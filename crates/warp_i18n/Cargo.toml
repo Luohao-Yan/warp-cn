@@ -1,0 +1,24 @@
+[package]
+name = "warp_i18n"
+version = "0.1.0"
+edition = "2021"
+authors.workspace = true
+license = "MIT"
+publish.workspace = true
+
+[dependencies]
+fluent-bundle = "0.15"
+fluent-syntax = "0.11"
+unic-langid = { version = "0.9", features = ["unic-langid-macros"] }
+
+# Runtime file loading
+walkdir.workspace = true
+anyhow.workspace = true
+serde.workspace = true
+
+# Logging
+log.workspace = true
+
+[dev-dependencies]
+walkdir.workspace = true
+fluent-bundle = "0.15"

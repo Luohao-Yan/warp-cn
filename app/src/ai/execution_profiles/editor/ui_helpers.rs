@@ -112,7 +112,7 @@ fn render_header_title(appearance: &Appearance) -> Box<dyn Element> {
 
 fn render_header_name_label(appearance: &Appearance) -> Box<dyn Element> {
     Container::new(
-        Text::new("Name", appearance.ui_font_family(), 13.)
+        Text::new(crate::tr!("common", "name-label"), appearance.ui_font_family(), 13.)
             .with_color(appearance.theme().active_ui_text_color().into())
             .finish(),
     )

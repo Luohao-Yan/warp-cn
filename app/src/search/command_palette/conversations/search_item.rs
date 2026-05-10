@@ -66,7 +66,7 @@ impl ConversationSearchItem {
         Flex::row()
             .with_child(
                 Text::new_inline(
-                    "New conversation",
+                    crate::tr!("ai_assistant", "ai-chat-new-conversation"),
                     appearance.ui_font_family(),
                     appearance.monospace_font_size(),
                 )

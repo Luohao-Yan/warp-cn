@@ -106,7 +106,7 @@ impl View for CloseSessionConfirmationDialog {
         let close_session_button = appearance
             .ui_builder()
             .button(ButtonVariant::Accent, self.confirm_mouse_state.clone())
-            .with_centered_text_label("Close session".into())
+            .with_centered_text_label(crate::tr!("workspace", "close-session-title").into())
             .with_style(button_style)
             .build()
             .with_cursor(Cursor::PointingHand)
@@ -120,7 +120,7 @@ impl View for CloseSessionConfirmationDialog {
         let cancel_button = appearance
             .ui_builder()
             .button(ButtonVariant::Basic, self.cancel_mouse_state.clone())
-            .with_centered_text_label("Cancel".into())
+            .with_centered_text_label(crate::tr!("common", "cancel-label").into())
             .with_style(button_style)
             .build()
             .with_cursor(Cursor::PointingHand)

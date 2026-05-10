@@ -218,7 +218,7 @@ impl ConversationEndedTombstoneView {
             .filter(|_| FeatureFlag::HandoffCloudCloud.is_enabled())
             .map(|task_id| {
                 ctx.add_typed_action_view(move |_| {
-                    ActionButton::new("Continue", PrimaryTheme)
+                    ActionButton::new(crate::tr!("common", "continue-label"), PrimaryTheme)
                         .with_tooltip("Continue this task in Cloud Mode")
                         .on_click(move |ctx| {
                             ctx.dispatch_typed_action(

@@ -175,7 +175,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
             ));
         }
 
-        button_data.push(ModalButton::for_app("Cancel", move |ctx| {
+        button_data.push(ModalButton::for_app(crate::tr!("common", "cancel-label"), move |ctx| {
             send_telemetry_sync_from_app_ctx!(
                 TelemetryEvent::LogOutModalCancel { nav_palette: false },
                 ctx

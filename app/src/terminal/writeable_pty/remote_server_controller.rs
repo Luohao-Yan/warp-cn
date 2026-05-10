@@ -541,7 +541,7 @@ fn describe_libc(libc: &RemoteLibc) -> String {
     match libc {
         RemoteLibc::Glibc(version) => format!("glibc {version}"),
         RemoteLibc::NonGlibc { name } => name.clone(),
-        RemoteLibc::Unknown => "unknown".to_string(),
+        RemoteLibc::Unknown => crate::tr!("common", "unknown-label").to_string(),
     }
 }
 

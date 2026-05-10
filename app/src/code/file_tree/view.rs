@@ -2396,7 +2396,7 @@ impl FileTreeView {
                         .into_item(),
                 );
                 items.push(
-                    MenuItemFields::new("Delete")
+                    MenuItemFields::new(crate::tr!("common", "delete-label"))
                         .with_on_select_action(FileTreeAction::Delete { id: id.clone() })
                         .into_item(),
                 );
@@ -2418,7 +2418,7 @@ impl FileTreeView {
             items.push(MenuItem::Separator);
         }
         items.extend([
-            MenuItemFields::new("Copy path")
+            MenuItemFields::new(crate::tr!("code_editor", "code-file-tree-copy-path"))
                 .with_on_select_action(FileTreeAction::CopyPath { id: id.clone() })
                 .into_item(),
             MenuItemFields::new("Copy relative path")

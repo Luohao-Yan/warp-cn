@@ -227,7 +227,7 @@ impl ConversationListView {
                 ctx,
             );
 
-            editor.set_placeholder_text("Search", ctx);
+            editor.set_placeholder_text(crate::tr!("common", "search-label"), ctx);
             editor
         });
         ctx.subscribe_to_view(&query_editor, |me, _handle, event, ctx| {
@@ -705,7 +705,7 @@ fn render_zero_state(
 
     let new_conversation_button =
         Hoverable::new(zero_state_button_mouse_state, move |mouse_state| {
-            let label = Text::new_inline("New conversation", appearance.ui_font_family(), 12.)
+            let label = Text::new_inline(crate::tr!("ai_assistant", "ai-chat-new-conversation"), appearance.ui_font_family(), 12.)
                 .with_color(theme.main_text_color(theme.background()).into_solid())
                 .finish();
 
@@ -926,7 +926,7 @@ impl TypedActionView for ConversationListView {
                         return;
                     };
 
-                    let mut delete_item = MenuItemFields::new("Delete")
+                    let mut delete_item = MenuItemFields::new(crate::tr!("common", "delete-label"))
                         .with_override_text_color(Appearance::as_ref(ctx).theme().ansi_fg_red())
                         .with_on_select_action(ConversationListViewAction::DeleteFromOverflowMenu {
                             conversation_id,

@@ -441,7 +441,7 @@ impl UpdateEnvironmentForm {
 
         // Create buttons
         let submit_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Create", PrimaryTheme)
+            ActionButton::new(crate::tr!("common", "create-label"), PrimaryTheme)
                 .with_icon(Icon::Check)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(UpdateEnvironmentFormAction::Submit);

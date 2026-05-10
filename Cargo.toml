@@ -10,6 +10,7 @@ resolver = "2"
 # tests against) and integration (since it is only used for testing).
 default-members = [
   "app",
+  "crates/warp_i18n",
   "crates/channel_versions",
   "crates/command",
   "crates/editor",
@@ -68,6 +69,7 @@ vim = { path = "crates/vim" }
 virtual-fs = { path = "crates/virtual_fs" }
 voice_input = { path = "crates/voice_input" }
 warp = { path = "app" }
+warp_i18n = { path = "crates/warp_i18n" }
 warp_cli = { path = "crates/warp_cli" }
 warp_completer = { path = "crates/warp_completer" }
 warp_core = { path = "crates/warp_core" }

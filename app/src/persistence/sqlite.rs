@@ -284,7 +284,7 @@ unsafe fn init_logging() {
                     |scope| {
                         let mut context = std::collections::BTreeMap::new();
                         context.insert("message".to_string(), err_message.into());
-                        context.insert("code".to_string(), err_code.into());
+                        context.insert(crate::tr!("settings", "code-tab").to_string(), err_code.into());
                         context.insert(
                             "code_description".to_string(),
                             sqlite3::code_to_str(err_code).into(),

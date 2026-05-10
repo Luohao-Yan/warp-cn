@@ -41,6 +41,7 @@ mod external_secrets;
 mod font_fallback;
 mod global_resource_handles;
 mod gpu_state;
+mod i18n;
 mod input_classifier;
 mod interval_timer;
 mod linear;
@@ -279,6 +280,8 @@ use crate::cloud_object::model::persistence::CloudModel;
 use crate::drive::CloudObjectTypeAndId;
 use crate::experiments::ImprovedPaletteSearch;
 pub use crate::global_resource_handles::{GlobalResourceHandles, GlobalResourceHandlesProvider};
+/// Convenience re-export so files in this crate can use `tr!("domain", "id")`.
+pub use warp_i18n::tr;
 use crate::notification::NotificationContext;
 use crate::root_view::{
     quake_mode_window_id, quake_mode_window_is_open, OpenFromRestoredArg, OpenPath,
@@ -581,6 +584,12 @@ pub fn run() -> Result<()> {
 
     // Ensure feature flags are initialized before parsing command-line arguments.
     init_feature_flags();
+
+    // Initialize internationalization. Must run early so `tr!()` is available
+    // before any view code executes. The system locale is detected from `$LANG`
+    // (or `AppleLocale` on macOS); the base path can be overridden with the
+    // `WARP_I18N_PATH` environment variable.
+    i18n::init_i18n();
 
     // Parse command-line arguments.
     let args = warp_cli::Args::from_env();
@@ -1092,6 +1101,10 @@ pub(crate) fn initialize_app(
     ctx.add_singleton_model(|_ctx| SettingsManager::default());
 
     let user_defaults_on_startup = settings::init(startup_toml_parse_error, ctx);
+
+    // Reload i18n using the persisted language setting (if any).
+    i18n::init_from_settings(ctx);
+
     timer.mark_interval_end("READ_USER_DEFAULTS_AND_INITIALIZE_SETTINGS");
 
     if FeatureFlag::UIZoom.is_enabled() {
@@ -1342,6 +1355,22 @@ pub(crate) fn initialize_app(
     });
 
     ctx.add_singleton_model(|_ctx| SyncedInputState::new());
+
+    // Global i18n language actions — accessible via the Command Palette.
+    // Open Command Palette → type "set language" → pick your locale.
+    // The choice is persisted to settings.toml as `general.language`.
+    ctx.add_global_action("i18n:set_language_zh_cn", |_args: &(), ctx| {
+        i18n::set_language(ctx, "zh-CN");
+    });
+    ctx.add_global_action("i18n:set_language_en", |_args: &(), ctx| {
+        i18n::set_language(ctx, "en-US");
+    });
+    ctx.add_global_action("i18n:set_language_ja", |_args: &(), ctx| {
+        i18n::set_language(ctx, "ja");
+    });
+    ctx.add_global_action("i18n:set_language_auto", |_args: &(), ctx| {
+        i18n::set_language(ctx, "auto");
+    });
 
     ctx.add_singleton_model(remote_server::manager::RemoteServerManager::new);
     #[cfg(not(target_family = "wasm"))]

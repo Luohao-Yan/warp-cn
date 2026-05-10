@@ -886,7 +886,7 @@ impl ConversationDetailsPanel {
         let ui_font_size = appearance.ui_font_size();
 
         let label_text = Text::new(
-            "Error".to_string(),
+            crate::tr!("common", "error-label").to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )
@@ -926,7 +926,7 @@ impl ConversationDetailsPanel {
 
         // Section header
         let header = Text::new(
-            "Status".to_string(),
+            crate::tr!("common", "status-label").to_string(),
             appearance.ui_font_family(),
             ui_font_size,
         )

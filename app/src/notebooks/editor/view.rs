@@ -144,7 +144,7 @@ pub fn init(app: &mut AppContext) {
             EditorViewAction::Backspace,
             id!("RichTextEditorView") & !id!("IMEOpen"),
         ),
-        FixedBinding::new("delete", EditorViewAction::Delete, text_entry.clone()),
+        FixedBinding::new(crate::tr!("common", "common-delete-label"), EditorViewAction::Delete, text_entry.clone()),
         FixedBinding::new(
             "shift-up",
             EditorViewAction::SelectUp,
@@ -475,7 +475,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("ctrl-a"),
         EditableBinding::new(
             "editor_view:home",
-            "Home",
+            crate::tr!("workspace", "workspace-home-label"),
             EditorViewAction::MoveToLineStart,
         )
         .with_context_predicate(text_entry.clone())
@@ -542,7 +542,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("shift-ctrl-N"),
         EditableBinding::new(
             "editor_view:select_all",
-            "Select all",
+            crate::tr!("terminal", "terminal-context-select-all"),
             EditorViewAction::SelectAll,
         )
         .with_context_predicate(text_entry.clone())
@@ -601,7 +601,7 @@ pub fn init(app: &mut AppContext) {
         )
         .with_context_predicate(text_entry.clone())
         .with_key_binding("ctrl-h"),
-        EditableBinding::new("editor_view:delete", "Delete", EditorViewAction::Delete)
+        EditableBinding::new("editor_view:delete", crate::tr!("common", "common-delete-label"), EditorViewAction::Delete)
             .with_context_predicate(text_entry.clone())
             .with_key_binding("ctrl-d"),
         EditableBinding::new(

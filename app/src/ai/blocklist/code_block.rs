@@ -234,10 +234,11 @@ fn render_linked_code_block_internal(
         }
 
         if let Some(on_copy) = on_copy {
+            let copy_label = crate::tr!("terminal", "context-copy");
             let copy_button = render_button(
                 appearance,
                 Icon::Copy,
-                "Copy",
+                &copy_label,
                 mouse_handles.copy_button,
                 code_clone.clone(),
                 on_copy,
@@ -322,10 +323,11 @@ fn render_plain_code_block_internal(
         let code_clone = code.to_owned();
 
         if let Some(on_copy) = on_copy {
+            let copy_label = crate::tr!("terminal", "context-copy");
             let copy_button = render_button(
                 appearance,
                 Icon::Copy,
-                "Copy",
+                &copy_label,
                 mouse_handles.copy_button,
                 code_clone.clone(),
                 on_copy,

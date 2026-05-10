@@ -2603,7 +2603,7 @@ impl SettingsWidget for CreateCustomThemeWidget {
             appearance
                 .ui_builder()
                 .link(
-                    "Create your own custom theme".to_string(),
+                    crate::tr!("appearance", "create-custom-theme"),
                     Some("https://docs.warp.dev/terminal/appearance/custom-themes".to_string()),
                     None,
                     self.mouse_state.clone(),
@@ -3749,7 +3749,7 @@ impl SettingsWidget for AIFontWidget {
         let mut ai_font_row = Flex::row().with_cross_axis_alignment(CrossAxisAlignment::Center);
         let mut ai_font = Flex::column();
         ai_font.add_child(render_body_item_label::<AppearancePageAction>(
-            "Agent font".to_string(),
+            crate::tr!("appearance", "agent-font"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -3813,7 +3813,7 @@ impl TerminalFontWidget {
         line_height.add_child(
             appearance
                 .ui_builder()
-                .label("Line height".to_string())
+                .label(crate::tr!("appearance", "line-height"))
                 .with_style(UiComponentStyles {
                     margin: Some(Coords {
                         left: 12.,
@@ -3911,7 +3911,7 @@ impl SettingsWidget for TerminalFontWidget {
         // Terminal Font
         let mut terminal_font = Flex::column();
         terminal_font.add_child(render_body_item_label::<AppearancePageAction>(
-            "Terminal font".to_string(),
+            crate::tr!("appearance", "terminal-font"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -3975,7 +3975,7 @@ impl SettingsWidget for TerminalFontWidget {
         font_weight.add_child(
             appearance
                 .ui_builder()
-                .label("Font weight".to_string())
+                .label(crate::tr!("appearance", "font-weight"))
                 .with_style(UiComponentStyles {
                     font_size: Some(CONTENT_FONT_SIZE),
                     ..Default::default()
@@ -3998,7 +3998,7 @@ impl SettingsWidget for TerminalFontWidget {
         font_size.add_child(
             appearance
                 .ui_builder()
-                .label("Font size (px)".to_string())
+                .label(crate::tr!("appearance", "font-size"))
                 .with_style(UiComponentStyles {
                     margin: Some(Coords {
                         left: 2.,
@@ -4082,7 +4082,7 @@ impl SettingsWidget for NotebookFontSizeWidget {
                         Align::new(
                             appearance
                                 .ui_builder()
-                                .span("Notebook font size".to_string())
+                                .span(crate::tr!("appearance", "notebook-font-size"))
                                 .build()
                                 .with_margin_right(16.)
                                 .finish(),

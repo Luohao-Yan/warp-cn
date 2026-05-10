@@ -124,22 +124,22 @@ pub fn get_additional_keybindings() -> Vec<CommandBinding> {
         ),
         CommandBinding::new(
             "workspace:hide_warp".into(),
-            "Hide Warp".into(),
+            crate::tr!("menus", "app-hide").into(),
             Some(Keystroke::parse("cmd-h").expect("Valid keystroke")),
         ),
         CommandBinding::new(
             "workspace:hide_others".into(),
-            "Hide Others".into(),
+            crate::tr!("menus", "app-hide-others").into(),
             Some(Keystroke::parse("alt-cmd-h").expect("Valid keystroke")),
         ),
         CommandBinding::new(
             "workspace:quit_warp".into(),
-            "Quit Warp".into(),
+            crate::tr!("menus", "app-quit").into(),
             Some(Keystroke::parse("cmd-q").expect("Valid keystroke")),
         ),
         CommandBinding::new(
             "workspace:minimize".into(),
-            "Minimize".into(),
+            crate::tr!("menus", "window-minimize").into(),
             Some(Keystroke::parse("cmd-m").expect("Valid keystroke")),
         ),
     ]

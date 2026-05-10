@@ -300,7 +300,7 @@ impl RunAgentsCardView {
             ctx,
         );
         let edit_button = CompactibleActionButton::new(
-            "Edit".to_string(),
+            crate::tr!("common", "edit-label").to_string(),
             Some(KeystrokeSource::Fixed(edit_keystroke)),
             ButtonSize::Small,
             RunAgentsCardViewAction::ToggleEdit,

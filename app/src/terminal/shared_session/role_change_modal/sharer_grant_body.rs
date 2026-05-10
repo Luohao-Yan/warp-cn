@@ -60,7 +60,7 @@ impl SharerGrantBody {
                     width: Some(BUTTON_WIDTH),
                     ..Default::default()
                 })
-                .with_centered_text_label(String::from("Cancel"))
+                .with_centered_text_label(String::from(crate::tr!("common", "cancel-label")))
                 .build()
                 .with_cursor(Cursor::PointingHand)
                 .on_click(move |ctx, _, _| ctx.dispatch_typed_action(SharerGrantBodyAction::Cancel))

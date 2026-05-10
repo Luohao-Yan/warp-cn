@@ -83,7 +83,7 @@ impl NavBar {
         });
 
         let down_label_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Next", NakedTheme)
+            ActionButton::new(crate::tr!("common", "next-label"), NakedTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .with_icon(Icon::ArrowDown)
                 .on_click(|ctx| ctx.dispatch_typed_action(NavBarAction::NavigateDown))

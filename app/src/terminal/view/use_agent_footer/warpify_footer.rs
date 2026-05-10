@@ -56,7 +56,7 @@ impl WarpifyFooterView {
         });
 
         let dismiss_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Dismiss", AgentFooterButtonTheme::new(None))
+            ActionButton::new(crate::tr!("common", "dismiss-label"), AgentFooterButtonTheme::new(None))
                 .with_size(button_size)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WarpifyFooterViewAction::Dismiss);

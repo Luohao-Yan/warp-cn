@@ -291,7 +291,7 @@ fn get_app_for_file_from_mime(path: &Path) -> Option<Editor> {
 
     let default_app = String::from_utf8(
         Command::new("xdg-mime")
-            .args(["query", "default", mime_type.trim()])
+            .args(["query", crate::tr!("keybindings", "default-button"), mime_type.trim()])
             .output()
             .ok()?
             .stdout,

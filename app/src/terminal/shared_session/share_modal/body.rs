@@ -270,7 +270,7 @@ impl View for Body {
                 ButtonVariant::Outlined,
                 self.button_mouse_states.cancel_button.clone(),
             )
-            .with_centered_text_label(String::from("Cancel"))
+            .with_centered_text_label(String::from(crate::tr!("common", "cancel-label")))
             .with_style(style::button_styles())
             .build()
             .with_cursor(Cursor::PointingHand)

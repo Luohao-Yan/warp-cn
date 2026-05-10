@@ -178,7 +178,7 @@ impl SharerResponseBody {
                 ButtonVariant::Outlined,
                 role_request_params.button_mouse_states.approve_button,
             )
-            .with_centered_text_label(String::from("Approve"))
+            .with_centered_text_label(String::from(crate::tr!("code_editor", "code-review-approve")))
             .with_style(UiComponentStyles {
                 font_size: Some(BUTTON_FONT_SIZE),
                 font_weight: Some(Weight::Bold),

@@ -117,7 +117,7 @@ pub enum LoginSlideEvent {
 }
 
 /// How the user arrived at the login slide. Controls which step is shown first
-/// and how "Back" is routed when the user backs out of the privacy-settings step.
+/// and how crate::tr!("common", "back-label") is routed when the user backs out of the privacy-settings step.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum LoginSlideSource {
     /// Reached via the normal onboarding flow (e.g. agent intention requires an account).
@@ -588,7 +588,7 @@ impl LoginSlideView {
         let back_button = self.back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label(crate::tr!("common", "back-label").into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -624,7 +624,7 @@ impl LoginSlideView {
         let login_button = self.login_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Continue".into()),
+                content: button::Content::Label(crate::tr!("common", "continue-label").into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(enter),
@@ -800,7 +800,7 @@ impl LoginSlideView {
         let back_button = self.browser_back_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label(crate::tr!("common", "back-label").into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -860,7 +860,7 @@ impl LoginSlideView {
         let back_button = self.done_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Back".into()),
+                content: button::Content::Label(crate::tr!("common", "common-back-label").into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -1011,7 +1011,7 @@ impl LoginSlideView {
         let skip_confirm_button = self.dialog_skip_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Skip for now".into()),
+                content: button::Content::Label(crate::tr!("auth", "skip-button").into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     keystroke: Some(dialog_enter),

@@ -102,7 +102,7 @@ impl View for TelemetryBanner {
                 Container::new(
                     ui_builder
                         .button(ButtonVariant::Text, self.learn_more_mouse_state.clone())
-                        .with_text_label("Learn more".into())
+                        .with_text_label(crate::tr!("common", "learn-more-label").into())
                         .with_style(UiComponentStyles {
                             height: Some(24.),
                             padding: Some(Coords {

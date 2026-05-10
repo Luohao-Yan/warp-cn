@@ -695,7 +695,7 @@ impl ShowBlocksWidget {
                                                 ButtonVariant::Basic,
                                                 view.state_handles.cancel_dialog_handle.clone(),
                                             )
-                                            .with_text_label("Cancel".into())
+                                            .with_text_label(crate::tr!("common", "cancel-label").into())
                                             .build()
                                             .on_click(|ctx, _, _| {
                                                 ctx.dispatch_typed_action(
