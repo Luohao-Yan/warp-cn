@@ -172,4 +172,16 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: true,
     },
+    // Display language for the Warp UI.
+    // Set to "auto" (default) to follow the system locale, or a BCP47 tag
+    // like "zh-CN", "ja", "en-US" to override.
+    language: Language {
+        type: String,
+        default: "auto".to_string(),
+        supported_platforms: SupportedPlatforms::ALL,
+        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
+        private: false,
+        toml_path: "general.language",
+        description: "Display language for the Warp UI. Use 'auto' for system locale.",
+    },
 ]);

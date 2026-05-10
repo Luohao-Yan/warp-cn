@@ -105,12 +105,12 @@ pub fn init(app: &mut AppContext) {
             text_entry.clone() & id!("Vim"),
         ),
         FixedBinding::new(
-            "delete",
+            crate::tr!("common", "common-delete-label"),
             CodeEditorViewAction::Delete,
             text_entry.clone() & !id!("Vim"),
         ),
         FixedBinding::new(
-            "delete",
+            crate::tr!("common", "common-delete-label"),
             CodeEditorViewAction::VimDelete,
             text_entry.clone() & id!("Vim"),
         ),
@@ -507,7 +507,7 @@ pub fn init(app: &mut AppContext) {
         )
         .with_context_predicate(text_entry.clone())
         .with_key_binding("cmdorctrl-/"),
-        EditableBinding::new("editor_view:delete", "Delete", CodeEditorViewAction::Delete)
+        EditableBinding::new("editor_view:delete", crate::tr!("common", "delete-label"), CodeEditorViewAction::Delete)
             .with_context_predicate(
                 text_entry.clone() & !id!("VimNormalMode") & !id!("VimVisualMode"),
             )

@@ -628,6 +628,7 @@ pub enum FeaturesPageAction {
     SetCtrlTabBehavior(CtrlTabBehavior),
     SetPreferredGraphicsBackend(Option<GraphicsBackend>),
     SetNewTabPlacement(NewTabPlacement),
+    SetLanguage(String),
     SetDefaultSessionMode(DefaultSessionMode),
     SetDefaultTabConfig(String),
     SearchForKeybinding(String),
@@ -1030,6 +1031,10 @@ impl FeaturesPageAction {
                 action: "SetCtrlTabBehavior".to_string(),
                 value: format!("{ctrl_tab_behavior:?}"),
             },
+            Self::SetLanguage(locale) => TelemetryEvent::FeaturesPageAction {
+                action: "SetLanguage".to_string(),
+                value: locale.clone(),
+            },
             Self::SetNewTabPlacement(new_tab_placement) => TelemetryEvent::FeaturesPageAction {
                 action: "SetNewTabPlacement".to_string(),
                 value: format!("{new_tab_placement:?}"),
@@ -1233,6 +1238,7 @@ pub struct FeaturesPageView {
     tab_behavior_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
     graphics_backend_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
     new_tab_placement_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
+    language_dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
     default_session_mode_dropdown: ViewHandle<FilterableDropdown<FeaturesPageAction>>,
     tab_behavior: Tracked<TabBehavior>,
     completions_keystroke: Tracked<String>,
@@ -1740,6 +1746,11 @@ impl TypedActionView for FeaturesPageView {
             SetNewTabPlacement(new_tab_placement) => {
                 self.set_new_tab_placement(new_tab_placement, ctx)
             }
+            SetLanguage(locale) => {
+                crate::i18n::set_language(ctx, locale);
+                // Force all views to re-render so they pick up new translations
+                ctx.invalidate_all_views();
+            }
             SetDefaultSessionMode(mode) => self.set_default_session_mode(mode, ctx),
             SetDefaultTabConfig(path) => {
                 AISettings::handle(ctx).update(ctx, |ai_settings, ctx| {
@@ -2141,6 +2152,14 @@ impl FeaturesPageView {
             ctx.notify();
         });
 
+        let language_dropdown = ctx.add_typed_action_view(Dropdown::new);
+        Self::update_language_dropdown(language_dropdown.clone(), ctx);
+
+        ctx.subscribe_to_model(&GeneralSettings::handle(ctx), |me, _, _event, ctx| {
+            Self::update_language_dropdown(me.language_dropdown.clone(), ctx);
+            ctx.notify();
+        });
+
         let default_session_mode_dropdown = ctx.add_typed_action_view(FilterableDropdown::new);
         Self::update_default_session_mode_dropdown(default_session_mode_dropdown.clone(), ctx);
 
@@ -2410,6 +2429,7 @@ impl FeaturesPageView {
             ctrl_tab_behavior_dropdown,
             graphics_backend_dropdown,
             new_tab_placement_dropdown,
+            language_dropdown,
             default_session_mode_dropdown,
             tab_behavior: Default::default(),
 
@@ -2452,6 +2472,7 @@ impl FeaturesPageView {
 
         general_widgets.push(Box::new(SnackbarHeaderWidget::default()));
         general_widgets.push(Box::new(LinkTooltipWidget::default()));
+        general_widgets.push(Box::new(LanguageWidget::default()));
 
         #[cfg(feature = "local_fs")]
         {
@@ -3301,6 +3322,37 @@ impl FeaturesPageView {
         }
     }
 
+    fn update_language_dropdown(
+        dropdown: ViewHandle<Dropdown<FeaturesPageAction>>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        dropdown.update(ctx, |dropdown, ctx| {
+            let values: &[(&str, &str)] = &[
+                ("auto", "Auto (system)"),
+                ("en-US", "English (US)"),
+                ("zh-CN", "中文 (简体)"),
+                ("ja", "日本語"),
+            ];
+            let current = GeneralSettings::as_ref(ctx).language.clone();
+
+            let selected_index = values
+                .iter()
+                .position(|(val, _)| *val == current.as_str())
+                .unwrap_or(0);
+
+            dropdown.set_items(
+                values
+                    .iter()
+                    .map(|(val, label)| {
+                        DropdownItem::new(label.to_string(), FeaturesPageAction::SetLanguage(val.to_string()))
+                    })
+                    .collect(),
+                ctx,
+            );
+            dropdown.set_selected_by_index(selected_index, ctx);
+        });
+    }
+
     fn set_new_tab_placement(&mut self, value: &NewTabPlacement, ctx: &mut ViewContext<Self>) {
         let _ = TabSettings::handle(ctx).update(ctx, |tab_settings, ctx| {
             tab_settings.new_tab_placement.set_value(*value, ctx)
@@ -3885,7 +3937,7 @@ impl FeaturesPageView {
                 padding: Some(Coords::default().right(10.)),
                 ..Default::default()
             })
-            .with_text_label("Cancel".to_string())
+            .with_text_label(crate::tr!("common", "cancel-label").to_string())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(cancel_action.clone());
@@ -3897,7 +3949,7 @@ impl FeaturesPageView {
             appearance
                 .ui_builder()
                 .button(ButtonVariant::Text, save_button_mouse_state)
-                .with_text_label("Save".to_string())
+                .with_text_label(crate::tr!("common", "save-label").to_string())
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(save_action.clone());
@@ -4421,6 +4473,53 @@ impl SettingsWidget for LinkTooltipWidget {
                 })
                 .finish(),
             None,
+        )
+    }
+}
+
+// =========================================================================
+// Language widget — shows current display language
+// =========================================================================
+
+struct LanguageWidget;
+
+impl Default for LanguageWidget {
+    fn default() -> Self {
+        Self
+    }
+}
+
+impl SettingsWidget for LanguageWidget {
+    type View = FeaturesPageView;
+
+    fn search_terms(&self) -> &str {
+        "language display locale i18n international"
+    }
+
+    fn render(
+        &self,
+        view: &Self::View,
+        appearance: &Appearance,
+        app: &AppContext,
+    ) -> Box<dyn Element> {
+        use crate::terminal::general_settings::Language as LanguageSetting;
+
+        render_dropdown_item(
+            appearance,
+            "Display language",
+            None,
+            None,
+            LocalOnlyIconState::for_setting(
+                LanguageSetting::storage_key(),
+                LanguageSetting::sync_to_cloud(),
+                &mut view
+                    .button_mouse_states
+                    .local_only_icon_tooltip_states
+                    .borrow_mut(),
+                app,
+            ),
+            None,
+            &view.language_dropdown,
         )
     }
 }

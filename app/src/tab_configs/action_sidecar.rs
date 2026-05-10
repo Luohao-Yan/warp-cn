@@ -167,7 +167,7 @@ pub(crate) fn render_action_sidecar(
             .finish(),
     );
 
-    // "Edit config" and "Remove" buttons (only for user tab configs)
+    // "Edit config" and crate::tr!("common", "remove-label") buttons (only for user tab configs)
     if let SidecarItemKind::UserTabConfig { config } = item {
         if let Some(config_path) = &config.source_path {
             let edit_path = config_path.clone();
@@ -205,7 +205,7 @@ pub(crate) fn render_action_sidecar(
             let remove_button = appearance
                 .ui_builder()
                 .button(ButtonVariant::Outlined, mouse_states.remove_config.clone())
-                .with_centered_text_label("Remove".into())
+                .with_centered_text_label(crate::tr!("common", "common-remove-label").into())
                 .with_style(remove_style)
                 .with_hovered_styles(UiComponentStyles {
                     border_color: Some(theme.accent().into()),

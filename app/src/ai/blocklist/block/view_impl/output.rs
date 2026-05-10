@@ -373,7 +373,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                             let header_text = if let Some(dur) = finished_duration {
                                 format!("Thought for {}", format_elapsed_seconds(*dur))
                             } else {
-                                "Thinking".to_string()
+                                crate::tr!("ai_assistant", "ai-chat-thinking-label").to_string()
                             };
                             if let Some(element) = render_collapsible_block(
                                 output_message,

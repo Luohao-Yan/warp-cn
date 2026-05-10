@@ -421,7 +421,7 @@ impl SharingDialog {
                 ShareableObject::Session { .. } => Some("session".to_string()),
                 ShareableObject::AIConversation(_) => Some("conversation".to_string()),
             })
-            .unwrap_or_else(|| "unknown".to_string())
+            .unwrap_or_else(|| crate::tr!("common", "unknown-label").to_string())
     }
 
     /// Whether or not the current user is allowed to *edit* sharing settings.
@@ -985,7 +985,7 @@ impl SharingDialog {
                 if !is_team_guest || !is_session {
                     items.push(MenuItem::Separator);
                     items.push(
-                        MenuItemFields::new("Remove")
+                        MenuItemFields::new(crate::tr!("common", "remove-label"))
                             .with_on_select_action(SharingDialogAction::RemoveGuest)
                             .with_disabled(inherited_access)
                             .into_item(),

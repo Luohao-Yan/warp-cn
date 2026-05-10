@@ -75,7 +75,7 @@ impl View for TransferOwnershipConfirmationModal {
                 appearance
                     .ui_builder()
                     .button(ButtonVariant::Secondary, self.cancel_mouse_state.clone())
-                    .with_text_label("Cancel".to_string())
+                    .with_text_label(crate::tr!("common", "cancel-label").to_string())
                     .with_style(button_style)
                     .build()
                     .on_click(|ctx, _, _| {

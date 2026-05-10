@@ -308,6 +308,16 @@ impl RunAgentsCardView {
             ctx,
         );
         let position_id_prefix = format!("{action_id:?}");
+        let edit_button = CompactibleActionButton::new(
+            crate::tr!("common", "edit-label").to_string(),
+            Some(KeystrokeSource::Fixed(edit_keystroke)),
+            ButtonSize::Small,
+            RunAgentsCardViewAction::ToggleEdit,
+            Icon::Pencil,
+            std::sync::Arc::new(NakedTheme),
+            ctx,
+        );
+        // Both primary and chevron click route to Accept.
         let accept_button = CompactibleSplitActionButton::new(
             "Accept".to_string(),
             Some(KeystrokeSource::Fixed(accept_keystroke)),

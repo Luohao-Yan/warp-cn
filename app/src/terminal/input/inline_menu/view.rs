@@ -1001,7 +1001,7 @@ impl<A: InlineMenuAction, T: 'static + Send + Sync> View for InlineMenuView<A, T
             content = if self.mixer.as_ref(app).is_loading() {
                 self.render_no_results_state("Loading...".into(), app)
             } else {
-                self.render_no_results_state("No results".into(), app)
+                self.render_no_results_state(crate::tr!("workspace", "empty-state-title").into(), app)
             };
         } else {
             let results_list = self.render_results_list(app);

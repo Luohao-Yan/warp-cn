@@ -303,7 +303,7 @@ impl UpdateModalBody {
         let cancel_button = appearance
             .ui_builder()
             .button(ButtonVariant::Text, self.cancel_mouse_state.clone())
-            .with_text_label("Cancel".into())
+            .with_text_label(crate::tr!("common", "cancel-label").into())
             .with_style(UiComponentStyles {
                 font_weight: Some(Weight::Bold),
                 font_color: Some(theme.active_ui_text_color().into()),
@@ -341,7 +341,7 @@ impl UpdateModalBody {
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
                 Text::new_inline(
-                    "Update",
+                    crate::tr!("common", "update-label"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )

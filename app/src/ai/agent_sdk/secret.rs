@@ -49,7 +49,7 @@ impl TableFormat for SecretInfo {
         vec![
             Cell::new("Name"),
             Cell::new("Scope"),
-            Cell::new("Type"),
+            Cell::new(crate::tr!("common", "type-label")),
             Cell::new("Created"),
             Cell::new("Updated"),
         ]

@@ -6747,7 +6747,7 @@ impl AwsBedrockWidget {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("default", ctx);
+            editor.set_placeholder_text(crate::tr!("keybindings", "default-button"), ctx);
             editor.set_buffer_text(&aws_auth_refresh_profile, ctx);
             editor
         });

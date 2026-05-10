@@ -202,7 +202,7 @@ fn main() {
         if !entry.description.is_empty() {
             if let Some(obj) = schema_value.as_object_mut() {
                 obj.insert(
-                    "description".to_string(),
+                    crate::tr!("common", "description-label").to_string(),
                     Value::String(entry.description.to_string()),
                 );
             }

@@ -664,7 +664,7 @@ pub struct CodeReviewView {
     undo_action_button: ViewHandle<ActionButton>,
     last_revert: Option<(ViewHandle<CodeEditorView>, ContentVersion)>,
     containing_pane_id: Option<PaneId>,
-    // Header-specific dropdown menu ("Add diff set as context" / "Add comment")
+    // Header-specific dropdown menu ("Add diff set as context" / crate::tr!("code_editor", "code-comment-add"))
     header_menu: ViewHandle<Menu<CodeReviewAction>>,
     header_menu_open: bool,
     view_position_id: String,

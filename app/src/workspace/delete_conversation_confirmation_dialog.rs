@@ -54,14 +54,14 @@ pub struct DeleteConversationConfirmationDialog {
 impl DeleteConversationConfirmationDialog {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Cancel", NakedTheme).on_click(|ctx| {
+            ActionButton::new(crate::tr!("common", "cancel-label"), NakedTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteConversationConfirmationAction::Cancel);
             })
         });
 
         let enter_keystroke = Keystroke::parse("enter").expect("Valid keystroke");
         let delete_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new("Delete", DangerPrimaryTheme)
+            ActionButton::new(crate::tr!("common", "delete-label"), DangerPrimaryTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter_keystroke), ctx)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(DeleteConversationConfirmationAction::Confirm);

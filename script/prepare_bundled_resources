@@ -62,6 +62,13 @@ else
   echo "Warning: No bundled directory found at $RESOURCES_SRC/bundled" >&2
 fi
 
+# Copy i18n translation resources
+if [ -d "$RESOURCES_SRC/i18n" ]; then
+  echo "Copying i18n resources to $DEST_DIR/i18n"
+  rm -rf "$DEST_DIR/i18n"
+  cp -R "$RESOURCES_SRC/i18n" "$DEST_DIR/i18n"
+fi
+
 if [ -n "$GIT_RELEASE_TAG" ]; then
   VERSION_METADATA_DIR="$DEST_DIR/bundled/metadata"
   VERSION_METADATA_PATH="$VERSION_METADATA_DIR/version.json"
