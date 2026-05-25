@@ -160,6 +160,6 @@ impl SearchItem for PlanSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Plan: {}", self.title)
+        crate::tr!("terminal", "terminal-search-plan", title = self.title.clone())
     }
 }

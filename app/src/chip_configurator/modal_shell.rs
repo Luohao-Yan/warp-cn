@@ -5,6 +5,8 @@
 //! Modal consumers wrap those sections in a title, cancel/save buttons, and blur
 //! overlay, while settings consumers can render the sections inline.
 
+use std::sync::LazyLock;
+
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::theme::Fill;
 use warpui::elements::{
@@ -29,7 +31,9 @@ const PRIMARY_BUTTON_HEIGHT: f32 = 40.;
 const SECTION_UNIFORM_PADDING: f32 = 16.;
 const MARGIN_BETWEEN_MODAL_SECTIONS: f32 = 16.;
 const MODAL_CONTENT_FONT_SIZE: f32 = 14.;
-const RESTORE_DEFAULT_LABEL: &str = "Restore default";
+static RESTORE_DEFAULT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "chip-configurator-restore-default"));
+static LEFT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "chip-configurator-left-side"));
+static RIGHT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "chip-configurator-right-side"));
 
 /// Mouse state handles for interactive controls in chip editor sections and modals.
 #[derive(Default)]
@@ -146,7 +150,7 @@ fn render_restore_default_button<A: Action + Clone + Copy + 'static>(
     let button = Hoverable::new(mouse_handle.clone(), |_state| {
         appearance
             .ui_builder()
-            .span(RESTORE_DEFAULT_LABEL.to_string())
+            .span(RESTORE_DEFAULT_LABEL.clone())
             .with_style(UiComponentStyles {
                 font_size: Some(MODAL_CONTENT_FONT_SIZE),
                 ..Default::default()
@@ -205,7 +209,7 @@ pub fn render_chip_editor_sections<A: Action + Clone + Copy + 'static>(
     );
 
     let left_section = Flex::column()
-        .with_child(render_section_label("Left side", appearance))
+        .with_child(render_section_label(LEFT_SIDE_LABEL.as_str(), appearance))
         .with_child(
             Container::new(chip_configurator.render_left_drop_zone(
                 config.activate_action,
@@ -218,7 +222,7 @@ pub fn render_chip_editor_sections<A: Action + Clone + Copy + 'static>(
         .finish();
 
     let right_section = Flex::column()
-        .with_child(render_section_label("Right side", appearance))
+        .with_child(render_section_label(RIGHT_SIDE_LABEL.as_str(), appearance))
         .with_child(
             Container::new(chip_configurator.render_right_drop_zone(
                 config.activate_action,
@@ -293,7 +297,7 @@ fn render_buttons<A: Action + Clone + Copy + 'static>(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let cancel_button = render_primary_button(
-        "Cancel".to_string(),
+        crate::tr!("common", "common-cancel-label").clone(),
         ButtonVariant::Outlined,
         false,
         &config.mouse_handles.cancel,
@@ -302,7 +306,7 @@ fn render_buttons<A: Action + Clone + Copy + 'static>(
     );
 
     let save_button = render_primary_button(
-        "Save changes".to_string(),
+        crate::tr!("common", "common-save-changes-label").clone(),
         ButtonVariant::Accent,
         !config.is_dirty,
         &config.mouse_handles.save,

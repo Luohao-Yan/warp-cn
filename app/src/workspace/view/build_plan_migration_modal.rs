@@ -27,6 +27,7 @@ use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
+use std::sync::LazyLock;
 
 const BUTTON_DIAMETER: f32 = 20.;
 const DROPDOWN_WIDTH: f32 = 160.;
@@ -35,6 +36,22 @@ const MODAL_WIDTH: f32 = 876.;
 const LEFT_PANEL_WIDTH: f32 = 333.;
 const CORNER_RADIUS: f32 = 20.;
 const PANEL_PADDING: f32 = 24.;
+
+static AUTO_RELOAD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-auto-reload-title"));
+static AUTO_RELOAD_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-auto-reload-description"));
+static WELCOME_NEW_BUSINESS_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-welcome-new-business-plan"));
+static WELCOME_WARP_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-welcome-warp-build"));
+static INTRO_BUSINESS_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-intro-business-plan"));
+static INTRO_BUILD_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-intro-build-plan"));
+static PRICING_HEADER_BUSINESS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-pricing-header-business-plan"));
+static PRICING_HEADER_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-pricing-header-build-plan"));
+static FEATURES_HEADER_BUSINESS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-features-header-business-plan"));
+static FEATURES_HEADER_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-features-header-build-plan"));
+static ACCESS_RELOAD_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-access-reload-credits"));
+static BYOK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-bring-your-own-api-key"));
+static SSO: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-saml-based-sso"));
+static ZDR: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-team-wide-zero-data-retention"));
+static AND_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-and-more"));
 
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub enum BuildPlanMigrationModalViewAction {
@@ -192,7 +209,7 @@ impl BuildPlanMigrationModal {
             UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
                 self.is_updating = false;
                 ctx.emit(BuildPlanMigrationModalEvent::ShowToast {
-                    message: "Failed to enable auto-reload. Please try updating your settings in Billing & usage.".to_string(),
+                    message: crate::tr!("workspace", "workspace-failed-auto-reload"),
                     flavor: ToastFlavor::Error,
                 });
                 ctx.notify();
@@ -222,10 +239,9 @@ impl BuildPlanMigrationModal {
                         .enumerate()
                         .map(|(i, option)| {
                             DropdownItem::new(
-                                format!(
-                                    "${} / {} credits",
-                                    option.price_usd_cents / 100,
-                                    option.credits.separate_with_commas(),
+                                crate::tr!("workspace", "workspace-reload-denomination",
+                                    price = format!("{}", option.price_usd_cents / 100),
+                                    credits = option.credits.separate_with_commas(),
                                 ),
                                 BuildPlanMigrationModalViewAction::SelectReloadDenomination(i),
                             )
@@ -265,7 +281,7 @@ impl BuildPlanMigrationModal {
             })
             .finish();
 
-        let label = FormattedTextElement::from_str("Auto-reload", appearance.ui_font_family(), 12.)
+        let label = FormattedTextElement::from_str(&crate::tr!("workspace", "workspace-auto-reload"), appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(
                 theme,
                 blended_colors::neutral_4(theme),
@@ -303,9 +319,9 @@ impl BuildPlanMigrationModal {
 
     fn render_get_started_button(&self, appearance: &Appearance) -> Box<dyn Element> {
         let button_text = if self.is_updating {
-            "Saving...".to_string()
+            crate::tr!("workspace", "workspace-saving-label")
         } else {
-            "Get Started".to_string()
+            crate::tr!("workspace", "workspace-get-started")
         };
 
         let button_font_color = self.is_updating.then_some(
@@ -353,7 +369,7 @@ impl BuildPlanMigrationModal {
         let theme = appearance.theme();
 
         let title = Self::create_text(
-            "Use auto-reload to never miss a beat.".to_string(),
+            AUTO_RELOAD_TITLE.clone(),
             appearance.ui_font_family(),
             16.,
             blended_colors::text_main(theme, blended_colors::neutral_2(theme)),
@@ -361,7 +377,7 @@ impl BuildPlanMigrationModal {
         );
 
         let description = Self::create_text(
-            "Auto-reload will automatically purchase credits at your selected rate when your account balance reaches 100 credits. Your monthly spend limit is set at your legacy plan's monthly cost and can be updated in Settings > Billing & usage.".to_string(),
+            AUTO_RELOAD_DESCRIPTION.clone(),
             appearance.ui_font_family(),
             14.,
             blended_colors::text_sub(theme, blended_colors::neutral_4(theme)),
@@ -513,9 +529,9 @@ impl BuildPlanMigrationModal {
             .unwrap_or((2000, 1800));
 
         let title_text = if is_business {
-            "Welcome to the New Business Plan"
+            WELCOME_NEW_BUSINESS_PLAN.as_str()
         } else {
-            "Welcome to Warp Build"
+            WELCOME_WARP_BUILD.as_str()
         };
 
         let title = Self::create_text(
@@ -527,18 +543,18 @@ impl BuildPlanMigrationModal {
         );
 
         let intro_text = if is_business {
-            "Your workspace has been updated to the new Warp Business Plan as the legacy Business plan is sunset."
+            INTRO_BUSINESS_PLAN.as_str()
         } else {
-            "Your workspace has been updated to the Warp Build Plan as the legacy Pro, Turbo, and Lightspeed plans are sunset."
+            INTRO_BUILD_PLAN.as_str()
         };
 
         let intro = Self::create_text(intro_text.to_string(), font_family, 14., text_color, None);
 
         let pricing_header = Self::create_text(
             if is_business {
-                "The new Business plan is a primarily usage-based plan, starting at:"
+                PRICING_HEADER_BUSINESS.as_str()
             } else {
-                "Warp Build is a primarily usage-based plan, starting at:"
+                PRICING_HEADER_BUILD.as_str()
             }
             .to_string(),
             font_family,
@@ -548,17 +564,14 @@ impl BuildPlanMigrationModal {
         );
 
         let price_monthly = Self::create_bullet_item(
-            format!("${} per user per month", base_plan_prices.0 / 100),
+            crate::tr!("workspace", "workspace-price-per-user-month", price = format!("{}", base_plan_prices.0 / 100)),
             font_family,
             14.,
             text_color,
         );
 
         let price_annual = Self::create_bullet_item(
-            format!(
-                "${} per user per month for annual plans",
-                base_plan_prices.1 / 100
-            ),
+            crate::tr!("workspace", "workspace-price-per-user-month-annual", price = format!("{}", base_plan_prices.1 / 100)),
             font_family,
             14.,
             text_color,
@@ -566,9 +579,9 @@ impl BuildPlanMigrationModal {
 
         let features_header = Self::create_text(
             if is_business {
-                "The new Business plan comes with:"
+                FEATURES_HEADER_BUSINESS.as_str()
             } else {
-                "Build comes with:"
+                FEATURES_HEADER_BUILD.as_str()
             }
             .to_string(),
             font_family,
@@ -578,24 +591,21 @@ impl BuildPlanMigrationModal {
         );
 
         let base_credits = Self::create_bullet_item(
-            format!(
-                "{} base credits per month",
-                base_credits_limit.separate_with_commas()
-            ),
+            crate::tr!("workspace", "workspace-base-credits-per-month", credits = base_credits_limit.separate_with_commas()),
             font_family,
             14.,
             text_color,
         );
 
         let reload_credits = Self::create_bullet_item(
-            "Access to Reload credits and volume-based discounts".to_string(),
+            ACCESS_RELOAD_CREDITS.clone(),
             font_family,
             14.,
             text_color,
         );
 
         let byok = Self::create_bullet_item(
-            "Bring your own API key".to_string(),
+            BYOK.clone(),
             font_family,
             14.,
             text_color,
@@ -609,7 +619,7 @@ impl BuildPlanMigrationModal {
 
         if is_business {
             let sso = Self::create_bullet_item(
-                "SAML-based SSO".to_string(),
+                SSO.clone(),
                 font_family,
                 14.,
                 text_color,
@@ -617,7 +627,7 @@ impl BuildPlanMigrationModal {
             features_list.add_child(sso);
 
             let zdr = Self::create_bullet_item(
-                "Automatically enforced team-wide Zero Data Retention".to_string(),
+                ZDR.clone(),
                 font_family,
                 14.,
                 text_color,
@@ -626,14 +636,26 @@ impl BuildPlanMigrationModal {
         }
 
         let and_more =
-            Self::create_bullet_item("And more...".to_string(), font_family, 14., text_color);
+            Self::create_bullet_item(AND_MORE.clone(), font_family, 14., text_color);
         features_list.add_child(and_more);
 
-        let learn_more_fragments = vec![
-            FormattedTextFragment::plain_text("Learn more on our "),
-            FormattedTextFragment::hyperlink("pricing page", "https://www.warp.dev/pricing"),
-            FormattedTextFragment::plain_text("."),
-        ];
+        // Parse the FTL key with <a> tag for the hyperlink part
+        // The FTL entry: workspace-learn-more-pricing-page = Learn more on our <a>pricing page</a>.
+        // We split at the <a> tag boundaries
+        let learn_more_text = crate::tr!("workspace", "workspace-learn-more-pricing-page");
+        let learn_more_fragments = if let Some(start) = learn_more_text.find("<a>") {
+            let end = learn_more_text.find("</a>").unwrap_or(learn_more_text.len());
+            let before = &learn_more_text[..start];
+            let link_text = &learn_more_text[start + 3..end];
+            let after = &learn_more_text[end + 4..];
+            vec![
+                FormattedTextFragment::plain_text(before.to_string()),
+                FormattedTextFragment::hyperlink(link_text.to_string(), "https://www.warp.dev/pricing".to_string()),
+                FormattedTextFragment::plain_text(after.to_string()),
+            ]
+        } else {
+            vec![FormattedTextFragment::plain_text(learn_more_text)]
+        };
         let learn_more = Container::new(
             FormattedTextElement::new(
                 FormattedText::new([FormattedTextLine::Line(learn_more_fragments)]),
@@ -789,8 +811,7 @@ impl TypedActionView for BuildPlanMigrationModal {
                 let workspaces = UserWorkspaces::as_ref(ctx);
                 let Some(team_uid) = workspaces.current_team_uid() else {
                     ctx.emit(BuildPlanMigrationModalEvent::ShowToast {
-                        message: "Oops, something went wrong; your team data could not be found."
-                            .to_string(),
+                        message: crate::tr!("workspace", "workspace-oops-team-data-not-found"),
                         flavor: ToastFlavor::Error,
                     });
                     return;

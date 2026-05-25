@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::cloud_object::model::generic_string_model::GenericStringObjectId;
 use crate::cloud_object::model::persistence::{CloudModel, CloudModelEvent};
 use crate::cloud_object::{
@@ -49,18 +51,32 @@ use warpui::{
 use super::{is_edit_allowed, is_syncing, style, AIFact, CloudAIFact, CloudAIFactModel};
 use crate::ai::facts::AIMemory;
 
-pub const HEADER_TEXT: &str = "Rules";
-const DESCRIPTION_TEXT: &str = "Rules enhance the agent by providing structured guidelines that help maintain consistency, enforce best practices, and adapt to specific workflows, including codebases or broader tasks.";
+pub static HEADER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rules-header"));
+pub static DESCRIPTION_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rules-description"));
 
-const SEARCH_PLACEHOLDER_TEXT: &str = "Search rules";
-const ZERO_STATE_TEXT: &str = "Once you add a rule, it will be shown here.";
-const ZERO_STATE_TEXT_PROJECT: &str =
-    "Once you generate a WARP.md rules file for a project, it will appear here.";
+pub static SEARCH_PLACEHOLDER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-search-rules"));
+pub static ZERO_STATE_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-zero-state-text"));
+pub static ZERO_STATE_TEXT_PROJECT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-zero-state-project-text"));
 
-const DISABLED_BANNER_TEXT: &str =
-    "Your rules are disabled and won't be used as context in sessions. You can ";
-const DISABLED_BANNER_LINK_TEXT: &str = "turn it back on";
-const DISABLED_BANNER_TEXT_2: &str = " anytime.";
+pub static SETTINGS_AI_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-settings-ai"));
+
+pub static DISABLED_BANNER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-disabled-banner-text"));
+pub static DISABLED_BANNER_LINK_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-disabled-banner-link-text"));
+pub static DISABLED_BANNER_TEXT_2: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-disabled-banner-text-2"));
+
+pub static GLOBAL_SCOPE_TAB: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-global-scope-tab"));
+pub static PROJECT_BASED_SCOPE_TAB: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-project-based-scope-tab"));
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RuleScope {
@@ -255,7 +271,7 @@ impl RuleView {
 
         search_editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text(SEARCH_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*SEARCH_PLACEHOLDER_TEXT, ctx);
         });
         let search_bar = ctx.add_typed_action_view(|_| SearchBar::new(search_editor.clone()));
 
@@ -266,7 +282,7 @@ impl RuleView {
         });
 
         let initialize_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Initialize Project", NakedTheme)
+            ActionButton::new(crate::tr!("ai_assistant", "ai-initialize-project"), NakedTheme)
                 .with_icon(Icon::Plus)
                 .on_click(|ctx| ctx.dispatch_typed_action(RuleViewAction::InitializeProject))
         });
@@ -442,7 +458,7 @@ impl RuleView {
             .with_child(
                 appearance
                     .ui_builder()
-                    .wrappable_text(HEADER_TEXT, true)
+                    .wrappable_text(HEADER_TEXT.as_str(), true)
                     .with_style(style::header_text())
                     .build()
                     .finish(),
@@ -454,7 +470,7 @@ impl RuleView {
         Container::new(
             appearance
                 .ui_builder()
-                .wrappable_text(DESCRIPTION_TEXT, true)
+                .wrappable_text(DESCRIPTION_TEXT.as_str(), true)
                 .with_style(style::description_text(appearance))
                 .build()
                 .finish(),
@@ -465,7 +481,7 @@ impl RuleView {
 
     fn render_scope_tabs(&self, appearance: &Appearance) -> Box<dyn Element> {
         let global_tab = Container::new(self.render_scope_tab(
-            "Global",
+            GLOBAL_SCOPE_TAB.as_str(),
             RuleScope::Global,
             appearance,
             self.global_tab_mouse_state.clone(),
@@ -473,7 +489,7 @@ impl RuleView {
         .with_padding_right(4.)
         .finish();
         let project_tab = self.render_scope_tab(
-            "Project based",
+            PROJECT_BASED_SCOPE_TAB.as_str(),
             RuleScope::ProjectBased,
             appearance,
             self.project_tab_mouse_state.clone(),
@@ -561,14 +577,14 @@ impl RuleView {
     }
 
     fn render_disabled_banner(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let mut link = FormattedTextFragment::hyperlink(DISABLED_BANNER_LINK_TEXT, "Settings > AI");
+        let mut link = FormattedTextFragment::hyperlink(DISABLED_BANNER_LINK_TEXT.as_str(), SETTINGS_AI_LABEL.as_str());
         link.styles.weight = Some(CustomWeight::Bold);
 
         let formatted_text = FormattedTextElement::new(
             FormattedText::new([FormattedTextLine::Line(vec![
-                FormattedTextFragment::bold(DISABLED_BANNER_TEXT),
+                FormattedTextFragment::bold(DISABLED_BANNER_TEXT.as_str()),
                 link,
-                FormattedTextFragment::bold(DISABLED_BANNER_TEXT_2),
+                FormattedTextFragment::bold(DISABLED_BANNER_TEXT_2.as_str()),
             ])]),
             style::SUBTEXT_FONT_SIZE,
             appearance.ui_font_family(),
@@ -688,12 +704,13 @@ impl RuleView {
             .finish(),
         );
 
+        let open_file_label = crate::tr!("ai_assistant", "ai-open-file");
         let file_path = project_row.file_path.clone();
         row.add_child(
             appearance
                 .ui_builder()
                 .button(ButtonVariant::Outlined, project_row.mouse_state.clone())
-                .with_text_label("Open file".to_string())
+                .with_text_label(open_file_label)
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(RuleViewAction::OpenFile(file_path.clone()));
@@ -727,12 +744,12 @@ impl RuleView {
         let formatted_name = match name {
             Some(name) => {
                 if name.is_empty() {
-                    "Untitled".to_string()
+                    crate::tr!("ai_assistant", "ai-untitled")
                 } else {
                     name
                 }
             }
-            None => "Untitled".to_string(),
+            None => crate::tr!("ai_assistant", "ai-untitled"),
         };
         // Truncate content to 3 lines
         let formatted_content = if content.split("\n").count() > 3 {
@@ -846,8 +863,8 @@ impl RuleView {
 
     fn render_zero_state(&self, appearance: &Appearance) -> Box<dyn Element> {
         let text = match self.current_scope {
-            RuleScope::Global => ZERO_STATE_TEXT,
-            RuleScope::ProjectBased => ZERO_STATE_TEXT_PROJECT,
+            RuleScope::Global => ZERO_STATE_TEXT.as_str(),
+            RuleScope::ProjectBased => ZERO_STATE_TEXT_PROJECT.as_str(),
         };
 
         Container::new(

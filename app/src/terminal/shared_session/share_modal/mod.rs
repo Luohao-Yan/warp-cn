@@ -32,8 +32,10 @@ use self::body::BodyEvent;
 
 use super::{SharedSessionActionSource, SharedSessionScrollbackType};
 
-const MODAL_HEADER: &str = "Share session";
-const SESSION_LIMIT_REACHED_HEADER: &str = "Shared session limit reached";
+use std::sync::LazyLock;
+
+static MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-session"));
+static SESSION_LIMIT_REACHED_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-shared-session-limit-reached"));
 
 pub struct ShareSessionModal {
     modal: ViewHandle<Modal<Body>>,
@@ -77,7 +79,7 @@ impl ShareSessionModal {
         });
 
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(MODAL_HEADER.to_string()), body, ctx)
+            Modal::new(Some(MODAL_HEADER.clone()), body, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(MODAL_WIDTH),
                     height: Some(MODAL_HEIGHT),
@@ -96,7 +98,7 @@ impl ShareSessionModal {
         });
         let denied_modal = ctx.add_typed_action_view(|ctx| {
             let mut denied_modal = Modal::new(
-                Some(SESSION_LIMIT_REACHED_HEADER.to_string()),
+                Some(SESSION_LIMIT_REACHED_HEADER.clone()),
                 denied_body,
                 ctx,
             )

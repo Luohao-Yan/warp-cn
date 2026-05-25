@@ -3,6 +3,7 @@ use instant::Duration;
 use serde::{Deserialize, Serialize};
 use session_sharing_protocol::common::{Role, Scrollback, ScrollbackBlock, SessionId};
 use session_sharing_protocol::sharer::SessionSourceType;
+use std::sync::LazyLock;
 use warpui::{id, keymap::ContextPredicate, AppContext};
 
 use crate::{
@@ -36,7 +37,7 @@ pub mod viewer;
 pub use tests::MAX_BYTES_SHAREABLE;
 
 /// The toast copy when copying a shared session link.
-pub const COPY_LINK_TEXT: &str = "Sharing link copied";
+pub static COPY_LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-sharing-link-copied"));
 
 /// Throttle period for selection updates. We throttle instead of debounce because we want
 /// to send selections even when it updates fast, so it appears live.

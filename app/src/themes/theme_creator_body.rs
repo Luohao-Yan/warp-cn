@@ -11,6 +11,7 @@ use pathfinder_geometry::vector::vec2f;
 use std::default::Default;
 use std::fmt;
 use std::path::PathBuf;
+use std::sync::LazyLock;
 #[cfg(feature = "local_fs")]
 use std::{fs::copy, io::Write};
 #[cfg(feature = "local_fs")]
@@ -35,13 +36,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
-const MODAL_SUBHEADER: &str =
-    "Automatically generate a theme based on extracted colors from an image (.png, .jpg).";
-const IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: &str = "Select an image";
-const IMAGE_PICKER_BUTTON_SELECTING_TEXT: &str = "Selecting image...";
-const IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: &str = "Select a new image";
-const CANCEL_BUTTON_TEXT: &str = "Cancel";
-const CREATE_BUTTON_TEXT: &str = "Create theme";
+static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-theme-creator-subheader"));
+static IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-select-image"));
+static IMAGE_PICKER_BUTTON_SELECTING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-selecting-image"));
+static IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-select-new-image"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
+static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-create-theme"));
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -84,12 +84,12 @@ pub enum ThemeCreatorImageState {
 impl fmt::Display for ThemeCreatorImageState {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            ThemeCreatorImageState::Empty => write!(f, "{IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT}"),
+            ThemeCreatorImageState::Empty => write!(f, "{}", *IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT),
             ThemeCreatorImageState::Uploading => {
-                write!(f, "{IMAGE_PICKER_BUTTON_SELECTING_TEXT}")
+                write!(f, "{}", *IMAGE_PICKER_BUTTON_SELECTING_TEXT)
             }
             ThemeCreatorImageState::Uploaded => {
-                write!(f, "{IMAGE_PICKER_BUTTON_POST_SELECT_TEXT}")
+                write!(f, "{}", *IMAGE_PICKER_BUTTON_POST_SELECT_TEXT)
             }
         }
     }
@@ -417,7 +417,7 @@ impl View for ThemeCreatorBody {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_centered_text_label(CANCEL_BUTTON_TEXT.into());
+            .with_centered_text_label(CANCEL_BUTTON_TEXT.clone());
 
         let mut create_button = appearance
             .ui_builder()
@@ -429,13 +429,13 @@ impl View for ThemeCreatorBody {
                 Some(create_hovered_styles),
                 Some(disabled_styles),
             )
-            .with_centered_text_label(CREATE_BUTTON_TEXT.into());
+            .with_centered_text_label(CREATE_BUTTON_TEXT.clone());
 
         let mut flex: Flex = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_child(
                 Container::new(
-                    Text::new_inline(MODAL_SUBHEADER, appearance.ui_font_family(), 14.)
+                    Text::new_inline(MODAL_SUBHEADER.clone(), appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )
@@ -445,7 +445,7 @@ impl View for ThemeCreatorBody {
         if let Some(theme_options) = &self.theme_options {
             flex.add_child(
                 Container::new(
-                    Text::new_inline("Theme name", appearance.ui_font_family(), 14.)
+                    Text::new_inline(crate::tr!("common", "theme-name"), appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )
@@ -474,7 +474,7 @@ impl View for ThemeCreatorBody {
 
             flex.add_child(
                 Container::new(
-                    Text::new_inline("Background color", appearance.ui_font_family(), 14.)
+                    Text::new_inline(crate::tr!("common", "background-color"), appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )

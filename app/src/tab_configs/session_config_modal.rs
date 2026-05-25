@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use pathfinder_geometry::vector::vec2f;
 use warpui::elements::{
@@ -88,7 +89,8 @@ impl SessionConfigModal {
         });
 
         let submit_button = ctx.add_view(|ctx| {
-            ActionButton::new("Get Warping", PrimaryTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "get-warping"));
+            ActionButton::new(&*LABEL, PrimaryTheme)
                 .with_full_width(true)
                 .with_keybinding(
                     KeystrokeSource::Fixed(Keystroke::parse("enter").unwrap_or_default()),
@@ -165,8 +167,9 @@ impl SessionConfigModal {
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
 
+        let title_text = crate::tr!("common", "create-first-tab-config");
         let title = FormattedTextElement::from_str(
-            "Create your first tab config",
+            title_text,
             appearance.ui_font_family(),
             24.,
         )
@@ -175,13 +178,9 @@ impl SessionConfigModal {
         .finish();
 
         let subtitle_text = if self.show_session_type_row {
-            "Set up a reusable starting point for your tabs. \
-             Pick a repo, choose a session type, and optionally attach a worktree. \
-             Use it whenever you want to open a new tab with this setup."
+            crate::tr!("common", "create-first-tab-config-desc-oz")
         } else {
-            "Set up a reusable starting point for your tabs. \
-             Pick a repo, optionally attach a worktree, and \
-             use it whenever you want to open a new tab with this setup."
+            crate::tr!("common", "create-first-tab-config-desc-no-oz")
         };
         let subtitle =
             FormattedTextElement::from_str(subtitle_text, appearance.ui_font_family(), 14.)

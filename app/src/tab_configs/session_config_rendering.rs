@@ -1,5 +1,6 @@
 use std::path::Path;
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
@@ -28,6 +29,17 @@ use crate::view_components::callout_bubble::{
 };
 
 const PILL_GAP: f32 = 8.;
+
+static TAB_SELECT_DIRECTORY: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-select-directory"));
+static TAB_SELECT_GIT_REPO: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-select-git-repo"));
+static TAB_AUTO_CREATE_WORKTREE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-auto-create-worktree"));
+static TAB_MUST_SELECT_WORKTREE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-must-select-worktree"));
+static TAB_AUTO_GENERATE_BRANCH: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-auto-generate-branch"));
 
 fn session_type_item_color(
     is_selected: bool,
@@ -90,7 +102,7 @@ where
     let on_accent_bg = bg.is_some();
     let on_select = Arc::new(on_select);
 
-    let label = Text::new_inline("Session type".to_string(), appearance.ui_font_family(), 12.)
+    let label = Text::new_inline(crate::tr!("common", "session-type"), appearance.ui_font_family(), 12.)
         .with_color(if on_accent_bg {
             callout_label_color(appearance)
         } else {
@@ -227,7 +239,7 @@ where
     let on_accent_bg = bg.is_some();
 
     let label = Text::new_inline(
-        "Select directory".to_string(),
+        &*TAB_SELECT_DIRECTORY,
         appearance.ui_font_family(),
         12.,
     )
@@ -359,7 +371,7 @@ where
             if state.is_hovered() {
                 let tooltip = Container::new(
                     Text::new_inline(
-                        "Select a git repository to enable worktree support".to_string(),
+                        &*TAB_SELECT_GIT_REPO,
                         font_family,
                         12.,
                     )
@@ -403,7 +415,7 @@ where
         blended_colors::text_sub(theme, theme.background())
     };
     let label = Text::new(
-        "Automatically create a worktree when opening a new tab",
+        &*TAB_AUTO_CREATE_WORKTREE,
         appearance.ui_font_family(),
         12.,
     )
@@ -490,9 +502,7 @@ where
             if state.is_hovered() {
                 let tooltip = Container::new(
                     Text::new_inline(
-                        "You must select that you want to automatically create a \
-                         worktree in order to select this"
-                            .to_string(),
+                        &*TAB_MUST_SELECT_WORKTREE,
                         font_family,
                         12.,
                     )
@@ -537,7 +547,7 @@ where
     };
 
     let label = Text::new(
-        "Auto-generate worktree branch name",
+        &*TAB_AUTO_GENERATE_BRANCH,
         appearance.ui_font_family(),
         12.,
     )

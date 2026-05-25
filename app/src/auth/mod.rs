@@ -95,7 +95,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
             || num_unsaved_files > 0)
     {
         send_telemetry_sync_from_app_ctx!(TelemetryEvent::LogOutModalShown, app);
-        let mut button_data = vec![ModalButton::for_app("Yes, log out", |ctx| {
+        let mut button_data = vec![ModalButton::for_app(crate::tr!("auth", "auth-yes-log-out"), |ctx| {
             log_out(ctx);
         })];
 
@@ -106,11 +106,9 @@ pub fn maybe_log_out(app: &mut AppContext) {
             } else {
                 "process"
             };
-            info_text_vec.push(format!(
-                "You have {num_long_running_commands} {plural} running."
-            ));
+            info_text_vec.push(crate::tr!("auth", "auth-long-running-warning", num = num_long_running_commands as i64, plural = plural));
 
-            button_data.push(ModalButton::for_app("Show running processes", move |ctx| {
+            button_data.push(ModalButton::for_app(crate::tr!("auth", "auth-show-running-processes"), move |ctx| {
                 send_telemetry_sync_from_app_ctx!(
                     TelemetryEvent::LogOutModalCancel { nav_palette: true },
                     ctx
@@ -148,7 +146,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
             } else {
                 "session"
             };
-            info_text_vec.push(format!("You have {num_shared_sessions} shared {plural}."));
+            info_text_vec.push(crate::tr!("auth", "auth-shared-session-warning", num = num_shared_sessions as i64, plural = plural));
         }
 
         if num_unsaved_objects > 0 {
@@ -157,10 +155,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
             } else {
                 "object"
             };
-            info_text_vec.push(format!(
-                "You have {num_unsaved_objects} unsynced Warp Drive {plural}. \
-            Logging out will cause you to lose the {plural}."
-            ));
+            info_text_vec.push(crate::tr!("auth", "auth-unsynced-warning", num = num_unsaved_objects as i64, plural = plural));
         }
 
         if num_unsaved_files > 0 {
@@ -169,10 +164,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
             } else {
                 "file"
             };
-            info_text_vec.push(format!(
-                "You have {num_unsaved_files} unsaved {plural}. \
-            Logging out will cause you to lose the {plural}."
-            ));
+            info_text_vec.push(crate::tr!("auth", "auth-unsaved-files-warning", num = num_unsaved_files as i64, plural = plural));
         }
 
         button_data.push(ModalButton::for_app(crate::tr!("common", "cancel-label"), move |ctx| {
@@ -183,7 +175,7 @@ pub fn maybe_log_out(app: &mut AppContext) {
         }));
 
         let alert_data = AlertDialogWithCallbacks::for_app(
-            "Log out?",
+            crate::tr!("auth", "auth-logout-question"),
             info_text_vec.join("\n"),
             button_data,
             move |ctx| {

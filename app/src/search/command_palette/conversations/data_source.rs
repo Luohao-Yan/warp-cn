@@ -8,6 +8,7 @@ use crate::search::command_palette::conversations::search_item::{
 };
 use crate::search::command_palette::mixer::CommandPaletteItemAction;
 use crate::search::command_palette::separator_search_item::SeparatorSearchItem;
+use std::sync::LazyLock;
 use crate::search::data_source::{DataSourceSearchError, Query, QueryResult};
 use crate::search::mixer::DataSourceRunErrorWrapper;
 use crate::search::SyncDataSource;
@@ -24,12 +25,16 @@ enum ConversationSection {
     Past,
 }
 
+static CONVERSATION_SECTION_ACTIVE_PANE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-active-pane").clone());
+static CONVERSATION_SECTION_OTHER_ACTIVE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-other-active").clone());
+static CONVERSATION_SECTION_PAST: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-past").clone());
+
 impl ConversationSection {
-    fn title(&self) -> &'static str {
+    fn title(&self) -> &str {
         match self {
-            ConversationSection::ActivePane => "Active pane conversations",
-            ConversationSection::OtherActive => "Other active conversations",
-            ConversationSection::Past => "Past conversations",
+            ConversationSection::ActivePane => &CONVERSATION_SECTION_ACTIVE_PANE,
+            ConversationSection::OtherActive => &CONVERSATION_SECTION_OTHER_ACTIVE,
+            ConversationSection::Past => &CONVERSATION_SECTION_PAST,
         }
     }
 

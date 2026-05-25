@@ -1,5 +1,9 @@
 use crate::code_review::comments::CommentId;
 use std::path::PathBuf;
+use std::sync::LazyLock;
+
+static INVALID_FILE_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-invalid-file-name"));
+static REVIEW_COMMENT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-review-comment"));
 
 /// The current state of a code review.
 #[derive(Debug, Clone, Default)]
@@ -34,7 +38,7 @@ impl ReviewComment {
                 let file_name = file_path
                     .file_name()
                     .and_then(|name| name.to_str())
-                    .unwrap_or("Invalid File Name");
+                    .unwrap_or(&INVALID_FILE_NAME);
                 let display_line = line_number + 1;
                 format!("{file_name}:{display_line}")
             }
@@ -42,14 +46,14 @@ impl ReviewComment {
                 let file_name = file_path
                     .file_name()
                     .and_then(|name| name.to_str())
-                    .unwrap_or("Invalid File Name");
+                    .unwrap_or(&INVALID_FILE_NAME);
                 file_name.to_string()
             }
             (None, _) => self
                 .head_title
                 .as_ref()
                 .cloned()
-                .unwrap_or_else(|| "Review Comment".to_string()),
+                .unwrap_or_else(|| REVIEW_COMMENT.clone()),
         }
     }
 }

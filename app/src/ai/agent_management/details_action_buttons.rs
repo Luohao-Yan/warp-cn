@@ -115,7 +115,7 @@ impl ConversationActionButtonsRow {
         let open_button = ctx.add_typed_action_view(|_| {
             Self::make_action_button(
                 Icon::LinkExternal,
-                "Open conversation",
+                crate::tr!("ai_assistant", "ai-open-conversation"),
                 None,
                 AgentDetailsAction::Open,
             )
@@ -124,7 +124,7 @@ impl ConversationActionButtonsRow {
         let cancel_task_button = ctx.add_typed_action_view(|_| {
             Self::make_action_button(
                 Icon::StopFilled,
-                "Cancel task",
+                crate::tr!("ai_assistant", "ai-cancel-task"),
                 Some(AnsiColorIdentifier::Red),
                 AgentDetailsAction::CancelTask,
             )
@@ -133,7 +133,7 @@ impl ConversationActionButtonsRow {
         let fork_conversation_button = ctx.add_typed_action_view(|_| {
             Self::make_action_button(
                 Icon::ArrowSplit,
-                "Fork conversation",
+                crate::tr!("ai_assistant", "ai-fork-conversation"),
                 None,
                 AgentDetailsAction::ForkConversation,
             )
@@ -142,7 +142,7 @@ impl ConversationActionButtonsRow {
         let view_details_button = ctx.add_typed_action_view(|_| {
             Self::make_action_button(
                 Icon::Info,
-                "View details",
+                crate::tr!("ai_assistant", "ai-view-details"),
                 None,
                 AgentDetailsAction::ViewDetails,
             )
@@ -151,7 +151,7 @@ impl ConversationActionButtonsRow {
         let copy_link_button = ctx.add_typed_action_view(|_| {
             Self::make_action_button(
                 Icon::Link,
-                "Copy link to run",
+                crate::tr!("ai_assistant", "ai-copy-link-to-run"),
                 None,
                 AgentDetailsAction::CopyLink,
             )
@@ -180,10 +180,11 @@ impl ConversationActionButtonsRow {
 
     fn make_action_button(
         icon: Icon,
-        tooltip: &str,
+        tooltip: impl Into<String>,
         icon_color: Option<AnsiColorIdentifier>,
         action: AgentDetailsAction,
     ) -> ActionButton {
+        let tooltip = tooltip.into();
         let mut button = ActionButton::new("", SecondaryTheme)
             .with_icon(icon)
             .with_size(ButtonSize::Small)

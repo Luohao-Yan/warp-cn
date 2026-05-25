@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use warpui::{
     elements::{ChildView, Container, Dismiss, Empty},
     ui_components::components::UiComponent,
@@ -41,7 +42,8 @@ impl DeleteEnvironmentConfirmationDialog {
         });
 
         let confirm_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Delete environment", DangerPrimaryTheme).on_click(|ctx| {
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-environment"));
+            ActionButton::new(&*LABEL, DangerPrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteEnvironmentConfirmationDialogAction::Confirm);
             })
         });
@@ -84,13 +86,10 @@ impl View for DeleteEnvironmentConfirmationDialog {
 
         let appearance = Appearance::as_ref(app);
 
-        let description = format!(
-            "Are you sure you want to remove the {} environment?",
-            self.env_name
-        );
+        let description = crate::tr!("settings", "delete-environment-description", name = self.env_name.as_str());
 
         let dialog = Dialog::new(
-            "Delete environment?".to_string(),
+            crate::tr!("settings", "delete-environment-title"),
             Some(description),
             dialog_styles(appearance),
         )

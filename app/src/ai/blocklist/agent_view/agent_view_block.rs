@@ -294,9 +294,9 @@ impl View for AgentViewEntryBlock {
         let is_open_elsewhere = is_active && !is_active_in_this_pane;
 
         let subtext = if is_open_elsewhere {
-            Some("Open in different pane")
+            Some(crate::tr!("ai", "ai-open-in-different-pane"))
         } else if self.is_restored {
-            Some("Restored")
+            Some("Restored".to_string())
         } else if !self.is_new
             && !matches!(
                 self.origin,
@@ -304,13 +304,13 @@ impl View for AgentViewEntryBlock {
                     | AgentViewEntryOrigin::AgentRequestedNewConversation
             )
         {
-            Some("Continued")
+            Some("Continued".to_string())
         } else {
             None
         };
 
         if let Some(subtext) = subtext {
-            row.add_child(render_subtext(subtext.to_string(), appearance));
+            row.add_child(render_subtext(subtext, appearance));
         }
 
         row.add_child(

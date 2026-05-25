@@ -230,7 +230,7 @@ impl ImportModal {
                 Shrinkable::new(
                     1.0,
                     Align::new(
-                        Text::new_inline("Import", appearance.ui_font_family(), HEADER_FONT_SIZE)
+                        Text::new_inline(crate::tr!("drive", "drive-import"), appearance.ui_font_family(), HEADER_FONT_SIZE)
                             .with_color(appearance.theme().active_ui_text_color().into())
                             .finish(),
                     )
@@ -284,9 +284,9 @@ impl ImportModal {
 
     fn render_footer(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let button_text = if !self.import_modal.as_ref(app).upload_in_progress(app) {
-            "Close".to_string()
+            crate::tr!("common", "close-label").to_string()
         } else {
-            "Cancel".to_string()
+            crate::tr!("common", "cancel-label").to_string()
         };
 
         Container::new(

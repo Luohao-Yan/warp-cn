@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use warpui::{
     elements::{ChildView, Container, CrossAxisAlignment, Expanded, Flex, ParentElement, Text},
     fonts::{Properties, Style, Weight},
@@ -35,8 +36,9 @@ impl PendingUserQueryBlock {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let close_button = show_close_button.then(|| {
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-remove-queued-prompt"));
             ctx.add_typed_action_view(|_| {
-                ActionButton::new("Remove queued prompt", NakedTheme)
+                ActionButton::new(&*LABEL, NakedTheme)
                     .with_icon(Icon::X)
                     .with_size(ButtonSize::XSmall)
                     .on_click(|ctx| {
@@ -45,8 +47,9 @@ impl PendingUserQueryBlock {
             })
         });
         let send_now_button = show_send_now_button.then(|| {
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-send-now"));
             ctx.add_typed_action_view(|_| {
-                ActionButton::new("Send now", NakedTheme)
+                ActionButton::new(&*LABEL, NakedTheme)
                     .with_icon(Icon::Play)
                     .with_size(ButtonSize::XSmall)
                     .on_click(|ctx| {
@@ -128,8 +131,9 @@ impl View for PendingUserQueryBlock {
         .with_selectable(false)
         .finish();
 
+        let queued_text = crate::tr!("ai_assistant", "ai-queued");
         let queued_badge = Text::new(
-            "Queued",
+            queued_text,
             appearance.ui_font_family(),
             appearance.monospace_font_size().max(4.) - 2.,
         )

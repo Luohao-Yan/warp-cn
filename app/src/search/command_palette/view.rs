@@ -3,6 +3,10 @@ use crate::drive::CloudObjectTypeAndId;
 use crate::search::binding_source::{BindingFilterFn, BindingSource};
 use crate::search::command_palette::mixer::CommandPaletteItemAction;
 use crate::search::command_palette::SelectedItems;
+use std::sync::LazyLock;
+
+static COMMAND_PALETTE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-palette-placeholder").clone());
+static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-palette-no-results").clone());
 use crate::search::result_renderer::QueryResultRenderer;
 use crate::search::search_bar::SelectionUpdate;
 use crate::search::search_bar::{SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering};
@@ -286,7 +290,7 @@ impl View {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                "Search for a command",
+                COMMAND_PALETTE_PLACEHOLDER.as_str(),
                 Self::create_query_result_renderer,
                 ctx,
             )
@@ -298,7 +302,7 @@ impl View {
         });
 
         let placeholder_element = QueryResultRenderer::new(
-            MatchedBinding::placeholder("No results found".into()).into(),
+            MatchedBinding::placeholder(NO_RESULTS_LABEL.clone()).into(),
             "command_palette:no_results".into(),
             |_, _, _| {},
             *styles::QUERY_RESULT_RENDERER_STYLES,

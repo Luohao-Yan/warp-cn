@@ -217,14 +217,14 @@ impl SecretManager {
     ) -> ErrorMessageAndCommand {
         match error_type {
             SecretErrorType::NotInstalled => {
-                let message = format!("{} CLI is not installed", &self);
+                let message = crate::tr!("settings", "settings-cli-not-installed", name = self.to_string());
 
                 let (link, link_message) = (
                     match self {
                         SecretManager::OnePassword => Some(ONEPASSWORD_DOCS_LINK.to_owned()),
                         SecretManager::LastPass => Some(LASTPASS_DOCS_LINK.to_owned()),
                     },
-                    Some(format!("View {} CLI installation documentation", &self)),
+                    Some(crate::tr!("settings", "settings-cli-install-doc", name = self.to_string())),
                 );
 
                 ErrorMessageAndCommand {
@@ -237,15 +237,12 @@ impl SecretManager {
                 let (link, link_message) = match self {
                     SecretManager::OnePassword => (
                         Some(ONEPASSWORD_DOCS_LINK.to_owned()),
-                        Some("Integrate 1Password app with CLI".to_owned()),
+                        Some(crate::tr!("settings", "settings-1password-integrate-cli")),
                     ),
                     SecretManager::LastPass => (None, None),
                 };
                 ErrorMessageAndCommand {
-                    message: format!(
-                        "{} didn't return secrets (likely not configured or authenticated)",
-                        &self
-                    ),
+                    message: crate::tr!("settings", "settings-secret-fetch-failed", manager = self.to_string()),
                     link,
                     link_message,
                 }

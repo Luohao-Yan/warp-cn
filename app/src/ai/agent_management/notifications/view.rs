@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use warp_core::ui::theme::color::internal_colors;
 use warpui::elements::new_scrollable::{ScrollableAppearance, SingleAxisConfig};
 use warpui::elements::{
@@ -116,19 +117,21 @@ impl NotificationMailboxView {
             AgentManagementEvent::ConversationNeedsAttention { .. } => {}
         });
 
-        let close_button = ctx.add_typed_action_view(|_| {
+        let close_tooltip = crate::tr!("ai_assistant", "ai-close-tooltip");
+        let close_button = ctx.add_typed_action_view(move |_| {
             ActionButton::new("", NakedTheme)
                 .with_icon(Icon::X)
                 .with_size(ButtonSize::XSmall)
-                .with_tooltip("Close")
+                .with_tooltip(&close_tooltip)
                 .with_tooltip_sublabel("Esc")
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NotificationMailboxViewAction::Dismiss);
                 })
         });
 
-        let mark_all_read_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Mark all as read", NakedTheme)
+        static MARK_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-mark-all-as-read"));
+        let mark_all_read_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*MARK_ALL_LABEL, NakedTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NotificationMailboxViewAction::MarkAllRead);
@@ -409,7 +412,7 @@ impl NotificationMailboxView {
 
         let label = appearance
             .ui_builder()
-            .wrappable_text("Notifications".to_string(), false)
+            .wrappable_text(crate::tr!("ai_assistant", "ai-notifications-title"), false)
             .with_style(UiComponentStyles {
                 font_size: Some(14.),
                 font_color: Some(theme.main_text_color(theme.surface_2()).into()),
@@ -462,7 +465,7 @@ impl NotificationMailboxView {
             let label = if count == 0 {
                 filter.label().to_string()
             } else {
-                format!("{} ({count})", filter.label())
+                crate::tr!("agent_cloud", "agent-cloud-filter-with-count", label = filter.label(), count = count)
             };
             let text_color = if is_active {
                 theme.main_text_color(theme.surface_2())
@@ -546,7 +549,7 @@ impl NotificationMailboxView {
         Container::new(
             appearance
                 .ui_builder()
-                .wrappable_text("No notifications".to_string(), false)
+                .wrappable_text(crate::tr!("ai_assistant", "ai-no-notifications"), false)
                 .with_style(UiComponentStyles {
                     font_size: Some(14.),
                     font_color: Some(theme.sub_text_color(theme.surface_2()).into()),

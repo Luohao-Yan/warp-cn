@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::Vector2F;
 use warp_core::features::FeatureFlag;
@@ -28,8 +30,12 @@ const VARIABLE_DIVIDER_HEIGHT: f32 = 2.;
 const SECTION_FONT_SIZE: f32 = 16.;
 const BUTTON_HEIGHT: f32 = 32.;
 
-const SAVE_BUTTON_TEXT: &str = "Save";
-const VARIABLES_LABEL_TEXT: &str = "Variables";
+static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-save-label"));
+static VARIABLES_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-variables-label"));
+static TRASH_BANNER_DELETED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-trash-banner-deleted"));
+static TRASH_BANNER_MOVED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-trash-banner-moved"));
+static RESTORE_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-restore-tooltip"));
+static LOAD_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-load-label"));
 
 /// This file contains components that fixed in the view,
 /// i.e. the trash banner, breadcrumbs, and variables section header
@@ -63,9 +69,9 @@ impl EnvVarCollectionView {
         let mut stack = Stack::new();
 
         let text = if deleted {
-            "You no longer have access to these environment variables"
+            TRASH_BANNER_DELETED_TEXT.as_str()
         } else {
-            "Environment variables were moved to trash"
+            TRASH_BANNER_MOVED_TEXT.as_str()
         };
         stack.add_child(
             Align::new(
@@ -107,6 +113,7 @@ impl EnvVarCollectionView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center);
 
             if !FeatureFlag::SharedWithMe.is_enabled() || access_level.can_trash() {
+                let restore_label = crate::tr!("drive", "drive-restore");
                 let ui_builder = appearance.ui_builder().clone();
                 action_row.add_child(
                     Align::new(
@@ -119,12 +126,12 @@ impl EnvVarCollectionView {
                             .with_tooltip(move || {
                                 ui_builder
                                     .tool_tip(
-                                        "Restore environment variables from trash".to_string(),
+                                        RESTORE_TOOLTIP_TEXT.clone(),
                                     )
                                     .build()
                                     .finish()
                             })
-                            .with_text_label("Restore".to_string())
+                            .with_text_label(restore_label)
                             .build()
                             .on_click(|ctx, _, _| {
                                 ctx.dispatch_typed_action(EnvVarCollectionAction::Untrash)
@@ -167,7 +174,7 @@ impl EnvVarCollectionView {
                 2.,
                 appearance
                     .ui_builder()
-                    .span(VARIABLES_LABEL_TEXT.to_string())
+                    .span(VARIABLES_LABEL_TEXT.clone())
                     .with_style(UiComponentStyles {
                         font_size: Some(SECTION_FONT_SIZE),
                         ..Default::default()
@@ -246,7 +253,7 @@ impl EnvVarCollectionView {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::TextFirst,
-                    "Load",
+                    LOAD_BUTTON_TEXT.clone(),
                     Icon::TerminalInput.to_warpui_icon(appearance.theme().active_ui_text_color()),
                     MainAxisSize::Min,
                     MainAxisAlignment::SpaceBetween,
@@ -299,7 +306,7 @@ impl EnvVarCollectionView {
                 font_size: Some(14.),
                 ..Default::default()
             })
-            .with_centered_text_label(SAVE_BUTTON_TEXT.to_owned());
+            .with_centered_text_label(SAVE_BUTTON_TEXT.clone());
 
         if is_save_disabled {
             button = button.disabled();

@@ -39,7 +39,7 @@ impl EnvVarCollectionSearchItem {
                 env_var_collection
                     .title
                     .clone()
-                    .unwrap_or("Untitled".to_owned()),
+                    .unwrap_or(crate::tr!("common", "common-untitled-label")),
                 true,
             )
             .with_style(UiComponentStyles {
@@ -97,7 +97,7 @@ impl SearchItem for EnvVarCollectionSearchItem {
             env_var_collection
                 .title
                 .clone()
-                .unwrap_or("Untitled".to_owned()),
+                .unwrap_or(crate::tr!("common", "common-untitled-label")),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -220,13 +220,12 @@ impl SearchItem for EnvVarCollectionSearchItem {
     fn accessibility_label(&self) -> String {
         let env_var_collection = self.env_var_collection.model().string_model.clone();
 
-        format!(
-            "Environment Variables: {}",
-            env_var_collection
-                .title
-                .clone()
-                .unwrap_or("Untitled".to_owned())
-        )
+        let title = env_var_collection
+            .title
+            .clone()
+            .unwrap_or(crate::tr!("common", "common-untitled-label").clone());
+        crate::tr!("search", "search-env-var-a11y-label")
+            .replace("{ $title }", &title)
     }
 }
 

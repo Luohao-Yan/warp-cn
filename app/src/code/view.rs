@@ -93,7 +93,6 @@ const TAB_PADDING: f32 = 2.;
 
 // Keybinding constants - exported so AI document view can reuse
 pub const SAVE_FILE_BINDING_NAME: &str = "code_view:save";
-pub const SAVE_FILE_BINDING_DESCRIPTION: &str = "Save file";
 
 pub fn init(app: &mut AppContext) {
     super::editor::view::init(app);
@@ -103,28 +102,28 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             SAVE_FILE_BINDING_NAME,
-            SAVE_FILE_BINDING_DESCRIPTION,
+            crate::tr!("code", "code-save-file"),
             CodeViewAction::SaveFile,
         )
         .with_context_predicate(text_entry.clone())
         .with_key_binding("cmdorctrl-s"),
         EditableBinding::new(
             "code_view:save_as",
-            "Save file as",
+            crate::tr!("code", "code-save-file-as"),
             CodeViewAction::SaveFileAs,
         )
         .with_context_predicate(text_entry.clone())
         .with_key_binding("cmdorctrl-shift-S"),
         EditableBinding::new(
             "code_view:close_all_tabs",
-            "Close all tabs",
+            crate::tr!("code", "code-close-all-tabs"),
             CodeViewAction::CloseAll,
         )
         .with_context_predicate(id!("CodeEditorView"))
         .with_key_binding("cmdorctrl-r w"),
         EditableBinding::new(
             "code_view:close_saved_tabs",
-            "Close saved tabs",
+            crate::tr!("code", "code-close-saved-tabs"),
             CodeViewAction::CloseSaved,
         )
         .with_context_predicate(id!("CodeEditorView"))
@@ -830,7 +829,7 @@ impl CodeView {
         let title = match &file_location {
             Some(FileLocation::Local(path)) => path.display().to_string(),
             Some(FileLocation::Remote(remote_path)) => remote_path.path.as_str().to_string(),
-            None => "Untitled".to_string(),
+            None => crate::tr!("code", "untitled"),
         };
 
         self.pane_configuration.update(ctx, |pane_config, ctx| {
@@ -920,7 +919,7 @@ impl CodeView {
 
     fn display_load_failure(window_id: WindowId, ctx: &mut ViewContext<Self>) {
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::error(String::from("Failed to load file."))
+            let toast = DismissibleToast::error(crate::tr!("code", "code-failed-to-load-file"))
                 .with_object_id("failed_to_load_file".to_string());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -928,7 +927,7 @@ impl CodeView {
 
     fn display_save_failure(window_id: WindowId, ctx: &mut ViewContext<Self>) {
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::error(String::from("Failed to save file."))
+            let toast = DismissibleToast::error(crate::tr!("code", "code-failed-to-save-file"))
                 .with_object_id("failed_to_save_file".to_string());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -936,7 +935,7 @@ impl CodeView {
 
     fn display_save_success(window_id: WindowId, ctx: &mut ViewContext<Self>) {
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::success(String::from("File saved."))
+            let toast = DismissibleToast::success(crate::tr!("code", "code-file-saved-toast"))
                 .with_object_id("file_saved".to_string());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -1065,7 +1064,7 @@ impl CodeView {
                                     ButtonVariant::Outlined,
                                     tab.mouse_state_handles.reject_mouse_state.clone(),
                                 )
-                                .with_text_label("Reject".to_string())
+                                .with_text_label(crate::tr!("code", "reject"))
                                 .build()
                                 .on_click(|ctx, _, _| {
                                     ctx.dispatch_typed_action(CodeViewAction::RejectPendingDiffs)
@@ -1083,7 +1082,7 @@ impl CodeView {
                                     ButtonVariant::Outlined,
                                     tab.mouse_state_handles.accept_mouse_state.clone(),
                                 )
-                                .with_text_label("Accept and save".to_string())
+                                .with_text_label(crate::tr!("code", "accept-and-save"))
                                 .build()
                                 .on_click(|ctx, _, _| {
                                     ctx.dispatch_typed_action(
@@ -1497,7 +1496,7 @@ impl CodeView {
             .path
             .as_ref()
             .and_then(|p| p.file_name().map(|f| f.to_string_lossy().to_string()))
-            .unwrap_or_else(|| "Untitled".to_string());
+            .unwrap_or_else(|| crate::tr!("common", "common-untitled-label"));
         let language_icon =
             icon_from_file_path(&file_name, appearance, ItemHighlightState::Default);
         row.add_child(
@@ -1885,7 +1884,7 @@ impl CodeView {
                         name
                     })
             })
-            .unwrap_or_else(|| "Untitled".to_string());
+            .unwrap_or_else(|| crate::tr!("common", "common-untitled-label"));
 
         let appearance = Appearance::as_ref(app);
         let is_pane_dragging = header_ctx.draggable_state.is_dragging();
@@ -1983,8 +1982,9 @@ impl CodeView {
             "Ctrl-R"
         };
 
+        let close_saved_label = crate::tr!("code", "close-saved");
         let mut items = vec![
-            MenuItemFields::new_with_label("Close saved", &format!("{modifier_keys} U"))
+            MenuItemFields::new_with_label(&close_saved_label, &format!("{modifier_keys} U"))
                 .with_on_select_action(CodeViewAction::CloseSaved)
                 .into_item(),
             MenuItemFields::toggle_pane_action(is_maximized)
@@ -1995,25 +1995,26 @@ impl CodeView {
         #[cfg(feature = "local_fs")]
         if let Some(path) = self.local_path(ctx) {
             let reveal_label = if cfg!(target_os = "macos") {
-                "Reveal in Finder"
+                crate::tr!("code", "reveal-in-finder")
             } else if cfg!(target_os = "windows") {
-                "Reveal in Explorer"
+                crate::tr!("code", "reveal-in-explorer")
             } else {
-                "Reveal in file manager"
+                crate::tr!("code", "reveal-in-file-manager")
             };
             items.extend([
                 MenuItem::Separator,
-                MenuItemFields::new("Copy file path")
+                MenuItemFields::new(&crate::tr!("code", "copy-file-path"))
                     .with_on_select_action(CodeViewAction::CopyFilePath)
                     .into_item(),
-                MenuItemFields::new(reveal_label)
+                MenuItemFields::new(&reveal_label)
                     .with_on_select_action(CodeViewAction::RevealInFinder)
                     .into_item(),
             ]);
 
             if is_markdown_file(&path) {
+                let md_preview = crate::tr!("code", "view-markdown-preview");
                 items.push(
-                    MenuItemFields::new("View Markdown preview")
+                    MenuItemFields::new(&md_preview)
                         .with_on_select_action(CodeViewAction::RenderMarkdown)
                         .into_item(),
                 );

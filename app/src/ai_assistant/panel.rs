@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use std::sync::LazyLock;
 use std::time::Duration;
 
 use chrono::Local;
@@ -75,15 +76,15 @@ const BODY_FONT_SIZE: f32 = 13.;
 const TITLE_FONT_SIZE: f32 = 16.;
 const ZERO_STATE_HELP_TEXT_FONT_SIZE: f32 = 12.;
 
-const ZERO_STATE_HELP_TEXT: &str = "Shift + ctrl + space a block or text selection to ask Warp AI.";
-const SCRIPT_ZERO_STATE_PROMPT: &str = "Write a script to connect to an AWS EC2 instance.";
-const GIT_ZERO_STATE_PROMPT: &str = "How do I undo the most recent commits in git?";
-const FILES_ZERO_STATE_PROMPT: &str = "How do I find all files containing specific text?";
+static ZERO_STATE_HELP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "zero-state-help-text"));
+static SCRIPT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-zero-state-script-prompt"));
+static GIT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-zero-state-git-prompt"));
+static FILES_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "zero-state-files-prompt"));
 
 // The placeholder texts are prepended with a space to give them cushion from the cursor.
-const INIT_PLACEHOLDER_TEXT: &str = " Ask a question...";
-const FOLLOWUP_PLACEHOLDER_TEXT: &str = " Type a response or click one above...";
-const RESTART_BUTTON_TEXT: &str = "Restart";
+static INIT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "init-placeholder-text"));
+static FOLLOWUP_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "followup-placeholder-text"));
+static RESTART_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "restart-button-text"));
 
 const ASK_AI_BLOCK_INPUT_LIMIT: usize = 100;
 
@@ -151,28 +152,28 @@ pub fn init(app: &mut AppContext) {
     app.register_fixed_bindings([FixedBinding::custom(
         CustomAction::CloseCurrentSession,
         AIAssistantAction::ClosePanel,
-        "Close Warp AI",
+        &crate::tr!("ai_assistant", "close-warp-ai"),
         id!("AIAssistantPanel"),
     )]);
 
     app.register_editable_bindings([
         EditableBinding::new(
             "ai_assistant_panel:focus_terminal_input",
-            "Focus Terminal Input From Warp AI",
+            &crate::tr!("ai_assistant", "focus-terminal-input-from-warp-ai"),
             AIAssistantAction::FocusTerminalInput,
         )
         .with_context_predicate(id!("AIAssistantPanel"))
         .with_key_binding(cmd_or_ctrl_shift("l")),
         EditableBinding::new(
             "ai_assistant_panel:reset_context",
-            "Restart Warp AI",
+            &crate::tr!("ai_assistant", "restart-warp-ai"),
             AIAssistantAction::ResetContext,
         )
         .with_context_predicate(id!("AIAssistantPanel"))
         .with_key_binding("ctrl-l"),
         EditableBinding::new(
             "ai_assistant_panel:reset_context",
-            "Restart Warp AI",
+            &crate::tr!("ai_assistant", "restart-warp-ai"),
             AIAssistantAction::ResetContext,
         )
         .with_context_predicate(id!("AIAssistantPanel"))
@@ -203,7 +204,7 @@ impl AIAssistantPanelView {
             })
         };
         editor.update(ctx, |editor, ctx| {
-            editor.set_placeholder_text(INIT_PLACEHOLDER_TEXT, ctx)
+            editor.set_placeholder_text(&*INIT_PLACEHOLDER_TEXT, ctx)
         });
         ctx.subscribe_to_view(&editor, |me, _, event, ctx| {
             me.handle_editor_event(event, ctx);
@@ -304,7 +305,7 @@ impl AIAssistantPanelView {
                 populate_input_box,
             } => {
                 if *populate_input_box {
-                    let prefix = "Explain the following:\n";
+                    let prefix = crate::tr!("ai_assistant", "explain-the-following");
                     let code_block_formatting_len = self.format_as_code_block("").len();
                     let truncated =
                         if text.chars().count() + prefix.len() + code_block_formatting_len
@@ -350,12 +351,12 @@ impl AIAssistantPanelView {
 
                 // Formatting strings.
                 let question = if block_successful {
-                    "\nWhat should I do next?"
+                    crate::tr!("ai_assistant", "what-should-i-do-next")
                 } else {
-                    "\nHow do I fix this?"
+                    crate::tr!("ai_assistant", "how-do-i-fix-this-block")
                 };
-                let prefix = "I ran the command: `";
-                let suffix = "` and got the following output:\n";
+                let prefix = crate::tr!("ai_assistant", "i-ran-the-command");
+                let suffix = crate::tr!("ai_assistant", "and-got-the-following-output");
                 let code_block_formatting_len = self.format_as_code_block("").len();
                 let non_input_output_len =
                     prefix.len() + suffix.len() + question.len() + code_block_formatting_len;
@@ -570,7 +571,7 @@ impl AIAssistantPanelView {
             RequestsEvent::RequestFinished { .. } => {
                 self.editor.update(ctx, |editor, ctx| {
                     editor.clear_buffer_and_reset_undo_stack(ctx);
-                    editor.set_placeholder_text(FOLLOWUP_PLACEHOLDER_TEXT, ctx);
+                    editor.set_placeholder_text(&*FOLLOWUP_PLACEHOLDER_TEXT, ctx);
                 });
                 self.transcript_view.update(ctx, |transcript_view, ctx| {
                     transcript_view.scroll_to_bottom_of_transcript(ctx);
@@ -638,7 +639,7 @@ impl AIAssistantPanelView {
         }
 
         self.editor.update(ctx, |editor, ctx| {
-            editor.set_placeholder_text(INIT_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*INIT_PLACEHOLDER_TEXT, ctx);
         });
 
         self.requests_model.update(ctx, |requests_model, ctx| {
@@ -721,7 +722,7 @@ impl AIAssistantPanelView {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .wrappable_text(AI_ASSISTANT_FEATURE_NAME.to_string(), false)
+                        .wrappable_text(AI_ASSISTANT_FEATURE_NAME.clone(), false)
                         .with_style(UiComponentStyles {
                             font_family_id: Some(appearance.ui_font_family()),
                             font_size: Some(TITLE_FONT_SIZE),
@@ -788,7 +789,7 @@ impl AIAssistantPanelView {
                 ..Default::default()
             };
             ui_builder
-                .tool_tip("Copy transcript to clipboard".to_owned())
+                .tool_tip(crate::tr!("ai_assistant", "copy-transcript-to-clipboard"))
                 .with_style(tool_tip_style)
                 .build()
                 .finish()
@@ -846,7 +847,7 @@ impl AIAssistantPanelView {
             .with_children([
                 Container::new(
                     Text::new_inline(
-                        "Character limit exceeded.",
+                        crate::tr!("ai_assistant", "character-limit-exceeded"),
                         appearance.ui_font_family(),
                         BODY_FONT_SIZE,
                     )
@@ -910,7 +911,7 @@ impl AIAssistantPanelView {
             )
             .with_child(
                 Container::new(
-                    Text::new_inline(ASK_AI_ASSISTANT_TEXT, appearance.ui_font_family(), 14.)
+                    Text::new_inline(&*ASK_AI_ASSISTANT_TEXT, appearance.ui_font_family(), 14.)
                         .with_color(sub_text_color)
                         .finish(),
                 )
@@ -925,7 +926,7 @@ impl AIAssistantPanelView {
                     self.mouse_state_handles.git_zero_state_prompt.clone(),
                     Some(300.),
                     None,
-                    GIT_ZERO_STATE_PROMPT,
+                    &*GIT_ZERO_STATE_PROMPT,
                 ))
                 .with_margin_top(20.)
                 .with_margin_bottom(10.)
@@ -935,7 +936,7 @@ impl AIAssistantPanelView {
                     self.mouse_state_handles.files_zero_state_prompt.clone(),
                     Some(300.),
                     None,
-                    FILES_ZERO_STATE_PROMPT,
+                    &*FILES_ZERO_STATE_PROMPT,
                 ))
                 .with_margin_bottom(10.)
                 .finish(),
@@ -944,7 +945,7 @@ impl AIAssistantPanelView {
                     self.mouse_state_handles.script_zero_state_prompt.clone(),
                     Some(300.),
                     None,
-                    SCRIPT_ZERO_STATE_PROMPT,
+                    &*SCRIPT_ZERO_STATE_PROMPT,
                 ))
                 .finish(),
             ]);

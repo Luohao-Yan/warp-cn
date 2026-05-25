@@ -67,7 +67,7 @@ impl WarpDriveItem for WarpDriveEnvVarCollection {
         let title_to_render = if let Some(title) = title_text {
             title
         } else {
-            "Untitled".to_string()
+            crate::tr!("drive", "drive-untitled")
         };
         let title = appearance
             .ui_builder()

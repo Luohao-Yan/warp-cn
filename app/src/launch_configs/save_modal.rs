@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use crate::app_state::{get_app_state, AppState};
 use crate::appearance::Appearance;
 use crate::editor::{
@@ -37,8 +38,6 @@ const MODAL_WIDTH: f32 = 660.;
 const SIDE_PADDING: f32 = 16.;
 const BUTTON_SIZE: f32 = 24.;
 const DOC_LINK_WIDTH: f32 = 120.;
-const SAVE_CONFIG_BUTTON_LABEL: &str = "Save Configuration";
-const OPEN_FILE_BUTTON_LABEL: &str = "Open YAML File";
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -289,7 +288,7 @@ impl LaunchConfigSaveModal {
     pub fn reset_editor(&mut self, ctx: &mut ViewContext<Self>) {
         self.editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text("launch_config.yaml", ctx);
+            editor.set_placeholder_text(&crate::tr!("common", "common-launch-config-placeholder"), ctx);
         });
     }
 
@@ -342,7 +341,7 @@ impl LaunchConfigSaveModal {
     ) -> Box<dyn Element> {
         self.save_modal_button(
             appearance,
-            SAVE_CONFIG_BUTTON_LABEL.to_owned(),
+            crate::tr!("common", "common-save-configuration-button"),
             self.mouse_states.save_button_state.clone(),
             disabled,
         )
@@ -356,7 +355,7 @@ impl LaunchConfigSaveModal {
     fn render_open_file_button(&self, appearance: &Appearance) -> Box<dyn Element> {
         self.save_modal_button(
             appearance,
-            OPEN_FILE_BUTTON_LABEL.to_owned(),
+            crate::tr!("common", "common-open-yaml-file-button"),
             self.mouse_states.open_file_button_state.clone(),
             false,
         )
@@ -433,13 +432,14 @@ impl LaunchConfigSaveModal {
 
     /// Renders the title of the modal
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
+        static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-save-current-configuration"));
         let header = Flex::row()
             .with_child(
                 Shrinkable::new(
                     1.0,
                     Align::new(
                         Text::new_inline(
-                            "Save Current Configuration",
+                            &*LABEL,
                             appearance.header_font_family(),
                             appearance.header_font_size(),
                         )

@@ -1,4 +1,4 @@
-use std::{cell::RefCell, collections::HashMap};
+use std::{cell::RefCell, collections::HashMap, sync::LazyLock};
 
 use settings::{Setting, ToggleableSetting};
 use warp_core::features::FeatureFlag;
@@ -25,8 +25,17 @@ use crate::{
     view_components::{Dropdown, DropdownItem},
 };
 
-const TABBED_FILE_VIEWER_TOGGLE_HEADER: &str = "Group files into single editor pane";
-const TABBED_FILE_VIEWER_TOGGLE_DESCRIPTION: &str = "When this setting is on, any files opened in the same tab will be automatically grouped into a single editor pane.";
+static SPLIT_PANE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "split-pane"));
+static NEW_TAB_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "new-tab"));
+static DEFAULT_APP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "default-app"));
+static WARP_LABEL: LazyLock<String> = LazyLock::new(|| "Warp".to_string());
+static EDITOR_LABEL: LazyLock<String> = LazyLock::new(|| "$EDITOR".to_string());
+static CHOOSE_EDITOR_FILES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "choose-editor-files"));
+static CHOOSE_EDITOR_CODE_PANELS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "choose-editor-code-panels"));
+static CHOOSE_LAYOUT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "choose-layout"));
+static TABBED_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "group-files-header"));
+static TABBED_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "group-files-description"));
+static MARKDOWN_DEFAULT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "open-markdown-default"));
 
 #[derive(Debug, Clone)]
 pub enum ExternalEditorAction {
@@ -121,7 +130,7 @@ impl ExternalEditorView {
         dropdown: &mut Dropdown<ExternalEditorAction>,
         ctx: &mut ViewContext<Dropdown<ExternalEditorAction>>,
     ) {
-        let default_option_text = "Split Pane";
+        let default_option_text = &*SPLIT_PANE_LABEL;
         let default_app = DropdownItem::new(
             default_option_text,
             ExternalEditorAction::SetLayout(EditorLayout::SplitPane),
@@ -129,14 +138,14 @@ impl ExternalEditorView {
 
         let mut items = vec![default_app];
         items.push(DropdownItem::new(
-            "New Tab",
+            &*NEW_TAB_LABEL,
             ExternalEditorAction::SetLayout(EditorLayout::NewTab),
         ));
 
         dropdown.set_items(items, ctx);
         match layout_to_open_files {
             EditorLayout::SplitPane => dropdown.set_selected_by_name(default_option_text, ctx),
-            EditorLayout::NewTab => dropdown.set_selected_by_name("New Tab", ctx),
+            EditorLayout::NewTab => dropdown.set_selected_by_name(&*NEW_TAB_LABEL, ctx),
         };
     }
 
@@ -146,7 +155,7 @@ impl ExternalEditorView {
         mut make_action: impl FnMut(EditorChoice) -> ExternalEditorAction,
         ctx: &mut ViewContext<Dropdown<ExternalEditorAction>>,
     ) {
-        let default_option_text = "Default App";
+        let default_option_text = &*DEFAULT_APP_LABEL;
         let default_app = DropdownItem::new(
             default_option_text,
             make_action(EditorChoice::SystemDefault),
@@ -154,10 +163,10 @@ impl ExternalEditorView {
 
         let mut items = vec![default_app];
 
-        items.push(DropdownItem::new("Warp", make_action(EditorChoice::Warp)));
+        items.push(DropdownItem::new(&*WARP_LABEL, make_action(EditorChoice::Warp)));
         if FeatureFlag::AllowOpeningFileLinksUsingEditorEnv.is_enabled() {
             items.push(DropdownItem::new(
-                "$EDITOR",
+                &*EDITOR_LABEL,
                 make_action(EditorChoice::EnvEditor),
             ));
         }
@@ -176,8 +185,8 @@ impl ExternalEditorView {
             EditorChoice::ExternalEditor(editor) => {
                 dropdown.set_selected_by_name(format!("{editor}"), ctx)
             }
-            EditorChoice::Warp => dropdown.set_selected_by_name("Warp", ctx),
-            EditorChoice::EnvEditor => dropdown.set_selected_by_name("$EDITOR", ctx),
+            EditorChoice::Warp => dropdown.set_selected_by_name(&*WARP_LABEL, ctx),
+            EditorChoice::EnvEditor => dropdown.set_selected_by_name(&*EDITOR_LABEL, ctx),
             EditorChoice::SystemDefault => dropdown.set_selected_by_name(default_option_text, ctx),
         };
     }
@@ -280,7 +289,7 @@ impl View for ExternalEditorView {
 
         let default_editor = render_dropdown_item(
             appearance,
-            "Choose an editor to open file links",
+            &*CHOOSE_EDITOR_FILES_LABEL,
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -295,7 +304,7 @@ impl View for ExternalEditorView {
 
         let code_panels_editor = render_dropdown_item(
             appearance,
-            "Choose an editor to open files from the code review panel, project explorer, and global search",
+            &*CHOOSE_EDITOR_CODE_PANELS_LABEL,
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -310,7 +319,7 @@ impl View for ExternalEditorView {
 
         let default_layout = render_dropdown_item(
             appearance,
-            "Choose a layout to open files in Warp",
+            &*CHOOSE_LAYOUT_LABEL,
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -330,7 +339,7 @@ impl View for ExternalEditorView {
 
         if FeatureFlag::TabbedEditorView.is_enabled() {
             column.add_child(render_body_item::<ExternalEditorAction>(
-                TABBED_FILE_VIEWER_TOGGLE_HEADER.into(),
+                TABBED_HEADER.clone(),
                 None,
                 LocalOnlyIconState::for_setting(
                     PreferTabbedEditorView::storage_key(),
@@ -353,12 +362,12 @@ impl View for ExternalEditorView {
                         ctx.dispatch_typed_action(ExternalEditorAction::ToggleTabbedEditorView);
                     })
                     .finish(),
-                Some(TABBED_FILE_VIEWER_TOGGLE_DESCRIPTION.into()),
+                Some(TABBED_DESCRIPTION.clone()),
             ));
         }
 
         column.add_child(render_body_item::<ExternalEditorAction>(
-            "Open Markdown files in Warp's Markdown Viewer by default".to_string(),
+            MARKDOWN_DEFAULT.clone(),
             Some(AdditionalInfo {
                 mouse_state: self.markdown_viewer_mouse_state.clone(),
                 on_click_action: Some(ExternalEditorAction::OpenUrl(

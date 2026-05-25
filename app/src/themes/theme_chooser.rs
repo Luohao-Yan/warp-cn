@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use pathfinder_color::ColorU;
 use settings::Setting as _;
 use warp_editor::editor::NavigationKey;
@@ -52,7 +54,7 @@ use crate::{
 use super::theme;
 
 // All units in px
-const THEME_CHOOSER_TITLE: &str = "Themes";
+static THEME_CHOOSER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-themes-title"));
 const CLOSE_BUTTON_MARGIN_RIGHT: f32 = 6.;
 const TITLE_FONT_SIZE: f32 = 16.;
 const TITLE_MARGIN: f32 = 12.;
@@ -122,13 +124,13 @@ impl ThemeChooserMode {
         let hint_text = match self {
             ThemeChooserMode::SystemAgnostic => appearance
                 .ui_builder()
-                .paragraph("Change your current theme.".to_string()),
+                .paragraph(crate::tr!("common", "common-theme-hint-default").to_string()),
             ThemeChooserMode::SystemLight => appearance
                 .ui_builder()
-                .paragraph("Pick a theme for when your system is in light mode.".to_string()),
+                .paragraph(crate::tr!("common", "common-theme-hint-light").to_string()),
             ThemeChooserMode::SystemDark => appearance
                 .ui_builder()
-                .paragraph("Pick a theme for when your system is in dark mode.".to_string()),
+                .paragraph(crate::tr!("common", "common-theme-hint-dark").to_string()),
         };
         hint_text
             .build()
@@ -643,7 +645,7 @@ impl ThemeChooser {
                     Align::new(
                         appearance
                             .ui_builder()
-                            .span(THEME_CHOOSER_TITLE.to_string())
+                            .span(THEME_CHOOSER_TITLE.clone())
                             .with_style(UiComponentStyles {
                                 font_family_id: Some(appearance.ui_font_family()),
                                 font_size: Some(TITLE_FONT_SIZE),
@@ -749,7 +751,7 @@ impl ThemeChooser {
                 .with_child(
                     appearance
                         .ui_builder()
-                        .span("No matching themes!".to_string())
+                        .span(crate::tr!("common", "common-no-matching-themes"))
                         .build()
                         .finish(),
                 )

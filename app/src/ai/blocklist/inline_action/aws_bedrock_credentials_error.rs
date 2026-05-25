@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use settings::Setting as _;
 use warp_core::ui::Icon;
 use warpui::elements::{
@@ -59,8 +60,9 @@ impl AwsBedrockCredentialsErrorView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         // Run button
-        let run_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Refresh AWS Credentials", PrimaryTheme)
+        static REFRESH_AWS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-refresh-aws-credentials"));
+        let run_button = ctx.add_typed_action_view(move |_ctx| {
+            ActionButton::new(&*REFRESH_AWS_LABEL, PrimaryTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AwsBedrockCredentialsErrorAction::RunLoginCommand)
@@ -68,8 +70,9 @@ impl AwsBedrockCredentialsErrorView {
         });
 
         // Configure button
-        let configure_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Configure", NakedTheme)
+        static CONFIGURE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-configure"));
+        let configure_button = ctx.add_typed_action_view(move |_ctx| {
+            ActionButton::new(&*CONFIGURE_LABEL, NakedTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AwsBedrockCredentialsErrorAction::Configure)
@@ -114,7 +117,7 @@ impl View for AwsBedrockCredentialsErrorView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_child(
                     Text::new(
-                        format!("Running `{}`...", self.login_command),
+                        crate::tr!("ai_assistant", "ai-running-login-command", login_command = self.login_command.clone()),
                         appearance.ui_font_family(),
                         14.,
                     )
@@ -141,7 +144,7 @@ impl View for AwsBedrockCredentialsErrorView {
 
         let make_alert_text = || {
             Text::new(
-                "AWS credentials expired or missing",
+                crate::tr!("ai_assistant", "ai-aws-auth-failed"),
                 appearance.ui_font_family(),
                 14.,
             )
@@ -152,11 +155,7 @@ impl View for AwsBedrockCredentialsErrorView {
 
         let make_detail_text = || {
             Text::new(
-                format!(
-                    "Failed to authenticate with AWS Bedrock when using {}. \
-                     Run `{}` to refresh credentials.",
-                    self.model_name, self.login_command
-                ),
+                crate::tr!("ai_assistant", "ai-aws-auth-failed", model_name = self.model_name.clone(), login_command = self.login_command.clone()),
                 appearance.ui_font_family(),
                 14.,
             )
@@ -190,7 +189,7 @@ impl View for AwsBedrockCredentialsErrorView {
             .finish();
 
             let checkbox_label = Text::new(
-                "Always run automatically",
+                crate::tr!("ai_assistant", "ai-always-run-auto"),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() - 1.,
             )

@@ -1,4 +1,5 @@
 //! AI Assistant has since been renamed to "Warp AI" in the product.
+use std::sync::LazyLock;
 use std::{collections::HashSet, sync::Arc};
 
 use crate::{
@@ -34,8 +35,8 @@ mod test_util;
 /// This is also roughly the limit at which the editor starts degrading.
 pub const PROMPT_CHARACTER_LIMIT: usize = 1000;
 
-pub const AI_ASSISTANT_FEATURE_NAME: &str = "Warp AI";
-pub const ASK_AI_ASSISTANT_TEXT: &str = "Ask Warp AI";
+pub static AI_ASSISTANT_FEATURE_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-feature-name"));
+pub static ASK_AI_ASSISTANT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-ask-text"));
 
 pub const AI_ASSISTANT_SVG_PATH: &str = "bundled/svg/ai-assistant.svg";
 

@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 use pathfinder_color::ColorU;
@@ -125,10 +127,12 @@ impl EnvironmentSetupModeSelector {
     }
 
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
+        static TERMINAL_CHOOSE_SETUP: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("terminal", "terminal-choose-setup-env"));
         let theme = appearance.theme();
 
         let title = Text::new(
-            "Choose how you'd like to set up your environment".to_string(),
+            &*TERMINAL_CHOOSE_SETUP,
             appearance.ui_font_family(),
             TITLE_FONT_SIZE,
         )
@@ -262,7 +266,7 @@ impl EnvironmentSetupModeSelector {
 
             if is_suggested {
                 let suggested_text =
-                    Text::new("Suggested".to_string(), font_family, OPTION_DESC_FONT_SIZE)
+                    Text::new(crate::tr!("common", "suggested").to_string(), font_family, OPTION_DESC_FONT_SIZE)
                         .with_style(Properties::default().weight(Weight::Medium))
                         .with_color(badge_text_color)
                         .finish();

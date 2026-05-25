@@ -1,6 +1,7 @@
 use fuzzy_match::FuzzyMatchResult;
 use ordered_float::OrderedFloat;
 use std::fmt::Debug;
+use std::sync::LazyLock;
 
 use crate::appearance::Appearance;
 use crate::cloud_object::ObjectType;
@@ -13,6 +14,8 @@ use warpui::elements::{
 };
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
+
+static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-untitled").clone());
 
 const MAX_COMBINED_LENGTH: usize = 55;
 
@@ -199,7 +202,7 @@ impl SearchItem for NotebookSearchItem {
 
         // Use notebook name, or "Untitled" if empty
         let display_name = if self.notebook_name.is_empty() {
-            "Untitled".to_string()
+            UNTITLED_LABEL.clone()
         } else {
             self.notebook_name.clone()
         };

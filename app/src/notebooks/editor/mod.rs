@@ -134,15 +134,15 @@ impl BlockType {
         }
     }
 
-    fn label(self) -> &'static str {
+    fn label(self) -> String {
         match self {
-            BlockType::Text => "Text",
-            BlockType::Header(size) => size.label(),
-            BlockType::RunnableCommand => "Command",
-            BlockType::UnorderedList => "Bulleted list",
-            BlockType::OrderedList => "Numbered list",
-            BlockType::Code => "Code",
-            BlockType::TaskList => "To-do list",
+            BlockType::Text => crate::tr!("notebooks", "block-text"),
+            BlockType::Header(size) => size.label().to_string(),
+            BlockType::RunnableCommand => crate::tr!("notebooks", "block-command"),
+            BlockType::UnorderedList => crate::tr!("notebooks", "block-bulleted-list"),
+            BlockType::OrderedList => crate::tr!("notebooks", "block-numbered-list"),
+            BlockType::Code => crate::tr!("notebooks", "block-code"),
+            BlockType::TaskList => crate::tr!("notebooks", "block-to-do-list"),
         }
     }
 }

@@ -555,7 +555,7 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::CommentsAddressed {
                     comments: comment_ids,
                 } => {
-                    result.push(format!("Addressed {} comments", comment_ids.len()));
+                    result.push(crate::tr!("ai_assistant", "ai-assistant-addressed-comments", count = comment_ids.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::Reasoning { .. } => continue,
@@ -569,11 +569,11 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::ArtifactCreated(_) => continue,
                 AIAgentOutputMessageType::SkillInvoked(_) => continue,
                 AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                    result.push(format!("Received {} messages", messages.len()));
+                    result.push(crate::tr!("ai_assistant", "ai-assistant-received-messages", count = messages.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                    result.push(format!("Received {} agent events", event_ids.len()));
+                    result.push(crate::tr!("ai_assistant", "ai-assistant-received-events", count = event_ids.len()));
                     last_was_action = false;
                 }
             }
@@ -678,12 +678,12 @@ impl Display for RenderableAIError {
             Self::ServerOverloaded => {
                 write!(f, "Warp is currently overloaded. Please try again later.")
             }
-            Self::InternalWarpError => write!(f, "Internal Warp error."),
+            Self::InternalWarpError => write!(f, "{}", crate::tr!("ai_assistant", "ai-internal-warp-error")),
             Self::ContextWindowExceeded(message) => {
                 write!(f, "Context window exceeded: {message}")
             }
             Self::InvalidApiKey { provider, .. } => {
-                write!(f, "Invalid API key for {provider}")
+                write!(f, "{}", crate::tr!("ai_assistant", "ai-invalid-api-key-for-provider", provider = provider.as_ref()))
             }
             Self::AwsBedrockCredentialsExpiredOrInvalid { model_name } => {
                 write!(
@@ -2622,7 +2622,7 @@ impl AIAgentInput {
             } => Some(url.query.clone()),
             Self::InitProjectRules { display_query, .. }
             | Self::CreateEnvironment { display_query, .. } => display_query.clone(),
-            Self::CodeReview { .. } => Some("Address these comments".to_string()),
+            Self::CodeReview { .. } => Some(crate::tr!("ai", "ai-address-comments")),
             Self::FetchReviewComments { .. } => Some(commands::PR_COMMENTS.name.to_string()),
             Self::InvokeSkill {
                 skill, user_query, ..

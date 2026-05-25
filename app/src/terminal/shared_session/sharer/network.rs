@@ -9,6 +9,7 @@ use crate::terminal::shared_session::network::heartbeat::{Event as HeartbeatEven
 use crate::terminal::shared_session::{connect_endpoint, max_session_size};
 use async_channel::Receiver;
 use byte_unit::{Byte, UnitType};
+use std::sync::LazyLock;
 use futures_util::stream::AbortHandle;
 use futures_util::{SinkExt, StreamExt};
 use instant::Instant;
@@ -1236,8 +1237,7 @@ impl Network {
     }
 }
 
-const NO_QUOTA_REMAINING_MESSAGE: &str =
-    "Session sharing usage exceeded for the day. Please try again later.";
+static NO_QUOTA_REMAINING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-sharing-usage-exceeded"));
 
 /// Converts [`SessionTerminatedReason`] to a user-facing string.
 pub fn session_terminated_reason_string(
@@ -1247,14 +1247,14 @@ pub fn session_terminated_reason_string(
     match reason {
         SessionTerminatedReason::NoUserQuotaRemaining {} => {
             // TODO: we should pass down the next refresh time to tell the user.
-            NO_QUOTA_REMAINING_MESSAGE.to_string()
+            NO_QUOTA_REMAINING_MESSAGE.clone()
         }
         SessionTerminatedReason::ExceededSizeLimit => {
             let max_bytes = max_session_size.get_appropriate_unit(UnitType::Decimal);
-            format!("Session limit ({max_bytes}) exceeded. Please reshare to continue.")
+            crate::tr!("terminal", "terminal-session-limit-exceeded", limit = max_bytes.to_string())
         }
         SessionTerminatedReason::InternalServerError { .. } => {
-            "Session ended due to an internal error. Please try sharing again.".to_string()
+            crate::tr!("terminal", "terminal-session-internal-error")
         }
     }
 }

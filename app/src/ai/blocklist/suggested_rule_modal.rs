@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+use std::sync::LazyLock;
 use crate::ai::agent::SuggestedRule;
 use crate::ai::facts::CloudAIFactModel;
 use crate::cloud_object::model::generic_string_model::GenericStringObjectId;
@@ -45,7 +47,7 @@ use warpui::{
     ViewHandle,
 };
 
-const HEADER_TEXT: &str = "Suggested rule";
+const HEADER_TEXT: &str = "ai_assistant-ai-suggested-rule-header";
 const MAX_EDITOR_HEIGHT: f32 = 240.;
 
 pub fn init(app: &mut AppContext) {
@@ -103,7 +105,7 @@ impl SuggestedRuleModal {
 
         let view_handle = view.clone();
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(HEADER_TEXT.to_string()), view, ctx)
+            Modal::new(Some(crate::tr!("ai_assistant", "ai-suggested-rule-header")), view, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(510.),
                     background: Some(background.into()),
@@ -255,7 +257,7 @@ impl SuggestedRuleView {
         ctx.subscribe_to_model(&network_status, |me, _, _event, ctx| {
             let is_edit_allowed = me.is_edit_allowed(ctx);
             let tooltip = if !is_edit_allowed {
-                Some("Editing is disabled while offline.".to_string())
+                Some(crate::tr!("ai_assistant", "ai-editing-disabled-offline"))
             } else {
                 None
             };
@@ -317,12 +319,14 @@ impl SuggestedRuleView {
         });
 
         let add_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Add rule", PrimaryTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-add-rule"));
+            ActionButton::new(&*LABEL, PrimaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(SuggestedRuleDialogAction::Add))
         });
 
         let edit_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Edit rule", PrimaryTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-edit-rule"));
+            ActionButton::new(&*LABEL, PrimaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(SuggestedRuleDialogAction::Edit))
         });
 
@@ -503,7 +507,7 @@ impl SuggestedRuleView {
         {
             let AIFact::Memory(AIMemory { name, content, .. }) = rule.model().string_model.clone();
             self.name_editor.update(ctx, |name_editor, ctx| {
-                name_editor.set_buffer_text(&name.unwrap_or("Untitled".to_string()), ctx);
+                name_editor.set_buffer_text(&name.unwrap_or(crate::tr!("ai_assistant", "ai-untitled")), ctx);
             });
             self.content_editor.update(ctx, |content_editor, ctx| {
                 content_editor.set_buffer_text(&content, ctx);
@@ -555,7 +559,7 @@ impl SuggestedRuleView {
         ctx.notify();
     }
 
-    fn render_label(&self, text: String, appearance: &Appearance) -> Box<dyn Element> {
+    fn render_label(&self, text: impl Into<Cow<'static, str>>, appearance: &Appearance) -> Box<dyn Element> {
         Container::new(appearance.ui_builder().span(text).build().finish())
             .with_margin_bottom(8.)
             .finish()
@@ -571,7 +575,7 @@ impl SuggestedRuleView {
         let editor_margin = 16.;
 
         Flex::column()
-            .with_child(self.render_label("Name".to_string(), appearance))
+            .with_child(self.render_label(crate::tr!("ai_assistant", "ai-name-label"), appearance))
             .with_child(
                 Container::new(ChildView::new(&self.name_editor).finish())
                     .with_background(editor_bg)
@@ -582,7 +586,7 @@ impl SuggestedRuleView {
                     .with_margin_bottom(editor_margin)
                     .finish(),
             )
-            .with_child(self.render_label("Rule".to_string(), appearance))
+            .with_child(self.render_label(crate::tr!("ai_assistant", "ai-rule-label"), appearance))
             .with_child(
                 ConstrainedBox::new(
                     Container::new(

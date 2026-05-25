@@ -32,12 +32,13 @@ use crate::server::network_logging::NetworkLogModel;
 use crate::ui_components::blended_colors;
 use crate::ui_components::buttons::icon_button_with_color;
 use crate::ui_components::icons;
+use std::sync::LazyLock;
 
 /// Header text for the network log pane.
-pub const NETWORK_LOG_HEADER_TEXT: &str = "Network log";
+pub static NETWORK_LOG_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-network-log-header").clone());
 
 /// Tooltip shown on hover over the refresh button in the pane header.
-const REFRESH_TOOLTIP: &str = "Refresh";
+static REFRESH_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-network-log-refresh-tooltip").clone());
 
 /// Event emitted by the [`NetworkLogView`].
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -68,7 +69,7 @@ pub struct NetworkLogView {
 impl NetworkLogView {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let pane_configuration =
-            ctx.add_model(|_ctx| PaneConfiguration::new(NETWORK_LOG_HEADER_TEXT));
+            ctx.add_model(|_ctx| PaneConfiguration::new(NETWORK_LOG_HEADER_TEXT.as_str()));
 
         // Capture a one-shot snapshot of the model. We intentionally do not
         // subscribe to the model: new items that arrive after the pane is
@@ -156,7 +157,7 @@ impl NetworkLogView {
         )
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(REFRESH_TOOLTIP.to_string())
+                .tool_tip(REFRESH_TOOLTIP.clone())
                 .build()
                 .finish()
         })
@@ -232,7 +233,7 @@ impl BackingView for NetworkLogView {
         app: &AppContext,
     ) -> HeaderContent {
         HeaderContent::Standard(StandardHeader {
-            title: NETWORK_LOG_HEADER_TEXT.to_string(),
+            title: NETWORK_LOG_HEADER_TEXT.clone(),
             title_secondary: None,
             title_style: None,
             title_clip_config: ClipConfig::start(),

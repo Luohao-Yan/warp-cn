@@ -253,7 +253,7 @@ impl InstallationModalBody {
 
         // Renders MCP title text
         let title = Text::new(
-            format!("Install {name}"),
+            crate::tr!("settings", "settings-install-mcp", name = name.as_str()),
             appearance.ui_font_family(),
             appearance.header_font_size(),
         )
@@ -297,7 +297,7 @@ impl InstallationModalBody {
         // Renders 'ESC' text for closing the modal
         let escape_button = Container::new(
             Text::new_inline(
-                "ESC".to_string(),
+                crate::tr!("settings", "settings-esc-key"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size() * 0.8,
             )
@@ -345,7 +345,7 @@ impl InstallationModalBody {
             )
             .with_margin_bottom(INSTALLATION_MODAL_TITLE_VERTICAL_SPACING)
             .finish()),
-            Err(e) => Err(format!("Failed to parse markdown: {e:?}")),
+            Err(e) => Err(crate::tr!("settings", "settings-failed-parse-markdown", error = format!("{e:?}"))),
         }
     }
 
@@ -419,13 +419,13 @@ impl InstallationModalBody {
         .finish();
 
         let source_text = if is_shared {
-            "Shared from team"
+            crate::tr!("settings", "settings-mcp-shared-from-team")
         } else {
-            "From another device"
+            crate::tr!("settings", "settings-mcp-from-another-device")
         };
 
         let label_text = Text::new_inline(
-            source_text.to_string(),
+            source_text,
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )
@@ -483,7 +483,7 @@ impl InstallationModalBody {
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
                 Text::new_inline(
-                    "Install",
+                    crate::tr!("common", "common-install-label"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )
@@ -614,7 +614,7 @@ impl View for InstallationModalBody {
                 .finish()
         } else {
             Text::new(
-                "No MCP server selected",
+                crate::tr!("settings", "settings-mcp-no-server-selected"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )

@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use warpui::{
     elements::{MouseStateHandle, Text},
@@ -16,10 +17,10 @@ use super::{
     InlineBannerTextButtonVariant,
 };
 
-const SPEEDBUMP_HEADER: &str = "Optimize Warp for this codebase?";
-const SPEEDBUMP_TEXT: &str = "Unlock smarter, more consistent responses by letting the Agent understand your codebase and generate rules for it. You can also do this at any point by running /init";
+static SPEEDBUMP_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "optimize-codebase-header"));
+static SPEEDBUMP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "optimize-codebase-text"));
 /// Text for the button that allows execution
-const ALLOW_BUTTON_TEXT: &str = "Optimize";
+static ALLOW_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "optimize"));
 
 #[derive(Clone, Copy, Debug)]
 pub enum AgentModeSetupSpeedbumpBannerAction {
@@ -55,7 +56,7 @@ pub fn render_agent_mode_setup_banner(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let open_button = InlineBannerTextButton {
-        text: ALLOW_BUTTON_TEXT.to_string(),
+        text: ALLOW_BUTTON_TEXT.clone(),
         text_color: appearance.theme().active_ui_text_color().into_solid(),
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::AgentModeSetupSpeedbumpBanner(
@@ -79,7 +80,7 @@ pub fn render_agent_mode_setup_banner(
         InlineBannerStyle::Recommendation,
         appearance,
         InlineBannerContent {
-            title: SPEEDBUMP_HEADER.to_string(),
+            title: SPEEDBUMP_HEADER.clone(),
             buttons: vec![open_button],
             close_button: Some(close_button),
             header_icon: Some(InlineBannerIcon {
@@ -88,7 +89,7 @@ pub fn render_agent_mode_setup_banner(
                 color_override: Some(appearance.theme().active_ui_text_color().into_solid()),
             }),
             content: Some(vec![Text::new(
-                SPEEDBUMP_TEXT,
+                &*SPEEDBUMP_TEXT,
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() - 2.,
             )

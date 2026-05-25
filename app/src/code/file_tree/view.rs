@@ -13,6 +13,7 @@ use std::collections::{HashMap, HashSet};
 use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use std::sync::LazyLock;
 use warp_util::path::LineAndColumnArg;
 use warp_util::standardized_path::StandardizedPath;
 
@@ -72,9 +73,9 @@ use warp_core::HostId;
 mod editing;
 mod render;
 
-const REMOTE_TEXT: &str = "The Project Explorer requires access to your local workspace, which isn’t supported in remote sessions.";
-const DISABLED_TEXT: &str = "The Project Explorer requires access to your local workspace. Open a new session or navigate to an active session to view.";
-const WSL_TEXT: &str = "The Project Explorer doesn't currently work in WSL.";
+pub static REMOTE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-remote"));
+pub static DISABLED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-disabled"));
+pub static WSL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-wsl"));
 
 /// Stable identifier for an item in the file tree.
 /// Includes both the root directory and the index within that root's flattened list.
@@ -1595,9 +1596,9 @@ impl FileTreeView {
     fn show_exceeded_file_limit_toast(ctx: &mut ViewContext<Self>) {
         let window_id = ctx.window_id();
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::error(String::from(
-                "Folder has too many files to display in the file explorer.",
-            ))
+            let toast = DismissibleToast::error(
+                crate::tr!("code", "folder-too-many-files")
+            )
             .with_object_id("file_tree_exceeded_file_limit".to_string());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -2311,21 +2312,24 @@ impl FileTreeView {
                 FileTreeItem::File { .. } => {
                     let path_local = item.path().to_local_path_lossy();
                     if !is_file_content_binary(&path_local) {
+                        let open_in_pane = crate::tr!("code", "open-in-new-pane");
+                        let open_in_tab = crate::tr!("code", "open-in-new-tab");
                         items.extend([
-                            MenuItemFields::new("Open in new pane")
+                            MenuItemFields::new(&open_in_pane)
                                 .with_on_select_action(FileTreeAction::OpenInNewPane {
                                     id: id.clone(),
                                 })
                                 .into_item(),
-                            MenuItemFields::new("Open in new tab")
+                            MenuItemFields::new(&open_in_tab)
                                 .with_on_select_action(FileTreeAction::OpenInNewTab {
                                     id: id.clone(),
                                 })
                                 .into_item(),
                         ]);
                     } else {
+                        let open_file = crate::tr!("code", "open-file");
                         items.push(
-                            MenuItemFields::new("Open file")
+                            MenuItemFields::new(&open_file)
                                 .with_on_select_action(FileTreeAction::ItemClicked {
                                     id: id.clone(),
                                 })
@@ -2334,8 +2338,9 @@ impl FileTreeView {
                     }
                 }
                 FileTreeItem::DirectoryHeader { .. } => {
+                    let new_file = crate::tr!("code", "new-file");
                     items.push(
-                        MenuItemFields::new("New file")
+                        MenuItemFields::new(&new_file)
                             .with_on_select_action(FileTreeAction::NewFileBelowDirectory {
                                 id: id.clone(),
                             })
@@ -2343,16 +2348,18 @@ impl FileTreeView {
                     );
                     items.push(MenuItem::Separator);
                     if self.has_terminal_session {
+                        let cd_to_dir = crate::tr!("code", "cd-to-directory");
                         items.push(
-                            MenuItemFields::new("cd to directory")
+                            MenuItemFields::new(&cd_to_dir)
                                 .with_on_select_action(FileTreeAction::CDToDirectory {
                                     id: id.clone(),
                                 })
                                 .into_item(),
                         );
                     }
+                    let open_in_tab2 = crate::tr!("code", "open-in-new-tab");
                     items.push(
-                        MenuItemFields::new("Open in new tab")
+                        MenuItemFields::new(&open_in_tab2)
                             .with_on_select_action(FileTreeAction::OpenInNewTab { id: id.clone() })
                             .into_item(),
                     );
@@ -2360,14 +2367,14 @@ impl FileTreeView {
             };
 
             let open_text = if cfg!(target_os = "macos") {
-                "Reveal in Finder"
+                crate::tr!("code", "reveal-in-finder")
             } else if cfg!(target_os = "windows") {
-                "Reveal in Explorer"
+                crate::tr!("code", "reveal-in-explorer")
             } else {
-                "Reveal in file manager"
+                crate::tr!("code", "reveal-in-file-manager")
             };
             items.push(
-                MenuItemFields::new(open_text)
+                MenuItemFields::new(&open_text)
                     .with_on_select_action(FileTreeAction::OpenInFinder { id: id.clone() })
                     .into_item(),
             );
@@ -2376,8 +2383,9 @@ impl FileTreeView {
             // multiple repos in a project view, for instance. This disallows deletion/renaming of the root repo.
             let is_repo_root_dir = id.index == 0;
             if !is_repo_root_dir {
+                let rename_label = crate::tr!("common", "rename-label");
                 items.push(
-                    MenuItemFields::new("Rename")
+                    MenuItemFields::new(&rename_label)
                         .with_on_select_action(FileTreeAction::Rename { id: id.clone() })
                         .into_item(),
                 );
@@ -2393,8 +2401,9 @@ impl FileTreeView {
             if !items.is_empty() {
                 items.push(MenuItem::Separator);
             }
+            let attach_label = crate::tr!("code", "attach-as-context");
             items.push(
-                MenuItemFields::new("Attach as context")
+                MenuItemFields::new(&attach_label)
                     .with_on_select_action(FileTreeAction::AttachAsContext { id: id.clone() })
                     .into_item(),
             );
@@ -2407,7 +2416,7 @@ impl FileTreeView {
             MenuItemFields::new(crate::tr!("code_editor", "code-file-tree-copy-path"))
                 .with_on_select_action(FileTreeAction::CopyPath { id: id.clone() })
                 .into_item(),
-            MenuItemFields::new("Copy relative path")
+            MenuItemFields::new(&crate::tr!("code", "copy-relative-path"))
                 .with_on_select_action(FileTreeAction::CopyRelativePath { id: id.clone() })
                 .into_item(),
         ]);
@@ -2725,7 +2734,7 @@ impl FileTreeView {
             )
             .with_child(
                 Text::new(
-                    "Project explorer unavailable",
+                    crate::tr!("code", "project-explorer-unavailable"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() + 2.,
                 )
@@ -2912,13 +2921,13 @@ impl View for FileTreeView {
 
     #[cfg(not(feature = "local_fs"))]
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
-        self.render_error_state(REMOTE_TEXT.to_string(), app)
+        self.render_error_state(REMOTE_TEXT.clone(), app)
     }
 
     #[cfg(feature = "local_fs")]
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         if matches!(self.enablement, CodingPanelEnablementState::Disabled) {
-            return self.render_error_state(DISABLED_TEXT.to_string(), app);
+            return self.render_error_state(DISABLED_TEXT.clone(), app);
         }
 
         if matches!(
@@ -2939,7 +2948,7 @@ impl View for FileTreeView {
                 return if has_remote_server {
                     self.render_loading_state(app)
                 } else {
-                    self.render_error_state(REMOTE_TEXT.to_string(), app)
+                    self.render_error_state(REMOTE_TEXT.clone(), app)
                 };
             }
 
@@ -2947,7 +2956,7 @@ impl View for FileTreeView {
                 self.enablement,
                 CodingPanelEnablementState::UnsupportedSession
             ) {
-                return self.render_error_state(WSL_TEXT.to_string(), app);
+                return self.render_error_state(WSL_TEXT.clone(), app);
             }
 
             return self.render_loading_state(app);

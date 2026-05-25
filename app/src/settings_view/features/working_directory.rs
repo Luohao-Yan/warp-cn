@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use itertools::Itertools;
 use warpui::{
     elements::{Container, CrossAxisAlignment, Flex, ParentElement, Shrinkable},
@@ -15,6 +17,17 @@ use crate::{
     terminal::session_settings::*,
     view_components::{dropdown::TOP_MENU_BAR_HEIGHT, Dropdown, DropdownItem},
 };
+
+static SETTINGS_NEW_WINDOW_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-new-window"));
+static SETTINGS_NEW_TAB_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-new-tab"));
+static SETTINGS_SPLIT_PANE_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-split-pane"));
+static SETTINGS_ADVANCED_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-advanced"));
+static SETTINGS_DIRECTORY_PATH_PLACEHOLDER: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-directory-path-placeholder"));
 
 #[derive(Clone, Debug)]
 #[allow(clippy::enum_variant_names)]
@@ -145,21 +158,21 @@ impl View for WorkingDirectoryView {
             let items = Flex::column()
                 .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
                 .with_children([
-                    ui_builder.label("New window").build().finish(),
+                    ui_builder.label(&*SETTINGS_NEW_WINDOW_LABEL).build().finish(),
                     render_row(
                         &self.new_window_working_directory_dropdown,
                         &self.new_window_working_directory_editor,
                         config.new_window.mode == WorkingDirectoryMode::CustomDir,
                         appearance,
                     ),
-                    ui_builder.label("New tab").build().finish(),
+                    ui_builder.label(&*SETTINGS_NEW_TAB_LABEL).build().finish(),
                     render_row(
                         &self.new_tab_working_directory_dropdown,
                         &self.new_tab_working_directory_editor,
                         config.new_tab.mode == WorkingDirectoryMode::CustomDir,
                         appearance,
                     ),
-                    ui_builder.label("Split pane").build().finish(),
+                    ui_builder.label(&*SETTINGS_SPLIT_PANE_LABEL).build().finish(),
                     render_row(
                         &self.split_pane_working_directory_dropdown,
                         &self.split_pane_working_directory_editor,
@@ -311,7 +324,7 @@ fn init_top_level_dropdown(
     })
     .collect_vec();
     items.push(DropdownItem::new(
-        "Advanced".to_string(),
+        SETTINGS_ADVANCED_LABEL.clone(),
         WorkingDirectoryAction::SetGlobalWorkingDirectoryMode(None),
     ));
     let advanced_item_index = items.len() - 1;
@@ -370,7 +383,7 @@ fn create_editor(
         };
         ctx.add_typed_action_view(|ctx| {
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("Directory path", ctx);
+            editor.set_placeholder_text(&*SETTINGS_DIRECTORY_PATH_PLACEHOLDER, ctx);
             editor
         })
     };

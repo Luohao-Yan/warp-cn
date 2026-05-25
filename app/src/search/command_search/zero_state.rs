@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 use lazy_static::lazy_static;
 use warp_core::features::FeatureFlag;
@@ -17,6 +18,13 @@ use crate::drive::settings::{WarpDriveSettings, WarpDriveSettingsChangedEvent};
 use crate::search::FilterChipRenderer;
 use crate::search::QueryFilter;
 use crate::settings::{AISettings, AISettingsChangedEvent};
+
+static SEARCH_COMMAND_SEARCH: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-command-search"));
+static SEARCH_IM_LOOKING_FOR: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-im-looking-for"));
+static SEARCH_EXAMPLE_QUERIES: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-example-queries"));
 
 lazy_static! {
     /// Map of sample queries to the [`QueryFilter`]s they employ.
@@ -196,7 +204,7 @@ impl View for CommandSearchZeroStateView {
 
         let command_search_text = Container::new(
             Text::new_inline(
-                "Command Search",
+                &*SEARCH_COMMAND_SEARCH,
                 appearance.ui_font_family(),
                 styles::header_text_font_size(appearance),
             )
@@ -218,7 +226,7 @@ impl View for CommandSearchZeroStateView {
             .with_child(
                 Container::new(
                     Text::new_inline(
-                        "I'm looking for...",
+                        &*SEARCH_IM_LOOKING_FOR,
                         appearance.ui_font_family(),
                         styles::subheader_text_font_size(appearance),
                     )
@@ -237,7 +245,7 @@ impl View for CommandSearchZeroStateView {
             .with_child(
                 Container::new(
                     Text::new_inline(
-                        "Example queries",
+                        &*SEARCH_EXAMPLE_QUERIES,
                         appearance.ui_font_family(),
                         styles::subheader_text_font_size(appearance),
                     )

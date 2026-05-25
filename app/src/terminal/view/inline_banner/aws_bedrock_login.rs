@@ -29,7 +29,7 @@ pub fn render_aws_bedrock_login_banner(
     let active_ui_text_color = appearance.theme().active_ui_text_color().into_solid();
     let buttons = vec![
         InlineBannerTextButton {
-            text: "Don't show again".to_owned(),
+            text: crate::tr!("common", "common-do-not-show-again").clone(),
             text_color: active_ui_text_color,
             button_state: InlineBannerButtonState {
                 on_click_event: TerminalAction::AwsBedrockLoginBanner(
@@ -42,7 +42,7 @@ pub fn render_aws_bedrock_login_banner(
             variant: InlineBannerTextButtonVariant::Secondary,
         },
         InlineBannerTextButton {
-            text: "Log into AWS".to_owned(),
+            text: crate::tr!("terminal", "terminal-log-into-aws"),
             text_color: active_ui_text_color,
             button_state: InlineBannerButtonState {
                 on_click_event: TerminalAction::AwsBedrockLoginBanner(
@@ -63,7 +63,7 @@ pub fn render_aws_bedrock_login_banner(
 
     // Use sub_text_color for description to differentiate from title
     let description_text = warpui::elements::Text::new(
-        "Your Warp admin has enabled AWS Bedrock for your team.",
+        crate::tr!("terminal", "terminal-aws-bedrock-description"),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 2.,
     )
@@ -74,7 +74,7 @@ pub fn render_aws_bedrock_login_banner(
         InlineBannerStyle::Recommendation,
         appearance,
         InlineBannerContent {
-            title: "Use AWS Bedrock?".to_string(),
+            title: crate::tr!("terminal", "terminal-aws-bedrock-title"),
             content: Some(vec![description_text]),
             buttons,
             close_button: Some(close_button),

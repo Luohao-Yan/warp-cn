@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use serde::Serialize;
 use std::rc::Rc;
 
@@ -42,8 +44,8 @@ use crate::server::ids::ServerId;
 const INLINE_BANNER_SPACING: f32 = 8.;
 const INLINE_BANNER_BUTTON_PADDING: f32 = 8.;
 
-const DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE: &str = "Restricted due to payment issue";
-const OUT_OF_REQUESTS_TOOLTIP_MESSAGE: &str = "Out of credits";
+static DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "restricted-due-to-payment-issue"));
+static OUT_OF_REQUESTS_TOOLTIP_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "out-of-credits"));
 
 /// Types of zero-state prompt suggestions.
 #[derive(Debug, Copy, Clone, Serialize)]
@@ -69,20 +71,14 @@ impl ZeroStatePromptSuggestionType {
     /// Constant for the number of zero-state prompt suggestion types.
     pub const COUNT: usize = 5;
 
-    pub fn query(&self) -> &'static str {
+    pub fn query(&self) -> String {
         match self {
-            Self::Explain => "Explain this to me.",
-            Self::Fix => "Help me fix this.",
-            Self::Install => {
-                "Help me install a binary/dependency. What information do I need to provide to you to do this?"
-            }
-            Self::Code => {
-                "Help me write some code. What information do I need to provide to you to do this?"
-            }
-            Self::Deploy => {
-                "Help me deploy my project. What information do I need to provide to you to do this?"
-            }
-            Self::SomethingElse => "Something else?",
+            Self::Explain => crate::tr!("terminal", "suggestion-explain"),
+            Self::Fix => crate::tr!("terminal", "suggestion-fix"),
+            Self::Install => crate::tr!("terminal", "suggestion-install"),
+            Self::Code => crate::tr!("terminal", "suggestion-code"),
+            Self::Deploy => crate::tr!("terminal", "suggestion-deploy"),
+            Self::SomethingElse => crate::tr!("terminal", "suggestion-something-else"),
         }
     }
 
@@ -298,14 +294,14 @@ fn get_tooltip_text_for_alert_state(alert_state: &PromptAlertState) -> Option<St
     // so we can keep the tooltip's text relatively minimal and just capture broad groups.
     match alert_state {
         PromptAlertState::DelinquentDueToPaymentIssue => {
-            Some(DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE.to_string())
+            Some(DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE.clone())
         }
         PromptAlertState::RequestLimitReached
         | PromptAlertState::AnonymousUserRequestLimitHardGate
         | PromptAlertState::AnonymousUserRequestLimitSoftGate
         | PromptAlertState::OveragesToggleableButNotEnabled
         | PromptAlertState::MonthlyOveragesSpendLimitReached => {
-            Some(OUT_OF_REQUESTS_TOOLTIP_MESSAGE.to_string())
+            Some(OUT_OF_REQUESTS_TOOLTIP_MESSAGE.clone())
         }
         _ => None,
     }

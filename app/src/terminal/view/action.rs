@@ -528,8 +528,8 @@ impl fmt::Debug for TerminalAction {
             }
             BlockListContextMenu(menu) => write!(f, "BlockListContextMenu({menu:?})"),
             CloseContextMenu => f.write_str("CloseContextMenu"),
-            Paste => f.write_str("Paste"),
-            Copy => f.write_str("Copy"),
+            Paste => f.write_str(crate::tr!("common", "common-paste-label").as_str()),
+            Copy => f.write_str(crate::tr!("common", "common-copy-label").as_str()),
             CopyOutputs => f.write_str("CopyOutputs"),
             CopyCommands => f.write_str("CopyCommands"),
             CopyGitBranch => f.write_str("CopyGitBranch"),
@@ -558,7 +558,7 @@ impl fmt::Debug for TerminalAction {
             ClearSelectionsWhenShellMode => {
                 f.write_str("ClearSelectionsWhenShellMode(TerminalAction)")
             }
-            Close => f.write_str("Close"),
+            Close => f.write_str(crate::tr!("common", "common-close-label").as_str()),
             SplitRight(_) => f.write_str("SplitRight"),
             SplitLeft(_) => f.write_str("SplitLeft"),
             SplitDown(_) => f.write_str("SplitDown"),

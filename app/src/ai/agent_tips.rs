@@ -35,9 +35,9 @@ pub trait AITip: Clone {
     fn description(&self) -> &str;
 
     /// Converts the tip to formatted text fragments for rendering.
-    /// Default implementation adds "Tip: " prefix and parses backtick-wrapped text as inline code.
+    /// Default implementation adds a localized "Tip:" prefix and parses backtick-wrapped text as inline code.
     fn to_formatted_text(&self, _app: &AppContext) -> Vec<FormattedTextFragment> {
-        let text = format!("Tip: {}", self.description());
+        let text = format!("{} {}", crate::tr!("ai", "ai-tip-label"), self.description());
 
         // Style backtick-wrapped text as inline code
         let parts: Vec<&str> = text.split('`').collect();
@@ -83,28 +83,28 @@ pub enum AgentTipKind {
 static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
     vec![
         AgentTip {
-            description: "`/` to open the slash-command menu and access quick agent actions.".to_string(),
+            description: crate::tr!("ai", "ai-tip-slash-commands"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/slash-commands".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "<keybinding> to toggle natural language detection and switch between agent and terminal input.".to_string(),
+            description: crate::tr!("ai", "ai-tip-toggle-nl-detection"),
             link: Some("https://docs.warp.dev/terminal/input/universal-input#input-modes".to_string()),
             binding_name: Some(SET_INPUT_MODE_AGENT_ACTION_NAME),
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "`/plan` <prompt> to create a plan for the agent before executing.".to_string(),
+            description: crate::tr!("ai", "ai-tip-plan"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/planning".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "<keybinding> to open the Command Palette and access Warp actions and shortcuts.".to_string(),
+            description: crate::tr!("ai", "ai-tip-command-palette"),
             link: Some("https://docs.warp.dev/terminal/command-palette".to_string()),
             binding_name: Some(TOGGLE_COMMAND_PALETTE_KEYBINDING_NAME),
             action: Some(WorkspaceAction::OpenPalette {
@@ -115,217 +115,217 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Store reusable workflows, notebooks, and prompts in your".to_string(),
+            description: crate::tr!("ai", "ai-tip-store-workflows"),
             link: Some("https://docs.warp.dev/knowledge-and-collaboration/warp-drive".to_string()),
             binding_name: None,
             action: Some(WorkspaceAction::OpenWarpDrive),
             kind: AgentTipKind::WarpDrive,
         },
         AgentTip {
-            description: "Enter a new prompt to redirect the agent while it's running.".to_string(),
+            description: crate::tr!("ai", "ai-tip-redirect-agent"),
             link: None,
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "`@` to add context from files, blocks, or Warp Drive objects to your prompt.".to_string(),
+            description: crate::tr!("ai", "ai-tip-at-context"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/using-to-add-context".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "<keybinding> to attach the prior command output as agent context.".to_string(),
+            description: crate::tr!("ai", "ai-tip-attach-block"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/blocks-as-context#attaching-blocks-as-context".to_string()),
             binding_name: Some(SELECT_PREVIOUS_BLOCK_ACTION_NAME),
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "`/init` to index the repo so the agent can understand your codebase.".to_string(),
+            description: crate::tr!("ai", "ai-tip-init-repo"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/codebase-context".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::CodebaseContext,
         },
         AgentTip {
-            description: "Add agent profiles to customize permissions and models per session.".to_string(),
+            description: crate::tr!("ai", "ai-tip-agent-profiles"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/agent-profiles-permissions".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Right-click a block to fork the conversation from that point.".to_string(),
+            description: crate::tr!("ai", "ai-tip-fork-conversation"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/interacting-with-agents/conversation-forking".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Right-click a block to copy a conversation's output.".to_string(),
+            description: crate::tr!("ai", "ai-tip-copy-output"),
             link: Some("https://docs.warp.dev/terminal/blocks/block-actions#copy-input-output-of-block".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Drag an image into the pane to attach it as agent context.".to_string(),
+            description: crate::tr!("ai", "ai-tip-drag-image"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/images-as-context".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "Prompt the agent to control interactive tools like node, python, postgres, gdb, or vim.".to_string(),
+            description: crate::tr!("ai", "ai-tip-interactive-tools"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/full-terminal-use".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "<keybinding> to open the code review panel and review the agent's changes.".to_string(),
+            description: crate::tr!("ai", "ai-tip-code-review"),
             link: Some("https://docs.warp.dev/code/code-review".to_string()),
             binding_name: Some(TOGGLE_RIGHT_PANEL_BINDING_NAME),
             action: None,
             kind: AgentTipKind::Code,
         },
         AgentTip {
-            description: "`/add-mcp` to add an MCP server to your workspace.".to_string(),
+            description: crate::tr!("ai", "ai-tip-add-mcp"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/mcp".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Mcp,
         },
         AgentTip {
-            description: "`/open-mcp-servers` to view and share MCP servers with your team.".to_string(),
+            description: crate::tr!("ai", "ai-tip-open-mcp"),
             link: None,
             binding_name: None,
             action: None,
             kind: AgentTipKind::Mcp,
         },
         AgentTip {
-            description: "`/create-environment` to turn a repo into a remote docker environment an agent can run in.".to_string(),
+            description: crate::tr!("ai", "ai-tip-create-environment"),
             link: Some("https://docs.warp.dev/reference/cli/integration-setup".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "`/add-prompt` to create a reusable prompt for repeatable workflows.".to_string(),
+            description: crate::tr!("ai", "ai-tip-add-prompt"),
             link: None,
             binding_name: None,
             action: None,
             kind: AgentTipKind::WarpDrive,
         },
         AgentTip {
-            description: "`/add-rule` to create a global agent rule.".to_string(),
+            description: crate::tr!("ai", "ai-tip-add-rule"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/rules".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "`/fork` to create a fresh copy of the current conversation, optionally with a new prompt.".to_string(),
+            description: crate::tr!("ai", "ai-tip-fork"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/interacting-with-agents/conversation-forking".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "`/open-code-review` to open the code review panel and inspect agent-generated diffs.".to_string(),
+            description: crate::tr!("ai", "ai-tip-open-code-review"),
             link: None,
             binding_name: None,
             action: Some(WorkspaceAction::ToggleRightPanel),
             kind: AgentTipKind::Code,
         },
         AgentTip {
-            description: "`/new` to start a new agent conversation with clean context.".to_string(),
+            description: crate::tr!("ai", "ai-tip-new"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/interacting-with-agents".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "`/compact` to summarize the current conversation and free up space in the context window.".to_string(),
+            description: crate::tr!("ai", "ai-tip-compact"),
             link: None,
             binding_name: None,
             action: None,
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "`/usage` to show your current AI credits usage.".to_string(),
+            description: crate::tr!("ai", "ai-tip-usage"),
             link: None,
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Use the `oz` command to run an Oz agent in headless mode, useful for remote machines.".to_string(),
+            description: crate::tr!("ai", "ai-tip-oz-command"),
             link: Some("https://docs.warp.dev/reference/cli".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Right-click selected text to attach it as agent context.".to_string(),
+            description: crate::tr!("ai", "ai-tip-selected-text-context"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/blocks-as-context#attaching-blocks-as-context".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "Use `AGENTS.md` or `CLAUDE.md` to apply project-scoped rules.".to_string(),
+            description: crate::tr!("ai", "ai-tip-agents-md"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/rules#project-rules-1".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "Paste a URL to attach that webpage as context for the agent.".to_string(),
+            description: crate::tr!("ai", "ai-tip-paste-url"),
             link: Some("https://docs.warp.dev/agent-platform/local-agents/agent-context/urls-as-context".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::Context,
         },
         AgentTip {
-            description: "Warpify a remote SSH session to enable Oz inside that environment.".to_string(),
+            description: crate::tr!("ai", "ai-tip-warpify-ssh"),
             link: Some("https://docs.warp.dev/terminal/warpify".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Switch agent profiles to quickly change models and agent permissions.".to_string(),
+            description: crate::tr!("ai", "ai-tip-switch-profiles"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/agent-profiles-permissions".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "`/init` to generate a `WARP.md` file and define project rules for the agent.".to_string(),
+            description: crate::tr!("ai", "ai-tip-init-warp-md"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/rules".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::SlashCommands,
         },
         AgentTip {
-            description: "<keybinding> to auto-approve the agent's commands and diffs for the rest of the session.".to_string(),
+            description: crate::tr!("ai", "ai-tip-auto-approve"),
             link: Some("https://docs.warp.dev/agent-platform/capabilities/full-terminal-use#session-level-approvals".to_string()),
             binding_name: Some(TOGGLE_AUTOEXECUTE_MODE_KEYBINDING),
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "Enable desktop notifications to get an alert when an agent needs your attention.".to_string(),
+            description: crate::tr!("ai", "ai-enable-desktop-notifications"),
             link: Some("https://docs.warp.dev/agent-platform/cloud-agents/managing-cloud-agents#in-app-agent-notifications".to_string()),
             binding_name: None,
             action: None,
             kind: AgentTipKind::General,
         },
         AgentTip {
-            description: "<keybinding> to cancel the current agent task.".to_string(),
+            description: crate::tr!("ai", "ai-tip-cancel-task"),
             link: None,
             binding_name: Some(CANCEL_COMMAND_KEYBINDING),
             action: None,
@@ -337,7 +337,7 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
 #[derive(Clone, Debug)]
 pub struct AgentTip {
     /// The text that will be displayed to the user. This is parsed such that:
-    /// "Tip: " is added as a prefix,
+    /// A localized "Tip:" label is added as a prefix,
     /// "<keybinding>" is replaced with user-defined and platform-specific keybinding referenced by binding_name,
     /// `text` that is wrapped in backticks is formatted as inline code
     pub description: String,
@@ -372,7 +372,7 @@ impl AITip for AgentTip {
     }
 
     fn to_formatted_text(&self, app: &AppContext) -> Vec<FormattedTextFragment> {
-        let mut text = format!("Tip: {}", self.description);
+        let mut text = format!("{} {}", crate::tr!("ai", "ai-tip-label"), self.description);
 
         // Replace <keybinding> with the actual keybinding string
         if let Some(keystroke) = self.keystroke(app) {
@@ -417,9 +417,9 @@ impl AITip for AgentTip {
 impl WorkspaceAction {
     pub fn display_text(&self) -> Option<String> {
         match self {
-            WorkspaceAction::OpenPalette { .. } => Some("Open palette".to_string()),
-            WorkspaceAction::OpenWarpDrive => Some("Warp Drive.".to_string()),
-            WorkspaceAction::ToggleRightPanel => Some("Show diff view".to_string()),
+            WorkspaceAction::OpenPalette { .. } => Some(crate::tr!("ai", "ai-open-palette")),
+            WorkspaceAction::OpenWarpDrive => Some(crate::tr!("ai", "ai-warp-drive-period")),
+            WorkspaceAction::ToggleRightPanel => Some(crate::tr!("ai", "ai-show-diff-view")),
             _ => None,
         }
     }
@@ -434,8 +434,7 @@ pub fn get_agent_tips(ctx: &AppContext) -> Vec<AgentTip> {
         && AISettings::as_ref(ctx).is_voice_input_enabled(ctx)
     {
         tips.push(AgentTip {
-            description: "Hold <keybinding> to speak your prompt directly to the agent."
-                .to_string(),
+            description: crate::tr!("ai", "ai-tip-voice-input"),
             link: Some(
                 "https://docs.warp.dev/agent-platform/local-agents/interacting-with-agents/voice"
                     .to_string(),

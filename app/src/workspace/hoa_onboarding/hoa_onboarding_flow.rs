@@ -1,4 +1,6 @@
+use std::borrow::Cow;
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use markdown_parser::{
     FormattedText, FormattedTextFragment, FormattedTextLine, FormattedTextStyles, Hyperlink,
@@ -210,35 +212,39 @@ impl HoaOnboardingFlow {
         });
 
         let cta_button = ctx.add_view(|_ctx| {
-            ActionButton::new("See what's new", HoaWelcomeModalButtonTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-see-whats-new"));
+            ActionButton::new(&*LABEL, HoaWelcomeModalButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromWelcome))
         });
 
         let enter = Keystroke::parse("enter").unwrap_or_default();
 
+        static NEXT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-next"));
         let next_vtabs_button = ctx.add_view(|ctx| {
-            ActionButton::new("Next", HoaPrimaryButtonTheme)
+            ActionButton::new(&*NEXT_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromVerticalTabs)
                 })
         });
 
+        static DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-dismiss"));
         let dismiss_vtabs_button = ctx.add_view(|ctx| {
-            ActionButton::new("Dismiss", HoaPrimaryButtonTheme)
+            ActionButton::new(&*DISMISS_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::Dismiss))
         });
 
         let next_inbox_button = ctx.add_view(|ctx| {
-            ActionButton::new("Next", HoaPrimaryButtonTheme)
+            ActionButton::new(&*NEXT_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromInbox))
         });
 
+        static FINISH_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-finish"));
         let finish_button = ctx.add_view(|ctx| {
-            ActionButton::new("Finish", HoaPrimaryButtonTheme)
+            ActionButton::new(&*FINISH_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::Finish))
         });
@@ -376,8 +382,8 @@ impl HoaOnboardingFlow {
 
     fn render_callout_content(
         &self,
-        title: &'static str,
-        description: &'static str,
+        title: impl Into<Cow<'static, str>>,
+        description: impl Into<Cow<'static, str>>,
         extra_child: Option<Box<dyn Element>>,
         button: &ViewHandle<ActionButton>,
         appearance: &Appearance,
@@ -427,7 +433,7 @@ impl HoaOnboardingFlow {
             .finish();
 
         let checkbox_label = Text::new_inline(
-            "Switch back to horizontal tabs".to_string(),
+            crate::tr!("workspace", "workspace-onboarding-switch-horizontal"),
             appearance.ui_font_family(),
             12.,
         )
@@ -447,9 +453,11 @@ impl HoaOnboardingFlow {
             &self.next_vtabs_button
         };
 
+        let vertical_tabs_title = crate::tr!("workspace", "workspace-onboarding-vertical-tabs-title");
+        let vertical_tabs_desc = crate::tr!("workspace", "workspace-onboarding-vertical-tabs-desc");
         self.render_callout_content(
-            "Introducing vertical tabs - the new default",
-            "Vertical tabs show all open agent and terminal panes, grouped by tab. Customize what information you want to see to support your workflow.",
+            vertical_tabs_title,
+            vertical_tabs_desc,
             Some(checkbox_row),
             button,
             appearance,
@@ -458,7 +466,7 @@ impl HoaOnboardingFlow {
 
     fn render_inbox_callout(&self, appearance: &Appearance) -> Box<dyn Element> {
         let title = Text::new(
-            "Meet your new agent inbox",
+            crate::tr!("workspace", "workspace-onboarding-inbox-title"),
             appearance.ui_font_family(),
             16.,
         )
@@ -468,7 +476,7 @@ impl HoaOnboardingFlow {
 
         // Build the description with an inline "Learn more" hyperlink.
         let learn_more_fragment = FormattedTextFragment {
-            text: "Learn more".into(),
+            text: crate::tr!("workspace", "workspace-onboarding-inbox-learn-more"),
             styles: FormattedTextStyles {
                 underline: true,
                 hyperlink: Some(Hyperlink::Url(
@@ -480,7 +488,7 @@ impl HoaOnboardingFlow {
 
         let formatted = FormattedText::new([FormattedTextLine::Line(vec![
             FormattedTextFragment::plain_text(
-                "Warp pipes through notifications from any CLI coding agent into a unified notification center that works across all coding agents and harnesses. ",
+                &crate::tr!("workspace", "workspace-onboarding-inbox-desc"),
             ),
             learn_more_fragment,
         ])]);

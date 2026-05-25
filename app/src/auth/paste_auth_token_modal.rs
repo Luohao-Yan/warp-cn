@@ -53,7 +53,7 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Paste,
             PasteAuthTokenModalAction::PasteIntoEditor,
-            "Paste",
+            crate::tr!("common", "common-paste-label").as_str(),
             id!(PasteAuthTokenModalView::ui_name()),
         ),
         FixedBinding::standard(
@@ -120,7 +120,8 @@ impl PasteAuthTokenModalView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text("Enter auth token", ctx);
+            let placeholder = crate::tr!("auth", "auth-enter-token-placeholder");
+            editor.set_placeholder_text(&placeholder, ctx);
             editor
         });
 
@@ -238,7 +239,7 @@ impl View for PasteAuthTokenModalView {
         let ui_builder = appearance.ui_builder();
 
         let title = FormattedTextElement::from_str(
-            "Paste your auth token below",
+            crate::tr!("auth", "auth-paste-token-modal-title"),
             appearance.ui_font_family(),
             16.,
         )
@@ -265,7 +266,7 @@ impl View for PasteAuthTokenModalView {
 
         let subtitle_color = internal_colors::text_sub(theme, dialog_surface_solid);
         let subtitle = FormattedTextElement::from_str(
-            "Paste your auth token from the browser to get complete login.",
+            crate::tr!("auth", "auth-paste-token-modal-subtitle"),
             appearance.ui_font_family(),
             14.,
         )

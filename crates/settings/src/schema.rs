@@ -15,7 +15,7 @@ pub struct SettingSchemaEntry {
     pub storage_key: &'static str,
 
     /// User-facing description of what this setting does.
-    pub description: &'static str,
+    pub description_fn: fn() -> String,
 
     /// The TOML section path (everything before the last segment of toml_path).
     pub hierarchy: Option<&'static str>,
@@ -71,7 +71,7 @@ macro_rules! submit_schema_entry {
                     };
                     KEY
                 },
-                description: $desc,
+                description_fn: || $desc,
                 hierarchy: {
                     const HIER: Option<&str> = match $toml_path {
                         Some(path) => $crate::toml_path_hierarchy(path),
@@ -99,13 +99,13 @@ macro_rules! submit_schema_entry {
     };
 }
 
-/// Helper: produces a `&'static str` description, defaulting to `""` when omitted.
+/// Helper: produces a description expression, defaulting to `"".to_string()` when omitted.
 #[macro_export]
 macro_rules! _schema_default_description {
     () => {
-        ""
+        "".to_string()
     };
-    ($desc:literal) => {
+    ($desc:expr) => {
         $desc
     };
 }

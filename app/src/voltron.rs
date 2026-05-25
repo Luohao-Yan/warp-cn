@@ -117,7 +117,7 @@ pub struct VoltronMetadata {
 /// then properly propagated to corresponding views.
 pub trait VoltronFeatureViewMeta {
     /// Placeholder text to show in the editor.
-    fn editor_placeholder_text(&self) -> &'static str;
+    fn editor_placeholder_text(&self) -> String;
 
     /// Voltron captures all the editor events and passes them to the currently focused feature by
     /// calling this method. Note that it does not call `ctx.notify()`, so it's up to the feature
@@ -258,7 +258,7 @@ impl Voltron {
         }
     }
 
-    fn placeholder(&mut self, ctx: &mut ViewContext<Self>) -> Option<&'static str> {
+    fn placeholder(&mut self, ctx: &mut ViewContext<Self>) -> Option<String> {
         if let Some(current_feature) = self.current_feature() {
             Some(match current_feature.feature_view_handle {
                 VoltronFeatureViewHandle::Workflows(view_handle) => {

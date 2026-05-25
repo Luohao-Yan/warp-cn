@@ -152,16 +152,16 @@ impl Input {
                 SuggestionsResizeConfig::WidthOnly,
             ),
             DynamicEnumSuggestionStatus::Pending => (
-                self.render_dynamic_enum_status_message(DYNAMIC_ENUM_PENDING_MESSAGE, appearance),
+                self.render_dynamic_enum_status_message(&DYNAMIC_ENUM_PENDING_MESSAGE, appearance),
                 SuggestionsResizeConfig::WidthAndHeight,
             ),
             DynamicEnumSuggestionStatus::Failure => (
-                self.render_dynamic_enum_status_message(DYNAMIC_ENUM_FAILURE_MESSAGE, appearance),
+                self.render_dynamic_enum_status_message(&DYNAMIC_ENUM_FAILURE_MESSAGE, appearance),
                 SuggestionsResizeConfig::WidthAndHeight,
             ),
             DynamicEnumSuggestionStatus::Success if suggestions.is_empty() => (
                 self.render_dynamic_enum_status_message(
-                    DYNAMIC_ENUM_NO_RESULTS_MESSAGE,
+                    &DYNAMIC_ENUM_NO_RESULTS_MESSAGE,
                     appearance,
                 ),
                 SuggestionsResizeConfig::WidthAndHeight,
@@ -289,7 +289,7 @@ impl Input {
                 ConstrainedBox::new(
                     Container::new(
                         Text::new_inline(
-                            String::from(DYNAMIC_ENUM_GENERATE_MESSAGE),
+                            DYNAMIC_ENUM_GENERATE_MESSAGE.clone(),
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -340,7 +340,7 @@ impl Input {
                                 1.,
                                 Container::new(
                                     Text::new_inline(
-                                        String::from(DYNAMIC_ENUM_RUN_MESSAGE),
+                                        DYNAMIC_ENUM_RUN_MESSAGE.clone(),
                                         appearance.ui_font_family(),
                                         appearance.ui_font_size(),
                                     )

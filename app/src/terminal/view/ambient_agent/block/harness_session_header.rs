@@ -35,7 +35,7 @@ impl HarnessSessionHeader {
     pub fn new(block_id: BlockId, cli_agent: Option<CLIAgent>) -> Self {
         let cli_name = cli_agent
             .map(|agent| agent.display_name().to_owned())
-            .unwrap_or_else(|| "Agent".to_owned());
+            .unwrap_or_else(|| crate::tr!("agent_cloud", "agent-cloud-agent-fallback-name"));
 
         Self {
             block_id,
@@ -66,7 +66,7 @@ impl View for HarnessSessionHeader {
             Icon::ChevronRight
         };
 
-        let label = format!("Running {}...", self.cli_name);
+        let label = crate::tr!("agent_cloud", "agent-cloud-running-agent", cli_name = self.cli_name.as_str());
 
         let row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)

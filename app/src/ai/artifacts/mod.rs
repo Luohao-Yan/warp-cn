@@ -385,9 +385,10 @@ pub fn download_file_artifact<V: warpui::View>(
             Ok(artifact) => open_file_download_result(&artifact_uid, artifact, ctx),
             Err(error) => {
                 log::warn!("Failed to load file artifact {artifact_uid}: {error}");
+                let failed_prepare_label = crate::tr!("ai_assistant", "ai-failed-prepare-file-download");
                 show_file_download_toast(
                     &artifact_uid,
-                    DismissibleToast::error("Failed to prepare file download.".to_string()),
+                    DismissibleToast::error(failed_prepare_label),
                     ctx,
                 );
             }
@@ -446,18 +447,20 @@ fn open_file_download_picker<V: warpui::View>(
                         .await
                 },
                 move |_me, result, ctx| match result {
-                    Ok(()) => show_file_download_toast(
-                        &artifact_uid,
-                        DismissibleToast::success(format!("Downloaded {toast_filename}.")),
-                        ctx,
-                    ),
-                    Err(error) => {
-                        log::warn!("Failed to download file artifact {artifact_uid}: {error}");
+                    Ok(()) => {
+                        let downloaded_label = crate::tr!("ai_assistant", "ai-downloaded-file", filename = toast_filename.as_str());
                         show_file_download_toast(
                             &artifact_uid,
-                            DismissibleToast::error(format!(
-                                "Failed to download {toast_filename}."
-                            )),
+                            DismissibleToast::success(downloaded_label),
+                            ctx,
+                        )
+                    }
+                    Err(error) => {
+                        log::warn!("Failed to download file artifact {artifact_uid}: {error}");
+                        let failed_download_label = crate::tr!("ai_assistant", "ai-failed-download-file", filename = toast_filename.as_str());
+                        show_file_download_toast(
+                            &artifact_uid,
+                            DismissibleToast::error(failed_download_label),
                             ctx,
                         );
                     }

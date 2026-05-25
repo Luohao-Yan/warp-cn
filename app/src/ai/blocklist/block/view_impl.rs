@@ -669,7 +669,7 @@ pub fn render_citation(
                 .to_warp_drive_item(appearance)?;
             (
                 item.icon(appearance, Some(theme.active_ui_text_color())),
-                item.display_name().unwrap_or(String::from("Untitled")),
+                item.display_name().unwrap_or(crate::tr!("common", "common-untitled-label")),
             )
         }
         AIAgentCitation::WarpDocumentation { .. } => {
@@ -732,7 +732,7 @@ pub fn render_citation(
 /// "Manage AI Autonomy permissions" link. Matches the visual rhythm of
 /// [`render_autonomy_checkbox_setting_speedbump_footer`].
 pub fn render_autonomy_dropdown_setting_speedbump_footer<A>(
-    description: &'static str,
+    description: &str,
     dropdown: &warpui::ViewHandle<crate::view_components::dropdown::Dropdown<A>>,
     settings_link_handle: MouseStateHandle,
     app: &AppContext,
@@ -748,7 +748,7 @@ where
         .with_child(
             Container::new(
                 Text::new(
-                    description,
+                    description.to_string(),
                     appearance.ui_font_family(),
                     appearance.monospace_font_size() - 1.,
                 )

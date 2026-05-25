@@ -219,14 +219,14 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "notebookview:focus_terminal_input",
-            "Focus Terminal Input from File",
+            crate::tr!("notebooks", "notebooks-focus-terminal-input-from-file"),
             FileNotebookAction::FocusTerminalInput,
         )
         .with_context_predicate(id!("FileNotebookView"))
         .with_key_binding(cmd_or_ctrl_shift("l")),
         EditableBinding::new(
             "notebookview:reload_file",
-            "Reload file",
+            crate::tr!("notebooks", "notebooks-reload-file"),
             FileNotebookAction::ReloadFile,
         )
         .with_context_predicate(id!("FileNotebookView")),
@@ -313,7 +313,7 @@ impl FileNotebookView {
             .as_ref()
             .map(|location| location.name.clone())
             .or_else(|| self.file_state.display_name())
-            .unwrap_or_else(|| "Untitled".to_string())
+            .unwrap_or_else(|| crate::tr!("notebooks", "notebooks-untitled"))
     }
 
     pub fn focus(&self, ctx: &mut ViewContext<Self>) {
@@ -605,7 +605,7 @@ impl FileNotebookView {
                 let workflow_type = workflow.named_workflow(|| {
                     self.location
                         .as_ref()
-                        .map(|location| format!("Command from {}", location.name))
+                        .map(|location| crate::tr!("notebooks", "notebooks-command-from", location_name = location.name.clone()))
                 });
                 let source = workflow.source.unwrap_or(WorkflowSource::Notebook {
                     notebook_id: None,
@@ -729,7 +729,7 @@ impl FileNotebookView {
             .with_child(
                 appearance
                     .ui_builder()
-                    .paragraph(format!("Could not read {}", source.display_name()))
+                    .paragraph(crate::tr!("notebooks", "notebooks-could-not-read", name = source.display_name().to_string()))
                     .with_style(self.state_style(appearance))
                     .build()
                     .finish(),
@@ -768,7 +768,7 @@ impl FileNotebookView {
         Align::new(
             appearance
                 .ui_builder()
-                .paragraph(format!("Loading {}...", source.display_name()))
+                .paragraph(crate::tr!("notebooks", "notebooks-loading-file", name = source.display_name().to_string()))
                 .with_style(self.state_style(appearance))
                 .build()
                 .finish(),
@@ -781,7 +781,7 @@ impl FileNotebookView {
         Align::new(
             appearance
                 .ui_builder()
-                .paragraph("Missing source file".to_string())
+                .paragraph(crate::tr!("notebooks", "notebooks-missing-source-file"))
                 .with_style(self.state_style(appearance))
                 .build()
                 .finish(),
@@ -946,24 +946,27 @@ impl BackingView for FileNotebookView {
             ..
         }) = self.file_state.source()
         {
+            let refresh_file_label = crate::tr!("notebooks", "notebooks-refresh-file");
             actions.push(
-                MenuItemFields::new("Refresh file")
+                MenuItemFields::new(&refresh_file_label)
                     .with_on_select_action(FileNotebookAction::ReloadFile)
                     .into_item(),
             );
 
             #[cfg(feature = "local_fs")]
             {
+                let open_in_editor_label = crate::tr!("notebooks", "notebooks-open-in-editor");
                 // The markdown rendered/raw toggle is always visible in the pane header, so we don't
                 // duplicate it in the overflow menu. Keep "Open in editor" available for local files.
                 actions.push(
-                    MenuItemFields::new("Open in editor")
+                    MenuItemFields::new(&open_in_editor_label)
                         .with_on_select_action(FileNotebookAction::OpenInEditor)
                         .into_item(),
                 );
+                let copy_file_path_label = crate::tr!("notebooks", "notebooks-copy-file-path");
                 actions.extend([
                     MenuItem::Separator,
-                    MenuItemFields::new("Copy file path")
+                    MenuItemFields::new(&copy_file_path_label)
                         .with_on_select_action(FileNotebookAction::CopyFilePath)
                         .into_item(),
                 ]);

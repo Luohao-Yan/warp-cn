@@ -13,9 +13,12 @@ use crate::search::notebooks::fuzzy_match::{
 use crate::search::result_renderer::ItemHighlightState;
 use crate::ui_components::icons::Icon;
 use ordered_float::OrderedFloat;
+use std::sync::LazyLock;
 use warpui::elements::{Container, Flex, Highlight, ParentElement, Text};
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
+
+static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-untitled").clone());
 
 /// Search item result for a cloud notebook.
 #[derive(Debug)]
@@ -61,7 +64,7 @@ impl SearchItem for NotebookSearchItem {
     ) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
         let title = if self.cloud_notebook.model().title.is_empty() {
-            "Untitled".to_string()
+            UNTITLED_LABEL.clone()
         } else {
             self.cloud_notebook.model().title.clone()
         };
@@ -141,6 +144,7 @@ impl SearchItem for NotebookSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Notebook: {}", self.cloud_notebook.model().title)
+        crate::tr!("search", "search-notebook-a11y-label")
+            .replace("{ $title }", &self.cloud_notebook.model().title)
     }
 }

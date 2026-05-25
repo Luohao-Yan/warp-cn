@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::cloud_object::model::generic_string_model::GenericStringObjectId;
 use crate::cloud_object::model::persistence::CloudModel;
 use crate::cloud_object::{CloudObject, Revision};
@@ -28,8 +30,10 @@ use super::{is_delete_allowed, style, AIFact, CloudAIFact, CloudAIFactModel};
 use crate::ai::facts::AIMemory;
 use crate::ui_components::icons::Icon;
 
-const RULE_NAME_PLACEHOLDER_TEXT: &str = "e.g. Rust rules";
-const RULE_DESCRIPTION_PLACEHOLDER_TEXT: &str = "e.g. Never use unwrap in Rust";
+pub static RULE_NAME_PLACEHOLDER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rule-name-placeholder"));
+pub static RULE_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rule-description-placeholder"));
 
 #[derive(Debug, Clone, Copy)]
 enum EditorType {
@@ -99,7 +103,7 @@ impl RuleEditorView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(RULE_NAME_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*RULE_NAME_PLACEHOLDER_TEXT, ctx);
             editor
         });
         ctx.subscribe_to_view(&name_editor, |me, _editor, event, ctx| {
@@ -126,7 +130,7 @@ impl RuleEditorView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(RULE_DESCRIPTION_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*RULE_DESCRIPTION_PLACEHOLDER_TEXT, ctx);
             editor
         });
         ctx.subscribe_to_view(&content_editor, |me, _editor, event, ctx| {
@@ -145,7 +149,7 @@ impl RuleEditorView {
         });
 
         let delete_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Delete rule", DangerSecondaryTheme)
+            ActionButton::new(crate::tr!("ai_assistant", "ai-delete-rule"), DangerSecondaryTheme)
                 .with_icon(Icon::Trash)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(RuleEditorViewAction::Delete);
@@ -258,9 +262,9 @@ impl RuleEditorView {
 
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         let title = if self.ai_fact.is_none() {
-            "Add Rule"
+            crate::tr!("ai_assistant", "ai-add-rule")
         } else {
-            "Edit Rule"
+            crate::tr!("ai_assistant", "ai-edit-rule")
         };
         Container::new(
             Flex::row()
@@ -333,13 +337,13 @@ impl RuleEditorView {
     fn render_form(&self, appearance: &Appearance) -> Box<dyn Element> {
         Flex::column()
             .with_child(
-                Container::new(appearance.ui_builder().span("Name").build().finish())
+                Container::new(appearance.ui_builder().span(crate::tr!("ai_assistant", "ai-name-label")).build().finish())
                     .with_margin_bottom(style::ITEM_BOTTOM_MARGIN)
                     .finish(),
             )
             .with_child(self.render_name_editor(appearance))
             .with_child(
-                Container::new(appearance.ui_builder().span("Rule").build().finish())
+                Container::new(appearance.ui_builder().span(crate::tr!("ai_assistant", "ai-rule-label")).build().finish())
                     .with_margin_bottom(style::ITEM_BOTTOM_MARGIN)
                     .finish(),
             )

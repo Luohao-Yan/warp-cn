@@ -1,4 +1,5 @@
 use std::rc::Rc;
+use std::sync::LazyLock;
 
 use strum::IntoEnumIterator;
 use strum_macros::{EnumIter, IntoStaticStr};
@@ -50,16 +51,15 @@ const SECTION_FONT_SIZE: f32 = 16.;
 const SPAN_FONT_SIZE: f32 = 16.;
 const VARIANT_FONT_SIZE: f32 = 13.;
 
-const CANCEL_BUTTON_LABEL: &str = "Close";
-const NEW_ENUM_SPAN: &str = "New enum";
-const EXISTING_ENUM_SPAN: &str = "Edit enum";
-const NAME_PLACEHOLDER_TEXT: &str = "Name";
-const CREATE_BUTTON_LABEL: &str = "Create";
-const SAVE_BUTTON_LABEL: &str = "Save";
-const VARIANT_PLACEHOLDER_TEXT: &str = "Variant";
-const STATIC_LABEL_TEXT: &str = "Variants";
-const DYNAMIC_PLACEHOLDER_TEXT: &str =
-    "# Enter a shell command that generates variants, delimited by newlines.\n\ngit branch -a";
+static CANCEL_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-close"));
+static NEW_ENUM_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-new"));
+static EXISTING_ENUM_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-edit"));
+static NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-name"));
+static CREATE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-create"));
+static SAVE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-save"));
+static VARIANT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-variant"));
+static STATIC_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-variants"));
+static DYNAMIC_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-command-placeholder"));
 
 #[derive(Debug, Clone)]
 pub enum EnumCreationDialogAction {
@@ -163,7 +163,7 @@ impl EnumCreationDialog {
                 };
 
                 let mut editor = EditorView::single_line(options, ctx);
-                editor.set_placeholder_text(NAME_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(&*NAME_PLACEHOLDER_TEXT, ctx);
                 editor
             })
         };
@@ -196,7 +196,7 @@ impl EnumCreationDialog {
                 };
 
                 let mut editor = EditorView::new(options, ctx);
-                editor.set_placeholder_text(DYNAMIC_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(&*DYNAMIC_PLACEHOLDER_TEXT, ctx);
                 editor.set_autogrow(true);
                 editor
             })
@@ -549,7 +549,7 @@ impl EnumCreationDialog {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(VARIANT_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*VARIANT_PLACEHOLDER_TEXT, ctx);
             editor
         });
 
@@ -628,8 +628,8 @@ impl EnumCreationDialog {
 
     fn render_dialog_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         let text = match self.sync_id {
-            Some(_) => EXISTING_ENUM_SPAN,
-            None => NEW_ENUM_SPAN,
+            Some(_) => EXISTING_ENUM_SPAN.as_str(),
+            None => NEW_ENUM_SPAN.as_str(),
         };
 
         appearance
@@ -653,7 +653,10 @@ impl EnumCreationDialog {
                         self.enum_type_options
                             .iter()
                             .map(|arg_type| {
-                                let label: &'static str = arg_type.into();
+                                let label = match arg_type {
+                                    EnumType::Static => crate::tr!("drive", "drive-enum-static"),
+                                    EnumType::Dynamic => crate::tr!("drive", "drive-enum-dynamic"),
+                                };
                                 ToggleMenuItem::new(label)
                             })
                             .collect(),
@@ -821,7 +824,7 @@ impl EnumCreationDialog {
                 1.,
                 appearance
                     .ui_builder()
-                    .span(STATIC_LABEL_TEXT.to_string())
+                    .span(STATIC_LABEL_TEXT.as_str())
                     .with_style(UiComponentStyles {
                         font_size: Some(SECTION_FONT_SIZE),
                         ..Default::default()
@@ -862,8 +865,8 @@ impl EnumCreationDialog {
     fn render_footer_buttons(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let disable_save = self.should_disable_save(app);
         let save_button_label = match self.sync_id {
-            None => CREATE_BUTTON_LABEL,
-            Some(_) => SAVE_BUTTON_LABEL,
+            None => CREATE_BUTTON_LABEL.as_str(),
+            Some(_) => SAVE_BUTTON_LABEL.as_str(),
         };
 
         Flex::row()
@@ -877,7 +880,7 @@ impl EnumCreationDialog {
                                 .cancel_button_mouse_state_handle
                                 .clone(),
                             EnumCreationDialogAction::Close,
-                            CANCEL_BUTTON_LABEL,
+                            CANCEL_BUTTON_LABEL.as_str(),
                             false,
                             false,
                         ),

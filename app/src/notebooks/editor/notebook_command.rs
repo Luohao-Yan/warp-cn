@@ -678,7 +678,7 @@ impl RunnableCommandModel for NotebookCommand {
             .with_active_styles(active_highlight)
             .with_tooltip(move || {
                 tooltip_builder_raw
-                    .tool_tip("Raw".to_string())
+                    .tool_tip(crate::tr!("notebooks", "notebooks-raw"))
                     .build()
                     .finish()
             })
@@ -703,7 +703,7 @@ impl RunnableCommandModel for NotebookCommand {
             .with_active_styles(active_highlight)
             .with_tooltip(move || {
                 tooltip_builder_rendered
-                    .tool_tip("Rendered".to_string())
+                    .tool_tip(crate::tr!("notebooks", "notebooks-rendered"))
                     .build()
                     .finish()
             })
@@ -741,7 +741,7 @@ impl RunnableCommandModel for NotebookCommand {
                     appearance,
                     Icon::Copy,
                     self.mouse_state_handles.copy_button_state.clone(),
-                    "Copy",
+                    crate::tr!("common", "common-copy-label"),
                     custom_action_to_display(CustomAction::Copy),
                 )
                 .on_click(move |ctx, app, _| {

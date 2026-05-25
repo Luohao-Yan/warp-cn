@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use warpui::{elements::MouseStateHandle, Element};
 
 use crate::{appearance::Appearance, terminal::view::TerminalAction};
@@ -10,6 +12,9 @@ use super::{
 
 const AWS_CLI_INSTALL_DOCS_URL: &str =
     "https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html";
+
+static TERMINAL_AWS_CLI_REQUIRED: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-aws-cli-required"));
 
 pub struct AwsCliNotInstalledBannerState {
     pub id: usize,
@@ -66,7 +71,7 @@ pub fn render_aws_cli_not_installed_banner(
     });
 
     let description_text = warpui::elements::Text::new(
-        "The AWS CLI is required to authenticate with your organization's AWS Bedrock. Install it to continue.",
+        &*TERMINAL_AWS_CLI_REQUIRED,
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 2.,
     )

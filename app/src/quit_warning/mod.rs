@@ -1,6 +1,6 @@
 use itertools::Itertools;
 use settings::ToggleableSetting as _;
-use std::fmt::Write;
+use std::sync::LazyLock;
 use warpui::{
     modals::{AlertDialogWithCallbacks, AppModalCallback, ModalButton},
     AppContext, EntityId, SingletonEntity, ViewContext, WeakViewHandle, WindowId,
@@ -292,49 +292,62 @@ impl<'a> UnsavedStateSummary<'a> {
     pub fn warning_text(&self) -> String {
         let mut info_text_lines = Vec::<String>::new();
 
-        let scope_suffix = match self.scope {
-            QuitScope::Tabs(ref tabs) if tabs.len() == 1 => " in this tab.",
-            QuitScope::Window(_) => " in this window.",
-            QuitScope::Pane { .. } => " in this pane.",
-            QuitScope::App | QuitScope::Tabs(_) | QuitScope::EditorTab { .. } => ".",
+        let target = match self.scope {
+            QuitScope::Tabs(ref tabs) if tabs.len() == 1 => "tab",
+            QuitScope::Window(_) => "window",
+            QuitScope::Pane { .. } => "pane",
+            QuitScope::App | QuitScope::Tabs(_) | QuitScope::EditorTab { .. } => "",
         };
 
         if self.total_long_running_commands > 0 {
-            let mut process_info_text = format!(
-                "You have {} {} running",
-                self.total_long_running_commands,
-                pluralize(self.total_long_running_commands, "process", "processes")
-            );
-            if self.windows_with_long_running_commands > 1 {
-                let _ = write!(
-                    &mut process_info_text,
-                    " in {} windows",
-                    self.windows_with_long_running_commands
-                );
+            let process_info_text = if self.windows_with_long_running_commands > 1 {
+                crate::tr!(
+                    "workspace",
+                    "workspace-quit-running-processes-windows",
+                    count = self.total_long_running_commands,
+                    window_count = self.windows_with_long_running_commands
+                )
             } else if self.tabs_with_long_running_commands > 1 {
-                let _ = write!(
-                    &mut process_info_text,
-                    " in {} tabs",
-                    self.tabs_with_long_running_commands
-                );
-            }
-            process_info_text.push_str(scope_suffix);
+                crate::tr!(
+                    "workspace",
+                    "workspace-quit-running-processes-tabs",
+                    count = self.total_long_running_commands,
+                    tab_count = self.tabs_with_long_running_commands
+                )
+            } else {
+                crate::tr!(
+                    "workspace",
+                    "workspace-quit-running-processes",
+                    count = self.total_long_running_commands,
+                    target = target
+                )
+            };
             info_text_lines.push(process_info_text);
         }
 
         if self.shared_sessions > 0 {
-            info_text_lines.push(format!(
-                "You are sharing {} {}{scope_suffix}",
-                self.shared_sessions,
-                pluralize(self.shared_sessions, "session", "sessions")
+            info_text_lines.push(crate::tr!(
+                "workspace",
+                "workspace-quit-shared-session",
+                count = self.shared_sessions,
+                target = target
             ));
         }
 
         if self.unsaved_code_changes {
             if let QuitScope::EditorTab { ref file_name, .. } = self.scope {
-                info_text_lines.push(format!("Do you want to save the changes you made to {}? Your changes will be discarded if you don't save them.", file_name.clone().unwrap_or("this file".to_string())));
+                let name = file_name.clone().unwrap_or_else(|| "this file".to_string());
+                info_text_lines.push(crate::tr!(
+                    "workspace",
+                    "workspace-quit-unsaved-editor-changes",
+                    file_name = name.as_str()
+                ));
             } else {
-                info_text_lines.push(format!("You have unsaved file changes{scope_suffix}"));
+                info_text_lines.push(crate::tr!(
+                    "workspace",
+                    "workspace-quit-unsaved-changes",
+                    target = target
+                ));
             }
         }
 
@@ -387,6 +400,31 @@ impl<'a> QuitWarningDialog<'a> {
     }
 
     pub fn build(self) -> AlertDialogWithCallbacks<AppModalCallback> {
+        static YES_CLOSE: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-yes-close"));
+        static YES_QUIT: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-yes-quit"));
+        static SAVE_BUTTON: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-save-button"));
+        static DONT_SAVE_BUTTON: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-dont-save-button"));
+        static SHOW_PROCESSES: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-show-processes"));
+        static CANCEL_LABEL: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
+        static CLOSE_PANE: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-pane"));
+        static CLOSE_TAB: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-tab"));
+        static CLOSE_TABS: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-tabs"));
+        static CLOSE_WINDOW: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-window"));
+        static QUIT_WARP: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-warp"));
+        static SAVE_CHANGES: LazyLock<String> =
+            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-save-changes"));
+
         let QuitWarningDialog {
             state,
             on_confirm,
@@ -400,25 +438,27 @@ impl<'a> QuitWarningDialog<'a> {
 
         if let Some(callback) = on_confirm {
             let confirm_title = match state.scope {
-                QuitScope::Window(_) | QuitScope::Tabs(_) | QuitScope::Pane { .. } => "Yes, close",
-                QuitScope::App => "Yes, quit",
+                QuitScope::Window(_) | QuitScope::Tabs(_) | QuitScope::Pane { .. } => {
+                    YES_CLOSE.as_str()
+                }
+                QuitScope::App => YES_QUIT.as_str(),
                 _ => "",
             };
             buttons.push(ModalButton::for_app(confirm_title.to_string(), callback));
         }
 
         if let Some(callback) = on_save_changes {
-            buttons.push(ModalButton::for_app("Save".to_string(), callback));
+            buttons.push(ModalButton::for_app(SAVE_BUTTON.to_string(), callback));
         }
 
         if let Some(callback) = on_discard_changes {
-            buttons.push(ModalButton::for_app("Don't Save".to_string(), callback));
+            buttons.push(ModalButton::for_app(DONT_SAVE_BUTTON.to_string(), callback));
         }
 
         if let Some(callback) = on_show_processes {
             if state.total_long_running_commands > 0 {
                 buttons.push(ModalButton::for_app(
-                    "Show running processes".to_string(),
+                    SHOW_PROCESSES.to_string(),
                     move |app| {
                         callback(app);
                     },
@@ -427,16 +467,16 @@ impl<'a> QuitWarningDialog<'a> {
         }
 
         if let Some(callback) = on_cancel {
-            buttons.push(ModalButton::for_app("Cancel".to_string(), callback));
+            buttons.push(ModalButton::for_app(CANCEL_LABEL.to_string(), callback));
         }
 
-        let title = match &state.scope {
-            QuitScope::Pane { .. } => "Close pane?",
-            QuitScope::Tabs(tabs) if tabs.len() == 1 => "Close tab?",
-            QuitScope::Tabs(_) => "Close tabs?",
-            QuitScope::Window(_) => "Close window?",
-            QuitScope::App => "Quit Warp?",
-            QuitScope::EditorTab { .. } => "Save changes?",
+        let title: &str = match &state.scope {
+            QuitScope::Pane { .. } => CLOSE_PANE.as_str(),
+            QuitScope::Tabs(tabs) if tabs.len() == 1 => CLOSE_TAB.as_str(),
+            QuitScope::Tabs(_) => CLOSE_TABS.as_str(),
+            QuitScope::Window(_) => CLOSE_WINDOW.as_str(),
+            QuitScope::App => QUIT_WARP.as_str(),
+            QuitScope::EditorTab { .. } => SAVE_CHANGES.as_str(),
         };
 
         AlertDialogWithCallbacks::for_app(
@@ -490,14 +530,6 @@ impl<'a> QuitWarningDialog<'a> {
             }
         }
         shown
-    }
-}
-
-fn pluralize<'a>(count: usize, singular: &'a str, plural: &'a str) -> &'a str {
-    if count > 1 {
-        plural
-    } else {
-        singular
     }
 }
 

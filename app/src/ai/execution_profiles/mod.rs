@@ -47,9 +47,9 @@ pub enum ActionPermission {
 impl ActionPermission {
     pub fn description(&self) -> &'static str {
         match self {
-            ActionPermission::AgentDecides | ActionPermission::Unknown => "The Agent chooses the safest path: acting on its own when confident, and asking for approval when uncertain.",
-            ActionPermission::AlwaysAllow => "Give the Agent full autonomy  — no manual approval ever required.",
-            ActionPermission::AlwaysAsk => "Require explicit approval before the Agent takes any action.",
+            ActionPermission::AgentDecides | ActionPermission::Unknown => "ai-permission-agent-decides-desc",
+            ActionPermission::AlwaysAllow => "ai-permission-always-allow-desc",
+            ActionPermission::AlwaysAsk => "ai-permission-always-ask-desc",
         }
     }
 
@@ -81,9 +81,9 @@ impl WriteToPtyPermission {
         match self {
             WriteToPtyPermission::AlwaysAllow => ActionPermission::AlwaysAllow.description(),
             WriteToPtyPermission::AskOnFirstWrite => {
-                "The agent will ask for permission the first time it needs to interact with a running command. After that, it will continue automatically for the rest of that command."
+                "ai-permission-ask-on-first-write-desc"
             }
-            WriteToPtyPermission::AlwaysAsk => "The agent will always ask for permission to interact with a running command.",
+            WriteToPtyPermission::AlwaysAsk => "ai-permission-write-always-ask-desc",
             WriteToPtyPermission::Unknown => ActionPermission::Unknown.description(),
         }
     }
@@ -118,15 +118,15 @@ impl ComputerUsePermission {
     pub fn description(&self) -> &'static str {
         match self {
             ComputerUsePermission::Never => {
-                "Computer use tools are disabled and will not be available to the Agent."
+                "ai-permission-computer-use-never-desc"
             }
             ComputerUsePermission::AlwaysAsk => {
-                "Require explicit approval before the Agent uses computer use tools."
+                "ai-permission-computer-use-always-ask-desc"
             }
             ComputerUsePermission::AlwaysAllow => {
-                "Give the Agent full autonomy to use computer use tools without approval."
+                "ai-permission-computer-use-always-allow-desc"
             }
-            ComputerUsePermission::Unknown => "Unknown setting.",
+            ComputerUsePermission::Unknown => "ai-permission-unknown-desc",
         }
     }
 
@@ -196,10 +196,10 @@ pub enum AskUserQuestionPermission {
 impl AskUserQuestionPermission {
     pub fn label(&self) -> &'static str {
         match self {
-            AskUserQuestionPermission::Never => "Never ask",
-            AskUserQuestionPermission::AskExceptInAutoApprove => "Ask unless auto-approve",
+            AskUserQuestionPermission::Never => "ai-never-ask",
+            AskUserQuestionPermission::AskExceptInAutoApprove => "ai-ask-unless-auto-approve",
             AskUserQuestionPermission::AlwaysAsk | AskUserQuestionPermission::Unknown => {
-                "Always ask"
+                "ai-always-ask"
             }
         }
     }
@@ -208,13 +208,13 @@ impl AskUserQuestionPermission {
         match self {
             AskUserQuestionPermission::AskExceptInAutoApprove
             | AskUserQuestionPermission::Unknown => {
-                "The Agent may ask a question and pause for your response, but will continue automatically when auto-approve is on."
+                "ai-permission-ask-except-auto-approve-desc"
             }
             AskUserQuestionPermission::Never => {
-                "The Agent will not ask questions and will continue with its best judgment."
+                "ai-permission-never-ask-desc"
             }
             AskUserQuestionPermission::AlwaysAsk => {
-                "The Agent may ask a question and will pause for your response even when auto-approve is on."
+                "ai-permission-always-ask-question-desc"
             }
         }
     }
@@ -303,7 +303,7 @@ impl AIExecutionProfile {
         // ignore it. The same applies to "Autonomy".
         let ai_settings = AISettings::as_ref(app);
         Self {
-            name: "Default".to_string(),
+            name: crate::tr!("ai_assistant", "ai-default-profile-name"),
             is_default_profile: true,
             command_denylist: ai_settings.agent_mode_command_execution_denylist.clone(),
             // We initialize the command allowlist to be anything the user added, excluding all
@@ -322,7 +322,7 @@ impl AIExecutionProfile {
     #[cfg(feature = "agent_mode_evals")]
     pub fn create_agent_mode_eval_profile() -> Self {
         Self {
-            name: "Agent Mode Eval".to_string(),
+            name: crate::tr!("ai_assistant", "ai-agent-mode-eval-profile-name"),
             is_default_profile: false,
             apply_code_diffs: ActionPermission::AlwaysAllow,
             read_files: ActionPermission::AlwaysAllow,
@@ -377,7 +377,7 @@ impl AIExecutionProfile {
         };
 
         Self {
-            name: "Default (CLI)".to_owned(),
+            name: crate::tr!("ai_assistant", "ai-default-cli-profile-name"),
             is_default_profile: true,
             apply_code_diffs: ActionPermission::AlwaysAllow,
             read_files: ActionPermission::AlwaysAllow,
@@ -454,9 +454,9 @@ impl StringModel for AIExecutionProfile {
     fn display_name(&self) -> String {
         // Handles case where default profile was previously created and named "Untitled"
         if self.is_default_profile {
-            "Default".to_string()
+            crate::tr!("ai_assistant", "ai-default-profile-name")
         } else if self.name.trim().is_empty() {
-            "Untitled".to_string()
+            crate::tr!("common", "common-untitled-label")
         } else {
             self.name.clone()
         }

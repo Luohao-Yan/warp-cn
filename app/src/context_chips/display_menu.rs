@@ -285,9 +285,9 @@ impl DisplayChipMenu {
                     };
                     let mut editor = EditorView::new(options, ctx);
                     let placeholder_text = match chip_menu_type {
-                        ChipMenuType::Directories => "Search directories...",
-                        ChipMenuType::Branches => "Search branches...",
-                        ChipMenuType::Environments => "Search environments...",
+                        ChipMenuType::Directories => crate::tr!("context_chips", "search-directories"),
+                        ChipMenuType::Branches => crate::tr!("context_chips", "search-branches"),
+                        ChipMenuType::Environments => crate::tr!("context_chips", "search-environments"),
                         ChipMenuType::CodeReview => {
                             unreachable!("search input should not be constructed")
                         }
@@ -588,7 +588,7 @@ impl DisplayChipMenu {
             .map(|repo| repo.repo.clone())
             .collect::<Vec<_>>();
         let repos_text = if repo_names.is_empty() {
-            "(none)".to_string()
+            crate::tr!("context_chips", "sidecar-none")
         } else {
             repo_names.join(", ")
         };
@@ -813,15 +813,15 @@ impl DisplayChipMenu {
             .with_cross_axis_alignment(CrossAxisAlignment::Start)
             .with_child(row(
                 Icon::Globe4,
-                "Name:",
+                &crate::tr!("context_chips", "sidecar-name"),
                 value_text(data.name.clone()),
                 false,
             ))
-            .with_child(row(Icon::Hash, "ID:", id_value, false))
-            .with_child(row(Icon::Docker, "Image:", image_value, false))
+            .with_child(row(Icon::Hash, &crate::tr!("context_chips", "sidecar-id"), id_value, false))
+            .with_child(row(Icon::Docker, &crate::tr!("context_chips", "sidecar-image"), image_value, false))
             .with_child(row(
                 Icon::Github,
-                "Repos:",
+                &crate::tr!("context_chips", "sidecar-repos"),
                 value_text(data.repos_text.clone()),
                 true,
             ))
@@ -1007,7 +1007,7 @@ impl DisplayChipMenu {
                 let (label, font_size, horizontal_padding, vertical_padding, text_color) =
                     match self.chip_menu_type {
                         ChipMenuType::Environments => (
-                            "No results",
+                            crate::tr!("context_chips", "no-results"),
                             ENV_MENU_ITEM_FONT_SIZE,
                             ENV_MENU_ITEM_HORIZONTAL_PADDING,
                             ENV_MENU_ITEM_VERTICAL_PADDING,
@@ -1016,7 +1016,7 @@ impl DisplayChipMenu {
                         ChipMenuType::Directories
                         | ChipMenuType::Branches
                         | ChipMenuType::CodeReview => (
-                            "No results found",
+                            crate::tr!("context_chips", "no-results-found"),
                             appearance.ui_font_size(),
                             LABEL_HORIZONTAL_PADDING,
                             LABEL_VERTICAL_PADDING * 2.0,

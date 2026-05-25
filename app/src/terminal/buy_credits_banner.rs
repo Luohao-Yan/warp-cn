@@ -208,7 +208,7 @@ impl BuyCreditsBanner {
                 if self.banner_auto_reload_update_in_flight {
                     self.banner_auto_reload_update_in_flight = false;
                     ctx.emit(BuyCreditsBannerEvent::ShowAutoReloadError {
-                        error_message: "Failed to enable auto-reload for your team. Please try again in Settings > Billing and Usage.",
+                        error_message: crate::tr!("terminal", "terminal-failed-enable-autoreload"),
                     });
                     ctx.notify();
                 }
@@ -241,7 +241,8 @@ impl BuyCreditsBanner {
 
         let sub_text_color = theme.sub_text_color(theme.surface_1());
 
-        let label = Text::new_inline("Auto reload", appearance.ui_font_family(), 12.)
+        let auto_reload_label = crate::tr!("terminal", "terminal-auto-reload");
+        let label = Text::new_inline(auto_reload_label, appearance.ui_font_family(), 12.)
             .with_color(sub_text_color.into())
             .finish();
 
@@ -252,10 +253,7 @@ impl BuyCreditsBanner {
             .map(|option| option.credits)
             .unwrap_or(0);
 
-        let tooltip_text = format!(
-            "When enabled, auto reload will purchase {} credits when your credit balance gets low",
-            selected_credits
-        );
+        let tooltip_text = crate::tr!("terminal", "terminal-auto-reload-tooltip", credits = selected_credits as i64);
 
         // Create info icon with a custom sub_text_color & mouse cursor (i.e. as opposed to using IconWithTooltip)
         let ui_builder = appearance.ui_builder();
@@ -404,16 +402,16 @@ impl BuyCreditsBanner {
 
         // Banner text with title and description based on admin status
         let banner_description = if has_admin_permissions {
-            "Your monthly spend limit has been reached. Increase it to continue."
+            crate::tr!("terminal", "terminal-monthly-limit-reached-admin")
         } else {
-            "Contact a team admin to increase monthly limit."
+            crate::tr!("terminal", "terminal-monthly-limit-reached-non-admin")
         };
 
         let banner_text = Flex::column()
             .with_children([
                 appearance
                     .ui_builder()
-                    .paragraph("Monthly limit reached")
+                    .paragraph(crate::tr!("terminal", "terminal-monthly-limit-reached-title"))
                     .with_style(UiComponentStyles {
                         font_size: Some(14.),
                         ..Default::default()
@@ -464,7 +462,7 @@ impl BuyCreditsBanner {
                     }),
                     ..Default::default()
                 })
-                .with_text_label("Manage billing".to_string())
+                .with_text_label(crate::tr!("terminal", "terminal-manage-billing"))
                 .build()
                 .on_click(|ctx, _, _| {
                     ctx.dispatch_typed_action(Action::ManageBilling);
@@ -549,7 +547,7 @@ impl BuyCreditsBanner {
         let make_banner_text = || {
             let mut banner_text_children = vec![appearance
                 .ui_builder()
-                .paragraph("Out of credits")
+                .paragraph(crate::tr!("terminal", "terminal-out-of-credits-title"))
                 .with_style(UiComponentStyles {
                     font_size: Some(14.),
                     ..Default::default()
@@ -562,10 +560,10 @@ impl BuyCreditsBanner {
                 // Create formatted text with clickable hyperlink
                 let warning_text_fragments = vec![
                     FormattedTextFragment::plain_text(
-                        "Purchasing these credits would take you over your monthly spend limit. ",
+                        &crate::tr!("terminal", "terminal-purchase-exceeds-limit"),
                     ),
-                    FormattedTextFragment::hyperlink_action("Increase it", Action::ManageBilling),
-                    FormattedTextFragment::plain_text(" to continue."),
+                    FormattedTextFragment::hyperlink_action(&crate::tr!("terminal", "terminal-increase-limit"), Action::ManageBilling),
+                    FormattedTextFragment::plain_text(&crate::tr!("terminal", "terminal-to-continue")),
                 ];
 
                 let formatted_warning = FormattedTextElement::new(
@@ -593,9 +591,9 @@ impl BuyCreditsBanner {
             } else {
                 // Default message when not at limit
                 let banner_description = if has_admin_permissions {
-                    "Add more credits to your account to continue using Oz agents."
+                    crate::tr!("terminal", "terminal-out-of-credits-admin")
                 } else {
-                    "Contact a team admin to purchase more credits to continue."
+                    crate::tr!("terminal", "terminal-out-of-credits-non-admin")
                 };
 
                 banner_text_children.push(
@@ -634,9 +632,9 @@ impl BuyCreditsBanner {
                 || would_purchase_exceed_limit;
 
             let button_text = if self.purchase_addon_credits_loading {
-                "Buying…".to_string()
+                crate::tr!("terminal", "terminal-buying")
             } else {
-                "Buy".to_string()
+                crate::tr!("terminal", "terminal-buy")
             };
 
             let button_font_color = buy_button_disabled.then_some(
@@ -793,7 +791,7 @@ pub enum BuyCreditsBannerEvent {
     OpenBillingAndUsage,
     RefocusInput,
     OpenAutoReloadModal { purchased_credits: i32 },
-    ShowAutoReloadError { error_message: &'static str },
+    ShowAutoReloadError { error_message: String },
 }
 
 impl Entity for BuyCreditsBanner {

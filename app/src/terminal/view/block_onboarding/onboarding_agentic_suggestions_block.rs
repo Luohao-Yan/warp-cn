@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::ai::blocklist::ai_brand_color;
 use crate::ai::blocklist::{
     BlocklistAIActionEvent, BlocklistAIActionModel, BlocklistAIHistoryEvent,
@@ -54,6 +56,9 @@ lazy_static! {
         Regex::new(r##"(?i)(?:Set-Location|cd)\s+(?:-\S+\s+)*["']?([^"'\r\n]+)["']?"##)
             .expect("command line path regex invalid");
 }
+
+static TERMINAL_THINKING: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-thinking"));
 
 pub struct OnboardingAgenticSuggestionsBlock {
     agent_suggestions: Vec<(AgenticSuggestionsContent, MouseStateHandle)>,
@@ -589,15 +594,14 @@ impl OnboardingAgenticSuggestionsBlock {
         let font_size = appearance.monospace_font_size();
         let font_color = current_theme.main_text_color(current_theme.background());
 
-        const WELCOME_TEXT_LINE_ONE: &str = "Welcome to Warp!";
-        const WELCOME_TEXT_LINE_TWO_PART_ONE: &str =
-            "Here are a few examples of how to leverage the power of AI in your terminal using";
-        const WELCOME_TEXT_LINE_TWO_PART_TWO: &str = " Agent Mode";
+        static WELCOME_TEXT_LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-welcome-text"));
+        static WELCOME_TEXT_LINE_TWO_PART_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-agent-examples-intro"));
+        static WELCOME_TEXT_LINE_TWO_PART_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-agent-mode-label"));
 
         Flex::column()
             .with_children(vec![
                 Container::new(
-                    Text::new(WELCOME_TEXT_LINE_ONE, font_family, font_size)
+                    Text::new(&*WELCOME_TEXT_LINE_ONE, font_family, font_size)
                         .with_color(font_color.into_solid())
                         .finish(),
                 )
@@ -605,9 +609,9 @@ impl OnboardingAgenticSuggestionsBlock {
                 .finish(),
                 FormattedTextElement::new(
                     FormattedText::new([FormattedTextLine::Line(vec![
-                        FormattedTextFragment::plain_text(WELCOME_TEXT_LINE_TWO_PART_ONE),
+                        FormattedTextFragment::plain_text(&*WELCOME_TEXT_LINE_TWO_PART_ONE),
                         FormattedTextFragment::weighted(
-                            WELCOME_TEXT_LINE_TWO_PART_TWO,
+                            &*WELCOME_TEXT_LINE_TWO_PART_TWO,
                             Some(CustomWeight::Bold),
                         ),
                     ])]),
@@ -650,7 +654,7 @@ impl OnboardingAgenticSuggestionsBlock {
                     )
                     .with_child(
                         Text::new(
-                            "Thinking...".to_owned(),
+                            &*TERMINAL_THINKING,
                             appearance.ui_font_family(),
                             appearance.monospace_font_size(),
                         )

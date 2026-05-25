@@ -46,6 +46,7 @@ impl View for NeedsSsoLinkView {
         let appearance = Appearance::as_ref(app);
         let ui_builder = appearance.ui_builder();
 
+        let link_sso_label = crate::tr!("auth", "auth-link-sso");
         let link_sso_button = Shrinkable::new(
             1.,
             Align::new(
@@ -54,7 +55,7 @@ impl View for NeedsSsoLinkView {
                         ButtonVariant::Accent,
                         self.mouse_state_handles.link_sso_handle.clone(),
                     )
-                    .with_text_label("Link SSO".to_string())
+                    .with_text_label(link_sso_label)
                     .with_style(UiComponentStyles {
                         padding: Some(Coords {
                             top: 10.,
@@ -74,9 +75,11 @@ impl View for NeedsSsoLinkView {
         )
         .finish();
 
+        let sso_header = crate::tr!("auth", "auth-sso-header");
+        let sso_detail = crate::tr!("auth", "auth-sso-detail");
         LoginErrorModal::new(app)
-            .with_header("Your organization has enabled SSO for your account")
-            .with_detail("Click the button below to link your Warp account to your SSO provider.")
+            .with_header(sso_header)
+            .with_detail(sso_detail)
             .with_action(link_sso_button)
             .build()
             .finish()

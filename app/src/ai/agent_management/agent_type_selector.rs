@@ -3,8 +3,15 @@
 //! This modal is displayed when users click "New agent" to choose between
 //! cloud and local agent modes.
 
+use std::sync::LazyLock;
+
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
+
+static AI_CLOUD_AGENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cloud-agent"));
+static AI_LOCAL_AGENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-local-agent"));
+static AI_CLOUD_AGENT_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cloud-agent-desc"));
+static AI_LOCAL_AGENT_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-local-agent-desc"));
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::color::blend::Blend;
@@ -126,7 +133,7 @@ impl AgentTypeSelector {
         let theme = appearance.theme();
 
         let title = Text::new(
-            "Choose your agent".to_string(),
+            crate::tr!("ai_assistant", "ai-choose-your-agent"),
             appearance.ui_font_family(),
             TITLE_FONT_SIZE,
         )
@@ -258,7 +265,7 @@ impl AgentTypeSelector {
 
             if is_suggested {
                 let suggested_text =
-                    Text::new("Suggested".to_string(), font_family, OPTION_DESC_FONT_SIZE)
+                    Text::new(crate::tr!("ai_assistant", "ai-suggested").to_string(), font_family, OPTION_DESC_FONT_SIZE)
                         .with_style(Properties::default().weight(Weight::Medium))
                         .with_color(badge_text_color)
                         .finish();
@@ -333,8 +340,8 @@ impl AgentTypeSelector {
         let cloud_agent_option = self.render_option(
             0,
             Icon::OzCloud,
-            "Cloud agent",
-            "Runs autonomously in a cloud environment you choose. Best for parallel or long-running work.",
+            &*AI_CLOUD_AGENT_TITLE,
+            &*AI_CLOUD_AGENT_DESC,
             true,
             self.cloud_agent_mouse_state.clone(),
             AgentTypeSelectorAction::SelectCloudAgent,
@@ -344,8 +351,8 @@ impl AgentTypeSelector {
         let local_agent_option = self.render_option(
             1,
             Icon::Oz,
-            "Local agent",
-            "Runs on your machine and requires supervision. Best for quick, interactive tasks.",
+            &*AI_LOCAL_AGENT_TITLE,
+            &*AI_LOCAL_AGENT_DESC,
             false,
             self.local_agent_mouse_state.clone(),
             AgentTypeSelectorAction::SelectLocalAgent,

@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::appearance::Appearance;
 use crate::terminal::view::{InlineBannerId, TerminalAction};
 use crate::ui_components::buttons::icon_button;
@@ -17,10 +19,9 @@ use super::{
     INLINE_BANNER_MARGIN_BETWEEN_BUTTONS, INLINE_BANNER_RIGHT_MARGIN,
 };
 
-const TITLE: &str = "Login for AI";
-const CONTENT: &str =
-    "AI features are unavailable for logged-out users. Create an account to use AI.";
-const SIGN_UP_BUTTON_TEXT: &str = "Sign Up";
+static TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "login-for-ai"));
+static CONTENT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ai-features-unavailable"));
+static SIGN_UP_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sign-up"));
 
 // Layout constants for three-column banner
 const ICON_SIZE_OFFSET: f32 = 3.0;
@@ -53,9 +54,9 @@ impl AnonymousUserAISignUpBannerState {
     pub fn render(&self, appearance: &Appearance) -> Box<dyn Element> {
         render_three_column_inline_banner(
             appearance,
-            TITLE,
-            CONTENT,
-            SIGN_UP_BUTTON_TEXT,
+            &*TITLE,
+            &*CONTENT,
+            &*SIGN_UP_BUTTON_TEXT,
             self.sign_up_button_mouse_state.clone(),
             self.close_button_mouse_state.clone(),
         )

@@ -38,17 +38,17 @@ pub fn render_inline_ssh_wrapper_banner(
     let (style, title) = if state.wrapper_enabled {
         (
             InlineBannerStyle::LowPriority,
-            "Warp SSH wrapper enabled".to_string(),
+            crate::tr!("terminal", "terminal-ssh-wrapper-enabled"),
         )
     } else {
         (
             InlineBannerStyle::VeryLowPriority,
-            "Warp SSH wrapper disabled".to_string(),
+            crate::tr!("terminal", "terminal-ssh-wrapper-disabled"),
         )
     };
     let buttons = vec![
         InlineBannerTextButton {
-            text: "Learn more".to_string(),
+            text: crate::tr!("common", "common-learn-more-label").clone(),
             text_color: label_text_color,
             button_state: InlineBannerButtonState {
                 on_click_event: TerminalAction::LegacySSHBanner(SSHBannerAction::LearnMore),
@@ -59,7 +59,7 @@ pub fn render_inline_ssh_wrapper_banner(
             variant: InlineBannerTextButtonVariant::Secondary,
         },
         InlineBannerTextButton {
-            text: "Settings".to_string(),
+            text: crate::tr!("terminal", "terminal-settings"),
             text_color: label_text_color,
             button_state: InlineBannerButtonState {
                 on_click_event: TerminalAction::LegacySSHBanner(SSHBannerAction::Settings),

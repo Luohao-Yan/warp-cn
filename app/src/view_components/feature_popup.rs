@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use warpui::{
     elements::{
         ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Flex, Hoverable,
@@ -8,6 +10,9 @@ use warpui::{
 };
 
 use crate::{appearance::Appearance, ui_components::icons::Icon};
+
+static COMMON_NEW: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("common", "common-new-badge"));
 
 pub enum NewFeaturePopupLabel {
     /// A static label.
@@ -57,7 +62,7 @@ impl FeaturePopup {
         match self.badge {
             FeaturePopupBadge::New => Container::new(
                 Text::new(
-                    "NEW",
+                    &*COMMON_NEW,
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )

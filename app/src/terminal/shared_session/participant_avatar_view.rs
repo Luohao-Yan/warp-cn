@@ -164,18 +164,24 @@ impl ParticipantAvatarView {
             .into_item()];
 
         match self.role {
-            Some(Role::Reader) => items.extend([MenuItemFields::new("Make editor")
-                .with_on_select_action(ParticipantAvatarAction::UpdateRole {
-                    participant_id,
-                    role: Role::Executor,
-                })
-                .into_item()]),
-            Some(Role::Executor) => items.extend([MenuItemFields::new("Make viewer")
-                .with_on_select_action(ParticipantAvatarAction::UpdateRole {
-                    participant_id,
-                    role: Role::Reader,
-                })
-                .into_item()]),
+            Some(Role::Reader) => {
+                let label = crate::tr!("terminal", "terminal-menu-make-editor");
+                items.extend([MenuItemFields::new(&label)
+                    .with_on_select_action(ParticipantAvatarAction::UpdateRole {
+                        participant_id,
+                        role: Role::Executor,
+                    })
+                    .into_item()])
+            }
+            Some(Role::Executor) => {
+                let label = crate::tr!("terminal", "terminal-menu-make-viewer");
+                items.extend([MenuItemFields::new(&label)
+                    .with_on_select_action(ParticipantAvatarAction::UpdateRole {
+                        participant_id,
+                        role: Role::Reader,
+                    })
+                    .into_item()])
+            }
             // Sharer does not have context menu
             _ => {}
         }
@@ -541,8 +547,9 @@ pub fn render_revoke_all_button(
                     Border::all(1.).with_border_color(appearance.theme().surface_3().into()),
                 );
 
+            let tooltip_text = crate::tr!("terminal", "terminal-revoke-all-edit-permissions");
             stack.add_positioned_child(
-                render_tooltip("Revoke all edit permissions".to_string(), appearance),
+                render_tooltip(tooltip_text, appearance),
                 OffsetPositioning::offset_from_parent(
                     vec2f(0., 3.),
                     ParentOffsetBounds::Unbounded,
@@ -583,8 +590,9 @@ pub fn render_viewer_role_button(
     let mut stack = Stack::new();
     let button = icon_button(appearance, icon, false, mouse_state_handle.clone())
         .with_tooltip(move || {
+            let tooltip_text = crate::tr!("terminal", "terminal-change-role");
             ui_builder
-                .tool_tip("Change role".to_string())
+                .tool_tip(tooltip_text)
                 .build()
                 .finish()
         })

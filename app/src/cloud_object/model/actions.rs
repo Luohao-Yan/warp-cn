@@ -34,13 +34,13 @@ impl ToString for ObjectActionType {
 impl ObjectActionType {
     fn singular(&self) -> String {
         match self {
-            ObjectActionType::Execute => "run".to_string(),
+            ObjectActionType::Execute => crate::tr!("cloud_object", "cloud-object-action-run-singular"),
         }
     }
 
     fn plural(&self) -> String {
         match self {
-            ObjectActionType::Execute => "runs".to_string(),
+            ObjectActionType::Execute => crate::tr!("cloud_object", "cloud-object-action-run-plural"),
         }
     }
 }
@@ -353,7 +353,7 @@ impl ObjectActions {
         // If the object is not in the model, return 0.
         let all_actions_on_this_object = self.object_actions_by_id.get(uid);
         if all_actions_on_this_object.is_none() {
-            return Some("0 runs in the last year".to_string());
+            return Some(crate::tr!("cloud_object", "cloud-object-action-summary-zero-year"));
         }
 
         // If the object doesn't have any of these action types recorded, return 0.
@@ -361,52 +361,31 @@ impl ObjectActions {
             .iter()
             .filter(|a| a.action_type == action_type);
         if all_relevant_actions.clone().count() == 0 {
-            return Some("0 runs in the last year".to_string());
+            return Some(crate::tr!("cloud_object", "cloud-object-action-summary-zero-year"));
         }
 
         // If the action has occurred in the last day, return Day as the time unit.
         let one_day_ago = Utc::now() - Duration::days(1);
         let in_the_last_day = all_relevant_actions.clone().filter(|a| matches!(a.action_subtype, ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_day_ago)).count();
         if in_the_last_day > 0 {
-            return Some(format!(
-                "{} {} in the last day",
-                in_the_last_day,
-                if in_the_last_day == 1 {
-                    action_type.singular()
-                } else {
-                    action_type.plural()
-                }
-            ));
+            let action_word = if in_the_last_day == 1 { action_type.singular() } else { action_type.plural() };
+            return Some(crate::tr!("cloud_object", "cloud-object-action-summary-day", count = in_the_last_day, action_word = action_word));
         }
 
         // If the action has occurred in the last week, return Week as the time unit.
         let one_week_ago = Utc::now() - Duration::days(7);
         let in_the_last_week = all_relevant_actions.clone().filter(|a| matches!(a.action_subtype, ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_week_ago)).count();
         if in_the_last_week > 0 {
-            return Some(format!(
-                "{} {} in the last week",
-                in_the_last_week,
-                if in_the_last_week == 1 {
-                    action_type.singular()
-                } else {
-                    action_type.plural()
-                }
-            ));
+            let action_word = if in_the_last_week == 1 { action_type.singular() } else { action_type.plural() };
+            return Some(crate::tr!("cloud_object", "cloud-object-action-summary-week", count = in_the_last_week, action_word = action_word));
         }
 
         // If the action has occurred in the last month, return Month as the time unit.
         let one_month_ago = Utc::now() - Duration::days(30);
         let in_the_last_month = all_relevant_actions.clone().filter(|a| matches!(a.action_subtype, ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_month_ago)).count();
         if in_the_last_month > 0 {
-            return Some(format!(
-                "{} {} in the last month",
-                in_the_last_month,
-                if in_the_last_month == 1 {
-                    action_type.singular()
-                } else {
-                    action_type.plural()
-                }
-            ));
+            let action_word = if in_the_last_month == 1 { action_type.singular() } else { action_type.plural() };
+            return Some(crate::tr!("cloud_object", "cloud-object-action-summary-month", count = in_the_last_month, action_word = action_word));
         }
 
         // Finally, if all else turned up fruitless, return the yearly count.
@@ -426,15 +405,8 @@ impl ObjectActions {
             })
             .sum();
 
-        Some(format!(
-            "{} {} in the last year",
-            in_the_last_year,
-            if in_the_last_year == 1 {
-                action_type.singular()
-            } else {
-                action_type.plural()
-            }
-        ))
+        let action_word = if in_the_last_year == 1 { action_type.singular() } else { action_type.plural() };
+        Some(crate::tr!("cloud_object", "cloud-object-action-summary-year", count = in_the_last_year, action_word = action_word))
     }
 
     /// Returns all the actions on the objects specified by the parameter hashed_object_ids.

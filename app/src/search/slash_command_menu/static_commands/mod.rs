@@ -87,7 +87,7 @@ impl Argument {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StaticCommand {
     pub name: &'static str,
-    pub description: &'static str,
+    pub description: String,
     pub icon_path: &'static str,
     /// Specifies the requirements for this command to be available. See [`Availability`].
     pub availability: Availability,

@@ -29,6 +29,7 @@ use instant::{Duration, Instant};
 use log::debug;
 #[cfg(not(target_family = "wasm"))]
 use std::collections::HashMap;
+use std::sync::LazyLock;
 use url::Url;
 use warp_core::send_telemetry_from_ctx;
 use warp_editor::editor::NavigationKey;
@@ -54,6 +55,64 @@ use warpui::{
 };
 
 const SUBMIT_BUTTON_FOCUSED: &str = "SubmitButtonFocused";
+
+static SETTINGS_ENV_NAME_PLACEHOLDER: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-environment-name"));
+static SETTINGS_DOCKER_IMAGE_PLACEHOLDER: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-docker-image-placeholder"));
+static SETTINGS_SETUP_COMMANDS_PLACEHOLDER: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-setup-commands-placeholder"));
+static SETTINGS_CREATE_ENV: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-create-environment"));
+static SETTINGS_SAVE_ENV: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-save-environment"));
+static SETTINGS_EDIT_ENV: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-edit-environment"));
+static SETTINGS_SHARE_WITH_TEAM: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-share-with-team"));
+static SETTINGS_PERSONAL_ENV_WARNING: LazyLock<String> = LazyLock::new(|| {
+    crate::tr!("settings", "settings-personal-env-warning")
+});
+static SETTINGS_SETUP_COMMANDS_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-setup-commands"));
+static SETTINGS_SETUP_COMMANDS_HELPER: LazyLock<String> = LazyLock::new(|| {
+    crate::tr!("settings", "settings-setup-commands-helper")
+});
+static SETTINGS_DESCRIPTION_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-description-label"));
+static SETTINGS_REPOS_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-repos-label"));
+static SETTINGS_LOADING: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("common", "loading-label"));
+static SETTINGS_FAILED_LOAD_GITHUB_REPOS: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-failed-load-github-repos"));
+static SETTINGS_MISSING_REPO: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-missing-repo"));
+static SETTINGS_CONFIGURE_ACCESS: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-configure-access-github"));
+static SETTINGS_SUGGEST_IMAGE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-suggest-image"));
+static SETTINGS_LAUNCH_AGENT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-launch-agent"));
+static SETTINGS_FAILED_SUGGEST_DOCKER: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-failed-suggest-docker-image"));
+static SETTINGS_FAILED_SUGGEST_DOCKER_FULL: LazyLock<String> = LazyLock::new(|| {
+    crate::tr!("settings", "settings-failed-suggest-docker-image-full")
+});
+static SETTINGS_FAILED_LOAD_GITHUB_REPOS_FULL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-failed-load-github-repos-full"));
+static SETTINGS_DESCRIPTION_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| {
+    crate::tr!("settings", "settings-description-placeholder")
+});
+static SETTINGS_GENERATING: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-generating"));
+static SETTINGS_DOCKER_SUGGEST_TOOLTIP: LazyLock<String> = LazyLock::new(|| {
+    crate::tr!("settings", "settings-docker-suggest-tooltip")
+});
+static SETTINGS_DOCKER_IMAGE_REF: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-docker-image-ref"));
+static SETTINGS_NAME_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-name-label"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -343,8 +402,14 @@ pub struct UpdateEnvironmentForm {
 }
 
 const DESCRIPTION_MAX_CHARS: usize = 240;
-const REPOS_PLACEHOLDER_AUTHED: &str = "Enter repos (owner/repo format)";
-const REPOS_PLACEHOLDER_UNAUTHED: &str = "Paste repo URL(s)";
+static SETTINGS_REPOS_PLACEHOLDER_AUTHED: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-enter-repos-format"));
+static SETTINGS_REPOS_PLACEHOLDER_UNAUTHED: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-paste-repo-urls"));
+static SETTINGS_CREATE_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("common", "create-label"));
+static SETTINGS_SAVE_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("common", "save-label"));
 const FORM_FIELD_SPACING: f32 = 20.;
 const FORM_LABEL_SPACING: f32 = 6.;
 const FORM_INPUT_HEIGHT: f32 = 36.;
@@ -387,15 +452,15 @@ impl UpdateEnvironmentForm {
             form.update_editor_text_colors(ctx);
         });
         // Create editors
-        let name_editor = Self::create_single_line_editor("Environment name", ctx);
+        let name_editor = Self::create_single_line_editor(&*SETTINGS_ENV_NAME_PLACEHOLDER, ctx);
         let description_editor = Self::create_description_editor(ctx);
         let docker_image_editor =
-            Self::create_single_line_editor("e.g. python:3.11, node:20-alpine", ctx);
-        let repos_input_editor = Self::create_single_line_editor(REPOS_PLACEHOLDER_AUTHED, ctx);
+            Self::create_single_line_editor(&*SETTINGS_DOCKER_IMAGE_PLACEHOLDER, ctx);
+        let repos_input_editor = Self::create_single_line_editor(&*SETTINGS_REPOS_PLACEHOLDER_AUTHED, ctx);
 
         let setup_commands_input = ctx.add_typed_action_view(|ctx| {
             let mut input = SubmittableTextInput::new(ctx);
-            input.set_placeholder_text("e.g. cd my-repo && pip install -r requirements.txt", ctx);
+            input.set_placeholder_text(&*SETTINGS_SETUP_COMMANDS_PLACEHOLDER, ctx);
             // Keep this consistent with other form inputs (e.g. repos): caller controls spacing.
             input.set_outer_margins(0., 0., ctx);
             input
@@ -449,7 +514,8 @@ impl UpdateEnvironmentForm {
         });
 
         let delete_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Delete environment", DangerSecondaryTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-environment"));
+            ActionButton::new(&*LABEL, DangerSecondaryTheme)
                 .with_icon(Icon::Trash)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(UpdateEnvironmentFormAction::Delete);
@@ -704,8 +770,8 @@ impl UpdateEnvironmentForm {
         // Update button text based on mode when header is hidden
         if !show_header {
             let button_text = match &self.mode {
-                EnvironmentFormMode::Create => "Create environment",
-                EnvironmentFormMode::Edit { .. } => "Save environment",
+                EnvironmentFormMode::Create => &*SETTINGS_CREATE_ENV,
+                EnvironmentFormMode::Edit { .. } => &*SETTINGS_SAVE_ENV,
             };
             self.submit_button.update(ctx, |button, ctx| {
                 button.set_label(button_text, ctx);
@@ -759,7 +825,7 @@ impl UpdateEnvironmentForm {
                 self.remove_setup_command_mouse_states.clear();
                 // Update button text for Create mode
                 self.submit_button.update(ctx, |button, ctx| {
-                    button.set_label("Create", ctx);
+                    button.set_label(SETTINGS_CREATE_LABEL.clone(), ctx);
                 });
             }
             EnvironmentFormInitArgs::Edit {
@@ -800,7 +866,7 @@ impl UpdateEnvironmentForm {
                     .collect();
                 // Update button text for Edit mode
                 self.submit_button.update(ctx, |button, ctx| {
-                    button.set_label("Save", ctx);
+                    button.set_label(SETTINGS_SAVE_LABEL.clone(), ctx);
                 });
             }
         }
@@ -809,7 +875,7 @@ impl UpdateEnvironmentForm {
         //
         // Note: We intentionally do not set `suggest_image_last_attempt_key` here.
         // That field tracks the last *attempted* suggest-image key, and is used to enforce
-        // “repos must change to retry”. Edit-mode gating is handled via `edit_repos_modified`.
+        // "repos must change to retry". Edit-mode gating is handled via `edit_repos_modified`.
         self.suggest_image_state = SuggestImageState::Idle;
         self.suggest_image_last_attempt_key = None;
         self.suggest_image_request_seq = 0;
@@ -832,9 +898,9 @@ impl UpdateEnvironmentForm {
 
     fn update_repos_input_placeholder(&mut self, ctx: &mut ViewContext<Self>) {
         let placeholder = if self.github_dropdown_state.auth_url.is_some() {
-            REPOS_PLACEHOLDER_UNAUTHED
+            &*SETTINGS_REPOS_PLACEHOLDER_UNAUTHED
         } else {
-            REPOS_PLACEHOLDER_AUTHED
+            &*SETTINGS_REPOS_PLACEHOLDER_AUTHED
         };
         self.repos_input_editor.update(ctx, |editor, ctx| {
             editor.set_placeholder_text(placeholder, ctx);
@@ -850,10 +916,11 @@ impl UpdateEnvironmentForm {
     }
 
     fn create_single_line_editor(
-        placeholder: &'static str,
+        placeholder: &str,
         ctx: &mut ViewContext<Self>,
     ) -> ViewHandle<EditorView> {
-        ctx.add_typed_action_view(|ctx| {
+        let placeholder = placeholder.to_owned();
+        ctx.add_typed_action_view(move |ctx| {
             let appearance = Appearance::as_ref(ctx);
             let options = SingleLineEditorOptions {
                 text: TextOptions {
@@ -867,7 +934,7 @@ impl UpdateEnvironmentForm {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text(placeholder, ctx);
+            editor.set_placeholder_text(&placeholder, ctx);
             editor
         })
     }
@@ -915,7 +982,7 @@ impl UpdateEnvironmentForm {
             };
             let mut editor = EditorView::new(options, ctx);
             editor.set_placeholder_text(
-                "e.g., this environment is for all front end focused agents",
+                SETTINGS_DESCRIPTION_PLACEHOLDER.clone(),
                 ctx,
             );
             editor
@@ -1245,11 +1312,11 @@ impl UpdateEnvironmentForm {
                     }
                     Ok(UserGithubInfoResult::Unknown) => {
                         me.github_dropdown_state.load_error_message =
-                            Some("Failed to load GitHub repos".to_string());
+                            Some(SETTINGS_FAILED_LOAD_GITHUB_REPOS.clone());
                     }
                     Err(e) => {
                         me.github_dropdown_state.load_error_message =
-                            Some(format!("Failed to load GitHub repos: {}", e));
+                            Some(format!("{}: {}", SETTINGS_FAILED_LOAD_GITHUB_REPOS_FULL.clone(), e));
                     }
                 }
 
@@ -1438,7 +1505,7 @@ impl UpdateEnvironmentForm {
                             };
                         }
                         warp_graphql::queries::suggest_cloud_environment_image::SuggestCloudEnvironmentImageResult::UserFacingError(_) => {
-                            let error_message = "Failed to suggest a Docker image".to_string();
+                            let error_message = SETTINGS_FAILED_SUGGEST_DOCKER.clone();
                             send_telemetry_from_ctx!(
                                 CloudAgentTelemetryEvent::ImageSuggestionFailed {
                                     error: error_message.clone(),
@@ -1451,7 +1518,7 @@ impl UpdateEnvironmentForm {
                             };
                         }
                         warp_graphql::queries::suggest_cloud_environment_image::SuggestCloudEnvironmentImageResult::Unknown => {
-                            let error_message = "Unknown response from suggestCloudEnvironmentImage".to_string();
+                            let error_message = crate::tr!("settings", "settings-unknown-suggest-response");
                             send_telemetry_from_ctx!(
                                 CloudAgentTelemetryEvent::ImageSuggestionFailed {
                                     error: error_message.clone(),
@@ -1465,7 +1532,7 @@ impl UpdateEnvironmentForm {
                         }
                     },
                     Err(e) => {
-                        let error_message = format!("Failed to suggest a Docker image: {}", e);
+                        let error_message = format!("{}: {}", SETTINGS_FAILED_SUGGEST_DOCKER_FULL.clone(), e);
                         send_telemetry_from_ctx!(
                             CloudAgentTelemetryEvent::ImageSuggestionFailed {
                                 error: error_message.clone(),
@@ -1532,7 +1599,7 @@ impl UpdateEnvironmentForm {
                         theme.active_ui_text_color()
                     };
 
-                    Text::new_inline("Share with team", font_family, font_size)
+                    Text::new_inline(SETTINGS_SHARE_WITH_TEAM.clone(), font_family, font_size)
                         .with_color(color.into())
                         .finish()
                 },
@@ -1569,7 +1636,7 @@ impl UpdateEnvironmentForm {
 
         Some(render_warning_box(
             WarningBoxConfig::new(
-                "Personal environments cannot be used with external integrations or team API keys. For the best experience, use shared environments.",
+                SETTINGS_PERSONAL_ENV_WARNING.clone(),
             )
             .with_width(DROPDOWN_MAX_WIDTH),
             appearance,
@@ -1614,8 +1681,8 @@ impl UpdateEnvironmentForm {
 
     fn render_header(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let (title, button_handle) = match &self.mode {
-            EnvironmentFormMode::Create => ("Create environment", &self.submit_button),
-            EnvironmentFormMode::Edit { .. } => ("Edit environment", &self.submit_button),
+            EnvironmentFormMode::Create => (SETTINGS_CREATE_ENV.clone(), &self.submit_button),
+            EnvironmentFormMode::Edit { .. } => (SETTINGS_EDIT_ENV.clone(), &self.submit_button),
         };
 
         let submit_actions = || self.render_submit_actions(appearance, app, button_handle);
@@ -1624,14 +1691,14 @@ impl UpdateEnvironmentForm {
             .with_main_axis_size(MainAxisSize::Max)
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
-            .with_child(self.render_back_button_and_title(title, appearance))
+            .with_child(self.render_back_button_and_title(&title, appearance))
             .with_child(submit_actions())
             .finish();
 
         let compact_header = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Start)
             .with_spacing(8.)
-            .with_child(self.render_back_button_and_title(title, appearance))
+            .with_child(self.render_back_button_and_title(&title, appearance))
             .with_child(submit_actions())
             .finish();
 
@@ -1741,7 +1808,7 @@ impl UpdateEnvironmentForm {
             .with_spacing(FORM_LABEL_SPACING);
 
         field.add_child(Self::render_form_label(
-            "Setup command(s)",
+            &*SETTINGS_SETUP_COMMANDS_LABEL,
             false,
             appearance,
         ));
@@ -1764,7 +1831,7 @@ impl UpdateEnvironmentForm {
             });
 
         let helper_text = Text::new(
-            "Setup commands run independently. Each command runs from the workspace root (/workspace). If a command depends on the previous one, combine them with &&.",
+            SETTINGS_SETUP_COMMANDS_HELPER.clone(),
             appearance.ui_font_family(),
             appearance.ui_font_size() * 0.85,
         )
@@ -1812,7 +1879,7 @@ impl UpdateEnvironmentForm {
 
         field.add_child(
             Text::new(
-                "Description",
+                SETTINGS_DESCRIPTION_LABEL.clone(),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
@@ -1844,7 +1911,7 @@ impl UpdateEnvironmentForm {
             .buffer_text(app)
             .chars()
             .count();
-        let count_text = format!("{} / {} characters", char_count, DESCRIPTION_MAX_CHARS);
+        let count_text = crate::tr!("settings", "settings-char-count", char_count = char_count, max_chars = DESCRIPTION_MAX_CHARS);
         field.add_child(
             Text::new(
                 count_text,
@@ -1874,7 +1941,7 @@ impl UpdateEnvironmentForm {
     fn render_repos_field_label(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         Text::new(
-            "Repo(s)",
+            SETTINGS_REPOS_LABEL.clone(),
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )
@@ -1906,7 +1973,7 @@ impl UpdateEnvironmentForm {
                     .with_child(
                         Container::new(
                             Text::new(
-                                "Loading...",
+                                SETTINGS_LOADING.clone(),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )
@@ -1998,7 +2065,7 @@ impl UpdateEnvironmentForm {
                         )
                         .with_child(
                             Text::new(
-                                "Auth with GitHub",
+                                crate::tr!("settings", "settings-auth-with-github"),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )
@@ -2044,7 +2111,7 @@ impl UpdateEnvironmentForm {
             .github_dropdown_state
             .load_error_message
             .clone()
-            .unwrap_or_else(|| "Failed to load GitHub repositories".to_string());
+            .unwrap_or_else(|| SETTINGS_FAILED_LOAD_GITHUB_REPOS.clone());
 
         let mut field = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
@@ -2115,7 +2182,7 @@ impl UpdateEnvironmentForm {
                             )
                             .with_child(
                                 Text::new(
-                                    "Retry",
+                                    crate::tr!("common", "retry-label"),
                                     appearance.ui_font_family(),
                                     appearance.ui_font_size(),
                                 )
@@ -2347,7 +2414,7 @@ impl UpdateEnvironmentForm {
     fn render_repo_helper_text_row(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         let helper = Text::new(
-            "Type owner/repo and press Enter to add, or select from dropdown.",
+            crate::tr!("settings", "settings-type-owner-repo"),
             appearance.ui_font_family(),
             appearance.ui_font_size() * 0.85,
         )
@@ -2373,7 +2440,7 @@ impl UpdateEnvironmentForm {
             // Plain text part
             text_row.add_child(
                 Text::new(
-                    "Missing a repo?",
+                    SETTINGS_MISSING_REPO.clone(),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() * 0.85,
                 )
@@ -2391,7 +2458,7 @@ impl UpdateEnvironmentForm {
                         theme.accent()
                     };
                     Text::new(
-                        "Configure access on GitHub",
+                        SETTINGS_CONFIGURE_ACCESS.clone(),
                         appearance.ui_font_family(),
                         appearance.ui_font_size() * 0.85,
                     )
@@ -2560,7 +2627,7 @@ impl UpdateEnvironmentForm {
             content.add_child(
                 Container::new(
                     Text::new(
-                        "No repositories found",
+                        crate::tr!("settings", "settings-no-repositories-found"),
                         appearance.ui_font_family(),
                         appearance.ui_font_size(),
                     )
@@ -2936,7 +3003,7 @@ impl UpdateEnvironmentForm {
                 let ui_builder = appearance.ui_builder().clone();
                 move || {
                     ui_builder
-                        .tool_tip(format!("Open image at {docker_hub_url}"))
+                        .tool_tip(crate::tr!("settings", "settings-open-image-at", url = docker_hub_url))
                         .build()
                         .finish()
                 }
@@ -2963,7 +3030,7 @@ impl UpdateEnvironmentForm {
 
         // Label (without suggest button)
         field.add_child(Self::render_form_label(
-            "Docker image reference",
+            &*SETTINGS_DOCKER_IMAGE_REF,
             true,
             appearance,
         ));
@@ -3037,7 +3104,7 @@ impl UpdateEnvironmentForm {
             return false;
         }
 
-        // Enforce “repos must change to retry” after a suggest-image attempt.
+        // Enforce "repos must change to retry" after a suggest-image attempt.
         let repos_unchanged = self
             .selected_repos_key()
             .and_then(|key| {
@@ -3060,12 +3127,12 @@ impl UpdateEnvironmentForm {
         let is_disabled = !self.can_suggest_image_for_current_repos();
 
         let button_text = if is_loading {
-            "Generating…"
+            &*SETTINGS_GENERATING
         } else {
-            "Suggest image"
+            &*SETTINGS_SUGGEST_IMAGE
         };
 
-        let tooltip_text = "Warp will suggest a Docker image based on your selected repositories.";
+        let tooltip_text = &*SETTINGS_DOCKER_SUGGEST_TOOLTIP;
 
         let button = Hoverable::new(
             self.suggest_image_button_mouse_state.clone(),
@@ -3184,7 +3251,7 @@ impl UpdateEnvironmentForm {
                 let auth_url_with_next = self.auth_url_with_next(auth_url);
                 let action = UpdateEnvironmentFormAction::OpenUrl(auth_url_with_next);
                 let button = WarningBoxButtonConfig::new(
-                    "Authenticate",
+                    crate::tr!("settings", "settings-authenticate"),
                     self.suggest_image_auth_button_mouse_state.clone(),
                     move |ctx| {
                         ctx.dispatch_typed_action(action.clone());
@@ -3192,7 +3259,7 @@ impl UpdateEnvironmentForm {
                 );
                 Some(render_warning_box(
                     WarningBoxConfig::new(
-                        "You need to grant access to your GitHub repos to suggest a Docker image",
+                        crate::tr!("settings", "settings-github-access-warning"),
                     )
                     .with_width(DROPDOWN_MAX_WIDTH)
                     .with_button(button),
@@ -3218,7 +3285,7 @@ impl UpdateEnvironmentForm {
     ) -> Box<dyn Element> {
         let action = UpdateEnvironmentFormAction::LaunchAgentForSelectedRepos;
         let button = WarningBoxButtonConfig::new(
-            "Launch agent",
+            SETTINGS_LAUNCH_AGENT.clone(),
             self.suggest_image_launch_agent_button_mouse_state.clone(),
             move |ctx| {
                 ctx.dispatch_typed_action(action.clone());
@@ -3227,7 +3294,7 @@ impl UpdateEnvironmentForm {
 
         render_warning_box(
             WarningBoxConfig::new(
-                "We couldn't find a good match. We recommend using a custom Docker image for these repos.",
+                crate::tr!("settings", "settings-no-docker-match"),
             )
             .with_description(reason)
             .with_icon(Icon::AlertTriangle)
@@ -3492,7 +3559,7 @@ impl View for UpdateEnvironmentForm {
 
         // Form fields
         page.add_child(Self::render_form_field(
-            "Name",
+            &*SETTINGS_NAME_LABEL,
             true,
             None,
             &self.name_editor,

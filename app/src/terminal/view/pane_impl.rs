@@ -652,16 +652,18 @@ impl BackingView for TerminalView {
         let is_ambient_agent = self.is_ambient_agent_session(ctx);
         if shared_session_status.is_sharer_or_viewer() {
             if !is_ambient_agent {
+                let copy_link_label = crate::tr!("terminal", "terminal-menu-copy-link");
                 items.push(
-                    MenuItemFields::new("Copy link")
+                    MenuItemFields::new(&copy_link_label)
                         .with_on_select_action(TerminalAction::CopySharedSessionLink { source })
                         .into_item(),
                 );
             }
 
             if shared_session_status.is_sharer() {
+                let stop_label = crate::tr!("terminal", "terminal-menu-stop-sharing-session");
                 items.push(
-                    MenuItemFields::new("Stop sharing session")
+                    MenuItemFields::new(&stop_label)
                         .with_on_select_action(TerminalAction::StopSharingCurrentSession { source })
                         .into_item(),
                 );
@@ -672,8 +674,9 @@ impl BackingView for TerminalView {
                     .value()
                     == UserAppInstallStatus::Detected
             {
+                let desktop_label = crate::tr!("terminal", "terminal-menu-open-on-desktop");
                 items.push(
-                    MenuItemFields::new("Open on Desktop")
+                    MenuItemFields::new(&desktop_label)
                         .with_on_select_action(TerminalAction::OpenSharedSessionOnDesktop {
                             source,
                         })
@@ -683,8 +686,9 @@ impl BackingView for TerminalView {
         } else if FeatureFlag::CreatingSharedSessions.is_enabled()
             && ContextFlag::CreateSharedSession.is_enabled()
         {
+            let share_label = crate::tr!("terminal", "terminal-menu-share-session");
             items.push(
-                MenuItemFields::new("Share session")
+                MenuItemFields::new(&share_label)
                     .with_on_select_action(TerminalAction::OpenShareSessionModal { source })
                     .into_item(),
             );
@@ -805,12 +809,12 @@ impl TerminalView {
         button
             .with_tooltip(move || {
                 let tooltip_text = if is_open {
-                    "Hide details"
+                    crate::tr!("terminal", "terminal-tooltip-hide-details")
                 } else {
-                    "Show details"
+                    crate::tr!("terminal", "terminal-tooltip-show-details")
                 };
                 ui_builder
-                    .tool_tip(tooltip_text.to_string())
+                    .tool_tip(tooltip_text)
                     .build()
                     .finish()
             })
@@ -1059,8 +1063,8 @@ impl TerminalView {
 
 fn default_agent_conversation_title(is_ambient_agent: bool) -> String {
     if is_ambient_agent {
-        "New cloud agent".to_owned()
+        crate::tr!("terminal", "terminal-new-cloud-agent")
     } else {
-        "New agent conversation".to_owned()
+        crate::tr!("terminal", "terminal-new-agent-conversation")
     }
 }

@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use rand::{distributions::Alphanumeric, thread_rng, Rng as _};
@@ -35,8 +35,8 @@ use crate::{
     TelemetryEvent,
 };
 
-const ACCEPT_LABEL: &str = "Generate tests";
-const CANCEL_LABEL: &str = "Dismiss";
+static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-generate-tests"));
+static CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-dismiss-label"));
 
 #[derive(Debug, Clone)]
 pub enum SuggestedUnitTestsEvent {
@@ -85,7 +85,7 @@ impl SuggestedUnitTestsView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let accept_button = CompactibleActionButton::new(
-            ACCEPT_LABEL.to_string(),
+            ACCEPT_LABEL.clone(),
             Some(KeystrokeSource::Binding(
                 ACCEPT_PROMPT_SUGGESTION_KEYBINDING,
             )),
@@ -97,7 +97,7 @@ impl SuggestedUnitTestsView {
         );
 
         let cancel_button = CompactibleActionButton::new(
-            CANCEL_LABEL.to_string(),
+            CANCEL_LABEL.clone(),
             Some(KeystrokeSource::Fixed(
                 REJECT_PROMPT_SUGGESTION_KEYSTROKE.clone(),
             )),
@@ -315,7 +315,7 @@ impl SuggestedUnitTestsView {
 
         let checkbox_text = appearance
             .ui_builder()
-            .span("Don't show me suggested code banners again")
+            .span(crate::tr!("ai_assistant", "ai-dont-show-suggested-code-banners"))
             .with_style(UiComponentStyles {
                 font_color: Some(font_color),
                 font_size: Some(font_size),

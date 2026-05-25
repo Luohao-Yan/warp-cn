@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use warpui::{
     elements::{Align, Clipped},
     ui_components::components::{Coords, UiComponentStyles},
@@ -17,6 +19,12 @@ use warpui::{
 };
 
 const MAXIMUM_SPENDING_LIMIT_CENTS: u32 = 999999999;
+
+static OVERAGE_PLACEHOLDER: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-50-placeholder"));
+
+static SETTINGS_OVERAGE_LIMIT_DESC: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-overage-limit-desc"));
 
 pub struct SpendingLimitModal {
     amount_editor: ViewHandle<EditorView>,
@@ -58,7 +66,7 @@ impl SpendingLimitModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("50.00", ctx);
+            editor.set_placeholder_text(&*OVERAGE_PLACEHOLDER, ctx);
             editor
         });
         ctx.subscribe_to_view(&amount_editor, |me, _, event, ctx| {
@@ -157,10 +165,10 @@ impl SpendingLimitModal {
     fn error_text(&self) -> Option<String> {
         match self.input_error_state {
             Some(SpendingLimitModalInputErrorState::InvalidNumberFormat) => {
-                Some("Please enter a valid currency amount".to_string())
+                Some(crate::tr!("settings", "settings-enter-currency"))
             }
             Some(SpendingLimitModalInputErrorState::NumberOutOfRange) => {
-                Some("Please enter a price between $0.01 and $10,000,000".to_string())
+                Some(crate::tr!("settings", "settings-price-range"))
             }
             None => None,
         }
@@ -200,7 +208,7 @@ impl View for SpendingLimitModal {
         let theme = appearance.theme();
 
         let description_text = Text::new(
-            "Warp will prevent use of premium models when this dollar limit is reached. Resets on a monthly basis.",
+            &*SETTINGS_OVERAGE_LIMIT_DESC,
             appearance.ui_font_family(),
             14.,
         )
@@ -208,7 +216,7 @@ impl View for SpendingLimitModal {
         .finish();
 
         let additional_note_text = Text::new(
-            "Note that AI credits made near your chosen limit may exceed it by a few dollars.",
+            crate::tr!("settings", "settings-overage-note"),
             appearance.ui_font_family(),
             12.,
         )
@@ -227,7 +235,7 @@ impl View for SpendingLimitModal {
         let input_row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
-                Text::new("$", appearance.ui_font_family(), appearance.ui_font_size())
+                Text::new(crate::tr!("settings", "settings-dollar-sign"), appearance.ui_font_family(), appearance.ui_font_size())
                     .with_color(theme.active_ui_text_color().into())
                     .finish(),
             )
@@ -262,19 +270,21 @@ impl View for SpendingLimitModal {
             ..Default::default()
         };
 
+        let update_label = crate::tr!("settings", "settings-update");
         let mut update_button = appearance
             .ui_builder()
             .button(
                 ButtonVariant::Accent,
                 self.update_button_mouse_state.clone(),
             )
-            .with_text_label("Update".to_string())
+            .with_text_label(update_label)
             .with_style(button_style);
 
         if self.input_error_state.is_some() {
             update_button = update_button.disabled();
         }
 
+        let cancel_label = crate::tr!("settings", "settings-cancel");
         let buttons_row = Flex::row()
             .with_child(
                 appearance
@@ -283,7 +293,7 @@ impl View for SpendingLimitModal {
                         ButtonVariant::Secondary,
                         self.cancel_button_mouse_state.clone(),
                     )
-                    .with_text_label("Cancel".to_string())
+                    .with_text_label(cancel_label)
                     .with_style(button_style)
                     .build()
                     .on_click(|ctx, _, _| {

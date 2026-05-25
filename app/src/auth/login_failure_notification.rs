@@ -41,26 +41,25 @@ impl LoginFailureReason {
         let fragments = match self {
             LoginFailureReason::InvalidRedirectUrl { was_pasted } => {
                 let text = if *was_pasted {
-                    "An invalid auth token was entered into the modal."
+                    crate::tr!("auth", "auth-invalid-token-entered")
                 } else {
-                    "Failed to log in. Try manually copying the auth token from the \
-                        authentication web page and pasting into the modal."
+                    crate::tr!("auth", "auth-failed-login-manual-copy")
                 };
-                with_troubleshooting_text(vec![FormattedTextFragment::plain_text(text)])
+                with_troubleshooting_text(vec![FormattedTextFragment::plain_text(&text)])
             }
             LoginFailureReason::FailedUserAuthentication => {
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(
-                    "Request to log in failed.",
+                    &crate::tr!("auth", "auth-request-login-failed"),
                 )])
             }
             LoginFailureReason::FailedMintCustomToken => {
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(
-                    "Request to sign up failed.",
+                    &crate::tr!("auth", "auth-request-signup-failed"),
                 )])
             }
             LoginFailureReason::InvalidStateParameter | LoginFailureReason::MissingStateParameter => {
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(
-                    "The redirect URL pasted did not originate from this app. Please click the button below to try again.",
+                    &crate::tr!("auth", "auth-invalid-redirect-url"),
                 )])
             }
         };

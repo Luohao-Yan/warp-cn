@@ -136,7 +136,7 @@ impl AgentTodosPopupView {
 
         let mut header_row = Flex::row().with_cross_axis_alignment(CrossAxisAlignment::Center);
         let mut header = Text::new(
-            "Tasks".to_string(),
+            crate::tr!("ai", "ai-tasks-label"),
             appearance.header_font_family(),
             styles.detail_font_size + 2.,
         )

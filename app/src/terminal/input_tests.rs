@@ -2928,7 +2928,7 @@ fn test_create_docker_sandbox_slash_command_executes_and_clears_buffer() {
         input.update(&mut app, |input, ctx| {
             input.user_insert("draft text", ctx);
             let handled = input.execute_slash_command(
-                &commands::CREATE_DOCKER_SANDBOX,
+                &*commands::CREATE_DOCKER_SANDBOX,
                 None,
                 SlashCommandTrigger::input(),
                 /*is_queued_prompt*/ false,

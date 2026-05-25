@@ -20,17 +20,17 @@ pub struct DiffSetSearchItem {
 impl DiffSetSearchItem {
     pub fn name(&self) -> String {
         match &self.diff_mode {
-            DiffMode::Head => "Uncommitted changes".to_string(),
-            DiffMode::MainBranch => "Changes vs. main branch".to_string(),
-            DiffMode::OtherBranch(branch) => format!("Changes vs. {branch}"),
+            DiffMode::Head => crate::tr!("search", "search-diff-uncommitted").clone(),
+            DiffMode::MainBranch => crate::tr!("search", "search-diff-vs-main").clone(),
+            DiffMode::OtherBranch(branch) => crate::tr!("search", "search-diff-vs-branch").replace("{ $branch }", branch),
         }
     }
 
     pub fn description(&self) -> String {
         match &self.diff_mode {
-            DiffMode::Head => "All uncommitted changes in the working directory".to_string(),
-            DiffMode::MainBranch => "All changes compared to the main branch".to_string(),
-            DiffMode::OtherBranch(branch) => format!("All changes compared to {branch}"),
+            DiffMode::Head => crate::tr!("search", "search-diff-uncommitted-desc").clone(),
+            DiffMode::MainBranch => crate::tr!("search", "search-diff-vs-main-desc").clone(),
+            DiffMode::OtherBranch(branch) => crate::tr!("search", "search-diff-vs-branch-desc").replace("{ $branch }", branch),
         }
     }
 }

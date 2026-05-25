@@ -13,6 +13,7 @@ use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::ActionButton;
 
+use std::sync::LazyLock;
 use warpui::ViewHandle;
 
 const BANNER_WIDTH: f32 = 420.;
@@ -21,32 +22,39 @@ const HERO_IMAGE_PATH: &str = "async/png/onboarding/hoa_welcome_banner.png";
 
 struct FeatureItem {
     icon: Icon,
-    title: &'static str,
-    description: &'static str,
+    title: LazyLock<String>,
+    description: LazyLock<String>,
 }
 
-const FEATURE_ITEMS: &[FeatureItem] = &[
-    FeatureItem {
-        icon: Icon::LayoutAlt01,
-        title: "Vertical tabs",
-        description: "Rich tab titles and metadata like git branch, worktree, and PR. Fully customizable.",
-    },
-    FeatureItem {
-        icon: Icon::Sliders,
-        title: "Tab configs",
-        description: "Tab-level schema to set your directory, startup commands, theme, and worktree with one click",
-    },
-    FeatureItem {
-        icon: Icon::Inbox,
-        title: "Agent inbox",
-        description: "Notifications when any agent needs your attention, also accessible in a central inbox",
-    },
-    FeatureItem {
-        icon: Icon::MessageCheckSquare,
-        title: "Native code review",
-        description: "Send inline comments from Warp's code review directly to Claude Code, Codex, or OpenCode",
-    },
+static FEATURE_ITEM_VERTICAL_TABS: FeatureItem = FeatureItem {
+    icon: Icon::LayoutAlt01,
+    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-vertical-tabs").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-vertical-tabs-desc").clone()),
+};
+static FEATURE_ITEM_TAB_CONFIGS: FeatureItem = FeatureItem {
+    icon: Icon::Sliders,
+    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-tab-configs").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-tab-configs-desc").clone()),
+};
+static FEATURE_ITEM_AGENT_INBOX: FeatureItem = FeatureItem {
+    icon: Icon::Inbox,
+    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-agent-inbox").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-agent-inbox-desc").clone()),
+};
+static FEATURE_ITEM_NATIVE_REVIEW: FeatureItem = FeatureItem {
+    icon: Icon::MessageCheckSquare,
+    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-native-review").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-native-review-desc").clone()),
+};
+
+static FEATURE_ITEMS: &[&FeatureItem] = &[
+    &FEATURE_ITEM_VERTICAL_TABS,
+    &FEATURE_ITEM_TAB_CONFIGS,
+    &FEATURE_ITEM_AGENT_INBOX,
+    &FEATURE_ITEM_NATIVE_REVIEW,
 ];
+
+static WELCOME_BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-welcome-banner-title").clone());
 
 pub fn render_welcome_banner(
     close_button: &ViewHandle<ActionButton>,
@@ -85,7 +93,7 @@ pub fn render_welcome_banner(
     );
 
     // "New" badge
-    let text = Text::new_inline("New".to_string(), appearance.ui_font_family(), 14.)
+    let text = Text::new_inline(crate::tr!("common", "common-new-label").clone(), appearance.ui_font_family(), 14.)
         .with_color(PhenomenonStyle::modal_badge_text())
         .finish();
     let badge = ConstrainedBox::new(
@@ -106,7 +114,7 @@ pub fn render_welcome_banner(
 
     // Title
     let title = Text::new(
-        "Introducing universal agent support: level up any coding agent with Warp",
+        WELCOME_BANNER_TITLE.clone(),
         appearance.ui_font_family(),
         20.,
     )
@@ -133,12 +141,12 @@ pub fn render_welcome_banner(
             .with_cross_axis_alignment(CrossAxisAlignment::Start)
             .with_spacing(2.)
             .with_child(
-                Text::new_inline(item.title.to_string(), appearance.ui_font_family(), 14.)
+                Text::new_inline(item.title.clone(), appearance.ui_font_family(), 14.)
                     .with_color(PhenomenonStyle::modal_feature_title_text())
                     .finish(),
             )
             .with_child(
-                Text::new(item.description, appearance.ui_font_family(), 14.)
+                Text::new(item.description.clone(), appearance.ui_font_family(), 14.)
                     .with_color(PhenomenonStyle::modal_feature_description_text())
                     .finish(),
             )

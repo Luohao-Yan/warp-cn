@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::ai::blocklist::agent_view::{agent_view_bg_fill, AgentViewState};
 use crate::ai::blocklist::{ai_brand_color, ATTACH_AS_AGENT_MODE_CONTEXT_TEXT};
 use crate::ai_assistant::{AI_ASSISTANT_SVG_PATH, ASK_AI_ASSISTANT_TEXT};
@@ -153,10 +155,14 @@ const LINEAR_SCROLLING: ScrollingAcceleration = ScrollingAcceleration::Polynomia
 /// have a height that extends down to the bottom of the window when there's a horizontal scroll bar, which messes with the on-hover behavior.
 const BLOCK_HOVER_BUTTON_HEIGHT: f32 = 28.;
 
-const TAG_AGENT_FOR_ASSISTANCE_TEXT: &str = "Tag agent for assistance";
+static TAG_AGENT_FOR_ASSISTANCE_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-block-tag-agent"));
 
-const SAVE_AS_WORKFLOW_TEXT: &str = "Save as Workflow";
-const SAVE_AS_WORKFLOW_SECRETS_TEXT: &str = "Blocks containing secrets cannot be saved.";
+static SAVE_AS_WORKFLOW_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-block-save-workflow"));
+
+static SAVE_AS_WORKFLOW_SECRETS_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-block-secrets-cannot-save"));
 
 enum ScrollingAcceleration {
     Polynomial(f32),
@@ -1164,18 +1170,18 @@ impl BlockListElement {
                 if has_active_long_running_command && active_block.index() == block_index {
                     (
                         Some(TerminalAction::SetInputModeAgent),
-                        TAG_AGENT_FOR_ASSISTANCE_TEXT,
+                        TAG_AGENT_FOR_ASSISTANCE_TEXT.as_str(),
                     )
                 } else {
                     (
                         Some(TerminalAction::AskAIAssistant { block_index }),
-                        *ATTACH_AS_AGENT_MODE_CONTEXT_TEXT,
+                        ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.as_str(),
                     )
                 }
             } else {
                 (
                     Some(TerminalAction::AskAIAssistant { block_index }),
-                    ASK_AI_ASSISTANT_TEXT,
+                    ASK_AI_ASSISTANT_TEXT.as_str(),
                 )
             };
 
@@ -1225,7 +1231,7 @@ impl BlockListElement {
                 render_hoverable_block_button(
                     icon,
                     Some(ToolbeltButtonTooltip {
-                        label: SAVE_AS_WORKFLOW_SECRETS_TEXT.to_owned(),
+                        label: SAVE_AS_WORKFLOW_SECRETS_TEXT.to_string(),
                         tool_tip_below_button: should_render_tooltip_below_button,
                     }),
                     false,
@@ -1245,7 +1251,7 @@ impl BlockListElement {
                 render_hoverable_block_button(
                     icon,
                     Some(ToolbeltButtonTooltip {
-                        label: SAVE_AS_WORKFLOW_TEXT.to_owned(),
+                        label: SAVE_AS_WORKFLOW_TEXT.to_string(),
                         tool_tip_below_button: should_render_tooltip_below_button,
                     }),
                     false,
@@ -3412,16 +3418,16 @@ impl Element for BlockListElement {
                     // we want to show different text in the separator if this is an individual conversation
                     // restored from the command palette
                     let banner_intro_text = if is_historical_conversation_restoration {
-                        "Conversation restored".to_string()
+                        crate::tr!("terminal", "terminal-conversation-restored")
                     } else {
-                        "Previous session".to_string()
+                        crate::tr!("terminal", "terminal-previous-session")
                     };
 
                     let separator_text =
                         if let Some(ts) = (*model).block_list().restored_session_ts() {
-                            format!(
-                                "{banner_intro_text} from {}",
-                                ts.format("%a %b %-d at %-I:%M %p")
+                            crate::tr!("terminal", "terminal-session-restored-from",
+                                banner_intro_text = banner_intro_text,
+                                timestamp = ts.format("%a %b %-d at %-I:%M %p").to_string()
                             )
                         } else {
                             banner_intro_text

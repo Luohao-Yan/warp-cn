@@ -5,6 +5,7 @@
 //! a toast with a clickable "Open PR" link.
 
 use std::path::Path;
+use std::sync::LazyLock;
 
 use warp_core::ui::appearance::Appearance;
 use warpui::{
@@ -35,6 +36,8 @@ use crate::{
 };
 use warp_core::send_telemetry_from_ctx;
 
+static CODE_REVIEW_PR_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-changes"));
+
 /// PR-mode sub-actions, dispatched wrapped in `GitDialogAction::Pr`.
 #[derive(Clone, Debug, PartialEq)]
 pub enum PrSubAction {
@@ -49,16 +52,16 @@ pub struct PrState {
     changes_scroll_state: ClippedScrollStateHandle,
 }
 
-pub(super) fn confirm_label_for() -> &'static str {
-    "Create PR"
+pub(super) fn confirm_label_for() -> String {
+    crate::tr!("code_editor", "review-create-pull-request")
 }
 
 pub(super) fn confirm_icon_for() -> Icon {
     Icon::Github
 }
 
-fn loading_label_for() -> &'static str {
-    "Creating\u{2026}"
+fn loading_label_for() -> String {
+    crate::tr!("code_editor", "review-creating")
 }
 
 /// PR mode has no prerequisites beyond a branch with commits; confirm is
@@ -236,9 +239,9 @@ pub(super) fn show_pr_created_toast(pr_info: &PrInfo, ctx: &mut ViewContext<GitD
     let window_id = ctx.window_id();
     let url = pr_info.url.clone();
     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-        let link = ToastLink::new("Open PR".to_string()).with_href(url);
+        let link = ToastLink::new(crate::tr!("code_editor", "review-open-pr")).with_href(url);
         let toast =
-            DismissibleToast::default("PR successfully created.".to_string()).with_link(link);
+            DismissibleToast::default(crate::tr!("code_editor", "review-pr-created")).with_link(link);
         toast_stack.add_ephemeral_toast(toast, window_id, ctx);
     });
 }
@@ -268,7 +271,7 @@ fn render_changes_section(state: &PrState, appearance: &Appearance) -> Box<dyn E
     let main_color = theme.main_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        "Changes",
+        &*CODE_REVIEW_PR_CHANGES,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

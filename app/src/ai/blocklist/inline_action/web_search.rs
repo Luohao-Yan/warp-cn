@@ -1,6 +1,7 @@
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::{Container, CrossAxisAlignment, Element, Flex, ParentElement, Text};
 use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
+use std::sync::LazyLock;
 
 use super::search_results_common::{
     render_collapsible_search_results, CollapsibleSearchResultsState,
@@ -8,6 +9,8 @@ use super::search_results_common::{
 use crate::ai::agent::icons::yellow_running_icon;
 use crate::ai::agent::WebSearchStatus;
 use crate::ai::blocklist::block::view_impl::WithContentItemSpacing;
+
+static AI_NO_URLS_FOUND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-no-urls-found"));
 
 pub enum WebSearchViewEvent {}
 
@@ -108,7 +111,7 @@ impl WebSearchView {
 
         if pages.is_empty() {
             let no_results = Text::new_inline(
-                "No URLs found".to_string(),
+                AI_NO_URLS_FOUND.clone(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )

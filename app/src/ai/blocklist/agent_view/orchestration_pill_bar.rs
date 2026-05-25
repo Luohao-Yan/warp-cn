@@ -293,7 +293,7 @@ impl Entity for OrchestrationPillBar {
 
 impl OrchestrationPillBar {
     fn overflow_menu_item(
-        label: &'static str,
+        label: String,
         icon: Icon,
         action: OrchestrationPillBarAction,
         hover_background: Fill,
@@ -409,19 +409,19 @@ impl OrchestrationPillBar {
 
         let mut items = if is_open_elsewhere {
             vec![item(
-                "Focus pane",
+                "Focus pane".to_string(),
                 Icon::ArrowSplit,
                 OrchestrationPillBarAction::FocusOpenedConversation(conversation_id),
             )]
         } else {
             vec![
                 item(
-                    "Open in new pane",
+                    crate::tr!("ai", "ai-open-in-new-pane"),
                     Icon::ArrowSplit,
                     OrchestrationPillBarAction::OpenInNewPane(conversation_id),
                 ),
                 item(
-                    "Open in new tab",
+                    crate::tr!("ai", "ai-open-in-new-tab"),
                     Icon::Plus,
                     OrchestrationPillBarAction::OpenInNewTab(conversation_id),
                 ),
@@ -433,13 +433,13 @@ impl OrchestrationPillBar {
         items.push(MenuItem::Separator);
         if is_in_progress {
             items.push(destructive_item(
-                "Stop agent",
+                "Stop agent".to_string(),
                 Icon::StopFilled,
                 OrchestrationPillBarAction::Stop(conversation_id),
             ));
         }
         items.push(destructive_item(
-            "Kill agent",
+            "Kill agent".to_string(),
             Icon::X,
             OrchestrationPillBarAction::Kill(conversation_id),
         ));
@@ -627,7 +627,7 @@ fn orchestrator_label(orchestrator: &AIConversation) -> String {
         .agent_name()
         .filter(|n| !n.is_empty())
         .map(|n| n.to_string())
-        .unwrap_or_else(|| "Orchestrator".to_string())
+        .unwrap_or_else(|| crate::tr!("ai", "ai-orchestrator"))
 }
 
 impl TypedActionView for OrchestrationPillBar {
@@ -1913,7 +1913,7 @@ pub fn render_orchestration_breadcrumbs(
                 .filter(|t| !t.is_empty())
                 .or_else(|| p.agent_name().map(str::to_string))
         })
-        .unwrap_or_else(|| "Orchestrator".to_string());
+        .unwrap_or_else(|| crate::tr!("ai", "ai-orchestrator"));
 
     // Treat empty `agent_name` as missing so the label, avatar color, and
     // initial all consistently fall back to "Agent". Without the

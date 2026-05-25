@@ -26,7 +26,7 @@ use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 
-const SUGGESTED_PROMPT_MODAL_HEADER: &str = "Prompt";
+static SUGGESTED_PROMPT_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-prompt-label"));
 
 /// A modal component for displaying and managing suggested agent mode workflows.
 /// This component wraps a WorkflowView in a modal dialog with proper styling and

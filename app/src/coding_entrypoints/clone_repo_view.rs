@@ -20,7 +20,7 @@ impl CloneRepoView {
     pub fn new(is_ftux: bool, ctx: &mut ViewContext<Self>) -> Self {
         let editor = ctx.add_typed_action_view(|ctx| {
             GlowingEditor::new(
-                "Provide a repository URL e.g. \"git@github.com:username/project.git\"",
+                &crate::tr!("coding_entrypoints", "coding-entrypoints-clone-repo-placeholder"),
                 ctx,
             )
         });

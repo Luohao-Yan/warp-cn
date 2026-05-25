@@ -146,7 +146,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Never,
     private: false,
     toml_path: "agents.voice.voice_input_toggle_key",
-    description: "The key used to toggle voice input.",
+    description: crate::tr!("settings", "ai-voice-toggle-key-desc"),
 );
 
 impl VoiceInputToggleKey {
@@ -166,9 +166,9 @@ impl VoiceInputToggleKey {
     }
 
     /// Display name for choosing key from the AI settings page.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         // We use the underlying host OS to determine the correct key name to display.
-        let (super_key_name, alt_key_name): (&'static str, &'static str) =
+        let (super_key_name, alt_key_name): (&str, &str) =
             match OperatingSystem::get() {
                 OperatingSystem::Mac => ("Command", "Option"),
                 OperatingSystem::Windows => ("Windows", "Alt"),
@@ -176,24 +176,32 @@ impl VoiceInputToggleKey {
             };
 
         match self {
-            VoiceInputToggleKey::None => "None",
-            VoiceInputToggleKey::Fn => "Fn",
+            VoiceInputToggleKey::None => crate::tr!("settings", "settings-voice-key-none"),
+            VoiceInputToggleKey::Fn => "Fn".to_string(),
             VoiceInputToggleKey::AltLeft => {
-                Box::leak(format!("{alt_key_name} (Left)").into_boxed_str())
+                format!("{alt_key_name} ({})", crate::tr!("settings", "settings-key-left"))
             }
             VoiceInputToggleKey::AltRight => {
-                Box::leak(format!("{alt_key_name} (Right)").into_boxed_str())
+                format!("{alt_key_name} ({})", crate::tr!("settings", "settings-key-right"))
             }
-            VoiceInputToggleKey::ControlLeft => "Control (Left)",
-            VoiceInputToggleKey::ControlRight => "Control (Right)",
+            VoiceInputToggleKey::ControlLeft => {
+                format!("Control ({})", crate::tr!("settings", "settings-key-left"))
+            }
+            VoiceInputToggleKey::ControlRight => {
+                format!("Control ({})", crate::tr!("settings", "settings-key-right"))
+            }
             VoiceInputToggleKey::SuperLeft => {
-                Box::leak(format!("{super_key_name} (Left)").into_boxed_str())
+                format!("{super_key_name} ({})", crate::tr!("settings", "settings-key-left"))
             }
             VoiceInputToggleKey::SuperRight => {
-                Box::leak(format!("{super_key_name} (Right)").into_boxed_str())
+                format!("{super_key_name} ({})", crate::tr!("settings", "settings-key-right"))
             }
-            VoiceInputToggleKey::ShiftLeft => "Shift (Left)",
-            VoiceInputToggleKey::ShiftRight => "Shift (Right)",
+            VoiceInputToggleKey::ShiftLeft => {
+                format!("Shift ({})", crate::tr!("settings", "settings-key-left"))
+            }
+            VoiceInputToggleKey::ShiftRight => {
+                format!("Shift ({})", crate::tr!("settings", "settings-key-right"))
+            }
         }
     }
 
@@ -263,9 +271,9 @@ impl VoiceInputToggleKey {
                     Some(side) => format!("{side} {symbol}"),
                     None => symbol,
                 };
-                format!("Voice input (hold {key_name} key)")
+                crate::tr!("settings", "settings-voice-input-hold-key", key_name = key_name)
             }
-            None => "Voice input".to_string(),
+            None => crate::tr!("settings", "settings-voice-input"),
         }
     }
 
@@ -314,18 +322,18 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "general.default_session_mode",
-    description: "The default mode for new terminal sessions.",
+    description: crate::tr!("settings", "ai-default-session-mode-desc"),
 );
 
 impl DefaultSessionMode {
     /// Display name for the settings dropdown.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         match self {
-            DefaultSessionMode::Terminal => "Terminal",
-            DefaultSessionMode::Agent => "Agent",
-            DefaultSessionMode::CloudAgent => "Cloud Oz",
-            DefaultSessionMode::TabConfig => "Tab Config",
-            DefaultSessionMode::DockerSandbox => "Local Docker Sandbox",
+            DefaultSessionMode::Terminal => crate::tr!("settings", "settings-default-session-terminal"),
+            DefaultSessionMode::Agent => crate::tr!("settings", "settings-default-session-agent"),
+            DefaultSessionMode::CloudAgent => crate::tr!("settings", "settings-default-session-cloud-oz"),
+            DefaultSessionMode::TabConfig => crate::tr!("settings", "settings-default-session-tab-config"),
+            DefaultSessionMode::DockerSandbox => crate::tr!("settings", "settings-default-session-docker-sandbox"),
         }
     }
 }
@@ -364,24 +372,24 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "agents.warp_agent.other.thinking_display_mode",
-    description: "Controls how agent thinking traces are displayed after streaming.",
+    description: crate::tr!("settings", "ai-thinking-display-desc"),
 );
 
 impl ThinkingDisplayMode {
     /// Display name for the settings dropdown.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         match self {
-            ThinkingDisplayMode::ShowAndCollapse => "Show & collapse",
-            ThinkingDisplayMode::AlwaysShow => "Always show",
-            ThinkingDisplayMode::NeverShow => "Never show",
+            ThinkingDisplayMode::ShowAndCollapse => crate::tr!("settings", "settings-thinking-show-and-collapse"),
+            ThinkingDisplayMode::AlwaysShow => crate::tr!("settings", "settings-thinking-always-show"),
+            ThinkingDisplayMode::NeverShow => crate::tr!("settings", "settings-thinking-never-show"),
         }
     }
 
-    pub fn command_palette_description(&self) -> &'static str {
+    pub fn command_palette_description(&self) -> String {
         match self {
-            ThinkingDisplayMode::ShowAndCollapse => "Set agent thinking display: show & collapse",
-            ThinkingDisplayMode::AlwaysShow => "Set agent thinking display: always show",
-            ThinkingDisplayMode::NeverShow => "Set agent thinking display: never show",
+            ThinkingDisplayMode::ShowAndCollapse => crate::tr!("settings", "settings-thinking-cmd-show-and-collapse"),
+            ThinkingDisplayMode::AlwaysShow => crate::tr!("settings", "settings-thinking-cmd-always-show"),
+            ThinkingDisplayMode::NeverShow => crate::tr!("settings", "settings-thinking-cmd-never-show"),
         }
     }
 
@@ -716,7 +724,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::No),
         private: false,
         toml_path: "agents.warp_agent.is_any_ai_enabled",
-        description: "Controls whether all AI features are enabled.",
+        description: crate::tr!("settings", "ai-all-features-desc"),
     },
     // This field should not be referenced directly to lookup active AI enablement -- use the
     // `is_active_ai_enabled()` getter.
@@ -727,7 +735,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::No),
         private: false,
         toml_path: "agents.warp_agent.active_ai.enabled",
-        description: "Controls whether proactive AI features like suggestions are enabled.",
+        description: crate::tr!("settings", "ai-proactive-features-desc"),
     },
     // This field should not be referenced directly to lookup autodetection enablement -- use the
     // `is_ai_autodetection_enabled()` getter.
@@ -738,7 +746,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.input.ai_auto_detection_enabled",
-        description: "Controls whether AI automatically detects natural language input.",
+        description: crate::tr!("settings", "ai-autodetect-nl-desc"),
     },
     // This field should not be referenced directly -- use the
     // `is_nld_in_terminal_enabled()` getter.
@@ -752,7 +760,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.input.nld_in_terminal_enabled",
-        description: "Controls whether natural language detection is enabled in the terminal input.",
+        description: crate::tr!("settings", "ai-nld-terminal-desc"),
     },
     autodetection_command_denylist: AICommandDenylist {
         type: String,
@@ -761,7 +769,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.input.ai_command_denylist",
-        description: "Commands to exclude from AI natural language autodetection.",
+        description: crate::tr!("settings", "ai-command-denylist-desc"),
     },
     // This field should not be referenced directly to lookup intelligent autosuggestion enablement
     // -- use the `is_intelligent_autosuggestions_enabled()` getter.
@@ -772,7 +780,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.intelligent_autosuggestions_enabled",
-        description: "Controls whether AI-powered intelligent autosuggestions are enabled.",
+        description: crate::tr!("settings", "ai-intelligent-autosuggestions-desc"),
     }
     // This field should not be referenced directly to lookup Prompt Suggestions
     // enablement -- use the `is_prompt_suggestions_enabled()` getter.
@@ -786,7 +794,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.agent_mode_query_suggestions_enabled",
-        description: "Controls whether prompt suggestions are shown in agent mode.",
+        description: crate::tr!("settings", "ai-prompt-suggestions-desc"),
     }
 
     // This field should not be referenced directly to lookup Code Suggestions
@@ -798,7 +806,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.code_suggestions_enabled",
-        description: "Controls whether AI code suggestions are enabled.",
+        description: crate::tr!("settings", "ai-code-suggestions-desc"),
     }
     // This field should not be referenced directly to lookup natural language autosuggestions
     // enablement -- use the `is_natural_language_autosuggestions_enabled()` getter.
@@ -810,7 +818,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.natural_language_autosuggestions_enabled",
-        description: "Controls whether ghosted text autosuggestions are shown for AI input queries.",
+        description: crate::tr!("settings", "ai-nl-autosuggestions-desc"),
         feature_flag: FeatureFlag::PredictAMQueries,
     }
     // This field should not be referenced directly to lookup shared block title generations
@@ -823,7 +831,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.shared_block_title_generation_enabled",
-        description: "Controls whether titles are auto-generated when sharing blocks.",
+        description: crate::tr!("settings", "ai-shared-block-title-desc"),
     }
     // This field should not be referenced directly to lookup git operations AI autogen
     // enablement -- use the `is_git_operations_autogen_enabled()` getter.
@@ -834,7 +842,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.git_operations_autogen_enabled",
-        description: "Controls whether AI auto-generates commit messages and PR title/body in the code review dialogs.",
+        description: crate::tr!("settings", "ai-git-autogen-desc"),
     }
     // This field should not be referenced directly to lookup Rule Suggestions
     // enablement -- use the `is_rule_suggestions_enabled()` getter.
@@ -845,7 +853,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.active_ai.rule_suggestions_enabled",
-        description: "Controls whether the agent suggests rules to save after responses.",
+        description: crate::tr!("settings", "ai-rule-suggestions-desc"),
         feature_flag: FeatureFlag::SuggestedRules,
     }
     // This field should not be referenced directly to lookup Voice AI enablement -- use the
@@ -857,7 +865,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.voice.voice_input_enabled",
-        description: "Controls whether voice input is enabled for AI interactions.",
+        description: crate::tr!("settings", "ai-voice-input-desc"),
     },
     // The number of times the user has entered Agent Mode.
     // Not a user-visible setting. We model it so we can show the voice input new feature popup
@@ -903,7 +911,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.profiles.agent_mode_command_execution_allowlist",
-        description: "Commands that the agent can execute without explicit permission.",
+        description: crate::tr!("settings", "ai-cmd-allowlist-desc"),
     },
     // Predicates that Agent Mode can use to decide if a command must
     // be executed by the user.
@@ -917,7 +925,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.profiles.agent_mode_command_execution_denylist",
-        description: "Commands that the agent must always ask before executing.",
+        description: crate::tr!("settings", "ai-cmd-denylist-desc"),
     },
     // Enabled iff Agent Mode can execute readonly commands without explicit user consent.
     //
@@ -930,7 +938,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.profiles.agent_mode_execute_readonly_commands",
-        description: "Whether the agent can auto-execute read-only commands without asking.",
+        description: crate::tr!("settings", "ai-readonly-cmd-desc"),
     },
     // Determines coding permissions that Agent Mode has.
     // Note that if Agent Mode has permissions to execute readonly commands,
@@ -945,7 +953,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.profiles.agent_mode_coding_permissions",
-        description: "The file read permission level for the agent.",
+        description: crate::tr!("settings", "ai-coding-perms-desc"),
     }
     // Specific filepaths that Agent Mode can read without asking for additional permissions.
     // These should be persisted as absolute filepaths to avoid ambiguity.
@@ -961,7 +969,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Never,
         private: false,
         toml_path: "agents.profiles.agent_mode_coding_file_read_allowlist",
-        description: "File paths the agent can read without asking for permission.",
+        description: crate::tr!("settings", "ai-file-read-allowlist-desc"),
     }
     // Whether or not the profile-level command autoexecution speedbump has been shown.
     //
@@ -1028,7 +1036,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "cloud_platform.third_party_api_keys.aws_bedrock_credentials_enabled",
-        description: "Whether Warp should use your local AWS credentials for Bedrock-enabled requests.",
+        description: crate::tr!("settings", "ai-aws-bedrock-creds-desc"),
     }
     // Whether to automatically run the AWS login command when Bedrock credentials are expired.
     //
@@ -1041,7 +1049,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "cloud_platform.third_party_api_keys.aws_bedrock_auto_login",
-        description: "Whether to automatically run the AWS login command when Bedrock credentials expire.",
+        description: crate::tr!("settings", "ai-aws-bedrock-auto-login-desc"),
     }
     // Command to run to refresh AWS credentials when using Bedrock auto-login.
     aws_bedrock_auth_refresh_command: AwsBedrockAuthRefreshCommand {
@@ -1051,7 +1059,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "cloud_platform.third_party_api_keys.aws_bedrock_auth_refresh_command",
-        description: "The command to run to refresh AWS credentials for Bedrock.",
+        description: crate::tr!("settings", "ai-aws-bedrock-refresh-cmd-desc"),
     }
     // AWS profile name to use when loading credentials from the local AWS credential/config chain.
     aws_bedrock_profile: AwsBedrockProfile {
@@ -1061,7 +1069,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "cloud_platform.third_party_api_keys.aws_bedrock_profile",
-        description: "The AWS profile name to use for Bedrock credentials.",
+        description: crate::tr!("settings", "ai-aws-bedrock-profile-desc"),
     }
     // Whether the AWS Bedrock login banner has been permanently dismissed.
     //
@@ -1081,7 +1089,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.knowledge.rules_enabled",
-        description: "Whether the agent uses your saved rules during requests.",
+        description: crate::tr!("settings", "ai-memory-rules-desc"),
     }
     // Whether warp drive context should be included in AI requests
     warp_drive_context_enabled: WarpDriveContextEnabled {
@@ -1091,7 +1099,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.knowledge.warp_drive_context_enabled",
-        description: "Whether Warp Drive context is included in AI requests.",
+        description: crate::tr!("settings", "ai-warp-drive-context-desc"),
     }
 
     // Whether the codebase speedbump banner has been permanently dismissed for a given repo path.
@@ -1215,7 +1223,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.should_show_oz_updates_in_zero_state",
-        description: "Whether the \"What's new\" section is shown in the agent view.",
+        description: crate::tr!("settings", "ai-oz-updates-desc"),
     }
 
     // Whether or not the user has enabled the ability to use Warp credits even when providing
@@ -1227,7 +1235,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "cloud_platform.third_party_api_keys.can_use_warp_credits_with_byok",
-        description: "Whether Warp credits can be used even when providing your own API key.",
+        description: crate::tr!("settings", "ai-warp-credits-byok-desc"),
     }
 
     should_render_use_agent_footer_for_user_commands: ShouldRenderUseAgentToolbarForUserCommands {
@@ -1237,7 +1245,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.should_render_use_agent_toolbar_for_user_commands",
-        description: "Whether to show the \"Use Agent\" footer for terminal commands.",
+        description: crate::tr!("settings", "ai-use-agent-footer-desc"),
     }
 
     // Whether to render the CLI agent footer for commands like Claude, Codex, Gemini, etc.
@@ -1249,7 +1257,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.third_party.should_render_cli_agent_toolbar",
-        description: "Whether to show the CLI agent footer for coding agent commands.",
+        description: crate::tr!("settings", "ai-cli-agent-footer-desc"),
     }
     // When enabled and a CLI agent session has a plugin listener, rich input
     // auto-closes when the session enters a Blocked state (the agent requires
@@ -1261,7 +1269,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.third_party.auto_toggle_composer",
-        description: "Whether CLI agent Rich Input automatically closes and reopens based on the agent's blocked state.",
+        description: crate::tr!("settings", "ai-auto-toggle-rich-input-desc"),
     }
 
     // When enabled and a CLI agent session has a plugin listener, rich input
@@ -1273,7 +1281,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.third_party.auto_open_composer_on_cli_agent_start",
-        description: "Whether CLI agent Rich Input automatically opens when a CLI agent session starts.",
+        description: crate::tr!("settings", "ai-auto-open-rich-input-desc"),
     }
 
     // When enabled and a CLI agent session does NOT have a plugin listener,
@@ -1287,7 +1295,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.third_party.auto_dismiss_composer_after_submit",
-        description: "Whether CLI agent Rich Input automatically closes after the user submits a prompt.",
+        description: crate::tr!("settings", "ai-auto-dismiss-rich-input-desc"),
     }
 
     // Maps custom toolbar command regex patterns to specific CLI agents.
@@ -1302,7 +1310,7 @@ define_settings_group!(AISettings, settings: [
         private: false,
         toml_path: "agents.third_party.cli_agent_toolbar_enabled_commands",
         max_table_depth: 1,
-        description: "Maps custom toolbar command patterns to specific CLI agents.",
+        description: crate::tr!("settings", "ai-cli-agent-mapping-desc"),
     }
 
     // This is not a user-visible setting - it tracks whether a paid user has dismissed the
@@ -1380,7 +1388,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.cloud_agent_computer_use_enabled",
-        description: "Whether computer use is enabled for cloud agent conversations.",
+        description: crate::tr!("settings", "ai-cloud-computer-use-desc"),
     }
 
     // Whether multi-agent orchestration is enabled. When enabled, the agent can
@@ -1394,7 +1402,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.orchestration_enabled",
-        description: "Whether multi-agent orchestration is enabled.",
+        description: crate::tr!("settings", "ai-orchestration-desc"),
         feature_flag: FeatureFlag::Orchestration,
     }
 
@@ -1408,7 +1416,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.mcp_servers.file_based_mcp_enabled",
-        description: "Whether third-party file-based MCP servers are automatically detected.",
+        description: crate::tr!("settings", "ai-file-mcp-desc"),
     }
 
     // Controls how agent thinking/reasoning traces are displayed.
@@ -1424,7 +1432,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.input.include_agent_commands_in_history",
-        description: "Whether agent-executed commands are included in command history.",
+        description: crate::tr!("settings", "ai-agent-cmds-history-desc"),
     }
 
     // Controls whether the conversation history view appears in the tools panel.
@@ -1435,7 +1443,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.show_conversation_history",
-        description: "Whether conversation history appears in the tools panel.",
+        description: crate::tr!("settings", "ai-conversation-history-desc"),
     }
 
 
@@ -1447,7 +1455,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.show_agent_notifications",
-        description: "Whether agent notifications are shown.",
+        description: crate::tr!("settings", "ai-agent-notifications-desc"),
     }
 
     // Per-agent, per-host tracking of whether the user dismissed the plugin install chip.
@@ -1484,7 +1492,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::No),
         private: false,
         toml_path: "agents.warp_agent.other.agent_attribution_enabled",
-        description: "Whether the Warp Agent adds an attribution co-author line to commit messages and pull requests it creates.",
+        description: crate::tr!("settings", "ai-attribution-desc"),
     }
 ]);
 

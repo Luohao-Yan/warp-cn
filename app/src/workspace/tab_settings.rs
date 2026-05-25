@@ -34,7 +34,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Never,
     private: false,
     toml_path: "general.new_tab_placement",
-    description: "Where new tabs are placed in the tab bar.",
+    description: crate::tr!("settings", "new-tab-placement-desc"),
 );
 
 #[derive(
@@ -65,7 +65,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.tabs.tab_close_button_position",
-    description: "Position of the close button on tabs.",
+    description: crate::tr!("settings", "tab-close-button-position-desc"),
 );
 
 /// Visibility options for workspace decorations like the tab bar.
@@ -102,7 +102,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.tabs.workspace_decoration_visibility",
-    description: "When workspace decorations such as the tab bar are visible.",
+    description: crate::tr!("settings", "workspace-decoration-visibility-desc"),
 );
 
 impl WorkspaceDecorationVisibility {
@@ -195,7 +195,7 @@ settings::macros::implement_setting_for_enum!(
     private: false,
     toml_path: "appearance.tabs.directory_tab_colors",
     max_table_depth: 0,
-    description: "Mapping of directory paths to their tab color assignments.",
+    description: crate::tr!("settings", "directory-tab-colors-desc"),
     feature_flag: warp_core::features::FeatureFlag::DirectoryTabColors,
 );
 
@@ -282,7 +282,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.tabs.header_toolbar_chip_selection",
-    description: "Configuration for the header toolbar chips in the vertical tab panel header.",
+    description: crate::tr!("settings", "header-toolbar-chip-selection-desc"),
 );
 
 #[derive(
@@ -313,7 +313,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.vertical_tabs.view_mode",
-    description: "Display mode for the vertical tab bar.",
+    description: crate::tr!("settings", "vertical-tabs-view-mode-desc"),
 );
 
 #[derive(
@@ -344,7 +344,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.vertical_tabs.display_granularity",
-    description: "Granularity of rows displayed in the vertical tabs panel.",
+    description: crate::tr!("settings", "vertical-tabs-display-granularity-desc"),
 );
 
 #[derive(
@@ -375,7 +375,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.vertical_tabs.tab_item_mode",
-    description: "Tab item display mode in vertical tabs.",
+    description: crate::tr!("settings", "vertical-tabs-tab-item-mode-desc"),
 );
 
 #[derive(
@@ -407,7 +407,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.vertical_tabs.primary_info",
-    description: "The primary information displayed on vertical tabs.",
+    description: crate::tr!("settings", "vertical-tabs-primary-info-desc"),
 );
 
 #[derive(
@@ -439,7 +439,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "appearance.vertical_tabs.compact_subtitle",
-    description: "Subtitle shown on compact vertical tabs.",
+    description: crate::tr!("settings", "vertical-tabs-compact-subtitle-desc"),
 );
 
 define_settings_group!(TabSettings, settings: [
@@ -450,7 +450,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.tabs.show_indicators_button",
-        description: "Whether to show activity indicators on tabs.",
+        description: crate::tr!("settings", "show-indicators-desc"),
     },
     show_code_review_button: ShowCodeReviewButton {
         type: bool,
@@ -459,7 +459,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.show_code_review_button",
-        description: "Whether to show the code review button on tabs.",
+        description: crate::tr!("settings", "show-code-review-button-desc"),
     },
     show_code_review_diff_stats: ShowCodeReviewDiffStats {
         type: bool,
@@ -468,7 +468,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.show_code_review_diff_stats",
-        description: "Whether to show lines added/removed counts on the code review button.",
+        description: crate::tr!("settings", "show-code-review-diff-stats-desc"),
     },
     preserve_active_tab_color: PreserveActiveTabColor {
         type: bool,
@@ -477,7 +477,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.tabs.preserve_active_tab_color",
-        description: "Whether to preserve the active tab's color when switching tabs.",
+        description: crate::tr!("settings", "preserve-active-tab-color-desc"),
     },
     use_vertical_tabs: UseVerticalTabs {
         type: bool,
@@ -486,7 +486,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.enabled",
-        description: "Whether to display tabs vertically instead of horizontally.",
+        description: crate::tr!("settings", "use-vertical-tabs-desc"),
     },
     show_vertical_tab_panel_in_restored_windows: ShowVerticalTabPanelInRestoredWindows {
         type: bool,
@@ -495,7 +495,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.show_panel_in_restored_windows",
-        description: "When restoring a window, open the vertical tabs panel even if it was closed when the session was saved.",
+        description: crate::tr!("settings", "show-vertical-tab-panel-restored-desc"),
     },
     use_latest_user_prompt_as_conversation_title_in_tab_names: UseLatestUserPromptAsConversationTitleInTabNames {
         type: bool,
@@ -504,7 +504,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.use_latest_prompt_as_title",
-        description: "Whether vertical tab names for agent conversations use the latest user prompt.",
+        description: crate::tr!("settings", "use-latest-prompt-conversation-title-desc"),
     },
     vertical_tabs_display_granularity: VerticalTabsDisplayGranularity,
     vertical_tabs_tab_item_mode: VerticalTabsTabItemMode,
@@ -518,7 +518,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.show_pr_link",
-        description: "Whether to show PR links on vertical tabs.",
+        description: crate::tr!("settings", "vertical-tabs-show-pr-link-desc"),
     },
     vertical_tabs_show_diff_stats: VerticalTabsShowDiffStats {
         type: bool,
@@ -527,7 +527,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.show_diff_stats",
-        description: "Whether to show diff stats on vertical tabs.",
+        description: crate::tr!("settings", "vertical-tabs-show-diff-stats-desc"),
     },
     vertical_tabs_show_details_on_hover: VerticalTabsShowDetailsOnHover {
         type: bool,
@@ -536,7 +536,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.show_details_on_hover",
-        description: "Whether to show a details sidecar when hovering over a vertical tab.",
+        description: crate::tr!("settings", "vertical-tabs-show-details-hover-desc"),
     },
     header_toolbar_chip_selection: HeaderToolbarChipSelection,
     new_tab_placement: NewTabPlacement,

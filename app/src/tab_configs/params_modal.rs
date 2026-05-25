@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use std::{collections::HashMap, path::PathBuf};
 
 use warp_core::ui::theme::color::internal_colors;
@@ -159,8 +160,9 @@ impl TabConfigParamsModal {
                 ctx.dispatch_typed_action(TabConfigParamsModalAction::Cancel);
             })
         });
+        static OPEN_TAB_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "open-tab"));
         let submit_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new("Open Tab", PrimaryTheme)
+            ActionButton::new(&*OPEN_TAB_LABEL, PrimaryTheme)
                 .with_keybinding(
                     KeystrokeSource::Fixed(Keystroke::parse("enter").unwrap_or_default()),
                     ctx,
@@ -170,7 +172,7 @@ impl TabConfigParamsModal {
                 })
         });
         let submit_button_disabled =
-            ctx.add_typed_action_view(|_| ActionButton::new("Open Tab", DisabledTheme));
+            ctx.add_typed_action_view(|_| ActionButton::new(&*OPEN_TAB_LABEL, DisabledTheme));
         Self {
             param_fields: Vec::new(),
             pending_config: None,

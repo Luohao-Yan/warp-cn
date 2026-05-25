@@ -205,24 +205,16 @@ mod package_manager {
                 FormattedTextLine::Heading(FormattedTextHeader {
                     // Make this an <h3>
                     heading_size: 3,
-                    text: vec![FormattedTextFragment::bold(format!(
-                        "Run {package_manager_name} to update"
-                    ))],
+                    text: vec![FormattedTextFragment::bold(crate::tr!("autoupdate", "run-to-update", package_manager = package_manager_name))],
                 }),
                 FormattedTextLine::Line(vec![
-                    FormattedTextFragment::plain_text("If you installed Warp using "),
-                    FormattedTextFragment::bold(package_manager_name),
-                    FormattedTextFragment::plain_text(
-                        " or a compatible tool, the pre-filled command will update Warp for you.",
-                    ),
+                    FormattedTextFragment::plain_text(crate::tr!("autoupdate", "if-installed-using", package_manager = package_manager_name.clone())),
                 ]),
             ];
 
             if self.package_manager.needs_repository_configuration() {
                 lines.push(FormattedTextLine::Line(vec![
-                    FormattedTextFragment::plain_text(
-                        "\nThe command below includes a one-time configuration of the Warp package repository and PGP signing key.",
-                    ),
+                    FormattedTextFragment::plain_text(format!("\n{}", crate::tr!("autoupdate", "one-time-repo-config"))),
                 ]));
             }
 
@@ -231,22 +223,21 @@ mod package_manager {
                 .distribution_update_disabled_repository()
             {
                 lines.push(FormattedTextLine::Line(vec![
-                    FormattedTextFragment::plain_text(
-                        "\nThe ",
-                    ),
+                    FormattedTextFragment::plain_text(format!(
+                        "\n{} ",
+                        crate::tr!("autoupdate", "dist-upgrade-explainer-prefix")
+                    )),
                     FormattedTextFragment::inline_code("warp_handle_dist_upgrade"),
-                    FormattedTextFragment::plain_text(
-                        " function ensures the Warp package repository is enabled, as we've detected you recently upgraded your distribution.",
-                    ),
+                    FormattedTextFragment::plain_text(crate::tr!("autoupdate", "dist-upgrade-explainer-suffix")),
                 ]));
             }
 
             lines.push(FormattedTextLine::Line(vec![
-                FormattedTextFragment::plain_text("\nReview the command below, then "),
-                FormattedTextFragment::bold("press enter"),
-                FormattedTextFragment::plain_text(" to install the update and re-launch Warp.  "),
+                FormattedTextFragment::plain_text(format!("\n{}", crate::tr!("autoupdate", "review-command"))),
+                FormattedTextFragment::bold(crate::tr!("autoupdate", "press-enter")),
+                FormattedTextFragment::plain_text(crate::tr!("autoupdate", "to-install")),
                 FormattedTextFragment::hyperlink(
-                    "Please report any issues",
+                    crate::tr!("autoupdate", "report-issues"),
                     "https://github.com/warpdotdev/Warp/issues/new/choose",
                 ),
             ]));

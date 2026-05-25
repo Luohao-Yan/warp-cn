@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use ai::agent::action::{AIAgentActionType, ShellCommandDelay};
 use parking_lot::FairMutex;
@@ -21,12 +22,12 @@ use crate::{
     ui_components::{blended_colors, icons::Icon},
 };
 
-const AGENT_PROMPT_TO_INTERACT_MESSAGE: &str = "Prompt agent to interact with";
-const AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: &str = "Agent is waiting on instructions";
-const AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: &str = "Agent is waiting for command to exit";
-const AGENT_BLOCKED_MESSAGE: &str = "Agent needs your permission to continue";
-const AGENT_IN_CONTROL_MESSAGE: &str = "Agent is in control";
-const USER_IN_CONTROL_MESSAGE: &str = "User is in control";
+static AGENT_PROMPT_TO_INTERACT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-prompt-to-interact"));
+static AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-waiting-on-instructions"));
+static AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-waiting-for-command-exit"));
+static AGENT_BLOCKED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-blocked"));
+static AGENT_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-in-control"));
+static USER_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-user-in-control"));
 
 /// A header rendered as rich content above the active block when Agent View is in inline mode.
 pub struct InlineAgentViewHeader {

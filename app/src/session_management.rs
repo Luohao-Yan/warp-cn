@@ -81,13 +81,13 @@ impl CommandContext {
             Self::None => None,
             Self::LastRunCommand {
                 last_run_command, ..
-            } => Some(format!("Last run command {}", last_run_command.clone())),
-            Self::LastRunAIBlock { prompt } => Some(format!("Last AI interaction: {prompt}")),
+            } => Some(crate::tr!("workspace", "workspace-last-run-command", command = last_run_command.clone())),
+            Self::LastRunAIBlock { prompt } => Some(crate::tr!("workspace", "workspace-last-ai-interaction", prompt = prompt.clone())),
             Self::RunningCommand { running_command } => {
-                Some(format!("Currently running {running_command}"))
+                Some(crate::tr!("workspace", "workspace-currently-running", command = running_command.clone()))
             }
             Self::RunningAIBlock { prompt } => {
-                Some(format!("Currently running AI interaction: {prompt}"))
+                Some(crate::tr!("workspace", "workspace-currently-running-ai", prompt = prompt.clone()))
             }
         }
     }

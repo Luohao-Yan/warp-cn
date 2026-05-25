@@ -35,7 +35,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:new_tab",
-            "Terminal session",
+            crate::tr!("workspace", "workspace-terminal-session"),
             WelcomeViewAction::CreateTerminalSession,
         )
         .with_context_predicate(id!("WelcomeView"))
@@ -44,7 +44,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             "welcome_view:open_project",
-            "Add repository",
+            crate::tr!("workspace", "workspace-add-repository"),
             WelcomeViewAction::OpenProject,
         )
         .with_context_predicate(id!("WelcomeView"))

@@ -1,6 +1,8 @@
 //! Implementation for the omnibar - a floating menu for editor interactions
 //! like formatting and changing block types.
 
+use std::sync::LazyLock;
+
 use itertools::Itertools;
 use pathfinder_geometry::{rect::RectF, vector::Vector2F};
 use warp_editor::{
@@ -41,6 +43,8 @@ const OMNIBAR_HEIGHT: f32 = 32.;
 const OMNIBAR_PADDING: f32 = 4.;
 
 const ACTION_BUTTON_SIZE: f32 = 24.;
+
+static REMOVE_LINK_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-remove-link-a11y"));
 
 pub enum OmnibarEvent {
     OpenLinkEditor,
@@ -445,14 +449,18 @@ impl TypedActionView for Omnibar {
                 .as_ref(ctx)
                 .style_toggle_a11y(BufferTextStyle::InlineCode),
             OmnibarAction::ConvertBlock(style) => {
+                let block_label = BlockType::from(style).label();
                 ActionAccessibilityContent::Custom(AccessibilityContent::new_without_help(
-                    format!("Convert to {}", BlockType::from(style).label()),
+                    crate::tr!("notebooks", "notebooks-convert-to-block-a11y", block_label = block_label),
                     WarpA11yRole::UserAction,
                 ))
             }
             OmnibarAction::OpenLinkEditor => ActionAccessibilityContent::from_debug(),
             OmnibarAction::UnstyleLink => ActionAccessibilityContent::Custom(
-                AccessibilityContent::new_without_help("Remove link", WarpA11yRole::UserAction),
+                AccessibilityContent::new_without_help(
+                    REMOVE_LINK_A11Y.clone(),
+                    WarpA11yRole::UserAction,
+                ),
             ),
         }
     }

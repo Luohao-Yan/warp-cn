@@ -4,6 +4,7 @@ use crate::ai::agent::{
 };
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use std::sync::LazyLock;
 use std::str::FromStr;
 use uuid::{NonNilUuid, Uuid};
 
@@ -17,10 +18,8 @@ pub use task::{
     cancel_task_silently, cancel_task_with_toast, AgentConfigSnapshot, AgentSource,
     AmbientAgentTask, AmbientAgentTaskState, TaskStatusMessage,
 };
-pub const OUT_OF_CREDITS_TASK_FAILURE_MESSAGE: &str =
-    "Out of credits. Upgrade your Warp plan to continue running cloud agents.";
-pub const SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: &str =
-    "Warp is temporarily overloaded. Please try again shortly.";
+pub static OUT_OF_CREDITS_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-out-of-credits-upgrade"));
+pub static SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-server-overloaded-short"));
 
 #[derive(Debug, thiserror::Error)]
 #[error("Invalid task ID: {0}")]

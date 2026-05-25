@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::{
     settings_view::SettingsSection,
     terminal::view::TerminalAction,
@@ -18,9 +20,12 @@ use warpui::{
     AppContext, Element, Entity, SingletonEntity, View, ViewContext,
 };
 
-const TITLE_EXISTING_USERS: &str = "We've updated our telemetry policy.";
-const TITLE_NEW_USERS: &str = "Help improve Warp.";
-const DESCRIPTION: &str = "We may collect certain console interactions to improve Warp's AI capabilities. You can opt out any time.";
+pub static TITLE_EXISTING_USERS: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-telemetry-title-existing"));
+pub static TITLE_NEW_USERS: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-telemetry-title-new"));
+pub static DESCRIPTION: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-telemetry-description"));
 const PRIVACY_URL: &str = "https://warp.dev/privacy";
 
 #[derive(Default, Debug, Clone)]
@@ -53,9 +58,9 @@ impl View for TelemetryBanner {
         let ui_builder = appearance.ui_builder();
 
         let title = if self.is_onboarded {
-            TITLE_EXISTING_USERS
+            TITLE_EXISTING_USERS.as_str()
         } else {
-            TITLE_NEW_USERS
+            TITLE_NEW_USERS.as_str()
         };
 
         let left = Flex::row()
@@ -85,7 +90,7 @@ impl View for TelemetryBanner {
                                 .finish(),
                         )
                         .with_child(
-                            Text::new(DESCRIPTION, ui_builder.ui_font_family(), 12.)
+                            Text::new(DESCRIPTION.as_str(), ui_builder.ui_font_family(), 12.)
                                 .with_color(theme.nonactive_ui_text_color().into_solid())
                                 .soft_wrap(true)
                                 .finish(),
@@ -96,6 +101,7 @@ impl View for TelemetryBanner {
             )
             .finish();
 
+        let manage_privacy_label = crate::tr!("ai_assistant", "ai-manage-privacy-settings");
         let right = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
@@ -133,7 +139,7 @@ impl View for TelemetryBanner {
                             ButtonVariant::Outlined,
                             self.privacy_settings_mouse_state.clone(),
                         )
-                        .with_text_label("Manage privacy settings".into())
+                        .with_text_label(manage_privacy_label.into())
                         .with_style(UiComponentStyles {
                             ..Default::default()
                         })

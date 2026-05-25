@@ -36,6 +36,7 @@ use pathfinder_geometry::{
     vector::{vec2f, Vector2F},
 };
 use serde::Serialize;
+use std::sync::LazyLock;
 use std::{ops::RangeInclusive, sync::Arc};
 use warp_core::features::FeatureFlag;
 use warp_core::ui::theme::Fill;
@@ -68,7 +69,7 @@ const INNER_MARGIN: f32 = 20.;
 const MODAL_WIDTH: f32 = 862.;
 const BLOCK_TITLE_INPUT_WIDTH: f32 = 800.;
 
-const BLOCK_TITLE_PLACEHOLDER: &str = "Title (optional)";
+static BLOCK_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-title-optional"));
 
 // TODO(vorporeal): This is 12 in the specs, but I think our 14pt font is a bit
 // taller than 14pt?
@@ -85,8 +86,8 @@ const COMMAND_OPTION: (&str, DisplaySetting) = ("Command", DisplaySetting::Comma
 const OUTPUT_OPTION: (&str, DisplaySetting) = ("Output", DisplaySetting::Output);
 
 /// This default title is helpful for screen readers.
-const DEFAULT_EMBED_TITLE: &str = "embedded warp block";
-const BLOCK_CREATION_FAILED_MESSAGE: &str = "Something went wrong. Please try again.";
+static DEFAULT_EMBED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-embed-label"));
+static BLOCK_CREATION_FAILED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-error"));
 
 #[derive(PartialEq)]
 enum ShareRequestState {
@@ -163,7 +164,7 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Copy,
             ShareBlockModalAction::CopyLink,
-            "Copy",
+            crate::tr!("common", "common-copy-label").as_str(),
             id!(ShareBlockModal::ui_name()),
         ),
         FixedBinding::new(
@@ -198,7 +199,7 @@ impl ShareBlockModal {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(BLOCK_TITLE_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(BLOCK_TITLE_PLACEHOLDER.as_str(), ctx);
             editor
         });
         ctx.subscribe_to_view(&block_title_editor, move |me, _, event, ctx| {
@@ -502,7 +503,7 @@ impl ShareBlockModal {
             );
             ctx.clipboard().write(ClipboardContent::plain_text(link));
             ctx.emit(ShareBlockModalEvent::ShowToast {
-                message: "Link copied.".to_string(),
+                message: crate::tr!("terminal", "terminal-share-link-copied").to_string(),
                 flavor: ToastFlavor::Default,
             });
         }
@@ -546,7 +547,7 @@ impl ShareBlockModal {
         ctx.clipboard()
             .write(ClipboardContent::plain_text(embed_snippet));
         ctx.emit(ShareBlockModalEvent::ShowToast {
-            message: "Embed code copied.".to_string(),
+            message: crate::tr!("terminal", "terminal-share-embed-copied").to_string(),
             flavor: ToastFlavor::Success,
         });
     }
@@ -663,7 +664,7 @@ impl ShareBlockModal {
             TextAndIconAlignment::TextFirst,
             if let ShareRequestState::Pending(pending_share_type) = self.request_state {
                 if pending_share_type == share_type {
-                    "Creating block...".to_string()
+                    crate::tr!("terminal", "terminal-share-creating").to_string()
                 } else {
                     text_label.to_string()
                 }
@@ -738,7 +739,7 @@ impl ShareBlockModal {
         } else {
             let embed_snippet = self
                 .generate_embed_snippet(app)
-                .unwrap_or("Error generating embed snippet".to_string());
+                .unwrap_or(crate::tr!("terminal", "terminal-share-embed-error").to_string());
             col.add_child(self.render_embed_label(appearance, embed_snippet));
             col.add_child(
                 Align::new(
@@ -764,7 +765,7 @@ impl ShareBlockModal {
                     .manage_permalinks_mouse_state
                     .clone(),
             )
-            .with_centered_text_label("Manage shared blocks".to_string())
+            .with_centered_text_label(crate::tr!("terminal", "terminal-manage-shared-blocks"))
             .with_style(
                 self.button_style_overrides(appearance)
                     .set_font_size(12.)
@@ -796,7 +797,7 @@ impl ShareBlockModal {
     ) -> Box<dyn Element> {
         let text_and_icon = TextAndIcon::new(
             TextAndIconAlignment::TextFirst,
-            "Copy".to_string(),
+            crate::tr!("common", "common-copy-label").clone(),
             Icon::Copy.to_warpui_icon(appearance.theme().active_ui_text_color()),
             MainAxisSize::Max,
             MainAxisAlignment::Center,
@@ -958,7 +959,7 @@ impl ShareBlockModal {
                 .finish();
             let show_prompt_description = appearance
                 .ui_builder()
-                .span("Show prompt".to_string())
+                .span(crate::tr!("terminal", "terminal-show-prompt"))
                 .build()
                 .with_margin_left(2.)
                 .finish();

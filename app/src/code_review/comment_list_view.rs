@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::sync::LazyLock;
 
 use crate::ai::AIRequestUsageModel;
 use crate::code::editor::comment_editor::DEFAULT_COMMENT_MAX_WIDTH;
@@ -203,7 +204,8 @@ impl CommentListView {
         let menu = ctx.add_view(|_| Menu::new());
 
         let comments_button = ctx.add_view(|_| {
-            ActionButton::new("1 Comment", CustomSecondaryActionTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "review-comment-count", count = 1i64));
+            ActionButton::new(&*LABEL, CustomSecondaryActionTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(CommentListAction::ToggleCollapsed);
@@ -868,6 +870,7 @@ impl CommentListView {
     }
 
     fn render_cancel_button(&self, appearance: &Appearance) -> Box<dyn Element> {
+        let cancel_label = crate::tr!("code_editor", "code-comment-cancel-button");
         let cancel_button = EventHandler::new(
             appearance
                 .ui_builder()
@@ -875,7 +878,7 @@ impl CommentListView {
                     ButtonVariant::Text,
                     self.view_state.cancel_button_mouse_state.clone(),
                 )
-                .with_text_label("Cancel".to_string())
+                .with_text_label(cancel_label)
                 .build()
                 .finish(),
         )
@@ -902,22 +905,22 @@ impl CommentListView {
     ) -> Cow<'static, str> {
         if let ReviewDestination::Cli(agent) = destination {
             if !has_sendable_comments {
-                Cow::Borrowed("No non-outdated comments to send")
+                crate::tr!("code_review", "code-review-no-non-outdated-comments").into()
             } else {
                 let cmd = agent.command_prefix();
                 let label = if cmd.is_empty() { "CLI agent" } else { cmd };
-                Cow::Owned(format!("Send diff comments to {label}"))
+                crate::tr!("code_review", "code-review-send-comments-to-cli", label = label).into()
             }
         } else if !ai_enabled {
-            Cow::Borrowed("AI must be enabled to send comments to Agent")
+            crate::tr!("code_review", "code-review-ai-must-be-enabled").into()
         } else if !ai_available {
-            Cow::Borrowed("Agent code review requires AI credits")
+            crate::tr!("code_review", "code-review-agent-requires-credits").into()
         } else if matches!(destination, ReviewDestination::None) {
-            Cow::Borrowed("All terminals are busy")
+            crate::tr!("code_review", "code-review-all-terminals-busy").into()
         } else if !has_sendable_comments {
-            Cow::Borrowed("No non-outdated comments to send")
+            crate::tr!("code_review", "code-review-no-non-outdated-comments").into()
         } else {
-            Cow::Borrowed("Send diff comments to Agent")
+            crate::tr!("code_review", "code-review-send-comments-to-agent").into()
         }
     }
 
@@ -946,13 +949,14 @@ impl CommentListView {
             .build()
             .finish();
 
+        let send_to_agent_label = crate::tr!("code_editor", "code-review-send-to-agent");
         let button = appearance
             .ui_builder()
             .button(
                 ButtonVariant::Accent,
                 self.view_state.submit_button_mouse_state.clone(),
             )
-            .with_text_label("Send to Agent".to_string())
+            .with_text_label(send_to_agent_label)
             .with_tooltip(|| tooltip)
             .with_tooltip_position(ButtonTooltipPosition::AboveLeft);
 
@@ -1061,27 +1065,30 @@ impl CommentListView {
         html_url: Option<&str>,
         appearance: &Appearance,
     ) -> Vec<MenuItem<CommentListAction>> {
-        let mut items = vec![MenuItemFields::new("Copy text")
+        let copy_text_label = crate::tr!("code_editor", "code-review-copy-text");
+        let mut items = vec![MenuItemFields::new(&copy_text_label)
             .with_icon(Icon::Copy)
             .with_on_select_action(CommentListAction::CopyCommentText)
             .into_item()];
 
-        let mut edit_item = MenuItemFields::new("Edit")
+        let edit_label = crate::tr!("code_editor", "code-review-edit");
+        let mut edit_item = MenuItemFields::new(&edit_label)
             .with_icon(Icon::Pencil)
             .with_on_select_action(CommentListAction::EditComment);
         if is_file_level || is_outdated {
             let tooltip_text = if is_file_level {
-                "File-level comments currently can't be edited."
+                crate::tr!("code_review", "code-review-file-level-cannot-edit")
             } else {
-                "Outdated comments can't be edited."
+                crate::tr!("code_review", "code-review-outdated-cannot-edit")
             };
-            edit_item = edit_item.with_disabled(true).with_tooltip(tooltip_text);
+            edit_item = edit_item.with_disabled(true).with_tooltip(&tooltip_text);
         }
         items.push(edit_item.into_item());
 
         if let Some(url) = html_url {
+            let view_github_label = crate::tr!("code_editor", "code-review-view-in-github");
             items.push(
-                MenuItemFields::new("View in GitHub")
+                MenuItemFields::new(&view_github_label)
                     .with_icon(Icon::Github)
                     .with_on_select_action(CommentListAction::ViewInGitHub {
                         url: url.to_string(),
@@ -1090,8 +1097,9 @@ impl CommentListView {
             );
         }
 
+        let remove_label = crate::tr!("code_editor", "code-review-remove");
         items.push(
-            MenuItemFields::new("Remove")
+            MenuItemFields::new(&remove_label)
                 .with_icon(Icon::Trash)
                 .with_override_text_color(Fill::Solid(appearance.theme().ansi_fg_red()))
                 .with_override_icon_color(Fill::Solid(appearance.theme().ansi_fg_red()))

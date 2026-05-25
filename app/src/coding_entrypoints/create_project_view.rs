@@ -27,14 +27,14 @@ pub struct CreateProjectView {
 }
 
 struct BuildSuggestion {
-    prompt: &'static str,
+    prompt: String,
     mouse_state: MouseStateHandle,
 }
 
 impl CreateProjectView {
     pub fn new(is_ftux: bool, ctx: &mut ViewContext<Self>) -> Self {
         let editor =
-            ctx.add_typed_action_view(|ctx| GlowingEditor::new("What do you want to build?", ctx));
+            ctx.add_typed_action_view(|ctx| GlowingEditor::new(&crate::tr!("coding_entrypoints", "coding-entrypoints-what-to-build"), ctx));
 
         ctx.subscribe_to_view(&editor, move |me, _, event, ctx| {
             me.handle_editor_event(event, ctx);
@@ -42,23 +42,23 @@ impl CreateProjectView {
 
         let suggestions = vec![
             BuildSuggestion {
-                prompt: "Build a Minesweeper clone in React",
+                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-minesweeper"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: "Code a Node.js server that returns random quotes from a JSON file",
+                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-node-server"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: "Write a CSV to JSON converter CLI",
+                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-csv-converter"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: "Create a starter template for a résumé web page",
+                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-resume"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: "Make a Conway's Game of Life simulation",
+                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-game-of-life"),
                 mouse_state: Default::default(),
             },
         ];
@@ -139,7 +139,7 @@ impl CreateProjectView {
                 .finish(),
                 Expanded::new(
                     1.,
-                    Text::new(prompt, font_family, font_size)
+                    Text::new(&prompt, font_family, font_size)
                         .with_color(font_color)
                         .with_style(Properties::default().weight(Weight::Medium))
                         .soft_wrap(false)
@@ -162,7 +162,7 @@ impl CreateProjectView {
         .with_cursor(Cursor::PointingHand)
         .on_click(move |ctx, _, _| {
             ctx.dispatch_typed_action(CreateProjectAction::SuggestionSelected {
-                prompt: prompt.to_string(),
+                prompt: prompt.clone(),
             });
         })
         .finish()

@@ -169,10 +169,10 @@ impl View for DiffSelector {
         let font_size = appearance.ui_font_size();
 
         let label = if self.trigger_label.is_empty() {
-            "Uncommitted changes".to_string()
-        } else {
-            self.trigger_label.clone()
-        };
+                crate::tr!("code_review", "code-review-uncommitted-changes")
+            } else {
+                self.trigger_label.clone()
+            };
 
         // Build the icon+text row by hand: `with_text_and_icon_label` wraps
         // the text in `Shrinkable<flex=1>`, which makes the button grow to

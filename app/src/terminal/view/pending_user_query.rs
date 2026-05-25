@@ -39,7 +39,7 @@ impl TerminalView {
         let auth_state = AuthStateProvider::as_ref(ctx).get().clone();
         let user_display_name = auth_state
             .username_for_display()
-            .unwrap_or_else(|| "User".to_owned());
+            .unwrap_or_else(|| crate::tr!("common", "common-default-user-display-name"));
         let profile_image_path = auth_state.user_photo_url();
 
         let prompt_for_send_now = prompt.clone();

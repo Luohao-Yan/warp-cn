@@ -113,7 +113,7 @@ impl UpdateModalBody {
 
         // Renders MCP title text
         let title = Text::new(
-            format!("Update {name}"),
+            crate::tr!("settings", "settings-update-mcp", name = name),
             appearance.ui_font_family(),
             appearance.header_font_size(),
         )
@@ -155,7 +155,7 @@ impl UpdateModalBody {
         // Renders 'ESC' text for closing the modal
         let escape_button = Container::new(
             Text::new_inline(
-                "ESC".to_string(),
+                crate::tr!("settings", "settings-esc-key"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size() * 0.8,
             )
@@ -180,10 +180,7 @@ impl UpdateModalBody {
 
     fn render_description(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Modal appears only when multiple updates are available
-        let description = format!(
-            "This server has {} updates available, which would you like to proceed with?",
-            self.update_options.len()
-        );
+        let description = crate::tr!("settings", "settings-mcp-updates-available", count = self.update_options.len());
 
         Text::new(
             description,
@@ -217,9 +214,9 @@ impl UpdateModalBody {
                 ..
             } => {
                 let publisher_string = match publisher {
-                    Author::CurrentUser => "another device",
-                    Author::OtherUser { name } => name,
-                    Author::Unknown => "a team member",
+                    Author::CurrentUser => crate::tr!("settings", "settings-mcp-publisher-another-device"),
+                    Author::OtherUser { name } => name.clone(),
+                    Author::Unknown => crate::tr!("settings", "settings-mcp-publisher-team-member"),
                 };
                 let datetime = Local
                     .timestamp_opt(*new_version_ts, 0)
@@ -227,15 +224,15 @@ impl UpdateModalBody {
                     .unwrap_or_else(Local::now);
                 let formatted_time = format_approx_duration_from_now(datetime);
                 (
-                    format!("Update from {publisher_string}"),
+                    crate::tr!("settings", "settings-update-from-publisher", publisher = publisher_string.as_str()),
                     formatted_time.to_string(),
                 )
             }
             MCPServerUpdate::Gallery {
                 name, new_version, ..
             } => (
-                format!("Update from {name}"),
-                format!("Version {new_version}"),
+                crate::tr!("settings", "settings-update-from-name", name = name.as_str()),
+                crate::tr!("settings", "settings-version-label", version = *new_version as i64),
             ),
         };
 
@@ -427,7 +424,7 @@ impl View for UpdateModalBody {
         // Add update options
         if self.update_options.is_empty() {
             let no_updates_text = Text::new(
-                "No updates available",
+                crate::tr!("settings", "settings-mcp-no-updates-available"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )

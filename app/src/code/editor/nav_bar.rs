@@ -76,7 +76,7 @@ impl NavBar {
         });
 
         let up_label_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Previous", NakedTheme)
+            ActionButton::new(crate::tr!("code_editor", "code-previous"), NakedTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .with_icon(Icon::ArrowUp)
                 .on_click(|ctx| ctx.dispatch_typed_action(NavBarAction::NavigateUp))
@@ -152,7 +152,7 @@ impl NavBar {
     ) -> Box<dyn Element> {
         let diff_text = appearance
             .ui_builder()
-            .span("Hunk:")
+            .span(crate::tr!("code_editor", "code-hunk"))
             .with_style(UiComponentStyles {
                 font_color: Some(appearance.theme().sub_text_color(background).into()),
                 ..Default::default()
@@ -162,7 +162,7 @@ impl NavBar {
             .finish();
 
         let index = (self.selected_index(app).unwrap_or(0) + 1).min(total);
-        let text = format!("{index}/{total}");
+        let text = crate::tr!("code", "match-index", current = index, total = total);
 
         let index = Container::new(
             appearance
@@ -197,6 +197,7 @@ impl NavBar {
     }
 
     fn render_revert_button(&self, appearance: &Appearance) -> Box<dyn Element> {
+        let reject_label = crate::tr!("code", "code-reject");
         Container::new(
             appearance
                 .ui_builder()
@@ -204,7 +205,7 @@ impl NavBar {
                     ButtonVariant::Outlined,
                     self.mouse_state_handles.revert_mouse_state.clone(),
                 )
-                .with_text_label("Reject".to_string())
+                .with_text_label(reject_label)
                 .build()
                 .on_click(|ctx, _, _| ctx.dispatch_typed_action(NavBarAction::Revert))
                 .finish(),

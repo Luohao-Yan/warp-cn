@@ -157,8 +157,12 @@ where
     fn split_pane_menu_items(&self, ctx: &mut ViewContext<V>) -> Vec<MenuItem<V::Action>> {
         let mut items = vec![];
         if ContextFlag::CreateNewSession.is_enabled() {
+            let split_right_label = crate::tr!("notebooks", "notebooks-split-pane-right");
+            let split_left_label = crate::tr!("notebooks", "notebooks-split-pane-left");
+            let split_down_label = crate::tr!("notebooks", "notebooks-split-pane-down");
+            let split_up_label = crate::tr!("notebooks", "notebooks-split-pane-up");
             items.extend([
-                MenuItemFields::new("Split pane right")
+                MenuItemFields::new(&split_right_label)
                     .with_on_select_action(V::Action::from(ContextMenuAction::EmitPaneEvent(
                         PaneEvent::SplitRight(None),
                     )))
@@ -167,7 +171,7 @@ where
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("Split pane left")
+                MenuItemFields::new(&split_left_label)
                     .with_on_select_action(V::Action::from(ContextMenuAction::EmitPaneEvent(
                         PaneEvent::SplitLeft(None),
                     )))
@@ -176,7 +180,7 @@ where
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("Split pane down")
+                MenuItemFields::new(&split_down_label)
                     .with_on_select_action(V::Action::from(ContextMenuAction::EmitPaneEvent(
                         PaneEvent::SplitDown(None),
                     )))
@@ -185,7 +189,7 @@ where
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("Split pane up")
+                MenuItemFields::new(&split_up_label)
                     .with_on_select_action(V::Action::from(ContextMenuAction::EmitPaneEvent(
                         PaneEvent::SplitUp(None),
                     )))

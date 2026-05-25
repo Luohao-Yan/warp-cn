@@ -2,6 +2,8 @@
 //! an active `OrchestrationConfigSnapshot`. Shows a "Use orchestration"
 //! toggle, Cloud/Local picker, and run-wide config dropdowns.
 
+use std::sync::LazyLock;
+
 use ai::agent::action::RunAgentsExecutionMode;
 use ai::agent::orchestration_config::OrchestrationConfigStatus;
 use pathfinder_color::ColorU;
@@ -67,10 +69,10 @@ fn render_pill_toggle(is_on: bool, theme: &WarpTheme) -> Box<dyn Element> {
     .finish()
 }
 
-const CONFIG_BLOCK_HEADER: &str = "Use orchestration";
-const CONFIG_BLOCK_DESCRIPTION: &str =
-    "Break this work into coordinated streams with multiple agents.";
-const BASE_MODEL_HELPER: &str = "The primary model all agents will use.";
+static CONFIG_BLOCK_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-use-orchestration"));
+static CONFIG_BLOCK_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-orchestration-description"));
+static BASE_MODEL_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-base-model-helper"));
+static AI_VIEW_DETAILS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-details"));
 
 // ── Action type ─────────────────────────────────────────────────────
 
@@ -409,7 +411,7 @@ impl View for OrchestrationConfigBlockView {
             };
             let disabled_text_color = blended_colors::text_disabled(theme, theme.background());
             let details_text = Text::new(
-                "View details".to_string(),
+                AI_VIEW_DETAILS.clone(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() + 1.,
             )

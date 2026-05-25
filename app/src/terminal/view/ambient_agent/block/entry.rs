@@ -112,7 +112,7 @@ impl AmbientAgentEntryBlock {
         ai_context_model
             .selected_conversation(app)
             .and_then(|c| c.title())
-            .unwrap_or_else(|| "New cloud agent".to_owned())
+            .unwrap_or_else(|| crate::tr!("agent_cloud", "agent-cloud-new-cloud-agent"))
     }
 
     fn ambient_agent_view_model<'a>(
@@ -126,14 +126,14 @@ impl AmbientAgentEntryBlock {
     }
 
     /// Gets the detail text to display based on the ambient agent status.
-    fn detail_text(&self, app: &AppContext) -> Option<&'static str> {
+    fn detail_text(&self, app: &AppContext) -> Option<String> {
         match self.ambient_agent_view_model(app)?.status() {
             Status::Setup | Status::Composing => None,
-            Status::WaitingForSession { .. } => Some("Starting environment..."),
-            Status::AgentRunning => Some("Agent is working on task"),
-            Status::Failed { .. } => Some("Agent failed"),
-            Status::NeedsGithubAuth { .. } => Some("Authentication required"),
-            Status::Cancelled { .. } => Some("Cancelled"),
+            Status::WaitingForSession { .. } => Some(crate::tr!("agent_cloud", "agent-cloud-starting-environment")),
+            Status::AgentRunning => Some(crate::tr!("agent_cloud", "agent-cloud-agent-working-on-task")),
+            Status::Failed { .. } => Some(crate::tr!("agent_cloud", "agent-cloud-agent-failed-status")),
+            Status::NeedsGithubAuth { .. } => Some(crate::tr!("agent_cloud", "agent-cloud-authentication-required")),
+            Status::Cancelled { .. } => Some(crate::tr!("agent_cloud", "agent-cloud-cancelled")),
         }
     }
 

@@ -199,11 +199,12 @@ fn main() {
         }
 
         // Always overwrite description with the macro-provided one
-        if !entry.description.is_empty() {
+        let description = (entry.description_fn)();
+        if !description.is_empty() {
             if let Some(obj) = schema_value.as_object_mut() {
                 obj.insert(
-                    crate::tr!("common", "description-label").to_string(),
-                    Value::String(entry.description.to_string()),
+                    "description".to_string(),
+                    Value::String(description),
                 );
             }
         }

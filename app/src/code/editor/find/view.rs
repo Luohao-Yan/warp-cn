@@ -46,13 +46,28 @@ const FIND_EDITOR_PADDING: f32 = 6.;
 pub const FIND_EDITOR_BORDER_RADIUS: f32 = 6.;
 const FIND_EDITOR_BORDER_WIDTH: f32 = 1.;
 const FIND_EDITOR_FONT_SIZE: f32 = 12.;
+use std::sync::LazyLock;
+
 const FIND_EDITOR_ROW_SPACING: f32 = 4.;
 
-pub const REGEX_TOGGLE_TOOLTIP: &str = "Regex toggle";
-pub const CASE_SENSITIVE_TOOLTIP: &str = "Case sensitive search";
-pub const PRESERVE_CASE_TOOLTIP: &str = "Preserve case";
-pub const FIND_PLACEHOLDER_TEXT: &str = "Find";
-pub const REPLACE_PLACEHOLDER_TEXT: &str = "Replace";
+pub static REGEX_TOGGLE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "regex-toggle-tooltip"));
+pub static CASE_SENSITIVE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "case-sensitive-tooltip"));
+pub static PRESERVE_CASE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "preserve-case-tooltip"));
+pub static FIND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-placeholder"));
+pub static SELECT_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "select-all"));
+pub static REPLACE_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "replace-all"));
+pub static REPLACE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "replace-label"));
+
+static RESULT_OF_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-result-of"));
+static NO_RESULTS_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-no-results"));
+static USE_ENTER_NAVIGATE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-use-enter-navigate"));
+static FIND_BAR_DESCRIPTION_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-bar-description"));
+static FIND_BAR_WITH_MATCHES_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-bar-with-matches"));
+static REPLACE_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-field-focused"));
+static FIND_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-field-focused"));
+static REPLACE_SUCCESS_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-success"));
+static REPLACE_CONTINUE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-continue"));
+static REPLACE_LAST_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-last"));
 
 #[derive(Default)]
 struct ButtonMouseStates {
@@ -108,7 +123,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "find:find_next_occurrence",
-            "Find the next occurrence of your search query",
+            crate::tr!("code", "find-next-occurrence"),
             FindAction::CmdG,
         )
         .with_context_predicate(id!("CodeEditorFind"))
@@ -118,7 +133,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("f3"),
         EditableBinding::new(
             "find:find_prev_occurrence",
-            "Find the previous occurrence of your search query",
+            crate::tr!("code", "find-prev-occurrence"),
             FindAction::CmdShiftG,
         )
         .with_context_predicate(id!("CodeEditorFind"))
@@ -142,7 +157,7 @@ impl CodeEditorFind {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(FIND_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*FIND_PLACEHOLDER_TEXT, ctx);
             editor
         });
 
@@ -159,7 +174,7 @@ impl CodeEditorFind {
                 },
                 ctx,
             );
-            replace_editor.set_placeholder_text(REPLACE_PLACEHOLDER_TEXT, ctx);
+            replace_editor.set_placeholder_text(&*REPLACE_PLACEHOLDER_TEXT, ctx);
             replace_editor
         });
 
@@ -174,7 +189,7 @@ impl CodeEditorFind {
         let editor_height = line_height + (2. * FIND_EDITOR_PADDING) + 5.;
 
         let select_all_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Select all", SecondaryTheme)
+            ActionButton::new(&*SELECT_ALL_LABEL, SecondaryTheme)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(FindAction::SelectAll);
                 })
@@ -184,7 +199,7 @@ impl CodeEditorFind {
         });
 
         let replace_all_button = ctx.add_typed_action_view(|ctx| {
-            let mut button = ActionButton::new("Replace all", SecondaryTheme)
+            let mut button = ActionButton::new(&*REPLACE_ALL_LABEL, SecondaryTheme)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(FindAction::ReplaceAll);
                 })
@@ -372,16 +387,12 @@ impl CodeEditorFind {
     pub fn emit_result_a11y_content(&mut self, ctx: &mut ViewContext<Self>) {
         let content = if let Some(match_index) = self.searcher.as_ref(ctx).selected_match() {
             AccessibilityContent::new(
-                format!(
-                    "Result {} of {}.",
-                    match_index + 1,
-                    self.searcher.as_ref(ctx).match_count()
-                ),
-                "Use enter and shift-enter to navigate between matches. Escape to quit.",
+                crate::tr!("code", "code-find-result-of", match_index = match_index + 1, match_count = self.searcher.as_ref(ctx).match_count()),
+                USE_ENTER_NAVIGATE_A11Y.clone(),
                 WarpA11yRole::UserAction,
             )
         } else {
-            AccessibilityContent::new_without_help("No results.", WarpA11yRole::UserAction)
+            AccessibilityContent::new_without_help(NO_RESULTS_A11Y.clone(), WarpA11yRole::UserAction)
         };
         ctx.emit_a11y_content(content);
     }
@@ -392,15 +403,13 @@ impl CodeEditorFind {
         let content = if let Some(match_index) = self.searcher.as_ref(ctx).selected_match() {
             let remaining_matches = self.searcher.as_ref(ctx).match_count();
             AccessibilityContent::new(
-                format!(
-                    "Successfully replaced match. Selected match is {match_index} of {remaining_matches}"
-                ),
-                "Continue pressing Enter to replace more matches, or use up/down arrows to navigate.",
+                crate::tr!("code", "code-find-replace-success", match_index = match_index, remaining_matches = remaining_matches),
+                REPLACE_CONTINUE_A11Y.clone(),
                 WarpA11yRole::UserAction,
             )
         } else {
             AccessibilityContent::new_without_help(
-                "Successfully replaced the last match.",
+                REPLACE_LAST_A11Y.clone(),
                 WarpA11yRole::UserAction,
             )
         };
@@ -446,15 +455,11 @@ impl CodeEditorFind {
             None => 0,
             Some(idx) => idx + 1,
         };
-        let label = format!(
-            "{}/{}",
-            if index > 0 {
-                index.to_string()
-            } else {
-                "?".to_string()
-            },
-            self.searcher.as_ref(app).match_count()
-        );
+        let label = if index > 0 {
+            crate::tr!("code", "match-index", current = index, total = self.searcher.as_ref(app).match_count())
+        } else {
+            crate::tr!("code", "match-index-no-current", total = self.searcher.as_ref(app).match_count())
+        };
         Text::new_inline(label, appearance.ui_font_family(), FIND_EDITOR_FONT_SIZE)
             .with_color(blended_colors::text_sub(
                 appearance.theme(),
@@ -744,7 +749,7 @@ impl CodeEditorFind {
             self.button_mouse_states.toggle_regex_search.clone(),
             FindAction::ToggleRegexSearch,
             editor_height,
-            Some(REGEX_TOGGLE_TOOLTIP),
+            Some(&*REGEX_TOGGLE_TOOLTIP),
             ICON_PADDING,
         );
         let case_sensitive_icon = Container::new(
@@ -756,7 +761,7 @@ impl CodeEditorFind {
                     self.button_mouse_states.toggle_case_sensitivity.clone(),
                     FindAction::ToggleCaseSensitivity,
                     editor_height,
-                    Some(CASE_SENSITIVE_TOOLTIP),
+                    Some(&*CASE_SENSITIVE_TOOLTIP),
                     ICON_PADDING,
                 ),
                 "case_sensitive_button",
@@ -857,7 +862,7 @@ impl CodeEditorFind {
             self.button_mouse_states.toggle_preserve_case.clone(),
             FindAction::TogglePreserveCase,
             editor_height,
-            Some(PRESERVE_CASE_TOOLTIP),
+            Some(&*PRESERVE_CASE_TOOLTIP),
             ICON_PADDING,
         );
         replace_editor_row.add_child(preserve_case_icon);
@@ -927,20 +932,15 @@ impl View for CodeEditorFind {
         let match_count = self.searcher.as_ref(app).match_count();
         let selected_match = self.searcher.as_ref(app).selected_match();
         let description = match (match_count, selected_match) {
-            (0, _) | (_, None) => "Find bar for searching text in the editor.".to_string(),
-            (count, Some(current)) => format!(
-                "Find bar with {} matches found. Currently on match {} of {}.",
-                count,
-                current + 1,
-                count
-            ),
+            (0, _) | (_, None) => FIND_BAR_DESCRIPTION_A11Y.clone(),
+            (count, Some(current)) => crate::tr!("code", "code-find-bar-with-matches", count = count, current = current + 1, total = count),
         };
 
         let is_replace_focused = self.is_replace_open && self.replace_editor.is_focused(app);
         let help_text = if is_replace_focused {
-            "Replace field focused. Type replacement text, press Enter to replace current match, Tab to return to find field. Use up/down arrows to navigate matches, Escape to close."
+            REPLACE_FIELD_FOCUSED_A11Y.as_str()
         } else {
-            "Find field focused. Type to search text. Use Enter and Shift-Enter or up/down arrows to navigate between matches. Press Escape to close find bar."
+            FIND_FIELD_FOCUSED_A11Y.as_str()
         };
 
         Some(AccessibilityContent::new(

@@ -79,8 +79,12 @@ impl std::fmt::Display for ChipValue {
             ChipValue::GitDiffStats(g) => {
                 write!(
                     f,
-                    "{} • +{} -{}",
-                    g.files_changed, g.lines_added, g.lines_removed
+                    "{}",
+                    crate::tr!("context_chips", "git-diff-stats",
+                        files = g.files_changed as usize,
+                        added = g.lines_added as usize,
+                        removed = g.lines_removed as usize
+                    )
                 )
             }
         }
@@ -190,7 +194,7 @@ impl ContextChipKind {
     pub fn to_chip(&self) -> Option<ContextChip> {
         match self {
             Self::WorkingDirectory => Some(ContextChip::builtin_with_runtime_policy(
-                "Working Directory",
+                crate::tr!("context_chips", "working-directory"),
                 builtins::working_directory,
                 RefreshConfig::OnDemandOnly,
                 ChipRuntimePolicy::new(
@@ -204,7 +208,7 @@ impl ContextChipKind {
                 ),
             )),
             Self::Username => Some(ContextChip::builtin_with_runtime_policy(
-                "User",
+                crate::tr!("context_chips", "user"),
                 builtins::username,
                 RefreshConfig::OnDemandOnly,
                 ChipRuntimePolicy::new(
@@ -215,7 +219,7 @@ impl ContextChipKind {
                 ),
             )),
             Self::Hostname => Some(ContextChip::builtin_with_runtime_policy(
-                "Host",
+                crate::tr!("context_chips", "host"),
                 builtins::hostname,
                 RefreshConfig::OnDemandOnly,
                 ChipRuntimePolicy::new(
@@ -226,7 +230,7 @@ impl ContextChipKind {
                 ),
             )),
             Self::VirtualEnvironment => Some(ContextChip::builtin_with_runtime_policy(
-                "Python Virtualenv",
+                crate::tr!("context_chips", "python-virtualenv"),
                 builtins::virtual_environment,
                 RefreshConfig::OnDemandOnly,
                 ChipRuntimePolicy::new(
@@ -240,7 +244,7 @@ impl ContextChipKind {
                 ),
             )),
             Self::CondaEnvironment => Some(ContextChip::builtin_with_runtime_policy(
-                "Conda Environment",
+                crate::tr!("context_chips", "conda-environment"),
                 builtins::conda_environment,
                 RefreshConfig::OnDemandOnly,
                 ChipRuntimePolicy::new(
@@ -254,7 +258,7 @@ impl ContextChipKind {
                 ),
             )),
             Self::NodeVersion => Some(ContextChip::builtin_with_runtime_policy(
-                "Node.js Version",
+                crate::tr!("context_chips", "node-version"),
                 builtins::node_version,
                 RefreshConfig::OnDemandOnly,
                 ChipRuntimePolicy::new(
@@ -268,17 +272,17 @@ impl ContextChipKind {
                 ),
             )),
             Self::Date => Some(ContextChip::builtin(
-                "Date",
+                crate::tr!("context_chips", "date"),
                 builtins::date,
                 DATE_REFRESH_CONFIG,
             )),
             Self::Time12 => Some(ContextChip::builtin(
-                "Time (12-hour format)",
+                crate::tr!("context_chips", "time-12"),
                 builtins::time12,
                 TIME_REFRESH_CONFIG,
             )),
             Self::Time24 => Some(ContextChip::builtin(
-                "Time (24-hour format)",
+                crate::tr!("context_chips", "time-24"),
                 builtins::time24,
                 TIME_REFRESH_CONFIG,
             )),
@@ -287,14 +291,14 @@ impl ContextChipKind {
                 None
             }
             Self::ShellGitBranch => Some(ContextChip::shell_builtin(
-                "Git Branch",
+                crate::tr!("context_chips", "git-branch"),
                 builtins::shell_git_branch(),
                 Some(builtins::shell_other_git_branches()),
                 GIT_REFRESH_CONFIG,
             )),
             Self::GitDiffStats => Some(
                 ContextChip::shell_builtin(
-                    "Git Diff Stats",
+                    crate::tr!("context_chips", "git-diff-stats"),
                     builtins::shell_git_line_changes(),
                     None,
                     GIT_REFRESH_CONFIG,
@@ -319,7 +323,7 @@ impl ContextChipKind {
                 .with_suppress_on_failure()
                 .with_invalidate_on_commands(["git", "gh", "gt"]);
                 Some(ContextChip::shell_builtin_with_runtime_policy(
-                    "GitHub Pull Request",
+                    crate::tr!("context_chips", "github-pull-request"),
                     generator,
                     None,
                     GIT_REFRESH_CONFIG,
@@ -327,35 +331,35 @@ impl ContextChipKind {
                 ))
             }
             Self::KubernetesContext => Some(ContextChip::shell_builtin(
-                "Kubernetes Context",
+                crate::tr!("context_chips", "kubernetes-context"),
                 builtins::kubernetes_current_context(),
                 None,
                 RefreshConfig::OnDemandOnly,
             )),
             Self::SvnBranch => Some(ContextChip::shell_builtin(
-                "Svn Branch",
+                crate::tr!("context_chips", "svn-branch"),
                 builtins::svn_branch_context(),
                 None,
                 RefreshConfig::OnDemandOnly,
             )),
             Self::SvnDirtyItems => Some(ContextChip::shell_builtin(
-                "Svn Uncommitted File Count",
+                crate::tr!("context_chips", "svn-uncommitted-file-count"),
                 builtins::svn_dirty_items(),
                 None,
                 RefreshConfig::OnDemandOnly,
             )),
             Self::Ssh => Some(ContextChip::builtin(
-                "Remote Login",
+                crate::tr!("context_chips", "remote-login"),
                 builtins::ssh_session,
                 RefreshConfig::OnDemandOnly,
             )),
             Self::Subshell => Some(ContextChip::builtin(
-                "subshell",
+                crate::tr!("context_chips", "subshell"),
                 builtins::subshell,
                 RefreshConfig::OnDemandOnly,
             )),
             Self::AgentPlanAndTodoList => Some(ContextChip::builtin(
-                "Agent Plan and Todo List",
+                crate::tr!("context_chips", "agent-plan-and-todo-list"),
                 |_| Some(ChipValue::Text(String::new())),
                 RefreshConfig::OnDemandOnly,
             )),
@@ -406,7 +410,7 @@ impl ContextChipKind {
             Self::SvnDirtyItems => ChipValue::Text("3".to_string()),
             Self::Ssh => ChipValue::Text("alice@127.0.0.1".to_string()),
             Self::Subshell => ChipValue::Text("bash".to_string()),
-            Self::AgentPlanAndTodoList => ChipValue::Text("Plan and Todo List".to_string()),
+            Self::AgentPlanAndTodoList => ChipValue::Text(crate::tr!("context_chips", "agent-plan-and-todo-list")),
         }
     }
 
@@ -466,11 +470,11 @@ impl ContextChipKind {
     pub fn display_value(&self, value: &ChipValue) -> String {
         let text = value.to_string();
         match self {
-            Self::ShellGitBranch => format!("git:({text})"),
+            Self::ShellGitBranch => crate::tr!("context_chips", "git-prefix", value = text),
             Self::GithubPullRequest => github_pr_display_text_from_url(&text).unwrap_or(text),
-            Self::KubernetesContext => format!("⎈ {text}"),
-            Self::SvnBranch => format!("svn:({text})"),
-            Self::SvnDirtyItems => format!("±{text}"),
+            Self::KubernetesContext => crate::tr!("context_chips", "k8s-prefix", value = text),
+            Self::SvnBranch => crate::tr!("context_chips", "svn-prefix", value = text),
+            Self::SvnDirtyItems => crate::tr!("context_chips", "svn-dirty-prefix", value = text),
             _ => text,
         }
     }

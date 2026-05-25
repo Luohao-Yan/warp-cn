@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use self::telemetry::SettingsTelemetryEvent;
 use crate::pane_group::focus_state::PaneFocusHandle;
 use crate::server::telemetry::MCPServerCollectionPaneEntrypoint;
@@ -73,6 +75,11 @@ use warpui::{
     Action, AppContext, Entity, ModelHandle, SingletonEntity, TypedActionView, UpdateView as _,
     View, ViewContext, ViewHandle,
 };
+
+static SETTINGS_NO_MATCH: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-no-match"));
+static SETTINGS_NO_MATCH_HINT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-no-match-hint"));
 
 mod about_page;
 mod admin_actions;
@@ -676,8 +683,8 @@ impl<T: Action + Clone> ToggleSettingActionPair<T> {
 
         ToggleSettingActionPair {
             descriptions: SettingActionPairDescriptions {
-                enable: format!("Enable {description_suffix}"),
-                disable: format!("Disable {description_suffix}"),
+                enable: crate::tr!("settings", "enable-feature", description = description_suffix.clone()),
+                disable: crate::tr!("settings", "disable-feature", description = description_suffix.clone()),
             },
             contexts: SettingActionPairContexts {
                 enable_predicate: context_prefix.to_owned() & !id!(context_boolean_flag),
@@ -1025,7 +1032,7 @@ pub struct SettingsView {
 
 impl SettingsView {
     pub fn new(page: Option<SettingsSection>, ctx: &mut ViewContext<Self>) -> Self {
-        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new("Settings"));
+        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(crate::tr!("common", "common-settings-label")));
 
         let global_resource_handles = GlobalResourceHandlesProvider::as_ref(ctx).get().clone();
         // Main settings page with accounts info
@@ -1167,7 +1174,7 @@ impl SettingsView {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("Search", ctx);
+            editor.set_placeholder_text(&crate::tr!("settings", "search-placeholder"), ctx);
             editor
         });
 
@@ -1525,29 +1532,33 @@ impl SettingsView {
         let mut items = vec![];
 
         if ContextFlag::CreateNewSession.is_enabled() {
+            let split_right = crate::tr!("code", "split-pane-right");
+            let split_left = crate::tr!("code", "split-pane-left");
+            let split_down = crate::tr!("code", "split-pane-down");
+            let split_up = crate::tr!("code", "split-pane-up");
             items.extend(vec![
-                MenuItemFields::new("Split pane right")
+                MenuItemFields::new(&split_right)
                     .with_on_select_action(SettingsAction::Split(Direction::Right))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_right",
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("Split pane left")
+                MenuItemFields::new(&split_left)
                     .with_on_select_action(SettingsAction::Split(Direction::Left))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_left",
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("Split pane down")
+                MenuItemFields::new(&split_down)
                     .with_on_select_action(SettingsAction::Split(Direction::Down))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_down",
                         ctx,
                     ))
                     .into_item(),
-                MenuItemFields::new("Split pane up")
+                MenuItemFields::new(&split_up)
                     .with_on_select_action(SettingsAction::Split(Direction::Up))
                     .with_key_shortcut_label(keybinding_name_to_display_string(
                         "pane_group:add_up",
@@ -1575,8 +1586,9 @@ impl SettingsView {
                     .into_item(),
             );
 
+            let close_pane = crate::tr!("code", "close-pane");
             items.push(
-                MenuItemFields::new("Close pane")
+                MenuItemFields::new(&close_pane)
                     .with_on_select_action(SettingsAction::Close)
                     .with_key_shortcut_label(
                         custom_tag_to_keystroke(CustomAction::CloseCurrentSession.into())
@@ -2253,7 +2265,7 @@ impl SettingsView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_children([
                         Text::new(
-                            "No settings match your search.",
+                            &*SETTINGS_NO_MATCH,
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -2261,7 +2273,7 @@ impl SettingsView {
                         .with_color(theme.sub_text_color(theme.background()).into_solid())
                         .finish(),
                         Text::new(
-                            "You may want to try using different keywords or checking for any possible typos.",
+                            &*SETTINGS_NO_MATCH_HINT,
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -2680,7 +2692,7 @@ impl BackingView for SettingsView {
         _ctx: &view::HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> view::HeaderContent {
-        view::HeaderContent::simple("Settings")
+        view::HeaderContent::simple(&crate::tr!("settings", "settings-header"))
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, _ctx: &mut ViewContext<Self>) {

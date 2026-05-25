@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::{
     auth::AuthStateProvider,
     changelog_model::ChangelogModel,
@@ -40,6 +42,9 @@ use super::{
 };
 
 const SEND_SVG_PATH: &str = "bundled/svg/send.svg";
+
+static INVITE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "invite-a-friend-to-warp"));
+static MARK_READ_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "mark-all-as-read"));
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -394,7 +399,7 @@ impl ResourceCenterMainView {
                 .with_text_and_icon_label(
                     TextAndIcon::new(
                         TextAndIconAlignment::IconFirst,
-                        "Invite a friend to Warp",
+                        &*INVITE_LABEL,
                         Icon::new(SEND_SVG_PATH, appearance.theme().accent()),
                         MainAxisSize::Max,
                         MainAxisAlignment::Center,
@@ -433,7 +438,7 @@ impl ResourceCenterMainView {
 
                     appearance
                         .ui_builder()
-                        .wrappable_text("Mark all as read", false)
+                        .wrappable_text(&*MARK_READ_LABEL, false)
                         .with_style(style)
                         .build()
                         .finish()

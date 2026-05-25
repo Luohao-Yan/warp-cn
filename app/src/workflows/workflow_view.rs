@@ -6,7 +6,7 @@ use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use std::{
     collections::{HashMap, HashSet},
-    sync::Arc,
+    sync::{Arc, LazyLock},
 };
 use string_offset::CharOffset;
 use syntax_highlightable::SyntaxHighlightable;
@@ -123,7 +123,7 @@ pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::id;
     app.register_editable_bindings([EditableBinding::new(
         "workflowview:save",
-        "Save workflow",
+        crate::tr!("workflows", "workflows-save-workflow"),
         WorkflowAction::Save,
     )
     .with_context_predicate(id!("WorkflowView"))
@@ -131,7 +131,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "Close Workflow",
-        crate::tr!("common", "common-close-label"),
+        crate::tr!("workflows", "workflows-close-workflow"),
         WorkflowAction::Close,
     )
     .with_custom_action(CustomAction::CloseCurrentSession)
@@ -145,10 +145,10 @@ const WORKFLOW_PARAMETER_HIGHLIGHT_COLOR: u32 = 0x42C0FA4D;
 const MAX_ELEMENT_WIDTH: f32 = 800.;
 
 const SCROLLBAR_WIDTH: ScrollbarWidth = ScrollbarWidth::Auto;
-const TITLE_PLACEHOLDER_TEXT: &str = "Add a title";
-const DESCRIPTION_PLACEHOLDER_TEXT: &str = "Add a description";
-const COMMAND_PLACEHOLDER_TEXT: &str = "echo \"Hello {{your_name}}\" # insert arguments with curly braces\n# enter a single-line command or an entire shell script";
-const AGENT_MODE_QUERY_PLACEHOLDER_TEXT: &str = "Enter your prompt here... (e.g., 'Create a function to sort an array of objects by date' or 'Help me debug this React component').";
+static TITLE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-title-placeholder"));
+static DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-description-placeholder"));
+static COMMAND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-command-placeholder"));
+static AGENT_MODE_QUERY_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-agent-mode-query-placeholder"));
 const DESCRIPTION_MARGIN_TOP: f32 = 10.;
 
 const CORE_HORIZONATAL_MARGIN: f32 = 24.;
@@ -170,26 +170,23 @@ const HORIZONTAL_TEXT_INPUT_PADDING: f32 = 10.;
 
 const EDITOR_FONT_SIZE: f32 = 14.;
 
-const CREATE_BUTTON_TEXT: &str = "Create";
-const SAVE_BUTTON_TEXT: &str = "Update";
-const CANCEL_BUTTON_TEXT: &str = "Cancel";
+static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-create-label"));
+static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-update-label"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BUTTON_HEIGHT: f32 = 32.;
 
 const AI_ASSIST_BUTTON_SIZE: f32 = 92.;
-const AI_ASSIST_BUTTON_TEXT: &str = "Autofill";
-const AI_ASSIST_LOADING_TEXT: &str = "Loading";
+static AI_ASSIST_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-autofill"));
+static AI_ASSIST_LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-loading"));
 
-const ALIAS_HELP_TEXT: &str = "Aliases allow you to create short strings to execute workflows. Each alias can have different argument values and environment variables, and aliases are personal to you.";
+static ALIAS_HELP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-alias-help"));
 
-const RUN_ON_DESKTOP_BUTTON_TEXT: &str = "Run in Warp";
+static RUN_ON_DESKTOP_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-run-in-warp"));
 const RUN_ON_DESKTOP_BUTTON_WIDTH: f32 = 108.;
 
-const UNSAVED_CHANGES_TEXT: &str = "You have unsaved changes.";
-const KEEP_EDITING_TEXT: &str = "Keep editing";
-const DISCARD_CHANGES_TEXT: &str = "Discard changes";
 const DIALOG_WIDTH: f32 = 460.;
 const MODAL_HORIZONTAL_MARGIN: f32 = 28.;
 
@@ -350,7 +347,7 @@ impl WorkflowView {
 
 impl WorkflowView {
     pub fn new_in_pane(ctx: &mut ViewContext<Self>) -> Self {
-        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new("Untitled"));
+        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(&crate::tr!("common", "common-untitled-label")));
 
         Self::new_internal(ctx, ContainerConfiguration::Pane(pane_configuration))
     }
@@ -372,7 +369,7 @@ impl WorkflowView {
             ctx,
             Some(header_font_size),
             Some(ui_font_family),
-            Some(TITLE_PLACEHOLDER_TEXT),
+            Some(&*TITLE_PLACEHOLDER_TEXT),
             false,
             true,
             true,
@@ -382,7 +379,7 @@ impl WorkflowView {
             ctx,
             Some(EDITOR_FONT_SIZE),
             Some(ui_font_family),
-            Some(DESCRIPTION_PLACEHOLDER_TEXT),
+            Some(&*DESCRIPTION_PLACEHOLDER_TEXT),
             false,
             false,
             true,
@@ -392,7 +389,7 @@ impl WorkflowView {
             ctx,
             Some(EDITOR_FONT_SIZE),
             Some(monospace_font_family),
-            Some(COMMAND_PLACEHOLDER_TEXT),
+            Some(&*COMMAND_PLACEHOLDER_TEXT),
             true,
             false,
             true,
@@ -402,7 +399,7 @@ impl WorkflowView {
             ctx,
             Some(EDITOR_FONT_SIZE),
             Some(monospace_font_family),
-            Some(COMMAND_PLACEHOLDER_TEXT),
+            Some(&*COMMAND_PLACEHOLDER_TEXT),
             true,
             false,
             true,
@@ -502,7 +499,7 @@ impl WorkflowView {
         self.is_for_agent_mode = is_for_agent_mode;
         if is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
                 editor.set_font_family(Appearance::as_ref(ctx).ui_font_family(), ctx);
             });
         }
@@ -525,7 +522,7 @@ impl WorkflowView {
 
         if is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
             });
         }
 
@@ -726,7 +723,7 @@ impl WorkflowView {
         self.is_for_agent_mode = workflow.model().data.is_agent_mode_workflow();
         if self.is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
                 editor.set_font_family(Appearance::as_ref(ctx).ui_font_family(), ctx);
             });
         }
@@ -818,7 +815,7 @@ impl WorkflowView {
 
         if self.is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
             });
         } else {
             self.content_editor_highlight_model
@@ -1593,7 +1590,7 @@ impl WorkflowView {
     fn save_aliases(&mut self, ctx: &mut ViewContext<Self>) {
         if let Err(e) = self.alias_bar.update(ctx, |bar, ctx| bar.save(ctx)) {
             log::error!("Error saving aliases: {e:?}");
-            self.display_error_toast("Error saving aliases".to_string(), ctx);
+            self.display_error_toast(crate::tr!("workflows", "workflows-error-saving-aliases"), ctx);
         }
     }
 
@@ -1603,7 +1600,7 @@ impl WorkflowView {
         // Block saving if secrets are detected in the workflow when secret redaction is enabled.
         if self.workflow_contains_secrets(ctx) {
             self.display_error_toast(
-                "This workflow cannot be saved because it contains secrets".to_string(),
+                crate::tr!("workflows", "workflows-cannot-save-secrets"),
                 ctx,
             );
             return;
@@ -1637,7 +1634,7 @@ impl WorkflowView {
                     id
                 } else {
                     log::error!("No client_id obtained for creating workflow");
-                    self.display_error_toast(String::from("Could not create workflow"), ctx);
+                    self.display_error_toast(crate::tr!("workflows", "workflows-could-not-create"), ctx);
                     return;
                 };
 
@@ -1748,9 +1745,9 @@ impl WorkflowView {
         crate::workspace::ToastStack::handle(ctx).update(ctx, |stack, ctx| {
             stack.add_ephemeral_toast(
                 DismissibleToast::success(if self.is_for_agent_mode {
-                    "Prompt copied.".to_string()
+                    crate::tr!("workflows", "workflows-prompt-copied")
                 } else {
-                    "Command copied.".to_string()
+                    crate::tr!("workflows", "workflows-command-copied")
                 }),
                 window_id,
                 ctx,
@@ -1938,7 +1935,7 @@ impl WorkflowView {
             WorkflowViewMode::Edit => {
                 let mode_text = appearance
                     .ui_builder()
-                    .span("Editing")
+                    .span(crate::tr!("workflows", "workflows-editing"))
                     .with_style(base_text_styles)
                     .build();
                 let edit_button = accent_icon_button(
@@ -1953,7 +1950,7 @@ impl WorkflowView {
             WorkflowViewMode::View => {
                 let mode_text = appearance
                     .ui_builder()
-                    .span("Viewing")
+                    .span(crate::tr!("workflows", "workflows-viewing"))
                     .with_style(base_text_styles)
                     .build();
                 let edit_button = icon_button(
@@ -1973,7 +1970,7 @@ impl WorkflowView {
                 let ui_builder = appearance.ui_builder().clone();
                 edit_button = edit_button.with_tooltip(move || {
                     ui_builder
-                        .tool_tip("Sign in to edit".to_string())
+                        .tool_tip(crate::tr!("workflows", "workflows-sign-in-to-edit"))
                         .build()
                         .finish()
                 });
@@ -2190,7 +2187,7 @@ impl WorkflowView {
 
     fn render_section_header(
         &self,
-        text: &'static str,
+        text: &str,
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         Container::new(
@@ -2260,7 +2257,7 @@ impl WorkflowView {
             .with_children([
                 Flex::row()
                     .with_children([
-                        self.render_section_header("Aliases", appearance),
+                        self.render_section_header(&crate::tr!("workflows", "workflows-aliases-label"), appearance),
                         Container::new(help_icon).with_margin_left(4.).finish(),
                     ])
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -2287,7 +2284,7 @@ impl WorkflowView {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(KEEP_EDITING_TEXT.into())
+            .with_text_label(crate::tr!("drive", "workflow-keep-editing").into())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -2307,7 +2304,7 @@ impl WorkflowView {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(DISCARD_CHANGES_TEXT.into())
+            .with_text_label(crate::tr!("drive", "workflow-discard").into())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -2315,9 +2312,10 @@ impl WorkflowView {
             })
             .finish();
 
+        let unsaved_changes_text = crate::tr!("drive", "workflow-unsaved");
         Container::new(
             Dialog::new(
-                UNSAVED_CHANGES_TEXT.to_string(),
+                unsaved_changes_text,
                 None,
                 dialog_styles(appearance),
             )
@@ -2385,8 +2383,8 @@ impl WorkflowView {
         let mut save_button = self.build_footer_button(
             ButtonVariant::Accent,
             match self.workflow_view_mode {
-                WorkflowViewMode::Create => CREATE_BUTTON_TEXT.into(),
-                WorkflowViewMode::Edit | WorkflowViewMode::View => SAVE_BUTTON_TEXT.into(),
+                WorkflowViewMode::Create => CREATE_BUTTON_TEXT.clone(),
+                WorkflowViewMode::Edit | WorkflowViewMode::View => SAVE_BUTTON_TEXT.clone(),
             },
             None,
             self.ui_state_handles.save_workflow_state.clone(),
@@ -2405,7 +2403,7 @@ impl WorkflowView {
 
         let mut cancel_button = self.build_footer_button(
             ButtonVariant::Secondary,
-            CANCEL_BUTTON_TEXT.into(),
+            CANCEL_BUTTON_TEXT.clone(),
             None,
             self.ui_state_handles.cancel_mouse_state.clone(),
             appearance,
@@ -2465,7 +2463,7 @@ impl WorkflowView {
                     .finish();
 
                 let button_with_tool_tip = appearance.ui_builder().tool_tip_on_element(
-                    "Generate a title, descriptions, or parameters with Warp AI".to_string(),
+                    crate::tr!("workflows", "workflows-generate-with-ai"),
                     self.ui_state_handles.ai_assist_tool_tip.clone(),
                     rendered_button,
                     ParentAnchor::TopMiddle,
@@ -2669,7 +2667,7 @@ impl WorkflowView {
                                         pane.display_upgrade_error(Some(team.uid), current_user_id, ctx);
                                     } else {
                                         pane.display_error_toast(
-                                            "Looks like you're out of AI credits. Contact a team admin to upgrade for more credits.".to_string(),
+                                            crate::tr!("workflows", "workflows-out-of-credits-team"),
                                             ctx,
                                         );
                                     }
@@ -2732,7 +2730,7 @@ impl WorkflowView {
 
         crate::workspace::ToastStack::handle(ctx).update(ctx, |stack, ctx| {
             stack.add_ephemeral_toast(
-                DismissibleToast::error("Looks like you're out of AI credits.".into())
+                DismissibleToast::error(crate::tr!("workflows", "workflows-out-of-credits"))
                     .with_link(toast_link),
                 window_id,
                 ctx,
@@ -2831,9 +2829,9 @@ impl WorkflowView {
 
         let appearance = Appearance::as_ref(app);
         let text = if deleted {
-            "You no longer have access to this workflow"
+            crate::tr!("workflows", "workflows-no-longer-access")
         } else {
-            "Workflow moved to trash"
+            crate::tr!("workflows", "workflows-moved-to-trash")
         };
 
         let mut stack = Stack::new();
@@ -2886,12 +2884,13 @@ impl WorkflowView {
                             self.ui_state_handles.restore_from_trash_button.clone(),
                         )
                         .with_tooltip(move || {
+                            let tooltip = crate::tr!("drive", "restore-workflow-tooltip");
                             ui_builder
-                                .tool_tip("Restore workflow from trash".to_string())
+                                .tool_tip(tooltip)
                                 .build()
                                 .finish()
                         })
-                        .with_text_label("Restore".to_string())
+                        .with_text_label(crate::tr!("drive", "restore"))
                         .build()
                         .on_click(|ctx, _, _| ctx.dispatch_typed_action(WorkflowAction::Untrash))
                         .finish(),
@@ -3200,8 +3199,9 @@ impl BackingView for WorkflowView {
 
         // Add "Copy Link" to menu
         if let Some(link) = self.workflow_link(ctx) {
+            let copy_link = crate::tr!("drive", "copy-link");
             menu_items.push(
-                MenuItemFields::new("Copy link")
+                MenuItemFields::new(&copy_link)
                     .with_on_select_action(WorkflowAction::CopyLink(link))
                     .with_icon(Icon::Link)
                     .into_item(),
@@ -3211,8 +3211,9 @@ impl BackingView for WorkflowView {
         if self.can_open_on_desktop(ctx) {
             if let Some(link) = self.workflow_link(ctx) {
                 if let Ok(url) = Url::parse(&link) {
+                    let open_on_desktop = crate::tr!("drive", "open-on-desktop");
                     menu_items.push(
-                        MenuItemFields::new("Open on Desktop")
+                        MenuItemFields::new(&open_on_desktop)
                             .with_on_select_action(WorkflowAction::OpenLinkOnDesktop(url))
                             .with_icon(Icon::Laptop)
                             .into_item(),
@@ -3225,8 +3226,9 @@ impl BackingView for WorkflowView {
 
         // Add "Duplicate" to menu
         if space != Some(Space::Shared) {
+            let duplicate = crate::tr!("drive", "duplicate");
             menu_items.push(
-                MenuItemFields::new("Duplicate")
+                MenuItemFields::new(&duplicate)
                     .with_on_select_action(WorkflowAction::Duplicate)
                     .with_icon(Icon::Duplicate)
                     .into_item(),
@@ -3238,8 +3240,9 @@ impl BackingView for WorkflowView {
         if self.is_online(ctx)
             && (!FeatureFlag::SharedWithMe.is_enabled() || access_level.can_trash())
         {
+            let trash = crate::tr!("drive", "trash");
             menu_items.push(
-                MenuItemFields::new("Trash")
+                MenuItemFields::new(&trash)
                     .with_on_select_action(WorkflowAction::Trash)
                     .with_icon(Icon::Trash)
                     .into_item(),

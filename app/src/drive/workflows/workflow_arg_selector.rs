@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use std::sync::LazyLock;
 use std::{collections::HashMap, rc::Rc};
 use strum::IntoEnumIterator;
 use warp_core::ui::{appearance::Appearance, theme::Fill};
@@ -45,7 +46,7 @@ use strum_macros::{EnumIter, IntoStaticStr};
 
 use super::enum_creation_dialog::WorkflowEnumData;
 
-const ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: &str = "Default value (optional)";
+static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-default-value-placeholder"));
 const ARGUMENT_EDITOR_FONT_SIZE: f32 = 14.;
 const DROPDOWN_PADDING: f32 = 8.;
 const DROPDOWN_BORDER_RADIUS: f32 = 6.;
@@ -807,7 +808,7 @@ impl WorkflowArgSelector {
 
         let mut menu = Hoverable::new(self.enum_menu_mouse_state.clone(), |state| {
             let button = Text::new_inline(
-                "New".to_string(),
+                crate::tr!("common", "common-new-label").to_string(),
                 appearance.ui_font_family(),
                 ARGUMENT_EDITOR_FONT_SIZE,
             )

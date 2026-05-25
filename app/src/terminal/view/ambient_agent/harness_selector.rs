@@ -4,6 +4,8 @@
 
 use std::sync::Arc;
 
+use std::sync::LazyLock;
+
 use pathfinder_geometry::vector::vec2f;
 use warpui::{
     elements::{
@@ -31,6 +33,12 @@ use crate::terminal::input::{MenuPositioning, MenuPositioningProvider};
 use crate::terminal::view::ambient_agent::AmbientAgentViewModel;
 use crate::view_components::action_button::{ActionButton, ActionButtonTheme, ButtonSize};
 
+/// Tooltip string for the closed-state button.
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-agent-harness-tooltip"));
+
+/// Label rendered at the top of the dropdown.
+static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-agent-harness-header"));
+
 /// Font size for the header row (Figma: 12px).
 const HEADER_FONT_SIZE: f32 = 12.;
 
@@ -54,12 +62,6 @@ const MENU_WIDTH: f32 = 208.;
 /// Leading-icon size for harness item rows in logical pixels. Slightly larger
 /// than the default `ui_font_size()` to give the logos more visual presence.
 const ITEM_ICON_SIZE: f32 = 16.;
-
-/// Tooltip string for the closed-state button.
-const BUTTON_TOOLTIP: &str = "Agent harness";
-
-/// Label rendered at the top of the dropdown.
-const MENU_HEADER_LABEL: &str = "Agent harness";
 
 /// Actions dispatched by the [`HarnessSelector`].
 #[derive(Clone, Debug, PartialEq)]
@@ -97,7 +99,7 @@ impl HarnessSelector {
                 .with_size(ButtonSize::AgentInputButton)
                 .with_menu(true)
                 .with_disabled_theme(AgentInputButtonTheme)
-                .with_tooltip(BUTTON_TOOLTIP)
+                .with_tooltip(BUTTON_TOOLTIP.as_str())
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(HarnessSelectorAction::ToggleMenu);
                 })
@@ -227,9 +229,9 @@ impl HarnessSelector {
             button.set_disabled(is_locked_to_oz, ctx);
             button.set_tooltip(
                 Some(if is_locked_to_oz {
-                    "This conversation is with the Warp Agent, so the cloud handoff will also use Warp"
+                    crate::tr!("agent_cloud", "agent-cloud-warp-handoff-tooltip")
                 } else {
-                    BUTTON_TOOLTIP
+                    BUTTON_TOOLTIP.clone()
                 }),
                 ctx,
             );
@@ -285,7 +287,7 @@ fn build_menu_items(
     disabled_text_color: pathfinder_color::ColorU,
 ) -> Vec<MenuItem<HarnessSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(MENU_HEADER_LABEL)
+        fields: MenuItemFields::new(MENU_HEADER_LABEL.as_str())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(HEADER_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
@@ -314,7 +316,7 @@ fn build_menu_items(
             fields = fields
                 .with_disabled(true)
                 .with_override_text_color(disabled_text_color)
-                .with_tooltip("Disabled by your administrator");
+                .with_tooltip(&crate::tr!("agent_cloud", "agent-cloud-disabled-by-admin"));
         }
         items.push(MenuItem::Item(fields));
     }

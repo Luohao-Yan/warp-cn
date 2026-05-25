@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use pathfinder_geometry::vector::vec2f;
 use warp_cli::agent::Harness;
@@ -46,15 +47,13 @@ const SIDECAR_HORIZONTAL_GAP: f32 = 4.;
 
 const MENU_MAX_HEIGHT: f32 = 280.;
 
-const BUTTON_TOOLTIP: &str = "API key";
-
-const MENU_HEADER_LABEL: &str = "API key";
-
-const SIDECAR_HEADER_LABEL: &str = "Choose a type";
-
-const NO_SECRET_LABEL: &str = "No API key";
-
-const NEW_ITEM_LABEL: &str = "New";
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-api-key-tooltip"));
+static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-api-key-header"));
+static SIDECAR_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-choose-type"));
+static NO_SECRET_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-no-secret"));
+static LOADING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-loading"));
+static UNABLE_TO_LOAD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-unable-to-load-secrets"));
+static NEW_ITEM_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-new"));
 
 const MAIN_MENU_SAVE_POSITION_ID: &str = "auth_secret_selector_main_menu";
 
@@ -89,11 +88,11 @@ impl AuthSecretSelector {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(NO_SECRET_LABEL, NakedHeaderButtonTheme)
+            ActionButton::new(NO_SECRET_LABEL.clone(), NakedHeaderButtonTheme)
                 .with_size(ButtonSize::AgentInputButton)
                 .with_menu(true)
                 .with_icon(Icon::Key)
-                .with_tooltip(BUTTON_TOOLTIP)
+                .with_tooltip(BUTTON_TOOLTIP.clone())
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AuthSecretSelectorAction::ToggleMenu);
                 })
@@ -271,7 +270,7 @@ impl AuthSecretSelector {
                 .get(hovered_index)
                 .map(|item| {
                     matches!(item,
-                    MenuItem::Item(fields) if fields.label() == NEW_ITEM_LABEL)
+                    MenuItem::Item(fields) if fields.label() == NEW_ITEM_LABEL.as_str())
                 })
                 .unwrap_or(false)
         });
@@ -291,7 +290,7 @@ impl AuthSecretSelector {
             .as_ref(ctx)
             .selected_harness_auth_secret_name()
             .map(|s| s.to_string())
-            .unwrap_or_else(|| NO_SECRET_LABEL.to_string());
+            .unwrap_or_else(|| NO_SECRET_LABEL.clone());
         self.button.update(ctx, |button, ctx| {
             button.set_label(label, ctx);
         });
@@ -395,7 +394,7 @@ fn build_main_menu_items(
     header_text_color: pathfinder_color::ColorU,
 ) -> Vec<MenuItem<AuthSecretSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(MENU_HEADER_LABEL)
+        fields: MenuItemFields::new(MENU_HEADER_LABEL.as_str())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(6., MENU_HORIZONTAL_PADDING)
@@ -407,7 +406,7 @@ fn build_main_menu_items(
     let mut items = vec![header];
 
     items.push(MenuItem::Item(
-        MenuItemFields::new("No secret")
+        MenuItemFields::new(NO_SECRET_LABEL.as_str())
             .with_font_size_override(ITEM_FONT_SIZE)
             .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
             .with_override_hover_background_color(hover_background)
@@ -429,7 +428,7 @@ fn build_main_menu_items(
         }
         AuthSecretFetchState::NotFetched | AuthSecretFetchState::Loading => {
             items.push(MenuItem::Item(
-                MenuItemFields::new("Loading…")
+                MenuItemFields::new(LOADING_LABEL.as_str())
                     .with_font_size_override(ITEM_FONT_SIZE)
                     .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
                     .with_disabled(true)
@@ -438,7 +437,7 @@ fn build_main_menu_items(
         }
         AuthSecretFetchState::Failed(_) => {
             items.push(MenuItem::Item(
-                MenuItemFields::new("Unable to load secrets")
+                MenuItemFields::new(UNABLE_TO_LOAD_LABEL.as_str())
                     .with_font_size_override(ITEM_FONT_SIZE)
                     .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
                     .with_disabled(true)
@@ -448,7 +447,7 @@ fn build_main_menu_items(
     }
 
     items.push(MenuItem::Item(
-        MenuItemFields::new(NEW_ITEM_LABEL)
+        MenuItemFields::new(NEW_ITEM_LABEL.as_str())
             .with_font_size_override(ITEM_FONT_SIZE)
             .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
             .with_override_hover_background_color(hover_background)
@@ -466,7 +465,7 @@ fn build_sidecar_items(
     header_text_color: pathfinder_color::ColorU,
 ) -> Vec<MenuItem<AuthSecretSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(SIDECAR_HEADER_LABEL)
+        fields: MenuItemFields::new(SIDECAR_HEADER_LABEL.as_str())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(6., MENU_HORIZONTAL_PADDING)

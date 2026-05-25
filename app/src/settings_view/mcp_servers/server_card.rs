@@ -234,7 +234,7 @@ impl From<ServerCardStatus> for ServerCardOptions {
                     indicator_type: StatusElementTypes::Circle,
                     color: StatusColor::Neutral,
                 }),
-                status_line: Some("Offline".to_string()),
+                status_line: Some(crate::tr!("settings", "mcp-offline")),
                 background: Background::Filled,
                 full_card_clickable: false,
             },
@@ -254,7 +254,7 @@ impl From<ServerCardStatus> for ServerCardOptions {
                     indicator_type: StatusElementTypes::Circle,
                     color: StatusColor::Yellow,
                 }),
-                status_line: Some("Starting server...".to_string()),
+                status_line: Some(crate::tr!("settings", "mcp-starting")),
                 background: Background::Filled,
                 full_card_clickable: false,
             },
@@ -274,7 +274,7 @@ impl From<ServerCardStatus> for ServerCardOptions {
                     indicator_type: StatusElementTypes::Circle,
                     color: StatusColor::Yellow,
                 }),
-                status_line: Some("Authenticating...".to_string()),
+                status_line: Some(crate::tr!("settings", "mcp-authenticating")),
                 background: Background::Filled,
                 full_card_clickable: false,
             },
@@ -314,7 +314,7 @@ impl From<ServerCardStatus> for ServerCardOptions {
                     indicator_type: StatusElementTypes::Circle,
                     color: StatusColor::Neutral,
                 }),
-                status_line: Some("Shutting down...".to_string()),
+                status_line: Some(crate::tr!("settings", "mcp-shutting-down")),
                 background: Background::Filled,
                 full_card_clickable: false,
             },
@@ -491,7 +491,7 @@ impl ServerCardView {
 
         if tools.is_empty() {
             return Text::new(
-                "No tools available".to_string(),
+                crate::tr!("settings", "mcp-no-tools"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
@@ -513,7 +513,7 @@ impl ServerCardView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_child(
                     Text::new(
-                        format!("{} tools available", tools.len()),
+                        crate::tr!("settings", "settings-mcp-tools-available", count = tools.len()),
                         appearance.ui_font_family(),
                         appearance.ui_font_size(),
                     )
@@ -620,7 +620,7 @@ impl ServerCardView {
             ServerCardItemId::TemplatableMCP(template_uuid) => {
                 let cloud_server = CloudTemplatableMCPServer::get_by_uuid(&template_uuid, app);
                 if let Some(cloud_server) = cloud_server {
-                    lines.push(format!("Template sync id: {}", cloud_server.sync_id()));
+                    lines.push(crate::tr!("settings", "settings-mcp-template-sync-id", sync_id = cloud_server.sync_id().to_string()));
                 }
             }
             ServerCardItemId::TemplatableMCPInstallation(installation_uuid) => {
@@ -630,15 +630,15 @@ impl ServerCardView {
                     let template_uuid = installation.template_uuid();
                     let gallery_uuid = installation.gallery_uuid();
                     let gallery_uuid_text = match gallery_uuid {
-                        Some(uuid) => format!("Gallery Id: {uuid}"),
-                        None => "Gallery Id: None".to_string(),
+                        Some(uuid) => crate::tr!("settings", "settings-mcp-gallery-id", uuid = uuid.to_string()),
+                        None => crate::tr!("settings", "settings-mcp-gallery-id", uuid = "None"),
                     };
                     let cloud_server = CloudTemplatableMCPServer::get_by_uuid(&template_uuid, app);
                     let template_sync_id_text = match cloud_server {
                         Some(cloud_server) => {
-                            format!("Template sync id: {}", cloud_server.sync_id())
+                            crate::tr!("settings", "settings-mcp-template-sync-id", sync_id = cloud_server.sync_id().to_string())
                         }
-                        None => "Could not find cloud template".to_string(),
+                        None => crate::tr!("settings", "mcp-no-template"),
                     };
                     lines.push(format!(
                         "{}",
@@ -762,7 +762,7 @@ impl ServerCardView {
                     self.build_icon_button(
                         appearance,
                         Icon::Code1,
-                        "Show logs".to_string(),
+                        crate::tr!("settings", "mcp-show-logs"),
                         self.mouse_handles.show_logs_icon_button.clone(),
                     )
                     .on_click(move |ctx, _, _| {
@@ -777,7 +777,7 @@ impl ServerCardView {
                     self.build_icon_button(
                         appearance,
                         Icon::LogOut,
-                        "Log out".to_string(),
+                        crate::tr!("settings", "mcp-log-out"),
                         self.mouse_handles.logout_icon_button.clone(),
                     )
                     .on_click(move |ctx, _, _| {
@@ -792,7 +792,7 @@ impl ServerCardView {
                     self.build_icon_button(
                         appearance,
                         Icon::Share,
-                        "Share server".to_string(),
+                        crate::tr!("settings", "mcp-share-server"),
                         self.mouse_handles.share_icon_button.clone(),
                     )
                     .on_click(move |ctx, _, _| {
@@ -807,7 +807,7 @@ impl ServerCardView {
                     self.build_icon_button(
                         appearance,
                         Icon::Pencil,
-                        "Edit".to_string(),
+                        crate::tr!("settings", "settings-mcp-edit"),
                         self.mouse_handles.edit_icon_button.clone(),
                     )
                     .on_click(move |ctx, _, _| {
@@ -829,7 +829,7 @@ impl ServerCardView {
                     ButtonVariant::Secondary,
                     self.mouse_handles.view_logs_button.clone(),
                 )
-                .with_centered_text_label("View logs".to_string())
+                .with_centered_text_label(crate::tr!("settings", "mcp-view-logs"))
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(ServerCardAction::ViewLogs(item_id))
@@ -845,7 +845,7 @@ impl ServerCardView {
                     ButtonVariant::Accent,
                     self.mouse_handles.edit_config_button.clone(),
                 )
-                .with_centered_text_label("Edit config".to_string())
+                .with_centered_text_label(crate::tr!("settings", "mcp-edit-config"))
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(ServerCardAction::Edit(item_id));
@@ -861,7 +861,7 @@ impl ServerCardView {
                     ButtonVariant::Accent,
                     self.mouse_handles.setup_button.clone(),
                 )
-                .with_centered_text_label("Set up".to_string())
+                .with_centered_text_label(crate::tr!("settings", "mcp-set-up"))
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(ServerCardAction::Install(item_id));
@@ -909,7 +909,7 @@ impl ServerCardView {
             .build_icon_button(
                 appearance,
                 Icon::Refresh,
-                "Server update available".to_string(),
+                crate::tr!("settings", "mcp-update-available"),
                 self.mouse_handles.update_icon_button.clone(),
             )
             .on_click(move |ctx, _, _| {

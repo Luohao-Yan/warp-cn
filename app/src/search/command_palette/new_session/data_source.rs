@@ -8,6 +8,7 @@ use crate::search::{
     data_source::{Query, QueryResult},
     mixer::{DataSourceRunErrorWrapper, SyncDataSource},
 };
+use std::sync::LazyLock;
 use crate::terminal::available_shells::AvailableShells;
 use fuzzy_match::{match_indices_case_insensitive, FuzzyMatchResult};
 use std::collections::HashMap;
@@ -203,13 +204,13 @@ impl Entity for NewSessionDataSource {
 
 type SearcherAction = <NewSessionDataSource as SyncDataSource>::Action;
 
-const SEARCHER_BASE_STRINGS: [&str; 6] = [
-    "Create New Tab",
-    "Create New Window",
-    "Split Pane Down",
-    "Split Pane Right",
-    "Split Pane Up",
-    "Split Pane Left",
+static SEARCHER_BASE_STRINGS: [LazyLock<String>; 6] = [
+    LazyLock::new(|| crate::tr!("search", "search-new-tab").clone()),
+    LazyLock::new(|| crate::tr!("search", "search-new-window").clone()),
+    LazyLock::new(|| crate::tr!("search", "search-split-down").clone()),
+    LazyLock::new(|| crate::tr!("search", "search-split-right").clone()),
+    LazyLock::new(|| crate::tr!("search", "search-split-up").clone()),
+    LazyLock::new(|| crate::tr!("search", "search-split-left").clone()),
 ];
 
 trait NewSessionSearcher {
@@ -289,7 +290,7 @@ impl NewSessionSearcher for FuzzyNewSessionSearcher {
             .iter()
             .filter_map(|base| {
                 match_indices_case_insensitive(
-                    base.to_lowercase().as_str(),
+                    base.as_str().to_lowercase().as_str(),
                     query_str.to_lowercase().as_str(),
                 )
                 .map(|result| result.score)
@@ -403,7 +404,7 @@ mod full_text_searcher {
             let mut max_match_searcher = BASE_TEXT_SEARCH_SCHEMA
                 .create_async_searcher(MIN_MEMORY_BUDGET, background_executor.clone());
             let max_match_documents = SEARCHER_BASE_STRINGS.iter().map(|base| BaseTextDocument {
-                base_text: base.to_string(),
+                base_text: base.as_str().to_owned(),
             });
             if max_match_searcher
                 .build_index_async(max_match_documents)

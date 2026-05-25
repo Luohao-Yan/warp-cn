@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use ai::skills::{SkillProvider, SkillReference, SkillScope};
 use fuzzy_match::{match_indices_case_insensitive, FuzzyMatchResult};
@@ -24,6 +25,9 @@ use crate::search::result_renderer::ItemHighlightState;
 use crate::search::{SearchItem, SyncDataSource};
 use crate::terminal::cli_agent_sessions::{CLIAgentInputState, CLIAgentSessionsModel};
 use crate::terminal::input::inline_menu::styles as inline_styles;
+
+static TERMINAL_PROJECT_SKILL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-project-skill"));
 use crate::terminal::input::inline_menu::{
     default_navigation_message_items, InlineMenuAction, InlineMenuMessageArgs, InlineMenuType,
 };
@@ -349,7 +353,7 @@ impl SearchItem for SkillSearchItem {
             let badge_text_color =
                 inline_styles::disabled_text_color(theme, background_color.into());
             let badge_text = Text::new_inline(
-                "Project Skill".to_string(),
+                &*TERMINAL_PROJECT_SKILL,
                 appearance.ui_font_family(),
                 badge_font_size,
             )
@@ -402,6 +406,6 @@ impl SearchItem for SkillSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Skill: {}", self.skill_name)
+        crate::tr!("terminal", "terminal-search-skill", name = self.skill_name.clone())
     }
 }

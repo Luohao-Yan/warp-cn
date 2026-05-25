@@ -4001,11 +4001,11 @@ pub enum ConversationStatus {
 impl std::fmt::Display for ConversationStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ConversationStatus::InProgress => write!(f, "In progress"),
-            ConversationStatus::Success => write!(f, "Done"),
-            ConversationStatus::Error => write!(f, "Error"),
-            ConversationStatus::Cancelled => write!(f, "Cancelled"),
-            ConversationStatus::Blocked { .. } => write!(f, "Blocked"),
+            ConversationStatus::InProgress => write!(f, "{}", crate::tr!("common", "common-status-in-progress")),
+            ConversationStatus::Success => write!(f, "{}", crate::tr!("common", "common-status-done")),
+            ConversationStatus::Error => write!(f, "{}", crate::tr!("common", "common-error-label")),
+            ConversationStatus::Cancelled => write!(f, "{}", crate::tr!("common", "common-status-cancelled")),
+            ConversationStatus::Blocked { .. } => write!(f, "{}", crate::tr!("common", "common-status-blocked")),
         }
     }
 }

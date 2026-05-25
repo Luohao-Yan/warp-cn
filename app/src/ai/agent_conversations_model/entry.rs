@@ -329,12 +329,12 @@ fn task_session_status(task: &AmbientAgentTask) -> SessionStatus {
 
 fn task_run_time(task: &AmbientAgentTask) -> Option<String> {
     let Some(duration) = task.run_time() else {
-        return Some("Not started".to_string());
+        return Some(crate::tr!("ai", "ai-not-started"));
     };
     if duration.num_minutes() < 1 {
-        Some(format!("{} seconds", duration.num_seconds()))
+        Some(crate::tr!("ai_assistant", "ai-assistant-seconds", count = duration.num_seconds()))
     } else {
-        Some(format!("{} minutes", duration.num_minutes()))
+        Some(crate::tr!("ai_assistant", "ai-assistant-minutes", count = duration.num_minutes()))
     }
 }
 

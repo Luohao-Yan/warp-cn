@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::appearance::Appearance;
 use warpui::{
@@ -51,11 +53,9 @@ impl Entity for OnboardingDriveSharingBlock {
     type Event = ();
 }
 
-const TITLE_TEXT: &str = "Sharing in Warp Drive";
-const BODY_TEXT: &[&str] = &[
-    "You can now share drive objects, in Warp or on the web, with anyone - Warp user or not. Click Share in the Warp Drive menu or the pane header to share via link or email.",
-    "You’ll be able to modify the access permissions any time.",
-];
+static TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-sharing-in-warp-drive"));
+static BODY_TEXT_P1: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-drive-sharing-body-1"));
+static BODY_TEXT_P2: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-drive-sharing-body-2"));
 
 const BLOCK_PADDING: f32 = 16.;
 const BUTTON_WIDTH: f32 = 100.;
@@ -73,7 +73,7 @@ impl View for OnboardingDriveSharingBlock {
         let font_size = appearance.monospace_font_size();
 
         let header = Container::new(
-            Text::new(TITLE_TEXT, font_family, font_size)
+            Text::new(TITLE_TEXT.as_str(), font_family, font_size)
                 .with_color(appearance.theme().accent().into_solid())
                 .with_style(Properties::default().weight(Weight::Bold))
                 .finish(),
@@ -83,11 +83,11 @@ impl View for OnboardingDriveSharingBlock {
 
         let mut content = Flex::column().with_child(header);
 
-        for paragraph in BODY_TEXT.iter() {
+        for paragraph in [&*BODY_TEXT_P1, &*BODY_TEXT_P2] {
             content.add_child(
                 appearance
                     .ui_builder()
-                    .paragraph(*paragraph)
+                    .paragraph(paragraph)
                     .with_style(UiComponentStyles {
                         font_family_id: Some(font_family),
                         font_size: Some(font_size),
@@ -100,8 +100,8 @@ impl View for OnboardingDriveSharingBlock {
         }
 
         let button_label = match CloudModel::as_ref(app).get_by_uid(&self.object_id.uid()) {
-            Some(object) => format!("Share {}", object.display_name()),
-            None => format!("Share this {}", self.object_id.object_type()),
+            Some(object) => crate::tr!("terminal", "terminal-share-object-name", name = object.display_name().to_string()),
+            None => crate::tr!("terminal", "terminal-share-this-object-type", object_type = self.object_id.object_type().to_string()),
         };
         let object_id = self.object_id;
         let button = appearance

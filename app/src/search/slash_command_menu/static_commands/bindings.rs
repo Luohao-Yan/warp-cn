@@ -31,5 +31,5 @@ pub fn default_binding_for_command(name: &'static str) -> DefaultSlashCommandBin
 }
 
 pub fn binding_description(command: &StaticCommand) -> BindingDescription {
-    BindingDescription::new_preserve_case(format!("Slash command: {}", command.name))
+    BindingDescription::new_preserve_case(crate::tr!("slash_commands", "slash-command-desc", name = command.name))
 }

@@ -22,7 +22,7 @@ impl CloudObjectToastMessage {
             // We should only show toasts for creates initiated by the user, not by the system
             (_, ObjectOperation::Create { initiated_by: InitiatedBy::User }, OperationSuccessType::Success) => {
                 let containing_object_name = object.containing_object_name(app);
-                Some(format!("{object_name} saved to {containing_object_name}"))
+                Some(crate::tr!("cloud_object", "cloud-object-saved-to", object_name = object_name, containing_object_name = containing_object_name))
             }
             // notebooks intentionally do not have an update message, as they are updated
             // as the user types and so toasts would be VERY noisy
@@ -32,75 +32,75 @@ impl CloudObjectToastMessage {
                 OperationSuccessType::Success,
             ) => None,
             (_, ObjectOperation::Update, OperationSuccessType::Success) => {
-                Some(format!("{object_name} updated"))
+                Some(crate::tr!("cloud_object", "cloud-object-updated", object_name = object_name))
             }
             (_, ObjectOperation::MoveToFolder, OperationSuccessType::Success) | (_, ObjectOperation::MoveToDrive, OperationSuccessType::Success) => {
                 let containing_object_name = object.containing_object_name(app);
-                Some(format!("{object_name} moved to {containing_object_name}"))
+                Some(crate::tr!("cloud_object", "cloud-object-moved-to", object_name = object_name, containing_object_name = containing_object_name))
             }
             (_, ObjectOperation::Trash, OperationSuccessType::Success) => {
-                Some(format!("{object_name} trashed"))
+                Some(crate::tr!("cloud_object", "cloud-object-trashed", object_name = object_name))
             }
             (_, ObjectOperation::Untrash, OperationSuccessType::Success) => {
-                Some(format!("{object_name} restored"))
+                Some(crate::tr!("cloud_object", "cloud-object-restored", object_name = object_name))
             }
             (_, ObjectOperation::Leave, OperationSuccessType::Success) => {
-                Some(format!("Left {object_name}"))
+                Some(crate::tr!("cloud_object", "cloud-object-left-name", object_name = object_name))
             }
             (_, ObjectOperation::Create { initiated_by: InitiatedBy::User }, OperationSuccessType::Failure) => {
-                Some(format!("Failed to create {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-create", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::Create { initiated_by: InitiatedBy::User }, OperationSuccessType::Denied(message)) => {
                 Some(message.to_string())
             }
             (_, ObjectOperation::Update, OperationSuccessType::Failure) => {
-                Some(format!("Failed to update {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-update", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::MoveToFolder, OperationSuccessType::Failure) | (_, ObjectOperation::MoveToDrive, OperationSuccessType::Failure) => {
-                Some(format!("Failed to move {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-move", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::Trash, OperationSuccessType::Failure) => {
-                Some(format!("Failed to trash {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-trash", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::Untrash, OperationSuccessType::Failure) => {
-                Some(format!("Failed to restore {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-restore", object_name = object_name_lowercase))
             }
             // We should only show deletion failure toasts for user-initiated deletions.
             (_, ObjectOperation::Delete { initiated_by: InitiatedBy::User }, OperationSuccessType::Failure) => {
-                Some(format!("Failed to delete {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-delete", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::Leave, OperationSuccessType::Failure) => {
-                Some(format!("Failed to leave {object_name}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-leave", object_name = object_name))
             }
             (
                 ObjectType::Workflow,
                 ObjectOperation::Update,
                 OperationSuccessType::Rejection,
             ) => {
-                Some("This workflow could not be saved because changes were made while you were editing.".to_string())
+                Some(crate::tr!("cloud_object", "cloud-object-workflow-save-conflict"))
             }
             (
                 ObjectType::GenericStringObject(GenericStringObjectFormat::Json(JsonObjectType::EnvVarCollection)),
                 ObjectOperation::Update,
                 OperationSuccessType::Rejection,
             ) => {
-                Some("Environment variables could not be saved because changes were made while you were editing.".to_string())
+                Some(crate::tr!("cloud_object", "cloud-object-env-vars-save-conflict"))
             }
             (
                 ObjectType::GenericStringObject(GenericStringObjectFormat::Json(JsonObjectType::AIFact)),
                 ObjectOperation::Update,
                 OperationSuccessType::Rejection,
             ) => {
-                Some("Rule could not be saved because changes were made while you were editing.".to_string())
+                Some(crate::tr!("cloud_object", "cloud-object-rule-save-conflict"))
             }
             (_, ObjectOperation::TakeEditAccess, OperationSuccessType::Failure) => {
-                Some(format!("Failed to start editing {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-start-editing", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::UpdatePermissions, OperationSuccessType::Success) => {
-                Some(format!("Successfully updated permissions for {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-permissions-updated", object_name = object_name_lowercase))
             }
             (_, ObjectOperation::UpdatePermissions, OperationSuccessType::Failure) => {
-                Some(format!("Failed to update permissions for {object_name_lowercase}"))
+                Some(crate::tr!("cloud_object", "cloud-object-failed-update-permissions", object_name = object_name_lowercase))
             }
             _ => None,
         }
@@ -112,10 +112,8 @@ impl CloudObjectToastMessage {
         success_type: &OperationSuccessType,
     ) -> Option<String> {
         let count_objects_message = match num_objects {
-            1 => "1 object".to_string(),
-            n => {
-                format!("{n} objects")
-            }
+            1 => crate::tr!("cloud_object", "cloud-object-one-object"),
+            _ => crate::tr!("cloud_object", "cloud-object-count-objects", count = num_objects),
         };
         match (operation, success_type) {
             // We should only show deletion failure toasts for user-initiated deletions.
@@ -124,15 +122,13 @@ impl CloudObjectToastMessage {
                     initiated_by: InitiatedBy::User,
                 },
                 OperationSuccessType::Success,
-            ) => Some(format!("{count_objects_message} deleted forever")),
-            (ObjectOperation::EmptyTrash, OperationSuccessType::Success) => Some(format!(
-                "Trash emptied: {count_objects_message} deleted forever"
-            )),
+            ) => Some(crate::tr!("cloud_object", "cloud-object-deleted-forever", count_objects_message = count_objects_message)),
+            (ObjectOperation::EmptyTrash, OperationSuccessType::Success) => Some(crate::tr!("cloud_object", "cloud-object-trash-emptied", count_objects_message = count_objects_message)),
             (ObjectOperation::EmptyTrash, OperationSuccessType::Failure) => {
-                Some("Failed to empty trash".to_string())
+                Some(crate::tr!("cloud_object", "cloud-object-failed-empty-trash"))
             }
             (ObjectOperation::EmptyTrash, OperationSuccessType::Rejection) => {
-                Some("No objects in trash to empty".to_string())
+                Some(crate::tr!("cloud_object", "cloud-object-no-objects-in-trash"))
             }
             _ => None,
         }

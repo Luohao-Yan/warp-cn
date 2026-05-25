@@ -150,7 +150,7 @@ impl AuthSecretFtuxView {
                     if let Some(state) = me.creation_state.as_mut() {
                         state.is_saving = false;
                         let window_id = ctx.window_id();
-                        let message = format!("Failed to save API key: {error}");
+                        let message = crate::tr!("agent_cloud", "agent-cloud-failed-save-api-key", error = error.as_str());
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
                                 DismissibleToast::error(message),
@@ -328,7 +328,7 @@ impl AuthSecretFtuxView {
         if trimmed_name.is_empty() {
             HarnessAvailabilityModel::handle(ctx).update(ctx, |_model, ctx| {
                 ctx.emit(HarnessAvailabilityEvent::AuthSecretCreationFailed {
-                    error: "Please enter a name for the secret.".to_string(),
+                    error: crate::tr!("agent_cloud", "agent-cloud-secret-name-required"),
                 });
             });
             return;
@@ -415,9 +415,10 @@ impl AuthSecretFtuxView {
         let theme = appearance.theme();
         let harness = self.ambient_agent_model.as_ref(app).selected_harness();
         let display_name = harness_display::display_name(harness);
-        let description = format!(
-            "Please select an API key or create a new one to use \
-             {display_name} as a cloud agent."
+        let description = crate::tr!(
+            "agent_cloud",
+            "agent-cloud-select-api-key",
+            display_name = display_name.as_str()
         );
         Text::new_inline(
             description,
@@ -543,7 +544,7 @@ impl AuthSecretFtuxView {
         row.add_child(Expanded::new(1., Empty::new().finish()).finish());
 
         row.add_child(self.render_button(
-            "Cancel",
+            crate::tr!("common", "common-cancel-label").as_str(),
             self.cancel_mouse_state.clone(),
             None,
             AuthSecretFtuxAction::Cancel,
@@ -552,7 +553,7 @@ impl AuthSecretFtuxView {
 
         let accent_fill = Appearance::as_ref(app).theme().accent();
         row.add_child(self.render_button(
-            "Continue",
+            crate::tr!("common", "common-continue-label").as_str(),
             self.continue_mouse_state.clone(),
             Some(accent_fill),
             AuthSecretFtuxAction::Continue,

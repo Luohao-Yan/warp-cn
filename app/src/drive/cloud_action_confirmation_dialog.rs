@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use warpui::{
     elements::{CornerRadius, Dismiss, MouseStateHandle, Radius},
     fonts::Weight,
@@ -17,22 +19,20 @@ use crate::{
     },
 };
 
+static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-cancel"));
+static DELETE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-confirm-delete-team"));
+static LEAVE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-confirm-leave-team"));
+static DELETE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-delete-team-description"));
+static LEAVE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-leave-team-description"));
+static DELETE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-yes-delete"));
+static LEAVE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-yes-leave"));
+
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
 const DIALOG_WIDTH: f32 = 450.;
-const CANCEL_TEXT: &str = "Cancel";
-
-const DELETE_TEAM_TITLE_TEXT: &str = "Are you sure you want to delete this team?";
-const LEAVE_TEAM_TITLE_TEXT: &str = "Are you sure you want to leave this team?";
-
-const DELETE_TEAM_BODY_TEXT: &str = "Deleting this team will permanently delete it and all of its related content, including billing information or credits. You will not be able to restore them.";
-const LEAVE_TEAM_BODY_TEXT: &str = "You will need to be reinvited in order to rejoin.";
-
-const DELETE_TEAM_CONFIRM_TEXT: &str = "Yes, delete";
-const LEAVE_TEAM_CONFIRM_TEXT: &str = "Yes, leave";
 
 pub enum CloudActionConfirmationDialogEvent {
     Cancel,
@@ -80,25 +80,25 @@ impl CloudActionConfirmationDialog {
 
     fn title_text(&self) -> String {
         match self.variant {
-            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_TITLE_TEXT.to_string(),
-            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_TITLE_TEXT.to_string(),
+            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_TITLE_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_TITLE_TEXT.clone(),
             CloudActionConfirmationDialogVariant::None => "".to_string(),
         }
     }
 
     fn body_text(&self) -> String {
         match self.variant {
-            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_BODY_TEXT.to_string(),
-            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_BODY_TEXT.to_string(),
+            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_BODY_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_BODY_TEXT.clone(),
             CloudActionConfirmationDialogVariant::None => "".to_string(),
         }
     }
 
     fn confirm_button_text(&self) -> String {
         match self.variant {
-            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_CONFIRM_TEXT.to_string(),
+            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_CONFIRM_TEXT.clone(),
             CloudActionConfirmationDialogVariant::DeleteTeam => {
-                DELETE_TEAM_CONFIRM_TEXT.to_string()
+                DELETE_TEAM_CONFIRM_TEXT.clone()
             }
             CloudActionConfirmationDialogVariant::None => "".to_string(),
         }
@@ -156,7 +156,7 @@ impl View for CloudActionConfirmationDialog {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(CANCEL_TEXT.into())
+            .with_text_label(CANCEL_TEXT.clone().into())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {

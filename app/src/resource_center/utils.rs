@@ -119,7 +119,7 @@ pub fn get_additional_keybindings() -> Vec<CommandBinding> {
     vec![
         CommandBinding::new(
             "workspace:new_window".into(),
-            "Open New Window".into(),
+            crate::tr!("menus", "window-new").into(),
             Some(Keystroke::parse("cmd-n").expect("Valid keystroke")),
         ),
         CommandBinding::new(

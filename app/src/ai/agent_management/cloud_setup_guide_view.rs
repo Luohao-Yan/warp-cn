@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use crate::ai::agent_management::telemetry::{AgentManagementTelemetryEvent, SetupGuideStep};
 use crate::ai::blocklist::code_block::{
     render_code_block_plain, CodeBlockOptions, CodeSnippetButtonHandles,
@@ -115,8 +116,9 @@ impl CloudSetupGuideView {
             },
         );
 
-        let visit_oz_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Visit Oz", SecondaryTheme)
+        static VISIT_OZ_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-visit-oz"));
+        let visit_oz_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*VISIT_OZ_LABEL, SecondaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(CloudSetupGuideAction::VisitOz))
         });
 
@@ -144,7 +146,7 @@ impl CloudSetupGuideView {
         let mut header_container = Flex::column().with_spacing(8.);
 
         let title = Text::new(
-            "Getting started with Oz cloud agents",
+            crate::tr!("ai_assistant", "ai-cloud-agents-getting-started"),
             appearance.ui_font_family(),
             title_font_size,
         )
@@ -154,7 +156,7 @@ impl CloudSetupGuideView {
         header_container.add_child(title);
 
         let subtitle = Text::new(
-            "Start Oz cloud agents directly in Warp from an integration (Linear, Slack), with an event (GitHub, built-in schedule), or programmatically with the Oz SDK or CLI.",
+            crate::tr!("ai_assistant", "ai-cloud-agents-subtitle"),
             appearance.ui_font_family(),
             subtitle_font_size,
         )
@@ -163,10 +165,13 @@ impl CloudSetupGuideView {
         header_container.add_child(subtitle);
 
         // Documentation link line.
+        static CHECK_OUT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-check-out-the"));
+        let docs_link_text = crate::tr!("ai_assistant", "ai-oz-documentation");
+        static TO_LEARN_MORE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-to-learn-more"));
         let docs_line = Flex::row()
             .with_child(
                 Text::new_inline(
-                    "Check out the ",
+                    &*CHECK_OUT_TEXT,
                     appearance.ui_font_family(),
                     subtitle_font_size,
                 )
@@ -177,7 +182,7 @@ impl CloudSetupGuideView {
                 appearance
                     .ui_builder()
                     .link(
-                        "Oz documentation".to_string(),
+                        docs_link_text,
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(CloudSetupGuideAction::OpenDocs {
@@ -195,7 +200,7 @@ impl CloudSetupGuideView {
             )
             .with_child(
                 Text::new_inline(
-                    " to learn more.",
+                    &*TO_LEARN_MORE_TEXT,
                     appearance.ui_font_family(),
                     subtitle_font_size,
                 )
@@ -212,8 +217,9 @@ impl CloudSetupGuideView {
         let theme = appearance.theme();
         let font_size = 16.;
 
+        static QUICK_START_VISIT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-quick-start-visit"));
         let text = Text::new_inline(
-            "Quick start: Visit oz.warp.dev for a UI-based setup experience.",
+            &*QUICK_START_VISIT,
             appearance.ui_font_family(),
             font_size,
         )
@@ -247,7 +253,7 @@ impl CloudSetupGuideView {
         let font_size = 16.;
 
         Text::new(
-            "Manual setup: Create a Slack or Linear integration with the Oz CLI",
+            crate::tr!("ai_assistant", "ai-manual-setup-create-integration"),
             appearance.ui_font_family(),
             font_size,
         )
@@ -291,8 +297,8 @@ impl CloudSetupGuideView {
     /// Render a description that includes a link at the end
     /// (e.g. "Use warp's environment setup command to have an agent help you through it. LINK[Visit docs]")
     fn render_description_with_link(
-        prefix: &'static str,
-        link_text: &'static str,
+        prefix: String,
+        link_text: String,
         link_mouse_state: MouseStateHandle,
         telemetry_url: SetupGuideDocs,
         appearance: &Appearance,
@@ -345,21 +351,21 @@ impl CloudSetupGuideView {
         let Some((workflow, setup_step)) = (match code {
             CREATE_ENV_SLASH_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Environment", CREATE_ENV_SLASH_CMD).with_arguments(vec![
+                    Workflow::new(crate::tr!("ai_assistant", "ai-wf-create-environment"), CREATE_ENV_SLASH_CMD).with_arguments(vec![
                         Argument::new("github link or local filepath", ArgumentType::Text)
-                            .with_description("GitHub link or local filepath to the repository"),
+                            .with_description(crate::tr!("ai_assistant", "ai-wf-create-env-arg-repo")),
                     ]),
                 ),
                 SetupGuideStep::CreateEnvironment,
             )),
             CREATE_ENV_CLI_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Environment (CLI)", CREATE_ENV_CLI_CMD).with_arguments(
+                    Workflow::new(crate::tr!("ai_assistant", "ai-wf-create-environment-cli"), CREATE_ENV_CLI_CMD).with_arguments(
                         vec![
                             Argument::new("NAME", ArgumentType::Text)
-                                .with_description("Name for the environment"),
+                                .with_description(crate::tr!("ai_assistant", "ai-wf-create-env-cli-arg-name")),
                             Argument::new("DOCKER_IMAGE", ArgumentType::Text)
-                                .with_description("Docker image to use for the environment"),
+                                .with_description(crate::tr!("ai_assistant", "ai-wf-create-env-cli-arg-image")),
                         ],
                     ),
                 ),
@@ -367,17 +373,17 @@ impl CloudSetupGuideView {
             )),
             CREATE_SLACK_INTEGRATION_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Slack Integration", CREATE_SLACK_INTEGRATION_CMD)
+                    Workflow::new(crate::tr!("ai_assistant", "ai-wf-create-slack-integration"), CREATE_SLACK_INTEGRATION_CMD)
                         .with_arguments(vec![Argument::new("environment_id", ArgumentType::Text)
-                            .with_description("ID of the environment to integrate with")]),
+                            .with_description(crate::tr!("ai_assistant", "ai-wf-integration-arg-env-id"))]),
                 ),
                 SetupGuideStep::CreateSlackIntegration,
             )),
             CREATE_LINEAR_INTEGRATION_CMD => Some((
                 WorkflowType::Local(
-                    Workflow::new("Create Linear Integration", CREATE_LINEAR_INTEGRATION_CMD)
+                    Workflow::new(crate::tr!("ai_assistant", "ai-wf-create-linear-integration"), CREATE_LINEAR_INTEGRATION_CMD)
                         .with_arguments(vec![Argument::new("environment_id", ArgumentType::Text)
-                            .with_description("ID of the environment to integrate with")]),
+                            .with_description(crate::tr!("ai_assistant", "ai-wf-integration-arg-env-id"))]),
                 ),
                 SetupGuideStep::CreateLinearIntegration,
             )),
@@ -430,7 +436,7 @@ impl CloudSetupGuideView {
             .with_child(Self::render_step_number(1, appearance))
             .with_child(
                 Text::new(
-                    "Create an environment",
+                    crate::tr!("ai_assistant", "ai-create-an-environment"),
                     appearance.ui_font_family(),
                     step_title_font_size,
                 )
@@ -442,7 +448,7 @@ impl CloudSetupGuideView {
 
         let description = Container::new(
             Text::new(
-                "First, set up an environment to create an integration.",
+                crate::tr!("ai_assistant", "ai-first-set-up-environment"),
                 appearance.ui_font_family(),
                 step_desc_font_size,
             )
@@ -453,8 +459,8 @@ impl CloudSetupGuideView {
         .finish();
 
         let sub_description = Container::new(Self::render_description_with_link(
-            "Use Warp's environment setup command to have an agent help you through it. ",
-            "Visit docs",
+            crate::tr!("ai_assistant", "ai-use-warps-env-setup"),
+            crate::tr!("ai_assistant", "ai-visit-docs"),
             self.env_docs_link_mouse_state.clone(),
             SetupGuideDocs::Environment,
             appearance,
@@ -473,7 +479,7 @@ impl CloudSetupGuideView {
 
         let or_text = Container::new(
             Text::new(
-                "Or, supply your own existing docker image.",
+                crate::tr!("ai_assistant", "ai-or-supply-docker-image"),
                 appearance.ui_font_family(),
                 step_desc_font_size,
             )
@@ -515,7 +521,7 @@ impl CloudSetupGuideView {
             .with_child(Self::render_step_number(2, appearance))
             .with_child(
                 Text::new(
-                    "Create an integration",
+                    crate::tr!("ai_assistant", "ai-create-an-integration"),
                     appearance.ui_font_family(),
                     step_title_font_size,
                 )
@@ -526,8 +532,8 @@ impl CloudSetupGuideView {
             .finish();
 
         let sub_description = Container::new(Self::render_description_with_link(
-            "Integrate Slack or Linear to assign Warp's Agent tasks with @Warp. ",
-            "Visit docs",
+            crate::tr!("ai_assistant", "ai-integrate-slack-linear"),
+            crate::tr!("ai_assistant", "ai-visit-docs"),
             self.integration_docs_link_mouse_state.clone(),
             SetupGuideDocs::Integration,
             appearance,

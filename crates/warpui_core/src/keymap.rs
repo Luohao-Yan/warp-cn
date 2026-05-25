@@ -519,7 +519,7 @@ impl FixedBinding {
         let keys = keystrokes
             .as_ref()
             .split_whitespace()
-            .map(|key| Keystroke::parse(key).expect("Key Binding should be valid"))
+            .map(|key| Keystroke::parse(key).unwrap_or_else(|_| Keystroke::parse(key.to_lowercase()).expect("Key Binding should be valid")))
             .collect();
         Self {
             trigger: Trigger::Keystrokes(keys),

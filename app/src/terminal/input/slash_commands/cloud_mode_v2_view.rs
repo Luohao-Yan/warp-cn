@@ -1184,7 +1184,7 @@ fn render_show_more_row(
     let menu_bg = inline_styles::menu_background_color(app);
     let secondary_color = theme.sub_text_color(Fill::Solid(menu_bg)).into_solid();
 
-    let label = format!("Show {hidden_count} more");
+    let label = crate::tr!("terminal", "terminal-show-more", count = hidden_count);
 
     let row = Hoverable::new(mouse_state, move |mouse_state| {
         let bg = if is_selected || mouse_state.is_hovered() {

@@ -46,6 +46,7 @@ menus-view-actual-size = Actual Size
 ## -- Window menu --------------------------------------------------------------
 
 menus-window-menu = Window
+menus-window-new = New Window
 menus-window-minimize = Minimize
 menus-window-zoom = Zoom
 menus-window-show-all = Show All Windows
@@ -58,3 +59,19 @@ menus-help-report-issue = Report an Issue
 menus-help-community = Community
 menus-help-release-notes = Release Notes
 menus-help-check-for-updates = Check for Updates
+
+## -- Primary keys for migrated UI strings --
+
+menus-remove-config-confirm = Remove '{ $name }'?
+menus-delete-config-undo-warning = You will not be able to undo this action.
+menus-make-default = Make default
+menus-already-the-default = Already the default
+menus-edit-config = Edit config
+
+## -- Double-prefix aliases for migrated UI strings --
+
+menus-menus-remove-config-confirm = { menus-remove-config-confirm }
+menus-menus-delete-config-undo-warning = { menus-delete-config-undo-warning }
+menus-menus-make-default = { menus-make-default }
+menus-menus-already-the-default = { menus-already-the-default }
+menus-menus-edit-config = { menus-edit-config }

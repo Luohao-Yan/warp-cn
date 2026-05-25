@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::cloud_object::{
     CloudObject, CloudObjectSyncStatus, GenericStringObjectFormat, JsonObjectType,
 };
@@ -31,7 +33,8 @@ mod style;
 use rule::*;
 use rule_editor::*;
 
-const OFFLINE_TEXT: &str = "You are offline. Some rules will be read only.";
+pub static OFFLINE_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-offline-banner-text"));
 
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum AIFactPage {
@@ -45,8 +48,10 @@ pub enum AIFactPage {
 impl std::fmt::Display for AIFactPage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AIFactPage::Rules => write!(f, "Rules"),
-            AIFactPage::RuleEditor { .. } => write!(f, "Rule Editor"),
+            AIFactPage::Rules => write!(f, "{}", crate::tr!("ai_assistant", "ai-rules-header")),
+            AIFactPage::RuleEditor { .. } => {
+                write!(f, "{}", crate::tr!("ai_assistant", "ai-rule-editor-title"))
+            }
         }
     }
 }
@@ -209,7 +214,7 @@ impl AIFactView {
                         Container::new(
                             appearance
                                 .ui_builder()
-                                .wrappable_text(OFFLINE_TEXT, true)
+                                .wrappable_text(OFFLINE_TEXT.as_str(), true)
                                 .build()
                                 .finish(),
                         )

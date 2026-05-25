@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use warpui::{
     elements::{
@@ -39,6 +40,11 @@ use crate::{
         repo_picker::{RepoPicker, RepoPickerEvent},
     },
 };
+
+static TAB_NEW_WORKTREE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-new-worktree"));
+static TAB_AUTOGENERATE_BRANCH: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("workspace", "workspace-autogenerate-branch-name"));
 
 /// Gap between sections in the modal body (repo picker, branch picker, checkbox).
 const SECTION_GAP: f32 = 16.;
@@ -332,7 +338,7 @@ impl View for NewWorktreeModal {
         // ── Header (custom — Modal wrapper has no title) ────────────────
         let header = {
             let title = Text::new_inline(
-                "New worktree".to_string(),
+                &*TAB_NEW_WORKTREE,
                 appearance.ui_font_family(),
                 HEADER_TITLE_FONT_SIZE,
             )
@@ -471,7 +477,7 @@ impl View for NewWorktreeModal {
             .with_child(checkbox_element)
             .with_child(
                 Text::new_inline(
-                    "Autogenerate worktree branch name".to_string(),
+                    &*TAB_AUTOGENERATE_BRANCH,
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )

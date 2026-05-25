@@ -10,7 +10,9 @@ use warpui::AppContext;
 use warpui::ViewHandle;
 use warpui::{Element, Entity, TypedActionView, View, ViewContext};
 
-const THEME_DELETION_MODAL_HEADER: &str = "Are you sure you want to delete this theme?";
+use std::sync::LazyLock;
+
+static THEME_DELETION_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-delete-theme-confirm"));
 
 pub struct ThemeDeletionModal {
     theme_deletion_modal: ViewHandle<Modal<ThemeDeletionBody>>,
@@ -50,7 +52,7 @@ impl ThemeDeletionModal {
 
         let theme_deletion_modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(
-                Some(THEME_DELETION_MODAL_HEADER.to_string()),
+                Some(THEME_DELETION_MODAL_HEADER.clone()),
                 theme_deletion_body,
                 ctx,
             )

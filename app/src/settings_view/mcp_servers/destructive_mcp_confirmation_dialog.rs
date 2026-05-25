@@ -59,22 +59,22 @@ impl From<&DestructiveMCPConfirmationDialogVariant>
     fn from(variant: &DestructiveMCPConfirmationDialogVariant) -> Self {
         match *variant {
             DestructiveMCPConfirmationDialogVariant::DeleteLocal => DestructiveMCPConfirmationDialogDisplayOptions::new(
-                "Delete MCP server?".to_string(),
-                "This will uninstall and remove this MCP server from all your devices.".to_string(),
-                "Delete MCP".to_string(),
-                "Cancel".to_string(),
+                crate::tr!("settings", "delete-mcp-title"),
+                crate::tr!("settings", "delete-mcp-local-desc"),
+                crate::tr!("settings", "delete-mcp-btn"),
+                crate::tr!("settings", "cancel"),
             ),
             DestructiveMCPConfirmationDialogVariant::DeleteShared => DestructiveMCPConfirmationDialogDisplayOptions::new(
-                "Delete shared MCP server?".to_string(),
-                "This will not only delete this MCP server for yourself, but also uninstall and remove this MCP server from Warp and across all of your teammates' devices.".to_string(),
-                "Delete MCP".to_string(),
-                "Cancel".to_string(),
+                crate::tr!("settings", "delete-mcp-shared-title"),
+                crate::tr!("settings", "delete-mcp-shared-desc"),
+                crate::tr!("settings", "delete-mcp-btn"),
+                crate::tr!("settings", "cancel"),
             ),
             DestructiveMCPConfirmationDialogVariant::Unshare => DestructiveMCPConfirmationDialogDisplayOptions::new(
-                "Remove shared MCP server from team?".to_string(),
-                "This will uninstall and remove this MCP server from Warp and across all of your teammates' devices.".to_string(),
-                "Remove from team".to_string(),
-                "Cancel".to_string(),
+                crate::tr!("settings", "remove-mcp-team-title"),
+                crate::tr!("settings", "remove-mcp-team-desc"),
+                crate::tr!("settings", "remove-from-team"),
+                crate::tr!("settings", "cancel"),
             ),
         }
     }

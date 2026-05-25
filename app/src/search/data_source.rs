@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::search::item::IconLocation;
 use crate::search::mixer::{DataSourceRunError, SyncDataSource};
 use crate::search::result_renderer::ItemHighlightState;
@@ -15,6 +17,9 @@ use warpui::{Action, AppContext, Element, Entity, ModelHandle};
 
 use super::mixer::{AsyncDataSource, BoxFuture};
 use super::{item::SearchItem, mixer::DataSourceRunErrorWrapper};
+
+static WARP_DRIVE_FILTER_NAME: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-warp-drive"));
 
 lazy_static! {
     static ref HISTORY_FILTER_ATOM: FilterAtom = FilterAtom {
@@ -313,7 +318,7 @@ impl QueryFilter {
             QueryFilter::Tabs => "tabs",
             QueryFilter::Conversations => "conversations",
             QueryFilter::LaunchConfigurations => "launch configurations",
-            QueryFilter::Drive => "Warp Drive",
+            QueryFilter::Drive => &*WARP_DRIVE_FILTER_NAME,
             QueryFilter::EnvironmentVariables => "environment variables",
             QueryFilter::PromptHistory => "prompt history",
             QueryFilter::Files => "files",

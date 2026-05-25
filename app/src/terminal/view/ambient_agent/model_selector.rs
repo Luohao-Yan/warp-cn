@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use pathfinder_geometry::vector::vec2f;
 use warp_cli::agent::Harness;
@@ -57,11 +57,10 @@ const SEARCH_VERTICAL_PADDING: f32 = 4.;
 // of total breathing room above the divider line.
 const SEARCH_FOOTER_TOP_MARGIN: f32 = 4.;
 
-const SEARCH_PLACEHOLDER_TEXT: &str = "Search models";
-
-const BUTTON_TOOLTIP: &str = "Choose agent model";
-
-const NO_RESULTS_LABEL: &str = "No results";
+static SEARCH_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-search-models"));
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-choose-agent-model"));
+static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-no-results"));
+static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-default-model"));
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ModelSelectorAction {
@@ -117,7 +116,7 @@ impl ModelSelector {
         let button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_size(ButtonSize::AgentInputButton)
-                .with_tooltip(BUTTON_TOOLTIP)
+                .with_tooltip(BUTTON_TOOLTIP.as_str())
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ModelSelectorAction::ToggleMenu);
                 })
@@ -137,7 +136,7 @@ impl ModelSelector {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(SEARCH_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(SEARCH_PLACEHOLDER_TEXT.as_str(), ctx);
             editor
         });
         ctx.subscribe_to_view(&search_editor, |me, _, event, ctx| {
@@ -365,7 +364,7 @@ impl ModelSelector {
                                 .map(|info| info.display_name.clone())
                         })
                 })
-                .unwrap_or_else(|| "Default".to_string()),
+                .unwrap_or_else(|| DEFAULT_MODEL_LABEL.clone()),
             _ => LLMPreferences::as_ref(ctx)
                 .get_active_base_model(ctx, Some(self.terminal_view_id))
                 .display_name
@@ -399,7 +398,7 @@ impl ModelSelector {
         if items.is_empty() {
             let no_results_text_color = internal_colors::text_sub(theme, theme.surface_2());
             items.push(MenuItem::Item(
-                MenuItemFields::new(NO_RESULTS_LABEL)
+                MenuItemFields::new(NO_RESULTS_LABEL.as_str())
                     .with_font_size_override(ITEM_FONT_SIZE)
                     .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
                     .with_override_text_color(no_results_text_color)

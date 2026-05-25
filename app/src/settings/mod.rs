@@ -98,16 +98,16 @@ impl SettingsFileError {
     pub fn heading_and_description(&self) -> (String, String) {
         match self {
             Self::FileParseFailed(_) => (
-                "Your settings file contains an error.".to_owned(),
+                crate::tr!("settings", "settings-file-contains-error"),
                 format!("{self}. Open the file to fix it."),
             ),
             Self::InvalidSettings(keys) => match keys.len() {
                 1 => (
-                    "Your settings file contains an error.".to_owned(),
+                    crate::tr!("settings", "settings-file-contains-error"),
                     format!("{self}. The default value is being used."),
                 ),
                 _ => (
-                    "Your settings file contains errors.".to_owned(),
+                    crate::tr!("settings", "settings-file-contains-errors"),
                     format!("{self}. Default values are being used."),
                 ),
             },
@@ -218,11 +218,11 @@ pub enum CtrlTabBehavior {
 }
 
 impl CtrlTabBehavior {
-    pub fn as_dropdown_label(&self) -> &str {
+    pub fn as_dropdown_label(&self) -> String {
         match self {
-            Self::ActivatePrevNextTab => "Activate previous/next tab",
-            Self::CycleMostRecentSession => "Cycle most recent session",
-            Self::CycleMostRecentTab => "Cycle most recent tab",
+            Self::ActivatePrevNextTab => crate::tr!("settings", "settings-ctrl-tab-activate-prev-next"),
+            Self::CycleMostRecentSession => crate::tr!("settings", "settings-ctrl-tab-cycle-recent-session"),
+            Self::CycleMostRecentTab => crate::tr!("settings", "settings-ctrl-tab-cycle-recent-tab"),
         }
     }
 }
@@ -268,11 +268,11 @@ pub enum GlobalHotkeyMode {
 }
 
 impl GlobalHotkeyMode {
-    pub fn as_dropdown_label(&self) -> &str {
+    pub fn as_dropdown_label(&self) -> String {
         match self {
-            Self::Disabled => "Disabled",
-            Self::QuakeMode => "Dedicated hotkey window",
-            Self::ActivationHotkey => "Show/hide all windows",
+            Self::Disabled => crate::tr!("settings", "settings-global-hotkey-disabled"),
+            Self::QuakeMode => crate::tr!("settings", "settings-global-hotkey-quake-mode"),
+            Self::ActivationHotkey => crate::tr!("settings", "settings-global-hotkey-activation"),
         }
     }
 }

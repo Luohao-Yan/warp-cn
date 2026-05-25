@@ -107,7 +107,7 @@ define_settings_group!(SemanticSelection, settings: [
         private: false,
         storage_key: "SmartSelect",
         toml_path: "terminal.smart_select.enabled",
-        description: "Whether double-click smart selection is enabled for URLs, emails, file paths, and identifiers.",
+        description: "Whether double-click smart selection is enabled for URLs, emails, file paths, and identifiers.".to_string(),
     },
     word_char_allowlist: WordCharAllowlist {
         type: String,
@@ -117,7 +117,7 @@ define_settings_group!(SemanticSelection, settings: [
         private: false,
         storage_key: "WordCharAllowlist",
         toml_path: "terminal.smart_select.word_char_allowlist",
-        description: "Characters that are considered part of a word for double-click selection when smart select is disabled.",
+        description: "Characters that are considered part of a word for double-click selection when smart select is disabled.".to_string(),
     },
 ]);
 

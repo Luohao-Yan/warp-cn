@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use warp_editor::editor::NavigationKey;
 use warpui::{
     elements::{
@@ -27,8 +29,8 @@ use crate::{
 const LABEL_FONT_SIZE: f32 = 12.;
 const METADATA_SPACING: f32 = 8.;
 const LAST_ROW_ELEMENT_SPACING: f32 = 2.;
-const TITLE_LABEL_TEXT: &str = "Title";
-const DESCRIPTION_LABEL_TEXT: &str = "Description";
+static TITLE_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-title-label"));
+static DESCRIPTION_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-description-label"));
 
 const VERTICAL_TEXT_INPUT_PADDING: f32 = 5.;
 const HORIZONTAL_TEXT_INPUT_PADDING: f32 = 10.;
@@ -317,13 +319,11 @@ impl EnvVarCollectionView {
         };
     }
 
-    fn render_metadata_label<S>(&self, text: S, appearance: &Appearance) -> Box<dyn Element>
-    where
-        S: Into<String>,
+    fn render_metadata_label(&self, text: &str, appearance: &Appearance) -> Box<dyn Element>
     {
         appearance
             .ui_builder()
-            .span(text.into())
+            .span(text.to_owned())
             .with_style(UiComponentStyles {
                 font_size: Some(LABEL_FONT_SIZE),
                 ..Default::default()
@@ -369,7 +369,7 @@ impl EnvVarCollectionView {
 
         Flex::column()
             .with_child(
-                Container::new(self.render_metadata_label(TITLE_LABEL_TEXT, appearance))
+                Container::new(self.render_metadata_label(TITLE_LABEL_TEXT.as_str(), appearance))
                     .with_margin_bottom(METADATA_SPACING)
                     .finish(),
             )
@@ -384,7 +384,7 @@ impl EnvVarCollectionView {
             )
             .with_child(
                 SavePosition::new(
-                    Container::new(self.render_metadata_label(DESCRIPTION_LABEL_TEXT, appearance))
+                    Container::new(self.render_metadata_label(DESCRIPTION_LABEL_TEXT.as_str(), appearance))
                         .with_margin_bottom(METADATA_SPACING)
                         .finish(),
                     DESCRIPTION_EDITOR_POSITION,

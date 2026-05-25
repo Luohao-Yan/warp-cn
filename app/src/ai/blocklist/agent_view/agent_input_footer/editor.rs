@@ -17,14 +17,16 @@ use crate::terminal::session_settings::{
     AgentToolbarChipSelection, CLIAgentToolbarChipSelection, SessionSettings,
     SessionSettingsChangedEvent, ToolbarChipSelection,
 };
+use std::sync::LazyLock;
+
 use crate::Appearance;
 
 use settings::Setting as _;
 
-use super::toolbar_item::AgentToolbarItemKind;
+static AVAILABLE_CHIPS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-available-chips"));
 
-const AGENT_MODAL_TITLE: &str = "Edit agent toolbelt";
-const CLI_MODAL_TITLE: &str = "Edit CLI agent toolbelt";
+static AGENT_MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-edit-agent-toolbelt"));
+static CLI_MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-edit-cli-agent-toolbelt"));
 
 /// Controls which set of items and settings the editor modal operates on.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -225,7 +227,7 @@ impl View for AgentToolbarInlineEditor {
         render_chip_editor_sections(
             &self.chip_configurator,
             ChipEditorSectionsConfig {
-                available_section_label: "Available chips",
+                available_section_label: AVAILABLE_CHIPS_LABEL.as_str(),
                 is_at_defaults: self.is_at_defaults(),
                 reset_action: AgentToolbarInlineEditorAction::ResetDefault,
                 activate_action: AgentToolbarInlineEditorAction::Activate,
@@ -316,8 +318,8 @@ impl AgentToolbarEditorModal {
 
     fn modal_title(&self) -> &'static str {
         match self.mode {
-            AgentToolbarEditorMode::AgentView => AGENT_MODAL_TITLE,
-            AgentToolbarEditorMode::CLIAgent => CLI_MODAL_TITLE,
+            AgentToolbarEditorMode::AgentView => AGENT_MODAL_TITLE.as_str(),
+            AgentToolbarEditorMode::CLIAgent => CLI_MODAL_TITLE.as_str(),
         }
     }
 }
@@ -375,7 +377,7 @@ impl View for AgentToolbarEditorModal {
             &self.chip_configurator,
             ChipEditorModalConfig {
                 title: self.modal_title(),
-                available_section_label: "Available chips",
+                available_section_label: AVAILABLE_CHIPS_LABEL.as_str(),
                 is_at_defaults: self.is_at_defaults(),
                 is_dirty: self.is_dirty,
                 cancel_action: AgentToolbarEditorAction::Cancel,

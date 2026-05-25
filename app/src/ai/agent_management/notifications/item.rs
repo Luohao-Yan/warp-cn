@@ -1,7 +1,13 @@
+use std::sync::LazyLock;
+
 use enum_iterator::Sequence;
 use instant::Instant;
 use uuid::Uuid;
 use warpui::EntityId;
+
+static NOTIF_FILTER_ALL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notif-filter-all"));
+static NOTIF_FILTER_UNREAD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notif-filter-unread"));
+static NOTIF_FILTER_ERRORS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notif-filter-errors"));
 
 use crate::ai::agent::conversation::AIConversationId;
 use crate::ai::artifacts::Artifact;
@@ -35,9 +41,9 @@ pub enum NotificationFilter {
 impl NotificationFilter {
     pub(crate) fn label(&self) -> &'static str {
         match self {
-            NotificationFilter::All => "All tabs",
-            NotificationFilter::Unread => "Unread",
-            NotificationFilter::Errors => "Errors",
+            NotificationFilter::All => &*NOTIF_FILTER_ALL,
+            NotificationFilter::Unread => &*NOTIF_FILTER_UNREAD,
+            NotificationFilter::Errors => &*NOTIF_FILTER_ERRORS,
         }
     }
 }

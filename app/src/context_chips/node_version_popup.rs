@@ -1,4 +1,5 @@
 use pathfinder_color::ColorU;
+use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::Fill;
 use warpui::elements::{
@@ -51,6 +52,10 @@ pub enum NodeVersionPopupEvent {
     SelectVersion { version: String },
 }
 
+static INSTALL_NVM_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "install-nvm"));
+static NVM_INSTALL_NODE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "nvm-install-node"));
+static INSTALLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "installed-label"));
+
 struct Styles {
     ui_font_family: FamilyId,
     background: Fill,
@@ -77,14 +82,14 @@ impl NodeVersionPopupView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let install_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Install nvm", SecondaryTheme)
+            ActionButton::new(&*INSTALL_NVM_LABEL, SecondaryTheme)
                 .with_icon(icons::Icon::Terminal)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NodeVersionPopupAction::InstallNvm);
                 })
         });
         let install_latest_node_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("nvm install node", SecondaryTheme)
+            ActionButton::new(&*NVM_INSTALL_NODE_LABEL, SecondaryTheme)
                 .with_icon(icons::Icon::Terminal)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NodeVersionPopupAction::InstallLatestNodeVersion);
@@ -181,7 +186,7 @@ impl NodeVersionPopupView {
 
         col.add_child(
             Text::new(
-                "Install nvm to enable version switching",
+                crate::tr!("common", "install-nvm-enable-switching"),
                 styles.ui_font_family,
                 styles.detail_font_size + 2.,
             )
@@ -193,7 +198,7 @@ impl NodeVersionPopupView {
         col.add_child(
             Container::new(
                 Text::new(
-                    "This menu helps you switch between Node.js versions — but it requires nvm to be installed.",
+                    crate::tr!("common", "menu-helps-switch-versions"),
                     styles.ui_font_family,
                     styles.detail_font_size,
                 )
@@ -242,7 +247,7 @@ impl NodeVersionPopupView {
         // Heading
         col.add_child(
             Text::new(
-                "No node versions installed",
+                crate::tr!("common", "no-node-versions-installed"),
                 styles.ui_font_family,
                 styles.detail_font_size + 2.,
             )
@@ -255,7 +260,7 @@ impl NodeVersionPopupView {
         col.add_child(
             Container::new(
                 Text::new(
-                    "Try installing versions with nvm",
+                    crate::tr!("common", "try-installing-versions-nvm"),
                     styles.ui_font_family,
                     styles.detail_font_size,
                 )
@@ -286,7 +291,7 @@ impl NodeVersionPopupView {
 
         col.add_child(
             Container::new(
-                Text::new("Installed", styles.ui_font_family, styles.detail_font_size)
+                Text::new(&*INSTALLED_LABEL, styles.ui_font_family, styles.detail_font_size)
                     .with_style(Properties::default())
                     .with_color(styles.secondary_text_color)
                     .finish(),

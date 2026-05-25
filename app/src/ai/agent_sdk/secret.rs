@@ -1,6 +1,7 @@
 use std::{
     fs,
     io::{self, IsTerminal as _, Read},
+    sync::LazyLock,
 };
 
 use anyhow::{Context, Result};
@@ -31,6 +32,9 @@ use crate::{
 };
 
 use super::output::{self, TableFormat};
+
+static AI_AWS_REGION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-aws-region-label"));
+static AI_AWS_ACCESS_KEY_ID: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-aws-access-key-id-label"));
 
 #[derive(Serialize)]
 struct SecretInfo {
@@ -623,7 +627,7 @@ fn read_bedrock_secret_value(
                     "Bedrock secrets require --bedrock-api-key and --region in non-interactive mode"
                 ));
             }
-            let result = inquire::Text::new("AWS Region:").prompt();
+            let result = inquire::Text::new(&*AI_AWS_REGION).prompt();
             match result {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
@@ -661,7 +665,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match inquire::Text::new("AWS Access Key ID:").prompt() {
+            match inquire::Text::new(&*AI_AWS_ACCESS_KEY_ID).prompt() {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
                 Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
@@ -727,7 +731,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match inquire::Text::new("AWS Region:").prompt() {
+            match inquire::Text::new(&*AI_AWS_REGION).prompt() {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
                 Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
@@ -768,11 +772,11 @@ fn find_secret_type(
 
 fn format_secret_type(type_: &ManagedSecretType) -> String {
     match type_ {
-        ManagedSecretType::RawValue => "Raw Value".to_string(),
+        ManagedSecretType::RawValue => crate::tr!("ai", "ai-secret-raw-value"),
         ManagedSecretType::Dotenvx => "dotenvx".to_string(),
-        ManagedSecretType::AnthropicApiKey => "Anthropic API Key".to_string(),
-        ManagedSecretType::AnthropicBedrockAccessKey => "Anthropic Bedrock Access Key".to_string(),
-        ManagedSecretType::AnthropicBedrockApiKey => "Anthropic Bedrock API Key".to_string(),
-        ManagedSecretType::OpenaiApiKey => "OpenAI API Key".to_string(),
+        ManagedSecretType::AnthropicApiKey => crate::tr!("ai", "ai-secret-anthropic-key"),
+        ManagedSecretType::AnthropicBedrockAccessKey => crate::tr!("ai", "ai-secret-anthropic-bedrock-access"),
+        ManagedSecretType::AnthropicBedrockApiKey => crate::tr!("ai", "ai-secret-anthropic-bedrock-key"),
+        ManagedSecretType::OpenaiApiKey => crate::tr!("ai", "ai-secret-openai-key"),
     }
 }

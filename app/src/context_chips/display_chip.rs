@@ -609,7 +609,7 @@ impl DisplayChip {
                     DisplayChipMenu::new(
                         Vec::<DirectoryItem>::new(),
                         Some(FixedFooter::new(Arc::new(DirectoryItem {
-                            name: ".. (Parent Directory)".to_string(),
+                            name: crate::tr!("context_chips", "parent-directory"),
                             directory_type: DirectoryType::NavigateToParent,
                         }))), // Show parent directory option
                         ChipMenuType::Directories,
@@ -733,10 +733,9 @@ impl DisplayChip {
                             // nvm-windows has documented issues when installed alongside an existing Node.js installation.
                             // https://github.com/coreybutler/nvm-windows?tab=readme-ov-file#star-star-uninstall-any-pre-existing-node-installations-star-star
                             // Prompt the agent to remove this first.
-                            "Uninstall existing Node.js installation and install nvm for me"
-                                .to_string()
+                            crate::tr!("context_chips", "uninstall-node-install-nvm")
                         } else {
-                            "Install nvm for me".to_string()
+                            crate::tr!("common", "install-nvm-for-me")
                         }));
                         me.close_node_version_popup(ctx);
                     }
@@ -758,7 +757,7 @@ impl DisplayChip {
 
         let quota_reset_popup = ctx.add_typed_action_view(|_| {
             FeaturePopup::alert_icon(NewFeaturePopupLabel::FromString(
-                "Monthly AI credits reset!".to_string(),
+                crate::tr!("context_chips", "monthly-ai-credits-reset"),
             ))
         });
 
@@ -1039,7 +1038,7 @@ impl DisplayChip {
             if state.is_hovered() && is_interactive && !menu_open {
                 let tool_tip = appearance
                     .ui_builder()
-                    .tool_tip("Change git branch".to_string())
+                    .tool_tip(crate::tr!("common", "change-git-branch"))
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(tool_tip, udi_tooltip_positioning());
@@ -1106,7 +1105,7 @@ impl DisplayChip {
             if state.is_hovered() {
                 let tool_tip = appearance
                     .ui_builder()
-                    .tool_tip("View pull request".to_string())
+                    .tool_tip(crate::tr!("common", "view-pull-request"))
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(tool_tip, udi_tooltip_positioning());
@@ -1190,7 +1189,7 @@ impl DisplayChip {
                     let tool_tip = appearance
                         .ui_builder()
                         .tool_tip_with_sublabel(
-                            CODE_REVIEW_TOOLTIP_TEXT.to_string(),
+                            CODE_REVIEW_TOOLTIP_TEXT.clone(),
                             code_review_keybinding.clone(),
                         )
                         .build()
@@ -1279,7 +1278,7 @@ impl DisplayChip {
                 if state.is_hovered() {
                     let tool_tip = appearance
                         .ui_builder()
-                        .tool_tip("Change working directory".to_string())
+                        .tool_tip(crate::tr!("common", "change-working-directory"))
                         .build()
                         .finish();
 
@@ -1326,7 +1325,7 @@ impl DisplayChip {
                 if state.is_hovered() && !is_cli_agent_active {
                     let tool_tip = appearance
                         .ui_builder()
-                        .tool_tip("Working directory".to_string())
+                        .tool_tip(crate::tr!("common", "working-directory"))
                         .build()
                         .finish();
 
@@ -1807,10 +1806,7 @@ pub fn format_git_branch_command(encoded_git_branch_on_click_value: &str) -> Str
     if branch.is_linked_worktree {
         return format!(
             "echo {}",
-            shell_single_quote(&format!(
-                "Branch '{}' is already checked out in another worktree, but Warp couldn't find its path.",
-                branch.branch_name
-            ))
+            shell_single_quote(&crate::tr!("context_chips", "branch-already-checked-out", branch = branch.branch_name))
         );
     }
 

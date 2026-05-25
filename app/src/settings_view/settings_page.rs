@@ -4,6 +4,7 @@ use itertools::Itertools as _;
 use pathfinder_color::ColorU;
 use std::borrow::Cow;
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 use super::{
     about_page::AboutPageView,
@@ -560,7 +561,7 @@ pub fn render_info_icon<T: Clone + Action>(
             13.,
             additional_info
                 .tooltip_override_text
-                .unwrap_or("Click to learn more in docs".to_owned()),
+                .unwrap_or(crate::tr!("settings", "settings-click-learn-more-docs")),
             additional_info.mouse_state.clone(),
         )
         .on_click(move |ctx, _, _| {
@@ -586,7 +587,7 @@ pub fn render_local_only_icon(
         .ui_builder()
         .local_only_icon_with_tooltip(
             13.,
-            custom_tooltip.unwrap_or("This setting is not synced to your other devices".to_owned()),
+            custom_tooltip.unwrap_or(crate::tr!("settings", "settings-local-only-tooltip")),
             mouse_state.clone(),
         )
         .finish();
@@ -1005,8 +1006,9 @@ pub(crate) fn render_settings_info_banner(
     .finish()
 }
 
-const WORKSPACE_OVERRIDE_TOOLTIP_TEXT: &str =
-    "This option is enforced by your organization's settings and cannot be customized.";
+static WORKSPACE_OVERRIDE_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| {
+    crate::tr!("settings", "settings-workspace-override-tooltip")
+});
 
 pub struct InputListItem<SettingsPageAction: Action + Clone> {
     pub item: String,
@@ -1115,7 +1117,7 @@ fn render_workspace_override_row_tooltip(
         if state.is_hovered() {
             let tooltip = appearance
                 .ui_builder()
-                .tool_tip(WORKSPACE_OVERRIDE_TOOLTIP_TEXT.to_string())
+                .tool_tip(WORKSPACE_OVERRIDE_TOOLTIP_TEXT.clone())
                 .build()
                 .finish();
             stack.add_positioned_child(
@@ -1233,7 +1235,7 @@ pub(super) enum PageType<V: warpui::View> {
     /// handle and render their own scrollable elements.
     Monolith {
         widget: Box<dyn SettingsWidget<View = V>>,
-        title: Option<&'static str>,
+        title: Option<String>,
         filter: bool,
         vertical_scroll_state: Option<ClippedScrollStateHandle>,
         horizontal_scroll_state: Option<ClippedScrollStateHandle>,
@@ -1242,7 +1244,7 @@ pub(super) enum PageType<V: warpui::View> {
     /// A page which is a series of [`SettingsWidget`]s that don't fall under sub-categories.
     Uncategorized {
         widgets: Vec<Box<dyn SettingsWidget<View = V>>>,
-        title: Option<&'static str>,
+        title: Option<String>,
         filter: Vec<usize>,
         vertical_scroll_state: ClippedScrollStateHandle,
         horizontal_scroll_state: ClippedScrollStateHandle,
@@ -1252,7 +1254,7 @@ pub(super) enum PageType<V: warpui::View> {
     /// A page which is a series of [`SettingsWidget`]s that fall under sub-categories.
     Categorized {
         categories: Vec<Category<V>>,
-        title: Option<&'static str>,
+        title: Option<String>,
         filter: Vec<Vec<usize>>,
         vertical_scroll_state: ClippedScrollStateHandle,
         horizontal_scroll_state: ClippedScrollStateHandle,
@@ -1310,7 +1312,7 @@ impl<V: warpui::View> PageType<V> {
     /// [`SettingsWidget`].
     pub(super) fn new_monolith(
         widget: impl SettingsWidget<View = V> + 'static,
-        title: Option<&'static str>,
+        title: Option<String>,
         is_dual_scrollable: bool,
     ) -> Self {
         let (vertical_scroll_state, horizontal_scroll_state) = if is_dual_scrollable {
@@ -1335,7 +1337,7 @@ impl<V: warpui::View> PageType<V> {
     /// A page which is a series of [`SettingsWidget`]s that don't fall under sub-categories.
     pub(super) fn new_uncategorized(
         widgets: Vec<Box<dyn SettingsWidget<View = V>>>,
-        title: Option<&'static str>,
+        title: Option<String>,
     ) -> Self {
         Self::Uncategorized {
             filter: widgets.iter().enumerate().map(|(i, _)| i).collect(),
@@ -1351,7 +1353,7 @@ impl<V: warpui::View> PageType<V> {
     /// A page which is a series of [`SettingsWidget`]s that fall under sub-categories.
     pub(super) fn new_categorized(
         categories: Vec<Category<V>>,
-        title: Option<&'static str>,
+        title: Option<String>,
     ) -> Self {
         Self::Categorized {
             filter: categories
@@ -1507,7 +1509,7 @@ impl<V: warpui::View> PageType<V> {
                 ..
             } => FilteredPageType::Monolith {
                 widget: filter.then_some(widget.as_ref()),
-                title: *title,
+                title: title.clone(),
                 vertical_scroll_state: vertical_scroll_state.clone(),
                 horizontal_scroll_state: horizontal_scroll_state.clone(),
             },
@@ -1521,7 +1523,7 @@ impl<V: warpui::View> PageType<V> {
                 ..
             } => FilteredPageType::Uncategorized {
                 widgets: filter.iter().map(|i| widgets[*i].as_ref()).collect(),
-                title: *title,
+                title: title.clone(),
                 vertical_scroll_state: vertical_scroll_state.clone(),
                 horizontal_scroll_state: horizontal_scroll_state.clone(),
                 highlighted_widget_id: *highlighted_widget_id,
@@ -1542,7 +1544,7 @@ impl<V: warpui::View> PageType<V> {
                     .map(|(i, indices)| {
                         let category = &categories[i];
                         FilteredCategory {
-                            title: category.title,
+                            title: category.title.clone(),
                             subtitle: category.subtitle,
                             widgets: indices
                                 .iter()
@@ -1551,7 +1553,7 @@ impl<V: warpui::View> PageType<V> {
                         }
                     })
                     .collect(),
-                title: *title,
+                title: title.clone(),
                 vertical_scroll_state: vertical_scroll_state.clone(),
                 horizontal_scroll_state: horizontal_scroll_state.clone(),
                 highlighted_widget_id: *highlighted_widget_id,
@@ -1612,7 +1614,7 @@ impl<V: warpui::View> PageType<V> {
                     if widget.should_render(app) {
                         if let Some(title) = title {
                             let col = Flex::column()
-                                .with_child(render_page_title(title, HEADER_FONT_SIZE, appearance))
+                                .with_child(render_page_title(&title, HEADER_FONT_SIZE, appearance))
                                 .with_child(widget.render_widget(view, false, appearance, app));
                             page = col.finish();
                         } else {
@@ -1630,7 +1632,7 @@ impl<V: warpui::View> PageType<V> {
             } => {
                 let mut page = Flex::column();
                 if let Some(title) = title {
-                    page.add_child(render_page_title(title, HEADER_FONT_SIZE, appearance));
+                    page.add_child(render_page_title(&title, HEADER_FONT_SIZE, appearance));
                 }
                 for widget in widgets {
                     let highlighted =
@@ -1649,7 +1651,7 @@ impl<V: warpui::View> PageType<V> {
             } => {
                 let mut page = Flex::column();
                 if let Some(title) = title {
-                    page.add_child(render_page_title(title, HEADER_FONT_SIZE, appearance));
+                    page.add_child(render_page_title(&title, HEADER_FONT_SIZE, appearance));
                 }
                 let num_categories = categories.len();
                 for (i, category) in categories.into_iter().enumerate() {
@@ -1657,11 +1659,11 @@ impl<V: warpui::View> PageType<V> {
                         if let Some(subtitle) = category.subtitle {
                             page.add_child(render_sub_header_with_description(
                                 appearance,
-                                category.title,
+                                category.title.clone(),
                                 subtitle,
                             ));
                         } else {
-                            page.add_child(render_sub_header(appearance, category.title, None));
+                            page.add_child(render_sub_header(appearance, category.title.clone(), None));
                         }
                     }
                     for widget in &category.widgets {
@@ -1779,20 +1781,20 @@ impl<V: warpui::View> PageType<V> {
 pub(super) enum FilteredPageType<'a, V: warpui::View> {
     Monolith {
         widget: Option<&'a dyn SettingsWidget<View = V>>,
-        title: Option<&'static str>,
+        title: Option<String>,
         vertical_scroll_state: Option<ClippedScrollStateHandle>,
         horizontal_scroll_state: Option<ClippedScrollStateHandle>,
     },
     Uncategorized {
         widgets: Vec<&'a dyn SettingsWidget<View = V>>,
-        title: Option<&'static str>,
+        title: Option<String>,
         vertical_scroll_state: ClippedScrollStateHandle,
         horizontal_scroll_state: ClippedScrollStateHandle,
         highlighted_widget_id: Option<&'static str>,
     },
     Categorized {
         categories: Vec<FilteredCategory<'a, V>>,
-        title: Option<&'static str>,
+        title: Option<String>,
         vertical_scroll_state: ClippedScrollStateHandle,
         horizontal_scroll_state: ClippedScrollStateHandle,
         highlighted_widget_id: Option<&'static str>,
@@ -1801,14 +1803,14 @@ pub(super) enum FilteredPageType<'a, V: warpui::View> {
 
 /// A grouping of related [`SettingsWidget`]s that fall under the same sub-header.
 pub(super) struct Category<V: warpui::View> {
-    title: &'static str,
+    title: String,
     subtitle: Option<&'static str>,
     widgets: Vec<Box<dyn SettingsWidget<View = V>>>,
 }
 
 impl<V: warpui::View> Category<V> {
     pub(super) fn new(
-        title: &'static str,
+        title: String,
         widgets: Vec<Box<dyn SettingsWidget<View = V>>>,
     ) -> Self {
         Self {
@@ -1826,7 +1828,7 @@ impl<V: warpui::View> Category<V> {
 
 /// A [`Category`] with only the results which match a search query.
 pub(super) struct FilteredCategory<'a, V: warpui::View> {
-    pub(super) title: &'static str,
+    pub(super) title: String,
     pub(super) subtitle: Option<&'static str>,
     pub(super) widgets: Vec<&'a dyn SettingsWidget<View = V>>,
 }
@@ -1903,5 +1905,5 @@ pub(super) fn build_reset_button(
             font_size: Some(appearance.ui_font_size() * 0.8),
             ..Default::default()
         })
-        .with_text_label("Reset to default".to_owned())
+        .with_text_label(crate::tr!("settings", "settings-reset-to-default"))
 }

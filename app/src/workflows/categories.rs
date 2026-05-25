@@ -122,7 +122,7 @@ impl WorkflowViewType {
         let mut container = Container::new(
             appearance
                 .ui_builder()
-                .span(self.as_str(category_names).to_string())
+                .span(self.label(category_names))
                 .with_style(UiComponentStyles {
                     font_weight: Some(font_weight),
                     font_color: Some(appearance.theme().main_text_color(bg_color).into_solid()),
@@ -150,28 +150,25 @@ impl WorkflowViewType {
             .finish()
     }
 
-    fn as_str<'a>(&self, category_names: &'a [String]) -> &'a str {
+    fn label(&self, category_names: &[String]) -> String {
         match self {
-            WorkflowViewType::All => "All",
-            WorkflowViewType::LocalPersonal => "My Workflows",
-            WorkflowViewType::Project => "Repository Workflows",
-            WorkflowViewType::Team => "Team Workflows",
-            WorkflowViewType::Category { category_index, .. } => &category_names[*category_index],
+            WorkflowViewType::All => crate::tr!("workflows", "workflows-category-all"),
+            WorkflowViewType::LocalPersonal => crate::tr!("workflows", "workflows-category-my-workflows"),
+            WorkflowViewType::Project => crate::tr!("workflows", "workflows-category-repository-workflows"),
+            WorkflowViewType::Team => crate::tr!("workflows", "workflows-category-team-workflows"),
+            WorkflowViewType::Category { category_index, .. } => category_names[*category_index].clone(),
         }
     }
 
     fn as_accessibility_contents(&self, category_names: &[String]) -> AccessibilityContent {
         let a11y_content = match self {
             WorkflowViewType::Category { .. } => {
-                format!(
-                    "Showing workflows with category {}",
-                    self.as_str(category_names)
-                )
+                crate::tr!("workflows", "workflows-showing-category", category = self.label(category_names))
             }
-            WorkflowViewType::All => "Showing all workflows".into(),
-            WorkflowViewType::LocalPersonal => "Showing my workflows".into(),
-            WorkflowViewType::Project => "Showing project workflows".into(),
-            WorkflowViewType::Team => "Showing team workflows".into(),
+            WorkflowViewType::All => crate::tr!("workflows", "workflows-showing-all"),
+            WorkflowViewType::LocalPersonal => crate::tr!("workflows", "workflows-showing-my"),
+            WorkflowViewType::Project => crate::tr!("workflows", "workflows-showing-project"),
+            WorkflowViewType::Team => crate::tr!("workflows", "workflows-showing-team"),
         };
 
         AccessibilityContent::new_without_help(a11y_content, WarpA11yRole::UserAction)
@@ -715,10 +712,11 @@ impl CategoriesView {
         if let Some(workflow_for_render) =
             self.filtered_workflows().nth(self.selected_workflow_index)
         {
-            let a11y_content_text = format!(
-                "Selected {} {}",
-                workflow_for_render.workflow_type.as_workflow().name(),
-                workflow_for_render.workflow_type.as_workflow().content()
+            let a11y_content_text = crate::tr!(
+                "workflows",
+                "workflows-selected-workflow",
+                name = workflow_for_render.workflow_type.as_workflow().name(),
+                content = workflow_for_render.workflow_type.as_workflow().content()
             );
             ctx.emit_a11y_content(AccessibilityContent::new_without_help(
                 a11y_content_text,
@@ -755,16 +753,16 @@ impl CategoriesView {
 
     fn render_empty_list_placeholder(&self, appearance: &Appearance) -> Box<dyn Element> {
         let no_workflows_text =
-            CategoriesView::text_label("No matching workflows found.", appearance);
+            CategoriesView::text_label(crate::tr!("workflows", "workflows-no-matching-found"), appearance);
 
         let mut workflow_documentation_link_text =
-            Flex::row().with_child(CategoriesView::text_label("Try ", appearance));
+            Flex::row().with_child(CategoriesView::text_label(crate::tr!("workflows", "workflows-try"), appearance));
 
         workflow_documentation_link_text.add_child(
             appearance
                 .ui_builder()
                 .link(
-                    "creating your own workflow".into(),
+                    crate::tr!("workflows", "workflows-create-own-workflow"),
                     Some(
                         "https://docs.warp.dev/knowledge-and-collaboration/warp-drive/workflows"
                             .into(),
@@ -943,7 +941,7 @@ impl CategoriesView {
         let theme = appearance.theme();
         workflow_types_list.add_child(
             Container::new(Self::workflow_types_label(
-                "Categories",
+                crate::tr!("workflows", "workflows-categories-label"),
                 Some(theme.sub_text_color(theme.surface_2()).into_solid()),
                 appearance.ui_builder(),
             ))
@@ -1210,8 +1208,8 @@ impl View for CategoriesView {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            "Workflows",
-            "Search or use arrow up and arrow down keys to navigate and find a workflow. Use enter to confirm the workflow and esc to quit.",
+            crate::tr!("workflows", "workflows-accessibility-title"),
+            crate::tr!("workflows", "workflows-accessibility-description"),
             WarpA11yRole::MenuRole,
         ))
     }
@@ -1246,8 +1244,8 @@ impl View for CategoriesView {
 }
 
 impl VoltronFeatureViewMeta for CategoriesView {
-    fn editor_placeholder_text(&self) -> &'static str {
-        "Search workflows"
+    fn editor_placeholder_text(&self) -> String {
+        crate::tr!("workflows", "workflows-search-placeholder")
     }
 
     fn custom_action() -> Option<CustomAction> {

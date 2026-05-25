@@ -1,4 +1,5 @@
 #[cfg_attr(target_family = "wasm", allow(unused_imports))]
+use std::sync::LazyLock;
 use std::{
     path::{Path, PathBuf},
     time::Duration,
@@ -100,7 +101,8 @@ pub struct AgentAssistedEnvironmentModal {
 impl AgentAssistedEnvironmentModal {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let add_repo_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Add repo", SecondaryTheme)
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "add-repo"));
+            ActionButton::new(&*LABEL, SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(
@@ -116,7 +118,8 @@ impl AgentAssistedEnvironmentModal {
         });
 
         let create_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Create environment", PrimaryTheme).on_click(|ctx| {
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "create-environment"));
+            ActionButton::new(&*LABEL, PrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(AgentAssistedEnvironmentModalAction::Confirm);
             })
         });
@@ -332,12 +335,12 @@ impl AgentAssistedEnvironmentModal {
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_spacing(8.);
 
-        col.add_child(self.render_section_title("Selected repos", appearance));
+        col.add_child(self.render_section_title(&crate::tr!("settings", "settings-selected-repos"), appearance));
 
         if self.selected_repo_paths.is_empty() {
             col.add_child(
                 Text::new(
-                    "No repos selected yet",
+                    crate::tr!("settings", "settings-no-repos-selected"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() * 0.95,
                 )
@@ -358,8 +361,8 @@ impl AgentAssistedEnvironmentModal {
             let name = repo_path
                 .file_name()
                 .and_then(|s| s.to_str())
-                .unwrap_or("(unknown)")
-                .to_string();
+                .map(ToOwned::to_owned)
+                .unwrap_or_else(|| crate::tr!("settings", "settings-unknown-repo"));
 
             let path_text = home_relative_path(repo_path);
 
@@ -413,7 +416,7 @@ impl AgentAssistedEnvironmentModal {
             .with_child(
                 Expanded::new(
                     1.,
-                    self.render_section_title("Available indexed repos", appearance),
+                    self.render_section_title(&crate::tr!("settings", "settings-available-indexed-repos"), appearance),
                 )
                 .finish(),
             )
@@ -433,12 +436,12 @@ impl AgentAssistedEnvironmentModal {
         if self.available_repos.is_empty() {
             let text = if cfg!(all(feature = "local_fs", not(target_family = "wasm"))) {
                 if self.available_repos_loading {
-                    "Loading locally indexed repos…"
+                    crate::tr!("settings", "settings-loading-indexed-repos")
                 } else {
-                    "No locally indexed repos found yet. Index a repo, then try again."
+                    crate::tr!("settings", "settings-no-indexed-repos")
                 }
             } else {
-                "Local repo selection is unavailable in this build."
+                crate::tr!("settings", "settings-local-repo-unavailable")
             };
 
             col.add_child(
@@ -508,7 +511,7 @@ impl AgentAssistedEnvironmentModal {
         if !has_any_available {
             col.add_child(
                 Text::new(
-                    "All locally indexed repos are already selected.",
+                    crate::tr!("settings", "settings-all-repos-selected"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() * 0.95,
                 )
@@ -551,7 +554,7 @@ impl AgentAssistedEnvironmentModal {
         let path = home_relative_path(selected_path);
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             let toast =
-                DismissibleToast::error(format!("Selected folder is not a Git repository: {path}"))
+                DismissibleToast::error(crate::tr!("settings", "settings-folder-not-git-repo", path = path))
                     .with_object_id("agent_assisted_env_add_repo_not_git_repo".to_string());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -593,9 +596,10 @@ impl AgentAssistedEnvironmentModal {
 
         ctx.open_file_picker(
             move |paths_result, ctx| {
+                static NO_DIR_SELECTED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-no-directory-selected"));
                 let result = paths_result.and_then(|paths| {
                     paths.into_iter().next().map(PathBuf::from).ok_or_else(|| {
-                        FilePickerError::DialogFailed("No directory selected".to_string())
+                        FilePickerError::DialogFailed(NO_DIR_SELECTED.clone())
                     })
                 });
 
@@ -613,11 +617,10 @@ impl AgentAssistedEnvironmentModal {
 
     fn render_dialog(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let description = if FeatureFlag::FullSourceCodeEmbedding.is_enabled() {
-            "Select locally indexed repos to provide context for the environment creation agent."
+            crate::tr!("settings", "settings-select-local-repos-helper")
         } else {
-            "Select repos to provide context for the environment creation agent."
-        }
-        .to_string();
+            crate::tr!("settings", "settings-select-repos-helper")
+        };
 
         let close_button = icon_button(
             appearance,
@@ -639,7 +642,7 @@ impl AgentAssistedEnvironmentModal {
             .finish();
 
         let dialog = Dialog::new(
-            "Select repos for your environment".to_string(),
+            crate::tr!("settings", "settings-select-repos-title"),
             Some(description),
             dialog_styles(appearance),
         )

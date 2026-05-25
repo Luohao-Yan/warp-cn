@@ -54,7 +54,10 @@ use crate::{
 };
 
 const CLOUD_AGENT_DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
-const OZ_UPDATES_SECTION_HEADER: &str = "What's new in Oz";
+static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-oz-updates-header"));
+static AI_RUN_IN_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-in-cloud-env"));
+static AI_RECENT_ACTIVITY: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recent-activity"));
+static AI_VIEW_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-changelog"));
 
 // The maximum number of Oz updates from the changelog rendered in-line in the 'What's new in Oz section'.
 const MAX_OZ_UPDATE_COUNT: usize = 4;
@@ -649,7 +652,7 @@ fn render_title_and_description(props: HeaderProps, app: &AppContext) -> Vec<Box
             items.push(
                 Container::new(
                     Text::new(
-                        "Run your agent task in an isolated cloud environment.",
+                        &*AI_RUN_IN_CLOUD,
                         appearance.ui_font_family(),
                         appearance.monospace_font_size(),
                     )
@@ -883,7 +886,7 @@ fn render_recent_conversations_section(
         .with_child(
             Container::new(
                 Text::new(
-                    "RECENT ACTIVITY",
+                    &*AI_RECENT_ACTIVITY,
                     appearance.ui_font_family(),
                     header_font_size,
                 )
@@ -1054,7 +1057,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                         .with_child(
                             Container::new(
                                 Text::new(
-                                    OZ_UPDATES_SECTION_HEADER,
+                                    OZ_UPDATES_SECTION_HEADER.clone(),
                                     appearance.ui_font_family(),
                                     appearance.monospace_font_size() - 2.,
                                 )
@@ -1114,7 +1117,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                                 .with_child(
                                     Container::new(
                                         Text::new(
-                                            "View changelog",
+                                            &*AI_VIEW_CHANGELOG,
                                             appearance.ui_font_family(),
                                             appearance.monospace_font_size() - 2.,
                                         )

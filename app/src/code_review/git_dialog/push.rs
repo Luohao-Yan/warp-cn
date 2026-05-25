@@ -6,6 +6,7 @@
 //! spawns `run_push`.
 
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 use warp_core::ui::appearance::Appearance;
 use warpui::{
@@ -32,6 +33,8 @@ use crate::{
     util::git::{Commit, FileChangeEntry},
 };
 use warp_core::send_telemetry_from_ctx;
+
+static CODE_REVIEW_INCLUDED_COMMITS: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-included-commits"));
 
 /// Push-specific sub-actions, dispatched wrapped in `GitDialogAction::Push`.
 #[derive(Clone, Debug, PartialEq)]
@@ -63,11 +66,11 @@ pub(super) fn new_state(publish: bool, commits: Vec<Commit>) -> PushState {
     }
 }
 
-pub(super) fn confirm_label(publish: bool) -> &'static str {
+pub(super) fn confirm_label(publish: bool) -> String {
     if publish {
-        "Publish"
+        crate::tr!("code_editor", "review-publish-branch")
     } else {
-        "Push"
+        crate::tr!("code_editor", "review-push-changes")
     }
 }
 
@@ -79,11 +82,11 @@ pub(super) fn confirm_icon(publish: bool) -> Icon {
     }
 }
 
-fn loading_label(publish: bool) -> &'static str {
+fn loading_label(publish: bool) -> String {
     if publish {
-        "Publishing…"
+        crate::tr!("code_editor", "review-publishing")
     } else {
-        "Pushing…"
+        crate::tr!("code_editor", "review-pushing")
     }
 }
 
@@ -160,9 +163,9 @@ pub(super) fn start_confirm(me: &mut GitDialog, ctx: &mut ViewContext<GitDialog>
             match result {
                 Ok(_) => {
                     let toast_msg = if publish {
-                        "Branch successfully published."
+                        crate::tr!("code_editor", "review-branch-published")
                     } else {
-                        "Changes successfully pushed."
+                        crate::tr!("code_editor", "review-changes-pushed")
                     };
                     show_toast(toast_msg, ctx);
                 }
@@ -213,7 +216,7 @@ fn render_commits_section(state: &PushState, appearance: &Appearance) -> Box<dyn
     let sub_color = theme.sub_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        "Included commits",
+        &*CODE_REVIEW_INCLUDED_COMMITS,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

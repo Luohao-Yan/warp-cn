@@ -690,14 +690,14 @@ impl From<&WorkspaceAction> for LoginGatedFeature {
     fn from(val: &WorkspaceAction) -> LoginGatedFeature {
         use WorkspaceAction::*;
         match val {
-            ImportToTeamDrive => "Importing to a team drive",
-            CreateTeamNotebook => "Creating a team notebook",
-            CreateTeamWorkflow => "Creating a team workflow",
-            CreateTeamFolder => "Creating a team folder",
-            CreateTeamEnvVarCollection => "Creating a team environment variable collection",
-            CreateTeamAIPrompt => "Creating a team prompt",
-            OpenShareSessionModal(_) => "Sharing a session",
-            _ => "Unknown reason",
+            ImportToTeamDrive => crate::tr!("workspace", "workspace-importing-to-team-drive"),
+            CreateTeamNotebook => crate::tr!("workspace", "workspace-creating-team-notebook"),
+            CreateTeamWorkflow => crate::tr!("workspace", "workspace-creating-team-workflow"),
+            CreateTeamFolder => crate::tr!("workspace", "workspace-creating-team-folder"),
+            CreateTeamEnvVarCollection => crate::tr!("workspace", "workspace-creating-team-env-var-collection"),
+            CreateTeamAIPrompt => crate::tr!("workspace", "workspace-creating-team-prompt"),
+            OpenShareSessionModal(_) => crate::tr!("workspace", "workspace-sharing-session"),
+            _ => crate::tr!("common", "common-unknown-label"),
         }
     }
 }

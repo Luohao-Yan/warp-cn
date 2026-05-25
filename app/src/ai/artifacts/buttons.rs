@@ -212,7 +212,7 @@ fn make_plan_button(
     make_artifact_button(
         title,
         Icon::Compass,
-        "Open plan",
+        crate::tr!("ai", "ai-open-plan"),
         None,
         ArtifactButtonAction::OpenPlan { notebook_uid },
         theme,
@@ -223,7 +223,7 @@ fn make_branch_button(branch: String, theme: Arc<dyn ActionButtonTheme>) -> Acti
     make_artifact_button(
         branch.clone(),
         Icon::GitBranch,
-        "Copy branch name",
+        "Copy branch name".to_string(),
         Some(AnsiColorIdentifier::Green),
         ArtifactButtonAction::CopyBranch { branch },
         theme,
@@ -245,7 +245,7 @@ fn make_pr_button(
     make_artifact_button(
         display_text,
         Icon::Github,
-        "Open pull request",
+        crate::tr!("ai", "ai-open-pull-request"),
         None,
         ArtifactButtonAction::OpenPullRequest { url },
         theme,
@@ -260,7 +260,7 @@ fn make_screenshot_button(
     make_artifact_button(
         label,
         Icon::Image,
-        "View screenshots",
+        "View screenshots".to_string(),
         None,
         ArtifactButtonAction::ViewScreenshots { artifact_uids },
         theme,
@@ -275,7 +275,7 @@ fn make_file_button(
     make_artifact_button(
         label,
         Icon::File,
-        "Download file",
+        "Download file".to_string(),
         None,
         ArtifactButtonAction::DownloadFile { artifact_uid },
         theme,
@@ -285,7 +285,7 @@ fn make_file_button(
 fn make_artifact_button(
     display_text: String,
     icon: Icon,
-    tooltip: &str,
+    tooltip: String,
     icon_color: Option<AnsiColorIdentifier>,
     action: ArtifactButtonAction,
     theme: Arc<dyn ActionButtonTheme>,

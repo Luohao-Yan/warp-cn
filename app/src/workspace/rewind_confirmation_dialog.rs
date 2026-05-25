@@ -188,7 +188,7 @@ impl View for RewindConfirmationDialog {
             )
             .with_child(
                 Text::new_inline(
-                    "Rewinding does not affect files edited manually or via shell commands.",
+                    crate::tr!("workspace", "workspace-rewind-no-affect-files"),
                     appearance.ui_font_family(),
                     12.,
                 )
@@ -199,10 +199,9 @@ impl View for RewindConfirmationDialog {
 
         let dialog = Container::new(
             Dialog::new(
-                "Rewind".into(),
+                crate::tr!("workspace", "workspace-rewind").clone().into(),
                 Some(
-                    "Are you sure you want to rewind? This will restore your code and conversation to before this point, and cancel any commands the agent is currently running. A copy of the original conversation will be saved in your conversation history."
-                        .into(),
+                    crate::tr!("workspace", "workspace-rewind-ai-confirmation-body").into(),
                 ),
                 UiComponentStyles {
                     width: Some(DIALOG_WIDTH),

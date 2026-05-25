@@ -22,13 +22,13 @@ pub enum OzLaunchSlide {
 
 impl Slide for OzLaunchSlide {
     fn modal_title(&self) -> String {
-        "Introducing Oz".to_string()
+        crate::tr!("workspace", "workspace-introducing-oz")
     }
 
     fn modal_subtext_paragraphs(&self) -> Vec<FormattedTextLine> {
         vec![FormattedTextLine::Line(vec![
             FormattedTextFragment::plain_text(
-                "Infinitely scalable coding agent — run in local sessions or in the cloud.",
+                crate::tr!("workspace", "workspace-oz-subtext"),
             ),
         ])]
     }
@@ -55,33 +55,33 @@ impl Slide for OzLaunchSlide {
         }
     }
 
-    fn display_text(&self) -> Option<&'static str> {
+    fn display_text(&self) -> Option<String> {
         Some(match self {
-            OzLaunchSlide::CloudAgents => "Cloud agents",
-            OzLaunchSlide::AgentAutomations => "Agent automations",
-            OzLaunchSlide::AgentManagement => "Agent management",
-            OzLaunchSlide::LaunchCredits => "A little gift",
+            OzLaunchSlide::CloudAgents => crate::tr!("workspace", "workspace-cloud-agents"),
+            OzLaunchSlide::AgentAutomations => crate::tr!("workspace", "workspace-agent-automations"),
+            OzLaunchSlide::AgentManagement => crate::tr!("workspace", "workspace-agent-management"),
+            OzLaunchSlide::LaunchCredits => crate::tr!("workspace", "workspace-a-little-gift"),
         })
     }
 
-    fn short_label(&self) -> &'static str {
+    fn short_label(&self) -> String {
         match self {
-            OzLaunchSlide::CloudAgents => "Cloud agents",
-            OzLaunchSlide::AgentAutomations => "Agent automations",
-            OzLaunchSlide::AgentManagement => "Agent management",
-            OzLaunchSlide::LaunchCredits => "Launch credits",
+            OzLaunchSlide::CloudAgents => crate::tr!("workspace", "workspace-cloud-agents"),
+            OzLaunchSlide::AgentAutomations => crate::tr!("workspace", "workspace-agent-automations-short"),
+            OzLaunchSlide::AgentManagement => crate::tr!("workspace", "workspace-agent-management-short"),
+            OzLaunchSlide::LaunchCredits => crate::tr!("workspace", "workspace-launch-credits"),
         }
     }
 
-    fn title(&self) -> &'static str {
+    fn title(&self) -> String {
         match self {
-            OzLaunchSlide::CloudAgents => "Break out of your laptop with cloud agents",
+            OzLaunchSlide::CloudAgents => crate::tr!("workspace", "workspace-break-out-of-your-laptop"),
             OzLaunchSlide::AgentAutomations => {
-                "Orchestrate agents, turning Skills into automations"
+                crate::tr!("workspace", "workspace-orchestrate-agents")
             }
-            OzLaunchSlide::AgentManagement => "Track local and cloud agents seamlessly",
+            OzLaunchSlide::AgentManagement => crate::tr!("workspace", "workspace-track-local-and-cloud"),
             OzLaunchSlide::LaunchCredits => {
-                "1,000 free cloud agent credits when you upgrade to Warp Build"
+                crate::tr!("workspace", "workspace-1000-free-credits")
             }
         }
     }
@@ -90,19 +90,19 @@ impl Slide for OzLaunchSlide {
         None
     }
 
-    fn content(&self) -> &'static str {
+    fn content(&self) -> String {
         match self {
             OzLaunchSlide::CloudAgents => {
-                "Use cloud agents to run many agents in parallel, keep agents working when you close your laptop, or start agents programmatically. Plus, you can check on their work through the web."
+                crate::tr!("workspace", "workspace-oz-cloud-agents-content")
             }
             OzLaunchSlide::AgentAutomations => {
-                "Oz agents can be defined using the standard Skills format. You can use the built in scheduler to setup agents to run autonomously at set intervals, or use the Oz SDK or API to programmatically start and manage Oz agents."
+                crate::tr!("workspace", "workspace-oz-agent-automations-content")
             }
             OzLaunchSlide::AgentManagement => {
-                "View all of your agents across local and cloud sessions in the Warp app or at [oz.warp.dev](https://oz.warp.dev). Join live agent sessions, continue tasks locally, and steer agents with one click."
+                crate::tr!("workspace", "workspace-oz-agent-management-content")
             }
             OzLaunchSlide::LaunchCredits => {
-                "Upgrade to Build this month and receive 1,000 extra credits to try using Oz. Credits are only eligible for Oz runs in Warp-hosted cloud environments."
+                crate::tr!("workspace", "workspace-oz-launch-credits-content")
             }
         }
     }
@@ -140,9 +140,9 @@ impl Slide for OzLaunchSlide {
             | OzLaunchSlide::AgentAutomations
             | OzLaunchSlide::AgentManagement => {
                 let next = self.next().expect("Non-final slides should have a next");
-                CTAButton::next_slide(next, format!("Next: {}", next.short_label()))
+                CTAButton::next_slide(next, format!("{}: {}", crate::tr!("workspace", "workspace-next"), next.short_label()))
             }
-            OzLaunchSlide::LaunchCredits => CTAButton::custom("Try it out", |ctx| {
+            OzLaunchSlide::LaunchCredits => CTAButton::custom(crate::tr!("workspace", "workspace-try-it-out"), |ctx| {
                 send_telemetry_from_ctx!(
                     CloudAgentTelemetryEvent::EnteredCloudMode {
                         entry_point: CloudModeEntryPoint::OzLaunchModal,
@@ -162,7 +162,7 @@ impl Slide for OzLaunchSlide {
 
     fn secondary_cta_button(&self) -> Option<CTAButton<Self>> {
         match self {
-            OzLaunchSlide::LaunchCredits => Some(CTAButton::close("Skip for now")),
+            OzLaunchSlide::LaunchCredits => Some(CTAButton::close(crate::tr!("workspace", "workspace-skip-for-now"))),
             OzLaunchSlide::CloudAgents
             | OzLaunchSlide::AgentAutomations
             | OzLaunchSlide::AgentManagement => None,
@@ -171,8 +171,8 @@ impl Slide for OzLaunchSlide {
 
     fn checkbox_config(&self) -> Option<CheckboxConfig> {
         Some(CheckboxConfig {
-            label: "Sync conversations to cloud",
-            description: "Agent conversations stored in the cloud can be shared with anyone with one click, and allow conversations to be continued across devices and on logout.",
+            label: crate::tr!("workspace", "workspace-sync-conversations-to-cloud"),
+            description: crate::tr!("workspace", "workspace-sync-conversations-desc"),
         })
     }
 

@@ -24,6 +24,7 @@ use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
+use std::sync::LazyLock;
 
 use crate::send_telemetry_from_ctx;
 use crate::TelemetryEvent;
@@ -34,6 +35,18 @@ const COMPACT_MODAL_HEIGHT: f32 = 360.;
 const HEADER_HEIGHT: f32 = 92.;
 const BUTTON_DIAMETER: f32 = 20.;
 const BILLING_AND_USAGE_URL: &str = "warp://settings/billing_and_usage";
+
+static CONCURRENT_LIMIT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-concurrent-limit-reached"));
+static CONCURRENT_LIMIT_EXPLANATION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-concurrent-limit-explanation"));
+static OUT_OF_AI_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-you-are-out-of-ai-credits"));
+static OUT_OF_CREDITS_EXPLANATION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-out-of-credits-explanation"));
+static UPGRADE_MORE_CONCURRENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-upgrade-more-concurrent-agents"));
+static UPGRADE_CONTINUE_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-upgrade-continue-cloud-agents"));
+static PAID_PLANS_INCLUDE_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-paid-plans-include"));
+static BUSINESS_PLAN_INCLUDE_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-business-plan-include"));
+static EXTENDED_AI_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-extended-ai-credits-per-month"));
+static BYOK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-bring-your-own-api-key"));
+static SSO: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-saml-based-sso"));
 
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
 pub enum CloudAgentCapacityModalVariant {
@@ -127,12 +140,12 @@ impl CloudAgentCapacityModal {
         let neutral_bg = blended_colors::neutral_1(theme);
         let (title_text, mut explanation_text) = match self.variant {
             CloudAgentCapacityModalVariant::ConcurrentLimit => (
-                "Concurrent cloud agent limit reached",
-                "This cloud run is queued because your team has reached the maximum number of concurrent cloud agents. It will start automatically when another cloud run finishes.".to_string(),
+                CONCURRENT_LIMIT_TITLE.clone(),
+                CONCURRENT_LIMIT_EXPLANATION.clone(),
             ),
             CloudAgentCapacityModalVariant::OutOfCredits => (
-                "You're out of AI credits",
-                "This cloud run stopped because your team has used all available AI credits for the current billing period.".to_string(),
+                OUT_OF_AI_CREDITS_TITLE.clone(),
+                OUT_OF_CREDITS_EXPLANATION.clone(),
             ),
         };
 
@@ -148,12 +161,13 @@ impl CloudAgentCapacityModal {
         if can_upgrade {
             let upgrade_suffix = match self.variant {
                 CloudAgentCapacityModalVariant::ConcurrentLimit => {
-                    " Upgrade your plan for more concurrent cloud agents."
+                    UPGRADE_MORE_CONCURRENT.as_str()
                 }
                 CloudAgentCapacityModalVariant::OutOfCredits => {
-                    " Upgrade your plan to continue running cloud agents."
+                    UPGRADE_CONTINUE_CLOUD.as_str()
                 }
             };
+            explanation_text.push(' ');
             explanation_text.push_str(upgrade_suffix);
         }
         let subtitle =
@@ -169,7 +183,7 @@ impl CloudAgentCapacityModal {
         if can_upgrade {
             let (target_plan, agent_multiplier, extra_benefits) = match customer_type {
                 CustomerType::Build | CustomerType::BuildMax => {
-                    (StripeSubscriptionPlan::BuildBusiness, "2x", vec!["SSO"])
+                    (StripeSubscriptionPlan::BuildBusiness, "2x", vec![SSO.as_str()])
                 }
                 // Free tier or a legacy plan.
                 _ => (StripeSubscriptionPlan::Build, "5x", vec![]),
@@ -183,19 +197,15 @@ impl CloudAgentCapacityModal {
             let pricing_text = if customer_type == CustomerType::Free {
                 if let Some(pricing) = plan_pricing {
                     let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                    format!(
-                        "Paid plans start at ${price}/month and include everything in your free trial plus:"
-                    )
+                    crate::tr!("workspace", "workspace-paid-plans-start-at", price = format!("{}", price))
                 } else {
-                    "Paid plans include everything in your free trial plus:".to_string()
+                    PAID_PLANS_INCLUDE_FALLBACK.clone()
                 }
             } else if let Some(pricing) = plan_pricing {
                 let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                format!(
-                    "The Business plan starts at ${price}/month and includes everything on your current plan plus:"
-                )
+                crate::tr!("workspace", "workspace-business-plan-starts-at", price = format!("{}", price))
             } else {
-                "The Business plan includes everything on your current plan plus:".to_string()
+                BUSINESS_PLAN_INCLUDE_FALLBACK.clone()
             };
 
             let pricing = FormattedTextElement::new(
@@ -213,16 +223,16 @@ impl CloudAgentCapacityModal {
             // Credits text from plan pricing
             let credits_text = if let Some(limit) = plan_pricing.and_then(|plan| plan.request_limit)
             {
-                format!("{} AI credits per month", limit.separate_with_commas())
+                crate::tr!("workspace", "workspace-ai-credits-per-month", credits = limit.separate_with_commas())
             } else {
-                "Extended AI credits per month".to_string()
+                EXTENDED_AI_CREDITS.clone()
             };
 
             // Benefits list based on plan type
             let mut benefits = vec![
-                format!("{} the number of concurrent cloud agents", agent_multiplier),
+                crate::tr!("workspace", "workspace-multiplier-concurrent-agents", multiplier = agent_multiplier),
                 credits_text,
-                "Bring your own API key".to_string(),
+                BYOK.clone(),
             ];
             for extra in extra_benefits {
                 benefits.push(extra.to_string());
@@ -277,9 +287,9 @@ impl CloudAgentCapacityModal {
         let content = content.finish();
         let cta_button = if show_cta {
             let cta_button_label = if can_upgrade {
-                "Upgrade plan"
+                crate::tr!("workspace", "workspace-upgrade-plan")
             } else {
-                "Open billing"
+                crate::tr!("workspace", "workspace-open-billing")
             };
             Some(
                 appearance

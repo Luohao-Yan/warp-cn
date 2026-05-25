@@ -41,10 +41,12 @@ use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 
 use super::common::render_scrollable_collapsible_content;
+use std::sync::LazyLock;
+
 use super::output::{action_icon, Props};
 use super::WithContentItemSpacing;
 
-const GENERATING_TITLE_PLACEHOLDER: &str = "Generating title...";
+static GENERATING_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-generating-title"));
 const ORCHESTRATION_COLLAPSED_MAX_HEIGHT: f32 = 200.;
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct OrchestrationParticipant {
@@ -55,7 +57,7 @@ struct OrchestrationParticipant {
 impl OrchestrationParticipant {
     fn orchestrator() -> Self {
         Self {
-            display_name: "Orchestrator".to_string(),
+            display_name: crate::tr!("ai", "ai-orchestrator"),
             avatar: OrchestrationAvatar::Orchestrator,
         }
     }

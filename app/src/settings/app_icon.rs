@@ -70,24 +70,24 @@ pub enum AppIcon {
 
 impl std::fmt::Display for AppIcon {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let value = match &self {
-            AppIcon::Default => "Default",
-            AppIcon::Aurora => "Aurora",
-            AppIcon::Classic1 => "Classic 1",
-            AppIcon::Classic2 => "Classic 2",
-            AppIcon::Classic3 => "Classic 3",
-            AppIcon::Comets => "Comets",
-            AppIcon::GlassSky => "Glass Sky",
-            AppIcon::Glitch => "Glitch",
-            AppIcon::Cow => "Cow",
-            AppIcon::Glow => "Glow",
-            AppIcon::Holographic => "Holographic",
-            AppIcon::Mono => "Mono",
-            AppIcon::Neon => "Neon",
-            AppIcon::Original => "Original",
-            AppIcon::Starburst => "Starburst",
-            AppIcon::Sticker => "Sticker",
-            AppIcon::WarpOne => "Warp 1",
+        let value: String = match &self {
+            AppIcon::Default => crate::tr!("settings", "settings-icon-default"),
+            AppIcon::Aurora => crate::tr!("settings", "settings-icon-aurora"),
+            AppIcon::Classic1 => crate::tr!("settings", "settings-icon-classic-1"),
+            AppIcon::Classic2 => crate::tr!("settings", "settings-icon-classic-2"),
+            AppIcon::Classic3 => crate::tr!("settings", "settings-icon-classic-3"),
+            AppIcon::Comets => crate::tr!("settings", "settings-icon-comets"),
+            AppIcon::GlassSky => crate::tr!("settings", "settings-icon-glass-sky"),
+            AppIcon::Glitch => crate::tr!("settings", "settings-icon-glitch"),
+            AppIcon::Cow => crate::tr!("settings", "settings-icon-cow"),
+            AppIcon::Glow => crate::tr!("settings", "settings-icon-glow"),
+            AppIcon::Holographic => crate::tr!("settings", "settings-icon-holographic"),
+            AppIcon::Mono => crate::tr!("settings", "settings-icon-mono"),
+            AppIcon::Neon => crate::tr!("settings", "settings-icon-neon"),
+            AppIcon::Original => crate::tr!("settings", "settings-icon-original"),
+            AppIcon::Starburst => crate::tr!("settings", "settings-icon-starburst"),
+            AppIcon::Sticker => crate::tr!("settings", "settings-icon-sticker"),
+            AppIcon::WarpOne => crate::tr!("settings", "settings-icon-warp-1"),
         };
         write!(f, "{value}")
     }

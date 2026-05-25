@@ -17,6 +17,9 @@ use crate::editor::position_id_for_first_cursor;
 use crate::settings::CursorDisplayType;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
+use std::sync::LazyLock;
+
+static EDITOR_CYCLE_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-cycle-suggestions"));
 use itertools::Itertools;
 use pathfinder_geometry::{
     rect::RectF,
@@ -1519,7 +1522,7 @@ impl EditorElement {
                 .with_margin_right(self.view_snapshot.em_width)
                 .finish(),
                 Text::new(
-                    "Cycle suggestions",
+                    &*EDITOR_CYCLE_SUGGESTIONS,
                     self.view_snapshot.font_family,
                     font_size,
                 )

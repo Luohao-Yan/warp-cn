@@ -7,6 +7,7 @@ use crate::ui_components::icons::Icon;
 use crate::workspace::tab_settings::TabSettings;
 
 use settings::Setting as _;
+use std::sync::LazyLock;
 use warpui::{AppContext, SingletonEntity};
 
 /// A configurable item in the vertical tabs header toolbar.
@@ -34,14 +35,20 @@ pub enum HeaderToolbarItemKind {
     NotificationsMailbox,
 }
 
+static TOOLBAR_TABS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-tabs-panel").clone());
+static TOOLBAR_TOOLS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-tools-panel").clone());
+static TOOLBAR_AGENT_MANAGEMENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-agent-management").clone());
+static TOOLBAR_CODE_REVIEW: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-code-review").clone());
+static TOOLBAR_NOTIFICATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-notifications").clone());
+
 impl HeaderToolbarItemKind {
-    pub fn display_label(&self) -> &'static str {
+    pub fn display_label(&self) -> &str {
         match self {
-            Self::TabsPanel => "Tabs Panel",
-            Self::ToolsPanel => "Tools Panel",
-            Self::AgentManagement => "Agent Management",
-            Self::CodeReview => "Code Review",
-            Self::NotificationsMailbox => "Notifications",
+            Self::TabsPanel => &TOOLBAR_TABS_PANEL,
+            Self::ToolsPanel => &TOOLBAR_TOOLS_PANEL,
+            Self::AgentManagement => &TOOLBAR_AGENT_MANAGEMENT,
+            Self::CodeReview => &TOOLBAR_CODE_REVIEW,
+            Self::NotificationsMailbox => &TOOLBAR_NOTIFICATIONS,
         }
     }
 

@@ -237,9 +237,9 @@ impl ExportManager {
         if is_bulk && self.exports.is_empty() {
             ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
                 let link_label = if cfg!(target_os = "macos") {
-                    "Open in Finder"
+                    crate::tr!("drive", "drive-open-in-finder").as_str()
                 } else {
-                    "Open in folder"
+                    crate::tr!("drive", "drive-open-in-folder").as_str()
                 };
 
                 let mut toast_link = ToastLink::new(link_label.to_string());
@@ -250,7 +250,7 @@ impl ExportManager {
                         .with_onclick_action(WorkspaceAction::OpenInExplorer { path: root_dir });
                 }
                 toast_stack.add_ephemeral_toast(
-                    DismissibleToast::success("Finished exporting objects".to_string())
+                    DismissibleToast::success(crate::tr!("drive", "export-finished-toast"))
                         .with_link(toast_link),
                     window_id,
                     ctx,
@@ -322,7 +322,7 @@ impl ExportManager {
         };
 
         let name = if name.is_empty() {
-            "Untitled".to_string()
+            crate::tr!("drive", "drive-untitled")
         } else {
             safe_filename(&name)
         };
@@ -379,8 +379,8 @@ impl ExportManager {
         let window_id = export.remove().window_id;
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             let message = match id.display_name(ctx) {
-                Some(name) => format!("Failed to export {name}"),
-                None => "Export failed".to_string(),
+                Some(name) => crate::tr!("drive", "drive-failed-export-name", name = name.to_string()),
+                None => crate::tr!("drive", "drive-failed-export"),
             };
             toast_stack.add_persistent_toast(DismissibleToast::error(message), window_id, ctx);
         });
@@ -400,14 +400,14 @@ impl ExportManager {
         if !export.get().is_bulk {
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 let message = match export.key().display_name(ctx) {
-                    Some(name) => format!("Exported {name}"),
-                    None => "Exported object".to_string(),
+                    Some(name) => crate::tr!("drive", "drive-exported-named", name = name),
+                    None => crate::tr!("drive", "drive-exported-fallback"),
                 };
 
                 let link_label = if cfg!(target_os = "macos") {
-                    "Open in Finder"
+                    crate::tr!("drive", "drive-open-in-finder").as_str()
                 } else {
-                    "Open in folder"
+                    crate::tr!("drive", "drive-open-in-folder").as_str()
                 };
 
                 toast_stack.add_ephemeral_toast(
@@ -457,7 +457,7 @@ impl ExportId {
             .map(|object| {
                 let mut name = object.display_name();
                 if name.is_empty() {
-                    name.push_str("Untitled")
+                    name.push_str(&crate::tr!("drive", "drive-untitled"))
                 }
                 name
             })

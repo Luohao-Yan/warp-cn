@@ -100,7 +100,7 @@ impl KeybindingsView {
 
         search_editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text(settings_view::keybindings::SEARCH_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(settings_view::keybindings::search_placeholder(), ctx);
         });
 
         let search_bar = {
@@ -356,7 +356,7 @@ impl KeybindingsView {
                         .build()
                         .finish(),
                 )
-                .with_child(self.render_text("To toggle this panel".into(), None, appearance))
+                .with_child(self.render_text(crate::tr!("common", "to-toggle-this-panel"), None, appearance))
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .finish();
 
@@ -371,7 +371,7 @@ impl KeybindingsView {
             appearance
                 .ui_builder()
                 .link(
-                    "here.".into(),
+                    crate::tr!("common", "here-label").into(),
                     None,
                     Some(Box::new(|ctx| {
                         ctx.dispatch_typed_action(WorkspaceAction::ConfigureKeybindingSettings {
@@ -394,7 +394,7 @@ impl KeybindingsView {
         Container::new(
             column
                 .with_child(self.render_text(
-                    "Go to settings > keyboard shortcuts to configure custom keybindings".into(),
+                    crate::tr!("common", "go-to-settings-keybindings").into(),
                     None,
                     appearance,
                 ))
@@ -422,11 +422,11 @@ impl KeybindingsView {
             Flex::column().with_cross_axis_alignment(CrossAxisAlignment::Stretch);
 
         let title = match section {
-            KeybindingSection::Essentials => "Essentials",
-            KeybindingSection::Blocks => "Blocks",
-            KeybindingSection::InputEditor => "Input Editor",
-            KeybindingSection::Terminal => "Terminal",
-            KeybindingSection::Fundamentals => "Fundamentals",
+            KeybindingSection::Essentials => &crate::tr!("common", "essentials-section"),
+            KeybindingSection::Blocks => &crate::tr!("common", "blocks-section"),
+            KeybindingSection::InputEditor => &crate::tr!("common", "input-editor-section"),
+            KeybindingSection::Terminal => &crate::tr!("common", "terminal-section"),
+            KeybindingSection::Fundamentals => &crate::tr!("common", "fundamentals-section"),
         };
 
         let mut section_header = self.render_text(

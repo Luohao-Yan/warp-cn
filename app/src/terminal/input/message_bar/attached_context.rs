@@ -1,5 +1,7 @@
 //! Shared message producers for displaying attached blocks/text context.
 
+use std::sync::LazyLock;
+
 use warp_core::features::FeatureFlag;
 use warpui::keymap::Keystroke;
 
@@ -11,6 +13,9 @@ use crate::terminal::input::message_bar::{
 };
 use crate::terminal::input::InputAction;
 use crate::terminal::model::TerminalModel;
+
+static TERMINAL_TO_REMOVE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-to-remove"));
+static TERMINAL_SELECTED_TEXT_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selected-text-as-context"));
 
 /// Trait for message args that can provide attached context information.
 /// Exposes the required dependencies for attached context message producers.
@@ -58,18 +63,11 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args> for AttachedBlocksM
             .map(|cmd| truncated_command_for_block(&cmd))?;
 
         let message_text = if context_block_ids.len() == 1 {
-            format!("`{}` attached as context", block_command)
+            crate::tr!("terminal", "terminal-attached-as-context", name = block_command.clone())
         } else if context_block_ids.len() == 2 {
-            format!(
-                "`{}` and 1 other command attached as context",
-                block_command
-            )
+            crate::tr!("terminal", "terminal-attached-with-one-more", name = block_command.clone())
         } else {
-            format!(
-                "`{}` and {} other commands attached as context",
-                block_command,
-                context_block_ids.len().saturating_sub(1)
-            )
+            crate::tr!("terminal", "terminal-attached-with-more", name = block_command.clone(), count = context_block_ids.len().saturating_sub(1))
         };
 
         let mut items = vec![MessageItem::text(message_text)];
@@ -83,7 +81,7 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args> for AttachedBlocksM
                         key: "escape".to_owned(),
                         ..Default::default()
                     }),
-                    MessageItem::text(" to remove"),
+                    MessageItem::text(&*TERMINAL_TO_REMOVE),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(InputAction::ClearAttachedContext);
@@ -120,7 +118,7 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args>
 
         let _ = args.context_model().pending_context_selected_text()?;
 
-        let mut items = vec![MessageItem::text("selected text attached as context")];
+        let mut items = vec![MessageItem::text(&*TERMINAL_SELECTED_TEXT_AS_CONTEXT)];
 
         // Always show ESC hint in agent view, make it clickable
         if args.agent_view_controller().is_active() {
@@ -131,7 +129,7 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args>
                         key: "escape".to_owned(),
                         ..Default::default()
                     }),
-                    MessageItem::text(" to remove"),
+                    MessageItem::text(&*TERMINAL_TO_REMOVE),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(InputAction::ClearAttachedContext);

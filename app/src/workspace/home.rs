@@ -5,10 +5,12 @@
 
 use warpui::ViewContext;
 
+use std::sync::LazyLock;
+
 use super::view::Workspace;
 use crate::pane_group::{AnyPaneContent, FilePane};
 
-const WARP_HOME_TITLE: &str = "Welcome to Warp on Web";
+static WARP_HOME_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "welcome-web"));
 const WARP_HOME_CONTENT: &str = r#"
 Welcome to Warp on Web - your browser-based home for Warp! 
 Use Warp on Web to:
@@ -28,7 +30,7 @@ pub fn create_home_pane(ctx: &mut ViewContext<Workspace>) -> Box<dyn AnyPaneCont
         ctx,
     );
     pane.file_view(ctx).update(ctx, |pane, ctx| {
-        pane.open_static(WARP_HOME_TITLE, WARP_HOME_CONTENT, ctx);
+        pane.open_static(WARP_HOME_TITLE.clone(), WARP_HOME_CONTENT, ctx);
     });
     Box::new(pane)
 }

@@ -26,11 +26,19 @@ use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
+use std::sync::LazyLock;
 
 const BUTTON_DIAMETER: f32 = 20.;
 const MODAL_HEIGHT: f32 = 440.;
 const LEFT_PANEL_WIDTH: f32 = 360.;
 const RIGHT_PANEL_WIDTH: f32 = 360.;
+
+static OUT_OF_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-you-are-out-of-credits"));
+static UPGRADE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-to-continue-using-ai-upgrade"));
+static BUILD_PLAN_INCLUDES_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-build-plan-includes"));
+static EXTENDED_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-extended-credits-per-month"));
+static ACCESS_FRONTIER_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-access-frontier-models"));
+static EXTENDED_CLOUD_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-extended-cloud-agents"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -147,7 +155,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 FormattedTextElement::from_str(
-                                    "You’re out of credits",
+                                    OUT_OF_CREDITS_TITLE.clone(),
                                     appearance.ui_font_family(),
                                     24.,
                                 )
@@ -164,7 +172,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 FormattedTextElement::from_str(
-                                    "To continue using AI, please upgrade your plan.",
+                                    UPGRADE_PROMPT.clone(),
                                     appearance.ui_font_family(),
                                     14.,
                                 )
@@ -181,9 +189,9 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let benefits_text = if let Some(plan) = Self::get_build_plan_details(app) {
                                     let price = plan.monthly_plan_price_per_month_usd_cents / 100;
-                                    format!("The Build plan is ${price}/month which includes everything in the free tier plus:")
+                                    crate::tr!("workspace", "workspace-build-plan-price-includes", price = format!("{}", price))
                                 } else {
-                                    "The Build plan includes everything in the free tier plus:".to_string()
+                                    BUILD_PLAN_INCLUDES_FALLBACK.clone()
                                 };
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
                                     FormattedTextFragment::plain_text(benefits_text),
@@ -205,9 +213,9 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let credits_text = if let Some(plan) = Self::get_build_plan_details(app) {
                                     let limit = plan.request_limit.unwrap_or(1500);
-                                    format!("{} Credits per month", limit.separate_with_commas())
+                                    crate::tr!("workspace", "workspace-credits-per-month", credits = limit.separate_with_commas())
                                 } else {
-                                    "Extended Credits per month".to_string()
+                                    EXTENDED_CREDITS.clone()
                                 };
                                 Self::render_checklist_item_dynamic(credits_text, appearance, theme)
                             })
@@ -217,7 +225,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 Self::render_checklist_item_dynamic(
-                                    "Access to frontier OpenAI, Anthropic, and Google models".to_string(),
+                                    ACCESS_FRONTIER_MODELS.clone(),
                                     appearance,
                                     theme,
                                 )
@@ -227,13 +235,26 @@ impl FreeTierLimitHitModal {
                         )
                         .with_child(
                             Container::new({
-                                let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
-                                    FormattedTextFragment::plain_text("Access to "),
-                                    FormattedTextFragment::hyperlink(
-                                        "Reload Credits".to_string(),
-                                        "https://docs.warp.dev/support-and-community/plans-and-billing/add-on-credits".to_string(),
-                                    ),
-                                ])]);
+                                // Parse the FTL key with <a> tag for the hyperlink part
+                                let ftl_text = crate::tr!("workspace", "workspace-access-reload-credits-link");
+                                let formatted_text = if let Some(start) = ftl_text.find("<a>") {
+                                    let end = ftl_text.find("</a>").unwrap_or(ftl_text.len());
+                                    let before = &ftl_text[..start];
+                                    let link_text = &ftl_text[start + 3..end];
+                                    let after = &ftl_text[end + 4..];
+                                    FormattedText::new([FormattedTextLine::Line(vec![
+                                        FormattedTextFragment::plain_text(before.to_string()),
+                                        FormattedTextFragment::hyperlink(
+                                            link_text.to_string(),
+                                            "https://docs.warp.dev/support-and-community/plans-and-billing/add-on-credits".to_string(),
+                                        ),
+                                        FormattedTextFragment::plain_text(after.to_string()),
+                                    ])])
+                                } else {
+                                    FormattedText::new([FormattedTextLine::Line(vec![
+                                        FormattedTextFragment::plain_text(ftl_text),
+                                    ])])
+                                };
                                 Flex::row()
                                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
                                     .with_child(
@@ -273,7 +294,7 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
                                     FormattedTextFragment::hyperlink(
-                                        "Extended cloud agents access".to_string(),
+                                        EXTENDED_CLOUD_AGENTS.clone(),
                                         "https://www.warp.dev/oz".to_string(),
                                     ),
                                 ])]);
@@ -327,7 +348,7 @@ impl FreeTierLimitHitModal {
                                 width: Some(296.),
                                 ..Default::default()
                             })
-                            .with_centered_text_label("Upgrade plan".to_string())
+                            .with_centered_text_label(crate::tr!("workspace", "workspace-upgrade-plan"))
                             .build()
                             .with_cursor(Cursor::PointingHand)
                             .on_click(move |ctx, _, _| {

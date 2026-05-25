@@ -1,4 +1,4 @@
-use std::{fmt::Write, time::Duration};
+use std::{fmt::Write, sync::LazyLock, time::Duration};
 
 use async_channel::Sender;
 use pathfinder_geometry::vector::vec2f;
@@ -39,6 +39,15 @@ use super::{
     model::NotebooksEditorModel,
     view::{EditorViewEvent, RichTextEditorView},
 };
+
+static NO_MATCHES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-no-matches"));
+static ENABLE_REGEX_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-enable-regex-search-a11y"));
+static DISABLE_REGEX_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-disable-regex-search-a11y"));
+static ENABLE_CASE_SENSITIVE_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-enable-case-sensitive-search-a11y"));
+static DISABLE_CASE_SENSITIVE_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-disable-case-sensitive-search-a11y"));
+static FOCUS_NEXT_MATCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-focus-next-match-a11y"));
+static FOCUS_PREVIOUS_MATCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-focus-previous-match-a11y"));
+static CLOSE_FIND_BAR_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-close-find-bar-a11y"));
 
 /// View for the find bar within a notebook.
 pub struct FindBar {
@@ -195,7 +204,7 @@ impl FindBar {
         if searcher.has_query() {
             let match_count = searcher.match_count();
             let text = if match_count == 0 {
-                "No matches".to_string()
+                (*NO_MATCHES_TEXT).clone()
             } else {
                 let mut text = String::new();
                 match searcher.selected_match() {
@@ -419,7 +428,7 @@ impl View for FindBar {
                 ),
                 self.render_toggle_button(
                     REGEX_TOGGLE_LABEL,
-                    REGEX_TOGGLE_TOOLTIP,
+                    &*REGEX_TOGGLE_TOOLTIP,
                     FindBarAction::ToggleRegex,
                     searcher.is_regex(),
                     self.button_handles.regex_toggle.clone(),
@@ -428,7 +437,7 @@ impl View for FindBar {
                 ),
                 self.render_toggle_button(
                     CASE_SENSITIVE_LABEL,
-                    CASE_SENSITIVE_TOOLTIP,
+                    &*CASE_SENSITIVE_TOOLTIP,
                     FindBarAction::ToggleCaseSensitive,
                     searcher.is_case_sensitive(),
                     self.button_handles.case_sensitive_toggle.clone(),
@@ -543,21 +552,21 @@ impl TypedActionView for FindBar {
         let text = match action {
             FindBarAction::ToggleRegex => {
                 if self.searcher.as_ref(ctx).is_regex() {
-                    "Enable regex search"
+                    &*DISABLE_REGEX_SEARCH_A11Y
                 } else {
-                    "Disable regex search"
+                    &*ENABLE_REGEX_SEARCH_A11Y
                 }
             }
             FindBarAction::ToggleCaseSensitive => {
                 if self.searcher.as_ref(ctx).is_case_sensitive() {
-                    "Enable case-sensitive search"
+                    &*DISABLE_CASE_SENSITIVE_SEARCH_A11Y
                 } else {
-                    "Disable case-sensitive search"
+                    &*ENABLE_CASE_SENSITIVE_SEARCH_A11Y
                 }
             }
-            FindBarAction::FocusNextMatch => "Focus next match",
-            FindBarAction::FocusPreviousMatch => "Focus previous match",
-            FindBarAction::Close => "Close find bar",
+            FindBarAction::FocusNextMatch => &*FOCUS_NEXT_MATCH_A11Y,
+            FindBarAction::FocusPreviousMatch => &*FOCUS_PREVIOUS_MATCH_A11Y,
+            FindBarAction::Close => &*CLOSE_FIND_BAR_A11Y,
         };
         Some(AccessibilityContent::new_without_help(
             text,

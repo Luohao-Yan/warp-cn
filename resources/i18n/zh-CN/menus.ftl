@@ -46,6 +46,7 @@ menus-view-actual-size = 实际大小
 ## -- 窗口菜单 --------------------------------------------------------------
 
 menus-window-menu = 窗口
+menus-window-new = 新窗口
 menus-window-minimize = 最小化
 menus-window-zoom = 缩放
 menus-window-show-all = 显示所有窗口
@@ -58,3 +59,19 @@ menus-help-report-issue = 报告问题
 menus-help-community = 社区
 menus-help-release-notes = 发布说明
 menus-help-check-for-updates = 检查更新
+
+## -- 已迁移 UI 字符串的主键 --
+
+menus-remove-config-confirm = 移除 '{ $name }'？
+menus-delete-config-undo-warning = 你将无法撤销此操作。
+menus-make-default = 设为默认
+menus-already-the-default = 已是默认
+menus-edit-config = 编辑配置
+
+## -- 已迁移 UI 字符串的双前缀别名 --
+
+menus-menus-remove-config-confirm = { menus-remove-config-confirm }
+menus-menus-delete-config-undo-warning = { menus-delete-config-undo-warning }
+menus-menus-make-default = { menus-make-default }
+menus-menus-already-the-default = { menus-already-the-default }
+menus-menus-edit-config = { menus-edit-config }

@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use warpui::{
     elements::{
         Border, Clipped, Container, CornerRadius, Dismiss, Empty, Flex, MainAxisSize,
@@ -32,12 +34,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_MARGIN_BETWEEN: f32 = 8.;
 
-const NOTEBOOK_TITLE: &str = "Notebook name";
-const FOLDER_TITLE: &str = "Folder name";
-const ENV_VAR_COLLECTION_TITLE: &str = "Collection name";
-const CREATE_BUTTON_TEXT: &str = "Create";
-const CANCEL_BUTTON_TEXT: &str = "Cancel";
-const RENAME_BUTTON_TEXT: &str = "Rename";
+static NOTEBOOK_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-notebook-name"));
+static FOLDER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-folder-name"));
+static ENV_VAR_COLLECTION_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-collection-name"));
+static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-create"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-cancel"));
+static RENAME_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-rename"));
 
 /// Struct holding necessary information and states for the dialog
 /// that opens when creating or updating a folder or notebook.
@@ -142,9 +144,9 @@ impl CloudObjectNamingDialog {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let title = match object_type {
-            DriveObjectType::Notebook { .. } => NOTEBOOK_TITLE,
-            DriveObjectType::Folder => FOLDER_TITLE,
-            DriveObjectType::EnvVarCollection => ENV_VAR_COLLECTION_TITLE,
+            DriveObjectType::Notebook { .. } => NOTEBOOK_TITLE.as_str(),
+            DriveObjectType::Folder => FOLDER_TITLE.as_str(),
+            DriveObjectType::EnvVarCollection => ENV_VAR_COLLECTION_TITLE.as_str(),
             // workflows and ai facts aren't a part of this dialog
             DriveObjectType::Workflow
             | DriveObjectType::AgentModeWorkflow
@@ -226,8 +228,8 @@ impl CloudObjectNamingDialog {
         };
 
         let primary_button_text = match self.is_rename {
-            true => RENAME_BUTTON_TEXT,
-            false => CREATE_BUTTON_TEXT,
+            true => RENAME_BUTTON_TEXT.clone(),
+            false => CREATE_BUTTON_TEXT.clone(),
         };
 
         let primary_button_action = self.current_primary_action();
@@ -264,7 +266,7 @@ impl CloudObjectNamingDialog {
                                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                                 ..Default::default()
                             })
-                            .with_text_label(CANCEL_BUTTON_TEXT.into())
+                            .with_text_label(CANCEL_BUTTON_TEXT.clone().into())
                             .build()
                             .with_cursor(Cursor::PointingHand)
                             .on_click(move |ctx, _, _| {

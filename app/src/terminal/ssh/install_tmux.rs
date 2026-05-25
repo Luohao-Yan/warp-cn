@@ -1,4 +1,5 @@
 use std::rc::Rc;
+use std::sync::LazyLock;
 
 use crate::ai::blocklist::inline_action::requested_action::{ENTER_KEYSTROKE, ESCAPE_KEYSTROKE};
 use crate::ai::blocklist::inline_action::requested_script::{self, RequestedScriptMouseStates};
@@ -26,6 +27,19 @@ use warpui::{BlurContext, FocusContext};
 
 pub const WHY_INSTALL_TMUX_URL: &str =
     "https://docs.warp.dev/terminal/warpify/ssh#why-do-i-need-tmux-on-the-remote-machine";
+
+static INSTALL_TMUX_TITLE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-title"));
+static RUN_SCRIPT_TO_INSTALL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-run-script"));
+static INSTALL_TO_HOME_WARP: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-install-to-home-warp"));
+static EXPLANATION_OUTDATED: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-explanation-outdated"));
+static EXPLANATION_MISSING: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-explanation-missing"));
+static WHY_LINK_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-why-link-text"));
 
 #[derive(Debug, Clone)]
 pub struct TmuxInstallMethod {
@@ -257,11 +271,11 @@ impl SshInstallTmuxBlock {
         let package_manager = &self.system_details.package_manager;
         Container::new(requested_script::render_requested_scripts(
             TitledScript {
-                title: format!("Install with {package_manager}"),
+                title: crate::tr!("terminal", "terminal-install-tmux-install-with-pm", package_manager = package_manager.as_str()),
                 content: tmux_system_install_script.to_string(),
             },
             TitledScript {
-                title: "Install to ~/.warp".to_string(),
+                title: INSTALL_TO_HOME_WARP.to_string(),
                 content: self.tmux_local_install_script.clone(),
             },
             *is_first_script_active,
@@ -289,7 +303,7 @@ impl SshInstallTmuxBlock {
 
     fn render_local_install_ui(&self, app: &AppContext) -> Box<dyn Element> {
         let header = if self.is_focused {
-            "Run this script to install tmux?"
+            RUN_SCRIPT_TO_INSTALL.as_str()
         } else {
             ""
         };
@@ -319,7 +333,7 @@ impl SshInstallTmuxBlock {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let header_contents = render::build_header_row(
-            "Install tmux?",
+            INSTALL_TMUX_TITLE.as_str(),
             Icon::new(UiIcon::Warp.into(), theme.active_ui_detail()),
             theme,
             appearance,
@@ -377,14 +391,14 @@ impl View for SshInstallTmuxBlock {
         );
 
         let explanation = if self.outdated_version {
-            "In order to Warpify your SSH session, a more recent version of tmux (>=3.0) must be installed. "
+            EXPLANATION_OUTDATED.as_str()
         } else {
-            "In order to Warpify your SSH session, tmux must be installed. "
+            EXPLANATION_MISSING.as_str()
         };
 
         let warpify_description = vec![
             FormattedTextFragment::plain_text(explanation),
-            FormattedTextFragment::hyperlink("Why do I need tmux?", WHY_INSTALL_TMUX_URL),
+            FormattedTextFragment::hyperlink(WHY_LINK_TEXT.as_str(), WHY_INSTALL_TMUX_URL),
         ];
 
         let text_color =

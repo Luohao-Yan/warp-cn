@@ -210,10 +210,10 @@ fn poll_run_until_joinable_session(
                                         .map(|msg| msg.message.clone())
                                         .unwrap_or_else(|| {
                                             if task.state.is_failure_like() {
-                                                "Cloud agent failed".to_string()
-                                            } else {
-                                                "Cloud follow-up finished before a new session became available".to_string()
-                                            }
+                                                    crate::tr!("ai", "ai-cloud-agent-failed")
+                                                } else {
+                                                    crate::tr!("ai", "ai-cloud-followup-finished")
+                                                }
                                         });
                                     yield Err(anyhow!(message));
                                 }

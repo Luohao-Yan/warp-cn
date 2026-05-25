@@ -2,6 +2,7 @@ use parking_lot::{FairMutex, RwLock};
 use pathfinder_color::ColorU;
 use settings::Setting as _;
 use std::sync::Arc;
+use std::sync::LazyLock;
 use std::time::Duration;
 use std::{cmp::Ordering, rc::Rc};
 use warp_core::features::FeatureFlag;
@@ -64,6 +65,7 @@ use crate::terminal::{ShellLaunchData, TerminalModel};
 use crate::view_components::DismissibleToast;
 use crate::workspace::WorkspaceAction;
 use crate::ToastStack;
+
 use crate::{
     ai::{
         agent::{
@@ -142,7 +144,11 @@ lazy_static! {
 const HAS_PENDING_CLI_ACTION_CONTEXT_KEY: &str = "HasPendingCLIAgentAction";
 const HAS_PENDING_NON_TRANSFER_CONTROL_ACTION_CONTEXT_KEY: &str =
     "HasPendingNonTransferControlCLIAgentAction";
-const BLOCKED_ACTION_MESSAGE_FOR_TRANSFER_CONTROL: &str = "Agent is asking you to take control.";
+static BLOCKED_ACTION_MESSAGE_FOR_TRANSFER_CONTROL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-blocked-transfer-control"));
+static AI_ALLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-allow-btn"));
+static AI_REFINE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-refine-btn"));
+static AI_TAKE_OVER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-take-over-btn"));
+static AI_TAKE_CONTROL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-take-control-btn"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::{macros::*, FixedBinding};
@@ -253,7 +259,7 @@ impl CLISubagentView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let allow_button = CompactibleSplitActionButton::new(
-            "Allow".to_string(),
+            (*AI_ALLOW).clone(),
             Some(KeystrokeSource::Fixed(ACCEPT_KEYSTROKE.clone())),
             ButtonSize::Small,
             CLISubagentAction::ExecuteBlockedAction,
@@ -265,7 +271,7 @@ impl CLISubagentView {
         );
 
         let reject_button = CompactibleActionButton::new(
-            "Refine".to_string(),
+            (*AI_REFINE).clone(),
             Some(KeystrokeSource::Fixed(REJECT_KEYSTROKE.clone())),
             ButtonSize::Small,
             CLISubagentAction::RejectBlockedAction {
@@ -277,7 +283,7 @@ impl CLISubagentView {
         );
 
         let take_over_button = CompactibleActionButton::new(
-            "Take over".to_string(),
+            (*AI_TAKE_OVER).clone(),
             Some(KeystrokeSource::Binding(
                 SET_INPUT_MODE_TERMINAL_ACTION_NAME,
             )),
@@ -290,7 +296,7 @@ impl CLISubagentView {
             ctx,
         );
         let transfer_control_button = CompactibleActionButton::new(
-            "Take control".to_string(),
+            (*AI_TAKE_CONTROL).clone(),
             Some(KeystrokeSource::Binding(
                 SET_INPUT_MODE_TERMINAL_ACTION_NAME,
             )),
@@ -312,11 +318,11 @@ impl CLISubagentView {
         allow_menu.update(ctx, |menu, ctx| {
             menu.set_items(
                 vec![
-                    MenuItemFields::new("Accept".to_string())
+                    MenuItemFields::new(crate::tr!("ai_assistant", "ai-accept"))
                         .with_key_shortcut_label(Some(ACCEPT_KEYSTROKE.displayed()))
                         .with_on_select_action(CLISubagentAction::ExecuteBlockedAction)
                         .into_item(),
-                    MenuItemFields::new("Auto-approve".to_string())
+                    MenuItemFields::new(crate::tr!("ai_assistant", "ai-auto-approve"))
                         .with_key_shortcut_label(Some(AUTO_APPROVE_KEYSTROKE.displayed()))
                         .with_on_select_action(CLISubagentAction::ExecuteAndAutoApprove)
                         .into_item(),
@@ -1444,7 +1450,7 @@ impl TypedActionView for CLISubagentView {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::success(String::from("Copied to clipboard")),
+                        DismissibleToast::success(crate::tr!("ai_assistant", "ai-assistant-copied-to-clipboard")),
                         window_id,
                         ctx,
                     );
@@ -1818,7 +1824,7 @@ fn render_permissions_speedbump(
 
     let checkbox_text = appearance
         .ui_builder()
-        .span("Always allow")
+        .span(crate::tr!("ai_assistant", "ai-always-allow"))
         .with_style(UiComponentStyles {
             font_color: Some(font_color),
             font_size: Some(font_size),

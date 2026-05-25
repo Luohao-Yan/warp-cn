@@ -3,7 +3,7 @@
 //! This module provides a hover card that shows all references to a symbol
 //! as a flat list with file info, line numbers, and syntax-highlighted code snippets.
 
-use std::{collections::HashMap, path::PathBuf};
+use std::{collections::HashMap, path::PathBuf, sync::LazyLock};
 
 use lsp::ReferenceLocation;
 use pathfinder_geometry::vector::Vector2F;
@@ -27,6 +27,8 @@ use warpui::{
 
 use crate::search::result_renderer::ItemHighlightState;
 use warpui::ui_components::components::UiComponent;
+
+static CODE_LOADING: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-loading"));
 
 use super::{
     editor::view::{CodeEditorRenderOptions, CodeEditorView},
@@ -499,9 +501,9 @@ fn render_header(
 
     // "Showing X references" title
     let title_text = if total_refs == 1 {
-        "Showing 1 reference".to_string()
+        crate::tr!("code", "code-showing-one-reference")
     } else {
-        format!("Showing {total_refs} references")
+        crate::tr!("code", "code-showing-references", count = total_refs)
     };
 
     let title = Align::new(
@@ -647,7 +649,7 @@ fn render_reference_entry(
             } else {
                 // Show loading indicator when line_content is None
                 Text::new_inline(
-                    "Loading...",
+                    &*CODE_LOADING,
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )

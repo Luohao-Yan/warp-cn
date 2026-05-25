@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use regex_automata::hybrid::BuildError;
@@ -31,7 +33,8 @@ use crate::{
 
 use super::model::find::{FindConfig, RegexDFAs};
 
-const FILTER_BLOCK_PLACEHOLDER_TEXT: &str = "Filter block output";
+static FILTER_BLOCK_PLACEHOLDER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-placeholder"));
 
 const BLOCK_FILTER_BAR_WIDTH: f32 = 380.;
 const BLOCK_FILTER_BAR_PADDING: f32 = 4.;
@@ -49,10 +52,14 @@ const MAXIMUM_CONTEXT_LINES: u16 = 99;
 const MAXIMUM_CONTEXT_LINE_EDITOR_BUFFER_LENGTH: usize = 2;
 pub type ContextLines = u16;
 pub const DEFAULT_CONTEXT_LINES_VALUE: ContextLines = 0;
-const CONTEXT_LINE_EDITOR_TOOLTIP_LABEL: &str = "Show context lines around matches";
-const REGEX_TOOLTIP_LABEL: &str = "Regex toggle";
-const CASE_SENSITIVITY_TOOLTIP_LABEL: &str = "Case sensitive search";
-const INVERT_FILTER_TOOLTIP_LABEL: &str = "Invert filter";
+static CONTEXT_LINE_EDITOR_TOOLTIP_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-show-context"));
+static REGEX_TOOLTIP_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-regex-toggle"));
+static CASE_SENSITIVITY_TOOLTIP_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-case-sensitive"));
+static INVERT_FILTER_TOOLTIP_LABEL: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-invert"));
 
 pub const BLOCK_FILTER_DOTTED_LINE_DASH: Dash = Dash {
     dash_length: 4.,
@@ -188,7 +195,7 @@ impl BlockFilterEditor {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(FILTER_BLOCK_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(&*FILTER_BLOCK_PLACEHOLDER_TEXT, ctx);
             editor
         });
 
@@ -537,7 +544,7 @@ impl View for BlockFilterEditor {
             self.mouse_state_handles.regex_mouse_state_handle.clone(),
             BlockFilterEditorAction::ToggleRegex,
             editor_height,
-            Some(REGEX_TOOLTIP_LABEL),
+            Some(&*REGEX_TOOLTIP_LABEL),
         );
         let case_sensitive_icon = self.render_hoverable_icon(
             appearance,
@@ -548,7 +555,7 @@ impl View for BlockFilterEditor {
                 .clone(),
             BlockFilterEditorAction::ToggleCaseSensitivity,
             editor_height,
-            Some(CASE_SENSITIVITY_TOOLTIP_LABEL),
+            Some(&*CASE_SENSITIVITY_TOOLTIP_LABEL),
         );
         let invert_filter_icon = self.render_hoverable_icon(
             appearance,
@@ -559,7 +566,7 @@ impl View for BlockFilterEditor {
                 .clone(),
             BlockFilterEditorAction::ToggleInvertFilter,
             editor_height,
-            Some(INVERT_FILTER_TOOLTIP_LABEL),
+            Some(&*INVERT_FILTER_TOOLTIP_LABEL),
         );
 
         let query_editor = Shrinkable::new(
@@ -659,7 +666,7 @@ impl View for BlockFilterEditor {
                 if state.is_hovered() {
                     let tool_tip = appearance
                         .ui_builder()
-                        .tool_tip(CONTEXT_LINE_EDITOR_TOOLTIP_LABEL.to_string())
+                        .tool_tip(CONTEXT_LINE_EDITOR_TOOLTIP_LABEL.as_str())
                         .build()
                         .finish();
                     stack.add_positioned_child(
@@ -753,8 +760,8 @@ impl View for BlockFilterEditor {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            "Type searched phrase.",
-            "Press escape to quit",
+            crate::tr!("terminal", "terminal-type-searched-phrase"),
+            crate::tr!("terminal", "terminal-press-escape-to-quit"),
             WarpA11yRole::TextareaRole,
         ))
     }

@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use pathfinder_color::ColorU;
 use warp_core::ui::theme::color::internal_colors;
 use warpui::elements::{
@@ -15,11 +17,18 @@ use crate::terminal::input::inline_menu::styles as inline_styles;
 const CORNER_RADIUS: f32 = 4.0;
 const ROW_SPACING: f32 = 12.0;
 
-pub const MODEL_SPECS_TITLE: &str = "Model Specs";
-pub const MODEL_SPECS_DESCRIPTION: &str = "Warp's benchmarks for how well a model performs in our harness, the rate at which it consumes credits, and task speed.";
+pub static MODEL_SPECS_TITLE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-model-specs-title"));
+pub static MODEL_SPECS_DESCRIPTION: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-model-specs-description"));
 
-pub const REASONING_LEVEL_TITLE: &str = "Reasoning level";
-pub const REASONING_LEVEL_DESCRIPTION: &str = "Increased reasoning levels consume more credits and have higher latency, but higher performance for complicated tasks.";
+pub static REASONING_LEVEL_TITLE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-reasoning-level-title"));
+pub static REASONING_LEVEL_DESCRIPTION: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-reasoning-level-description"));
+
+static TERMINAL_BILLED_TO_API: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("terminal", "terminal-billed-to-api"));
 
 pub enum CostRow {
     Bar { value: Option<f32> },
@@ -193,7 +202,7 @@ fn render_score_row(
                 .with_child(
                     Container::new(
                         Text::new(
-                            "Billed to API".to_string(),
+                            &*TERMINAL_BILLED_TO_API,
                             appearance.ui_font_family(),
                             14.,
                         )

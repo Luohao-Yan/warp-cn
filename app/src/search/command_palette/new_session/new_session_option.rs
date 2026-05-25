@@ -4,7 +4,13 @@ use crate::terminal::view::TerminalAction;
 use crate::WorkspaceAction;
 use std::borrow::Cow;
 use std::fmt;
+use std::sync::LazyLock;
 use warpui::Action;
+
+static DIR_DOWN: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-down").clone());
+static DIR_RIGHT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-right").clone());
+static DIR_UP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-up").clone());
+static DIR_LEFT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-left").clone());
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct NewSessionOptionId(pub(crate) String);
@@ -29,10 +35,10 @@ impl fmt::Display for Direction {
             f,
             "{}",
             match self {
-                Direction::Down => "Down",
-                Direction::Right => "Right",
-                Direction::Up => "Up",
-                Direction::Left => "Left",
+                Direction::Down => DIR_DOWN.as_str(),
+                Direction::Right => DIR_RIGHT.as_str(),
+                Direction::Up => DIR_UP.as_str(),
+                Direction::Left => DIR_LEFT.as_str(),
             }
         )
     }
@@ -81,13 +87,13 @@ impl NewSessionOption {
 impl NewSessionOption {
     pub(super) fn new(id: NewSessionOptionId, config: NewSessionConfig) -> Self {
         let description = match &config {
-            NewSessionConfig::NewTab(shell) => format!("Create New Tab: {}", shell.short_name()),
-            NewSessionConfig::NewWindow(shell) => {
-                format!("Create New Window: {}", shell.short_name())
-            }
-            NewSessionConfig::Split(direction, shell) => {
-                format!("Split Pane {direction}: {}", shell.short_name())
-            }
+            NewSessionConfig::NewTab(shell) => crate::tr!("search", "search-new-tab-shell")
+                .replace("{ $shell }", shell.short_name().as_ref()),
+            NewSessionConfig::NewWindow(shell) => crate::tr!("search", "search-new-window-shell")
+                .replace("{ $shell }", shell.short_name().as_ref()),
+            NewSessionConfig::Split(direction, shell) => crate::tr!("search", "search-split-pane-shell")
+                .replace("{ $direction }", &direction.to_string())
+                .replace("{ $shell }", shell.short_name().as_ref()),
         };
         Self {
             id,

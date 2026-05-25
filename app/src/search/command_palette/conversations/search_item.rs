@@ -8,6 +8,11 @@ use crate::search::command_palette::view::Action;
 use crate::search::item::IconLocation;
 use crate::search::result_renderer::ItemHighlightState;
 use crate::search::SearchItem;
+use std::sync::LazyLock;
+
+static FORK_CURRENT_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-fork-current-conversation").clone());
+static FORK_CONVERSATION_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-fork-conversation-tooltip").clone());
+static NEW_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-new-conversation").clone());
 use crate::ui_components::buttons::icon_button;
 use crate::util::time_format::format_approx_duration_from_now;
 use ordered_float::OrderedFloat;
@@ -87,7 +92,7 @@ impl ConversationSearchItem {
         let appearance = Appearance::as_ref(app);
 
         let action_title = Text::new_inline(
-            "Fork current conversation",
+            FORK_CURRENT_CONVERSATION.clone(),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -241,7 +246,7 @@ impl ConversationSearchItem {
 
             let fork_button_tool_tip = appearance
                 .ui_builder()
-                .tool_tip("Fork conversation".to_string())
+                .tool_tip(FORK_CONVERSATION_TOOLTIP.clone())
                 .build();
 
             let fork_button_inner = icon_button(
@@ -421,7 +426,7 @@ impl SearchItem for ConversationSearchItem {
             ConversationAction::Fork { title, .. } => {
                 format!("Fork current conversation ({title})")
             }
-            ConversationAction::New => "New conversation".to_string(),
+            ConversationAction::New => NEW_CONVERSATION.clone(),
         }
     }
 

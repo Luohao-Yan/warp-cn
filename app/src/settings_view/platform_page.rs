@@ -19,6 +19,7 @@ use crate::{
 };
 use chrono::{DateTime, Utc};
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
+use std::sync::LazyLock;
 use std::collections::HashMap;
 use warp_core::features::FeatureFlag;
 use warpui::text_layout::ClipConfig;
@@ -55,6 +56,15 @@ const SETTINGS_SIDEBAR_WIDTH_WITH_FOOTER: f32 = 248.;
 const SETTINGS_SECTION_BORDER_WIDTH: f32 = 1.;
 const SETTINGS_PAGE_HORIZONTAL_PADDING: f32 = 56.;
 const SETTINGS_PAGE_MAX_CONTENT_WIDTH: f32 = 800.;
+
+static NEW_API_KEY_TITLE: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-new-api-key-title"));
+static API_KEY_DELETED: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-api-key-deleted"));
+static SETTINGS_NO_API_KEYS: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-no-api-keys"));
+static SETTINGS_CREATE_KEY_DESC: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("settings", "settings-create-key-desc"));
 fn settings_sidebar_width_for_platform_page() -> f32 {
     if FeatureFlag::SettingsFile.is_enabled() {
         SETTINGS_SIDEBAR_WIDTH_WITH_FOOTER
@@ -175,7 +185,7 @@ impl PlatformPageView {
         });
 
         let create_api_key_modal_view = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some("New API key".to_string()), create_api_key_body, ctx)
+            Modal::new(Some(NEW_API_KEY_TITLE.clone()), create_api_key_body, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(MODAL_WIDTH),
                     height: Some(MODAL_HEIGHT),
@@ -223,7 +233,7 @@ impl PlatformPageView {
 
     fn show_create_api_key_modal(&mut self, ctx: &mut ViewContext<Self>) {
         self.create_api_key_modal_state
-            .set_title(Some("New API key".to_string()), ctx);
+            .set_title(Some(crate::tr!("settings", "settings-new-api-key-title")), ctx);
         self.create_api_key_modal_state.open(ctx);
         ctx.emit(PlatformPageViewEvent::ShowCreateApiKeyModal);
     }
@@ -252,7 +262,7 @@ impl PlatformPageView {
             }
             CreateApiKeyModalEvent::Created { api_key } => {
                 self.create_api_key_modal_state
-                    .set_title(Some("Save your key".to_string()), ctx);
+                    .set_title(Some(crate::tr!("settings", "settings-save-your-key-title")), ctx);
                 let uid = api_key.uid.clone().into_inner();
                 self.ensure_expire_button_for_key(ctx, uid.clone());
 
@@ -303,7 +313,7 @@ impl PlatformPageView {
                 let window_id = ctx.window_id();
                 crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = crate::view_components::DismissibleToast::success(
-                        "API key deleted".to_string(),
+                        API_KEY_DELETED.clone(),
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -451,8 +461,8 @@ impl PlatformPageWidget {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let text = vec![
-            FormattedTextFragment::plain_text("Create and manage API keys to allow other Oz cloud agents to access your Warp account.\nFor more information, visit the "),
-            FormattedTextFragment::hyperlink("Documentation.", API_KEY_DOCS_URL),
+            FormattedTextFragment::plain_text(&crate::tr!("settings", "api-keys-description")),
+            FormattedTextFragment::hyperlink(&crate::tr!("settings", "documentation-link"), API_KEY_DOCS_URL),
         ];
 
         let text_element = FormattedTextElement::new(
@@ -499,7 +509,7 @@ impl PlatformPageWidget {
                             ButtonVariant::Outlined,
                             self.create_api_key_button_mouse_state.clone(),
                         )
-                        .with_text_label("+ Create API Key".to_string())
+                        .with_text_label(format!("+ {}", crate::tr!("settings", "settings-create-key")))
                         .build()
                         .on_click(|ctx, _, _| {
                             ctx.dispatch_typed_action(PlatformPageAction::ShowCreateApiKeyModal);
@@ -543,7 +553,7 @@ impl PlatformPageWidget {
             .with_main_axis_size(MainAxisSize::Max);
         header_row.add_child(self.render_resizable_header_cell(
             appearance,
-            "Name",
+            &crate::tr!("settings", "settings-name-label"),
             view.api_key_table_column_widths.name.clone(),
             API_KEY_NAME_COLUMN_MIN_WIDTH,
             min_non_resizable_columns_width,
@@ -707,9 +717,9 @@ impl PlatformPageWidget {
         );
         if FeatureFlag::TeamApiKeys.is_enabled() || FeatureFlag::NamedAgents.is_enabled() {
             let scope_display = match key.scope {
-                ApiKeyScope::Personal => "Personal",
-                ApiKeyScope::Team => "Team",
-                ApiKeyScope::Agent => "Agent",
+                ApiKeyScope::Personal => crate::tr!("settings", "settings-personal-label"),
+                ApiKeyScope::Team => crate::tr!("settings", "settings-team-label"),
+                ApiKeyScope::Agent => crate::tr!("settings", "settings-agent-label"),
             };
             row.add_child(
                 Expanded::new(
@@ -797,7 +807,7 @@ impl PlatformPageWidget {
                     .with_child(
                         Container::new(
                             Text::new(
-                                "No API Keys",
+                                &*SETTINGS_NO_API_KEYS,
                                 appearance.ui_font_family(),
                                 SUBHEADER_FONT_SIZE,
                             )
@@ -811,7 +821,7 @@ impl PlatformPageWidget {
                     .with_child(
                         Container::new(
                             Text::new(
-                                "Create a key to manage external access to Warp",
+                                &*SETTINGS_CREATE_KEY_DESC,
                                 appearance.ui_font_family(),
                                 CONTENT_FONT_SIZE,
                             )

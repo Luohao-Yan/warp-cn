@@ -1,5 +1,6 @@
 //! Inline history menu view for up-arrow history with conversations, commands and prompts.
 use std::collections::HashSet;
+use std::sync::LazyLock;
 
 use pathfinder_color::ColorU;
 use warp_core::ui::appearance::Appearance;
@@ -131,7 +132,7 @@ fn build_tab_configs(is_agent_view: bool) -> Vec<InlineMenuTabConfig<HistoryTab>
     if !is_agent_view {
         return vec![InlineMenuTabConfig {
             id: HistoryTab::All,
-            label: "All".to_string(),
+            label: crate::tr!("terminal", "terminal-tab-all"),
             filters: HashSet::new(),
         }];
     }
@@ -139,17 +140,17 @@ fn build_tab_configs(is_agent_view: bool) -> Vec<InlineMenuTabConfig<HistoryTab>
     vec![
         InlineMenuTabConfig {
             id: HistoryTab::All,
-            label: "All".to_string(),
+            label: crate::tr!("terminal", "terminal-tab-all"),
             filters: HashSet::new(),
         },
         InlineMenuTabConfig {
             id: HistoryTab::Commands,
-            label: "Commands".to_string(),
+            label: crate::tr!("terminal", "terminal-tab-commands"),
             filters: HashSet::from([QueryFilter::Commands]),
         },
         InlineMenuTabConfig {
             id: HistoryTab::Prompts,
-            label: "Prompts".to_string(),
+            label: crate::tr!("terminal", "terminal-tab-prompts"),
             filters: HashSet::from([QueryFilter::PromptHistory]),
         },
     ]
@@ -262,7 +263,8 @@ impl InlineHistoryMenuView {
 
         let menu_view = if FeatureFlag::InlineMenuHeaders.is_enabled() {
             let configure_button = ctx.add_view(|_| {
-                ActionButton::new("Configure", ConfigureButtonTheme)
+                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-configure"));
+                ActionButton::new(&*LABEL, ConfigureButtonTheme)
                     .with_icon(Icon::Settings)
                     .with_size(ButtonSize::Small)
                     .on_click(|ctx| {
@@ -273,7 +275,7 @@ impl InlineHistoryMenuView {
                     })
             });
             let header_config = InlineMenuHeaderConfig {
-                label: "History".to_string(),
+                label: crate::tr!("terminal", "terminal-history"),
                 trailing_element: Some(Box::new(move |_app: &AppContext| {
                     ChildView::new(&configure_button).finish()
                 })),

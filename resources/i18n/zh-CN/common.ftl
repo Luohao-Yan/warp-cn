@@ -15,6 +15,7 @@ common-submit-label = 提交
 common-continue-label = 继续
 common-create-label = 创建
 common-update-label = 更新
+common-install-label = 安装
 common-confirm-label = 确认
 common-done-label = 完成
 common-edit-label = 编辑
@@ -36,6 +37,23 @@ common-disable-label = 禁用
 common-show-label = 显示
 common-hide-label = 隐藏
 common-learn-more-label = 了解更多
+common-learn-more = 了解更多
+common-run-label = 运行
+common-download-label = 下载
+common-copy-label = 复制
+common-paste-label = 粘贴
+common-cut-label = 剪切
+common-undo-label = 撤销
+common-redo-label = 重做
+common-select-all-label = 全选
+common-open-label = 打开
+common-open-file-label = 打开文件
+common-view-label = 查看
+common-import-label = 导入
+common-share-label = 分享
+common-upload-label = 上传
+common-settings-label = 设置
+common-yes-label = 是
 
 ## -- 通用文本 -------------------------------------------------------------
 
@@ -49,9 +67,385 @@ common-error-label = 错误
 common-warning-label = 警告
 common-info-label = 信息
 common-success-label = 成功
+common-untitled-label = 无标题
+common-click-label = 点击
+common-new-label = 新建
+common-default-user-display-name = 用户
+common-status-done = 完成
+common-status-in-progress = 进行中
+common-status-cancelled = 已取消
+common-status-blocked = 已阻止
+common-status-failed = 失败
+common-status-claimed = 已认领
+common-status-queued = 排队中
+common-status-pending = 待处理
 
 ## -- 占位文本 -------------------------------------------------------------
 
 common-search-placeholder = 搜索…
 common-filter-placeholder = 筛选…
 common-type-here-placeholder = 在此输入…
+
+## -- Node 版本管理 ------------------------------------------------------------
+
+common-install-nvm = 安装 nvm
+common-nvm-install-node = nvm install node
+common-install-nvm-enable-switching = 安装 nvm 以启用版本切换
+common-menu-helps-switch-versions = 此菜单帮助您切换已安装的版本
+common-no-node-versions-installed = 未安装 Node 版本
+common-try-installing-versions-nvm = 尝试使用 nvm 安装版本
+common-installed-label = 已安装
+
+## -- 提示 / 引导 --------------------------------------------------------------
+
+common-complete-label = 完成！
+common-command-palette = 命令面板
+common-command-palette-desc = 打开命令面板以搜索命令
+common-split-pane = 拆分窗格
+common-split-pane-desc = 水平或垂直拆分当前窗格
+common-history-search = 历史搜索
+common-history-search-desc = 搜索命令历史
+common-ai-command-search = AI 命令搜索
+common-ai-command-search-desc = 使用 AI 搜索命令
+common-theme-picker = 主题选择器
+common-theme-picker-desc = 打开主题选择器以自定义外观
+common-shortcut-label = 快捷键
+common-skip-welcome-tips = 跳过欢迎提示
+
+## -- 社交 / 分享 --------------------------------------------------------------
+
+common-invite-a-friend-to-warp = 邀请朋友使用 Warp
+common-mark-all-as-read = 全部标为已读
+
+## -- 启动配置 / 保存模态框字符串 -----------------------------------------
+
+common-launch-config-placeholder = launch_config.yaml
+common-save-configuration-button = 保存配置
+common-open-yaml-file-button = 打开 YAML 文件
+common-save-current-configuration = 保存当前配置
+
+## -- 标签配置 / 会话配置模态框字符串 -----------------------------------------
+
+common-open-tab = 打开标签页
+common-get-warping = 开始使用 Warp
+common-create-first-tab-config = 创建你的第一个标签页配置
+common-create-first-tab-config-desc-oz = 为你的标签页设置可复用的起点。选择一个仓库，选择会话类型，并可选地附加一个工作树。每当你想用此设置打开新标签页时即可使用。
+common-create-first-tab-config-desc-no-oz = 为你的标签页设置可复用的起点。选择一个仓库，可选地附加一个工作树，每当你想用此设置打开新标签页时即可使用。
+
+## -- Suggested rule modal strings -------------------------------------------
+
+common-add-rule = 添加规则
+common-edit-rule = 编辑规则
+
+## -- Run agents card view strings -----------------------------------------
+
+common-accept-without-orchestration = 不编排直接接受
+
+## -- Conversation details panel strings -----------------------------------------
+
+common-continue-locally = 本地继续
+common-continue-locally-tooltip = 在本地分叉此对话
+
+## -- 应用菜单名称 ---------------------------------------------------------------
+
+common-menu-warp = Warp
+common-menu-file = 文件
+common-menu-edit = 编辑
+common-menu-view = 视图
+common-menu-tab = 标签页
+common-menu-ai = AI
+common-menu-blocks = 区块
+common-menu-drive = Drive
+common-menu-window = 窗口
+common-menu-help = 帮助
+
+## -- 应用菜单项标签 ---------------------------------------------------------
+
+common-menu-new-window = 新建窗口
+common-menu-new-terminal-tab = 新建终端标签页
+common-menu-new-agent-tab = 新建代理标签页
+common-menu-preferences = 偏好设置
+common-menu-privacy-policy = 隐私政策...
+common-menu-debug = 调试
+common-menu-set-warp-as-default-terminal = 将 Warp 设为默认终端
+common-menu-log-out = 退出登录
+common-menu-open-recent = 打开最近
+common-menu-use-warps-prompt = 使用 Warp 提示符
+common-menu-copy-on-select = 终端内选中即复制
+common-menu-synchronize-inputs = 同步输入
+common-menu-toggle-mouse-reporting = 切换鼠标报告
+common-menu-toggle-scroll-reporting = 切换滚动报告
+common-menu-toggle-focus-reporting = 切换焦点报告
+common-menu-compact-mode = 紧凑模式
+common-menu-manually-toggle-network-status = 手动切换网络状态
+common-menu-create-anonymous-user = 创建匿名用户
+common-menu-send-feedback = 发送反馈...
+common-menu-warp-documentation = Warp 文档...
+common-menu-github-issues = GitHub Issues...
+common-menu-warp-slack-community = Warp Slack 社区...
+common-menu-reopen-closed-session = 重新打开已关闭的会话
+common-menu-launch-configurations = 启动配置
+common-menu-save-new = 新建保存...
+
+## -- 应用菜单名称的双前缀别名 -----------------------------------------------
+
+common-common-menu-warp = { common-menu-warp }
+common-common-menu-file = { common-menu-file }
+common-common-menu-edit = { common-menu-edit }
+common-common-menu-view = { common-menu-view }
+common-common-menu-tab = { common-menu-tab }
+common-common-menu-ai = { common-menu-ai }
+common-common-menu-blocks = { common-menu-blocks }
+common-common-menu-drive = { common-menu-drive }
+common-common-menu-window = { common-menu-window }
+common-common-menu-help = { common-menu-help }
+
+## -- 应用菜单项标签的双前缀别名 --------------------------------------------
+
+common-common-menu-new-window = { common-menu-new-window }
+common-common-menu-new-terminal-tab = { common-menu-new-terminal-tab }
+common-common-menu-new-agent-tab = { common-menu-new-agent-tab }
+common-common-menu-preferences = { common-menu-preferences }
+common-common-menu-privacy-policy = { common-menu-privacy-policy }
+common-common-menu-debug = { common-menu-debug }
+common-common-menu-set-warp-as-default-terminal = { common-menu-set-warp-as-default-terminal }
+common-common-menu-log-out = { common-menu-log-out }
+common-common-menu-open-recent = { common-menu-open-recent }
+common-common-menu-use-warps-prompt = { common-menu-use-warps-prompt }
+common-common-menu-copy-on-select = { common-menu-copy-on-select }
+common-common-menu-synchronize-inputs = { common-menu-synchronize-inputs }
+common-common-menu-toggle-mouse-reporting = { common-menu-toggle-mouse-reporting }
+common-common-menu-toggle-scroll-reporting = { common-menu-toggle-scroll-reporting }
+common-common-menu-toggle-focus-reporting = { common-menu-toggle-focus-reporting }
+common-common-menu-compact-mode = { common-menu-compact-mode }
+common-common-menu-manually-toggle-network-status = { common-menu-manually-toggle-network-status }
+common-common-menu-create-anonymous-user = { common-menu-create-anonymous-user }
+common-common-menu-send-feedback = { common-menu-send-feedback }
+common-common-menu-warp-documentation = { common-menu-warp-documentation }
+common-common-menu-github-issues = { common-menu-github-issues }
+common-common-menu-warp-slack-community = { common-menu-warp-slack-community }
+common-common-menu-reopen-closed-session = { common-menu-reopen-closed-session }
+common-common-menu-launch-configurations = { common-menu-launch-configurations }
+common-common-menu-save-new = { common-menu-save-new }
+
+## -- 窗格操作 ---------------------------------------------------------------
+
+common-close-pane = 关闭窗格
+common-maximize-pane = 最大化窗格
+common-minimize-pane = 最小化窗格
+common-split-pane-right = 向右拆分窗格
+common-split-pane-left = 向左拆分窗格
+common-split-pane-down = 向下拆分窗格
+common-split-pane-up = 向上拆分窗格
+common-close-current-session = 关闭当前会话
+common-switch-panes-left = 向左切换窗格
+common-switch-panes-right = 向右切换窗格
+common-switch-panes-up = 向上切换窗格
+common-switch-panes-down = 向下切换窗格
+common-toggle-maximize-active-pane = 切换最大化活动窗格
+
+## -- 快捷键页面分区 -----------------------------------------------------------
+
+common-essentials-section = 基本
+common-blocks-section = 区块
+common-input-editor-section = 输入编辑器
+common-terminal-section = 终端
+common-fundamentals-section = 基础
+
+## -- 快捷键页面文本 -----------------------------------------------------------
+
+common-to-toggle-this-panel = 切换此面板
+common-go-to-settings-keybindings = 前往设置 > 键盘快捷键以配置自定义快捷键
+common-here-label = 这里。
+common-keyboard-shortcuts = 键盘快捷键
+common-warp-essentials = Warp 基本功能
+
+## -- 提示 / 引导扩展 ----------------------------------------------------------
+
+common-close-welcome-tips = 关闭欢迎提示
+common-nice-work-finishing-tips = 很棒，你已完成欢迎提示！
+
+## -- 上下文芯片提示 ------------------------------------------------------------
+
+common-change-git-branch = 更改 Git 分支
+common-change-working-directory = 更改工作目录
+common-view-pull-request = 查看拉取请求
+common-working-directory = 工作目录
+common-install-nvm-for-me = 为我安装 nvm
+
+## -- 其他 i18n 条目 --------------------------------------------------------
+
+common-same-line-prompt = 同行提示词
+common-not-visible-to-other-users = 其他用户不可见
+common-do-not-show-again = 不再显示
+common-do-not-ask-again = 不再询问
+common-copy-error = 复制错误
+common-suggested = 推荐
+common-theme-name = 主题名称
+common-background-color = 背景颜色
+common-session-type = 会话类型
+common-create-theme = 创建主题
+common-delete-theme = 删除主题
+common-theme-creator-subheader = 根据从图像中提取的颜色自动生成主题（.png, .jpg）。
+common-select-image = 选择图像
+common-selecting-image = 正在选择图像...
+common-select-new-image = 选择新图像
+common-theme-delete-subheader = 此操作将永久删除该主题。
+
+common-new-badge = 新
+
+## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID
+
+common-common-back-label = { common-back-label }
+common-common-cancel-label = { common-cancel-label }
+common-common-close-label = { common-close-label }
+common-common-delete-label = { common-delete-label }
+common-common-launch-config-placeholder = { common-launch-config-placeholder }
+common-common-open-yaml-file-button = { common-open-yaml-file-button }
+common-common-remove-label = { common-remove-label }
+common-common-save-configuration-button = { common-save-configuration-button }
+common-common-save-current-configuration = { common-save-current-configuration }
+common-common-download-label = { common-download-label }
+common-common-yes-label = { common-yes-label }
+common-common-done-label = { common-done-label }
+common-common-dismiss-label = { common-dismiss-label }
+common-common-learn-more-label = { common-learn-more-label }
+common-common-learn-more = { common-learn-more }
+common-common-copy-label = { common-copy-label }
+common-common-paste-label = { common-paste-label }
+common-common-cut-label = { common-cut-label }
+common-common-undo-label = { common-undo-label }
+common-common-redo-label = { common-redo-label }
+common-common-select-all-label = { common-select-all-label }
+common-common-open-label = { common-open-label }
+common-common-open-file-label = { common-open-file-label }
+common-common-view-label = { common-view-label }
+common-common-import-label = { common-import-label }
+common-common-share-label = { common-share-label }
+common-common-upload-label = { common-upload-label }
+common-common-split-pane-right = { common-split-pane-right }
+common-common-split-pane-left = { common-split-pane-left }
+common-common-split-pane-down = { common-split-pane-down }
+common-common-split-pane-up = { common-split-pane-up }
+common-common-close-pane = { common-close-pane }
+common-common-maximize-pane = { common-maximize-pane }
+common-common-minimize-pane = { common-minimize-pane }
+common-common-close-current-session = { common-close-current-session }
+common-common-switch-panes-left = { common-switch-panes-left }
+common-common-switch-panes-right = { common-switch-panes-right }
+common-common-switch-panes-up = { common-switch-panes-up }
+common-common-switch-panes-down = { common-switch-panes-down }
+common-common-toggle-maximize-active-pane = { common-toggle-maximize-active-pane }
+
+## -- 其他 --------------------------------------------------------------------
+
+common-toggle-fullscreen = 切换全屏
+common-rename-label = 重命名
+common-save-changes-label = 保存更改
+common-create-theme-label = 创建主题
+common-delete-theme-label = 删除主题
+
+## -- Additional common strings --
+common-separator = 分隔符
+common-current = 当前
+common-loading = 加载中...
+common-out-of-credits = 看来您的积分已用完。 
+common-no-results = 未找到结果。
+common-no-matches = 未找到匹配项。
+common-manage = 管理
+common-no-matching-themes = 没有匹配的主题！
+
+## -- Double-prefix aliases for new common strings --
+common-common-separator = { common-separator }
+common-common-current = { common-current }
+common-common-loading = { common-loading }
+common-common-out-of-credits = { common-out-of-credits }
+common-common-no-results = { common-no-results }
+common-common-no-matches = { common-no-matches }
+common-common-manage = { common-manage }
+common-common-no-matching-themes = { common-no-matching-themes }
+common-common-run-label = { common-run-label }
+common-common-new-label = { common-new-label }
+
+## -- 获取编辑权限模态框字符串 --
+common-edit-anyway-label = 仍然编辑
+common-grab-edit-warning = 如果您获取编辑控制权，当前编辑者将被强制进入查看模式
+common-currently-edited = 此笔记本正在被编辑
+
+## -- 应用菜单切换标签 --
+
+common-enable-shell-debug-mode = 为新会话启用 Shell 调试模式 (-x)
+common-disable-shell-debug-mode = 为新会话禁用 Shell 调试模式 (-x)
+common-enable-in-band-generators = 为新会话启用带内生成器
+common-disable-in-band-generators = 为新会话禁用带内生成器
+common-enable-pty-recording = 启用 PTY 录制模式 (warp.pty.recording)
+common-disable-pty-recording = 禁用 PTY 录制模式 (warp.pty.recording)
+common-show-bootstrap-block = 显示初始化块
+common-hide-bootstrap-block = 隐藏初始化块
+common-show-in-band-command-blocks = 显示带内命令块
+common-hide-in-band-command-blocks = 隐藏带内命令块
+common-show-ssh-command-blocks = 显示 Warp 化 SSH 块
+common-hide-ssh-command-blocks = 隐藏 Warp 化 SSH 块
+common-export-default-settings-csv = 将默认设置导出为 CSV 到主目录
+
+## -- 应用菜单切换标签的双前缀别名 --
+
+common-common-enable-shell-debug-mode = { common-enable-shell-debug-mode }
+common-common-disable-shell-debug-mode = { common-disable-shell-debug-mode }
+common-common-enable-in-band-generators = { common-enable-in-band-generators }
+common-common-disable-in-band-generators = { common-disable-in-band-generators }
+common-common-enable-pty-recording = { common-enable-pty-recording }
+common-common-disable-pty-recording = { common-disable-pty-recording }
+common-common-show-bootstrap-block = { common-show-bootstrap-block }
+common-common-hide-bootstrap-block = { common-hide-bootstrap-block }
+common-common-show-in-band-command-blocks = { common-show-in-band-command-blocks }
+common-common-hide-in-band-command-blocks = { common-hide-in-band-command-blocks }
+common-common-show-ssh-command-blocks = { common-show-ssh-command-blocks }
+common-common-hide-ssh-command-blocks = { common-hide-ssh-command-blocks }
+common-common-export-default-settings-csv = { common-export-default-settings-csv }
+
+## -- 主题选择器字符串 --
+common-themes-title = 主题
+common-theme-hint-default = 更改当前主题。
+common-theme-hint-light = 选择系统浅色模式时使用的主题。
+common-theme-hint-dark = 选择系统深色模式时使用的主题。
+
+common-saving-label = 正在保存…
+common-beta-label = Beta
+
+## -- 主题选择器字符串的双前缀别名 --
+common-common-themes-title = { common-themes-title }
+common-common-theme-hint-default = { common-theme-hint-default }
+common-common-theme-hint-light = { common-theme-hint-light }
+common-common-theme-hint-dark = { common-theme-hint-dark }
+common-common-saving-label = { common-saving-label }
+common-common-beta-label = { common-beta-label }
+
+## -- Double-prefix aliases for grab edit access modal strings --
+common-common-edit-anyway-label = { common-edit-anyway-label }
+common-common-grab-edit-warning = { common-grab-edit-warning }
+common-common-currently-edited = { common-currently-edited }
+common-common-create-theme = { common-create-theme }
+common-common-delete-theme = { common-delete-theme }
+common-common-theme-creator-subheader = { common-theme-creator-subheader }
+common-common-select-image = { common-select-image }
+common-common-selecting-image = { common-selecting-image }
+common-common-select-new-image = { common-select-new-image }
+common-common-theme-delete-subheader = { common-theme-delete-subheader }
+common-common-save-changes-label = { common-save-changes-label }
+common-common-create-theme-label = { common-create-theme-label }
+common-common-delete-theme-label = { common-delete-theme-label }
+common-common-continue-label = { common-continue-label }
+common-common-do-not-show-again = { common-do-not-show-again }
+common-common-enable-label = { common-enable-label }
+common-common-status-done = { common-status-done }
+common-common-status-in-progress = { common-status-in-progress }
+common-common-status-cancelled = { common-status-cancelled }
+common-common-status-blocked = { common-status-blocked }
+common-common-status-failed = { common-status-failed }
+common-common-status-claimed = { common-status-claimed }
+common-common-status-queued = { common-status-queued }
+common-common-status-pending = { common-status-pending }
+common-common-untitled-label = { common-untitled-label }
+common-common-default-user-display-name = { common-default-user-display-name }
+common-common-new-badge = { common-new-badge }

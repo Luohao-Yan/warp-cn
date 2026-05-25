@@ -2,6 +2,7 @@ use fuzzy_match::FuzzyMatchResult;
 use ordered_float::OrderedFloat;
 use std::fmt::Debug;
 use std::path::PathBuf;
+use std::sync::LazyLock;
 use warp_util::path::LineAndColumnArg;
 
 use crate::appearance::Appearance;
@@ -15,6 +16,9 @@ use warpui::{AppContext, Element, SingletonEntity};
 
 use crate::search::files::icon::icon_from_file_path;
 use crate::ui_components::render_file_search_row::{render_file_search_row, FileSearchRowOptions};
+
+static NAVIGATE_DIRECTORY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-file-navigate-directory").clone());
+static OPEN_FILE_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-file-open-file").clone());
 
 #[derive(Debug)]
 pub struct FileSearchItem {
@@ -97,17 +101,19 @@ impl SearchItem for FileSearchItem {
 
     fn accessibility_label(&self) -> String {
         if self.is_directory {
-            format!("Directory: {}", self.path.display())
+            crate::tr!("search", "search-file-directory-label")
+                .replace("{ $path }", &self.path.display().to_string())
         } else {
-            format!("File: {}", self.path.display())
+            crate::tr!("search", "search-file-file-label")
+                .replace("{ $path }", &self.path.display().to_string())
         }
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
         Some(if self.is_directory {
-            "Press Enter to navigate to this directory".to_string()
+            NAVIGATE_DIRECTORY_HELP.clone()
         } else {
-            "Press Enter to open this file".to_string()
+            OPEN_FILE_HELP.clone()
         })
     }
 
@@ -161,7 +167,8 @@ impl SearchItem for CreateFileSearchItem {
         let text_color = highlight_state.sub_text_fill(appearance).into_solid();
 
         let label = Text::new_inline(
-            format!("Create {}…", &self.file_name),
+            crate::tr!("search", "search-create-file-display")
+                .replace("{ $file_name }", &self.file_name),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -195,14 +202,15 @@ impl SearchItem for CreateFileSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Create file: {}", self.file_name)
+        crate::tr!("search", "search-create-file-a11y-label")
+            .replace("{ $file_name }", &self.file_name)
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some(format!(
-            "Press Enter to create {} in the current directory",
-            self.file_name
-        ))
+        Some(
+            crate::tr!("search", "search-create-file-a11y-help")
+                .replace("{ $file_name }", &self.file_name),
+        )
     }
 
     fn render_details(&self, _ctx: &AppContext) -> Option<Box<dyn Element>> {

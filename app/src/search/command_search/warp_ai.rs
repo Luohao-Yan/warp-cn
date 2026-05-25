@@ -29,15 +29,15 @@ use async_trait::async_trait;
 use itertools::Itertools;
 use ordered_float::OrderedFloat;
 use serde_json::json;
-use std::{any::Any, sync::Arc};
+use std::{any::Any, sync::Arc, sync::LazyLock};
 use warp_core::ui::builder;
 use warpui::{
     elements::{ConstrainedBox, Container, Text},
     AppContext, Element, SingletonEntity,
 };
 
-const OPEN_WARP_AI_ITEM_BODY_TEXT: &str = "Ask Warp AI for command suggestions";
-const TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT: &str = "Translate into shell command using Warp AI";
+static OPEN_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-ai-suggest").clone());
+static TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-ai-translate").clone());
 
 #[derive(Clone, Debug)]
 pub enum WarpAISearchItem {
@@ -49,10 +49,10 @@ pub enum WarpAISearchItem {
 }
 
 impl WarpAISearchItem {
-    fn item_body_text(&self) -> &'static str {
+    fn item_body_text(&self) -> &str {
         match self {
-            WarpAISearchItem::Translate => TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT,
-            WarpAISearchItem::Open => OPEN_WARP_AI_ITEM_BODY_TEXT,
+            WarpAISearchItem::Translate => TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT.as_str(),
+            WarpAISearchItem::Open => OPEN_WARP_AI_ITEM_BODY_TEXT.as_str(),
         }
     }
 }
@@ -242,12 +242,11 @@ impl AsyncDataSource for WarpAIDataSource {
 impl DataSourceRunError for GenerateCommandsFromNaturalLanguageError {
     fn user_facing_error(&self) -> String {
         match self {
-            Self::BadPrompt => "No results found. Please try again with a more specific query.",
-            Self::AiProviderError => "Something went wrong. Please try again.",
-            Self::RateLimited => "Looks like you're out of AI credits. Please try again later.",
-            Self::Other => "Something went wrong. Please try again.",
+            Self::BadPrompt => crate::tr!("search", "search-ai-no-results").clone(),
+            Self::AiProviderError => crate::tr!("search", "search-ai-error").clone(),
+            Self::RateLimited => crate::tr!("search", "search-ai-out-of-credits").clone(),
+            Self::Other => crate::tr!("search", "search-ai-error-fallback").clone(),
         }
-        .to_string()
     }
 
     fn telemetry_payload(&self) -> serde_json::Value {

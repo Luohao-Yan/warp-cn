@@ -1,5 +1,7 @@
+use std::borrow::Cow;
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
 
 use ai::index::full_source_code_embedding::manager::{
     CodebaseIndexManager, CodebaseIndexManagerEvent,
@@ -26,8 +28,8 @@ use crate::{
     },
 };
 
-const ADD_DIRECTORY_LABEL: &str = "+ Add directory…";
-const BUTTON_LABEL: &str = "Add directory color";
+static ADD_DIRECTORY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "add-directory-label"));
+static BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "add-directory-color-button"));
 const MENU_WIDTH: f32 = 340.;
 
 /// A dropdown used by the Directory tab colors settings widget, with a button fallback
@@ -110,7 +112,7 @@ impl DirectoryColorAddPicker {
         });
 
         let button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(BUTTON_LABEL, SecondaryTheme)
+            ActionButton::new(&*BUTTON_LABEL, SecondaryTheme)
                 .with_icon(icons::Icon::Plus)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(DirectoryColorAddPickerAction::AddNewDirectory);
@@ -121,7 +123,7 @@ impl DirectoryColorAddPicker {
             let mut dropdown = FilterableDropdown::new(ctx);
             dropdown.set_top_bar_max_width(MENU_WIDTH);
             dropdown.set_menu_width(MENU_WIDTH, ctx);
-            dropdown.set_menu_header_to_static(BUTTON_LABEL);
+            dropdown.set_menu_header_to_static(&*BUTTON_LABEL);
             dropdown
         });
 
@@ -158,7 +160,7 @@ impl DirectoryColorAddPicker {
                                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
                                     .with_child(
                                         Text::new_inline(
-                                            ADD_DIRECTORY_LABEL,
+                                            &*ADD_DIRECTORY_LABEL,
                                             font_family,
                                             font_size,
                                         )

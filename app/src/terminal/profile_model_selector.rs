@@ -258,7 +258,7 @@ impl ProfileModelSelector {
                 ),
                 is_blurred: false,
             })
-            .with_tooltip("Choose an AI execution profile")
+            .with_tooltip(crate::tr!("terminal", "terminal-choose-execution-profile-tooltip"))
             .with_size(ButtonSize::UDIButton)
             .with_icon(Icon::Psychology)
         });
@@ -286,14 +286,14 @@ impl ProfileModelSelector {
                 ),
                 is_blurred: false,
             })
-            .with_tooltip("Choose an agent model")
+            .with_tooltip(crate::tr!("terminal", "terminal-choose-agent-model-tooltip"))
             .with_size(ButtonSize::UDIButton)
         });
 
         let profile_compact_button = ctx.add_typed_action_view(|_| {
             ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::Psychology)
-                .with_tooltip("Choose an AI execution profile")
+                .with_tooltip(crate::tr!("terminal", "terminal-choose-execution-profile-tooltip"))
                 .with_size(ButtonSize::UDIButton)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ProfileModelSelectorAction::ToggleProfileMenu);
@@ -303,7 +303,7 @@ impl ProfileModelSelector {
         let model_compact_button = ctx.add_typed_action_view(|_| {
             ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::Neurology)
-                .with_tooltip("Choose an agent model")
+                .with_tooltip(crate::tr!("terminal", "terminal-choose-agent-model-tooltip"))
                 .with_size(ButtonSize::UDIButton)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ProfileModelSelectorAction::ToggleModelMenu);
@@ -340,19 +340,19 @@ impl ProfileModelSelector {
                         .iter()
                         .map(|name| {
                             if *name == "auto" {
-                                "auto-select the best model for the task"
+                                crate::tr!("terminal", "terminal-auto-select-best-model")
                             } else {
-                                name
+                                name.clone()
                             }
                         })
                         .collect::<Vec<_>>()
                         .join(", ");
                     if has_overflow {
-                        label += ", ...";
+                        label += &crate::tr!("terminal", "terminal-ellipsis");
                     }
                     label
                 } else {
-                    "New models available".to_string()
+                    crate::tr!("terminal", "terminal-new-models-available")
                 }
             })))
         });
@@ -506,8 +506,8 @@ impl ProfileModelSelector {
         );
 
         let manage_api_key_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Manage", SecondaryTheme)
-                .with_tooltip("Manage API keys")
+            ActionButton::new(crate::tr!("terminal", "terminal-manage"), SecondaryTheme)
+                .with_tooltip(crate::tr!("terminal", "terminal-manage-api-keys"))
                 .with_size(ButtonSize::XSmall)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WorkspaceAction::ShowSettingsPageWithSearch {
@@ -720,7 +720,7 @@ impl ProfileModelSelector {
         let appearance = Appearance::as_ref(ctx);
         let mut menu_items = vec![
             MenuItem::Header {
-                fields: MenuItemFields::new("Profiles").with_override_text_color(
+                fields: MenuItemFields::new(crate::tr!("terminal", "terminal-profiles")).with_override_text_color(
                     appearance
                         .theme()
                         .sub_text_color(appearance.theme().background())
@@ -751,7 +751,7 @@ impl ProfileModelSelector {
 
         menu_items.push(MenuItem::Separator);
         menu_items.push(MenuItem::Item(
-            MenuItemFields::new("Manage profiles")
+            MenuItemFields::new(crate::tr!("terminal", "terminal-manage-profiles"))
                 .with_icon(Icon::Gear)
                 .with_on_select_action(ProfileModelSelectorAction::ManageProfiles),
         ));
@@ -1333,7 +1333,7 @@ impl ProfileModelSelector {
                     )))
                     .finish();
 
-                let tooltip_text = "Choose an AI execution profile".to_owned();
+                let tooltip_text = crate::tr!("terminal", "terminal-choose-execution-profile-tooltip");
 
                 let tooltip = appearance.ui_builder().tool_tip(tooltip_text);
                 let mut stack = Stack::new();
@@ -1475,9 +1475,9 @@ impl ProfileModelSelector {
                     .finish();
 
                 let tooltip_text = if !has_edit_access {
-                    "Request edit access to change model".to_owned()
+                    crate::tr!("terminal", "terminal-request-edit-access-model")
                 } else {
-                    "Choose an agent model".to_owned()
+                    crate::tr!("terminal", "terminal-choose-agent-model-tooltip")
                 };
 
                 let tooltip = appearance.ui_builder().tool_tip(tooltip_text);
@@ -1638,7 +1638,7 @@ impl ProfileModelSelector {
             Flex::row()
                 .with_main_axis_size(MainAxisSize::Max)
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
-                .with_child(self.render_model_spec_value_label("Cost".to_string(), app))
+                .with_child(self.render_model_spec_value_label(crate::tr!("terminal", "terminal-cost"), app))
                 .with_child(
                     Expanded::new(
                         1.,
@@ -1649,7 +1649,7 @@ impl ProfileModelSelector {
                             .with_child(
                                 Container::new(
                                     Text::new(
-                                        "Billed to API".to_string(),
+                                        crate::tr!("terminal", "terminal-billed-to-api"),
                                         appearance.ui_font_family(),
                                         14.,
                                     )
@@ -1679,18 +1679,18 @@ impl ProfileModelSelector {
     ) -> Box<dyn Element> {
         let mut spec_values = vec![
             self.render_model_spec_value(
-                "Intelligence".to_string(),
+                crate::tr!("terminal", "terminal-intelligence"),
                 spec.quality,
                 bg_bar_color,
                 app,
             ),
-            self.render_model_spec_value("Speed".to_string(), spec.speed, bg_bar_color, app),
+            self.render_model_spec_value(crate::tr!("terminal", "terminal-speed"), spec.speed, bg_bar_color, app),
         ];
         if is_using_api_key {
             spec_values.push(self.render_model_spec_api_key(app));
         } else {
             spec_values.push(self.render_model_spec_value(
-                "Cost".to_string(),
+                crate::tr!("terminal", "terminal-cost"),
                 spec.cost,
                 bg_bar_color,
                 app,
@@ -1709,8 +1709,8 @@ impl ProfileModelSelector {
         let appearance = Appearance::as_ref(app);
         let theme = appearance.theme();
         let header = self.render_model_spec_header(
-            "Model Specs".to_string(),
-            "Warp’s benchmarks for how well a model performs in our harness, the rate at which it consumes credits, and task speed.".to_string(),
+            crate::tr!("terminal", "terminal-model-specs"),
+            crate::tr!("terminal", "terminal-model-specs-description"),
             app,
         );
         let spec = self.render_all_model_spec_values(
@@ -1749,16 +1749,16 @@ impl ProfileModelSelector {
 
         let (title, description) = match kind {
             ModelSpecSidecarKind::Auto => (
-                "Auto mode",
-                "Auto will select the best model for the task. Cost-efficiency optimizes for cost, Responsiveness optimizes for response speed.",
+                crate::tr!("terminal", "terminal-auto-mode"),
+                crate::tr!("terminal", "terminal-auto-mode-description"),
             ),
             ModelSpecSidecarKind::Reasoning => (
-                "Reasoning level",
-                "Increased reasoning levels consume more credits and have higher latency, but higher performance for complicated tasks.",
+                crate::tr!("terminal", "terminal-reasoning-level"),
+                crate::tr!("terminal", "terminal-reasoning-level-description"),
             ),
         };
 
-        let header = self.render_model_spec_header(title.to_string(), description.to_string(), app);
+        let header = self.render_model_spec_header(title, description, app);
         let sidecar_menu = ChildView::new(&self.model_spec_sidecar.dropdown).finish();
         let spec_values = self.render_all_model_spec_values(
             &spec.clone().unwrap_or_default(),

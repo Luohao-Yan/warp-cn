@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use serde::{Deserialize, Serialize};
 use warp_editor::content::text::BufferBlockItem;
@@ -39,6 +39,8 @@ use super::{
 
 /// The saved position ID for the block insertion button.
 const BLOCK_INSERT_BUTTON_ID: &str = "notebook_block_insertion_button";
+
+static INSERT_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-insert-block"));
 
 /// Where the block insertion menu was triggered from.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -105,8 +107,9 @@ impl BlockInsertionMenuState {
         }
 
         if embedded_objects_enabled {
+            let embed_label = crate::tr!("notebooks", "notebooks-block-embed");
             menu.add_item(
-                MenuItemFields::new("Embed")
+                MenuItemFields::new(&embed_label)
                     .with_icon(Icon::EmbedBlock)
                     .with_on_select_action(EditorViewAction::OpenEmbeddedObjectSearch)
                     .into_item(),
@@ -125,8 +128,9 @@ impl BlockInsertionMenuState {
             menu.add_item(item_fields.into_item());
         }
 
+        let divider_label = crate::tr!("notebooks", "notebooks-block-divider");
         menu.add_item(
-            MenuItemFields::new("Divider")
+            MenuItemFields::new(&divider_label)
                 .with_icon(Icon::HorizontalRuleBlock)
                 .with_on_select_action(EditorViewAction::InsertBlock(
                     warp_editor::content::text::BlockType::Item(BufferBlockItem::HorizontalRule),
@@ -246,7 +250,7 @@ impl RichTextEditorView {
             let title = model
                 .get_notebook(id)
                 .map(|notebook| notebook.model().title.clone())
-                .unwrap_or_else(|| "Untitled".to_string());
+                .unwrap_or_else(|| crate::tr!("notebooks", "notebooks-untitled"));
             let link = model
                 .get_by_uid(&CloudObjectTypeAndId::Notebook(*id).uid())
                 .and_then(|object| object.object_link());
@@ -315,7 +319,7 @@ impl RichTextEditorView {
         })
         .with_tooltip(move || {
             ui_builder
-                .tool_tip("Insert block".to_string())
+                .tool_tip(INSERT_BLOCK_TOOLTIP.clone())
                 .build()
                 .finish()
         })

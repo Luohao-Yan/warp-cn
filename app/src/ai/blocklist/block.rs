@@ -188,6 +188,7 @@ use crate::{report_error, report_if_error, ToastStack};
 use ai::agent::action::{AskUserQuestionItem, InsertReviewComment, RunAgentsRequest};
 
 use crate::editor::InteractionState;
+use std::sync::LazyLock;
 use crate::server::telemetry::{AutonomySettingToggleSource, InteractionSource};
 use crate::settings::{
     AISettingsChangedEvent, AgentModeCodingPermissionsType, FontSettings, InputModeSettings,
@@ -556,7 +557,7 @@ impl ImportedCommentElementState {
                 ActionButton::new("", NakedTheme)
                     .with_icon(Icon::Github)
                     .with_size(ButtonSize::Small)
-                    .with_tooltip("Open in GitHub")
+                    .with_tooltip(&crate::tr!("ai_assistant", "ai-open-in-github-tooltip"))
                     .on_click({
                         let url = url.clone();
                         move |ctx| {
@@ -569,8 +570,9 @@ impl ImportedCommentElementState {
         });
 
         let action_id_for_open_button = action_id.clone();
+        static OPEN_IN_CR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-open-in-code-review"));
         let open_in_code_review_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new("Open in code review", SecondaryTheme)
+            ActionButton::new(&*OPEN_IN_CR_LABEL, SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(move |ctx| {
                     ctx.dispatch_typed_action(AIBlockAction::OpenImportedCommentInCodeReview {
@@ -1133,8 +1135,9 @@ impl AIBlock {
             }
         });
 
-        let manage_rules_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Manage rules", NakedTheme)
+        static MANAGE_RULES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-manage-rules"));
+        let manage_rules_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*MANAGE_RULES_LABEL, NakedTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(AIBlockAction::OpenAIFactCollection))
         });
 
@@ -1264,8 +1267,9 @@ impl AIBlock {
             }
         });
 
-        let review_changes_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Review changes", SecondaryTheme)
+        static REVIEW_CHANGES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-review-changes"));
+        let review_changes_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*REVIEW_CHANGES_LABEL, SecondaryTheme)
                 .with_icon(Icon::Diff)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -1273,16 +1277,18 @@ impl AIBlock {
                 })
         });
 
-        let open_all_comments_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Open all in code review", SecondaryTheme)
+        static OPEN_ALL_CR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-open-all-in-code-review"));
+        let open_all_comments_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*OPEN_ALL_CR_LABEL, SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AIBlockAction::OpenAllImportedCommentsInCodeReview);
                 })
         });
 
-        let dismiss_suggestion_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Dismiss", SuggestionDismissButtonTheme)
+        static DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-dismiss-suggestion"));
+        let dismiss_suggestion_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*DISMISS_LABEL, SuggestionDismissButtonTheme)
                 .with_icon(Icon::X)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -1290,8 +1296,9 @@ impl AIBlock {
                 })
         });
 
-        let disable_rule_suggestions_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Don't show again", SuggestionDismissButtonTheme)
+        static DONT_SHOW_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-dont-show-again"));
+        let disable_rule_suggestions_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*DONT_SHOW_LABEL, SuggestionDismissButtonTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AIBlockAction::DisableRuleSuggestions);
@@ -1301,10 +1308,12 @@ impl AIBlock {
         let ai_block_view_id = ctx.view_id();
         let exchange_id = client_ids.client_exchange_id;
         let conversation_id = client_ids.conversation_id;
-        let rewind_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Rewind", RewindButtonTheme)
+        static REWIND_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-rewind"));
+        let rewind_tooltip = crate::tr!("ai_assistant", "ai-rewind-tooltip");
+        let rewind_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(&*REWIND_LABEL, RewindButtonTheme)
                 .with_size(ButtonSize::XSmall)
-                .with_tooltip("Rewind to before this block")
+                .with_tooltip(&rewind_tooltip)
                 .on_click(move |ctx| {
                     ctx.dispatch_typed_action(TerminalAction::RewindAIConversation {
                         ai_block_view_id,
@@ -1864,7 +1873,7 @@ impl AIBlock {
 
             if !self.action_buttons.contains_key(&action.id) {
                 let run_button = CompactibleActionButton::new(
-                    "Run".to_string(),
+                    crate::tr!("common", "common-run-label").clone(),
                     Some(KeystrokeSource::Fixed(ENTER_KEYSTROKE.clone())),
                     ButtonSize::InlineActionHeader,
                     AIBlockAction::ExecuteRequestedAction {
@@ -1876,7 +1885,7 @@ impl AIBlock {
                 );
 
                 let cancel_button = CompactibleActionButton::new(
-                    "Cancel".to_string(),
+                    crate::tr!("common", "common-cancel-label").clone(),
                     Some(KeystrokeSource::Fixed(CTRL_C_KEYSTROKE.clone())),
                     ButtonSize::InlineActionHeader,
                     AIBlockAction::CancelRequestedAction {
@@ -5989,7 +5998,7 @@ impl TypedActionView for AIBlock {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::success(String::from("Copied to clipboard")),
+                        DismissibleToast::success(crate::tr!("ai_assistant", "ai-copied-to-clipboard")),
                         window_id,
                         ctx,
                     );
@@ -6296,7 +6305,7 @@ impl TypedActionView for AIBlock {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast =
-                        DismissibleToast::default(String::from("Thank you for the feedback!"));
+                        DismissibleToast::default(crate::tr!("ai_assistant", "ai-thank-you-feedback"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
 

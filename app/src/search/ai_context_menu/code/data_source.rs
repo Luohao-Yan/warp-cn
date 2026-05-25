@@ -11,6 +11,8 @@ use crate::search::files::model::FileSearchModel;
 use crate::search::mixer::{
     AsyncDataSource, BoxFuture, DataSourceRunError, DataSourceRunErrorWrapper,
 };
+#[cfg(not(target_family = "wasm"))]
+use std::sync::LazyLock;
 use ai::index::Symbol;
 use fuzzy_match::FuzzyMatchResult;
 #[cfg(not(target_family = "wasm"))]
@@ -216,13 +218,16 @@ impl CodeSymbolCache {
 }
 
 #[cfg(not(target_family = "wasm"))]
+static CODE_SEARCH_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-code-search-failed").clone());
+
+#[cfg(not(target_family = "wasm"))]
 #[derive(Debug)]
 struct CodeSearchError;
 
 #[cfg(not(target_family = "wasm"))]
 impl DataSourceRunError for CodeSearchError {
     fn user_facing_error(&self) -> String {
-        "Code search failed".to_string()
+        CODE_SEARCH_FAILED.clone()
     }
 
     fn telemetry_payload(&self) -> serde_json::Value {

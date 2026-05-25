@@ -7,6 +7,7 @@ use crate::ui_components::icons::Icon;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::CustomerType;
 use std::default::Default;
+use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warpui::fonts::Weight;
 use warpui::keymap::FixedBinding;
@@ -21,7 +22,7 @@ use super::shared_objects_creation_denied_body::{
     SharedObjectsCreationDeniedBody, SharedObjectsCreationDeniedBodyEvent,
 };
 
-const DEFAULT_LIMIT_REACHED_MODAL_HEADER: &str = "Shared object limit reached";
+static DEFAULT_LIMIT_REACHED_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-shared-object-limit-reached"));
 
 pub struct SharedObjectsCreationDeniedModal {
     shared_objects_creation_denied_modal: ViewHandle<Modal<SharedObjectsCreationDeniedBody>>,
@@ -65,7 +66,7 @@ impl SharedObjectsCreationDeniedModal {
 
         let shared_objects_creation_denied_modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(
-                Some(DEFAULT_LIMIT_REACHED_MODAL_HEADER.into()),
+                Some(DEFAULT_LIMIT_REACHED_MODAL_HEADER.clone()),
                 shared_objects_creation_denied_body,
                 ctx,
             )
@@ -125,9 +126,9 @@ impl SharedObjectsCreationDeniedModal {
         let appearance = Appearance::as_ref(ctx);
         self.team_uid = Some(team_uid);
         let title: Option<String> = if is_delinquent_due_to_payment_issue {
-            Some(format!("Shared {object_type}s restricted"))
+            Some(crate::tr!("billing", "billing-shared-objects-restricted", object_type = object_type.to_string()))
         } else {
-            Some(format!("Shared {object_type}s limit reached"))
+            Some(crate::tr!("billing", "billing-shared-objects-limit-reached", object_type = object_type.to_string()))
         };
         let (icon, icon_color) = match object_type {
             DriveObjectType::Notebook { is_ai_document } => (

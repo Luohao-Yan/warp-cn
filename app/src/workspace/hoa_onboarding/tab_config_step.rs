@@ -1,4 +1,5 @@
 use std::path::Path;
+use std::sync::LazyLock;
 
 use warpui::elements::{
     Container, CrossAxisAlignment, Flex, MouseStateHandle, ParentElement, Text,
@@ -16,6 +17,9 @@ use crate::view_components::callout_bubble::{
 };
 
 const SECTION_GAP: f32 = 16.;
+
+static TAB_CONFIG_STEP_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-tab-config-step-title").clone());
+static TAB_CONFIG_STEP_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-tab-config-step-desc").clone());
 
 pub struct TabConfigFormState<'a> {
     pub session_types: &'a [SessionType],
@@ -56,7 +60,7 @@ where
 {
     let callout_bg = callout_background_fill(appearance).into_solid();
     let title = Text::new(
-        "Create your first tab config",
+        TAB_CONFIG_STEP_TITLE.clone(),
         appearance.ui_font_family(),
         16.,
     )
@@ -65,7 +69,7 @@ where
     .finish();
 
     let description = Text::new(
-        "Set up a reusable starting point for your tabs. Pick a repo, choose a session type, and optionally attach a worktree. Use it whenever you want to open a tab with this setup.",
+        TAB_CONFIG_STEP_DESC.clone(),
         appearance.ui_font_family(),
         14.,
     )

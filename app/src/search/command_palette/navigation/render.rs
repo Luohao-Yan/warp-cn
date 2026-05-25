@@ -8,6 +8,7 @@ use crate::context_chips::{ChipValue, ContextChipKind};
 use crate::search::command_palette::navigation::search::SessionHighlightIndices;
 use crate::search::result_renderer::ItemHighlightState;
 use crate::session_management::{CommandContext, SessionNavigationData};
+use std::sync::LazyLock;
 use crate::settings::FontSettings;
 use crate::terminal::blockgrid_element::BlockGridElement;
 use crate::terminal::grid_size_util::grid_cell_dimensions;
@@ -104,7 +105,7 @@ fn render_current_session_pill(
 ) -> Box<dyn Element> {
     let current_session_pill = appearance
         .ui_builder()
-        .span("Current".to_string())
+        .span(crate::tr!("common", "common-current"))
         .with_style(UiComponentStyles {
             font_family_id: Some(appearance.monospace_font_family()),
             // The font size is scaled down to make sure the pill fits in the row with its padding.
@@ -331,12 +332,18 @@ pub(super) struct CommandRenderInfo {
     hint_margin: f32,
 }
 
+static RUNNING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-status-running").clone());
+static COMPLETED_OVER_HOUR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-status-completed-hour").clone());
+static NO_TIMESTAMP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-status-no-timestamp").clone());
+static COMPLETED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-nav-completed").clone());
+static EMPTY_SESSION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-nav-empty-session").clone());
+
 impl CommandRenderInfo {
     pub fn from_context(command_context: CommandContext) -> CommandRenderInfo {
         match command_context {
             CommandContext::RunningCommand { running_command } => CommandRenderInfo {
                 command_text: Some(running_command),
-                hint_text: "Running...".to_string(),
+                hint_text: RUNNING_LABEL.clone(),
                 row_spacing: styles::NAVIGATION_PALETTE_COMMAND_ROW_SPACING,
                 hint_margin: styles::NAVIGATION_PALETTE_COMMAND_HINT_MARGIN,
             },
@@ -354,27 +361,26 @@ impl CommandRenderInfo {
                 },
                 command_text: Some(last_run_command),
                 hint_text: match mins_since_completion {
-                    Some(mins) if mins >= 60 => "Completed over 1 hour ago".to_string(),
-                    Some(mins) if mins == 1 => format!("Completed {mins} minute ago"),
-                    Some(mins) => format!("Completed {mins} minutes ago"),
-                    None => "No timestamp found".to_string(),
+                    Some(mins) if mins >= 60 => COMPLETED_OVER_HOUR_LABEL.clone(),
+                    Some(mins) => crate::tr!("search", "search-status-completed-minute").replace("{ $mins }", &mins.to_string()),
+                    None => NO_TIMESTAMP_LABEL.clone(),
                 },
             },
             CommandContext::RunningAIBlock { prompt } => CommandRenderInfo {
                 command_text: Some(prompt),
-                hint_text: "Running...".to_string(),
+                hint_text: RUNNING_LABEL.clone(),
                 row_spacing: styles::NAVIGATION_PALETTE_COMMAND_ROW_SPACING,
                 hint_margin: styles::NAVIGATION_PALETTE_COMMAND_HINT_MARGIN,
             },
             CommandContext::LastRunAIBlock { prompt } => CommandRenderInfo {
                 command_text: Some(prompt),
-                hint_text: "Completed".to_string(),
+                hint_text: COMPLETED_LABEL.clone(),
                 row_spacing: styles::NAVIGATION_PALETTE_COMMAND_ROW_SPACING,
                 hint_margin: styles::NAVIGATION_PALETTE_COMMAND_HINT_MARGIN,
             },
             CommandContext::None => CommandRenderInfo {
                 command_text: Some(String::new()),
-                hint_text: "Empty Session".to_string(),
+                hint_text: EMPTY_SESSION_LABEL.clone(),
                 row_spacing: 0.,
                 hint_margin: 0.,
             },

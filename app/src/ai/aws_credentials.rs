@@ -44,39 +44,41 @@ fn aws_profile_reference_for_message(profile: &str, capitalize_first_word: bool)
     let profile = profile.trim();
     if profile.is_empty() {
         if capitalize_first_word {
-            "The default AWS profile".to_string()
+            crate::tr!("ai_assistant", "ai-aws-profile-reference-default-capitalized")
         } else {
-            "the default AWS profile".to_string()
+            crate::tr!("ai_assistant", "ai-aws-profile-reference-default")
         }
     } else {
-        let article = if capitalize_first_word { "The" } else { "the" };
-        format!("{article} AWS profile `{profile}`")
+        if capitalize_first_word {
+            crate::tr!("ai_assistant", "ai-aws-profile-reference-named-capitalized", profile = profile)
+        } else {
+            crate::tr!("ai_assistant", "ai-aws-profile-reference-named", profile = profile)
+        }
     }
 }
 
 fn user_facing_aws_credentials_error_message(err: &CredentialsError, profile: &str) -> String {
     match err {
-        CredentialsError::CredentialsNotLoaded(_) => format!(
-            "AWS credentials were not found for {}. Log in with the AWS CLI or update your AWS credentials configuration, then refresh.",
-            aws_profile_reference_for_message(profile, false)
-        ),
-        CredentialsError::ProviderTimedOut(_) => {
-            "Timed out while loading AWS credentials. Refresh and try again.".to_string()
+        CredentialsError::CredentialsNotLoaded(_) => {
+            let profile_reference = aws_profile_reference_for_message(profile, false);
+            crate::tr!("ai_assistant", "ai-aws-credentials-not-found", profile_reference = profile_reference)
         }
-        CredentialsError::InvalidConfiguration(_) => format!(
-            "{} is invalid or incomplete in your local AWS configuration. Update your AWS profile settings and credentials, then refresh.",
-            aws_profile_reference_for_message(profile, true)
-        ),
+        CredentialsError::ProviderTimedOut(_) => {
+            crate::tr!("ai_assistant", "ai-aws-credentials-timeout")
+        }
+        CredentialsError::InvalidConfiguration(_) => {
+            let profile_reference = aws_profile_reference_for_message(profile, true);
+            crate::tr!("ai_assistant", "ai-aws-credentials-invalid-config", profile_reference = profile_reference)
+        }
         CredentialsError::ProviderError(_) => {
-            "Unable to load AWS credentials from your configured provider. Refresh your AWS login and try again."
-                .to_string()
+            crate::tr!("ai_assistant", "ai-aws-credentials-provider-error")
         }
         CredentialsError::Unhandled(_) => {
-            "Unexpected error while loading AWS credentials. Refresh your AWS login and try again."
-                .to_string()
+            crate::tr!("ai_assistant", "ai-aws-credentials-unexpected-error")
         }
-        _ => "Unable to load AWS credentials. Refresh your AWS login and try again."
-            .to_string(),
+        _ => {
+            crate::tr!("ai_assistant", "ai-aws-credentials-unable-to-load")
+        }
     }
 }
 
@@ -284,7 +286,7 @@ fn refresh_aws_credentials_local_chain(
     );
     Box::pin(async move {
         rx.await
-            .unwrap_or_else(|_| Err("Credential refresh was interrupted".to_string()))
+            .unwrap_or_else(|_| Err(crate::tr!("ai_assistant", "ai-aws-credentials-refresh-interrupted")))
     })
 }
 
@@ -393,7 +395,7 @@ fn refresh_aws_credentials_oidc(
     );
     Box::pin(async move {
         rx.await
-            .unwrap_or_else(|_| Err("Credential refresh was interrupted".to_string()))
+            .unwrap_or_else(|_| Err(crate::tr!("ai_assistant", "ai-aws-credentials-refresh-interrupted")))
     })
 }
 

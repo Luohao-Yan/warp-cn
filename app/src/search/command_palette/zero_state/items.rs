@@ -2,11 +2,15 @@ use crate::appearance::Appearance;
 use crate::search::command_palette::mixer::CommandPaletteItemAction;
 use crate::search::result_renderer::QueryResultRenderer;
 use crate::search::search_bar::SelectionUpdate;
+use std::sync::LazyLock;
 
 use warpui::elements::{Container, Flex, ParentElement};
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::ui_components::text::WrappableText;
 use warpui::{AppContext, Element, Entity, ModelContext, SingletonEntity};
+
+static RECENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-recent").clone());
+static SUGGESTED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-suggested").clone());
 
 /// List of items shown within the zero state. "Recent" items are shown first followed by
 /// "Suggested" items.
@@ -170,7 +174,7 @@ impl Items {
         let mut flex = Flex::column();
 
         if !self.recent.is_empty() {
-            flex.add_child(Self::render_section_text("Recent", appearance));
+            flex.add_child(Self::render_section_text(&*RECENT_LABEL, appearance));
 
             flex.add_children(self.recent.iter().enumerate().map(|(idx, result)| {
                 Self::render_query_result(
@@ -183,7 +187,7 @@ impl Items {
         }
 
         if !self.suggested.is_empty() {
-            flex.add_child(Self::render_section_text("Suggested", appearance));
+            flex.add_child(Self::render_section_text(&*SUGGESTED_LABEL, appearance));
 
             flex.add_children(self.suggested.iter().enumerate().map(|(idx, result)| {
                 Self::render_query_result(

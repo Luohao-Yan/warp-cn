@@ -79,9 +79,11 @@ impl SearchItem for FileSearchItem {
 
     fn accessibility_label(&self) -> String {
         if self.is_directory {
-            format!("Directory: {}", self.path.display())
+            crate::tr!("search", "search-file-directory-label")
+                .replace("{ $path }", &self.path.display().to_string())
         } else {
-            format!("File: {}", self.path.display())
+            crate::tr!("search", "search-file-file-label")
+                .replace("{ $path }", &self.path.display().to_string())
         }
     }
 }

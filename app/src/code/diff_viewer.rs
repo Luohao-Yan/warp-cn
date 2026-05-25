@@ -89,9 +89,9 @@ impl DisplayMode {
         !matches!(self, DisplayMode::InlineBanner { .. })
     }
 
-    pub fn title(&self) -> Option<&str> {
+    pub fn title(&self) -> Option<String> {
         match self {
-            DisplayMode::InlineBanner { .. } => Some("Suggested fixes based on your last command:"),
+            DisplayMode::InlineBanner { .. } => Some(crate::tr!("code", "code-suggested-fixes-based-on-your-last-command")),
             _ => None,
         }
     }

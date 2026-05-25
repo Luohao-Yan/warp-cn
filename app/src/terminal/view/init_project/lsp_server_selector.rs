@@ -6,6 +6,7 @@ use crate::appearance::Appearance;
 use crate::ui_components::blended_colors;
 use lsp::supported_servers::LSPServerType;
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use warpui::{
     elements::{
@@ -29,6 +30,8 @@ pub struct LSPServerInfo {
     pub server_type: LSPServerType,
     pub is_installed: bool,
 }
+
+static TERMINAL_ENABLE_LANG_SUPPORT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-enable-lang-support-desc"));
 
 /// Creates a ToggleableItemsView configured for LSP server selection.
 pub fn create_lsp_server_selector(
@@ -130,7 +133,7 @@ pub fn render_lsp_selector_block(
     );
 
     let title_element = Span::new(
-        "Would you like to enable available language support for this codebase? This will give you smarter code navigation and inline error checking.",
+        &*TERMINAL_ENABLE_LANG_SUPPORT,
         UiComponentStyles {
             font_family_id: Some(appearance.ui_font_family()),
             font_color: Some(blended_colors::text_main(appearance.theme(), header_background)),
@@ -176,9 +179,9 @@ pub fn render_lsp_selector_block(
     let any_needs_download = selected_items.iter().any(|info| !info.is_installed);
 
     let enable_label = if any_needs_download {
-        "Install and enable"
+        crate::tr!("terminal", "terminal-install-and-enable")
     } else {
-        "Enable language support"
+        crate::tr!("terminal", "terminal-enable-selected-languages")
     };
 
     // Create keyboard shortcut for Enter

@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use crate::{
     ai::agent::icons::{yellow_running_icon, yellow_stop_icon},
     view_components::compactible_action_button::{
@@ -44,8 +46,8 @@ use crate::{
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 const ENV_VAR_COLLECTION_BODY_VERTICAL_PADDING: f32 = 16.;
 
-const ENV_VAR_COLLECTION_CANCEL_LABEL: &str = "Cancel";
-const ENV_VAR_COLLECTION_ACCEPT_LABEL: &str = "Run";
+static ENV_VAR_COLLECTION_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
+static ENV_VAR_COLLECTION_ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-run-label"));
 
 lazy_static! {
     static ref CANCEL_ENV_VAR_COLLECTION_KEYSTROKE: Keystroke = Keystroke {
@@ -147,7 +149,7 @@ impl EnvVarCollectionBlock {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let cancel_button = CompactibleActionButton::new(
-            ENV_VAR_COLLECTION_CANCEL_LABEL.to_string(),
+            ENV_VAR_COLLECTION_CANCEL_LABEL.clone(),
             Some(KeystrokeSource::Fixed(
                 CANCEL_ENV_VAR_COLLECTION_KEYSTROKE.clone(),
             )),
@@ -159,7 +161,7 @@ impl EnvVarCollectionBlock {
         );
 
         let accept_button = CompactibleActionButton::new(
-            ENV_VAR_COLLECTION_ACCEPT_LABEL.to_string(),
+            ENV_VAR_COLLECTION_ACCEPT_LABEL.clone(),
             Some(KeystrokeSource::Fixed(
                 ACCEPT_ENV_VAR_COLLECTION_KEYSTROKE.clone(),
             )),

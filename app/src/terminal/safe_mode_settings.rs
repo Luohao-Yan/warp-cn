@@ -52,11 +52,11 @@ impl SecretDisplayMode {
     }
 
     /// Display name for UI
-    pub fn display_name(self) -> &'static str {
+    pub fn display_name(self) -> String {
         match self {
-            SecretDisplayMode::Asterisks => "Asterisks",
-            SecretDisplayMode::Strikethrough => "Strikethrough",
-            SecretDisplayMode::AlwaysShow => "Always show secrets",
+            SecretDisplayMode::Asterisks => crate::tr!("settings", "asterisks"),
+            SecretDisplayMode::Strikethrough => crate::tr!("settings", "strikethrough"),
+            SecretDisplayMode::AlwaysShow => crate::tr!("settings", "always-show-secrets"),
         }
     }
 

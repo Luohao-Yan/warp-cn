@@ -16,6 +16,7 @@ use markdown_parser::FormattedTextLine;
 use pathfinder_color::ColorU;
 use std::borrow::Cow;
 use std::rc::Rc;
+use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::color::internal_colors::neutral_2;
 use warpui::elements::Align;
@@ -44,8 +45,8 @@ use crate::ai::blocklist::inline_action::inline_action_header::{
 use crate::ai::blocklist::inline_action::inline_action_icons::icon_size;
 use crate::ui_components::blended_colors;
 
-const REQUESTED_ACTION_CANCEL_LABEL: &str = "Cancel";
-const REQUESTED_ACTION_RUN_LABEL: &str = "Run";
+static REQUESTED_ACTION_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cancel"));
+static REQUESTED_ACTION_RUN_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run"));
 
 const KEYBOARD_SHORTCUT_MARGIN_RIGHT: f32 = 8.;
 
@@ -250,14 +251,14 @@ pub(super) fn render_header_buttons(
     let appearance = Appearance::as_ref(app);
 
     let width_required_for_full_size_layout = approx_keystroke_button_width(
-        REQUESTED_ACTION_CANCEL_LABEL,
+        &*REQUESTED_ACTION_CANCEL_LABEL,
         appearance.monospace_font_size(),
         cancel_keystroke,
         None,
         app,
     ) + BUTTON_MARGIN_RIGHT
         + approx_keystroke_button_width(
-            REQUESTED_ACTION_RUN_LABEL,
+            &*REQUESTED_ACTION_RUN_LABEL,
             appearance.monospace_font_size(),
             run_keystroke,
             None,
@@ -271,14 +272,14 @@ pub(super) fn render_header_buttons(
         ..Default::default()
     };
     let width_required_for_compact_layout = approx_keystroke_button_width(
-        REQUESTED_ACTION_CANCEL_LABEL,
+        &*REQUESTED_ACTION_CANCEL_LABEL,
         compact_button_font_size,
         cancel_keystroke,
         Some(compact_button_styles),
         app,
     )
     .max(approx_keystroke_button_width(
-        REQUESTED_ACTION_RUN_LABEL,
+        &*REQUESTED_ACTION_RUN_LABEL,
         compact_button_font_size,
         run_keystroke,
         Some(compact_button_styles),
@@ -292,7 +293,7 @@ pub(super) fn render_header_buttons(
 
     let mut default_row = Flex::row().with_child(
         Container::new(render_keyboard_shortcut_button(
-            REQUESTED_ACTION_CANCEL_LABEL,
+            &*REQUESTED_ACTION_CANCEL_LABEL,
             Some(cancel_keystroke.clone()),
             cancel_button.clone(),
             cancel_callback,
@@ -304,7 +305,7 @@ pub(super) fn render_header_buttons(
     );
 
     let mut size_constrained_column = Flex::column().with_child(render_keyboard_shortcut_button(
-        REQUESTED_ACTION_CANCEL_LABEL,
+        &*REQUESTED_ACTION_CANCEL_LABEL,
         Some(cancel_keystroke.clone()),
         cancel_button.clone(),
         cancel_clone,
@@ -314,7 +315,7 @@ pub(super) fn render_header_buttons(
 
     if should_show_accept_button {
         default_row.add_child(render_keyboard_shortcut_button(
-            REQUESTED_ACTION_RUN_LABEL,
+            &*REQUESTED_ACTION_RUN_LABEL,
             Some(run_keystroke.clone()),
             run_button.clone(),
             accept_callback,
@@ -324,7 +325,7 @@ pub(super) fn render_header_buttons(
 
         size_constrained_column.add_child(
             Container::new(render_keyboard_shortcut_button(
-                REQUESTED_ACTION_RUN_LABEL,
+                &*REQUESTED_ACTION_RUN_LABEL,
                 Some(run_keystroke.clone()),
                 run_button.clone(),
                 accept_clone,

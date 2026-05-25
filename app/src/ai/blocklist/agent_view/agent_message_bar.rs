@@ -369,14 +369,14 @@ impl View for AgentMessageBar {
             Some(FigmaMcpStatus::NotInstalled) => {
                 message.items.push(figma_chip(
                     self.mouse_states.figma_install_button.clone(),
-                    "Get Figma MCP",
+                    "Get Figma MCP".to_string(),
                     Some(InputAction::FigmaAddButtonClicked),
                 ));
             }
             Some(FigmaMcpStatus::Installed) => {
                 message.items.push(figma_chip(
                     self.mouse_states.figma_enable_button.clone(),
-                    "Enable Figma MCP",
+                    crate::tr!("ai", "ai-enable-figma-mcp"),
                     Some(InputAction::FigmaEnableButtonClicked),
                 ));
             }
@@ -384,7 +384,7 @@ impl View for AgentMessageBar {
                 message.items.push(
                     figma_chip(
                         self.mouse_states.figma_enable_button.clone(),
-                        "Enabling...",
+                        "Enabling...".to_string(),
                         None,
                     )
                     .with_is_disabled(true),
@@ -459,7 +459,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for BootstrappingMessageProducer {
         {
             None
         } else {
-            Some(Message::from_text("Starting shell..."))
+            Some(Message::from_text(crate::tr!("ai", "ai-starting-shell")))
         }
     }
 }
@@ -963,7 +963,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitBashModeMessageProducer {
 /// When `action` is `None`, the chip is returned without an action (caller should disable it).
 fn figma_chip(
     mouse_state: MouseStateHandle,
-    label: &'static str,
+    label: String,
     action: Option<InputAction>,
 ) -> MessageItem {
     let items = vec![

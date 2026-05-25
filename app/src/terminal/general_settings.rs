@@ -13,7 +13,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.show_warning_before_quitting",
-        description: "Whether to show a warning dialog before quitting Warp.",
+        description: crate::tr!("terminal", "terminal-setting-description-show-warning-before-quitting"),
     },
     quit_on_last_window_closed: QuitOnLastWindowClosed {
         type: bool,
@@ -22,7 +22,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.quit_on_last_window_closed",
-        description: "Whether to quit Warp when the last window is closed.",
+        description: crate::tr!("terminal", "terminal-setting-description-quit-on-last-window-closed"),
     },
     restore_session: RestoreSession {
         type: bool,
@@ -31,7 +31,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.restore_session",
-        description: "Whether to restore the previous session when Warp starts up.",
+        description: crate::tr!("terminal", "terminal-setting-description-restore-session"),
     },
     add_app_as_login_item: LoginItem {
         type: bool,
@@ -43,7 +43,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Never,
         private: false,
         toml_path: "general.login_item",
-        description: "Whether to launch Warp automatically when you log in.",
+        description: crate::tr!("terminal", "terminal-setting-description-login-item"),
     },
     // Records whether the app has been added as a login item.
     // If it has, we don't try to add it again unless the user explicitly
@@ -67,7 +67,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.link_tooltip",
-        description: "Whether to show a tooltip when hovering over links.",
+        description: crate::tr!("terminal", "terminal-setting-description-link-tooltip"),
     },
     welcome_tips_features_used: WelcomeTipsFeaturesUsed {
         type: HashSet<Tip>,
@@ -91,8 +91,8 @@ define_settings_group!(GeneralSettings, settings: [
         private: true,
     },
     telemetry_banner_dismissed: TelemetryBannerDismissed {
-        type: bool,
-        default: false,
+        type: BannerState,
+        default: BannerState::default(),
         supported_platforms: SupportedPlatforms::ALL,
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: true,
@@ -163,7 +163,7 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.auto_open_code_review_pane_on_first_agent_change",
-        description: "Whether to automatically open the code review pane when the agent makes its first change.",
+        description: crate::tr!("terminal", "terminal-setting-description-auto-open-code-review-pane"),
     },
     bonus_grants_shown: BonusGrantsShown {
         type: HashSet<String>,
@@ -182,6 +182,6 @@ define_settings_group!(GeneralSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "general.language",
-        description: "Display language for the Warp UI. Use 'auto' for system locale.",
+        description: crate::tr!("terminal", "terminal-setting-description-language"),
     },
 ]);

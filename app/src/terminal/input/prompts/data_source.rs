@@ -226,6 +226,6 @@ impl SearchItem for PromptSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Prompt: {}", self.name)
+        crate::tr!("terminal", "terminal-search-prompt", name = self.name.clone())
     }
 }

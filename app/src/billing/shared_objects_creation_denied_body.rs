@@ -2,6 +2,7 @@ use crate::appearance::Appearance;
 use crate::drive::DriveObjectType;
 use crate::ui_components::blended_colors;
 use crate::workspaces::workspace::{BillingMetadata, CustomerType};
+use std::sync::LazyLock;
 use warpui::elements::{
     Container, CornerRadius, CrossAxisAlignment, Flex, MainAxisSize, MouseStateHandle,
     ParentElement, Radius, Shrinkable, Text,
@@ -18,15 +19,15 @@ const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 
-const DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: &str = "Shared drive objects have been restricted due to a subscription payment issue.\n\nPlease update your payment information to restore access.";
-const DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: &str = "Shared drive objects have been restricted due to a subscription payment issue.\n\nPlease contact support@warp.dev to restore access.";
-const DEFAULT_DELINQUENT_MODAL_SUBHEADER: &str = "Shared drive objects have been restricted due to a subscription payment issue.\n\nPlease contact a team admin to restore access.";
-const DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: &str = "Warp's Pro plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, upgrade to the Turbo plan.";
-const DEFAULT_PROSUMER_MODAL_SUBHEADER: &str = "Warp's Pro plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, contact a team admin to upgrade to the Turbo plan.";
-const DEFAULT_ADMIN_MODAL_SUBHEADER: &str = "Warp's free plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, upgrade to a paid plan.";
-const DEFAULT_MODAL_SUBHEADER: &str = "Warp's free plan comes with a limited number of shared drive objects.\n\nFor access to unlimited shared drive objects, contact a team admin to upgrade to a paid plan.";
-const VIEW_PLANS_TEXT: &str = "Compare plans";
-const MANAGE_BILLING_BUTTON_TEXT: &str = "Manage billing";
+static DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-delinquent-admin-subheader"));
+static DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-delinquent-admin-enterprise-subheader"));
+static DEFAULT_DELINQUENT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-delinquent-subheader"));
+static DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-admin-prosumer-subheader"));
+static DEFAULT_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-prosumer-subheader"));
+static DEFAULT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-admin-subheader"));
+static DEFAULT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-default-subheader"));
+static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-compare-plans"));
+static MANAGE_BILLING_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-manage-billing"));
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -97,20 +98,20 @@ impl View for SharedObjectsCreationDeniedBody {
                 match (self.is_delinquent_due_to_payment_issue, self.has_admin_permissions, self.customer_type) {
                     (true, true, _) => {
                         if is_stripe_paid_plan {
-                            format!("Shared {object_type}s have been restricted due to a subscription payment issue.\n\nPlease update your payment information to restore access.")
+                            crate::tr!("billing", "billing-delinquent-admin-dynamic-subheader", object_type = object_type.to_string())
                         } else {
-                            format!("Shared {object_type}s have been restricted due to a subscription payment issue.\n\nPlease contact support@warp.dev to restore access.")
+                            crate::tr!("billing", "billing-delinquent-admin-enterprise-dynamic-subheader", object_type = object_type.to_string())
                         }
                     },
-                    (true, false, _) => format!("Shared {object_type}s have been restricted due to a subscription payment issue.\n\nPlease contact a team admin to restore access."),
+                    (true, false, _) => crate::tr!("billing", "billing-delinquent-dynamic-subheader", object_type = object_type.to_string()),
                     (false, true, CustomerType::Prosumer) => {
-                        format!("Warp's Pro plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, upgrade to the Build plan.")
+                        crate::tr!("billing", "billing-admin-prosumer-dynamic-subheader", object_type = object_type.to_string())
                     }
                     (false, false, CustomerType::Prosumer) => {
-                        format!("Warp's Pro plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, contact a team admin to upgrade to the Build plan.")
+                        crate::tr!("billing", "billing-prosumer-dynamic-subheader", object_type = object_type.to_string())
                     }
-                    (false, true, _) => format!("Warp's free plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, upgrade to a paid plan."),
-                    (false, false, _) => format!("Warp's free plan comes with a limited number of shared {object_type}s.\n\nFor access to unlimited shared {object_type}s, contact a team admin to upgrade to a paid plan."),
+                    (false, true, _) => crate::tr!("billing", "billing-admin-dynamic-subheader", object_type = object_type.to_string()),
+                    (false, false, _) => crate::tr!("billing", "billing-default-dynamic-subheader", object_type = object_type.to_string()),
                 }
             }
             _ => match (
@@ -120,18 +121,18 @@ impl View for SharedObjectsCreationDeniedBody {
             ) {
                 (true, true, _) => {
                     if is_stripe_paid_plan {
-                        DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER.into()
+                        DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER.clone()
                     } else {
-                        DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER.into()
+                        DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER.clone()
                     }
                 }
-                (true, false, _) => DEFAULT_DELINQUENT_MODAL_SUBHEADER.into(),
+                (true, false, _) => DEFAULT_DELINQUENT_MODAL_SUBHEADER.clone(),
                 (false, true, CustomerType::Prosumer) => {
-                    DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER.into()
+                    DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER.clone()
                 }
-                (false, false, CustomerType::Prosumer) => DEFAULT_PROSUMER_MODAL_SUBHEADER.into(),
-                (false, true, _) => DEFAULT_ADMIN_MODAL_SUBHEADER.into(),
-                (false, false, _) => DEFAULT_MODAL_SUBHEADER.into(),
+                (false, false, CustomerType::Prosumer) => DEFAULT_PROSUMER_MODAL_SUBHEADER.clone(),
+                (false, true, _) => DEFAULT_ADMIN_MODAL_SUBHEADER.clone(),
+                (false, false, _) => DEFAULT_MODAL_SUBHEADER.clone(),
             },
         };
 
@@ -168,7 +169,7 @@ impl View for SharedObjectsCreationDeniedBody {
                                 0.5,
                                 self.render_button(
                                     appearance,
-                                    MANAGE_BILLING_BUTTON_TEXT.into(),
+                                    MANAGE_BILLING_BUTTON_TEXT.clone(),
                                     self.button_mouse_states.button_mouse_state.clone(),
                                     SharedObjectsCreationDeniedBodyAction::ManageBilling,
                                 ),
@@ -190,7 +191,7 @@ impl View for SharedObjectsCreationDeniedBody {
                                 0.5,
                                 self.render_button(
                                     appearance,
-                                    VIEW_PLANS_TEXT.into(),
+                                    VIEW_PLANS_TEXT.clone(),
                                     self.button_mouse_states.button_mouse_state.clone(),
                                     SharedObjectsCreationDeniedBodyAction::Upgrade,
                                 ),

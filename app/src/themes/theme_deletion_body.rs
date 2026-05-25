@@ -8,6 +8,7 @@ use crate::user_config::util::from_yaml;
 use std::default::Default;
 use std::fs;
 use std::fs::remove_file;
+use std::sync::LazyLock;
 use warpui::assets::asset_cache::AssetSource;
 use warpui::elements::{
     Container, CornerRadius, CrossAxisAlignment, Flex, MainAxisSize, MouseStateHandle,
@@ -26,9 +27,9 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
-const MODAL_SUBHEADER: &str = "This will permanently delete the theme.";
-const CANCEL_BUTTON_TEXT: &str = "Cancel";
-const DELETE_BUTTON_TEXT: &str = "Delete theme";
+static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-theme-delete-subheader"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
+static DELETE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-delete-theme"));
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -196,7 +197,7 @@ impl View for ThemeDeletionBody {
                 Some(cancel_hovered_styles),
                 Some(disabled_styles),
             )
-            .with_centered_text_label(CANCEL_BUTTON_TEXT.into());
+            .with_centered_text_label(CANCEL_BUTTON_TEXT.clone());
 
         let create_button = appearance
             .ui_builder()
@@ -208,13 +209,13 @@ impl View for ThemeDeletionBody {
                 Some(create_hovered_styles),
                 Some(disabled_styles),
             )
-            .with_centered_text_label(DELETE_BUTTON_TEXT.into());
+            .with_centered_text_label(DELETE_BUTTON_TEXT.clone());
 
         Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_child(
                 Container::new(
-                    Text::new_inline(MODAL_SUBHEADER, appearance.ui_font_family(), 14.)
+                    Text::new_inline(MODAL_SUBHEADER.clone(), appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )

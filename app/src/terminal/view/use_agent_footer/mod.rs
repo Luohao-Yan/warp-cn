@@ -154,6 +154,10 @@ fn rich_input_submit_strategy(agent: CLIAgent) -> RichInputSubmitStrategy {
 
 static USE_AGENT_KEYSTROKE: LazyLock<Keystroke> =
     LazyLock::new(|| Keystroke::parse(cmd_or_ctrl_shift("enter")).expect("valid keystroke"));
+static TERMINAL_USE_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-use-agent-btn"));
+static TERMINAL_GIVE_CONTROL_BACK: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-give-control-back-btn"));
+static TERMINAL_ASK_AGENT_ASSIST: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ask-agent-assist-tooltip"));
+static TERMINAL_ASK_AGENT_RESUME: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ask-agent-resume-tooltip"));
 
 impl TerminalView {
     pub(super) fn register_subscriptions_for_use_agent_footer(
@@ -1092,13 +1096,13 @@ impl UseAgentToolbar {
 
         let button = ctx.add_typed_action_view(|ctx| {
             ActionButton::new(
-                "Use agent",
+                &*TERMINAL_USE_AGENT,
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .with_icon(Icon::Oz)
             .with_keybinding(KeystrokeSource::Fixed(USE_AGENT_KEYSTROKE.clone()), ctx)
             .with_size(button_size)
-            .with_tooltip("Ask the Warp agent to assist")
+            .with_tooltip(&*TERMINAL_ASK_AGENT_ASSIST)
             .with_tooltip_alignment(TooltipAlignment::Left)
             .on_click(|ctx| {
                 ctx.dispatch_typed_action(TerminalAction::SetInputModeAgent);
@@ -1106,13 +1110,13 @@ impl UseAgentToolbar {
         });
         let give_control_back_button = ctx.add_typed_action_view(|ctx| {
             ActionButton::new(
-                "Give control back to agent",
+                &*TERMINAL_GIVE_CONTROL_BACK,
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .with_icon(Icon::Oz)
             .with_keybinding(KeystrokeSource::Fixed(USE_AGENT_KEYSTROKE.clone()), ctx)
             .with_size(button_size)
-            .with_tooltip("Ask the Warp agent to resume")
+            .with_tooltip(&*TERMINAL_ASK_AGENT_RESUME)
             .with_tooltip_alignment(TooltipAlignment::Left)
             .on_click(|ctx| {
                 ctx.dispatch_typed_action(TerminalAction::SetInputModeAgent);
@@ -1120,7 +1124,7 @@ impl UseAgentToolbar {
         });
         let dismiss_button = ctx.add_typed_action_view(|_| {
             ActionButton::new(
-                "Dismiss",
+                crate::tr!("common", "common-dismiss-label").as_str(),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .on_click(|ctx| {
@@ -1130,7 +1134,7 @@ impl UseAgentToolbar {
         });
         let dont_show_again_button = ctx.add_typed_action_view(|_| {
             ActionButton::new(
-                "Don't show again",
+                crate::tr!("common", "common-do-not-show-again").as_str(),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .on_click(|ctx| {

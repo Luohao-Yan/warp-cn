@@ -379,7 +379,7 @@ impl Input {
         if command.availability.contains(Availability::AI_ENABLED)
             && !AISettings::as_ref(ctx).is_any_ai_enabled(ctx)
         {
-            show_error_toast(format!("{} requires AI to be enabled", command.name), ctx);
+            show_error_toast(crate::tr!("slash_commands", "slash-command-requires-ai", name = command.name.clone()), ctx);
             return true;
         }
 
@@ -633,7 +633,7 @@ impl Input {
                             }
                             Err(_) => {
                                 show_error_toast(
-                                    format!("File not found: {}", file_path.display()),
+                                    crate::tr!("slash_commands", "slash-command-file-not-found", path = file_path.display().to_string()),
                                     ctx,
                                 );
                                 return true;
@@ -663,7 +663,7 @@ impl Input {
                     .as_ref(ctx)
                     .active_conversation(self.terminal_view_id)
                 else {
-                    show_error_toast("No active conversation to export".to_owned(), ctx);
+                    show_error_toast(crate::tr!("slash_commands", "slash-command-no-conversation-export"), ctx);
                     return true;
                 };
 
