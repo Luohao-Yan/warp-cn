@@ -281,7 +281,8 @@ impl BuildPlanMigrationModal {
             })
             .finish();
 
-        let label = FormattedTextElement::from_str(&crate::tr!("workspace", "workspace-auto-reload"), appearance.ui_font_family(), 12.)
+        let auto_reload_text = crate::tr!("workspace", "workspace-auto-reload");
+        let label = FormattedTextElement::from_str(auto_reload_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(
                 theme,
                 blended_colors::neutral_4(theme),

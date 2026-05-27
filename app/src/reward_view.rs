@@ -90,8 +90,8 @@ impl RewardView {
 
     fn subtitle(&self) -> &str {
         match self.kind {
-            RewardKind::SentReferralTheme => SUBTITLE_SENT_REFERRAL,
-            RewardKind::ReceivedReferralTheme => SUBTITLE_RECEIVED_REFERRAL,
+            RewardKind::SentReferralTheme => &*SUBTITLE_SENT_REFERRAL,
+            RewardKind::ReceivedReferralTheme => &*SUBTITLE_RECEIVED_REFERRAL,
         }
     }
 
@@ -117,7 +117,7 @@ impl RewardView {
     fn render_title(&self, ui_builder: &UiBuilder) -> Box<dyn Element> {
         Align::new(
             ui_builder
-                .span(TITLE.as_str())
+                .span(&*TITLE)
                 .with_style(UiComponentStyles {
                     font_size: Some(TITLE_FONT_SIZE),
                     margin: Some(Coords {
@@ -155,7 +155,7 @@ impl RewardView {
             Container::new(
                 ui_builder
                     .button(ButtonVariant::Accent, self.cta_mouse_state.clone())
-                    .with_centered_text_label(BUTTON_CTA.as_str().into())
+                    .with_centered_text_label((&*BUTTON_CTA).clone())
                     .with_style(UiComponentStyles {
                         height: Some(BUTTON_HEIGHT),
                         width: Some(BUTTON_WIDTH),
@@ -184,8 +184,8 @@ impl View for RewardView {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            format!("{} {}", TITLE, self.subtitle()),
-            ACCESSIBILITY_HELP.as_str(),
+            format!("{} {}", &*TITLE, self.subtitle()),
+            ACCESSIBILITY_HELP.as_str().to_string(),
             WarpA11yRole::WindowRole,
         ))
     }

@@ -12,7 +12,7 @@ define_settings_group!(BlockVisibilitySettings, settings: [
        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
        private: false,
        toml_path: "appearance.blocks.should_show_bootstrap_block",
-       description: "Whether the bootstrap block is visible in the terminal.",
+       description: "Whether the bootstrap block is visible in the terminal.".to_string(),
    },
    should_show_in_band_command_blocks: ShouldShowInBandCommandBlocks {
        type: bool,
@@ -21,7 +21,7 @@ define_settings_group!(BlockVisibilitySettings, settings: [
        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
        private: false,
        toml_path: "appearance.blocks.should_show_in_band_command_blocks",
-       description: "Whether in-band command blocks are visible in the terminal.",
+       description: "Whether in-band command blocks are visible in the terminal.".to_string(),
    },
    should_show_ssh_block: ShouldShowSSHBlock {
         type: bool,
@@ -30,6 +30,6 @@ define_settings_group!(BlockVisibilitySettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.blocks.should_show_ssh_block",
-        description: "Whether the SSH connection block is visible in the terminal.",
+        description: "Whether the SSH connection block is visible in the terminal.".to_string(),
    }
 ]);

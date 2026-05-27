@@ -21,7 +21,7 @@ define_settings_group!(KeysSettings, settings: [
         private: false,
         toml_path: "global_hotkey.dedicated_window.settings",
         max_table_depth: 2,
-        description: "Configuration options for Quake Mode window behavior.",
+        description: "Configuration options for Quake Mode window behavior.".to_string(),
     },
     quake_mode_enabled: QuakeModeEnabled {
         type: bool,
@@ -30,7 +30,7 @@ define_settings_group!(KeysSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "global_hotkey.dedicated_window.enabled",
-        description: "Whether the dedicated hotkey window is enabled. Mutually exclusive with `global_hotkey.toggle_all_windows.enabled`; only one should be true at a time.",
+        description: "Whether the dedicated hotkey window is enabled. Mutually exclusive with `global_hotkey.toggle_all_windows.enabled`; only one should be true at a time.".to_string(),
     },
     activation_hotkey_enabled: ActivationHotkeyEnabled {
         type: bool,
@@ -39,7 +39,7 @@ define_settings_group!(KeysSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "global_hotkey.toggle_all_windows.enabled",
-        description: "Whether the hotkey that toggles visibility of all windows is enabled. Mutually exclusive with `global_hotkey.dedicated_window.enabled`; only one should be true at a time.",
+        description: "Whether the hotkey that toggles visibility of all windows is enabled. Mutually exclusive with `global_hotkey.dedicated_window.enabled`; only one should be true at a time.".to_string(),
     },
     activation_hotkey_keybinding: ActivationHotkeyKeybinding {
         type: Option<Keystroke>,
@@ -48,7 +48,7 @@ define_settings_group!(KeysSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "global_hotkey.toggle_all_windows.keybinding",
-        description: "The keybinding used for the global activation hotkey. Format: modifiers (cmd, ctrl, alt, shift, meta) and a key joined by '-', e.g. \"cmd-shift-a\" or \"alt-enter\". Bindings are case-sensitive: when shift is present, the key must be its shifted form (e.g., \"ctrl-shift-E\", not \"ctrl-shift-e\").",
+        description: "The keybinding used for the global activation hotkey. Format: modifiers (cmd, ctrl, alt, shift, meta) and a key joined by '-', e.g. \"cmd-shift-a\" or \"alt-enter\". Bindings are case-sensitive: when shift is present, the key must be its shifted form (e.g., \"ctrl-shift-E\", not \"ctrl-shift-e\").".to_string(),
     }
     extra_meta_keys: ExtraMetaKeys {
         type: ExtraMetaKeysEnum,
@@ -57,7 +57,7 @@ define_settings_group!(KeysSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.input.extra_meta_keys",
-        description: "Controls which additional keys are treated as meta keys.",
+        description: "Controls which additional keys are treated as meta keys.".to_string(),
     }
     ctrl_tab_behavior: CtrlTabBehaviorSetting {
         type: CtrlTabBehavior,
@@ -66,7 +66,7 @@ define_settings_group!(KeysSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "keys.ctrl_tab_behavior_setting",
-        description: "Controls the behavior of Ctrl+Tab.",
+        description: "Controls the behavior of Ctrl+Tab.".to_string(),
     }
 ]);
 

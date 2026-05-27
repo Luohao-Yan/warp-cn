@@ -113,7 +113,7 @@ impl CloudObjectToastMessage {
     ) -> Option<String> {
         let count_objects_message = match num_objects {
             1 => crate::tr!("cloud_object", "cloud-object-one-object"),
-            _ => crate::tr!("cloud_object", "cloud-object-count-objects", count = num_objects),
+            _ => crate::tr!("cloud_object", "cloud-object-count-objects", count = num_objects as i64),
         };
         match (operation, success_type) {
             // We should only show deletion failure toasts for user-initiated deletions.

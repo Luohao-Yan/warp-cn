@@ -363,7 +363,7 @@ impl UniversalDeveloperInputButtonBar {
         let at_button_view = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::AtSign)
-                .with_tooltip(AT_CONTEXT_TOOLTIP)
+                .with_tooltip(AT_CONTEXT_TOOLTIP.as_str())
                 .with_size(button_size)
                 .with_disabled_theme(UDIDisabledButtonTheme)
                 .with_tooltip_alignment(TooltipAlignment::Left)
@@ -704,7 +704,7 @@ impl UniversalDeveloperInputButtonBar {
             button.set_tooltip(
                 disable_reason
                     .map(|reason| reason.tooltip_text())
-                    .or_else(|| Some(AT_CONTEXT_TOOLTIP.clone())),
+                    .or_else(|| Some(AT_CONTEXT_TOOLTIP.as_str().to_string())),
                 ctx,
             );
             ctx.notify();

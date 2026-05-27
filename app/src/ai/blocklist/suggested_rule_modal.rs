@@ -47,7 +47,6 @@ use warpui::{
     ViewHandle,
 };
 
-const HEADER_TEXT: &str = "ai_assistant-ai-suggested-rule-header";
 const MAX_EDITOR_HEIGHT: f32 = 240.;
 
 pub fn init(app: &mut AppContext) {

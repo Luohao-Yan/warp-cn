@@ -2216,7 +2216,7 @@ impl Input {
                     event
                 {
                     let window_id = ctx.window_id();
-                    let toast_message = crate::tr!("terminal", "terminal-failed-cloud-handoff", error = error_message);
+                    let toast_message = crate::tr!("terminal", "terminal-failed-cloud-handoff", error = error_message.clone());
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(toast_message),
@@ -5119,7 +5119,7 @@ impl Input {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(crate::tr!("terminal", "terminal-skill-not-found", reference = reference)),
+                        DismissibleToast::error(crate::tr!("terminal", "terminal-skill-not-found", reference = reference.to_string())),
                         window_id,
                         ctx,
                     );
@@ -5737,7 +5737,7 @@ impl Input {
             input_model.input_type(),
             input_model.should_run_input_autodetection(app),
         ) {
-            (InputType::Shell, false) => AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT,
+            (InputType::Shell, false) => AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.as_str(),
             (InputType::Shell, true) => {
                 // Ensure hint text is cached for new conversations
                 get_stable_agent_mode_hint_text(&mut self.cached_agent_mode_hint_text)
@@ -5754,16 +5754,16 @@ impl Input {
                 {
                     Some(status) if status.is_in_progress() => {
                         if is_udi_enabled {
-                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI
+                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI.as_str()
                         } else {
-                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC
+                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC.as_str()
                         }
                     }
                     Some(_) => {
                         if is_udi_enabled {
-                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI
+                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI.as_str()
                         } else {
-                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC
+                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC.as_str()
                         }
                     }
                     None => {
@@ -6174,19 +6174,19 @@ impl Input {
     }
     fn cli_agent_rich_input_hint_text(&self, ctx: &ViewContext<Self>) -> Cow<'static, str> {
         if self.is_locked_in_shell_mode(ctx) {
-            return Cow::Borrowed(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT);
+            return Cow::Owned(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.as_str().to_owned());
         }
 
         CLIAgentSessionsModel::as_ref(ctx)
             .session(self.terminal_view_id)
             .map(|session| match session.agent {
-                CLIAgent::Unknown => Cow::Borrowed(CLI_AGENT_RICH_INPUT_HINT_TEXT),
+                CLIAgent::Unknown => Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.as_str().to_owned()),
                 _ => Cow::Owned(format!(
                     "Enter prompt for {}...",
                     session.agent.display_name()
                 )),
             })
-            .unwrap_or(Cow::Borrowed(CLI_AGENT_RICH_INPUT_HINT_TEXT))
+            .unwrap_or(Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.as_str().to_owned()))
     }
 
     pub fn set_zero_state_hint_text(&mut self, ctx: &mut ViewContext<Self>) {
@@ -6220,7 +6220,7 @@ impl Input {
             let show_hint = *InputSettings::as_ref(ctx).show_hint_text;
             self.editor.update(ctx, |editor, ctx| {
                 if show_hint {
-                    editor.set_placeholder_text(CLOUD_MODE_V2_HINT_TEXT, ctx);
+                    editor.set_placeholder_text(CLOUD_MODE_V2_HINT_TEXT.as_str(), ctx);
                 } else {
                     editor.clear_placeholder_text(ctx);
                 }
@@ -6270,7 +6270,7 @@ impl Input {
                 });
             } else {
                 self.editor.update(ctx, |editor, ctx| {
-                    editor.set_placeholder_text(AI_COMMAND_SEARCH_HINT_TEXT, ctx);
+                    editor.set_placeholder_text(AI_COMMAND_SEARCH_HINT_TEXT.as_str(), ctx);
                 });
             }
         } else {
@@ -14650,9 +14650,9 @@ impl TypedActionView for Input {
         match action {
             InputAction::FocusInputBox => {
                 ActionAccessibilityContent::Custom(AccessibilityContent::new(
-                    INPUT_A11Y_LABEL,
+                    INPUT_A11Y_LABEL.clone(),
                     // TODO (a11y) use bindings from user settings
-                    INPUT_A11Y_HELPER,
+                    INPUT_A11Y_HELPER.clone(),
                     WarpA11yRole::TextareaRole,
                 ))
             }
@@ -14858,9 +14858,9 @@ impl View for Input {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            INPUT_A11Y_LABEL,
+            INPUT_A11Y_LABEL.clone(),
             // TODO (a11y) use bindings from user settings
-            INPUT_A11Y_HELPER,
+            INPUT_A11Y_HELPER.clone(),
             WarpA11yRole::TextareaRole,
         ))
     }

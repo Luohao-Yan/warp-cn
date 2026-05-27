@@ -51,6 +51,7 @@ pub trait BlockClient: 'static + Send + Sync {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-block-share")]
 impl BlockClient for ServerApi {
     async fn unshare_block(&self, block_uid: String) -> Result<(), anyhow::Error> {
         let variables = UnshareBlockVariables {

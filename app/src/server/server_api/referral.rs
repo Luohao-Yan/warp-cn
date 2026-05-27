@@ -38,6 +38,7 @@ pub trait ReferralsClient: 'static + Send + Sync {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-team")]
 impl ReferralsClient for ServerApi {
     async fn get_referral_info(&self) -> Result<ReferralInfo> {
         let variables = GetReferralInfoVariables {

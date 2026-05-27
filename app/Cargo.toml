@@ -20,6 +20,7 @@ path = "src/lib.rs"
 [[bin]]
 name = "warp-oss"
 path = "src/bin/oss.rs"
+required-features = ["oss-default"]
 test = false
 
 [[bin]]
@@ -105,6 +106,7 @@ enclose = "1.1.8"
 enum-iterator.workspace = true
 field_mask.workspace = true
 firebase.workspace = true
+firebase.optional = true
 flate2 = "1.0.17"
 float-cmp.workspace = true
 futures-lite.workspace = true
@@ -250,13 +252,14 @@ urlencoding = "2.1.3"
 mime_guess = "2.0"
 warp_multi_agent_api.workspace = true
 remote_server.workspace = true
+remote_server.optional = true
 repo_metadata.workspace = true
 vim.workspace = true
 rmcp = { workspace = true, features = ["client"] }
 warp_isolation_platform.workspace = true
 warp_ripgrep.workspace = true
 warp_managed_secrets.workspace = true
-
+warp_managed_secrets.optional = true
 [target.'cfg(target_os = "macos")'.dependencies]
 block.workspace = true
 cocoa.workspace = true
@@ -630,6 +633,7 @@ default = [
     "settings_file",
     "directory_tab_colors",
     "configurable_context_window",
+    "server-all",
 ]
 # Enable this feature to automatically perform heap profiling.  NOTE: This will
 # substantially slow down program execution.
@@ -935,6 +939,58 @@ cloud_mode_input_v2 = ["cloud_mode"]
 configurable_context_window = []
 handoff_cloud_cloud = ["cloud_mode_setup_v2"]
 git_credential_refresh = []
+
+# Server-dependent feature gates (compile-time shielding)
+server-auth = ["dep:firebase"]
+server-ai = []
+server-cloud = []
+server-session = []
+server-remote = ["dep:remote_server"]
+server-team = []
+server-integration = ["dep:warp_managed_secrets"]
+server-block-share = []
+server-autoupdate = []
+server-experiment = []
+
+server-all = [
+    "server-auth",
+    "server-ai",
+    "server-cloud",
+    "server-session",
+    "server-remote",
+    "server-team",
+    "server-integration",
+    "server-block-share",
+    "server-autoupdate",
+    "server-experiment",
+]
+
+# OSS default feature set — no server-* features
+oss-default = [
+    "local_fs",
+    "local_tty",
+    "agent_mode",
+    "completions_v2",
+    "shell_selector",
+    "minimalist_ui",
+    "avatar_in_tab_bar",
+    "full_screen_zen_mode",
+    "workflow_aliases",
+    "ligatures",
+    "dynamic_workflow_enums",
+    "rect_selection",
+    "warp_packs",
+    "ai_rules",
+    "suggested_rules",
+    "kitty_images",
+    "validate_autosuggestions",
+    "clear_autosuggestion_on_escape",
+    "file_retrieval_tools",
+    "mcp_server",
+    "file_based_mcp",
+    "agent_shared_sessions",
+    "bundled_skills",
+]
 
 [package.metadata.bundle.bin.warp-oss]
 category = "public.app-category.developer-tools"

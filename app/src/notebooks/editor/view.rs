@@ -2522,7 +2522,7 @@ impl RichTextEditorView {
                     force_open_in_warp: false,
                 });
             }),
-            detail: Some(crate::tr!("notebooks", "notebooks-modifier-click-a11y", modifier = modifier.clone())),
+            detail: Some(crate::tr!("notebooks", "notebooks-modifier-click-a11y", modifier = modifier)),
             mouse_state: self.file_path_mouse_states.open_file_handle.clone(),
         }];
 

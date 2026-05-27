@@ -493,7 +493,7 @@ impl<A: InlineMenuAction, T: 'static + Send + Sync> InlineMenuView<A, T> {
             state_handles: Default::default(),
             weak_handle: ctx.handle(),
             header_config: InlineMenuHeaderConfig {
-                label: A::MENU_TYPE.display_label(),
+                label: A::MENU_TYPE.display_label().to_owned(),
                 trailing_element: None,
             },
             banner_fn: None,

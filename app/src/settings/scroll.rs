@@ -8,6 +8,6 @@ define_settings_group!(ScrollSettings, settings: [
         sync_to_cloud: SyncToCloud::Never,
         private: false,
         toml_path: "general.mouse_scroll_multiplier",
-        description: "The scroll speed multiplier for mouse scroll events.",
+        description: "The scroll speed multiplier for mouse scroll events.".to_string(),
     },
 ]);

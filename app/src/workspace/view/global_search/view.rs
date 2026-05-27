@@ -2066,24 +2066,24 @@ impl View for GlobalSearchView {
 
         let files = self.unique_match_count();
         let file_word = if files == 1 {
-            crate::tr!("workspace", "workspace-global-search-file-singular").clone()
+            crate::tr!("workspace", "workspace-global-search-file-singular")
         } else {
-            crate::tr!("workspace", "workspace-global-search-file-plural").clone()
+            crate::tr!("workspace", "workspace-global-search-file-plural")
         };
 
         let message = if self.is_search_in_progress && self.total_match_count == 0 {
             "".to_string()
         } else if !self.is_search_in_progress && self.total_match_count == 0 {
-            crate::tr!("workspace", "workspace-global-search-no-results").clone()
+            crate::tr!("workspace", "workspace-global-search-no-results")
         } else {
             match self.total_match_count {
                 1 => crate::tr!("workspace", "workspace-global-search-single-result")
                     .replace("{ $files }", &files.to_string())
-                    .replace("{ $file_word }", file_word),
+                    .replace("{ $file_word }", file_word.as_str()),
                 n => crate::tr!("workspace", "workspace-global-search-multiple-results")
                     .replace("{ $count }", &n.to_string())
                     .replace("{ $files }", &files.to_string())
-                    .replace("{ $file_word }", file_word),
+                    .replace("{ $file_word }", file_word.as_str()),
             }
         };
 

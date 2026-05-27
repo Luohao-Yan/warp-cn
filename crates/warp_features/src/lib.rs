@@ -858,6 +858,18 @@ pub enum FeatureFlag {
 
     /// Replaces the raw harness CLI command with a styled header showing CLI name + status icon.
     HarnessSessionHeader,
+
+    // Compile-time server feature gates
+    ServerAuth,
+    ServerAI,
+    ServerCloud,
+    ServerSession,
+    ServerRemote,
+    ServerTeam,
+    ServerIntegration,
+    ServerBlockShare,
+    ServerAutoupdate,
+    ServerExperiment,
 }
 
 static FLAG_STATES: [AtomicBool; cardinality::<FeatureFlag>()] =

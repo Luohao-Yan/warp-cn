@@ -190,7 +190,6 @@ static KEYBINDING_ACTIVE_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("set
 static KEYBINDING_TERMINAL_CMD_AUTODETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-terminal-cmd-autodetection"));
 static KEYBINDING_NL_DETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-nl-detection"));
 static KEYBINDING_AGENT_PROMPT_AUTODETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-agent-prompt-autodetection"));
-static KEYBINDING_NEXT_COMMAND_KB: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-next-command"));
 static KEYBINDING_PROMPT_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-prompt-suggestions"));
 static KEYBINDING_CODE_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-code-suggestions"));
 static KEYBINDING_NL_AUTOSUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-nl-autosuggestions"));
@@ -2366,8 +2365,8 @@ impl From<&AISettingsPageAction> for LoginGatedFeature {
     fn from(val: &AISettingsPageAction) -> LoginGatedFeature {
         use AISettingsPageAction::*;
         match val {
-            AttemptLoginGatedUpgrade => &*UPGRADE_AI_USAGE,
-            _ => &*UNKNOWN_REASON,
+            AttemptLoginGatedUpgrade => UPGRADE_AI_USAGE.clone(),
+            _ => UNKNOWN_REASON.clone(),
         }
     }
 }

@@ -281,7 +281,7 @@ impl WorkflowsMoreInfoView {
                     1.,
                     Container::new(Self::render_workflow_title(self, WrapText::No, appearance))
                         .with_padding_left(INFO_BOX_PADDING)
-                        .finish(),
+                        .finish()
                 )
                 .finish(),
             );
@@ -297,7 +297,7 @@ impl WorkflowsMoreInfoView {
                         appearance,
                     ))
                     .with_padding_left(INFO_BOX_PADDING)
-                    .finish(),
+                    .finish()
                 )
                 .finish(),
             );
@@ -311,7 +311,7 @@ impl WorkflowsMoreInfoView {
                     .finish(),
                 Container::new(self.render_close_workflow_button(appearance))
                     .with_padding_right(COLLAPSED_BUTTON_HORIZONTAL_PADDING)
-                    .finish(),
+                    .finish()
             ])
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -392,7 +392,7 @@ impl WorkflowsMoreInfoView {
                             ..Default::default()
                         })
                         .build()
-                        .finish(),
+                        .finish()
                 )
                 .with_padding_bottom(ARGUMENT_PADDING)
                 .finish(),
@@ -428,19 +428,20 @@ impl WorkflowsMoreInfoView {
                                     .theme()
                                     .sub_text_color(appearance.theme().surface_2()),
                             )
-                            .finish(),
+                            .finish()
                     )
                     .with_height(16.)
                     .with_width(16.)
-                    .finish(),
+                    .finish()
                 )
                 .with_margin_right(8.)
                 .finish(),
             )
             .with_child(
-                Container::new(
+                Container::new({
+                    let text = crate::tr!("workflows", "workflows-command-edited");
                     Text::new_inline(
-                        &crate::tr!("workflows", "workflows-command-edited"),
+                        text,
                         appearance.ui_font_family(),
                         appearance.monospace_font_size(),
                     )
@@ -450,8 +451,8 @@ impl WorkflowsMoreInfoView {
                             .sub_text_color(appearance.theme().surface_2())
                             .into(),
                     )
-                    .finish(),
-                )
+                    .finish()
+                })
                 .with_margin_right(16.)
                 .finish(),
             )
@@ -473,7 +474,7 @@ impl WorkflowsMoreInfoView {
                     .on_click(|ctx, _, _| {
                         ctx.dispatch_typed_action(InputAction::ResetWorkflowState)
                     })
-                    .finish(),
+                    .finish()
             )
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_main_axis_size(MainAxisSize::Max);
@@ -498,14 +499,15 @@ impl WorkflowsMoreInfoView {
                         ..Default::default()
                     })
                     .build()
-                    .finish(),
+                    .finish()
             )
             .with_child(
                 Shrinkable::new(
                     1.,
-                    Container::new(
+                    Container::new({
+                        let text = crate::tr!("workflows", "workflows-to-cycle-parameters");
                         Text::new_inline(
-                            &crate::tr!("workflows", "workflows-to-cycle-parameters"),
+                            text,
                             appearance.ui_font_family(),
                             appearance.monospace_font_size(),
                         )
@@ -515,10 +517,10 @@ impl WorkflowsMoreInfoView {
                                 .main_text_color(appearance.theme().surface_2())
                                 .into(),
                         )
-                        .finish(),
-                    )
+                        .finish()
+                    })
                     .with_padding_left(10.)
-                    .finish(),
+                    .finish()
                 )
                 .finish(),
             )
@@ -577,7 +579,7 @@ impl WorkflowsMoreInfoView {
                         ..Default::default()
                     })
                     .build()
-                    .finish(),
+                    .finish()
             )
             .left()
             .finish(),
@@ -607,7 +609,7 @@ impl WorkflowsMoreInfoView {
                                 WorkspaceAction::CreatePersonalEnvVarCollection,
                             )
                         })
-                        .finish(),
+                        .finish()
                 )
                 .with_height(ENV_VAR_BUTTON_HEIGHT)
                 .finish(),
@@ -625,7 +627,7 @@ impl WorkflowsMoreInfoView {
                     .with_child(
                         Rect::new()
                             .with_background_color(appearance.theme().surface_1().into())
-                            .finish(),
+                            .finish()
                     )
                     .with_child(
                         Container::new(
@@ -633,12 +635,12 @@ impl WorkflowsMoreInfoView {
                                 .with_main_axis_size(MainAxisSize::Max)
                                 .with_child(span)
                                 .with_child(env_var_dropdown)
-                                .finish(),
+                                .finish()
                         )
                         .with_horizontal_margin(ENV_VAR_HORIZONTAL_MARGIN)
-                        .finish(),
+                        .finish()
                     )
-                    .finish(),
+                    .finish()
             )
             .with_height(ENV_VAR_ROW_HEIGHT)
             .finish(),
@@ -702,7 +704,7 @@ impl WorkflowsMoreInfoView {
                                     .into(),
                             )
                             .with_clip(ClipConfig::end())
-                            .finish(),
+                            .finish()
                     )
                     .with_uniform_padding(5.)
                     .finish()
@@ -742,20 +744,20 @@ impl WorkflowsMoreInfoView {
                                         .with_padding_top(COLLAPSED_BUTTON_VERTICAL_PADDING)
                                         .with_padding_right(COLLAPSED_BUTTON_HORIZONTAL_PADDING)
                                         .with_padding_left(COLLAPSED_BUTTON_HORIZONTAL_PADDING)
-                                        .finish(),
+                                        .finish()
                                 )
-                                .finish(),
+                                .finish()
                             ])
                             .with_main_axis_size(MainAxisSize::Max)
                             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
-                            .finish(),
+                            .finish()
                     )
-                    .finish(),
+                    .finish()
                 )
                 .finish(),
                 Container::new(content_and_args)
                     .with_padding_top(5.)
-                    .finish(),
+                    .finish()
             ])
             .finish();
 
@@ -766,7 +768,7 @@ impl WorkflowsMoreInfoView {
                     Container::new(workflow_info)
                         .with_padding_left(INFO_BOX_PADDING)
                         .with_padding_bottom(INFO_BOX_PADDING)
-                        .finish(),
+                        .finish()
                 )
                 .finish(),
             )
@@ -894,7 +896,7 @@ impl WorkflowsMoreInfoView {
                             Border::left(VERTICAL_DIVIDER_THICKNESS)
                                 .with_border_fill(appearance.theme().accent()),
                         )
-                        .finish(),
+                        .finish()
                 )
                 .with_max_height(100.)
                 .with_width(VERTICAL_DIVIDER_THICKNESS)
@@ -926,7 +928,7 @@ impl WorkflowsMoreInfoView {
                             icons::Icon::Prompt.into(),
                             ai_brand_color(appearance.theme()),
                         )
-                        .finish(),
+                        .finish()
                     }
                 } else {
                     Icon::new(
@@ -942,7 +944,7 @@ impl WorkflowsMoreInfoView {
                     ConstrainedBox::new(icon)
                         .with_width(16.)
                         .with_height(16.)
-                        .finish(),
+                        .finish()
                 )
                 .with_margin_right(8.)
                 .finish();
@@ -972,7 +974,7 @@ impl WorkflowsMoreInfoView {
                                 ..Default::default()
                             })
                             .build()
-                            .finish(),
+                            .finish()
                     ])
                     .finish()
             }

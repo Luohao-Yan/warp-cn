@@ -683,7 +683,7 @@ impl Display for RenderableAIError {
                 write!(f, "Context window exceeded: {message}")
             }
             Self::InvalidApiKey { provider, .. } => {
-                write!(f, "{}", crate::tr!("ai_assistant", "ai-invalid-api-key-for-provider", provider = provider.as_ref()))
+                write!(f, "{}", crate::tr!("ai_assistant", "ai-invalid-api-key-for-provider", provider = provider))
             }
             Self::AwsBedrockCredentialsExpiredOrInvalid { model_name } => {
                 write!(

@@ -817,7 +817,7 @@ impl BlocklistAIStatusBar {
         );
         let default_warping_text = fallback_warping_text
             .as_deref()
-            .unwrap_or(LOAD_OUTPUT_MESSAGE)
+            .unwrap_or(LOAD_OUTPUT_MESSAGE.as_str())
             .to_owned();
         let secondary_element = if fallback_warping_text.is_some() {
             Some(render_fallback_explanation(model.as_ref(), app))
@@ -937,7 +937,7 @@ impl BlocklistAIStatusBar {
                     color: Some(error_color),
                 },
                 MessageItem::hyperlink(
-                    crate::tr!("ai", "ai-authenticate-github").as_str(),
+                    crate::tr!("ai", "ai-authenticate-github"),
                     auth_url.to_owned(),
                     self.state_handles.github_auth_link.clone(),
                 ),
@@ -1193,17 +1193,19 @@ impl View for BlocklistAIStatusBar {
                     .current_message()
                     .is_none()
             {
+                let exit_text = crate::tr!("ai", "ai-exit");
+                let exit_tooltip = crate::tr!("ai", "ai-exit-agent-input");
                 render_warping_indicator_base(
                     WarpingIndicatorProps {
                         icon: Some(icons::gray_clock_icon(appearance).finish()),
                         warping_indicator_text: MaybeShimmeringText::Static(
-                            WAITING_FOR_USER_INPUT_MESSAGE.into(),
+                            (&*WAITING_FOR_USER_INPUT_MESSAGE).into(),
                         ),
                         non_shimmering_text: None,
                         non_shimmering_suffix: None,
                         buttons: Some(render_switch_control_to_user_button(
-                            &crate::tr!("ai", "ai-exit"),
-                            &crate::tr!("ai", "ai-exit-agent-input"),
+                            exit_text,
+                            exit_tooltip,
                             ButtonProps {
                                 button_handle: &self.state_handles.take_over_button,
                                 keystroke: self.set_terminal_input_keystroke.as_ref(),

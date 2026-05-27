@@ -119,7 +119,7 @@ impl InitEnvironmentBlock {
         // Add help text if we don't have any repos to make it clearer
         if self.repos.is_empty() && !self.use_current_dir {
             let help_text = Text::new(
-                NO_REPOS_HELP_TEXT,
+                NO_REPOS_HELP_TEXT.as_str(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() - 2.,
             )
@@ -136,7 +136,7 @@ impl InitEnvironmentBlock {
 
         RenderableAction::new_with_element(content.finish(), app)
             .with_header(
-                HeaderConfig::new(EXPLANATION_TEXT, app)
+                HeaderConfig::new(EXPLANATION_TEXT.as_str(), app)
                     .with_icon(yellow_stop_icon(appearance))
                     .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(8.)))
                     .with_soft_wrap_title(),

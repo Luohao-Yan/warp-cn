@@ -709,8 +709,6 @@ static FEATURES_CHARACTERS_WORD: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "settings-features-characters-word"));
 static FEATURES_CHANGES_NEW_WINDOWS: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "settings-features-changes-new-windows"));
-static FEATURES_TAB_ACCEPTS_AUTOSUGGESTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-tab-accepts-autosuggestion"));
 static FEATURES_ACCEPT_AUTOSUGGESTION: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "settings-features-accept-autosuggestion"));
 static FEATURES_OPEN_COMPLETIONS: LazyLock<String> =

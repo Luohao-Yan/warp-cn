@@ -683,8 +683,8 @@ impl<T: Action + Clone> ToggleSettingActionPair<T> {
 
         ToggleSettingActionPair {
             descriptions: SettingActionPairDescriptions {
-                enable: crate::tr!("settings", "enable-feature", description = description_suffix.clone()),
-                disable: crate::tr!("settings", "disable-feature", description = description_suffix.clone()),
+                enable: crate::tr!("settings", "enable-feature", description = description_suffix),
+                disable: crate::tr!("settings", "disable-feature", description = description_suffix),
             },
             contexts: SettingActionPairContexts {
                 enable_predicate: context_prefix.to_owned() & !id!(context_boolean_flag),

@@ -21,11 +21,14 @@ pub fn render_shell_process_terminated_banner(
                     aspect_ratio: 1.,
                     color_override: Some(appearance.theme().foreground().into_solid()),
                 }),
-                content: Some(vec![Text::new(
-                    &crate::tr!("terminal", "shell-init-output-visible"),
-                    appearance.ui_font_family(),
-                    appearance.ui_font_size(),
-                )]),
+                content: Some({
+                    let text = crate::tr!("terminal", "shell-init-output-visible");
+                    vec![Text::new(
+                        text,
+                        appearance.ui_font_family(),
+                        appearance.ui_font_size(),
+                    )]
+                }),
                 ..Default::default()
             },
         )

@@ -54,7 +54,7 @@ use crate::ai::blocklist::block::{
     CollapsibleElementState, CollapsibleExpansionState, FinishReason, ImportedCommentGroup,
 };
 use indexmap::IndexMap;
-use std::{cell::OnceCell, cmp::Ordering, collections::HashMap, rc::Rc, sync::Arc};
+use std::{cell::OnceCell, cmp::Ordering, collections::HashMap, rc::Rc, sync::Arc, sync::LazyLock};
 
 use crate::util::link_detection::{add_link_detection_mouse_interactions, DetectedLinksState};
 use crate::{
@@ -1118,7 +1118,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                             output_items.add_child(
                                 render_informational_footer(
                                     app,
-                                    crate::tr!("ai_assistant", "ai-sorry-bad-experience-plural", count = request_refunded_count),
+                                    crate::tr!("ai_assistant", "ai-sorry-bad-experience-plural", count = request_refunded_count as i64),
                                 )
                                 .with_agent_output_item_spacing(app)
                                 .finish(),
@@ -1251,13 +1251,13 @@ fn should_render_stopped_output(props: Props, app: &AppContext) -> bool {
 fn renderable_action(
     props: Props,
     id: &AIAgentActionId,
-    text: &str,
+    text: impl AsRef<str>,
     app: &AppContext,
     footer: Option<Box<dyn Element>>,
     appearance: &Appearance,
     status: Option<&AIActionStatus>,
 ) -> RenderableAction {
-    let mut requested_action = RenderableAction::new(text, app);
+    let mut requested_action = RenderableAction::new(text.as_ref(), app);
     let is_blocked_on_user = status.as_ref().is_some_and(|s| s.is_blocked());
     if is_blocked_on_user {
         requested_action =
@@ -1434,7 +1434,7 @@ fn render_search_codebase(
                 )
                 .with_header(blocked_action_header(
                     id.clone(),
-                    BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE,
+                    BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE.as_str(),
                     buttons.run_button.clone(),
                     buttons.cancel_button.clone(),
                     props.action_model,
@@ -1741,7 +1741,7 @@ fn render_read_skill(
 
             let skill_icon_override = icon_override_for_skill_name(&skill.name);
             let open_button = render_skill_button(
-                crate::tr!("ai_assistant", "ai-open-skill"),
+                crate::tr!("ai_assistant", "ai-open-skill").as_str(),
                 props.state_handles.open_skill_button_handle.clone(),
                 appearance,
                 skill.provider,
@@ -1784,7 +1784,7 @@ fn render_read_files(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 id.clone(),
-                BLOCKED_ACTION_MESSAGE_FOR_READING_FILES,
+                &*BLOCKED_ACTION_MESSAGE_FOR_READING_FILES,
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2109,11 +2109,12 @@ fn render_requested_edits_output_message(
         .is_some_and(|status| status.is_failed())
         && !is_passive_code_gen_block
     {
+        let fallback_title = crate::tr!("ai_assistant", "ai-could-not-apply-changes");
         let title = requested_edit
             .view
             .as_ref(app)
             .title()
-            .unwrap_or(&crate::tr!("ai_assistant", "ai-could-not-apply-changes"));
+            .unwrap_or(&fallback_title);
         RenderableAction::new(title, app)
             .with_icon(inline_action_icons::cancelled_icon(appearance).finish())
             .render(app)
@@ -2328,8 +2329,9 @@ fn create_formatted_text_for_grep(
         .as_ref()
         .is_some_and(|status| status.is_queued());
 
+    let current_dir_label = crate::tr!("ai_assistant", "ai-the-current-directory");
     let display_path = if path == "." {
-        crate::tr!("ai_assistant", "ai-the-current-directory").as_str()
+        current_dir_label.as_str()
     } else {
         path
     };
@@ -2527,7 +2529,7 @@ fn render_file_retrieval_tool(
         config = config
             .with_header(blocked_action_header(
                 action_id.clone(),
-                BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB,
+                &*BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB,
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2677,7 +2679,7 @@ fn format_upload_artifact_text(
     let mut lines = vec![crate::tr!("ai_assistant", "ai-upload-artifact", file_path = request.file_path.clone())];
 
     if let Some(description) = request.description.as_deref() {
-        lines.push(crate::tr!("ai_assistant", "ai-description-label", description = description.clone()));
+        lines.push(crate::tr!("ai_assistant", "ai-description-label", description = description));
     }
 
     match result {
@@ -2730,7 +2732,7 @@ fn render_upload_artifact(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT,
+                &*BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT,
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -3419,7 +3421,7 @@ pub fn action_icon<V: View>(
 
 pub(super) fn blocked_action_header<V: View>(
     action_id: AIAgentActionId,
-    text: &str,
+    text: impl AsRef<str>,
     accept_button: CompactibleActionButton,
     cancel_button: CompactibleActionButton,
     action_model: &ModelHandle<BlocklistAIActionModel>,
@@ -3430,7 +3432,7 @@ pub(super) fn blocked_action_header<V: View>(
         Rc::new(cancel_button.clone()),
         Rc::new(accept_button.clone()),
     ];
-    HeaderConfig::new(text.to_owned(), app)
+    HeaderConfig::new(text.as_ref().to_owned(), app)
         .with_icon(action_icon(&action_id, action_model, block_model, app))
         .with_interaction_mode(InteractionMode::ActionButtons {
             action_buttons,

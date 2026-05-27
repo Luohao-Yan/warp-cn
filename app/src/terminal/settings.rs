@@ -92,7 +92,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.use_audible_bell",
-        description: "Whether to play an audible bell sound on terminal bell events.",
+        description: "Whether to play an audible bell sound on terminal bell events.".to_string(),
     },
     spacing_mode: Spacing {
         type: SpacingMode,
@@ -101,7 +101,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.spacing",
-        description: "Controls the spacing between terminal blocks.",
+        description: "Controls the spacing between terminal blocks.".to_string(),
     }
     maximum_grid_size: MaximumGridSize {
         type: usize,
@@ -110,7 +110,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.maximum_grid_size",
-        description: "The maximum number of rows in the terminal grid.",
+        description: "The maximum number of rows in the terminal grid.".to_string(),
     },
     alt_screen_padding: AltScreenPadding {
         type: AltScreenPaddingMode,
@@ -120,7 +120,7 @@ define_settings_group!(TerminalSettings, settings: [
         private: false,
         toml_path: "appearance.full_screen_apps.alt_screen_padding",
         max_table_depth: 0,
-        description: "Controls padding around full-screen terminal applications.",
+        description: "Controls padding around full-screen terminal applications.".to_string(),
     },
     // This field should not be referenced directly to check zero state block visibility -- use
     // the `should_show_zero_state_block()` getter, which also considers global AI enablement.
@@ -131,7 +131,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.show_terminal_zero_state_block",
-        description: "Whether to show the AI zero-state block in new terminal sessions.",
+        description: "Whether to show the AI zero-state block in new terminal sessions.".to_string(),
     },
 ]);
 

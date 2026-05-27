@@ -86,7 +86,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::MCPServerNotFound(uuid) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "ai-mcp-server-not-found", uuid = uuid.as_str()),
+                crate::tr!("ai", "ai-mcp-server-not-found", uuid = uuid.to_string()),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),

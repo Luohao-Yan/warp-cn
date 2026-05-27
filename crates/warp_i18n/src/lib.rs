@@ -125,6 +125,30 @@ impl ToFluentValue for usize {
     }
 }
 
+impl ToFluentValue for i32 {
+    fn to_fluent_value(self) -> FluentValue<'static> {
+        FluentValue::from(self as i64)
+    }
+}
+
+impl ToFluentValue for u64 {
+    fn to_fluent_value(self) -> FluentValue<'static> {
+        FluentValue::from(self as i64)
+    }
+}
+
+impl ToFluentValue for u32 {
+    fn to_fluent_value(self) -> FluentValue<'static> {
+        FluentValue::from(self as i64)
+    }
+}
+
+impl ToFluentValue for &String {
+    fn to_fluent_value(self) -> FluentValue<'static> {
+        FluentValue::from(self.as_str().to_owned())
+    }
+}
+
 // ---------------------------------------------------------------------------
 // tr! — the primary i18n macro
 // ---------------------------------------------------------------------------

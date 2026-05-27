@@ -67,7 +67,7 @@ impl View for ViewerRequestBody {
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
         let header = crate::tr!("terminal", "terminal-requested-mode", role = self.role_label());
-        let text = crate::tr!("terminal", "terminal-waiting-for", name = self.display_name());
+        let text = crate::tr!("terminal", "terminal-waiting-for", name = &self.display_name);
 
         let cancel_button = appearance
             .ui_builder()

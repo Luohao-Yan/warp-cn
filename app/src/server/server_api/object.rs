@@ -333,6 +333,7 @@ pub trait ObjectClient: 'static + Send + Sync {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-cloud")]
 impl ObjectClient for ServerApi {
     async fn create_workflow(
         &self,

@@ -272,7 +272,7 @@ impl WelcomePalette {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                WELCOME_PLACEHOLDER.as_str(),
+                WELCOME_PLACEHOLDER.clone(),
                 Self::create_query_result_renderer,
                 ctx,
             )

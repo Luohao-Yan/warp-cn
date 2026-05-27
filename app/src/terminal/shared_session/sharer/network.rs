@@ -1270,7 +1270,7 @@ pub fn failed_to_initialize_session_user_error(reason: &FailedToInitializeSessio
         }
         FailedToInitializeSessionReason::NoUserQuotaRemaining { .. } => {
             // TODO: we should pass down the next refresh time to tell the user.
-            NO_QUOTA_REMAINING_MESSAGE
+            NO_QUOTA_REMAINING_MESSAGE.as_str()
         }
         FailedToInitializeSessionReason::UserNotFound => "You must be logged in to share sessions.",
     }

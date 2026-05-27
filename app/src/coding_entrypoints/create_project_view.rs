@@ -121,7 +121,8 @@ impl CreateProjectView {
         let font_color = theme.sub_text_color(theme.background()).into_solid();
 
         let mouse_state = suggestion.mouse_state.clone();
-        let prompt = suggestion.prompt;
+        let prompt = suggestion.prompt.clone();
+        let prompt_for_click = prompt.clone();
 
         let row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -139,7 +140,7 @@ impl CreateProjectView {
                 .finish(),
                 Expanded::new(
                     1.,
-                    Text::new(&prompt, font_family, font_size)
+                    Text::new(prompt, font_family, font_size)
                         .with_color(font_color)
                         .with_style(Properties::default().weight(Weight::Medium))
                         .soft_wrap(false)
@@ -162,7 +163,7 @@ impl CreateProjectView {
         .with_cursor(Cursor::PointingHand)
         .on_click(move |ctx, _, _| {
             ctx.dispatch_typed_action(CreateProjectAction::SuggestionSelected {
-                prompt: prompt.clone(),
+                prompt: prompt_for_click.clone(),
             });
         })
         .finish()

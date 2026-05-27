@@ -379,7 +379,7 @@ impl Input {
         if command.availability.contains(Availability::AI_ENABLED)
             && !AISettings::as_ref(ctx).is_any_ai_enabled(ctx)
         {
-            show_error_toast(crate::tr!("slash_commands", "slash-command-requires-ai", name = command.name.clone()), ctx);
+            show_error_toast(crate::tr!("slash_commands", "slash-command-requires-ai", name = command.name), ctx);
             return true;
         }
 

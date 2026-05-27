@@ -32,6 +32,7 @@ mod todos;
 use common::get_highlight_ranges_for_find_matches;
 use pathfinder_color::ColorU;
 use settings::Setting as _;
+use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use warp_core::features::FeatureFlag;
 use warp_core::semantic_selection::SemanticSelection;
@@ -794,7 +795,7 @@ where
 /// This function is needed both above (i.e. `block.rs`) and below (i.e. `output.rs`), and as such
 /// cannot reside in `output.rs` because we don't want to make `mod output` public.
 pub fn render_autonomy_checkbox_setting_speedbump_footer(
-    description: &'static str,
+    description: impl Into<Cow<'static, str>>,
     checked: bool,
     on_toggled_action: AIBlockAction,
     checkbox_handle: MouseStateHandle,
@@ -803,6 +804,7 @@ pub fn render_autonomy_checkbox_setting_speedbump_footer(
 ) -> Box<dyn Element> {
     let appearance = Appearance::as_ref(app);
     let theme = appearance.theme();
+    let description = description.into();
     Flex::row()
         .with_cross_axis_alignment(CrossAxisAlignment::Center)
         .with_main_axis_size(MainAxisSize::Max)

@@ -1191,6 +1191,7 @@ impl ServerApi {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-ai")]
 impl AIClient for ServerApi {
     async fn generate_commands_from_natural_language(
         &self,
@@ -2706,6 +2707,7 @@ impl TryFrom<warp_graphql::queries::list_ai_conversations::AIConversationMetadat
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-ai")]
 impl StoreClient for ServerApi {
     async fn update_intermediate_nodes(
         &self,

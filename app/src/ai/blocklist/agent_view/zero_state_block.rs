@@ -2,7 +2,7 @@ use itertools::Itertools as _;
 use markdown_parser::{parse_markdown, FormattedText, FormattedTextFragment, FormattedTextLine};
 use parking_lot::FairMutex;
 use settings::Setting;
-use std::{borrow::Cow, cmp::Reverse, path::Path, sync::Arc};
+use std::{borrow::Cow, cmp::Reverse, path::Path, sync::Arc, sync::LazyLock};
 use warp_core::{features::FeatureFlag, report_if_error, ui::Icon};
 use warpui::{
     elements::{

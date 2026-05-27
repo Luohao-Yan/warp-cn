@@ -14,7 +14,7 @@ define_settings_group!(InputModeSettings, settings: [
         private: false,
         storage_key: "InputMode",
         toml_path: "appearance.input.input_mode",
-        description: "The position of the terminal input.",
+        description: "The position of the terminal input.".to_string(),
     },
 ]);
 

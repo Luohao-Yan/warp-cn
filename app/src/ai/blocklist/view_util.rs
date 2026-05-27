@@ -157,7 +157,7 @@ pub fn get_ai_block_overflow_menu_element_position_id(view_id: EntityId) -> Stri
 pub fn format_credits(credits: f32) -> String {
     // If the first part of the decimal is 0, we just display the whole number.
     if credits.fract() < 0.1 {
-        let whole = credits.trunc() as i32;
+        let whole = credits.trunc() as i64;
         if whole == 1 {
             crate::tr!("ai_assistant", "ai-assistant-one-credit", count = whole)
         } else {

@@ -47,6 +47,7 @@ pub use warp_managed_secrets::client::{ManagedSecretConfigs, ManagedSecretsClien
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-integration")]
 impl ManagedSecretsClient for ServerApi {
     async fn get_managed_secret_configs(&self) -> Result<ManagedSecretConfigs> {
         let variables = GetManagedSecretConfigVariables {

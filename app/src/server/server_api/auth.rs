@@ -280,6 +280,7 @@ impl ServerApi {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-auth")]
 impl AuthClient for ServerApi {
     async fn create_anonymous_user(
         &self,

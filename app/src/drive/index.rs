@@ -2085,7 +2085,7 @@ impl DriveIndex {
 
     fn render_team_space_zero_state(&self, appearance: &Appearance) -> Box<dyn Element> {
         let hint_text =
-            &crate::tr!("drive", "drive-team-space-zero-state");
+            crate::tr!("drive", "drive-team-space-zero-state");
         let zero_state_info = Container::new(
             appearance
                 .ui_builder()
@@ -4916,7 +4916,7 @@ impl DriveIndex {
         if self.auth_state.is_anonymous_or_logged_out() {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "Share Object",
+                    "Share Object".to_string(),
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )

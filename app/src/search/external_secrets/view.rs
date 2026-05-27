@@ -90,7 +90,7 @@ impl ExternalSecretsMenu {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                DEFAULT_PLACEHOLDER_TEXT.as_str(),
+                DEFAULT_PLACEHOLDER_TEXT.clone(),
                 |result_index, result| {
                     QueryResultRenderer::new(
                         result,

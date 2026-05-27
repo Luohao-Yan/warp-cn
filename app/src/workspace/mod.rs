@@ -35,7 +35,6 @@ use crate::server::telemetry::AgentModeEntrypoint;
 use crate::server::telemetry::PaletteSource;
 use crate::settings::AISettings;
 use crate::settings_view::{self, flags, SettingsSection};
-use crate::tab::uses_vertical_tabs;
 use crate::tab_configs;
 use warpui::SingletonEntity;
 

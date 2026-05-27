@@ -298,14 +298,14 @@ pub fn render_warping_indicator<V: View>(
 
     let mut should_render_waiting_icon = false;
     let mut non_shimmering_text = None;
-    let message = if let Some(summarization_type) = summarization_type {
+    let message: String = if let Some(summarization_type) = summarization_type {
         // Choose the appropriate message based on summarization type
         let base_message = match summarization_type {
             SummarizationType::ConversationSummary => {
-                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION
+                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION.as_str()
             }
             SummarizationType::ToolCallResultSummary => {
-                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT
+                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT.as_str()
             }
         };
 
@@ -320,32 +320,32 @@ pub fn render_warping_indicator<V: View>(
 
             // Move the timer / token text outside of the base message, we don't want it to shimmer
             // since that would cause the animation to reset every time the tokens or time changes.
-            non_shimmering_text = Some(timer_text.to_string());
-            base_message.into()
+            non_shimmering_text = Some(timer_text);
+            base_message.to_string()
         } else {
             base_message.to_string()
         }
     } else if props.model.contains_update_document_action(app) {
-        LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN.as_str().to_string()
     } else if props.model.contains_create_document_action(app) {
-        LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN.as_str().to_string()
     } else if props.model.request_type(app).is_passive_code_diff() {
-        LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN.as_str().to_string()
     } else if is_last_message_requesting_file_edits {
-        LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF.as_str().to_string()
     } else if is_last_message_asking_user_question {
-        LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION.as_str().to_string()
     } else if is_searching_web {
-        LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH.as_str().to_string()
     } else if is_fetching_review_comments {
-        LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS.as_str().to_string()
     } else if is_interrupt_query_for_same_conversation
         && output_to_render
             .as_ref()
             .is_none_or(|output| output.get().messages.is_empty())
     {
         // Only "Adjusting..." if nothing from the current exchange has streamed yet.
-        LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING.to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING.as_str().to_string()
     } else {
         match props
             .action_model
@@ -353,9 +353,11 @@ pub fn render_warping_indicator<V: View>(
             .map(|action| &action.action)
         {
             Some(AIAgentActionType::SearchCodebase(..)) => {
-                LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE.to_owned()
+                LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE.as_str().to_string()
             }
-            Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.to_owned(),
+            Some(AIAgentActionType::Grep { .. }) => {
+                LOAD_OUTPUT_MESSAGE_FOR_GREP.as_str().to_string()
+            }
             Some(AIAgentActionType::CallMCPTool { name, .. }) => {
                 crate::tr!("ai", "ai-calling-mcp-tool", name = name.as_str())
             }
@@ -364,10 +366,10 @@ pub fn render_warping_indicator<V: View>(
             }
             Some(AIAgentActionType::FileGlob { .. })
             | Some(AIAgentActionType::FileGlobV2 { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB.to_owned()
+                LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB.as_str().to_string()
             }
             Some(AIAgentActionType::WriteToLongRunningShellCommand { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND.to_owned()
+                LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND.as_str().to_string()
             }
             action => {
                 let active_block = props.terminal_model.block_list().active_block();
@@ -377,7 +379,7 @@ pub fn render_warping_indicator<V: View>(
                 {
                     if action.is_none() {
                         should_render_waiting_icon = true;
-                        WAITING_FOR_USER_INPUT_MESSAGE.to_owned()
+                        WAITING_FOR_USER_INPUT_MESSAGE.as_str().to_string()
                     } else {
                         // Choose the base message depending on whether the agent is waiting
                         // for the command to exit or polling at a fixed interval.
@@ -385,8 +387,8 @@ pub fn render_warping_indicator<V: View>(
                             Some(AIAgentActionType::ReadShellCommandOutput {
                                 delay: Some(ShellCommandDelay::OnCompletion),
                                 ..
-                            }) => LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION,
-                            _ => LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND,
+                            }) => LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION.as_str(),
+                            _ => LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND.as_str(),
                         };
                         // Compute "Next check in {time}" for fixed-interval polls. Only
                         // `ReadShellCommandOutput { delay: Duration(_) }` has a meaningful
@@ -413,16 +415,16 @@ pub fn render_warping_indicator<V: View>(
                             } else {
                                 format!("{}m", secs / 60)
                             };
-                            let suffix = format!(" · Next check in {formatted}");
+                            let suffix = format!(" • Next check in {formatted}");
 
                             // Keep the base message constant so the shimmering animation
                             // isn't interrupted every time the countdown ticks. The
                             // suffix is rendered as a separate non-shimmering element,
                             // matching the same pattern used by the summarization timer.
                             non_shimmering_text = Some(suffix);
-                            base.to_owned()
+                            base.to_string()
                         } else {
-                            base.to_owned()
+                            base.to_string()
                         }
                     }
                 } else {
@@ -448,9 +450,11 @@ pub fn render_warping_indicator<V: View>(
 
     if let Some(take_over_button_props) = props.take_over_lrc_control_button {
         has_buttons = true;
+        let take_over_text = crate::tr!("ai", "ai-take-over");
+        let take_over_tooltip = crate::tr!("ai", "ai-take-over-tooltip");
         buttons_row.add_child(render_switch_control_to_user_button(
-            &crate::tr!("ai", "ai-take-over"),
-            &crate::tr!("ai", "ai-take-over-tooltip"),
+            take_over_text,
+            take_over_tooltip,
             take_over_button_props,
             appearance,
         ));
@@ -760,9 +764,9 @@ fn render_hide_responses_button(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let button_text = if should_hide_responses {
-        &*crate::tr!("ai", "ai-show-responses")
+        crate::tr!("ai", "ai-show-responses")
     } else {
-        &*crate::tr!("ai", "ai-hide-responses")
+        crate::tr!("ai", "ai-hide-responses")
     };
     let text = Container::new(
         Text::new(
@@ -795,8 +799,8 @@ fn render_hide_responses_button(
 }
 
 pub fn render_switch_control_to_user_button(
-    text: &str,
-    tooltip: &str,
+    text: impl Into<Cow<'static, str>>,
+    tooltip: impl Into<Cow<'static, str>>,
     props: ButtonProps,
     appearance: &Appearance,
 ) -> Box<dyn Element> {
@@ -812,12 +816,13 @@ pub fn render_switch_control_to_user_button(
     )
     .finish();
 
+    let tooltip_cow: Cow<'static, str> = tooltip.into();
     render_warping_indicator_button(
         props.button_handle.clone(),
         appearance,
         text,
         props.keystroke,
-        tooltip.to_string(),
+        tooltip_cow.into_owned(),
         props.is_active,
         |ctx| {
             ctx.dispatch_typed_action(TerminalAction::SetInputModeTerminal);
@@ -2968,7 +2973,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             crate::tr!("ai", "ai-server-overloaded")
         }
         RenderableAIError::InternalWarpError => {
-            format!("{ERROR_APOLOGY_TEXT}\n\n{INTERNAL_WARP_ERROR}")
+            format!("{}\n\n{}", ERROR_APOLOGY_TEXT.as_str(), INTERNAL_WARP_ERROR.as_str())
         }
         RenderableAIError::Other {
             error_message,
@@ -2982,7 +2987,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
                     crate::tr!("ai", "ai-attempting-resume", error_message = error_message.as_str())
                 }
             } else {
-                format!("{ERROR_APOLOGY_TEXT}\n\n{error_message}")
+                format!("{}\n\n{error_message}", ERROR_APOLOGY_TEXT.as_str())
             }
         }
         RenderableAIError::InvalidApiKey {
@@ -3010,8 +3015,9 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             }
             // Fallback for contexts that don't have the stateful view (e.g. CLI subagent)
             format!(
-                "{ERROR_APOLOGY_TEXT}\n\nAWS credentials expired or missing for {model_name}. \
-                 Please refresh your AWS credentials."
+                "{}\n\nAWS credentials expired or missing for {model_name}. \
+                 Please refresh your AWS credentials.",
+                ERROR_APOLOGY_TEXT.as_str()
             )
         }
     };

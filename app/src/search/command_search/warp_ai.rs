@@ -49,10 +49,10 @@ pub enum WarpAISearchItem {
 }
 
 impl WarpAISearchItem {
-    fn item_body_text(&self) -> &str {
+    fn item_body_text(&self) -> &'static str {
         match self {
-            WarpAISearchItem::Translate => TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT.as_str(),
-            WarpAISearchItem::Open => OPEN_WARP_AI_ITEM_BODY_TEXT.as_str(),
+            WarpAISearchItem::Translate => &*TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT,
+            WarpAISearchItem::Open => &*OPEN_WARP_AI_ITEM_BODY_TEXT,
         }
     }
 }

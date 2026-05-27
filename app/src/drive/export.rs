@@ -237,12 +237,12 @@ impl ExportManager {
         if is_bulk && self.exports.is_empty() {
             ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
                 let link_label = if cfg!(target_os = "macos") {
-                    crate::tr!("drive", "drive-open-in-finder").as_str()
+                    crate::tr!("drive", "drive-open-in-finder")
                 } else {
-                    crate::tr!("drive", "drive-open-in-folder").as_str()
+                    crate::tr!("drive", "drive-open-in-folder")
                 };
 
-                let mut toast_link = ToastLink::new(link_label.to_string());
+                let mut toast_link = ToastLink::new(link_label);
                 if let Ok(path) = path {
                     // The path to open in the bulk case is one level up from the export dir.
                     let root_dir = path.parent().unwrap_or(path.as_path()).to_path_buf();
@@ -405,14 +405,14 @@ impl ExportManager {
                 };
 
                 let link_label = if cfg!(target_os = "macos") {
-                    crate::tr!("drive", "drive-open-in-finder").as_str()
+                    crate::tr!("drive", "drive-open-in-finder")
                 } else {
-                    crate::tr!("drive", "drive-open-in-folder").as_str()
+                    crate::tr!("drive", "drive-open-in-folder")
                 };
 
                 toast_stack.add_ephemeral_toast(
                     DismissibleToast::success(message).with_link(
-                        ToastLink::new(link_label.to_string()).with_onclick_action(
+                        ToastLink::new(link_label).with_onclick_action(
                             WorkspaceAction::OpenInExplorer { path: root_path },
                         ),
                     ),

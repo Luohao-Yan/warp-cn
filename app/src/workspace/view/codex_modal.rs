@@ -108,8 +108,9 @@ impl CodexModal {
         let new_badge = self.render_new_badge(appearance);
 
         // Title
+        let codex_title = crate::tr!("workspace", "workspace-use-codex-models-in-warp");
         let title = FormattedTextElement::from_str(
-            &crate::tr!("workspace", "workspace-use-codex-models-in-warp"),
+            codex_title,
             appearance.ui_font_family(),
             24.,
         )
@@ -121,8 +122,9 @@ impl CodexModal {
         .finish();
 
         // Description - first paragraph
+        let codex_desc_1 = crate::tr!("workspace", "workspace-codex-description-1");
         let description_1 = FormattedTextElement::from_str(
-            &crate::tr!("workspace", "workspace-codex-description-1"),
+            codex_desc_1,
             appearance.ui_font_family(),
             14.,
         )
@@ -133,8 +135,9 @@ impl CodexModal {
         .finish();
 
         // Description - second paragraph
+        let codex_desc_2 = crate::tr!("workspace", "workspace-codex-description-2");
         let description_2 = FormattedTextElement::from_str(
-            &crate::tr!("workspace", "workspace-codex-description-2"),
+            codex_desc_2,
             appearance.ui_font_family(),
             14.,
         )

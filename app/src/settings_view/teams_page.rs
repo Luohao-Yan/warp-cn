@@ -166,7 +166,6 @@ static TOAST_INVALID_DOMAINS: LazyLock<String> = LazyLock::new(|| crate::tr!("se
 static TOAST_DOMAIN_RESTRICTIONS_ADDED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "domain-restrictions-added"));
 static TOAST_INVALID_EMAILS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invalid-emails-toast"));
 static TOAST_INVITE_ON_THE_WAY: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-on-the-way"));
-static TOAST_INVITES_ON_THE_WAY: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invites-on-the-way"));
 static TOAST_FAILED_LOAD_INVITE_LINK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-load-invite-link"));
 static TOAST_CANCEL_INVITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "cancel-invite"));
 static TOAST_TRANSFER_OWNERSHIP: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "transfer-ownership"));
@@ -175,7 +174,6 @@ static TOAST_DEMOTE_FROM_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("
 static TOAST_PROMOTE_TO_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "promote-to-admin"));
 static TOAST_REMOVE_DOMAIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "remove-domain"));
 
-static TOAST_ALLOW_DISCOVER_DOMAIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "allow-discover-domain"));
 static TOAST_ALLOW_DISCOVER_SAME: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "allow-discover-same-domain"));
 static TOAST_MAKE_DISCOVERABLE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "make-team-discoverable"));
 static TOAST_JOIN_TEAM_AND_COLLAB: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "join-team-and-collaborate"));
@@ -206,7 +204,6 @@ static TOAST_PENDING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings",
 static TOAST_OWNER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "owner"));
 static TOAST_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "admin"));
 static TOAST_TEAMMATE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "teammate"));
-static TOAST_TEAMMATES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "teammates"));
 
 lazy_static! {
     static ref DOMAIN_NAME_REGEX: Regex =
@@ -317,23 +314,23 @@ impl From<&TeamsPageAction> for LoginGatedFeature {
     fn from(val: &TeamsPageAction) -> LoginGatedFeature {
         use TeamsPageAction::*;
         match val {
-            LeaveTeam => "Leave Team",
-            ShowDeleteTeamConfirmationDialog => "Delete Team",
-            CreateTeam => "Create Team",
-            DeletePendingEmailInvitation { .. } => "Delete Pending Email Invitation",
-            RemoveUserFromTeam { .. } => "Remove User From Team",
-            AddDomainRestrictions { .. } => "Add Domain Restrictions",
-            DeleteDomainRestriction { .. } => "Delete Domain Restriction",
-            SendEmailInvites { .. } => "Send Email Invites",
-            GenerateUpgradeLink { .. } => "Generate Upgrade Link",
-            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
-            OpenAdminPanel { .. } => "Open Admin Panel",
-            ContactSupport => "Contact Support",
+            LeaveTeam => "Leave Team".to_string(),
+            ShowDeleteTeamConfirmationDialog => "Delete Team".to_string(),
+            CreateTeam => "Create Team".to_string(),
+            DeletePendingEmailInvitation { .. } => "Delete Pending Email Invitation".to_string(),
+            RemoveUserFromTeam { .. } => "Remove User From Team".to_string(),
+            AddDomainRestrictions { .. } => "Add Domain Restrictions".to_string(),
+            DeleteDomainRestriction { .. } => "Delete Domain Restriction".to_string(),
+            SendEmailInvites { .. } => "Send Email Invites".to_string(),
+            GenerateUpgradeLink { .. } => "Generate Upgrade Link".to_string(),
+            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link".to_string(),
+            OpenAdminPanel { .. } => "Open Admin Panel".to_string(),
+            ContactSupport => "Contact Support".to_string(),
             ToggleTeamDiscoverability { .. } | ToggleTeamDiscoverabilityBeforeCreation => {
-                "Toggle Team Discoverability"
+                "Toggle Team Discoverability".to_string()
             }
-            JoinTeamWithTeamDiscovery { .. } => "Join Team With Team Discovery",
-            _ => "Unknown reason",
+            JoinTeamWithTeamDiscovery { .. } => "Join Team With Team Discovery".to_string(),
+            _ => "Unknown reason".to_string(),
         }
     }
 }
@@ -3853,7 +3850,7 @@ impl TeamsWidget {
 
         // Number of teammates
         let teammate_string = if team_state.team.num_members == 1 {
-            TOAST_TEAMMATE.as_str().to_string()
+            TOAST_TEAMMATE.clone()
         } else {
             crate::tr!("settings", "teammates", count = team_state.team.num_members)
         };

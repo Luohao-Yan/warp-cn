@@ -1071,9 +1071,9 @@ impl From<&BillingAndUsagePageAction> for LoginGatedFeature {
     fn from(val: &BillingAndUsagePageAction) -> LoginGatedFeature {
         use BillingAndUsagePageAction::*;
         match val {
-            Upgrade { .. } => Box::leak(crate::tr!("settings", "settings-upgrade-plan").into_boxed_str()),
-            GenerateStripeBillingPortalLink { .. } => Box::leak(crate::tr!("settings", "settings-generate-stripe-link").into_boxed_str()),
-            _ => Box::leak(crate::tr!("settings", "settings-unknown-reason").into_boxed_str()),
+            Upgrade { .. } => crate::tr!("settings", "settings-upgrade-plan"),
+            GenerateStripeBillingPortalLink { .. } => crate::tr!("settings", "settings-generate-stripe-link"),
+            _ => crate::tr!("settings", "settings-unknown-reason"),
         }
     }
 }

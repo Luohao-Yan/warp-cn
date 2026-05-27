@@ -106,10 +106,10 @@ fn render_comment_file_path_header(
     if is_outdated {
         let yellow_border: ColorU = theme.terminal_colors().normal.yellow.into();
         let yellow_text: ColorU = theme.terminal_colors().bright.yellow.into();
-
+        let outdated_text = crate::tr!("code_review", "code-review-outdated");
         let outdated_chip = Container::new(
             Text::new(
-                &crate::tr!("code_review", "code-review-outdated"),
+                outdated_text,
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )

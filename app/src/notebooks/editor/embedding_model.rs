@@ -228,7 +228,7 @@ impl NotebookEmbed {
                     appearance,
                     Icon::Pencil,
                     self.mouse_state_handles.edit_button_state.clone(),
-                    crate::tr!("common", "common-edit-label").as_str(),
+                    crate::tr!("common", "common-edit-label"),
                     None,
                 )
                 .on_click(move |ctx, _, _| {

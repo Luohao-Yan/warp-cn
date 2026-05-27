@@ -58,14 +58,11 @@ pub static SELECT_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("cod
 pub static REPLACE_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "replace-all"));
 pub static REPLACE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "replace-label"));
 
-static RESULT_OF_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-result-of"));
 static NO_RESULTS_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-no-results"));
 static USE_ENTER_NAVIGATE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-use-enter-navigate"));
 static FIND_BAR_DESCRIPTION_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-bar-description"));
-static FIND_BAR_WITH_MATCHES_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-bar-with-matches"));
 static REPLACE_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-field-focused"));
 static FIND_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-field-focused"));
-static REPLACE_SUCCESS_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-success"));
 static REPLACE_CONTINUE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-continue"));
 static REPLACE_LAST_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-last"));
 

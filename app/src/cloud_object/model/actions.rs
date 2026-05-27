@@ -390,17 +390,17 @@ impl ObjectActions {
 
         // Finally, if all else turned up fruitless, return the yearly count.
         let one_year_ago = Utc::now() - Duration::days(365);
-        let in_the_last_year: i32 = all_relevant_actions
+        let in_the_last_year: i64 = all_relevant_actions
             .clone()
             .filter_map(|a| match a.action_subtype {
                 ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_year_ago => {
-                    Some(1)
+                    Some(1_i64)
                 }
                 ObjectActionSubtype::BundledActions {
                     count,
                     oldest_timestamp,
                     ..
-                } if oldest_timestamp > one_year_ago => Some(count),
+                } if oldest_timestamp > one_year_ago => Some(count as i64),
                 _ => None,
             })
             .sum();

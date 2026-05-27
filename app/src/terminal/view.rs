@@ -724,7 +724,7 @@ pub static DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT: LazyLock<String> = LazyLock::new(
 
 static TERMINAL_DID_YOU_INTEND: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-did-you-intend"));
 static TERMINAL_TO_MOVE_CURSOR: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-to-move-cursor"));
-static TERMINAL_SLOW_BOOTstrap: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-slow-bootstrap-msg"));
+static TERMINAL_SLOW_BOOTSTRAP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-slow-bootstrap-msg"));
 static TERMINAL_MORE_INFO: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-more-info-link"));
 static TERMINAL_SHOW_INIT_BLOCK: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-show-init-block"));
 
@@ -3771,9 +3771,9 @@ impl TerminalView {
             Banner::<TerminalAction>::new_with_buttons(
                 BannerTextContent::formatted_text(vec![
                     FormattedTextFragment::plain_text(
-                        &*TERMINAL_SLOW_BOOTstrap,
+                        TERMINAL_SLOW_BOOTSTRAP.as_str(),
                     ),
-                    FormattedTextFragment::hyperlink(&*TERMINAL_MORE_INFO, KNOWN_ISSUES_URL),
+                    FormattedTextFragment::hyperlink(TERMINAL_MORE_INFO.as_str(), KNOWN_ISSUES_URL),
                 ]),
                 vec![BannerTextButton::new(
                     (*TERMINAL_SHOW_INIT_BLOCK).clone(),
@@ -3827,11 +3827,11 @@ impl TerminalView {
         let emacs_bindings_banner = ctx.add_typed_action_view(|_| {
             Banner::new_with_buttons(
                 BannerTextContent::formatted_text(vec![
-                    FormattedTextFragment::plain_text(&*TERMINAL_DID_YOU_INTEND),
+                    FormattedTextFragment::plain_text(TERMINAL_DID_YOU_INTEND.as_str()),
                     FormattedTextFragment::inline_code("ctrl-a"),
                     FormattedTextFragment::plain_text("/"),
                     FormattedTextFragment::inline_code("ctrl-e"),
-                    FormattedTextFragment::plain_text(&*TERMINAL_TO_MOVE_CURSOR),
+                    FormattedTextFragment::plain_text(TERMINAL_TO_MOVE_CURSOR.as_str()),
                 ]),
                 // Here, we use DismissalType::Temporary and DismissalType::Permanent variants
                 // as stand-ins for changing bindings vs. leaving them as-is.
@@ -5352,9 +5352,7 @@ impl TerminalView {
             } => {
                 // Hide telemetry banner forever after first AI input user sends.
                 if FeatureFlag::GlobalAIAnalyticsBanner.is_enabled()
-                    && !GeneralSettings::as_ref(ctx)
-                        .telemetry_banner_dismissed
-                        .value()
+                    && !matches!(GeneralSettings::as_ref(ctx).telemetry_banner_dismissed.value(), BannerState::Dismissed)
                 {
                     self.hide_telemetry_banner_permanently(ctx);
                 }
@@ -9068,8 +9066,8 @@ impl TerminalView {
         }
 
         let a11y_message = match &warpify_keybinding {
-            Some(keystroke) => crate::tr!("terminal", "terminal-warpify-for-features-with-key", title = lowercase_title.clone(), key = keystroke.displayed().to_string()),
-                None => crate::tr!("terminal", "terminal-warpify-for-features", title = lowercase_title.clone()),
+            Some(keystroke) => crate::tr!("terminal", "terminal-warpify-for-features-with-key", title = lowercase_title, key = keystroke.displayed().to_string()),
+                None => crate::tr!("terminal", "terminal-warpify-for-features", title = lowercase_title),
         };
 
         model
@@ -9079,7 +9077,7 @@ impl TerminalView {
             )));
 
         let a11y_content = AccessibilityContent::new(
-            crate::tr!("terminal", "terminal-title-recognized", title = title.clone()),
+            crate::tr!("terminal", "terminal-title-recognized", title = title),
             a11y_message,
             WarpA11yRole::TextRole,
         );
@@ -10124,9 +10122,7 @@ impl TerminalView {
         }
 
         if FeatureFlag::GlobalAIAnalyticsBanner.is_enabled()
-            && !GeneralSettings::as_ref(ctx)
-                .telemetry_banner_dismissed
-                .value()
+            && !matches!(GeneralSettings::as_ref(ctx).telemetry_banner_dismissed.value(), BannerState::Dismissed)
             // Do not insert telemetry banner if one is already showing
             // (Happens in the case of a new user going from loginless to login
             // without dismissing banner the first time)
@@ -10152,7 +10148,7 @@ impl TerminalView {
         GeneralSettings::handle(ctx).update(ctx, |general_settings, ctx| {
             let _ = general_settings
                 .telemetry_banner_dismissed
-                .set_value(true, ctx);
+                .set_value(BannerState::Dismissed, ctx);
         });
         for rich_content in self.rich_content_views.iter() {
             if let Some(RichContentMetadata::TelemetryBanner {
@@ -10318,9 +10314,7 @@ impl TerminalView {
 
         // Hide telemetry banner forever after first block user executes.
         if FeatureFlag::GlobalAIAnalyticsBanner.is_enabled()
-            && !GeneralSettings::as_ref(ctx)
-                .telemetry_banner_dismissed
-                .value()
+            && !matches!(GeneralSettings::as_ref(ctx).telemetry_banner_dismissed.value(), BannerState::Dismissed)
         {
             self.hide_telemetry_banner_permanently(ctx);
         }
@@ -18685,11 +18679,11 @@ impl TerminalView {
 
             AskAIType::FromBlock { block_index, .. } => {
                 context_block_indices.insert(*block_index);
-                (None, Some(&*DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT))
+                (None, Some(DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT.as_str()))
             }
             AskAIType::FromBlocks { block_indices } => {
                 context_block_indices.extend(block_indices);
-                (None, Some(&*DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT))
+                (None, Some(DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT.as_str()))
             }
 
             AskAIType::FromAICommandSearch { query } => {
@@ -20040,7 +20034,7 @@ impl TerminalView {
         {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "Share Block",
+                    "Share Block".to_string(),
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )
@@ -24958,17 +24952,17 @@ impl TypedActionView for TerminalView {
             }
             FocusInputAndClearSelection => {
                 Custom(AccessibilityContent::new(
-                    INPUT_A11Y_LABEL,
+                    INPUT_A11Y_LABEL.as_str(),
                     // TODO (a11y) use bindings from user settings
-                    INPUT_A11Y_HELPER,
+                    INPUT_A11Y_HELPER.as_str(),
                     WarpA11yRole::TextareaRole,
                 ))
             }
             KeyDown(key) => {
                 let label = if key.eq("\x1b") {
-                    INPUT_A11Y_LABEL
+                    INPUT_A11Y_LABEL.as_str()
                 } else {
-                    key
+                    key.as_str()
                 };
                 Custom(AccessibilityContent::new_without_help(
                     label,
@@ -25758,7 +25752,7 @@ impl TypedActionView for TerminalView {
             AttemptLoginGatedFeature => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        "Upgrade AI Usage",
+                        "Upgrade AI Usage".to_string(),
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )

@@ -60,6 +60,7 @@ pub trait WorkspaceClient: 'static + Send + Sync {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-team")]
 impl WorkspaceClient for ServerApi {
     async fn generate_stripe_billing_portal_link(&self, team_uid: ServerId) -> Result<String> {
         let variables = StripeBillingPortalVariables {

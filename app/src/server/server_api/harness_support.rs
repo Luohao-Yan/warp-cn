@@ -326,6 +326,7 @@ impl ServerApi {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-ai")]
 impl HarnessSupportClient for ServerApi {
     async fn create_external_conversation(&self, format: &str) -> Result<AIConversationId> {
         let response: CreateExternalConversationResponse = self

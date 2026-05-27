@@ -576,9 +576,9 @@ impl InitStepBlock {
         let is_already_setup = self.model.as_ref(app).is_already_setup();
 
         let display_text = if !is_already_setup {
-            ONBOARDING_TEXT
+            ONBOARDING_TEXT.as_str()
         } else {
-            ALREADY_SETUP_TEXT
+            ALREADY_SETUP_TEXT.as_str()
         };
 
         let text = Text::new(

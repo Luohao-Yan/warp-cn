@@ -108,9 +108,9 @@ impl AuthOverrideWarningBody {
         };
 
         let text = match self.confirmation_step {
-            AuthOverrideConfirmationStep::Initial => AUTH_OVERRIDE_INITIAL_STEP_HEADER,
+            AuthOverrideConfirmationStep::Initial => AUTH_OVERRIDE_INITIAL_STEP_HEADER.as_str(),
             AuthOverrideConfirmationStep::ConfirmChangeUser => {
-                AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER
+                AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER.as_str()
             }
         };
 
@@ -162,7 +162,7 @@ impl AuthOverrideWarningBody {
             AuthOverrideConfirmationStep::Initial => {
                 let description = Container::new(
                     ui_builder
-                        .paragraph(AUTH_OVERRIDE_DESCRIPTION)
+                        .paragraph(AUTH_OVERRIDE_DESCRIPTION.as_str())
                         .with_style(muted_styles)
                         .build()
                         .finish(),
@@ -192,7 +192,7 @@ impl AuthOverrideWarningBody {
                         )
                         .with_child(
                             ui_builder
-                                .span(AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION)
+                                .span(AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION.as_str())
                                 .with_style(muted_styles)
                                 .build()
                                 .finish(),
@@ -208,7 +208,7 @@ impl AuthOverrideWarningBody {
             AuthOverrideConfirmationStep::ConfirmChangeUser => {
                 let confirmation = Container::new(
                     ui_builder
-                        .paragraph(AUTH_OVERRIDE_CONFIRMATION_WARNING)
+                        .paragraph(AUTH_OVERRIDE_CONFIRMATION_WARNING.as_str())
                         .with_style(muted_styles)
                         .build()
                         .finish(),

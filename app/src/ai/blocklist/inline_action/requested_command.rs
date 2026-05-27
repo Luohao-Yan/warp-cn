@@ -77,10 +77,7 @@ use super::inline_action_icons::{self, icon_size};
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 pub const REQUESTED_COMMAND_BODY_VERTICAL_PADDING: f32 = 16.;
 
-const REQUESTED_COMMAND_REJECT_LABEL: &str = "ai-reject";
 const REQUESTED_COMMAND_ACCEPT_LABEL: &str = "ai-run";
-const REQUESTED_COMMAND_EDIT_LABEL: &str = "ai-edit-command";
-const REQUESTED_COMMAND_MINIMIZE_LABEL: &str = "ai-done";
 
 const LOADING_MESSAGE: &str = "ai-generating-command";
 
@@ -1457,7 +1454,7 @@ impl View for RequestedCommandView {
                     }
                     CallMCPToolResult::Cancelled => crate::tr!("ai", "ai-tool-call-cancelled"),
                 };
-                crate::tr!("ai", "ai-mcp-response", command = command_text.as_ref(), result = result_text.as_str())
+                crate::tr!("ai", "ai-mcp-response", command = command_text, result = result_text.as_str())
             } else if self.is_header_expanded {
                 command_text.to_string()
             } else {

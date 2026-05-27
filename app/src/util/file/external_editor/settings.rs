@@ -76,7 +76,7 @@ define_settings_group!(EditorSettings, settings: [
         private: false,
         toml_path: "code.editor.open_file_editor",
         max_table_depth: 0,
-        description: "The editor used to open files.",
+        description: "The editor used to open files.".to_string(),
     },
     open_code_panels_file_editor: OpenCodePanelsFileEditor {
         type: EditorChoice,
@@ -86,7 +86,7 @@ define_settings_group!(EditorSettings, settings: [
         private: false,
         toml_path: "code.editor.open_code_panels_file_editor",
         max_table_depth: 0,
-        description: "The editor used to open files from code panels.",
+        description: "The editor used to open files from code panels.".to_string(),
     },
     open_file_layout: OpenFileLayout {
         type: EditorLayout,
@@ -95,7 +95,7 @@ define_settings_group!(EditorSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.open_file_layout",
-        description: "The layout used when opening files in the editor.",
+        description: "The layout used when opening files in the editor.".to_string(),
     },
     prefer_markdown_viewer: PreferMarkdownViewer {
         type: bool,
@@ -104,7 +104,7 @@ define_settings_group!(EditorSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.prefer_markdown_viewer",
-        description: "Whether to use the Markdown viewer when opening Markdown files.",
+        description: "Whether to use the Markdown viewer when opening Markdown files.".to_string(),
     },
     prefer_tabbed_editor_view: PreferTabbedEditorView {
         type: bool,
@@ -113,7 +113,7 @@ define_settings_group!(EditorSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.prefer_tabbed_editor_view",
-        description: "Whether to prefer opening files in a tabbed editor view.",
+        description: "Whether to prefer opening files in a tabbed editor view.".to_string(),
     },
     open_conversation_layout_preference: OpenConversationLayoutPreference {
         type: OpenConversationPreference,
@@ -122,7 +122,7 @@ define_settings_group!(EditorSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.open_conversation_layout_preference",
-        description: "Whether to open agent conversations in a new tab or a split pane.",
+        description: "Whether to open agent conversations in a new tab or a split pane.".to_string(),
     },
 ]);
 

@@ -2512,13 +2512,13 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::Ligatures,
         #[cfg(feature = "selectable_prompt")]
         FeatureFlag::SelectablePrompt,
-        #[cfg(feature = "viewing_shared_sessions")]
+        #[cfg(all(feature = "viewing_shared_sessions", feature = "server-session"))]
         FeatureFlag::ViewingSharedSessions,
-        #[cfg(feature = "creating_shared_sessions")]
+        #[cfg(all(feature = "creating_shared_sessions", feature = "server-session"))]
         FeatureFlag::CreatingSharedSessions,
-        #[cfg(feature = "agent_mode")]
+        #[cfg(all(feature = "agent_mode", feature = "server-ai"))]
         FeatureFlag::AgentMode,
-        #[cfg(feature = "shared_session_long_running_commands")]
+        #[cfg(all(feature = "shared_session_long_running_commands", feature = "server-session"))]
         FeatureFlag::SharedSessionWriteToLongRunningCommands,
         #[cfg(feature = "resize_fix")]
         FeatureFlag::ResizeFix,
@@ -2536,7 +2536,7 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::DynamicWorkflowEnums,
         #[cfg(feature = "shared_with_me")]
         FeatureFlag::SharedWithMe,
-        #[cfg(feature = "am_workflows")]
+        #[cfg(all(feature = "am_workflows", feature = "server-ai"))]
         FeatureFlag::AgentModeWorkflows,
         #[cfg(feature = "ai_rules")]
         FeatureFlag::AIRules,
@@ -2552,7 +2552,7 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::CloudEnvironments,
         #[cfg(all(feature = "simulate_github_unauthed", debug_assertions))]
         FeatureFlag::SimulateGithubUnauthed,
-        #[cfg(feature = "session_sharing_acls")]
+        #[cfg(all(feature = "session_sharing_acls", feature = "server-session"))]
         FeatureFlag::SessionSharingAcls,
         #[cfg(feature = "full_screen_zen_mode")]
         FeatureFlag::FullScreenZenMode,
@@ -2588,31 +2588,31 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::KittyImages,
         #[cfg(feature = "warp_packs")]
         FeatureFlag::WarpPacks,
-        #[cfg(feature = "global_ai_analytics_banner")]
+        #[cfg(all(feature = "global_ai_analytics_banner", feature = "server-ai"))]
         FeatureFlag::GlobalAIAnalyticsBanner,
-        #[cfg(feature = "global_ai_analytics_collection")]
+        #[cfg(all(feature = "global_ai_analytics_collection", feature = "server-ai"))]
         FeatureFlag::GlobalAIAnalyticsCollection,
         #[cfg(feature = "default_adeberry_theme")]
         FeatureFlag::DefaultAdeberryTheme,
-        #[cfg(feature = "agent_mode_primary_xml")]
+        #[cfg(all(feature = "agent_mode_primary_xml", feature = "server-ai"))]
         FeatureFlag::AgentModePrimaryXML,
-        #[cfg(feature = "agent_mode_pre_plan_xml")]
+        #[cfg(all(feature = "agent_mode_pre_plan_xml", feature = "server-ai"))]
         FeatureFlag::AgentModePrePlanXML,
-        #[cfg(feature = "agent_onboarding")]
+        #[cfg(all(feature = "agent_onboarding", feature = "server-ai"))]
         FeatureFlag::AgentOnboarding,
-        #[cfg(feature = "agent_shared_sessions")]
+        #[cfg(all(feature = "agent_shared_sessions", feature = "server-ai", feature = "server-session"))]
         FeatureFlag::AgentSharedSessions,
-        #[cfg(feature = "suggested_rules")]
+        #[cfg(all(feature = "suggested_rules", feature = "server-ai"))]
         FeatureFlag::SuggestedRules,
-        #[cfg(feature = "suggested_agent_mode_workflows")]
+        #[cfg(all(feature = "suggested_agent_mode_workflows", feature = "server-ai"))]
         FeatureFlag::SuggestedAgentModeWorkflows,
         #[cfg(feature = "command_correction_key")]
         FeatureFlag::CommandCorrectionKey,
-        #[cfg(feature = "predict_am_queries")]
+        #[cfg(all(feature = "predict_am_queries", feature = "server-ai"))]
         FeatureFlag::PredictAMQueries,
-        #[cfg(feature = "full_source_code_embedding")]
+        #[cfg(all(feature = "full_source_code_embedding", feature = "server-ai"))]
         FeatureFlag::FullSourceCodeEmbedding,
-        #[cfg(feature = "remote_codebase_indexing")]
+        #[cfg(all(feature = "remote_codebase_indexing", feature = "server-ai"))]
         FeatureFlag::RemoteCodebaseIndexing,
         #[cfg(feature = "use_tantivy_search")]
         FeatureFlag::UseTantivySearch,
@@ -2624,15 +2624,15 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::McpDebuggingIds,
         #[cfg(feature = "markdown_tables")]
         FeatureFlag::MarkdownTables,
-        #[cfg(feature = "blocklist_markdown_table_rendering")]
+        #[cfg(all(feature = "blocklist_markdown_table_rendering", feature = "server-ai"))]
         FeatureFlag::BlocklistMarkdownTableRendering,
-        #[cfg(feature = "blocklist_markdown_images")]
+        #[cfg(all(feature = "blocklist_markdown_images", feature = "server-ai"))]
         FeatureFlag::BlocklistMarkdownImages,
         #[cfg(feature = "markdown_mermaid")]
         FeatureFlag::MarkdownMermaid,
         #[cfg(feature = "editable_markdown_mermaid")]
         FeatureFlag::EditableMarkdownMermaid,
-        #[cfg(feature = "image_as_context")]
+        #[cfg(all(feature = "image_as_context", feature = "server-ai"))]
         FeatureFlag::ImageAsContext,
         #[cfg(feature = "msys2_shells")]
         FeatureFlag::MSYS2Shells,
@@ -2640,51 +2640,51 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::FileRetrievalTools,
         #[cfg(feature = "reload_stale_conversation_files")]
         FeatureFlag::ReloadStaleConversationFiles,
-        #[cfg(feature = "shared_block_title_generation")]
+        #[cfg(all(feature = "shared_block_title_generation", feature = "server-block-share"))]
         FeatureFlag::SharedBlockTitleGeneration,
-        #[cfg(feature = "retry_truncated_code_responses")]
+        #[cfg(all(feature = "retry_truncated_code_responses", feature = "server-ai"))]
         FeatureFlag::RetryTruncatedCodeResponses,
         #[cfg(feature = "read_image_files")]
         FeatureFlag::ReadImageFiles,
-        #[cfg(feature = "usage_based_pricing")]
+        #[cfg(all(feature = "usage_based_pricing", feature = "server-ai"))]
         FeatureFlag::UsageBasedPricing,
-        #[cfg(feature = "cross_repo_context")]
+        #[cfg(all(feature = "cross_repo_context", feature = "server-ai"))]
         FeatureFlag::CrossRepoContext,
-        #[cfg(feature = "codebase_index_persistence")]
+        #[cfg(all(feature = "codebase_index_persistence", feature = "server-ai"))]
         FeatureFlag::CodebaseIndexPersistence,
-        #[cfg(feature = "ai_context_menu")]
+        #[cfg(all(feature = "ai_context_menu", feature = "server-ai"))]
         FeatureFlag::AIContextMenuEnabled,
-        #[cfg(feature = "at_menu_outside_of_ai_mode")]
+        #[cfg(all(feature = "at_menu_outside_of_ai_mode", feature = "server-ai"))]
         FeatureFlag::AtMenuOutsideOfAIMode,
-        #[cfg(feature = "ai_resume_button")]
+        #[cfg(all(feature = "ai_resume_button", feature = "server-ai"))]
         FeatureFlag::AIResumeButton,
         #[cfg(feature = "figma_detection")]
         FeatureFlag::FigmaDetection,
-        #[cfg(feature = "agent_decides_command_execution")]
+        #[cfg(all(feature = "agent_decides_command_execution", feature = "server-ai"))]
         FeatureFlag::AgentDecidesCommandExecution,
-        #[cfg(feature = "codebase_index_speedbump")]
+        #[cfg(all(feature = "codebase_index_speedbump", feature = "server-ai"))]
         FeatureFlag::CodebaseIndexSpeedbump,
-        #[cfg(feature = "context_line_review_comments")]
+        #[cfg(all(feature = "context_line_review_comments", feature = "server-ai"))]
         FeatureFlag::ContextLineReviewComments,
-        #[cfg(feature = "fast_forward_autoexecute_button")]
+        #[cfg(all(feature = "fast_forward_autoexecute_button", feature = "server-ai"))]
         FeatureFlag::FastForwardAutoexecuteButton,
         #[cfg(feature = "code_find_replace")]
         FeatureFlag::CodeFindReplace,
         #[cfg(feature = "command_palette_file_search")]
         FeatureFlag::CommandPaletteFileSearch,
-        #[cfg(feature = "ai_context_menu_commands")]
+        #[cfg(all(feature = "ai_context_menu_commands", feature = "server-ai"))]
         FeatureFlag::AIContextMenuCommands,
-        #[cfg(feature = "ai_context_menu_code")]
+        #[cfg(all(feature = "ai_context_menu_code", feature = "server-ai"))]
         FeatureFlag::AIContextMenuCode,
         #[cfg(feature = "expand_edit_to_pane")]
         FeatureFlag::ExpandEditToPane,
-        #[cfg(feature = "fallback_model_load_output_messaging")]
+        #[cfg(all(feature = "fallback_model_load_output_messaging", feature = "server-ai"))]
         FeatureFlag::FallbackModelLoadOutputMessaging,
         #[cfg(feature = "tab_close_button_on_left")]
         FeatureFlag::TabCloseButtonOnLeft,
-        #[cfg(feature = "profiles_design_revamp")]
+        #[cfg(all(feature = "profiles_design_revamp", feature = "server-ai"))]
         FeatureFlag::ProfilesDesignRevamp,
-        #[cfg(feature = "search_codebase_ui")]
+        #[cfg(all(feature = "search_codebase_ui", feature = "server-ai"))]
         FeatureFlag::SearchCodebaseUI,
         #[cfg(feature = "changed_lines_only_apply_diff_result")]
         FeatureFlag::ChangedLinesOnlyApplyDiffResult,
@@ -2696,11 +2696,11 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::SendTelemetryToFile,
         #[cfg(feature = "undo_closed_panes")]
         FeatureFlag::UndoClosedPanes,
-        #[cfg(feature = "multi_profile")]
+        #[cfg(all(feature = "multi_profile", feature = "server-ai"))]
         FeatureFlag::MultiProfile,
-        #[cfg(feature = "conversation_artifacts")]
+        #[cfg(all(feature = "conversation_artifacts", feature = "server-ai"))]
         FeatureFlag::ConversationArtifacts,
-        #[cfg(feature = "sync_ambient_plans")]
+        #[cfg(all(feature = "sync_ambient_plans", feature = "server-ai"))]
         FeatureFlag::SyncAmbientPlans,
         #[cfg(feature = "get_started_tab")]
         FeatureFlag::GetStartedTab,
@@ -2736,19 +2736,19 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::FileTree,
         #[cfg(feature = "allow_ignoring_input_suggestions")]
         FeatureFlag::AllowIgnoringInputSuggestions,
-        #[cfg(feature = "ambient_agents_command_line")]
+        #[cfg(all(feature = "ambient_agents_command_line", feature = "server-ai"))]
         FeatureFlag::AmbientAgentsCommandLine,
-        #[cfg(feature = "ambient_agents_image_upload")]
+        #[cfg(all(feature = "ambient_agents_image_upload", feature = "server-ai"))]
         FeatureFlag::AmbientAgentsImageUpload,
-        #[cfg(feature = "scheduled_ambient_agents")]
+        #[cfg(all(feature = "scheduled_ambient_agents", feature = "server-ai"))]
         FeatureFlag::ScheduledAmbientAgents,
         #[cfg(feature = "code_launch_modal")]
         FeatureFlag::CodeLaunchModal,
-        #[cfg(feature = "api_key_authentication")]
+        #[cfg(all(feature = "api_key_authentication", feature = "server-auth"))]
         FeatureFlag::APIKeyAuthentication,
-        #[cfg(feature = "api_key_management")]
+        #[cfg(all(feature = "api_key_management", feature = "server-auth"))]
         FeatureFlag::APIKeyManagement,
-        #[cfg(feature = "mcp_oauth")]
+        #[cfg(all(feature = "mcp_oauth", feature = "server-auth"))]
         FeatureFlag::McpOauth,
         #[cfg(feature = "file_based_mcp")]
         FeatureFlag::FileBasedMcp,
@@ -2790,81 +2790,81 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::RevertToCheckpoints,
         #[cfg(feature = "rewind_slash_command")]
         FeatureFlag::RewindSlashCommand,
-        #[cfg(feature = "agent_management_view")]
+        #[cfg(all(feature = "agent_management_view", feature = "server-ai"))]
         FeatureFlag::AgentManagementView,
-        #[cfg(feature = "agent_management_details_view")]
+        #[cfg(all(feature = "agent_management_details_view", feature = "server-ai"))]
         FeatureFlag::AgentManagementDetailsView,
-        #[cfg(feature = "agent_view")]
+        #[cfg(all(feature = "agent_view", feature = "server-ai"))]
         FeatureFlag::AgentView,
-        #[cfg(feature = "agent_view_block_context")]
+        #[cfg(all(feature = "agent_view_block_context", feature = "server-ai"))]
         FeatureFlag::AgentViewBlockContext,
-        #[cfg(feature = "warp_managed_secrets")]
+        #[cfg(all(feature = "warp_managed_secrets", feature = "server-integration"))]
         FeatureFlag::WarpManagedSecrets,
         #[cfg(feature = "v4a_file_diffs")]
         FeatureFlag::V4AFileDiffs,
-        #[cfg(feature = "interactive_conversation_management_view")]
+        #[cfg(all(feature = "interactive_conversation_management_view", feature = "server-ai"))]
         FeatureFlag::InteractiveConversationManagementView,
-        #[cfg(feature = "agent_tips")]
+        #[cfg(all(feature = "agent_tips", feature = "server-ai"))]
         FeatureFlag::AgentTips,
-        #[cfg(feature = "agent_mode_computer_use")]
+        #[cfg(all(feature = "agent_mode_computer_use", feature = "server-ai"))]
         FeatureFlag::AgentModeComputerUse,
-        #[cfg(feature = "local_computer_use")]
+        #[cfg(all(feature = "local_computer_use", feature = "server-ai"))]
         FeatureFlag::LocalComputerUse,
-        #[cfg(feature = "team_api_keys")]
+        #[cfg(all(feature = "team_api_keys", feature = "server-team"))]
         FeatureFlag::TeamApiKeys,
-        #[cfg(feature = "cloud_conversations")]
+        #[cfg(all(feature = "cloud_conversations", feature = "server-ai"))]
         FeatureFlag::CloudConversations,
-        #[cfg(feature = "agent_toolbar_editor")]
+        #[cfg(all(feature = "agent_toolbar_editor", feature = "server-ai"))]
         FeatureFlag::AgentToolbarEditor,
-        #[cfg(feature = "configurable_toolbar")]
+        #[cfg(all(feature = "configurable_toolbar", feature = "server-ai"))]
         FeatureFlag::ConfigurableToolbar,
-        #[cfg(feature = "agent_view_prompt_chip")]
+        #[cfg(all(feature = "agent_view_prompt_chip", feature = "server-ai"))]
         FeatureFlag::AgentViewPromptChip,
-        #[cfg(feature = "ambient_agents_rtc")]
+        #[cfg(all(feature = "ambient_agents_rtc", feature = "server-ai"))]
         FeatureFlag::AmbientAgentsRTC,
         #[cfg(feature = "classic_completions")]
         FeatureFlag::ClassicCompletions,
         #[cfg(feature = "force_classic_completions")]
         FeatureFlag::ForceClassicCompletions,
-        #[cfg(feature = "agent_view_conversation_list_view")]
+        #[cfg(all(feature = "agent_view_conversation_list_view", feature = "server-ai"))]
         FeatureFlag::AgentViewConversationListView,
         #[cfg(feature = "inline_history_menu")]
         FeatureFlag::InlineHistoryMenu,
         #[cfg(feature = "inline_repo_menu")]
         FeatureFlag::InlineRepoMenu,
-        #[cfg(feature = "cloud_mode")]
+        #[cfg(all(feature = "cloud_mode", feature = "server-ai"))]
         FeatureFlag::CloudMode,
-        #[cfg(feature = "cloud_mode_from_local_session")]
+        #[cfg(all(feature = "cloud_mode_from_local_session", feature = "server-ai"))]
         FeatureFlag::CloudModeFromLocalSession,
-        #[cfg(feature = "cloud_mode_image_context")]
+        #[cfg(all(feature = "cloud_mode_image_context", feature = "server-ai"))]
         FeatureFlag::CloudModeImageContext,
-        #[cfg(feature = "summarization_via_message_replacement")]
+        #[cfg(all(feature = "summarization_via_message_replacement", feature = "server-ai"))]
         FeatureFlag::SummarizationViaMessageReplacement,
         #[cfg(feature = "pluggable_notifications")]
         FeatureFlag::PluggableNotifications,
-        #[cfg(feature = "list_skills")]
+        #[cfg(all(feature = "list_skills", feature = "server-ai"))]
         FeatureFlag::ListSkills,
-        #[cfg(feature = "ask_user_question")]
+        #[cfg(all(feature = "ask_user_question", feature = "server-ai"))]
         FeatureFlag::AskUserQuestion,
-        #[cfg(feature = "lsp_as_a_tool")]
+        #[cfg(all(feature = "lsp_as_a_tool", feature = "server-ai"))]
         FeatureFlag::LSPAsATool,
         #[cfg(feature = "inline_profile_selector")]
         FeatureFlag::InlineProfileSelector,
-        #[cfg(feature = "oz_platform_skills")]
+        #[cfg(all(feature = "oz_platform_skills", feature = "server-ai"))]
         FeatureFlag::OzPlatformSkills,
-        #[cfg(feature = "oz_identity_federation")]
+        #[cfg(all(feature = "oz_identity_federation", feature = "server-ai"))]
         FeatureFlag::OzIdentityFederation,
-        #[cfg(feature = "oz_changelog_updates")]
+        #[cfg(all(feature = "oz_changelog_updates", feature = "server-ai"))]
         FeatureFlag::OzChangelogUpdates,
-        #[cfg(feature = "bundled_skills")]
+        #[cfg(all(feature = "bundled_skills", feature = "server-ai"))]
         FeatureFlag::BundledSkills,
-        #[cfg(feature = "oz_launch_modal")]
+        #[cfg(all(feature = "oz_launch_modal", feature = "server-ai"))]
         FeatureFlag::OzLaunchModal,
         #[cfg(feature = "open_warp_launch_modal")]
         FeatureFlag::OpenWarpLaunchModal,
         #[cfg(feature = "new_tab_styling")]
         FeatureFlag::NewTabStyling,
-        #[cfg(feature = "skill_arguments")]
+        #[cfg(all(feature = "skill_arguments", feature = "server-ai"))]
         FeatureFlag::SkillArguments,
         #[cfg(feature = "active_conversation_requires_interaction")]
         FeatureFlag::ActiveConversationRequiresInteraction,
@@ -2872,15 +2872,15 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::ConversationsAsContext,
         #[cfg(feature = "incremental_auto_reload")]
         FeatureFlag::IncrementalAutoReload,
-        #[cfg(feature = "orchestration")]
+        #[cfg(all(feature = "orchestration", feature = "server-ai"))]
         FeatureFlag::Orchestration,
-        #[cfg(feature = "orchestration_v2")]
+        #[cfg(all(feature = "orchestration_v2", feature = "server-ai"))]
         FeatureFlag::OrchestrationV2,
-        #[cfg(feature = "orchestration_pill_bar")]
+        #[cfg(all(feature = "orchestration_pill_bar", feature = "server-ai"))]
         FeatureFlag::OrchestrationPillBar,
-        #[cfg(feature = "pending_user_query_indicator")]
+        #[cfg(all(feature = "pending_user_query_indicator", feature = "server-ai"))]
         FeatureFlag::PendingUserQueryIndicator,
-        #[cfg(feature = "queue_slash_command")]
+        #[cfg(all(feature = "queue_slash_command", feature = "server-ai"))]
         FeatureFlag::QueueSlashCommand,
         #[cfg(feature = "kitty_keyboard_protocol")]
         FeatureFlag::KittyKeyboardProtocol,
@@ -2890,7 +2890,7 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::DirectoryTabColors,
         #[cfg(feature = "open_warp_new_settings_modes")]
         FeatureFlag::OpenWarpNewSettingsModes,
-        #[cfg(feature = "hoa_code_review")]
+        #[cfg(all(feature = "hoa_code_review", feature = "server-ai"))]
         FeatureFlag::HoaCodeReview,
         #[cfg(feature = "vertical_tabs")]
         FeatureFlag::VerticalTabs,
@@ -2898,46 +2898,67 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::VerticalTabsSummaryMode,
         #[cfg(feature = "tab_configs")]
         FeatureFlag::TabConfigs,
-        #[cfg(feature = "agent_harness")]
+        #[cfg(all(feature = "agent_harness", feature = "server-ai"))]
         FeatureFlag::AgentHarness,
-        #[cfg(feature = "oz_handoff")]
+        #[cfg(all(feature = "oz_handoff", feature = "server-ai"))]
         FeatureFlag::OzHandoff,
-        #[cfg(feature = "handoff_local_cloud")]
+        #[cfg(all(feature = "handoff_local_cloud", feature = "server-ai"))]
         FeatureFlag::HandoffLocalCloud,
-        #[cfg(feature = "hoa_notifications")]
+        #[cfg(all(feature = "hoa_notifications", feature = "server-ai"))]
         FeatureFlag::HOANotifications,
-        #[cfg(feature = "open_code_notifications")]
+        #[cfg(all(feature = "open_code_notifications", feature = "server-ai"))]
         FeatureFlag::OpenCodeNotifications,
-        #[cfg(feature = "cli_agent_rich_input")]
+        #[cfg(all(feature = "cli_agent_rich_input", feature = "server-ai"))]
         FeatureFlag::CLIAgentRichInput,
-        #[cfg(feature = "transfer_control_tool")]
+        #[cfg(all(feature = "transfer_control_tool", feature = "server-ai"))]
         FeatureFlag::TransferControlTool,
-        #[cfg(feature = "warpify_footer")]
+        #[cfg(all(feature = "warpify_footer", feature = "server-ai"))]
         FeatureFlag::WarpifyFooter,
-        #[cfg(feature = "solo_user_byok")]
+        #[cfg(all(feature = "solo_user_byok", feature = "server-ai"))]
         FeatureFlag::SoloUserByok,
-        #[cfg(feature = "skip_firebase_anonymous_user")]
+        #[cfg(all(feature = "skip_firebase_anonymous_user", feature = "server-auth"))]
         FeatureFlag::SkipFirebaseAnonymousUser,
-        #[cfg(feature = "hoa_onboarding_flow")]
+        #[cfg(all(feature = "hoa_onboarding_flow", feature = "server-ai"))]
         FeatureFlag::HOAOnboardingFlow,
         #[cfg(feature = "git_operations_in_code_review")]
         FeatureFlag::GitOperationsInCodeReview,
-        #[cfg(feature = "hoa_remote_control")]
+        #[cfg(all(feature = "hoa_remote_control", feature = "server-ai"))]
         FeatureFlag::HOARemoteControl,
-        #[cfg(feature = "codex_notifications")]
+        #[cfg(all(feature = "codex_notifications", feature = "server-ai"))]
         FeatureFlag::CodexNotifications,
         #[cfg(feature = "trim_trailing_blank_lines")]
         FeatureFlag::TrimTrailingBlankLines,
-        #[cfg(feature = "cloud_mode_setup_v2")]
+        #[cfg(all(feature = "cloud_mode_setup_v2", feature = "server-ai"))]
         FeatureFlag::CloudModeSetupV2,
-        #[cfg(feature = "cloud_mode_input_v2")]
+        #[cfg(all(feature = "cloud_mode_input_v2", feature = "server-ai"))]
         FeatureFlag::CloudModeInputV2,
         #[cfg(feature = "configurable_context_window")]
         FeatureFlag::ConfigurableContextWindow,
-        #[cfg(feature = "handoff_cloud_cloud")]
+        #[cfg(all(feature = "handoff_cloud_cloud", feature = "server-ai"))]
         FeatureFlag::HandoffCloudCloud,
-        #[cfg(feature = "git_credential_refresh")]
+        #[cfg(all(feature = "git_credential_refresh", feature = "server-ai"))]
         FeatureFlag::GitCredentialRefresh,
+        // Server-dependent compile-time feature gates
+        #[cfg(feature = "server-auth")]
+        FeatureFlag::ServerAuth,
+        #[cfg(feature = "server-ai")]
+        FeatureFlag::ServerAI,
+        #[cfg(feature = "server-cloud")]
+        FeatureFlag::ServerCloud,
+        #[cfg(feature = "server-session")]
+        FeatureFlag::ServerSession,
+        #[cfg(feature = "server-remote")]
+        FeatureFlag::ServerRemote,
+        #[cfg(feature = "server-team")]
+        FeatureFlag::ServerTeam,
+        #[cfg(feature = "server-integration")]
+        FeatureFlag::ServerIntegration,
+        #[cfg(feature = "server-block-share")]
+        FeatureFlag::ServerBlockShare,
+        #[cfg(feature = "server-autoupdate")]
+        FeatureFlag::ServerAutoupdate,
+        #[cfg(feature = "server-experiment")]
+        FeatureFlag::ServerExperiment,
     ]);
 
     flags

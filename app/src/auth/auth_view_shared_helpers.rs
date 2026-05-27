@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use warp_core::channel::ChannelState;
 use warp_core::features::FeatureFlag;
@@ -63,7 +61,7 @@ where
         ..Default::default()
     };
 
-    let text = crate::tr!("auth", "auth-offline-message").as_str();
+    let text = crate::tr!("auth", "auth-offline-message");
 
     let (button_color, button_variant) = action_button_color_and_variant(appearance);
     let button_styles = UiComponentStyles {
@@ -177,9 +175,9 @@ where
         ..Default::default()
     };
 
-    let paragraph_1 = crate::tr!("auth", "auth-offline-paragraph-1").as_str();
-    let paragraph_2 = crate::tr!("auth", "auth-offline-paragraph-2").as_str();
-    let paragraph_3 = crate::tr!("auth", "auth-offline-paragraph-3").as_str();
+    let paragraph_1 = crate::tr!("auth", "auth-offline-paragraph-1");
+    let paragraph_2 = crate::tr!("auth", "auth-offline-paragraph-2");
+    let paragraph_3 = crate::tr!("auth", "auth-offline-paragraph-3");
 
     Container::new(
         Flex::column()
@@ -553,13 +551,14 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
         )
         .finish();
 
+    let cloud_conversation_storage_text = if PrivacySettings::as_ref(app).is_cloud_conversation_storage_enabled {
+            crate::tr!("auth", "auth-cloud-conversation-enabled-description")
+        } else {
+            crate::tr!("auth", "auth-cloud-conversation-disabled-description")
+        };
     let cloud_conversation_storage_description = render_description(
         appearance,
-        if PrivacySettings::as_ref(app).is_cloud_conversation_storage_enabled {
-            crate::tr!("auth", "auth-cloud-conversation-enabled-description").as_str()
-        } else {
-            crate::tr!("auth", "auth-cloud-conversation-disabled-description").as_str()
-        }
+        cloud_conversation_storage_text.as_str()
         .into(),
     );
 

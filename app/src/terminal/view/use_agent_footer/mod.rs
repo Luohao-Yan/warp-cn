@@ -1124,7 +1124,7 @@ impl UseAgentToolbar {
         });
         let dismiss_button = ctx.add_typed_action_view(|_| {
             ActionButton::new(
-                crate::tr!("common", "common-dismiss-label").as_str(),
+                crate::tr!("common", "common-dismiss-label"),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .on_click(|ctx| {
@@ -1134,7 +1134,7 @@ impl UseAgentToolbar {
         });
         let dont_show_again_button = ctx.add_typed_action_view(|_| {
             ActionButton::new(
-                crate::tr!("common", "common-do-not-show-again").as_str(),
+                crate::tr!("common", "common-do-not-show-again"),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .on_click(|ctx| {

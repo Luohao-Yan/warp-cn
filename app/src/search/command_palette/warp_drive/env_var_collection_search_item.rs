@@ -12,14 +12,11 @@ use crate::search::result_renderer::ItemHighlightState;
 use crate::ui_components::icons::Icon;
 use itertools::Itertools;
 use ordered_float::OrderedFloat;
-use std::sync::LazyLock;
 use warpui::elements::{Container, Flex, Highlight, ParentElement, Text};
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
 
 pub const ENV_VAR_NAME_SEPARATOR: &str = ", ";
-
-static ENV_VAR_A11Y_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-env-var-a11y-label").clone());
 
 /// Search item result for a cloud EnvVarCollection.
 #[derive(Debug)]

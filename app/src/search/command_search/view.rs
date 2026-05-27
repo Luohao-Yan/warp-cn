@@ -65,7 +65,7 @@ use super::{
 
 use std::sync::LazyLock;
 
-const DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-command-placeholder").clone());
+static DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-command-placeholder"));
 const PANEL_POSITION_ID: &str = "CommandSearchViewPanel";
 const DETAILS_PANEL_MARGIN: f32 = 4.;
 const MIN_WIDTH_RATIO: f32 = 0.25;
@@ -154,7 +154,7 @@ impl CommandSearchView {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                DEFAULT_PLACEHOLDER_TEXT.as_str(),
+                DEFAULT_PLACEHOLDER_TEXT.clone(),
                 |result_index, result| {
                     QueryResultRenderer::new(
                         result,
@@ -986,7 +986,7 @@ impl TypedActionView for CommandSearchView {
             AttemptLoginGatedUpgrade => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        "Upgrade AI Usage",
+                        "Upgrade AI Usage".to_string(),
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )

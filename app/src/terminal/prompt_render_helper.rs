@@ -256,7 +256,7 @@ impl PromptRenderHelper {
                     RemoteServerSetupState::Checking => crate::tr!("terminal", "terminal-starting-shell"),
                     RemoteServerSetupState::Installing {
                         progress_percent: Some(p),
-                    } => crate::tr!("terminal", "terminal-installing-ssh-progress", percent = p),
+                    } => crate::tr!("terminal", "terminal-installing-ssh-progress", percent = *p as i64),
                     RemoteServerSetupState::Installing {
                         progress_percent: None,
                     } => crate::tr!("terminal", "terminal-installing-ssh"),

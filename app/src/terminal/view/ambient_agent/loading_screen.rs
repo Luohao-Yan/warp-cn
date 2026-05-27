@@ -233,8 +233,9 @@ pub fn render_cloud_mode_error_screen(
     .finish();
 
     // Error title text
+    let failed_title = crate::tr!("agent_cloud", "agent-cloud-failed-title");
     let title_text = Text::new(
-        &crate::tr!("agent_cloud", "agent-cloud-failed-title"),
+        failed_title,
         appearance.ui_font_family(),
         appearance.monospace_font_size() + 2.,
     )
@@ -323,8 +324,9 @@ pub fn render_cloud_mode_github_auth_required_screen(
         .finish();
 
     // Title text - "GitHub Authentication Required"
+    let github_auth_title = crate::tr!("agent_cloud", "agent-cloud-github-auth-title");
     let title_text = Text::new(
-        &crate::tr!("agent_cloud", "agent-cloud-github-auth-title"),
+        github_auth_title,
         appearance.ui_font_family(),
         appearance.monospace_font_size() + 2.,
     )
@@ -333,8 +335,9 @@ pub fn render_cloud_mode_github_auth_required_screen(
     .finish();
 
     // Message text - "Please authenticate with GitHub to continue"
+    let github_auth_message = crate::tr!("agent_cloud", "agent-cloud-github-auth-message");
     let message_text = Text::new(
-        &crate::tr!("agent_cloud", "agent-cloud-github-auth-message"),
+        github_auth_message,
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -410,8 +413,9 @@ pub fn render_cloud_mode_cancelled_screen(appearance: &Appearance) -> Box<dyn El
     .finish();
 
     // Title text - "Cloud Agent Run Cancelled"
+    let cancelled_title = crate::tr!("agent_cloud", "agent-cloud-cancelled-title");
     let title_text = Text::new(
-        &crate::tr!("agent_cloud", "agent-cloud-cancelled-title"),
+        cancelled_title,
         appearance.ui_font_family(),
         appearance.monospace_font_size() + 2.,
     )
@@ -420,8 +424,9 @@ pub fn render_cloud_mode_cancelled_screen(appearance: &Appearance) -> Box<dyn El
     .finish();
 
     // Subtitle text - "No cloud environment was started"
+    let cancelled_subtitle = crate::tr!("agent_cloud", "agent-cloud-cancelled-subtitle");
     let subtitle_text = Text::new(
-        &crate::tr!("agent_cloud", "agent-cloud-cancelled-subtitle"),
+        cancelled_subtitle,
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )

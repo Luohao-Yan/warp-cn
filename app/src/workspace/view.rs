@@ -2493,7 +2493,7 @@ impl Workspace {
                             &raw_path,
                             home_dir.as_ref().and_then(|h| h.to_str()),
                         );
-                        let message = crate::tr!("workspace", "failed-to-load-tab-config", friendly_path = friendly_path, error = error.error_message);
+                        let message = crate::tr!("workspace", "failed-to-load-tab-config", friendly_path = friendly_path.as_ref() as &str, error = error.error_message.as_str());
                         let path = error.file_path.clone();
                         let toast = DismissibleToast::error(message)
                             .with_object_id(object_id.clone())
@@ -8833,11 +8833,12 @@ impl Workspace {
                             Flex::row()
                                 .with_main_axis_size(MainAxisSize::Max)
                                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
-                                .with_child(
-                                    Text::new_inline(&crate::tr!("workspace", "add-new-repo"), font_family, font_size)
+                                .with_child({
+                                    let text = crate::tr!("workspace", "add-new-repo");
+                                    Text::new_inline(text, font_family, font_size)
                                         .with_color(text_color.into())
-                                        .finish(),
-                                )
+                                        .finish()
+                                })
                                 .finish(),
                         )
                         .with_padding_left(NEW_SESSION_SIDECAR_FOOTER_HORIZONTAL_PADDING)

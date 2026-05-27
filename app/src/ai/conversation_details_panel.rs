@@ -1471,7 +1471,7 @@ impl ConversationDetailsPanel {
             };
 
         let name_text = Text::new(
-            crate::tr!("ai", "ai-env-name", name = environment_name),
+            crate::tr!("ai", "ai-env-name", name = environment_name.clone()),
             appearance.ui_font_family(),
             ui_font_size,
         )

@@ -166,6 +166,7 @@ pub trait TeamClient: 'static + Send + Sync {
 
 #[cfg_attr(not(target_family = "wasm"), async_trait)]
 #[cfg_attr(target_family = "wasm", async_trait(?Send))]
+#[cfg(feature = "server-team")]
 impl TeamClient for ServerApi {
     async fn workspaces_metadata(&self) -> Result<WorkspacesMetadataWithPricing> {
         let variables = GetWorkspacesMetadataForUserVariables {

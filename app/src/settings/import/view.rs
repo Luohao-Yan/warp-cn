@@ -995,9 +995,10 @@ impl View for SettingsImportView {
         let mut new_session_setting_text = Flex::row().finish();
 
         if display_new_session_text {
+            let new_session_text = crate::tr!("settings", "settings-import-new-session-effect");
             new_session_setting_text = Container::new(
                 Text::new(
-                    &crate::tr!("settings", "settings-import-new-session-effect"),
+                    new_session_text,
                     font_family,
                     font_size,
                 )

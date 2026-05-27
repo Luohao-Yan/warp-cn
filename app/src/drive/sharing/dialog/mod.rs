@@ -1953,8 +1953,8 @@ impl SharingDialog {
         );
 
         let menu_button_label = match self.link_sharing_state.access_level {
-            Some(access_level) => translated_access_level_label(access_level),
-            None => NO_ACCESS_LABEL.clone(),
+            Some(access_level) => translated_access_level_label(&access_level),
+            None => NO_ACCESS_LABEL.as_str().to_owned(),
         };
         let mut menu_button = appearance
             .ui_builder()
@@ -2134,8 +2134,8 @@ impl SharingDialog {
 
         let menu_button = {
             let label = match self.team_sharing_state.access_level {
-                Some(access_level) => translated_access_level_label(access_level),
-                None => NO_ACCESS_LABEL.clone(),
+                Some(access_level) => translated_access_level_label(&access_level),
+                None => NO_ACCESS_LABEL.as_str().to_owned(),
             };
             let button = appearance
                 .ui_builder()
@@ -2438,15 +2438,18 @@ impl SharingDialog {
                 self.ui_state_handles.copy_link_button.clone(),
             )
             .with_text_and_icon_label(
-                TextAndIcon::new(
-                    TextAndIconAlignment::IconFirst,
-                    &crate::tr!("drive", "drive-copy-link"),
-                    Icon::Link.to_warpui_icon(copy_button_foreground),
-                    MainAxisSize::Min,
-                    MainAxisAlignment::SpaceBetween,
-                    vec2f(12., 12.),
-                )
-                .with_inner_padding(4.),
+                {
+                    let copy_link_text = crate::tr!("drive", "drive-copy-link");
+                    TextAndIcon::new(
+                        TextAndIconAlignment::IconFirst,
+                        copy_link_text,
+                        Icon::Link.to_warpui_icon(copy_button_foreground),
+                        MainAxisSize::Min,
+                        MainAxisAlignment::SpaceBetween,
+                        vec2f(12., 12.),
+                    )
+                    .with_inner_padding(4.)
+                },
             )
             .with_style(UiComponentStyles {
                 font_color: Some(copy_button_foreground.into()),

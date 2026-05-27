@@ -546,7 +546,7 @@ impl DiscardOperationType {
             DiscardOperationType::AllChangesAgainstBranch(None) => Some(crate::tr!("code_review", "code-review-discard-all-changes-no-branch-desc")),
             DiscardOperationType::FileChangesAgainstBranch(None) => Some(crate::tr!("code_review", "code-review-discard-file-no-branch-desc")),
             DiscardOperationType::AllChangesAgainstBranch(Some(_)) => Some(crate::tr!("code_review", "code-review-discard-all-changes-no-branch-desc")),
-            DiscardOperationType::FileChangesAgainstBranch(Some(branch)) => Some(crate::tr!("code_review", "code-review-discard-file-branch-desc", branch = branch)),
+            DiscardOperationType::FileChangesAgainstBranch(Some(branch)) => Some(crate::tr!("code_review", "code-review-discard-file-branch-desc", branch = branch.clone())),
         }
     }
 
@@ -6524,7 +6524,7 @@ impl CodeReviewView {
                 if let Some(pr_info) = pr_info {
                     let url = pr_info.url.clone();
                     let number = pr_info.number;
-                    let label = crate::tr!("code_review", "code-review-view-pr", number = number);
+                    let label = crate::tr!("code_review", "code-review-view-pr", number = number as i64);
                     self.git_primary_action_button.update(ctx, |button, ctx| {
                         button.set_label(label, ctx);
                         button.set_icon(Some(Icon::Github), ctx);
@@ -6602,7 +6602,7 @@ impl CodeReviewView {
         let diff_state = self.diff_state_model.as_ref(app);
         let is_pr_info_refreshing = diff_state.is_pr_info_refreshing(app);
         if let Some(pr_info) = diff_state.pr_info(app).cloned() {
-            MenuItemFields::new(crate::tr!("code_review", "code-review-view-pr", number = pr_info.number))
+            MenuItemFields::new(crate::tr!("code_review", "code-review-view-pr", number = pr_info.number as i64))
                 .with_icon(Icon::Github)
                 .with_on_select_action(CodeReviewAction::ViewPr(pr_info.url))
                 .with_disabled(is_pr_info_refreshing)

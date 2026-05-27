@@ -12,7 +12,7 @@ use crate::{
     TelemetryEvent,
 };
 use pathfinder_geometry::vector::vec2f;
-use std::{collections::HashMap, default::Default, sync::Arc};
+use std::{collections::HashMap, default::Default, sync::Arc, sync::LazyLock};
 use warp_core::{send_telemetry_from_ctx, ui::appearance::Appearance};
 use warpui::{
     elements::{

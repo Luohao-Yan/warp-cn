@@ -146,9 +146,10 @@ impl FirstTimeCloudAgentSetupView {
             .with_spacing(HEADER_SPACING);
 
         // Title - 20px medium weight
+        let title = crate::tr!("agent_cloud", "agent-cloud-start-title");
         column.add_child(
             Text::new(
-                &crate::tr!("agent_cloud", "agent-cloud-start-title"),
+                title,
                 appearance.ui_font_family(),
                 20.,
             )
@@ -191,8 +192,9 @@ impl FirstTimeCloudAgentSetupView {
         let theme = appearance.theme();
 
         // Bold/semibold text in foreground color (per Figma: font-semibold text-[#e3e2df])
+        let subheading = crate::tr!("agent_cloud", "agent-cloud-subheading");
         Text::new(
-            &crate::tr!("agent_cloud", "agent-cloud-subheading"),
+            subheading,
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )
@@ -227,7 +229,7 @@ impl FirstTimeCloudAgentSetupView {
         let credits_text = if credits == 1 {
             crate::tr!("agent_cloud", "agent-cloud-credits-single")
         } else {
-            crate::tr!("agent_cloud", "agent-cloud-credits-plural", count = credits)
+            crate::tr!("agent_cloud", "agent-cloud-credits-plural", count = credits as i64)
         };
         let text = Text::new(credits_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(theme, theme.surface_1()))

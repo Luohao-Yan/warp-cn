@@ -220,9 +220,12 @@ impl View for ProjectButtons {
         let mut row = Flex::row();
 
         if FeatureFlag::CreateProjectFlow.is_enabled() {
+            let create_new_project = crate::tr!("coding_entrypoints", "coding-entrypoints-create-new-project");
+            let open_repository = crate::tr!("coding_entrypoints", "coding-entrypoints-open-repository");
+            let clone_repository = crate::tr!("coding_entrypoints", "coding-entrypoints-clone-repository");
             row.add_children([
                 Container::new(self.glowing_button(
-                    &crate::tr!("coding_entrypoints", "coding-entrypoints-create-new-project"),
+                    create_new_project,
                     Icon::Plus,
                     ProjectButtonsAction::CreateProject,
                     TooltipData {
@@ -238,7 +241,7 @@ impl View for ProjectButtons {
                 .with_margin_right(16.)
                 .finish(),
                 Container::new(self.glowing_button(
-                    &crate::tr!("coding_entrypoints", "coding-entrypoints-open-repository"),
+                    open_repository,
                     Icon::Folder,
                     ProjectButtonsAction::OpenRepository,
                     TooltipData {
@@ -254,7 +257,7 @@ impl View for ProjectButtons {
                 .with_margin_right(16.)
                 .finish(),
                 self.glowing_button(
-                    &crate::tr!("coding_entrypoints", "coding-entrypoints-clone-repository"),
+                    clone_repository,
                     Icon::Duplicate,
                     ProjectButtonsAction::CloneRepository,
                     TooltipData {
@@ -266,11 +269,12 @@ impl View for ProjectButtons {
                 ),
             ]);
         } else {
+            let open_repository = crate::tr!("coding_entrypoints", "coding-entrypoints-open-repository");
             row.add_child(
                 Expanded::new(
                     1.,
                     self.glowing_button(
-                        &crate::tr!("coding_entrypoints", "coding-entrypoints-open-repository"),
+                        open_repository,
                         Icon::Plus,
                         ProjectButtonsAction::CreateProject,
                         TooltipData {

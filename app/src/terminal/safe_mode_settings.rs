@@ -78,7 +78,7 @@ define_settings_group!(SafeModeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "privacy.secret_redaction.enabled",
-        description: "Whether secret redaction is enabled to detect and obscure secrets in terminal output.",
+        description: "Whether secret redaction is enabled to detect and obscure secrets in terminal output.".to_string(),
     },
     secret_display_mode: SecretDisplayModeSetting {
         type: SecretDisplayMode,
@@ -87,7 +87,7 @@ define_settings_group!(SafeModeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "privacy.secret_redaction.secret_display_mode_setting",
-        description: "Controls how detected secrets are visually displayed in the terminal.",
+        description: "Controls how detected secrets are visually displayed in the terminal.".to_string(),
     },
     // Keep legacy setting for backward compatibility during migration
     hide_secrets_in_block_list: HideSecretsInBlockList {
@@ -97,7 +97,7 @@ define_settings_group!(SafeModeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "privacy.secret_redaction.hide_secrets_in_block_list",
-        description: "Whether to hide detected secrets in the block list using asterisks.",
+        description: "Whether to hide detected secrets in the block list using asterisks.".to_string(),
     },
 ]);
 

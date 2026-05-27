@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use crate::{
     appearance::Appearance,
     auth::auth_view_shared_helpers::render_offline_contents,

@@ -418,7 +418,7 @@ impl AuthSecretFtuxView {
         let description = crate::tr!(
             "agent_cloud",
             "agent-cloud-select-api-key",
-            display_name = display_name.as_str()
+            display_name = display_name
         );
         Text::new_inline(
             description,
@@ -502,7 +502,7 @@ impl AuthSecretFtuxView {
 
     fn render_button(
         &self,
-        label: &'static str,
+        label: String,
         mouse_state: MouseStateHandle,
         background: Option<Fill>,
         action: AuthSecretFtuxAction,
@@ -514,7 +514,7 @@ impl AuthSecretFtuxView {
         let text_color = theme.foreground();
         Hoverable::new(mouse_state, move |_| {
             let inner = Container::new(
-                Text::new_inline(label.to_string(), font_family, BUTTON_FONT_SIZE)
+                Text::new_inline(label, font_family, BUTTON_FONT_SIZE)
                     .with_style(Properties::default().weight(Weight::Semibold))
                     .with_color(text_color.into())
                     .finish(),
@@ -544,7 +544,7 @@ impl AuthSecretFtuxView {
         row.add_child(Expanded::new(1., Empty::new().finish()).finish());
 
         row.add_child(self.render_button(
-            crate::tr!("common", "common-cancel-label").as_str(),
+            crate::tr!("common", "common-cancel-label"),
             self.cancel_mouse_state.clone(),
             None,
             AuthSecretFtuxAction::Cancel,
@@ -553,7 +553,7 @@ impl AuthSecretFtuxView {
 
         let accent_fill = Appearance::as_ref(app).theme().accent();
         row.add_child(self.render_button(
-            crate::tr!("common", "common-continue-label").as_str(),
+            crate::tr!("common", "common-continue-label"),
             self.continue_mouse_state.clone(),
             Some(accent_fill),
             AuthSecretFtuxAction::Continue,

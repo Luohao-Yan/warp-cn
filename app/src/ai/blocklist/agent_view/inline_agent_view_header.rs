@@ -126,9 +126,9 @@ impl View for InlineAgentViewHeader {
                 blended_colors::text_main(appearance.theme(), header_background).into(),
             );
             let message = if let Some(command) = top_level_command.as_deref() {
-                format!("{AGENT_PROMPT_TO_INTERACT_MESSAGE} `{command}`")
+                format!("{} `{command}`", AGENT_PROMPT_TO_INTERACT_MESSAGE.as_str())
             } else {
-                format!("{AGENT_PROMPT_TO_INTERACT_MESSAGE} the running command")
+                format!("{} the running command", AGENT_PROMPT_TO_INTERACT_MESSAGE.as_str())
             };
             return HeaderConfig::new(message, app)
                 .with_icon(icon)

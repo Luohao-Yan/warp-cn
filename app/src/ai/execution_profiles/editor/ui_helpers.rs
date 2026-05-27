@@ -1050,7 +1050,7 @@ pub fn wrap_disabled_with_workspace_override_tooltip(
         if state.is_hovered() {
             let tooltip = appearance
                 .ui_builder()
-                .tool_tip(&*WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE)
+                .tool_tip(WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE.clone())
                 .build()
                 .finish();
 

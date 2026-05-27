@@ -205,10 +205,10 @@ impl From<&MainPageAction> for LoginGatedFeature {
     fn from(val: &MainPageAction) -> LoginGatedFeature {
         use MainPageAction::*;
         match val {
-            Upgrade { .. } => &*SETTINGS_UPGRADE_PLAN,
-            GenerateStripeBillingPortalLink { .. } => &*SETTINGS_GENERATE_STRIPE_LINK,
-            ToggleSettingsSync => &*SETTINGS_TOGGLE_SETTINGS_SYNC,
-            _ => &*SETTINGS_UNKNOWN_REASON,
+            Upgrade { .. } => SETTINGS_UPGRADE_PLAN.clone(),
+            GenerateStripeBillingPortalLink { .. } => SETTINGS_GENERATE_STRIPE_LINK.clone(),
+            ToggleSettingsSync => SETTINGS_TOGGLE_SETTINGS_SYNC.clone(),
+            _ => SETTINGS_UNKNOWN_REASON.clone(),
         }
     }
 }

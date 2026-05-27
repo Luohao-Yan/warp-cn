@@ -11,7 +11,7 @@ define_settings_group!(LinuxAppConfiguration,
             sync_to_cloud: SyncToCloud::Never,
             private: false,
             toml_path: "system.force_x11",
-            description: "Whether to force X11 instead of Wayland on Linux.",
+            description: "Whether to force X11 instead of Wayland on Linux.".to_string(),
         },
     ]
 );

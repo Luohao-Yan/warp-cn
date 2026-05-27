@@ -666,7 +666,7 @@ impl View for BlockFilterEditor {
                 if state.is_hovered() {
                     let tool_tip = appearance
                         .ui_builder()
-                        .tool_tip(CONTEXT_LINE_EDITOR_TOOLTIP_LABEL.as_str())
+                        .tool_tip(CONTEXT_LINE_EDITOR_TOOLTIP_LABEL.clone())
                         .build()
                         .finish();
                     stack.add_positioned_child(

@@ -373,7 +373,7 @@ impl View for HeaderToolbarEditorModal {
 fn build_configurable_item(kind: &HeaderToolbarItemKind) -> ConfigurableItem {
     let id = serde_json::to_string(kind).expect("HeaderToolbarItemKind is serializable");
     let renderer =
-        ControlItemRenderer::new_with_label_and_icon(kind.display_label(), kind.icon())
+        ControlItemRenderer::new_with_label_and_icon(kind.display_label().to_string(), kind.icon())
             .with_identifier(id);
     let renderer = match kind {
         HeaderToolbarItemKind::TabsPanel => renderer.non_removable(),

@@ -3,6 +3,7 @@ use argument_editor::{ArgumentEditorRow, DEFAULT_ARGUMENT_PREFIX};
 use env_var_selector::{EnvVarSelector, EnvVarSelectorEvent};
 use itertools::Itertools;
 use pathfinder_color::ColorU;
+use std::borrow::Cow;
 use pathfinder_geometry::vector::vec2f;
 use std::{
     collections::{HashMap, HashSet},
@@ -2187,9 +2188,10 @@ impl WorkflowView {
 
     fn render_section_header(
         &self,
-        text: &str,
+        text: impl Into<Cow<'static, str>>,
         appearance: &Appearance,
     ) -> Box<dyn Element> {
+        let text: Cow<'static, str> = text.into();
         Container::new(
             appearance
                 .ui_builder()
@@ -2257,7 +2259,7 @@ impl WorkflowView {
             .with_children([
                 Flex::row()
                     .with_children([
-                        self.render_section_header(&crate::tr!("workflows", "workflows-aliases-label"), appearance),
+                        self.render_section_header(crate::tr!("workflows", "workflows-aliases-label"), appearance),
                         Container::new(help_icon).with_margin_left(4.).finish(),
                     ])
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -2428,8 +2430,8 @@ impl WorkflowView {
         let mut button_row = Flex::row();
 
         let label_and_icon = match self.ai_metadata_assist_state {
-            AiAssistState::PreRequest => Some((AI_ASSIST_BUTTON_TEXT, Icon::AiAssistant)),
-            AiAssistState::RequestInFlight => Some((AI_ASSIST_LOADING_TEXT, Icon::Refresh)),
+            AiAssistState::PreRequest => Some((AI_ASSIST_BUTTON_TEXT.as_str(), Icon::AiAssistant)),
+            AiAssistState::RequestInFlight => Some((AI_ASSIST_LOADING_TEXT.as_str(), Icon::Refresh)),
             AiAssistState::Generated => None,
         };
 

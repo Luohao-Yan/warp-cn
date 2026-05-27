@@ -17,6 +17,7 @@ use crate::terminal::session_settings::{
     AgentToolbarChipSelection, CLIAgentToolbarChipSelection, SessionSettings,
     SessionSettingsChangedEvent, ToolbarChipSelection,
 };
+use super::toolbar_item::AgentToolbarItemKind;
 use std::sync::LazyLock;
 
 use crate::Appearance;

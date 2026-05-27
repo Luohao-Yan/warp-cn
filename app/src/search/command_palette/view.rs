@@ -290,7 +290,7 @@ impl View {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                COMMAND_PALETTE_PLACEHOLDER.as_str(),
+                COMMAND_PALETTE_PLACEHOLDER.clone(),
                 Self::create_query_result_renderer,
                 ctx,
             )
