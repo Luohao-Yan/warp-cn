@@ -1199,7 +1199,7 @@ impl View for BlocklistAIStatusBar {
                     WarpingIndicatorProps {
                         icon: Some(icons::gray_clock_icon(appearance).finish()),
                         warping_indicator_text: MaybeShimmeringText::Static(
-                            (&*WAITING_FOR_USER_INPUT_MESSAGE).into(),
+                            WAITING_FOR_USER_INPUT_MESSAGE.clone().into(),
                         ),
                         non_shimmering_text: None,
                         non_shimmering_suffix: None,

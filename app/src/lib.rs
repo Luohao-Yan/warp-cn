@@ -2488,9 +2488,9 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
     }
 
     flags.extend([
-        #[cfg(feature = "autoupdate")]
+        #[cfg(all(feature = "autoupdate", feature = "server-autoupdate"))]
         FeatureFlag::Autoupdate,
-        #[cfg(feature = "changelog")]
+        #[cfg(all(feature = "changelog", feature = "server-autoupdate"))]
         FeatureFlag::Changelog,
         #[cfg(feature = "cocoa_sentry")]
         FeatureFlag::CocoaSentry,
@@ -2534,7 +2534,7 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::AlacrittySettingsImport,
         #[cfg(feature = "dynamic_workflow_enums")]
         FeatureFlag::DynamicWorkflowEnums,
-        #[cfg(feature = "shared_with_me")]
+        #[cfg(all(feature = "shared_with_me", feature = "server-cloud"))]
         FeatureFlag::SharedWithMe,
         #[cfg(all(feature = "am_workflows", feature = "server-ai"))]
         FeatureFlag::AgentModeWorkflows,
@@ -2544,11 +2544,11 @@ pub fn enabled_features() -> HashSet<FeatureFlag> {
         FeatureFlag::SSHTmuxWrapper,
         #[cfg(feature = "shell_selector")]
         FeatureFlag::ShellSelector,
-        #[cfg(feature = "integration_command")]
+        #[cfg(all(feature = "integration_command", feature = "server-integration"))]
         FeatureFlag::IntegrationCommand,
-        #[cfg(feature = "artifact_command")]
+        #[cfg(all(feature = "artifact_command", feature = "server-ai"))]
         FeatureFlag::ArtifactCommand,
-        #[cfg(feature = "cloud_environments")]
+        #[cfg(all(feature = "cloud_environments", feature = "server-ai"))]
         FeatureFlag::CloudEnvironments,
         #[cfg(all(feature = "simulate_github_unauthed", debug_assertions))]
         FeatureFlag::SimulateGithubUnauthed,

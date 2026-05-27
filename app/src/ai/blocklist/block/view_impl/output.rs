@@ -1784,7 +1784,7 @@ fn render_read_files(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 id.clone(),
-                &*BLOCKED_ACTION_MESSAGE_FOR_READING_FILES,
+                BLOCKED_ACTION_MESSAGE_FOR_READING_FILES.as_str(),
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2529,7 +2529,7 @@ fn render_file_retrieval_tool(
         config = config
             .with_header(blocked_action_header(
                 action_id.clone(),
-                &*BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB,
+                BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB.as_str(),
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2732,7 +2732,7 @@ fn render_upload_artifact(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                &*BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT,
+                BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT.as_str(),
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
