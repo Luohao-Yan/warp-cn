@@ -25,7 +25,7 @@ jobs:
       artifact_url: ${{ steps.upload_feature_flag_log.outputs.artifact-url }}
     steps:
       - name: Check out code
-        uses: namespacelabs/nscloud-checkout-action@938f5d2d403d6224d9a0c0dc559b1dae09c2ede4 # v8.1.1
+        uses: namespacelabs/nscloud-checkout-action@6c0b4ec65053c174f477e4c264bdbfdc70ad36cd # v8.1.2
         with:
           fetch-depth: 0
 
@@ -155,13 +155,13 @@ jobs:
       contents: read
     steps:
       - name: Check out code
-        uses: namespacelabs/nscloud-checkout-action@938f5d2d403d6224d9a0c0dc559b1dae09c2ede4 # v8.1.1
+        uses: namespacelabs/nscloud-checkout-action@6c0b4ec65053c174f477e4c264bdbfdc70ad36cd # v8.1.2
         with:
           ref: ${{ needs.analyze.outputs.analyzed_sha }}
           fetch-depth: 0
 
       - name: Setup Rust cache
-        uses: namespacelabs/nscloud-cache-action@a90bb5d4b27522ce881c6e98eebd7d7e6d1653f9 # v1.4.2
+        uses: namespacelabs/nscloud-cache-action@15799a6b54e5765f85b2aac25b3f0df43ed571c0 # v1.4.3
         with:
           cache: rust
 
@@ -212,7 +212,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Check out code
-        uses: namespacelabs/nscloud-checkout-action@938f5d2d403d6224d9a0c0dc559b1dae09c2ede4 # v8.1.1
+        uses: namespacelabs/nscloud-checkout-action@6c0b4ec65053c174f477e4c264bdbfdc70ad36cd # v8.1.2
         with:
           ref: ${{ needs.analyze.outputs.analyzed_sha }}
           fetch-depth: 0
