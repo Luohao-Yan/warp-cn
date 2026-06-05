@@ -47,7 +47,7 @@ impl InheritanceState {
         match folder_name {
             Some(folder_name) => {
                 let inherited_label = style::detail_text(
-                    crate::tr!("drive", "drive-inherited-from", parent = folder_name.as_str()),
+                    crate::tr!("drive", "inherited-from", parent = folder_name.as_str()),
                     appearance,
                 )
                 .build()
@@ -58,17 +58,17 @@ impl InheritanceState {
                         .with_child(inherited_label)
                         .with_cross_axis_alignment(CrossAxisAlignment::Center)
                         .finish(),
-                    tooltip_text: crate::tr!("drive", "drive-edit-inherited-tooltip").leak(),
+                    tooltip_text: crate::tr!("drive", "edit-inherited-tooltip").leak(),
                 }
             }
             None => InheritanceDetails {
                 source_label: style::detail_text(
-                    crate::tr!("drive", "drive-inherited-permission"),
+                    crate::tr!("drive", "inherited-permission"),
                     appearance,
                 )
                 .build()
                 .finish(),
-                tooltip_text: crate::tr!("drive", "drive-cannot-edit-inherited").leak(),
+                tooltip_text: crate::tr!("drive", "cannot-edit-inherited").leak(),
             },
         }
     }

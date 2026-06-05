@@ -677,7 +677,7 @@ const MAX_FORK_TOAST_TITLE_LENGTH: usize = 100;
 const MAX_WINDOW_TITLE_LENGTH: usize = 80;
 
 /// The default display name used for the user if they have no associated display name.
-pub static DEFAULT_USER_DISPLAY_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-default-user-display-name"));
+pub static DEFAULT_USER_DISPLAY_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "default-user-display-name"));
 
 lazy_static! {
     static ref OPENING_WARP_DRIVE_ON_START_UP: Arc<Mutex<bool>> = Arc::new(Mutex::new(false));
@@ -1227,7 +1227,7 @@ impl Workspace {
                 },
                 ctx,
             );
-            let repos_placeholder = crate::tr!("workspace", "workspace-search-repos");
+            let repos_placeholder = crate::tr!("workspace", "search-repos");
             editor.set_placeholder_text(&repos_placeholder, ctx);
             editor
         });
@@ -1264,7 +1264,7 @@ impl Workspace {
             EditorView::single_line(options, ctx)
         });
         editor.update(ctx, |editor, ctx| {
-            let tabs_placeholder = crate::tr!("workspace", "workspace-search-tabs");
+            let tabs_placeholder = crate::tr!("workspace", "search-tabs");
             editor.set_placeholder_text(&tabs_placeholder, ctx);
         });
         ctx.subscribe_to_view(&editor, |me, editor_view, event, ctx| match event {
@@ -2498,7 +2498,7 @@ impl Workspace {
                         let toast = DismissibleToast::error(message)
                             .with_object_id(object_id.clone())
                             .with_link(
-                                ToastLink::new(crate::tr!("common", "common-open-file-label").clone()).with_onclick_action(
+                                ToastLink::new(crate::tr!("common", "open-file-label").clone()).with_onclick_action(
                                     WorkspaceAction::OpenTabConfigErrorFile {
                                         path,
                                         toast_object_id: object_id,
@@ -5351,7 +5351,7 @@ impl Workspace {
                     .unwrap_or_else(|| {
                         let title = configuration.title().trim();
                         if title.is_empty() {
-                            crate::tr!("workspace", "workspace-untitled-pane").clone()
+                            crate::tr!("workspace", "untitled-pane").clone()
                         } else {
                             title.to_string()
                         }
@@ -5683,7 +5683,7 @@ impl Workspace {
         if !FeatureFlag::ConfigurableToolbar.is_enabled() {
             return;
         }
-        let rearrange_label = crate::tr!("workspace", "workspace-rearrange-toolbar");
+        let rearrange_label = crate::tr!("workspace", "rearrange-toolbar");
         let items = vec![MenuItemFields::new(&rearrange_label)
             .with_on_select_action(WorkspaceAction::OpenHeaderToolbarEditor)
             .into_item()];
@@ -6247,7 +6247,7 @@ impl Workspace {
 
         // 3b. Local Docker Sandbox
         if FeatureFlag::LocalDockerSandbox.is_enabled() {
-            let docker_label = crate::tr!("workspace", "workspace-local-docker-sandbox");
+            let docker_label = crate::tr!("workspace", "local-docker-sandbox");
             let mut docker_item = MenuItemFields::new(&docker_label)
                 .with_on_select_action(WorkspaceAction::AddDockerSandboxTab)
                 .with_icon(icons::Icon::Docker);
@@ -6308,14 +6308,14 @@ impl Workspace {
         if FeatureFlag::TabConfigs.is_enabled() {
             menu_items.push(MenuItem::Separator);
             menu_items.push(
-                MenuItemFields::new_submenu(&crate::tr!("workspace", "workspace-new-worktree-config"))
+                MenuItemFields::new_submenu(&crate::tr!("workspace", "new-worktree-config"))
                     .with_icon(icons::Icon::Dataflow02)
                     .into_item(),
             );
 
             // 6. New tab config — V0: opens the TOML template.
             menu_items.push(
-                MenuItemFields::new(&crate::tr!("workspace", "workspace-new-tab-config"))
+                MenuItemFields::new(&crate::tr!("workspace", "new-tab-config"))
                     .with_on_select_action(WorkspaceAction::SelectNewSessionMenuItem(
                         NewSessionMenuItem::CreateNewTabConfig,
                     ))
@@ -6324,7 +6324,7 @@ impl Workspace {
             );
         }
 
-        let reopen_label = crate::tr!("workspace", "workspace-reopen-closed-session");
+        let reopen_label = crate::tr!("workspace", "reopen-closed-session");
         menu_items.push(MenuItem::Separator);
         menu_items.push(
             MenuItemFields::new(&reopen_label)
@@ -6686,7 +6686,7 @@ impl Workspace {
         let mut menu_items = vec![];
         if FeatureFlag::Autoupdate.is_enabled() && ChannelState::show_autoupdate_menu_items() {
             if let Some(version) = ChannelState::app_version() {
-                let current_version_label = crate::tr!("workspace", "workspace-current-version-is", version = version.to_string());
+                let current_version_label = crate::tr!("workspace", "current-version-is", version = version.to_string());
                 menu_items.push(
                     MenuItemFields::new(&current_version_label)
                         .with_disabled(true)
@@ -6695,7 +6695,7 @@ impl Workspace {
                 match autoupdate::get_update_state(ctx) {
                     AutoupdateStage::UpdateReady { new_version, .. }
                     | AutoupdateStage::UpdatedPendingRestart { new_version } => {
-                        let install_label = crate::tr!("workspace", "workspace-install-update", version = new_version.version.to_string());
+                        let install_label = crate::tr!("workspace", "install-update", version = new_version.version.to_string());
                         menu_items.push(
                             MenuItemFields::new(&install_label)
                                 .with_on_select_action(WorkspaceAction::ApplyUpdate)
@@ -6703,7 +6703,7 @@ impl Workspace {
                         )
                     },
                     AutoupdateStage::Updating { new_version, .. } => {
-                        let updating_label = crate::tr!("workspace", "workspace-updating-to", version = new_version.version.to_string());
+                        let updating_label = crate::tr!("workspace", "updating-to", version = new_version.version.to_string());
                         menu_items.push(
                             MenuItemFields::new(&updating_label)
                                 .with_disabled(true)
@@ -6711,7 +6711,7 @@ impl Workspace {
                         )
                     },
                     AutoupdateStage::UnableToUpdateToNewVersion { .. } => {
-                        let update_manually_label = crate::tr!("workspace", "workspace-update-warp-manually");
+                        let update_manually_label = crate::tr!("workspace", "update-warp-manually");
                         menu_items.push(
                             MenuItemFields::new(&update_manually_label)
                                 .with_on_select_action(WorkspaceAction::DownloadNewVersion)
@@ -7768,7 +7768,7 @@ impl Workspace {
                     view.toast_stack.update(ctx, |toast_stack, ctx| {
                         let toast = DismissibleToast::success(message)
                             .with_link(
-                                ToastLink::new(crate::tr!("common", "common-learn-more-label").clone()).with_href(
+                                ToastLink::new(crate::tr!("common", "learn-more-label").clone()).with_href(
                                     "https://docs.warp.dev/reference/cli".to_string(),
                                 ),
                             );
@@ -8439,7 +8439,7 @@ impl Workspace {
                         new_version.last_prominent_update.as_deref(),
                     ) =>
                 {
-                    let update_relaunch_label = crate::tr!("workspace", "workspace-update-and-relaunch");
+                    let update_relaunch_label = crate::tr!("workspace", "update-and-relaunch");
                     items.push(
                         MenuItemFields::new(&update_relaunch_label)
                             .with_on_select_action(WorkspaceAction::ApplyUpdate)
@@ -8452,7 +8452,7 @@ impl Workspace {
                         new_version.last_prominent_update.as_deref(),
                     ) =>
                 {
-                    let updating_label = crate::tr!("workspace", "workspace-updating-to", version = new_version.version.to_string());
+                    let updating_label = crate::tr!("workspace", "updating-to", version = new_version.version.to_string());
                     items.push(
                         MenuItemFields::new(&updating_label)
                             .with_disabled(true)
@@ -8464,7 +8464,7 @@ impl Workspace {
                         new_version.last_prominent_update.as_deref(),
                     ) =>
                 {
-                    let update_manually_label = crate::tr!("workspace", "workspace-update-warp-manually");
+                    let update_manually_label = crate::tr!("workspace", "update-warp-manually");
                     items.push(
                         MenuItemFields::new(&update_manually_label)
                             .with_on_select_action(WorkspaceAction::DownloadNewVersion)
@@ -8476,13 +8476,13 @@ impl Workspace {
             }
         }
 
-        let whats_new_label = crate::tr!("workspace", "workspace-whats-new");
-        let feedback_label = crate::tr!("workspace", "workspace-feedback");
+        let whats_new_label = crate::tr!("workspace", "whats-new");
+        let feedback_label = crate::tr!("workspace", "feedback");
         items.extend([
             MenuItemFields::new(&whats_new_label)
                 .with_on_select_action(WorkspaceAction::ViewLatestChangelog)
                 .into_item(),
-            MenuItemFields::new(crate::tr!("workspace", "workspace-pane-settings"))
+            MenuItemFields::new(crate::tr!("workspace", "pane-settings"))
                 .with_on_select_action(WorkspaceAction::ShowSettings)
                 .into_item(),
             MenuItemFields::new(crate::tr!("settings", "keybindings-tab"))
@@ -8499,7 +8499,7 @@ impl Workspace {
 
         #[cfg(not(target_family = "wasm"))]
         {
-            let view_logs_label = crate::tr!("workspace", "workspace-view-warp-logs");
+            let view_logs_label = crate::tr!("workspace", "view-warp-logs");
             items.push(
                 MenuItemFields::new(&view_logs_label)
                     .with_on_select_action(WorkspaceAction::ViewLogs)
@@ -8507,7 +8507,7 @@ impl Workspace {
             );
         }
 
-        let slack_label = crate::tr!("workspace", "workspace-slack");
+        let slack_label = crate::tr!("workspace", "slack");
         items.extend([
             MenuItemFields::new(&slack_label)
                 .with_on_select_action(WorkspaceAction::JoinSlack)
@@ -8516,7 +8516,7 @@ impl Workspace {
         ]);
 
         if self.auth_state.is_anonymous_or_logged_out() {
-            let signup_label = crate::tr!("auth", "auth-signup-title");
+            let signup_label = crate::tr!("auth", "signup-title");
             items.push(
                 MenuItemFields::new(&signup_label)
                     .with_on_select_action(WorkspaceAction::SignupAnonymousUser)
@@ -8539,7 +8539,7 @@ impl Workspace {
                     .into_item(),
             );
         } else {
-            let upgrade_label = crate::tr!("workspace", "workspace-upgrade");
+            let upgrade_label = crate::tr!("workspace", "upgrade");
             items.push(
                 MenuItemFields::new(&upgrade_label)
                     .with_on_select_action(WorkspaceAction::ShowUpgrade)
@@ -8547,7 +8547,7 @@ impl Workspace {
             );
         }
 
-        let invite_label = crate::tr!("workspace", "workspace-invite-friend");
+        let invite_label = crate::tr!("workspace", "invite-friend");
         items.push(
             MenuItemFields::new(&invite_label)
                 .with_on_select_action(WorkspaceAction::ShowReferralSettingsPage)
@@ -8759,7 +8759,7 @@ impl Workspace {
                 .with_height(NEW_SESSION_SIDECAR_SEARCH_BOX_HEIGHT)
                 .finish()
             }),
-            Some(crate::tr!("workspace", "workspace-search-repos")),
+            Some(crate::tr!("workspace", "search-repos")),
         )
         .with_no_interaction_on_hover()
         .no_highlight_on_hover()
@@ -9364,12 +9364,12 @@ impl Workspace {
             .unwrap_or_else(|| repo.to_string());
         let config_name = match worktree_branch_name {
             Some(name) if !name.is_empty() => {
-                crate::tr!("workspace", "workspace-new-worktree-repo-name", repo_display_name = repo_display_name.clone(), name = name.to_string())
+                crate::tr!("workspace", "new-worktree-repo-name", repo_display_name = repo_display_name.clone(), name = name.to_string())
             }
             _ if !base_branch.is_empty() => {
-                crate::tr!("workspace", "workspace-new-worktree-repo-branch", repo_display_name = repo_display_name.clone(), base_branch = base_branch.to_string())
+                crate::tr!("workspace", "new-worktree-repo-branch", repo_display_name = repo_display_name.clone(), base_branch = base_branch.to_string())
             }
-            _ => crate::tr!("workspace", "workspace-new-worktree-repo", repo_display_name = repo_display_name.clone()),
+            _ => crate::tr!("workspace", "new-worktree-repo", repo_display_name = repo_display_name.clone()),
         };
 
         let filename_hint = if let Some(name) = worktree_branch_name {
@@ -9489,7 +9489,7 @@ impl Workspace {
             .file_name()
             .map(|name| name.to_string_lossy().to_string())
             .unwrap_or_else(|| repo_path.clone());
-        let config_name = crate::tr!("workspace", "workspace-worktree-config-name", repo_display_name = repo_display_name.clone());
+        let config_name = crate::tr!("workspace", "worktree-config-name", repo_display_name = repo_display_name.clone());
         // Use the user's default session mode to decide pane type.
         let pane_type = if AISettings::as_ref(ctx).is_any_ai_enabled(ctx)
             && AISettings::as_ref(ctx).default_session_mode(ctx) == DefaultSessionMode::Agent
@@ -12062,7 +12062,7 @@ impl Workspace {
             .conversation(&conversation_id)
             .and_then(|c| c.title())
             .map(|s| s.to_string())
-            .unwrap_or_else(|| crate::tr!("workspace", "workspace-conversation").clone());
+            .unwrap_or_else(|| crate::tr!("workspace", "conversation").clone());
 
         let title = if source_title.chars().count() > MAX_FORK_TOAST_TITLE_LENGTH {
             let truncated: String = source_title
@@ -12904,7 +12904,7 @@ impl Workspace {
                                 link = link.with_keystroke(keystroke);
                             }
 
-                            let toast = DismissibleToast::default(crate::tr!("workspace", "workspace-toast-warp-updated"))
+                            let toast = DismissibleToast::default(crate::tr!("workspace", "toast-warp-updated"))
                                 .with_link(link);
 
                             stack.add_ephemeral_toast(toast, ctx);
@@ -13376,7 +13376,7 @@ impl Workspace {
         let source_conversation_id = source_token.as_str().to_string();
         let title_for_fork = source_conversation
             .title()
-            .map(|t| crate::tr!("workspace", "workspace-moved-to-cloud", title = t.clone()));
+            .map(|t| crate::tr!("workspace", "moved-to-cloud", title = t.clone()));
         ctx.spawn(
             async move {
                 ai_client
@@ -13424,7 +13424,7 @@ impl Workspace {
         // Materialize the fork locally so the new pane can restore it.
         let title_override = source_conversation
             .title()
-            .map(|t| crate::tr!("workspace", "workspace-moved-to-cloud", title = t.clone()));
+            .map(|t| crate::tr!("workspace", "moved-to-cloud", title = t.clone()));
         let local_fork = match history_model.update(ctx, |history_model, ctx| {
             history_model.fork_conversation(
                 &source_conversation,
@@ -15734,7 +15734,7 @@ impl Workspace {
                                             )
                                             .with_object_id(object_id_clone)
                                             .with_link(
-                                                ToastLink::new(crate::tr!("common", "common-view-label").clone())
+                                                ToastLink::new(crate::tr!("common", "view-label").clone())
                                                     .with_onclick_action(
                                                         WorkspaceAction::ViewObjectInWarpDrive(
                                                             WarpDriveItemId::Object(
@@ -15756,7 +15756,7 @@ impl Workspace {
                                         || result.operation == ObjectOperation::Update
                                     {
                                         new_toast = new_toast.with_link(
-                                            ToastLink::new(crate::tr!("common", "common-view-label").clone()).with_onclick_action(
+                                            ToastLink::new(crate::tr!("common", "view-label").clone()).with_onclick_action(
                                                 WorkspaceAction::ViewObjectInWarpDrive(
                                                     WarpDriveItemId::Object(
                                                         CloudObjectTypeAndId::Workflow(workflow.id),
@@ -15769,7 +15769,7 @@ impl Workspace {
 
                                 if result.operation == ObjectOperation::Trash {
                                     new_toast = new_toast.with_link(
-                                        ToastLink::new(crate::tr!("common", "common-undo-label").clone()).with_onclick_action(
+                                        ToastLink::new(crate::tr!("common", "undo-label").clone()).with_onclick_action(
                                             WorkspaceAction::UndoTrash(cloud_object_type_and_id),
                                         ),
                                     )
@@ -17344,7 +17344,7 @@ impl Workspace {
                         icons::Icon::Grid,
                         &self.mouse_states.agent_management_view_button,
                         WorkspaceAction::ToggleAgentManagementView,
-                        crate::tr!("workspace", "workspace-toolbar-agent-management"),
+                        crate::tr!("workspace", "toolbar-agent-management"),
                         keybinding_name_to_display_string(
                             "workspace:toggle_agent_management_view",
                             ctx,
@@ -17374,7 +17374,7 @@ impl Workspace {
             if vertical_tabs_active {
                 (
                     self.vertical_tabs_panel_open,
-                    crate::tr!("workspace", "workspace-toolbar-tabs-panel"),
+                    crate::tr!("workspace", "toolbar-tabs-panel"),
                     WorkspaceAction::ToggleVerticalTabsPanel,
                     "workspace:toggle_vertical_tabs_panel",
                     "workspace:toggle_vertical_tabs_panel",
@@ -17387,13 +17387,13 @@ impl Workspace {
                         .copied()
                         .unwrap_or(ToolPanelView::WarpDrive)
                     {
-                        ToolPanelView::ProjectExplorer => crate::tr!("workspace", "workspace-project-explorer"),
-                        ToolPanelView::GlobalSearch { .. } => crate::tr!("workspace", "workspace-global-search"),
-                        ToolPanelView::WarpDrive => crate::tr!("workspace", "workspace-warp-drive-label"),
-                        ToolPanelView::ConversationListView => crate::tr!("workspace", "workspace-agent-conversations"),
+                        ToolPanelView::ProjectExplorer => crate::tr!("workspace", "project-explorer"),
+                        ToolPanelView::GlobalSearch { .. } => crate::tr!("workspace", "global-search"),
+                        ToolPanelView::WarpDrive => crate::tr!("workspace", "warp-drive-label"),
+                        ToolPanelView::ConversationListView => crate::tr!("workspace", "agent-conversations"),
                     }
                 } else {
-                    crate::tr!("workspace", "workspace-toolbar-tools-panel")
+                    crate::tr!("workspace", "toolbar-tools-panel")
                 };
                 (
                     self.active_tab_pane_group().as_ref(ctx).left_panel_open,
@@ -17441,13 +17441,13 @@ impl Workspace {
                 .copied()
                 .unwrap_or(ToolPanelView::WarpDrive)
             {
-                ToolPanelView::ProjectExplorer => crate::tr!("workspace", "workspace-project-explorer"),
-                ToolPanelView::GlobalSearch { .. } => crate::tr!("workspace", "workspace-global-search"),
-                ToolPanelView::WarpDrive => crate::tr!("workspace", "workspace-warp-drive-label"),
-                ToolPanelView::ConversationListView => crate::tr!("workspace", "workspace-agent-conversations"),
+                ToolPanelView::ProjectExplorer => crate::tr!("workspace", "project-explorer"),
+                ToolPanelView::GlobalSearch { .. } => crate::tr!("workspace", "global-search"),
+                ToolPanelView::WarpDrive => crate::tr!("workspace", "warp-drive-label"),
+                ToolPanelView::ConversationListView => crate::tr!("workspace", "agent-conversations"),
             }
         } else {
-            crate::tr!("workspace", "workspace-toolbar-tools-panel")
+            crate::tr!("workspace", "toolbar-tools-panel")
         };
 
         SavePosition::new(
@@ -17604,7 +17604,7 @@ impl Workspace {
             button
                 .with_tooltip(self.render_tab_bar_icon_button_tooltip(
                     appearance,
-                    crate::tr!("workspace", "workspace-code-review-panel"),
+                    crate::tr!("workspace", "code-review-panel"),
                     keybinding_name_to_display_string("workspace:toggle_right_panel", ctx),
                 ))
                 .build()
@@ -18100,7 +18100,7 @@ impl Workspace {
                 WorkspaceAction::ToggleNotificationMailbox {
                     select_first: false,
                 },
-                crate::tr!("workspace", "workspace-toolbar-notifications"),
+                crate::tr!("workspace", "toolbar-notifications"),
                 keybinding_name_to_display_string(TOGGLE_NOTIFICATION_MAILBOX_BINDING_NAME, ctx),
                 is_inbox_active,
                 false,
@@ -18369,10 +18369,10 @@ impl Workspace {
         const BUTTON_WIDTH: f32 = 24. + SIDE_MENU_WIDTH;
         const BUTTON_LEFT_MARGIN: f32 = 4.;
 
-        let new_tab_tool_tip_label_text = crate::tr!("workspace", "workspace-new-tab");
+        let new_tab_tool_tip_label_text = crate::tr!("workspace", "new-tab");
         let new_tab_tool_tip_sublabel_text =
             keybinding_name_to_display_string(NEW_TAB_BINDING_NAME, ctx);
-        let tab_configs_tool_tip_label_text = crate::tr!("workspace", "workspace-tab-configs");
+        let tab_configs_tool_tip_label_text = crate::tr!("workspace", "tab-configs");
         let tab_configs_tool_tip_sublabel_text =
             keybinding_name_to_display_string(TOGGLE_TAB_CONFIGS_MENU_BINDING_NAME, ctx);
         let appearance = Appearance::as_ref(ctx);
@@ -18613,7 +18613,7 @@ impl Workspace {
                 icons::Icon::Lightbulb,
                 &self.mouse_states.resource_center_icon,
                 WorkspaceAction::ToggleResourceCenter,
-                crate::tr!("workspace", "workspace-warp-essentials"),
+                crate::tr!("workspace", "warp-essentials"),
                 self.cached_keybindings[TOGGLE_RESOURCE_CENTER_KEYBINDING_NAME].clone(),
                 false,
                 false,
@@ -18655,7 +18655,7 @@ impl Workspace {
                 icons::Icon::Gear,
                 &self.mouse_states.settings_icon,
                 WorkspaceAction::ShowSettings,
-                crate::tr!("common", "common-settings-label"),
+                crate::tr!("common", "settings-label"),
                 self.cached_keybindings[SHOW_SETTINGS_KEYBINDING_NAME].clone(),
                 false,
                 false,
@@ -18696,7 +18696,7 @@ impl Workspace {
                 Some(hovered_styles),
                 None,
             )
-            .with_centered_text_label(crate::tr!("workspace", "workspace-sign-up"));
+            .with_centered_text_label(crate::tr!("workspace", "sign-up"));
 
         Align::new(
             button
@@ -18738,7 +18738,7 @@ impl Workspace {
                 Some(hovered_styles),
                 None,
             )
-            .with_centered_text_label(crate::tr!("workspace", "workspace-sign-up"));
+            .with_centered_text_label(crate::tr!("workspace", "sign-up"));
 
         Align::new(
             button
@@ -18754,7 +18754,7 @@ impl Workspace {
     fn render_offline_button(&self, appearance: &Appearance) -> Box<dyn Element> {
         let ui_builder = appearance.ui_builder().clone();
 
-        let tool_tip_label_text = crate::tr!("workspace", "workspace-offline-tooltip");
+        let tool_tip_label_text = crate::tr!("workspace", "offline-tooltip");
         let icon = ConstrainedBox::new(
             Container::new(
                 icons::Icon::CloudOffline
@@ -19126,7 +19126,7 @@ impl Workspace {
             description,
             secondary_button,
             button: Some(WorkspaceBannerButtonDetails {
-                text: crate::tr!("common", "common-open-file-label"),
+                text: crate::tr!("common", "open-file-label"),
                 action: WorkspaceAction::OpenSettingsFile,
                 variant: BannerButtonVariant::Outlined,
                 icon: None,
@@ -19185,7 +19185,7 @@ impl Workspace {
                         description,
                         secondary_button: None,
                         button: Some(WorkspaceBannerButtonDetails {
-                            text: crate::tr!("workspace", "workspace-update-warp-manually"),
+                            text: crate::tr!("workspace", "update-warp-manually"),
                             action: WorkspaceAction::DownloadNewVersion,
                             variant: BannerButtonVariant::Outlined,
                             icon: None,
@@ -19210,7 +19210,7 @@ impl Workspace {
                         description,
                         secondary_button: None,
                         button: Some(WorkspaceBannerButtonDetails {
-                            text: crate::tr!("workspace", "workspace-update-warp-manually"),
+                            text: crate::tr!("workspace", "update-warp-manually"),
                             action: WorkspaceAction::DownloadNewVersion,
                             variant: BannerButtonVariant::Outlined,
                             icon: None,
@@ -24791,7 +24791,7 @@ fn set_opencode_warp_plugin(new_entry: &str) -> String {
     plugins.push(serde_json::Value::String(new_entry.to_string()));
 
     if let Err(e) = std::fs::create_dir_all(&config_dir) {
-        return crate::tr!("workspace", "workspace-failed-config-dir", error = e.to_string());
+        return crate::tr!("workspace", "failed-config-dir", error = e.to_string());
     }
 
     match serde_json::to_string_pretty(&config) {

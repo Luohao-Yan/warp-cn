@@ -42,30 +42,30 @@ use warpui::{
 
 const HEADER_FONT_SIZE: f32 = 18.;
 const HEADER_MARGIN_BOTTOM: f32 = 32.;
-static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-invite-friend"));
-static ANONYMOUS_USER_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-signup-prompt"));
+static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-friend"));
+static ANONYMOUS_USER_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-signup-prompt"));
 
 const INVITE_FIELD_LABEL_BOTTOM_MARGIN: f32 = 8.;
 
 const LINK_BOTTOM_MARGIN: f32 = 12.;
 const LINK_TEXT_PADDING: f32 = 10.;
 const LINK_CORNER_RADIUS: Radius = Radius::Pixels(4.);
-static LINK_ERROR_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-load-error"));
+static LINK_ERROR_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-load-error"));
 
 const BUTTON_WIDTH: f32 = 98.;
 const BUTTON_HEIGHT: f32 = 36.;
 const BUTTON_LEFT_MARGIN: f32 = 8.;
 const BUTTON_FONT_SIZE: f32 = 12.;
-static LINK_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-copy-link"));
-static EMAIL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-send"));
-static EMAIL_BUTTON_SENDING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-sending"));
-static LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-loading"));
+static LINK_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "copy-link"));
+static EMAIL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "send"));
+static EMAIL_BUTTON_SENDING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "sending"));
+static LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "loading"));
 
-static LINK_COPIED_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-link-copied"));
-static EMAIL_SUCCESS_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-email-sent-success"));
-static EMAIL_FAILURE_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-email-sent-failure"));
+static LINK_COPIED_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "link-copied"));
+static EMAIL_SUCCESS_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-sent-success"));
+static EMAIL_FAILURE_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-sent-failure"));
 
-static REWARD_INTRO: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-reward-intro"));
+static REWARD_INTRO: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-reward-intro"));
 const REWARD_INTRO_FONT_SIZE: f32 = 14.;
 const REWARD_SECTION_VERTICAL_SPACING: f32 = 24.;
 
@@ -87,8 +87,8 @@ const METER_TOP_MARGIN: f32 = 16.;
 const METER_RIGHT_MARGIN: f32 = 12.;
 
 const CLAIMED_REFERRALS_LABEL_HORIZONTAL_SPACING: f32 = 4.;
-static CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-singular"));
-static CLAIMED_REFERRALS_COUNT_LABEL_PLURAL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-plural"));
+static CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-singular"));
+static CLAIMED_REFERRALS_COUNT_LABEL_PLURAL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-plural"));
 const CLAIMED_REFERRALS_LABEL_WIDTH: f32 = 52.;
 const CLAIMED_REFERRALS_LABEL_FONT_SIZE: f32 = 14.;
 const CLAIMED_REFERRALS_COUNT_FONT_SIZE: f32 = 48.;
@@ -96,14 +96,14 @@ const CLAIMED_REFERRAL_COUNT_LEFT_MARGIN: f32 = 40.;
 
 const CLAIMED_REFERRAL_CLIP: usize = 999;
 
-static TERMS_LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-terms"));
+static TERMS_LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-terms"));
 const TERMS_URL: &str =
     "https://docs.warp.dev/support-and-community/community/refer-a-friend#referral-program-terms-and-conditions";
-static TERMS_CONTACT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-referral-contact"));
+static TERMS_CONTACT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-contact"));
 
-static LINK_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-link-label"));
-static EMAIL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-email-label"));
-static SIGN_UP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-sign-up"));
+static LINK_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "link-label"));
+static EMAIL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-label"));
+static SIGN_UP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "sign-up"));
 
 enum ApiState {
     Loading,
@@ -158,56 +158,56 @@ lazy_static! {
             icon_path: "bundled/svg/referral-theme.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: crate::tr!("settings", "settings-reward-exclusive-theme"),
+            label: crate::tr!("settings", "reward-exclusive-theme"),
         },
         Reward {
             required_referral_count: 5,
             icon_path: "bundled/svg/referral-keycaps.svg",
             icon_width: 56.,
             icon_height: 56.,
-            label: crate::tr!("settings", "settings-reward-keycaps-stickers"),
+            label: crate::tr!("settings", "reward-keycaps-stickers"),
         },
         Reward {
             required_referral_count: 10,
             icon_path: "bundled/svg/referral-tshirt.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: crate::tr!("settings", "settings-reward-tshirt"),
+            label: crate::tr!("settings", "reward-tshirt"),
         },
         Reward {
             required_referral_count: 20,
             icon_path: "bundled/svg/referral-notebook.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: crate::tr!("settings", "settings-reward-notebook"),
+            label: crate::tr!("settings", "reward-notebook"),
         },
         Reward {
             required_referral_count: 35,
             icon_path: "bundled/svg/referral-hat.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: crate::tr!("settings", "settings-reward-baseball-cap"),
+            label: crate::tr!("settings", "reward-baseball-cap"),
         },
         Reward {
             required_referral_count: 50,
             icon_path: "bundled/svg/referral-hoodie.svg",
             icon_width: 64.,
             icon_height: 64.,
-            label: crate::tr!("settings", "settings-reward-hoodie"),
+            label: crate::tr!("settings", "reward-hoodie"),
         },
         Reward {
             required_referral_count: 75,
             icon_path: "bundled/svg/referral-hydroflask.svg",
             icon_width: 48.,
             icon_height: 48.,
-            label: crate::tr!("settings", "settings-reward-hydro-flask"),
+            label: crate::tr!("settings", "reward-hydro-flask"),
         },
         Reward {
             required_referral_count: 100,
             icon_path: "bundled/svg/referral-backpack.svg",
             icon_width: 50.,
             icon_height: 50.,
-            label: crate::tr!("settings", "settings-reward-backpack"),
+            label: crate::tr!("settings", "reward-backpack"),
         },
     ];
 }
@@ -465,9 +465,9 @@ impl EmailValidationError {
     /// The user-readable error descriptions.
     fn ui_message(&self) -> String {
         match self {
-            EmailValidationError::Empty => crate::tr!("settings", "settings-please-enter-email"),
+            EmailValidationError::Empty => crate::tr!("settings", "please-enter-email"),
             EmailValidationError::Invalid(invalid_email) => {
-                crate::tr!("settings", "settings-referral-invalid-email", email = invalid_email.as_str())
+                crate::tr!("settings", "referral-invalid-email", email = invalid_email.as_str())
             }
         }
     }
@@ -1063,7 +1063,7 @@ impl ReferralsWidget {
         let claimed_count_text = if claimed_count <= CLAIMED_REFERRAL_CLIP {
             claimed_count.to_string()
         } else {
-            crate::tr!("settings", "settings-referral-claimed-count", count = claimed_count)
+            crate::tr!("settings", "referral-claimed-count", count = claimed_count)
         };
 
         let current_referrals_label = match claimed_count {

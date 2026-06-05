@@ -21,10 +21,10 @@ use warpui::{
 };
 
 static EXPLANATION_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-init-environment-explanation-text")
+    crate::tr!("terminal", "init-environment-explanation-text")
 });
 static NO_REPOS_HELP_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-init-environment-no-repos-help-text")
+    crate::tr!("terminal", "init-environment-no-repos-help-text")
 });
 
 #[derive(Debug, Clone)]
@@ -90,7 +90,7 @@ impl InitEnvironmentBlock {
             ),
             // Skip button
             simple_navigation_button(
-                crate::tr!("common", "common-cancel-label").clone(),
+                crate::tr!("common", "cancel-label").clone(),
                 MouseStateHandle::default(),
                 InitEnvironmentBlockAction::Skip,
                 false,
@@ -161,7 +161,7 @@ impl View for InitEnvironmentBlock {
 
         let rendered_step = match &self.setup_state {
             SetupState::Pending { action_view } => self.render_pending_step(action_view, app),
-            SetupState::Skipped => RenderableAction::new(&crate::tr!("terminal", "terminal-env-setup-cancelled"), app)
+            SetupState::Skipped => RenderableAction::new(&crate::tr!("terminal", "env-setup-cancelled"), app)
                 .with_icon(cancelled_icon(appearance).finish())
                 .with_content_item_spacing()
                 .render(app)

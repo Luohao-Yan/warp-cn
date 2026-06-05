@@ -40,7 +40,7 @@ use super::{
 /// The saved position ID for the block insertion button.
 const BLOCK_INSERT_BUTTON_ID: &str = "notebook_block_insertion_button";
 
-static INSERT_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-insert-block"));
+static INSERT_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "insert-block"));
 
 /// Where the block insertion menu was triggered from.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -107,7 +107,7 @@ impl BlockInsertionMenuState {
         }
 
         if embedded_objects_enabled {
-            let embed_label = crate::tr!("notebooks", "notebooks-block-embed");
+            let embed_label = crate::tr!("notebooks", "block-embed");
             menu.add_item(
                 MenuItemFields::new(&embed_label)
                     .with_icon(Icon::EmbedBlock)
@@ -128,7 +128,7 @@ impl BlockInsertionMenuState {
             menu.add_item(item_fields.into_item());
         }
 
-        let divider_label = crate::tr!("notebooks", "notebooks-block-divider");
+        let divider_label = crate::tr!("notebooks", "block-divider");
         menu.add_item(
             MenuItemFields::new(&divider_label)
                 .with_icon(Icon::HorizontalRuleBlock)
@@ -250,7 +250,7 @@ impl RichTextEditorView {
             let title = model
                 .get_notebook(id)
                 .map(|notebook| notebook.model().title.clone())
-                .unwrap_or_else(|| crate::tr!("notebooks", "notebooks-untitled"));
+                .unwrap_or_else(|| crate::tr!("notebooks", "untitled"));
             let link = model
                 .get_by_uid(&CloudObjectTypeAndId::Notebook(*id).uid())
                 .and_then(|object| object.object_link());

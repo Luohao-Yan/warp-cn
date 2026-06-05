@@ -80,8 +80,7 @@ impl std::fmt::Display for ChipValue {
                 write!(
                     f,
                     "{}",
-                    crate::tr!("context_chips", "git-diff-stats",
-                        files = g.files_changed as usize,
+                    crate::tr!("context_chips", "git-diff-stats", files = g.files_changed as usize,
                         added = g.lines_added as usize,
                         removed = g.lines_removed as usize
                     )

@@ -160,10 +160,10 @@ impl AgentNotificationsModel {
                 CLIAgentSessionStatus::Success => {
                     let title = session_context
                         .display_title()
-                        .unwrap_or_else(|| crate::tr!("agent_cloud", "agent-cloud-completed", name = agent.display_name()));
+                        .unwrap_or_else(|| crate::tr!("agent_cloud", "completed", name = agent.display_name()));
                     let message = match agent {
-                        CLIAgent::Codex => crate::tr!("ai", "ai-notification-from-codex"),
-                        _ => crate::tr!("ai", "ai-task-completed"),
+                        CLIAgent::Codex => crate::tr!("ai", "notification-from-codex"),
+                        _ => crate::tr!("ai", "task-completed"),
                     };
                     let metadata = TerminalViewMetadata::lookup(*terminal_view_id, ctx);
                     self.add_notification(
@@ -184,13 +184,13 @@ impl AgentNotificationsModel {
                 CLIAgentSessionStatus::Blocked { message } => {
                     let title = session_context
                         .display_title()
-                        .unwrap_or_else(|| crate::tr!("agent_cloud", "agent-cloud-needs-attention", name = agent.display_name()));
+                        .unwrap_or_else(|| crate::tr!("agent_cloud", "needs-attention", name = agent.display_name()));
                     let metadata = TerminalViewMetadata::lookup(*terminal_view_id, ctx);
                     self.add_notification(
                         title,
                         message
                             .clone()
-                            .unwrap_or_else(|| crate::tr!("ai", "ai-waiting-for-input")),
+                            .unwrap_or_else(|| crate::tr!("ai", "waiting-for-input")),
                         NotificationCategory::Request,
                         NotificationSourceAgent::CLI {
                             agent: *agent,
@@ -345,10 +345,10 @@ impl AgentNotificationsModel {
                 .and_then(|c| c.agent_name())
                 .map(|name| name.to_owned())
                 .or(latest_query)
-                .unwrap_or_else(|| crate::tr!("ai", "ai-child-agent"));
+                .unwrap_or_else(|| crate::tr!("ai", "child-agent"));
             (child_open || parent_open, nav_terminal_view_id, child_name)
         } else {
-            let title = latest_query.unwrap_or_else(|| crate::tr!("ai", "ai-agent-task"));
+            let title = latest_query.unwrap_or_else(|| crate::tr!("ai", "agent-task"));
             (
                 active_views.is_conversation_open(conversation_id, ctx),
                 terminal_view_id,
@@ -377,9 +377,9 @@ impl AgentNotificationsModel {
             ConversationStatus::Success => {
                 let artifacts = self.flush_pending_artifacts(conversation_id);
                 let message = if is_child {
-                    crate::tr!("ai", "ai-child-agent-completed")
+                    crate::tr!("ai", "child-agent-completed")
                 } else {
-                    crate::tr!("ai", "ai-task-completed")
+                    crate::tr!("ai", "task-completed")
                 };
                 self.add_notification(
                     title,
@@ -396,9 +396,9 @@ impl AgentNotificationsModel {
             ConversationStatus::Cancelled => {
                 let artifacts = self.flush_pending_artifacts(conversation_id);
                 let message = if is_child {
-                    crate::tr!("ai", "ai-child-agent-cancelled")
+                    crate::tr!("ai", "child-agent-cancelled")
                 } else {
-                    crate::tr!("ai", "ai-task-cancelled")
+                    crate::tr!("ai", "task-cancelled")
                 };
                 self.add_notification(
                     title,
@@ -428,9 +428,9 @@ impl AgentNotificationsModel {
             ConversationStatus::Error => {
                 let artifacts = self.flush_pending_artifacts(conversation_id);
                 let message = if is_child {
-                    crate::tr!("ai", "ai-child-agent-error")
+                    crate::tr!("ai", "child-agent-error")
                 } else {
-                    crate::tr!("ai", "ai-something-went-wrong")
+                    crate::tr!("ai", "something-went-wrong")
                 };
                 self.add_notification(
                     title,

@@ -61,8 +61,8 @@ const COPY_BUTTON_SIZE: f32 = 14.;
 const TERMINAL_INPUT_BUTTON_SIZE: f32 = 20.;
 const SAVE_AS_WORKFLOW_BUTTON_SIZE: f32 = 20.;
 
-static HOW_DO_I_FIX_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-how-do-i-fix"));
-static SHOW_EXAMPLES_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-show-examples"));
+static HOW_DO_I_FIX_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "how-do-i-fix"));
+static SHOW_EXAMPLES_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "show-examples"));
 static WHAT_TO_DO_NEXT_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "what-should-i-do-next"));
 static IN_FLIGHT_REQUEST_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "generating-answer"));
 static ACCURACY_NOTICE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-responses-can-be-inaccurate"));

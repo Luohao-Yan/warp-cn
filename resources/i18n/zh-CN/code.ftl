@@ -211,91 +211,6 @@ code-cycle-suggestions = 切换建议
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
-code-code-discard-this-version = { code-discard-this-version }
-code-code-overwrite-label = { code-overwrite-label }
-code-code-reject = { code-reject }
-code-code-replace-label = { code-replace-label }
-code-code-explorer-remote = { code-explorer-remote }
-code-code-explorer-disabled = { code-explorer-disabled }
-code-code-explorer-wsl = { code-explorer-wsl }
-code-code-review-tooltip = { code-review-tooltip }
-code-code-review-remote = { code-review-remote }
-code-code-review-disabled = { code-review-disabled }
-code-code-review-wsl = { code-review-wsl }
-code-code-hint = { code-hint }
-code-code-diagnostic = { code-diagnostic }
-code-code-find-within-block-tooltip = { code-find-within-block-tooltip }
-code-code-find-next-occurrence = { code-find-next-occurrence }
-code-code-find-prev-occurrence = { code-find-prev-occurrence }
-code-code-match-index = { code-match-index }
-code-code-match-index-no-current = { code-match-index-no-current }
-code-code-folder-too-many-files = { code-folder-too-many-files }
-code-code-project-explorer-unavailable = { code-project-explorer-unavailable }
-code-code-open-agent-input-tab-config = { code-open-agent-input-tab-config }
-code-code-enable-ai-tab-config = { code-enable-ai-tab-config }
-code-code-enable-server = 启用 { $server }
-code-code-install-server = 安装 { $server }
-code-code-install-servers = { code-install-servers }
-code-code-enable-servers = { code-enable-servers }
-code-code-installing-server = 正在安装 { $server }…
-code-code-lang-support-unavailable-file = { code-lang-support-unavailable-file }
-code-code-lang-support-not-enabled = { $name } 的语言支持当前未启用
-code-code-this-codebase = { code-this-codebase }
-code-code-lang-server-unavailable = { code-lang-server-unavailable }
-code-code-lang-support-unavailable = { $name } 的语言支持不可用
-code-code-add-diff-hunk-as-context = { code-add-diff-hunk-as-context }
-code-code-save-changes-to-attach-as-context = { code-save-changes-to-attach-as-context }
-code-code-revert-diff-hunk = { code-revert-diff-hunk }
-code-code-save-changes-to-revert = { code-save-changes-to-revert }
-code-code-add-comment-on-line = { code-add-comment-on-line }
-code-code-save-changes-to-add-comment = { code-save-changes-to-add-comment }
-code-code-show-saved-comment = { code-show-saved-comment }
-code-code-suggested-fixes-based-on-your-last-command = { code-suggested-fixes-based-on-your-last-command }
-code-code-move-backward-one-word = { code-move-backward-one-word }
-code-code-move-forward-one-word = { code-move-forward-one-word }
-code-code-move-cursor-up = { code-move-cursor-up }
-code-code-move-cursor-down = { code-move-cursor-down }
-code-code-move-cursor-left = { code-move-cursor-left }
-code-code-move-cursor-right = { code-move-cursor-right }
-code-code-move-to-line-start = { code-move-to-line-start }
-code-code-home = { code-home }
-code-code-move-to-line-end = { code-move-to-line-end }
-code-code-end = { code-end }
-code-code-cursor-at-buffer-start = { code-cursor-at-buffer-start }
-code-code-cursor-at-buffer-end = { code-cursor-at-buffer-end }
-code-code-select-one-word-to-the-left = { code-select-one-word-to-the-left }
-code-code-select-one-word-to-the-right = { code-select-one-word-to-the-right }
-code-code-select-one-character-to-the-left = { code-select-one-character-to-the-left }
-code-code-select-one-character-to-the-right = { code-select-one-character-to-the-right }
-code-code-select-up = { code-select-up }
-code-code-select-down = { code-select-down }
-code-code-select-to-start-of-line = { code-select-to-start-of-line }
-code-code-select-to-end-of-line = { code-select-to-end-of-line }
-code-code-select-to-line-end = { code-select-to-line-end }
-code-code-select-to-line-start = { code-select-to-line-start }
-code-code-backspace = { code-backspace }
-code-code-toggle-comment = { code-toggle-comment }
-code-code-scroll-down-half-page-vim = { code-scroll-down-half-page-vim }
-code-code-scroll-up-half-page-vim = { code-scroll-up-half-page-vim }
-code-code-cut-word-left = { code-cut-word-left }
-code-code-delete-word-left = { code-delete-word-left }
-code-code-cut-word-right = { code-cut-word-right }
-code-code-delete-word-right = { code-delete-word-right }
-code-code-cut-all-left = { code-cut-all-left }
-code-code-delete-all-left = { code-delete-all-left }
-code-code-cut-all-right = { code-cut-all-right }
-code-code-delete-all-right = { code-delete-all-right }
-code-code-exit-vim-insert-mode = { code-exit-vim-insert-mode }
-code-code-find-in-code-editor = { code-find-in-code-editor }
-code-code-go-to-line = { code-go-to-line }
-code-code-save-file-as = { code-save-file-as }
-code-code-save-file = { code-save-file }
-code-code-close-all-tabs = { code-close-all-tabs }
-code-code-close-saved-tabs = { code-close-saved-tabs }
-code-code-failed-to-load-file = { code-failed-to-load-file }
-code-code-failed-to-save-file = { code-failed-to-save-file }
-code-code-file-saved-toast = { code-file-saved-toast }
-
 ## -- 查找引用和页脚字符串 ---------------------------------------------------------
 
 code-showing-one-reference = 显示 1 个引用
@@ -307,13 +222,3 @@ code-server-error-detail = { $name }：{ $error }
 
 ## -- 查找引用和页脚字符串的双前缀别名 ---------------------------------------------
 
-code-code-showing-one-reference = { code-showing-one-reference }
-code-code-showing-references = 显示 { $count } 个引用
-code-code-server-status-message = { $name }：{ $message }
-code-code-server-stopped = { $name }：已停止
-code-code-server-error = { $name }：错误
-code-code-server-error-detail = { $name }：{ $error }
-
-code-code-loading = { code-loading }
-code-code-add-as-context = { code-add-as-context }
-code-code-cycle-suggestions = { code-cycle-suggestions }

@@ -62,15 +62,6 @@ auth-invalid-redirect-url = The redirect URL pasted did not originate from this 
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
-auth-auth-enter-token-placeholder = { auth-enter-token-placeholder }
-auth-auth-link-sso = { auth-link-sso }
-auth-auth-paste-token-modal-subtitle = { auth-paste-token-modal-subtitle }
-auth-auth-paste-token-modal-title = { auth-paste-token-modal-title }
-auth-auth-signup-title = { auth-signup-title }
-auth-auth-sso-detail = { auth-sso-detail }
-auth-auth-sso-header = { auth-sso-header }
-auth-auth-token-placeholder = { auth-token-placeholder }
-
 ## -- Additional auth strings --
 auth-by-continuing = By continuing, you agree to Warp's
 auth-already-have-account = Already have an account?
@@ -153,90 +144,10 @@ auth-loading = Loading...
 auth-error-authenticating = Error authenticating - please refresh the page
 
 ## -- Double-prefix aliases for auth view body strings --
-auth-auth-click-here-paste-token = { auth-click-here-paste-token }
-auth-auth-terms-of-service = { auth-terms-of-service }
-auth-auth-welcome-to-warp = { auth-welcome-to-warp }
-auth-auth-sign-up-for-warp = { auth-sign-up-for-warp }
-auth-auth-require-login-closeable = { auth-require-login-closeable }
-auth-auth-hit-drive-limit-closeable = { auth-hit-drive-limit-closeable }
-auth-auth-share-requirement-closeable = { auth-share-requirement-closeable }
-
 ## -- Double-prefix aliases for new auth strings --
-auth-auth-by-continuing = { auth-by-continuing }
-auth-auth-already-have-account = { auth-already-have-account }
-auth-auth-dont-want-sign-in = { auth-dont-want-sign-in }
-auth-auth-browser-hasnt-launched = { auth-browser-hasnt-launched }
-auth-auth-using-warp-offline = { auth-using-warp-offline }
-auth-auth-privacy-settings = { auth-privacy-settings }
-auth-auth-override-description = { auth-override-description }
-auth-auth-override-cannot-undo = { auth-override-cannot-undo }
-auth-auth-override-new-login-header = { auth-override-new-login-header }
-auth-auth-override-confirm-delete-header = { auth-override-confirm-delete-header }
-auth-auth-override-export-data = { auth-override-export-data }
-auth-auth-override-export-later = { auth-override-export-later }
-auth-auth-browser-token-placeholder = { auth-browser-token-placeholder }
-auth-auth-opt-out-analytics-1 = { auth-opt-out-analytics-1 }
-auth-auth-opt-out-analytics-2 = { auth-opt-out-analytics-2 }
-auth-auth-skip-login-confirm = { auth-skip-login-confirm }
-auth-auth-skip-login-warning-1 = { auth-skip-login-warning-1 }
-auth-auth-skip-login-warning-2 = { auth-skip-login-warning-2 }
-auth-auth-skip-login-yes = { auth-skip-login-yes }
-auth-auth-browser-sign-in-header = { auth-browser-sign-in-header }
-auth-auth-copy-url = { auth-copy-url }
-auth-auth-open-manually = { auth-open-manually }
-
 ## -- Double-prefix aliases for new auth strings --
-
-auth-auth-press-enter-to-open-browser = { auth-press-enter-to-open-browser }
-auth-auth-get-started-with-warp-drive = { auth-get-started-with-warp-drive }
-auth-auth-get-started-with-ai = { auth-get-started-with-ai }
-auth-auth-connect-drive-description = { auth-connect-drive-description }
-auth-auth-connect-ai-description = { auth-connect-ai-description }
-auth-auth-terms-of-service = { auth-terms-of-service }
-auth-auth-sign-in-on-browser = { auth-sign-in-on-browser }
-auth-auth-disable-warp-drive = { auth-disable-warp-drive }
-auth-auth-disable-ai-features = { auth-disable-ai-features }
-auth-auth-enable-warp-drive = { auth-enable-warp-drive }
-auth-auth-enable-ai-features = { auth-enable-ai-features }
-auth-auth-opt-out-analytics-and-ai = { auth-opt-out-analytics-and-ai }
-auth-auth-opt-out-analytics = { auth-opt-out-analytics }
-auth-auth-copy-the-url = { auth-copy-the-url }
-auth-auth-and-open = { auth-and-open }
-auth-auth-the-page-manually = { auth-the-page-manually }
-auth-auth-click-here-paste-token-slide = { auth-click-here-paste-token-slide }
-auth-auth-privacy-settings-slide = { auth-privacy-settings-slide }
-auth-auth-sure-disable-warp-drive = { auth-sure-disable-warp-drive }
-auth-auth-sure-disable-ai-features = { auth-sure-disable-ai-features }
-auth-auth-warp-drive-benefits = { auth-warp-drive-benefits }
-auth-auth-ai-benefits = { auth-ai-benefits }
-auth-auth-logout-question = { auth-logout-question }
-auth-auth-yes-log-out = { auth-yes-log-out }
-auth-auth-show-running-processes = { auth-show-running-processes }
-auth-auth-long-running-warning = { auth-long-running-warning }
-auth-auth-shared-session-warning = { auth-shared-session-warning }
-auth-auth-unsynced-warning = { auth-unsynced-warning }
-auth-auth-unsaved-files-warning = { auth-unsaved-files-warning }
-auth-auth-loading = { auth-loading }
-auth-auth-error-authenticating = { auth-error-authenticating }
 
 ## -- Double-prefix aliases for offline overlay strings --
 
-auth-auth-offline-message = { auth-offline-message }
-auth-auth-offline-paragraph-1 = { auth-offline-paragraph-1 }
-auth-auth-offline-paragraph-2 = { auth-offline-paragraph-2 }
-auth-auth-offline-paragraph-3 = { auth-offline-paragraph-3 }
-
 ## -- Double-prefix aliases for privacy settings strings --
 
-auth-auth-help-improve-warp = { auth-help-improve-warp }
-auth-auth-telemetry-description = { auth-telemetry-description }
-auth-auth-send-crash-reports = { auth-send-crash-reports }
-auth-auth-crash-reporting-description = { auth-crash-reporting-description }
-auth-auth-store-ai-conversations = { auth-store-ai-conversations }
-auth-auth-cloud-conversation-enabled-description = { auth-cloud-conversation-enabled-description }
-auth-auth-cloud-conversation-disabled-description = { auth-cloud-conversation-disabled-description }
-auth-auth-invalid-token-entered = { auth-invalid-token-entered }
-auth-auth-failed-login-manual-copy = { auth-failed-login-manual-copy }
-auth-auth-request-login-failed = { auth-request-login-failed }
-auth-auth-request-signup-failed = { auth-request-signup-failed }
-auth-auth-invalid-redirect-url = { auth-invalid-redirect-url }

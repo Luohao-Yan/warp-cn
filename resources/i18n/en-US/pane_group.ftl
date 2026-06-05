@@ -7,28 +7,28 @@
 
 ## -- Pane types ----------------------------------------------------------------
 
-pane-type-terminal = Terminal
-pane-type-notebook = Notebook
-pane-type-file = File
-pane-type-code = Code
-pane-type-code-diff = Code Diff
-pane-type-env-var-collection = Environment Variable Collection
-pane-type-environment-management = Environment Management
-pane-type-workflow = Workflow
-pane-type-settings = Settings
-pane-type-ai-fact = AI Fact
-pane-type-ai-document = AI Document
-pane-type-execution-profile-editor = Execution Profile Editor
-pane-type-get-started = GetStarted
-pane-type-network-log = Network Log
-pane-type-welcome = Welcome
-pane-type-placeholder = Placeholder
+pane-group-pane-type-terminal = Terminal
+pane-group-pane-type-notebook = Notebook
+pane-group-pane-type-file = File
+pane-group-pane-type-code = Code
+pane-group-pane-type-code-diff = Code Diff
+pane-group-pane-type-env-var-collection = Environment Variable Collection
+pane-group-pane-type-environment-management = Environment Management
+pane-group-pane-type-workflow = Workflow
+pane-group-pane-type-settings = Settings
+pane-group-pane-type-ai-fact = AI Fact
+pane-group-pane-type-ai-document = AI Document
+pane-group-pane-type-execution-profile-editor = Execution Profile Editor
+pane-group-pane-type-get-started = GetStarted
+pane-group-pane-type-network-log = Network Log
+pane-group-pane-type-welcome = Welcome
+pane-group-pane-type-placeholder = Placeholder
 
 ## -- Pane titles ----------------------------------------------------------------
 
-pane-get-started-title = Get started
-pane-new-tab-title = New tab
-pane-code-diff-title = Requested Edit
+pane-group-pane-get-started-title = Get started
+pane-group-pane-new-tab-title = New tab
+pane-group-pane-code-diff-title = Requested Edit
 
 ## -- Actions and banners --------------------------------------------------------
 

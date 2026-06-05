@@ -112,7 +112,7 @@ const BUTTON_SIZE: f32 = 20.;
 const CARD_AGENT_ICON_SIZE: f32 = 24.;
 const CREATOR_AVATAR_FONT_SIZE: f32 = 10.;
 
-static SESSION_EXPIRED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-session-expired-text"));
+static SESSION_EXPIRED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "session-expired-text"));
 
 pub fn init(app: &mut AppContext) {
     use crate::util::bindings::cmd_or_ctrl_shift;
@@ -853,8 +853,7 @@ impl AgentManagementView {
     fn update_creator_dropdown(&mut self, ctx: &mut ViewContext<Self>) {
         let creators = AgentConversationsModel::as_ref(ctx).get_all_creators(ctx);
         let creator_filter_name = match &self.filters.creator {
-            CreatorFilter::All => &crate::tr!("ai_assistant", "ai-filter-all"),
-            CreatorFilter::Specific { name, .. } => name,
+            CreatorFilter::All => &crate::tr!("ai_assistant", "ai-filter-all"), CreatorFilter::Specific { name, .. } => name,
         };
         self.creator_dropdown.update(ctx, |dropdown, ctx| {
             let all_label = crate::tr!("ai_assistant", "ai-filter-all");
@@ -1819,7 +1818,7 @@ impl AgentManagementView {
         let mut metadata_parts = Vec::new();
 
         if let Some(source) = &entry.display.source {
-            metadata_parts.push(crate::tr!("ai", "ai-source-label", source = source.display_name()));
+            metadata_parts.push(crate::tr!("ai", "source-label", source = source.display_name()));
         }
 
         let availability = HarnessAvailabilityModel::as_ref(app);
@@ -1851,11 +1850,11 @@ impl AgentManagementView {
         }
 
         if let Some(run_time) = &entry.display.run_time {
-            metadata_parts.push(crate::tr!("ai", "ai-run-time-label", run_time = run_time.as_str()));
+            metadata_parts.push(crate::tr!("ai", "run-time-label", run_time = run_time.as_str()));
         }
 
         if let Some(usage) = entry.display.request_usage.map(format_credits) {
-            metadata_parts.push(crate::tr!("ai", "ai-credits-used-label", usage = usage.as_str()));
+            metadata_parts.push(crate::tr!("ai", "credits-used-label", usage = usage.as_str()));
         }
 
         Text::new(metadata_parts.join(" • "), font_family, font_size)
@@ -2036,7 +2035,7 @@ impl AgentManagementView {
             let mut stack = Stack::new().with_child(loading_icon);
             if mouse_state.is_hovered() {
                 let tooltip = ui_builder
-                    .tool_tip(crate::tr!("agent_cloud", "agent-cloud-loading-cloud-agent-runs"))
+                    .tool_tip(crate::tr!("agent_cloud", "loading-cloud-agent-runs"))
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(

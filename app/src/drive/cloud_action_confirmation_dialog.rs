@@ -19,13 +19,13 @@ use crate::{
     },
 };
 
-static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-cancel"));
-static DELETE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-confirm-delete-team"));
-static LEAVE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-confirm-leave-team"));
-static DELETE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-delete-team-description"));
-static LEAVE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-leave-team-description"));
-static DELETE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-yes-delete"));
-static LEAVE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-yes-leave"));
+static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "cancel"));
+static DELETE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "confirm-delete-team"));
+static LEAVE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "confirm-leave-team"));
+static DELETE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "delete-team-description"));
+static LEAVE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "leave-team-description"));
+static DELETE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "yes-delete"));
+static LEAVE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "yes-leave"));
 
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;

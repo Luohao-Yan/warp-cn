@@ -61,7 +61,7 @@ where
         ..Default::default()
     };
 
-    let text = crate::tr!("auth", "auth-offline-message");
+    let text = crate::tr!("auth", "offline-message");
 
     let (button_color, button_variant) = action_button_color_and_variant(appearance);
     let button_styles = UiComponentStyles {
@@ -175,9 +175,9 @@ where
         ..Default::default()
     };
 
-    let paragraph_1 = crate::tr!("auth", "auth-offline-paragraph-1");
-    let paragraph_2 = crate::tr!("auth", "auth-offline-paragraph-2");
-    let paragraph_3 = crate::tr!("auth", "auth-offline-paragraph-3");
+    let paragraph_1 = crate::tr!("auth", "offline-paragraph-1");
+    let paragraph_2 = crate::tr!("auth", "offline-paragraph-2");
+    let paragraph_3 = crate::tr!("auth", "offline-paragraph-3");
 
     Container::new(
         Flex::column()
@@ -191,7 +191,7 @@ where
                 Container::new(
                     appearance
                         .ui_builder()
-                        .span(crate::tr!("auth", "auth-using-warp-offline"))
+                        .span(crate::tr!("auth", "using-warp-offline"))
                         .with_style(header_styles)
                         .build()
                         .finish(),
@@ -369,7 +369,7 @@ pub fn render_privacy_settings_overlay_body<A: Action + Clone + 'static>(
             .with_child(
                 Container::new(
                     ui_builder
-                        .span(crate::tr!("auth", "auth-privacy-settings"))
+                        .span(crate::tr!("auth", "privacy-settings"))
                         .with_style(header_styles)
                         .build()
                         .finish(),
@@ -456,7 +456,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
         .with_child(
             Shrinkable::new(
                 1.,
-                render_privacy_settings_section_header(crate::tr!("auth", "auth-help-improve-warp").as_str(), appearance).finish(),
+                render_privacy_settings_section_header(crate::tr!("auth", "help-improve-warp").as_str(), appearance).finish(),
             )
             .finish(),
         )
@@ -475,7 +475,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
 
     let telemetry_description = render_description(
         appearance,
-        crate::tr!("auth", "auth-telemetry-description").into(),
+        crate::tr!("auth", "telemetry-description").into(),
     );
 
     let telemetry_link = Flex::row()
@@ -501,7 +501,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
         .with_child(
             Shrinkable::new(
                 1.,
-                render_privacy_settings_section_header(crate::tr!("auth", "auth-send-crash-reports").as_str(), appearance).finish(),
+                render_privacy_settings_section_header(crate::tr!("auth", "send-crash-reports").as_str(), appearance).finish(),
             )
             .finish(),
         )
@@ -520,7 +520,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
 
     let crash_reporting_description = render_description(
         appearance,
-        crate::tr!("auth", "auth-crash-reporting-description").into(),
+        crate::tr!("auth", "crash-reporting-description").into(),
     );
 
     let toggle_cloud = actions.toggle_cloud_conversation_storage.clone();
@@ -531,7 +531,7 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
             Shrinkable::new(
                 1.,
                 render_privacy_settings_section_header(
-                    crate::tr!("auth", "auth-store-ai-conversations").as_str(),
+                    crate::tr!("auth", "store-ai-conversations").as_str(),
                     appearance,
                 )
                 .finish(),
@@ -552,9 +552,9 @@ pub fn render_privacy_settings_toggles<A: Action + Clone + 'static>(
         .finish();
 
     let cloud_conversation_storage_text = if PrivacySettings::as_ref(app).is_cloud_conversation_storage_enabled {
-            crate::tr!("auth", "auth-cloud-conversation-enabled-description")
+            crate::tr!("auth", "cloud-conversation-enabled-description")
         } else {
-            crate::tr!("auth", "auth-cloud-conversation-disabled-description")
+            crate::tr!("auth", "cloud-conversation-disabled-description")
         };
     let cloud_conversation_storage_description = render_description(
         appearance,

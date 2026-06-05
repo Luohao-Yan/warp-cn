@@ -56,52 +56,7 @@ agent-cloud-filter-with-count = { $label } ({ $count })
 
 ## -- Double-prefix aliases --
 
-agent-cloud-agent-cloud-tier-machine-text = 你的 agent 当前运行在 { $specs } 机器上。
-agent-cloud-agent-cloud-upgrade-label = { agent-cloud-upgrade-label }
-agent-cloud-agent-cloud-upgrade-suffix = { agent-cloud-upgrade-suffix }
-agent-cloud-agent-cloud-failed-title = { agent-cloud-failed-title }
-agent-cloud-agent-cloud-github-auth-title = { agent-cloud-github-auth-title }
-agent-cloud-agent-cloud-github-auth-message = { agent-cloud-github-auth-message }
-agent-cloud-agent-cloud-github-auth-button = { agent-cloud-github-auth-button }
-agent-cloud-agent-cloud-cancelled-title = { agent-cloud-cancelled-title }
-agent-cloud-agent-cloud-cancelled-subtitle = { agent-cloud-cancelled-subtitle }
-agent-cloud-agent-cloud-start-title = { agent-cloud-start-title }
-agent-cloud-agent-cloud-description-text = { agent-cloud-description-text }
-agent-cloud-agent-cloud-visit-docs = { agent-cloud-visit-docs }
-agent-cloud-agent-cloud-subheading = { agent-cloud-subheading }
-agent-cloud-agent-cloud-credits-single = { agent-cloud-credits-single }
-agent-cloud-agent-cloud-credits-plural = 你有 { $count } 个免费积分可用于 Oz 云端 Agent。
-agent-cloud-agent-cloud-starting-up = { agent-cloud-starting-up }
-agent-cloud-agent-cloud-interact-soon = { agent-cloud-interact-soon }
-agent-cloud-agent-cloud-agent-failed = { agent-cloud-agent-failed }
-agent-cloud-agent-cloud-agent-harness-tooltip = { agent-cloud-agent-harness-tooltip }
-agent-cloud-agent-cloud-agent-harness-header = { agent-cloud-agent-harness-header }
-agent-cloud-agent-cloud-warp-handoff-tooltip = { agent-cloud-warp-handoff-tooltip }
-agent-cloud-agent-cloud-disabled-by-admin = { agent-cloud-disabled-by-admin }
-agent-cloud-agent-cloud-execution-host-tooltip = { agent-cloud-execution-host-tooltip }
-agent-cloud-agent-cloud-execution-host-header = { agent-cloud-execution-host-header }
-agent-cloud-agent-cloud-search-models = { agent-cloud-search-models }
-agent-cloud-agent-cloud-choose-agent-model = { agent-cloud-choose-agent-model }
-agent-cloud-agent-cloud-no-results = { agent-cloud-no-results }
-agent-cloud-agent-cloud-default-model = { agent-cloud-default-model }
-agent-cloud-agent-cloud-secret-name-required = { agent-cloud-secret-name-required }
-agent-cloud-agent-cloud-select-api-key = 请选择一个 API 密钥或创建新的，以使用 { $display_name } 作为云端 Agent。
-agent-cloud-agent-cloud-failed-save-api-key = 保存 API 密钥失败：{ $error }
-agent-cloud-agent-cloud-new-cloud-agent = { agent-cloud-new-cloud-agent }
-agent-cloud-agent-cloud-starting-environment = { agent-cloud-starting-environment }
-agent-cloud-agent-cloud-agent-working-on-task = { agent-cloud-agent-working-on-task }
-agent-cloud-agent-cloud-agent-failed-status = { agent-cloud-agent-failed-status }
-agent-cloud-agent-cloud-authentication-required = { agent-cloud-authentication-required }
-agent-cloud-agent-cloud-cancelled = { agent-cloud-cancelled }
-agent-cloud-agent-cloud-agent-fallback-name = { agent-cloud-agent-fallback-name }
-agent-cloud-agent-cloud-running-agent = 正在运行 { $cli_name }...
-
 ## -- 代理状态字符串双前缀别名 -----------------------------------------------
-
-agent-cloud-agent-cloud-completed = { $name } 已完成
-agent-cloud-agent-cloud-needs-attention = { $name } 需要关注
-agent-cloud-agent-cloud-filter-with-count = { $label } ({ $count })
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
 
-agent-cloud-agent-cloud-loading-cloud-agent-runs = { agent-cloud-loading-cloud-agent-runs }

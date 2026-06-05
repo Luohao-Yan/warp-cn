@@ -31,8 +31,8 @@ struct ChangelogMouseStateHandles {
     view_changelogs_mouse_state: MouseStateHandle,
 }
 
-static CHANGELOG_FETCH_ERROR_MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("resource_center", "resource-center-changelog-fetch-error"));
-static CHANGELOG_LOADING_MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-loading-label"));
+static CHANGELOG_FETCH_ERROR_MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("resource_center", "changelog-fetch-error"));
+static CHANGELOG_LOADING_MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "loading-label"));
 
 pub struct ChangelogSectionView {
     changelog_model_handle: ModelHandle<ChangelogModel>,
@@ -367,7 +367,7 @@ impl SectionView for ChangelogSectionView {
             appearance
                 .ui_builder()
                 .link(
-                    crate::tr!("resource_center", "resource-center-read-all-changelogs").into(),
+                    crate::tr!("resource_center", "read-all-changelogs").into(),
                     Some("https://docs.warp.dev/changelog".into()),
                     None,
                     self.changelog_button_mouse_states

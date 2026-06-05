@@ -513,7 +513,7 @@ impl ServerCardView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_child(
                     Text::new(
-                        crate::tr!("settings", "settings-mcp-tools-available", count = tools.len()),
+                        crate::tr!("settings", "mcp-tools-available", count = tools.len()),
                         appearance.ui_font_family(),
                         appearance.ui_font_size(),
                     )
@@ -620,7 +620,7 @@ impl ServerCardView {
             ServerCardItemId::TemplatableMCP(template_uuid) => {
                 let cloud_server = CloudTemplatableMCPServer::get_by_uuid(&template_uuid, app);
                 if let Some(cloud_server) = cloud_server {
-                    lines.push(crate::tr!("settings", "settings-mcp-template-sync-id", sync_id = cloud_server.sync_id().to_string()));
+                    lines.push(crate::tr!("settings", "mcp-template-sync-id", sync_id = cloud_server.sync_id().to_string()));
                 }
             }
             ServerCardItemId::TemplatableMCPInstallation(installation_uuid) => {
@@ -630,13 +630,13 @@ impl ServerCardView {
                     let template_uuid = installation.template_uuid();
                     let gallery_uuid = installation.gallery_uuid();
                     let gallery_uuid_text = match gallery_uuid {
-                        Some(uuid) => crate::tr!("settings", "settings-mcp-gallery-id", uuid = uuid.to_string()),
-                        None => crate::tr!("settings", "settings-mcp-gallery-id", uuid = "None"),
+                        Some(uuid) => crate::tr!("settings", "mcp-gallery-id", uuid = uuid.to_string()),
+                        None => crate::tr!("settings", "mcp-gallery-id", uuid = "None"),
                     };
                     let cloud_server = CloudTemplatableMCPServer::get_by_uuid(&template_uuid, app);
                     let template_sync_id_text = match cloud_server {
                         Some(cloud_server) => {
-                            crate::tr!("settings", "settings-mcp-template-sync-id", sync_id = cloud_server.sync_id().to_string())
+                            crate::tr!("settings", "mcp-template-sync-id", sync_id = cloud_server.sync_id().to_string())
                         }
                         None => crate::tr!("settings", "mcp-no-template"),
                     };
@@ -807,7 +807,7 @@ impl ServerCardView {
                     self.build_icon_button(
                         appearance,
                         Icon::Pencil,
-                        crate::tr!("settings", "settings-mcp-edit"),
+                        crate::tr!("settings", "mcp-edit"),
                         self.mouse_handles.edit_icon_button.clone(),
                     )
                     .on_click(move |ctx, _, _| {

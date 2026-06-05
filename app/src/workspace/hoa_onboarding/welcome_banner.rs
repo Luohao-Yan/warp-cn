@@ -28,23 +28,23 @@ struct FeatureItem {
 
 static FEATURE_ITEM_VERTICAL_TABS: FeatureItem = FeatureItem {
     icon: Icon::LayoutAlt01,
-    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-vertical-tabs").clone()),
-    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-vertical-tabs-desc").clone()),
+    title: LazyLock::new(|| crate::tr!("workspace", "banner-vertical-tabs").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "banner-vertical-tabs-desc").clone()),
 };
 static FEATURE_ITEM_TAB_CONFIGS: FeatureItem = FeatureItem {
     icon: Icon::Sliders,
-    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-tab-configs").clone()),
-    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-tab-configs-desc").clone()),
+    title: LazyLock::new(|| crate::tr!("workspace", "banner-tab-configs").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "banner-tab-configs-desc").clone()),
 };
 static FEATURE_ITEM_AGENT_INBOX: FeatureItem = FeatureItem {
     icon: Icon::Inbox,
-    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-agent-inbox").clone()),
-    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-agent-inbox-desc").clone()),
+    title: LazyLock::new(|| crate::tr!("workspace", "banner-agent-inbox").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "banner-agent-inbox-desc").clone()),
 };
 static FEATURE_ITEM_NATIVE_REVIEW: FeatureItem = FeatureItem {
     icon: Icon::MessageCheckSquare,
-    title: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-native-review").clone()),
-    description: LazyLock::new(|| crate::tr!("workspace", "workspace-banner-native-review-desc").clone()),
+    title: LazyLock::new(|| crate::tr!("workspace", "banner-native-review").clone()),
+    description: LazyLock::new(|| crate::tr!("workspace", "banner-native-review-desc").clone()),
 };
 
 static FEATURE_ITEMS: &[&FeatureItem] = &[
@@ -54,7 +54,7 @@ static FEATURE_ITEMS: &[&FeatureItem] = &[
     &FEATURE_ITEM_NATIVE_REVIEW,
 ];
 
-static WELCOME_BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-welcome-banner-title").clone());
+static WELCOME_BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "welcome-banner-title").clone());
 
 pub fn render_welcome_banner(
     close_button: &ViewHandle<ActionButton>,
@@ -93,7 +93,7 @@ pub fn render_welcome_banner(
     );
 
     // "New" badge
-    let text = Text::new_inline(crate::tr!("common", "common-new-label").clone(), appearance.ui_font_family(), 14.)
+    let text = Text::new_inline(crate::tr!("common", "new-label").clone(), appearance.ui_font_family(), 14.)
         .with_color(PhenomenonStyle::modal_badge_text())
         .finish();
     let badge = ConstrainedBox::new(

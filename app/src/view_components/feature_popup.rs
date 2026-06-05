@@ -12,7 +12,7 @@ use warpui::{
 use crate::{appearance::Appearance, ui_components::icons::Icon};
 
 static COMMON_NEW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-new-badge"));
+    LazyLock::new(|| crate::tr!("common", "new-badge"));
 
 pub enum NewFeaturePopupLabel {
     /// A static label.

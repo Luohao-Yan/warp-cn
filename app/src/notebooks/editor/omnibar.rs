@@ -44,7 +44,7 @@ const OMNIBAR_PADDING: f32 = 4.;
 
 const ACTION_BUTTON_SIZE: f32 = 24.;
 
-static REMOVE_LINK_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-remove-link-a11y"));
+static REMOVE_LINK_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "remove-link-a11y"));
 
 pub enum OmnibarEvent {
     OpenLinkEditor,
@@ -451,7 +451,7 @@ impl TypedActionView for Omnibar {
             OmnibarAction::ConvertBlock(style) => {
                 let block_label = BlockType::from(style).label();
                 ActionAccessibilityContent::Custom(AccessibilityContent::new_without_help(
-                    crate::tr!("notebooks", "notebooks-convert-to-block-a11y", block_label = block_label),
+                    crate::tr!("notebooks", "convert-to-block-a11y", block_label = block_label),
                     WarpA11yRole::UserAction,
                 ))
             }

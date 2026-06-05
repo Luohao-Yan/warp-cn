@@ -35,8 +35,8 @@ use crate::{
     TelemetryEvent,
 };
 
-static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-generate-tests"));
-static CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-dismiss-label"));
+static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "generate-tests"));
+static CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "dismiss-label"));
 
 #[derive(Debug, Clone)]
 pub enum SuggestedUnitTestsEvent {

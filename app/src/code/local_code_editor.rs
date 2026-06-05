@@ -87,7 +87,7 @@ const DROP_SHADOW_COLOR: ColorU = ColorU {
 
 const HOVER_DEBOUNCE_PERIOD: Duration = Duration::from_millis(500);
 
-static CODE_ADD_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-add-as-context"));
+static CODE_ADD_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "add-as-context"));
 
 use super::diff_viewer::DiffViewer;
 use super::editor::{
@@ -2368,8 +2368,8 @@ pub fn render_unsaved_changes_banner(
         )
         .finish();
 
-    let discard_label = crate::tr!("code", "code-discard-this-version");
-    let overwrite_label = crate::tr!("code", "code-overwrite-label");
+    let discard_label = crate::tr!("code", "discard-this-version");
+    let overwrite_label = crate::tr!("code", "overwrite-label");
     let right = Flex::row()
         .with_cross_axis_alignment(CrossAxisAlignment::Center)
         .with_child(

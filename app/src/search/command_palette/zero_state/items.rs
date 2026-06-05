@@ -9,8 +9,8 @@ use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::ui_components::text::WrappableText;
 use warpui::{AppContext, Element, Entity, ModelContext, SingletonEntity};
 
-static RECENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-recent").clone());
-static SUGGESTED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-suggested").clone());
+static RECENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-recent").clone());
+static SUGGESTED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-suggested").clone());
 
 /// List of items shown within the zero state. "Recent" items are shown first followed by
 /// "Suggested" items.

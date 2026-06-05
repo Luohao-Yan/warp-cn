@@ -77,9 +77,9 @@ use warpui::{
 };
 
 static SETTINGS_NO_MATCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-match"));
+    LazyLock::new(|| crate::tr!("settings", "no-match"));
 static SETTINGS_NO_MATCH_HINT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-match-hint"));
+    LazyLock::new(|| crate::tr!("settings", "no-match-hint"));
 
 mod about_page;
 mod admin_actions;
@@ -530,8 +530,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             vec![
                 ToggleSettingActionPair::custom(
                     SettingActionPairDescriptions::new(
-                        &crate::tr!("settings", "settings-toggle-show-init-block"),
-                        &crate::tr!("settings", "settings-toggle-hide-init-block"),
+                        &crate::tr!("settings", "toggle-show-init-block"),
+                        &crate::tr!("settings", "toggle-hide-init-block"),
                     ),
                     builder(SettingsAction::Debug(
                         DebugSettingsAction::ToggleInitializationBlock,
@@ -544,8 +544,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 ),
                 ToggleSettingActionPair::custom(
                     SettingActionPairDescriptions::new(
-                        &crate::tr!("settings", "settings-toggle-show-inband-commands"),
-                        &crate::tr!("settings", "settings-toggle-hide-inband-commands"),
+                        &crate::tr!("settings", "toggle-show-inband-commands"),
+                        &crate::tr!("settings", "toggle-hide-inband-commands"),
                     ),
                     builder(SettingsAction::Debug(
                         DebugSettingsAction::ToggleInBandCommandBlocks,
@@ -565,25 +565,25 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![
                 ToggleSettingActionPair::new(
-                    &crate::tr!("settings", "settings-toggle-recording-mode"),
+                    &crate::tr!("settings", "toggle-recording-mode"),
                     WorkspaceAction::ToggleRecordingMode,
                     &id!("Workspace"),
                     flags::RECORDING_MODE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    &crate::tr!("settings", "settings-toggle-inband-generators"),
+                    &crate::tr!("settings", "toggle-inband-generators"),
                     WorkspaceAction::ToggleInBandGenerators,
                     &id!("Workspace"),
                     flags::IN_BAND_GENERATORS_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    &crate::tr!("settings", "settings-toggle-debug-network"),
+                    &crate::tr!("settings", "toggle-debug-network"),
                     WorkspaceAction::ToggleDebugNetworkStatus,
                     &id!("Workspace"),
                     flags::DEBUG_NETWORK_ONLINE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    &crate::tr!("settings", "settings-toggle-memory-stats"),
+                    &crate::tr!("settings", "toggle-memory-stats"),
                     WorkspaceAction::ToggleShowMemoryStats,
                     &id!("Workspace"),
                     flags::DEBUG_SHOW_MEMORY_STATS_FLAG,
@@ -1032,7 +1032,7 @@ pub struct SettingsView {
 
 impl SettingsView {
     pub fn new(page: Option<SettingsSection>, ctx: &mut ViewContext<Self>) -> Self {
-        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(crate::tr!("common", "common-settings-label")));
+        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(crate::tr!("common", "settings-label")));
 
         let global_resource_handles = GlobalResourceHandlesProvider::as_ref(ctx).get().clone();
         // Main settings page with accounts info
@@ -2692,7 +2692,7 @@ impl BackingView for SettingsView {
         _ctx: &view::HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> view::HeaderContent {
-        view::HeaderContent::simple(&crate::tr!("settings", "settings-header"))
+        view::HeaderContent::simple(&crate::tr!("settings", "header"))
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, _ctx: &mut ViewContext<Self>) {

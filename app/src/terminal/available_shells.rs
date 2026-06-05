@@ -114,36 +114,36 @@ impl AvailableShell {
 
     pub fn short_name(&self) -> Cow<'_, str> {
         match self.state.as_ref() {
-            Config::SystemDefault => Cow::from(crate::tr!("terminal", "terminal-shell-default")),
+            Config::SystemDefault => Cow::from(crate::tr!("terminal", "shell-default")),
             Config::KnownLocal(LocalConfig { command, .. })
             | Config::MSYS2(LocalConfig { command, .. }) => match command.as_str() {
-                "bash" => Cow::from(crate::tr!("terminal", "terminal-shell-bash")),
-                "zsh" => Cow::from(crate::tr!("terminal", "terminal-shell-zsh")),
-                "fish" => Cow::from(crate::tr!("terminal", "terminal-shell-fish")),
-                "pwsh" | "pwsh.exe" => Cow::from(crate::tr!("terminal", "terminal-shell-powershell")),
-                "powershell" | "powershell.exe" => Cow::from(crate::tr!("terminal", "terminal-shell-windows-powershell")),
+                "bash" => Cow::from(crate::tr!("terminal", "shell-bash")),
+                "zsh" => Cow::from(crate::tr!("terminal", "shell-zsh")),
+                "fish" => Cow::from(crate::tr!("terminal", "shell-fish")),
+                "pwsh" | "pwsh.exe" => Cow::from(crate::tr!("terminal", "shell-powershell")),
+                "powershell" | "powershell.exe" => Cow::from(crate::tr!("terminal", "shell-windows-powershell")),
                 _ => Cow::from(command),
             },
             Config::Wsl { distro } => Cow::from(distro),
-            Config::Custom(_) => Cow::from(crate::tr!("terminal", "terminal-shell-custom")),
-            Config::DockerSandbox { .. } => Cow::from(crate::tr!("terminal", "terminal-shell-docker-sandbox")),
+            Config::Custom(_) => Cow::from(crate::tr!("terminal", "shell-custom")),
+            Config::DockerSandbox { .. } => Cow::from(crate::tr!("terminal", "shell-docker-sandbox")),
         }
     }
 
     pub fn details(&self) -> Cow<'_, str> {
         match self.state.as_ref() {
-            Config::SystemDefault => Cow::from(crate::tr!("terminal", "terminal-system-default-shell")),
+            Config::SystemDefault => Cow::from(crate::tr!("terminal", "system-default-shell")),
             Config::KnownLocal(LocalConfig {
                 executable_path, ..
             })
             | Config::MSYS2(LocalConfig {
                 executable_path, ..
             }) => Cow::from(format!("{}", executable_path.display())),
-            Config::Wsl { .. } => Cow::from(crate::tr!("terminal", "terminal-wsl-details")),
+            Config::Wsl { .. } => Cow::from(crate::tr!("terminal", "wsl-details")),
             Config::Custom(LocalConfig {
                 executable_path, ..
-            }) => Cow::from(crate::tr!("terminal", "terminal-custom-shell-details", path = executable_path.display().to_string())),
-            Config::DockerSandbox { .. } => Cow::from(crate::tr!("terminal", "terminal-shell-docker-sandbox")),
+            }) => Cow::from(crate::tr!("terminal", "custom-shell-details", path = executable_path.display().to_string())),
+            Config::DockerSandbox { .. } => Cow::from(crate::tr!("terminal", "shell-docker-sandbox")),
         }
     }
 
@@ -177,16 +177,16 @@ impl AvailableShell {
     /// the executable.
     fn long_name(&self) -> String {
         match &self.state.as_ref() {
-            Config::SystemDefault => crate::tr!("terminal", "terminal-default-shell"),
+            Config::SystemDefault => crate::tr!("terminal", "default-shell"),
             Config::KnownLocal(LocalConfig {
                 executable_path, ..
             }) => format!("{} ({})", self.short_name(), executable_path.display()),
             Config::Wsl { distro } => distro.to_string(),
-            Config::Custom(LocalConfig { command, .. }) => crate::tr!("terminal", "terminal-custom-shell", command = command.clone()),
+            Config::Custom(LocalConfig { command, .. }) => crate::tr!("terminal", "custom-shell", command = command.clone()),
             Config::MSYS2(LocalConfig {
                 executable_path, ..
             }) => format!("{} ({})", self.short_name(), executable_path.display()),
-            Config::DockerSandbox { .. } => crate::tr!("terminal", "terminal-docker-sandbox"),
+            Config::DockerSandbox { .. } => crate::tr!("terminal", "docker-sandbox"),
         }
     }
 

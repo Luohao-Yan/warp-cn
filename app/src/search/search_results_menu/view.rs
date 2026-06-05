@@ -18,7 +18,7 @@ use warpui::{
     ViewHandle, WeakViewHandle,
 };
 
-static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-no-results").clone());
+static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "no-results").clone());
 
 use super::styles::{ESTIMATED_RESULT_HEIGHT, MAX_DISPLAYED_RESULT_COUNT};
 

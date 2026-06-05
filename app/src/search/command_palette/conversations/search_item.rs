@@ -10,9 +10,9 @@ use crate::search::result_renderer::ItemHighlightState;
 use crate::search::SearchItem;
 use std::sync::LazyLock;
 
-static FORK_CURRENT_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-fork-current-conversation").clone());
-static FORK_CONVERSATION_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-fork-conversation-tooltip").clone());
-static NEW_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-new-conversation").clone());
+static FORK_CURRENT_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "fork-current-conversation").clone());
+static FORK_CONVERSATION_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "fork-conversation-tooltip").clone());
+static NEW_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "new-conversation").clone());
 use crate::ui_components::buttons::icon_button;
 use crate::util::time_format::format_approx_duration_from_now;
 use ordered_float::OrderedFloat;
@@ -418,7 +418,7 @@ impl SearchItem for ConversationSearchItem {
     fn accessibility_label(&self) -> String {
         match &self.action_info {
             ConversationAction::Resume(matched_conversation) => {
-                crate::tr!("search", "search-a11y-conversation-label", title = matched_conversation.as_ref().conversation.title())
+                crate::tr!("search", "a11y-conversation-label", title = matched_conversation.as_ref().conversation.title())
             }
             ConversationAction::Fork { .. } => {
                 FORK_CURRENT_CONVERSATION.clone()
@@ -430,12 +430,12 @@ impl SearchItem for ConversationSearchItem {
     fn accessibility_help_message(&self) -> Option<String> {
         match &self.action_info {
             ConversationAction::Resume(matched_conversation) => Some(
-                crate::tr!("search", "search-a11y-conversation-nav", title = matched_conversation.as_ref().conversation.title())
+                crate::tr!("search", "a11y-conversation-nav", title = matched_conversation.as_ref().conversation.title())
             ),
             ConversationAction::Fork { .. } => {
-                Some(crate::tr!("search", "search-a11y-fork-conversation").clone())
+                Some(crate::tr!("search", "a11y-fork-conversation").clone())
             }
-            ConversationAction::New => Some(crate::tr!("search", "search-a11y-new-conversation").clone()),
+            ConversationAction::New => Some(crate::tr!("search", "a11y-new-conversation").clone()),
         }
     }
 }

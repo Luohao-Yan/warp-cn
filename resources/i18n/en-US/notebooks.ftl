@@ -273,34 +273,6 @@ notebooks-copy-notebook-contents-to-personal-tooltip = Copy notebook contents in
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
-notebooks-notebooks-apply-link = { notebooks-apply-link }
-notebooks-notebooks-attach-to-active-session = { notebooks-attach-to-active-session }
-notebooks-notebooks-block-divider = { notebooks-block-divider }
-notebooks-notebooks-block-embed = { notebooks-block-embed }
-notebooks-notebooks-copy-all = { notebooks-copy-all }
-notebooks-notebooks-copy-file-path = { notebooks-copy-file-path }
-notebooks-notebooks-copy-link = { notebooks-copy-link }
-notebooks-notebooks-copy-to-personal = { notebooks-copy-to-personal }
-notebooks-notebooks-duplicate = { notebooks-duplicate }
-notebooks-notebooks-edit = { notebooks-edit }
-notebooks-notebooks-export = { notebooks-export }
-notebooks-notebooks-link-text = { notebooks-link-text }
-notebooks-notebooks-link-url = { notebooks-link-url }
-notebooks-notebooks-open-in-editor = { notebooks-open-in-editor }
-notebooks-notebooks-open-on-desktop = { notebooks-open-on-desktop }
-notebooks-notebooks-refresh-file = { notebooks-refresh-file }
-notebooks-notebooks-restore = { notebooks-restore }
-notebooks-notebooks-split-pane-down = { notebooks-split-pane-down }
-notebooks-notebooks-split-pane-left = { notebooks-split-pane-left }
-notebooks-notebooks-split-pane-right = { notebooks-split-pane-right }
-notebooks-notebooks-split-pane-up = { notebooks-split-pane-up }
-notebooks-notebooks-trash = { notebooks-trash }
-notebooks-notebooks-untitled = { notebooks-untitled }
-notebooks-notebooks-missing-source-file = { notebooks-missing-source-file }
-notebooks-notebooks-move-to-space = { notebooks-move-to-space }
-notebooks-notebooks-editing = { notebooks-editing }
-notebooks-notebooks-viewing = { notebooks-viewing }
-
 ## -- Additional notebook strings --
 
 notebooks-conflict-resolution-message = This notebook could not be saved because changes were made while you were editing. Please copy your work and refresh.
@@ -316,77 +288,6 @@ notebooks-focus-previous-match-a11y = Focus previous match
 notebooks-close-find-bar-a11y = Close find bar
 
 ## -- Double-prefix aliases for additional notebook strings --
-
-notebooks-notebooks-conflict-resolution-message = { notebooks-conflict-resolution-message }
-notebooks-notebooks-refresh-notebook = { notebooks-refresh-notebook }
-notebooks-notebooks-remove-link-a11y = { notebooks-remove-link-a11y }
-notebooks-notebooks-convert-to-block-a11y = { notebooks-convert-to-block-a11y }
-notebooks-notebooks-enable-regex-search-a11y = { notebooks-enable-regex-search-a11y }
-notebooks-notebooks-disable-regex-search-a11y = { notebooks-disable-regex-search-a11y }
-notebooks-notebooks-enable-case-sensitive-search-a11y = { notebooks-enable-case-sensitive-search-a11y }
-notebooks-notebooks-disable-case-sensitive-search-a11y = { notebooks-disable-case-sensitive-search-a11y }
-notebooks-notebooks-focus-next-match-a11y = { notebooks-focus-next-match-a11y }
-notebooks-notebooks-focus-previous-match-a11y = { notebooks-focus-previous-match-a11y }
-notebooks-notebooks-close-find-bar-a11y = { notebooks-close-find-bar-a11y }
-notebooks-notebooks-copy-rich-text-buffer = { notebooks-copy-rich-text-buffer }
-notebooks-notebooks-copy-rich-text-selection = { notebooks-copy-rich-text-selection }
-notebooks-notebooks-create-or-edit-link = { notebooks-create-or-edit-link }
-notebooks-notebooks-cut-all-left = { notebooks-cut-all-left }
-notebooks-notebooks-cut-all-right = { notebooks-cut-all-right }
-notebooks-notebooks-cut-word-left = { notebooks-cut-word-left }
-notebooks-notebooks-cut-word-right = { notebooks-cut-word-right }
-notebooks-notebooks-de-select-shell-commands = { notebooks-de-select-shell-commands }
-notebooks-notebooks-delete-all-left = { notebooks-delete-all-left }
-notebooks-notebooks-delete-all-right = { notebooks-delete-all-right }
-notebooks-notebooks-delete-word-left = { notebooks-delete-word-left }
-notebooks-notebooks-delete-word-right = { notebooks-delete-word-right }
-notebooks-notebooks-edit = { notebooks-edit }
-notebooks-notebooks-end = { notebooks-end }
-notebooks-notebooks-find-in-notebook = { notebooks-find-in-notebook }
-notebooks-notebooks-focus-next-match = { notebooks-focus-next-match }
-notebooks-notebooks-focus-previous-match = { notebooks-focus-previous-match }
-notebooks-notebooks-log-editor-state = { notebooks-log-editor-state }
-notebooks-notebooks-move-backward-one-word = { notebooks-move-backward-one-word }
-notebooks-notebooks-move-backward-one-word-lower = { notebooks-move-backward-one-word-lower }
-notebooks-notebooks-move-cursor-down = { notebooks-move-cursor-down }
-notebooks-notebooks-move-cursor-left = { notebooks-move-cursor-left }
-notebooks-notebooks-move-cursor-right = { notebooks-move-cursor-right }
-notebooks-notebooks-move-cursor-up = { notebooks-move-cursor-up }
-notebooks-notebooks-move-forward-one-word = { notebooks-move-forward-one-word }
-notebooks-notebooks-move-forward-one-word-lower = { notebooks-move-forward-one-word-lower }
-notebooks-notebooks-move-to-paragraph-end = { notebooks-move-to-paragraph-end }
-notebooks-notebooks-move-to-paragraph-start = { notebooks-move-to-paragraph-start }
-notebooks-notebooks-remove-previous-character = { notebooks-remove-previous-character }
-notebooks-notebooks-run-selected-commands = { notebooks-run-selected-commands }
-notebooks-notebooks-select-down = { notebooks-select-down }
-notebooks-notebooks-select-next-command = { notebooks-select-next-command }
-notebooks-notebooks-select-one-character-left = { notebooks-select-one-character-left }
-notebooks-notebooks-select-one-character-right = { notebooks-select-one-character-right }
-notebooks-notebooks-select-one-word-left = { notebooks-select-one-word-left }
-notebooks-notebooks-select-one-word-right = { notebooks-select-one-word-right }
-notebooks-notebooks-select-previous-command = { notebooks-select-previous-command }
-notebooks-notebooks-select-shell-command-at-cursor = { notebooks-select-shell-command-at-cursor }
-notebooks-notebooks-select-to-line-end = { notebooks-select-to-line-end }
-notebooks-notebooks-select-to-line-start = { notebooks-select-to-line-start }
-notebooks-notebooks-select-to-paragraph-end = { notebooks-select-to-paragraph-end }
-notebooks-notebooks-select-to-paragraph-start = { notebooks-select-to-paragraph-start }
-notebooks-notebooks-select-up = { notebooks-select-up }
-notebooks-notebooks-toggle-case-sensitive-search = { notebooks-toggle-case-sensitive-search }
-notebooks-notebooks-toggle-debug-mode = { notebooks-toggle-debug-mode }
-notebooks-notebooks-toggle-inline-code-styling = { notebooks-toggle-inline-code-styling }
-notebooks-notebooks-toggle-regular-expression-search = { notebooks-toggle-regular-expression-search }
-notebooks-notebooks-toggle-strikethrough-styling = { notebooks-toggle-strikethrough-styling }
-notebooks-notebooks-toggle-underline-styling = { notebooks-toggle-underline-styling }
-notebooks-notebooks-increase-font-size = { notebooks-increase-font-size }
-notebooks-notebooks-decrease-font-size = { notebooks-decrease-font-size }
-notebooks-notebooks-reset-font-size = { notebooks-reset-font-size }
-notebooks-notebooks-focus-terminal-input-from-notebook = { notebooks-focus-terminal-input-from-notebook }
-notebooks-notebooks-focus-terminal-input-from-file = { notebooks-focus-terminal-input-from-file }
-notebooks-notebooks-reload-file = { notebooks-reload-file }
-notebooks-notebooks-cannot-save-content-secrets = { notebooks-cannot-save-content-secrets }
-notebooks-notebooks-cannot-save-title-secrets = { notebooks-cannot-save-title-secrets }
-notebooks-notebooks-link-copied-to-clipboard = { notebooks-link-copied-to-clipboard }
-notebooks-notebooks-link-copied = { notebooks-link-copied }
 
 ## -- Additional file notebook and editor strings -----------------------------------
 
@@ -406,25 +307,7 @@ notebooks-open-embed-search-a11y = Open embedded object search menu
 
 ## -- Double-prefix aliases for additional file notebook and editor strings ----------
 
-notebooks-notebooks-command-from = Command from { $location_name }
-notebooks-notebooks-could-not-read = Could not read { $name }
-notebooks-notebooks-loading-file = Loading { $name }...
-notebooks-notebooks-editor-is-editing = { $editor } is editing
-notebooks-notebooks-pasting-a11y = Pasting: { $content }
-notebooks-notebooks-copy-link-a11y = { notebooks-copy-link-a11y }
-notebooks-notebooks-open-link-a11y = Open link: { $url }
-notebooks-notebooks-secondary-click-a11y = Secondary click on { $url }
-notebooks-notebooks-modifier-click-a11y = [{ $modifier } Click]
-notebooks-notebooks-insert-block-a11y = Insert { $block } block
-notebooks-notebooks-change-lang-a11y = Change code block language to { $language }
-notebooks-notebooks-copy-code-block-a11y = { notebooks-copy-code-block-a11y }
-notebooks-notebooks-open-embed-search-a11y = { notebooks-open-embed-search-a11y }
-
 ## -- Double-prefix aliases for migrated UI strings --
-
-notebooks-notebooks-restore-from-trash-tooltip = { notebooks-restore-from-trash-tooltip }
-notebooks-notebooks-copy-notebook-contents-tooltip = { notebooks-copy-notebook-contents-tooltip }
-notebooks-notebooks-copy-notebook-contents-to-personal-tooltip = { notebooks-copy-notebook-contents-to-personal-tooltip }
 
 ## -- Link and code block migrated strings --
 
@@ -444,16 +327,3 @@ notebooks-ruby-lang = Ruby on Rails
 
 ## -- Double-prefix aliases for link and code block migrated strings --
 
-notebooks-notebooks-open-terminal-tooltip = { notebooks-open-terminal-tooltip }
-notebooks-notebooks-open-in-terminal = { notebooks-open-in-terminal }
-notebooks-notebooks-edit-link = { notebooks-edit-link }
-notebooks-notebooks-mermaid-label = { notebooks-mermaid-label }
-notebooks-notebooks-go-lang = { notebooks-go-lang }
-notebooks-notebooks-java-lang = { notebooks-java-lang }
-notebooks-notebooks-javascript-lang = { notebooks-javascript-lang }
-notebooks-notebooks-python-lang = { notebooks-python-lang }
-notebooks-notebooks-rust-lang = { notebooks-rust-lang }
-notebooks-notebooks-ruby-lang = { notebooks-ruby-lang }
-
-notebooks-notebooks-show-find-bar-a11y = { notebooks-show-find-bar-a11y }
-notebooks-notebooks-open-block-insertion-menu-a11y = { notebooks-open-block-insertion-menu-a11y }

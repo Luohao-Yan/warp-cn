@@ -27,9 +27,9 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
-static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-theme-delete-subheader"));
-static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
-static DELETE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-delete-theme"));
+static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "theme-delete-subheader"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
+static DELETE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "delete-theme"));
 
 #[derive(Default)]
 struct MouseStateHandles {

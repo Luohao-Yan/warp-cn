@@ -41,10 +41,10 @@ use warpui::{
 };
 
 static ONBOARDING_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-init-project-onboarding-text")
+    crate::tr!("terminal", "init-project-onboarding-text")
 });
 static ALREADY_SETUP_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-init-project-already-setup-text")
+    crate::tr!("terminal", "init-project-already-setup-text")
 });
 // Native Warp rules file format.
 pub const FILES_TO_CHECK: [&str; 2] = ["AGENTS.md", "WARP.md"];
@@ -378,9 +378,9 @@ impl InitStepBlock {
         mouse_states: &LanguageServersMouseStateHandles,
     ) -> Vec<KeyboardNavigableButtonBuilder> {
         let button_text = if server_info.is_installed {
-            crate::tr!("terminal", "terminal-enable-language-support", language = server_info.server_type.language_name().to_string())
+            crate::tr!("terminal", "enable-language-support", language = server_info.server_type.language_name().to_string())
         } else {
-            crate::tr!("terminal", "terminal-install-and-enable-language", language = server_info.server_type.language_name().to_string())
+            crate::tr!("terminal", "install-and-enable-language", language = server_info.server_type.language_name().to_string())
         };
 
         vec![
@@ -431,7 +431,7 @@ impl InitStepBlock {
         for (i, linkable_file) in LINKABLE_FILES.iter().enumerate() {
             if let Some(path) = linkable_files.iter().find(|p| p.ends_with(linkable_file)) {
                 buttons.push(simple_navigation_button(
-                    crate::tr!("terminal", "terminal-link-to-agents-md", file = linkable_file.to_string()),
+                    crate::tr!("terminal", "link-to-agents-md", file = linkable_file.to_string()),
                     mouse_states.link_buttons[i].clone(),
                     InitProjectBlockAction::LinkFromExisting(path.clone()),
                     false,
@@ -520,7 +520,7 @@ impl InitStepBlock {
         let mut button = appearance
             .ui_builder()
             .button(ButtonVariant::Outlined, mouse_state.clone())
-            .with_text_label(crate::tr!("terminal", "terminal-regenerate-agents-md"));
+            .with_text_label(crate::tr!("terminal", "regenerate-agents-md"));
         if disabled {
             button = button.disabled();
         }
@@ -680,7 +680,7 @@ impl InitStepBlock {
                                 ButtonVariant::Outlined,
                                 mouse_states.view_status_button.clone(),
                             )
-                            .with_text_label(crate::tr!("terminal", "terminal-view-index-status"))
+                            .with_text_label(crate::tr!("terminal", "view-index-status"))
                             .build()
                             .on_click(|ctx, _, _| {
                                 ctx.dispatch_typed_action(
@@ -743,7 +743,7 @@ impl InitStepBlock {
         };
         Self::render_ready_with_buttons(
             action_view,
-            crate::tr!("terminal", "terminal-enable-language-for-codebase", language = server_info.server_type.language_name().to_string()),
+            crate::tr!("terminal", "enable-language-for-codebase", language = server_info.server_type.language_name().to_string()),
             app,
         )
     }
@@ -919,7 +919,7 @@ impl InitStepBlock {
         let init_completed = self.model.as_ref(app).is_completed();
         match rules_result {
             ProjectScopedRulesResult::LinkedFromExisting(path) => {
-                Self::render_success_completion(&crate::tr!("terminal", "terminal-project-rules-linked", path = path.clone()), app)
+                Self::render_success_completion(&crate::tr!("terminal", "project-rules-linked", path = path.clone()), app)
             }
             ProjectScopedRulesResult::GenerateNew {
                 button_disabled, ..
@@ -988,7 +988,7 @@ impl InitStepBlock {
 
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::success(crate::tr!("terminal", "terminal-installed-enabled", name = server_type.binary_name().to_string())),
+                            DismissibleToast::success(crate::tr!("terminal", "installed-enabled", name = server_type.binary_name().to_string())),
                             window_id,
                             ctx,
                         );
@@ -1009,7 +1009,7 @@ impl InitStepBlock {
 
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(crate::tr!("terminal", "terminal-failed-install", name = server_type.binary_name().to_string(), error = e.to_string())),
+                            DismissibleToast::error(crate::tr!("terminal", "failed-install", name = server_type.binary_name().to_string(), error = e.to_string())),
                             window_id,
                             ctx,
                         );
@@ -1130,7 +1130,7 @@ impl TypedActionView for InitStepBlock {
                         servers_to_install.iter().map(|s| s.binary_name()).collect();
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::default(crate::tr!("terminal", "terminal-installing-background", names = server_names.join(", "))),
+                            DismissibleToast::default(crate::tr!("terminal", "installing-background", names = server_names.join(", "))),
                             window_id,
                             ctx,
                         );

@@ -598,11 +598,10 @@ impl LocalCodeEditorView {
 
         // Create the diagnostic text with bold severity prefix.
         let severity_text = match diagnostic.severity {
-            lsp_types::DiagnosticSeverity::ERROR => crate::tr!("common", "common-error-label"),
-            lsp_types::DiagnosticSeverity::WARNING => crate::tr!("common", "common-warning-label"),
-            lsp_types::DiagnosticSeverity::INFORMATION => crate::tr!("common", "common-info-label"),
-            lsp_types::DiagnosticSeverity::HINT => crate::tr!("code", "code-hint"),
-            _ => crate::tr!("code", "code-diagnostic"),
+            lsp_types::DiagnosticSeverity::ERROR => crate::tr!("common", "error-label"),
+            lsp_types::DiagnosticSeverity::WARNING => crate::tr!("common", "warning-label"),
+            lsp_types::DiagnosticSeverity::INFORMATION => crate::tr!("common", "info-label"),
+            lsp_types::DiagnosticSeverity::HINT => crate::tr!("code", "hint"), _ => crate::tr!("code", "diagnostic"),
         };
 
         let text = FormattedText::new([FormattedTextLine::Line(vec![

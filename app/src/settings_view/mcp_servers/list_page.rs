@@ -76,8 +76,8 @@ use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 
-static DESCRIPTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-mcp-add-description"));
-static SEE_SUPPORTED_PROVIDERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-see-supported-providers"));
+static DESCRIPTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-add-description"));
+static SEE_SUPPORTED_PROVIDERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "see-supported-providers"));
 
 #[derive(Debug, Clone)]
 pub enum MCPServersListPageViewEvent {
@@ -103,8 +103,8 @@ pub enum MCPServersListPageViewAction {
     ToggleFileBasedMcp,
 }
 
-static EMPTY_STATE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-mcp-empty-state"));
-static NO_SEARCH_RESULTS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-mcp-no-search-results"));
+static EMPTY_STATE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-empty-state"));
+static NO_SEARCH_RESULTS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-no-search-results"));
 
 pub struct MCPServersListPageView {
     server_cards: HashMap<ServerCardItemId, ViewHandle<ServerCardView>>,
@@ -229,7 +229,7 @@ impl MCPServersListPageView {
 
         search_editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text(crate::tr!("settings", "settings-mcp-search-placeholder"), ctx);
+            editor.set_placeholder_text(crate::tr!("settings", "mcp-search-placeholder"), ctx);
         });
         let search_bar = ctx.add_typed_action_view(|_| SearchBar::new(search_editor.clone()));
 
@@ -843,7 +843,7 @@ impl MCPServersListPageView {
                 // Show the toast that the server updated, even though we don't update the cloud template in this case
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::success(crate::tr!("settings", "settings-mcp-updated-toast"));
+                    let toast = DismissibleToast::success(crate::tr!("settings", "mcp-updated-toast"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }
@@ -1186,7 +1186,7 @@ impl MCPServersListPageView {
         let description_fragments = vec![
             FormattedTextFragment::plain_text(&*DESCRIPTION_TEXT),
             FormattedTextFragment::hyperlink(
-                &crate::tr!("settings", "settings-learn-more"),
+                &crate::tr!("settings", "learn-more"),
                 "https://docs.warp.dev/agent-platform/capabilities/mcp",
             ),
         ];
@@ -1282,8 +1282,8 @@ impl MCPServersListPageView {
                         .current_team()
                         .map(|team| team.name.clone());
                     let shared_by_text = match team_name {
-                        Some(name) => crate::tr!("settings", "settings-mcp-shared-by-warp-and-name", name = name),
-                        None => crate::tr!("settings", "settings-mcp-shared-by-warp"),
+                        Some(name) => crate::tr!("settings", "mcp-shared-by-warp-and-name", name = name),
+                        None => crate::tr!("settings", "mcp-shared-by-warp"),
                     };
 
                     page.add_child(self.render_server_cards_section(
@@ -1294,7 +1294,7 @@ impl MCPServersListPageView {
                     ));
                 } else if !filtered_gallery_cards.is_empty() {
                     page.add_child(self.render_server_cards_section(
-                        &crate::tr!("settings", "settings-mcp-shared-from-warp"),
+                        &crate::tr!("settings", "mcp-shared-from-warp"),
                         &filtered_gallery_cards,
                         appearance,
                         app,
@@ -1303,7 +1303,7 @@ impl MCPServersListPageView {
 
                 // Render one section per provider (e.g. "Detected from Claude").
                 for (provider, cards) in &filtered_file_based_cards {
-                    let section_title = crate::tr!("settings", "settings-mcp-detected-from", provider = provider.display_name());
+                    let section_title = crate::tr!("settings", "mcp-detected-from", provider = provider.display_name());
                     page.add_child(self.render_server_cards_section(
                         &section_title,
                         cards,
@@ -1774,11 +1774,11 @@ impl MCPServersListPageView {
 
                 if is_shared {
                     match creator {
-                        Some(creator) => Some(TitleChip::text(crate::tr!("settings", "settings-mcp-shared-by-creator", creator = creator))),
-                        None => Some(TitleChip::text(crate::tr!("settings", "settings-mcp-shared-by-member"))),
+                        Some(creator) => Some(TitleChip::text(crate::tr!("settings", "mcp-shared-by-creator", creator = creator))),
+                        None => Some(TitleChip::text(crate::tr!("settings", "mcp-shared-by-member"))),
                     }
                 } else if matches!(item_id, ServerCardItemId::TemplatableMCP(_)) {
-                    Some(TitleChip::text(crate::tr!("settings", "settings-mcp-from-another-device")))
+                    Some(TitleChip::text(crate::tr!("settings", "mcp-from-another-device")))
                 } else {
                     None
                 }

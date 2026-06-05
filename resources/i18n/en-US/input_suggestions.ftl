@@ -16,11 +16,3 @@ input-suggestions-navigate-help = Navigate with tab and shift-tab, and confirm w
 
 ## -- Double-prefix aliases --
 
-input_suggestions-input-suggestions-last-ran = Last ran { $time }
-input_suggestions-input-suggestions-a11y-suggestion = Suggestion: { $text }.
-input_suggestions-input-suggestions-selected = Selected: { $text }
-input_suggestions-input-suggestions-closed = { input-suggestions-closed }
-input_suggestions-input-suggestions-no-suggestions = { input-suggestions-no-suggestions }
-input_suggestions-input-suggestions-ignore = { input-suggestions-ignore }
-input_suggestions-input-suggestions-command-suggestions = { input-suggestions-command-suggestions }
-input_suggestions-input-suggestions-navigate-help = { input-suggestions-navigate-help }

@@ -20,11 +20,11 @@ use crate::search::QueryFilter;
 use crate::settings::{AISettings, AISettingsChangedEvent};
 
 static SEARCH_COMMAND_SEARCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-command-search"));
+    LazyLock::new(|| crate::tr!("workspace", "command-search"));
 static SEARCH_IM_LOOKING_FOR: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-im-looking-for"));
+    LazyLock::new(|| crate::tr!("workspace", "im-looking-for"));
 static SEARCH_EXAMPLE_QUERIES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-example-queries"));
+    LazyLock::new(|| crate::tr!("workspace", "example-queries"));
 
 lazy_static! {
     /// Map of sample queries to the [`QueryFilter`]s they employ.

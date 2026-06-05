@@ -116,18 +116,18 @@ impl AgentToolbarItemKind {
 
     pub fn display_label(&self) -> String {
         match self {
-            Self::ContextChip(_) => crate::tr!("ai", "ai-context-chip"),
-            Self::ModelSelector => crate::tr!("ai", "ai-model-selector"),
-            Self::NLDToggle => crate::tr!("ai", "ai-autodetection"),
-            Self::VoiceInput => crate::tr!("ai", "ai-voice-input"),
-            Self::FileAttach => crate::tr!("ai", "ai-attach-file"),
-            Self::ContextWindowUsage => crate::tr!("ai", "ai-context-usage"),
-            Self::FileExplorer => crate::tr!("ai", "ai-file-explorer"),
-            Self::RichInput => crate::tr!("ai", "ai-rich-input"),
-            Self::ShareSession => crate::tr!("ai", "ai-share-session"),
-            Self::Settings => crate::tr!("common", "common-settings-label"),
-            Self::FastForwardToggle => crate::tr!("ai", "ai-fast-forward"),
-            Self::HandoffToCloud => crate::tr!("ai", "ai-handoff-to-cloud"),
+            Self::ContextChip(_) => crate::tr!("ai", "context-chip"),
+            Self::ModelSelector => crate::tr!("ai", "model-selector"),
+            Self::NLDToggle => crate::tr!("ai", "autodetection"),
+            Self::VoiceInput => crate::tr!("ai", "voice-input"),
+            Self::FileAttach => crate::tr!("ai", "attach-file"),
+            Self::ContextWindowUsage => crate::tr!("ai", "context-usage"),
+            Self::FileExplorer => crate::tr!("ai", "file-explorer"),
+            Self::RichInput => crate::tr!("ai", "rich-input"),
+            Self::ShareSession => crate::tr!("ai", "share-session"),
+            Self::Settings => crate::tr!("common", "settings-label"),
+            Self::FastForwardToggle => crate::tr!("ai", "fast-forward"),
+            Self::HandoffToCloud => crate::tr!("ai", "handoff-to-cloud"),
         }
     }
 

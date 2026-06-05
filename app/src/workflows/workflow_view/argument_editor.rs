@@ -42,12 +42,12 @@ use super::{
 };
 
 const ARGUMENT_INPUT_HEIGHT: f32 = 30.;
-static ARGUMENT_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-arguments-label"));
+static ARGUMENT_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "arguments-label"));
 const ARGUMENT_LABEL_HEIGHT: f32 = 20.;
 const ARGUMENT_LABEL_MARGIN_BOTTOM: f32 = 5.;
-static ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-argument-description-placeholder"));
-static ARGUMENT_ALIAS_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-argument-alias-description-placeholder"));
-static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-default-value-placeholder"));
+static ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "argument-description-placeholder"));
+static ARGUMENT_ALIAS_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "argument-alias-description-placeholder"));
+static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "default-value-placeholder"));
 pub const DEFAULT_ARGUMENT_PREFIX: &str = "argument";
 
 /// Width of the argument editor in alias mode.
@@ -589,7 +589,7 @@ impl WorkflowView {
                 )
                 .with_tooltip(move || {
                     ui_builder
-                        .tool_tip(crate::tr!("workflows", "workflows-add-a-workflow-argument"))
+                        .tool_tip(crate::tr!("workflows", "add-a-workflow-argument"))
                         .build()
                         .finish()
                 })
@@ -603,7 +603,7 @@ impl WorkflowView {
                     Container::new(
                         appearance
                         .ui_builder()
-                        .span(crate::tr!("drive", "drive-workflow-fill-arguments"))
+                        .span(crate::tr!("drive", "workflow-fill-arguments"))
                         .with_soft_wrap()
                         .with_style(UiComponentStyles {
                             font_size: Some(EDITOR_FONT_SIZE),
@@ -827,7 +827,7 @@ impl WorkflowView {
                         .add_environment_variables_mouse_state
                         .clone(),
                 )
-                .with_centered_text_label(crate::tr!("workflows", "workflows-add-environment-variables"))
+                .with_centered_text_label(crate::tr!("workflows", "add-environment-variables"))
                 .build()
                 .on_click(|ctx, _, _| {
                     ctx.dispatch_typed_action(WorkspaceAction::CreatePersonalEnvVarCollection);
@@ -839,7 +839,7 @@ impl WorkflowView {
             .with_children([
                 appearance
                     .ui_builder()
-                    .span(crate::tr!("drive", "drive-workflow-env-variables"))
+                    .span(crate::tr!("drive", "workflow-env-variables"))
                     .with_style(UiComponentStyles {
                         font_size: Some(13.),
                         ..Default::default()

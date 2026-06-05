@@ -65,9 +65,9 @@ impl OnboardingPromptBlock {
         let font_color = current_theme.main_text_color(current_theme.background());
 
         // Copy - https://docs.google.com/document/d/1zttBLI5Mw07kUupvrMQoC5aTwTXSHIUOIFFnxZ8GQEU/edit
-        static LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-prompt-setup-text-1"));
-        static LINE_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-prompt-setup-text-2"));
-        static LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-learn-more-label"));
+        static LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "prompt-setup-text-1"));
+        static LINE_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "prompt-setup-text-2"));
+        static LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "learn-more-label"));
         const LINK_DESTINATION: &str =
             "https://docs.warp.dev/terminal/appearance/prompt#custom-prompt-compatibility-table";
 
@@ -238,10 +238,10 @@ impl OnboardingPromptBlock {
     fn render_existing_prompt_button_interior(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Pixel values pulled from Figma mocks
         // https://www.figma.com/file/y888viqzWBoMpFTxQqkQEN/Activation?node-id=568:1595&mode=dev
-        static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-shell-prompt-ps1"));
-        static NO_PS1_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-no-existing-prompt"));
-        static CORRECTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-look-incorrect"));
-        static LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-let-us-know"));
+        static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "shell-prompt-ps1"));
+        static NO_PS1_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "no-existing-prompt"));
+        static CORRECTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "look-incorrect"));
+        static LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "let-us-know"));
         const LINK_DESTINATION: &str = "https://github.com/warpdotdev/Warp/issues/new?assignees=&labels=Bug&projects=&template=01_bug_report.yml";
 
         const HEADER_MARGIN_LEFT: f32 = 4.;
@@ -327,8 +327,8 @@ impl OnboardingPromptBlock {
     fn render_warp_prompt_button_interior(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Pixel values pulled from Figma mocks
         // https://www.figma.com/file/y888viqzWBoMpFTxQqkQEN/Activation?node-id=568:1595&mode=dev
-        static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-warp-prompt"));
-        static CUSTOMIZABLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-customizable-appearance"));
+        static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "warp-prompt"));
+        static CUSTOMIZABLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "customizable-appearance"));
         const HEADER_MARGIN_LEFT: f32 = 4.;
         const SECTION_MARGIN_TOP: f32 = 8.;
         const OUTER_CORNER_RADIUS: f32 = 4.;

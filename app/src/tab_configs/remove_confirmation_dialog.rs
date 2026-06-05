@@ -109,12 +109,12 @@ impl View for RemoveTabConfigConfirmationDialog {
             .with_margin_right(12.)
             .finish();
 
-        let title = crate::tr!("menus", "menus-remove-config-confirm", name = self.config_name.clone());
+        let title = crate::tr!("menus", "remove-config-confirm", name = self.config_name.clone());
 
         let dialog = Dialog::new(
             title,
             Some(
-                crate::tr!("menus", "menus-delete-config-undo-warning"),
+                crate::tr!("menus", "delete-config-undo-warning"),
             ),
             UiComponentStyles {
                 width: Some(DIALOG_WIDTH),

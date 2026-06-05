@@ -69,9 +69,9 @@ fn render_pill_toggle(is_on: bool, theme: &WarpTheme) -> Box<dyn Element> {
     .finish()
 }
 
-static CONFIG_BLOCK_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-use-orchestration"));
-static CONFIG_BLOCK_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-orchestration-description"));
-static BASE_MODEL_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-base-model-helper"));
+static CONFIG_BLOCK_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "use-orchestration"));
+static CONFIG_BLOCK_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "orchestration-description"));
+static BASE_MODEL_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "base-model-helper"));
 static AI_VIEW_DETAILS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-details"));
 
 // ── Action type ─────────────────────────────────────────────────────

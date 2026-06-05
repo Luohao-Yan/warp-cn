@@ -21,10 +21,10 @@ use warpui::{
 const MAXIMUM_SPENDING_LIMIT_CENTS: u32 = 999999999;
 
 static OVERAGE_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-50-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "50-placeholder"));
 
 static SETTINGS_OVERAGE_LIMIT_DESC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-overage-limit-desc"));
+    LazyLock::new(|| crate::tr!("settings", "overage-limit-desc"));
 
 pub struct SpendingLimitModal {
     amount_editor: ViewHandle<EditorView>,
@@ -165,10 +165,10 @@ impl SpendingLimitModal {
     fn error_text(&self) -> Option<String> {
         match self.input_error_state {
             Some(SpendingLimitModalInputErrorState::InvalidNumberFormat) => {
-                Some(crate::tr!("settings", "settings-enter-currency"))
+Some(crate::tr!("settings", "enter-currency"))
             }
             Some(SpendingLimitModalInputErrorState::NumberOutOfRange) => {
-                Some(crate::tr!("settings", "settings-price-range"))
+Some(crate::tr!("settings", "price-range"))
             }
             None => None,
         }
@@ -216,7 +216,7 @@ impl View for SpendingLimitModal {
         .finish();
 
         let additional_note_text = Text::new(
-            crate::tr!("settings", "settings-overage-note"),
+            crate::tr!("settings", "overage-note"),
             appearance.ui_font_family(),
             12.,
         )
@@ -235,7 +235,7 @@ impl View for SpendingLimitModal {
         let input_row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
-                Text::new(crate::tr!("settings", "settings-dollar-sign"), appearance.ui_font_family(), appearance.ui_font_size())
+                Text::new(crate::tr!("settings", "dollar-sign"), appearance.ui_font_family(), appearance.ui_font_size())
                     .with_color(theme.active_ui_text_color().into())
                     .finish(),
             )
@@ -270,7 +270,7 @@ impl View for SpendingLimitModal {
             ..Default::default()
         };
 
-        let update_label = crate::tr!("settings", "settings-update");
+        let update_label = crate::tr!("settings", "update");
         let mut update_button = appearance
             .ui_builder()
             .button(
@@ -284,7 +284,7 @@ impl View for SpendingLimitModal {
             update_button = update_button.disabled();
         }
 
-        let cancel_label = crate::tr!("settings", "settings-cancel");
+        let cancel_label = crate::tr!("settings", "cancel");
         let buttons_row = Flex::row()
             .with_child(
                 appearance

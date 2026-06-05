@@ -36,8 +36,8 @@ use warpui::{
     AppContext, Element, SingletonEntity,
 };
 
-static OPEN_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-ai-suggest").clone());
-static TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-ai-translate").clone());
+static OPEN_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "ai-suggest").clone());
+static TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "ai-translate").clone());
 
 #[derive(Clone, Debug)]
 pub enum WarpAISearchItem {
@@ -242,10 +242,10 @@ impl AsyncDataSource for WarpAIDataSource {
 impl DataSourceRunError for GenerateCommandsFromNaturalLanguageError {
     fn user_facing_error(&self) -> String {
         match self {
-            Self::BadPrompt => crate::tr!("search", "search-ai-no-results").clone(),
-            Self::AiProviderError => crate::tr!("search", "search-ai-error").clone(),
-            Self::RateLimited => crate::tr!("search", "search-ai-out-of-credits").clone(),
-            Self::Other => crate::tr!("search", "search-ai-error-fallback").clone(),
+            Self::BadPrompt => crate::tr!("search", "ai-no-results").clone(),
+            Self::AiProviderError => crate::tr!("search", "ai-error").clone(),
+            Self::RateLimited => crate::tr!("search", "ai-out-of-credits").clone(),
+            Self::Other => crate::tr!("search", "ai-error-fallback").clone(),
         }
     }
 

@@ -197,7 +197,7 @@ impl NavBar {
     }
 
     fn render_revert_button(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let reject_label = crate::tr!("code", "code-reject");
+        let reject_label = crate::tr!("code", "reject");
         Container::new(
             appearance
                 .ui_builder()

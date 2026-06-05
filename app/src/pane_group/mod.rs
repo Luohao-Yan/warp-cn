@@ -352,14 +352,14 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "pane_group:close_current_session",
-            crate::tr!("common", "common-close-current-session").as_str(),
+            crate::tr!("common", "close-current-session").as_str(),
             PaneGroupAction::RemoveActive,
         )
         .with_custom_action(CustomAction::CloseCurrentSession)
         .with_context_predicate(id!("PaneGroup")),
         EditableBinding::new(
             "pane_group:add_left",
-            crate::tr!("common", "common-split-pane-left").as_str(),
+            crate::tr!("common", "split-pane-left").as_str(),
             PaneGroupAction::Add(Direction::Left),
         )
         .with_context_predicate(id!("PaneGroup") & !id!("PaneGroup_PaneDragging"))
@@ -367,7 +367,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             "pane_group:add_up",
-            crate::tr!("common", "common-split-pane-up").as_str(),
+            crate::tr!("common", "split-pane-up").as_str(),
             PaneGroupAction::Add(Direction::Up),
         )
         .with_context_predicate(id!("PaneGroup") & !id!("PaneGroup_PaneDragging"))
@@ -375,7 +375,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             "pane_group:navigate_left",
-            crate::tr!("common", "common-switch-panes-left").as_str(),
+            crate::tr!("common", "switch-panes-left").as_str(),
             PaneGroupAction::NavigateLeft,
         )
         .with_context_predicate(
@@ -384,7 +384,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-alt-left"),
         EditableBinding::new(
             "pane_group:navigate_right",
-            crate::tr!("common", "common-switch-panes-right").as_str(),
+            crate::tr!("common", "switch-panes-right").as_str(),
             PaneGroupAction::NavigateRight,
         )
         .with_context_predicate(
@@ -393,7 +393,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-alt-right"),
         EditableBinding::new(
             "pane_group:navigate_up",
-            crate::tr!("common", "common-switch-panes-up").as_str(),
+            crate::tr!("common", "switch-panes-up").as_str(),
             PaneGroupAction::NavigateUp,
         )
         .with_context_predicate(
@@ -402,7 +402,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("cmdorctrl-alt-up"),
         EditableBinding::new(
             "pane_group:navigate_down",
-            crate::tr!("common", "common-switch-panes-down").as_str(),
+            crate::tr!("common", "switch-panes-down").as_str(),
             PaneGroupAction::NavigateDown,
         )
         .with_context_predicate(
@@ -417,7 +417,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "pane_group:resize_left",
-            crate::tr!("workspace", "workspace-resize-pane-move-divider-left"),
+            crate::tr!("workspace", "resize-pane-move-divider-left"),
             PaneGroupAction::ResizeLeft,
         )
         .with_context_predicate(
@@ -426,7 +426,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("cmd-ctrl-left"),
         EditableBinding::new(
             "pane_group:resize_right",
-            crate::tr!("workspace", "workspace-resize-pane-move-divider-right"),
+            crate::tr!("workspace", "resize-pane-move-divider-right"),
             PaneGroupAction::ResizeRight,
         )
         .with_context_predicate(
@@ -435,7 +435,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("cmd-ctrl-right"),
         EditableBinding::new(
             "pane_group:resize_up",
-            crate::tr!("workspace", "workspace-resize-pane-move-divider-up"),
+            crate::tr!("workspace", "resize-pane-move-divider-up"),
             PaneGroupAction::ResizeUp,
         )
         .with_context_predicate(
@@ -444,7 +444,7 @@ pub fn init(app: &mut AppContext) {
         .with_mac_key_binding("cmd-ctrl-up"),
         EditableBinding::new(
             "pane_group:resize_down",
-            crate::tr!("workspace", "workspace-resize-pane-move-divider-down"),
+            crate::tr!("workspace", "resize-pane-move-divider-down"),
             PaneGroupAction::ResizeDown,
         )
         .with_context_predicate(
@@ -456,7 +456,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "pane_group:add_down",
-            crate::tr!("common", "common-split-pane-down").as_str(),
+            crate::tr!("common", "split-pane-down").as_str(),
             PaneGroupAction::Add(Direction::Down),
         )
         .with_context_predicate(id!("PaneGroup") & !id!("PaneGroup_PaneDragging"))
@@ -464,7 +464,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             "pane_group:add_right",
-            crate::tr!("common", "common-split-pane-right").as_str(),
+            crate::tr!("common", "split-pane-right").as_str(),
             PaneGroupAction::Add(Direction::Right),
         )
         .with_context_predicate(id!("PaneGroup") & !id!("PaneGroup_PaneDragging"))
@@ -472,7 +472,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| ContextFlag::CreateNewSession.is_enabled()),
         EditableBinding::new(
             "pane_group:toggle_maximize_pane",
-            crate::tr!("common", "common-toggle-maximize-active-pane").as_str(),
+            crate::tr!("common", "toggle-maximize-active-pane").as_str(),
             PaneGroupAction::ToggleMaximizePane,
         )
         .with_context_predicate(id!("PaneGroup") & !id!("PaneGroup_PaneDragging"))
@@ -2527,7 +2527,7 @@ impl PaneGroup {
         {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    crate::tr!("pane_group", "pane-group-share-session"),
+                    crate::tr!("pane_group", "share-session"),
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )
@@ -2999,9 +2999,9 @@ impl PaneGroup {
             Banner::<PaneGroupAction>::new_permanently_dismissible(
                 BannerTextContent::formatted_text(vec![
                     FormattedTextFragment::plain_text(
-                        crate::tr!("pane_group", "pane-group-unsupported-shell-fallback"),
+                        crate::tr!("pane_group", "unsupported-shell-fallback"),
                     ),
-                    FormattedTextFragment::hyperlink(crate::tr!("common", "common-learn-more-label").as_str(), WARP_SHELL_COMPATIBILITY_DOCS),
+                    FormattedTextFragment::hyperlink(crate::tr!("common", "learn-more-label").as_str(), WARP_SHELL_COMPATIBILITY_DOCS),
                 ]),
             )
         });

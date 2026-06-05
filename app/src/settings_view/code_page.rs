@@ -82,90 +82,90 @@ const STATUS_ICON_SIZE: f32 = 16.;
 const LSP_STATUS_INDICATOR_SIZE: f32 = 8.;
 
 static CODE_FEATURE_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-code-feature-name"));
+    LazyLock::new(|| crate::tr!("settings", "code-feature-name"));
 static INITIALIZATION_SETTINGS_HEADER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-initialization-settings"));
+    LazyLock::new(|| crate::tr!("settings", "initialization-settings"));
 static CODEBASE_INDEXING_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-codebase-indexing-label"));
+    LazyLock::new(|| crate::tr!("settings", "codebase-indexing-label"));
 static CODEBASE_INDEX_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-codebase-index-description")
+    crate::tr!("settings", "codebase-index-description")
 });
 static WARP_INDEXING_IGNORE_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-warp-indexing-ignore-description")
+    crate::tr!("settings", "warp-indexing-ignore-description")
 });
 static AUTO_INDEX_FEATURE_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-auto-index-feature-name"));
+    LazyLock::new(|| crate::tr!("settings", "auto-index-feature-name"));
 static AUTO_INDEX_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-auto-index-description")
+    crate::tr!("settings", "auto-index-description")
 });
 static INDEXING_DISABLED_ADMIN_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-indexing-disabled-admin"));
+    LazyLock::new(|| crate::tr!("settings", "indexing-disabled-admin"));
 static INDEXING_WORKSPACE_ENABLED_ADMIN_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-indexing-workspace-enabled-admin"));
+    LazyLock::new(|| crate::tr!("settings", "indexing-workspace-enabled-admin"));
 static INDEXING_DISABLED_GLOBAL_AI_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-indexing-disabled-global-ai")
+    crate::tr!("settings", "indexing-disabled-global-ai")
 });
 static CODEBASE_INDEX_LIMIT_REACHED: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-codebase-index-limit-reached")
+    crate::tr!("settings", "codebase-index-limit-reached")
 });
 static SETTINGS_INITIALIZED_FOLDERS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-initialized-folders"));
+    LazyLock::new(|| crate::tr!("settings", "initialized-folders"));
 static SETTINGS_NO_FOLDERS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-folders-initialized"));
+    LazyLock::new(|| crate::tr!("settings", "no-folders-initialized"));
 static SETTINGS_INDEXING_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-indexing-label"));
+    LazyLock::new(|| crate::tr!("settings", "indexing-label"));
 static SETTINGS_LSP_SERVERS_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-lsp-servers-label"));
+    LazyLock::new(|| crate::tr!("settings", "lsp-servers-label"));
 static SETTINGS_NO_INDEX_CREATED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-index-created"));
+    LazyLock::new(|| crate::tr!("settings", "no-index-created"));
 static SETTINGS_SYNCED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-synced"));
+    LazyLock::new(|| crate::tr!("settings", "synced"));
 static SETTINGS_CODEBASE_TOO_LARGE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-codebase-too-large"));
+    LazyLock::new(|| crate::tr!("settings", "codebase-too-large"));
 static SETTINGS_CODEBASE_INDEXING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-codebase-indexing"));
+    LazyLock::new(|| crate::tr!("settings", "codebase-indexing"));
 static SETTINGS_STALE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-stale"));
+    LazyLock::new(|| crate::tr!("settings", "stale"));
 static SETTINGS_FAILED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed"));
+    LazyLock::new(|| crate::tr!("settings", "failed"));
 static SETTINGS_NO_INDEX_BUILT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-index-built"));
+    LazyLock::new(|| crate::tr!("settings", "no-index-built"));
 static SETTINGS_SYNCING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-syncing"));
+    LazyLock::new(|| crate::tr!("settings", "syncing"));
 static SETTINGS_INSTALLED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-installed"));
+    LazyLock::new(|| crate::tr!("settings", "installed"));
 static SETTINGS_INSTALLING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-installing"));
+    LazyLock::new(|| crate::tr!("settings", "installing"));
 static SETTINGS_CHECKING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-checking"));
+    LazyLock::new(|| crate::tr!("settings", "checking"));
 static SETTINGS_AVAILABLE_DOWNLOAD: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-available-download"));
+    LazyLock::new(|| crate::tr!("settings", "available-download"));
 static SETTINGS_RESTART_SERVER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-restart-server"));
+    LazyLock::new(|| crate::tr!("settings", "restart-server"));
 static SETTINGS_VIEW_LOGS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-view-logs"));
+    LazyLock::new(|| crate::tr!("settings", "view-logs"));
 static SETTINGS_OPEN_PROJECT_RULES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-open-project-rules"));
+    LazyLock::new(|| crate::tr!("settings", "open-project-rules"));
 static SETTINGS_AVAILABLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-available"));
+    LazyLock::new(|| crate::tr!("settings", "available"));
 static SETTINGS_BUSY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-busy"));
+    LazyLock::new(|| crate::tr!("settings", "busy"));
 static SETTINGS_STOPPED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-stopped"));
+    LazyLock::new(|| crate::tr!("settings", "stopped"));
 static SETTINGS_NOT_RUNNING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-not-running"));
+    LazyLock::new(|| crate::tr!("settings", "not-running"));
 static SETTINGS_CODE_EDITOR_REVIEW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-editor-code-review"));
+    LazyLock::new(|| crate::tr!("settings", "editor-code-review"));
 static SETTINGS_AUTO_OPEN_CODE_REVIEW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-auto-open-code-review"));
+    LazyLock::new(|| crate::tr!("settings", "auto-open-code-review"));
 static SETTINGS_SHOW_CODE_REVIEW_BTN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-show-code-review-button"));
+    LazyLock::new(|| crate::tr!("settings", "show-code-review-button"));
 static SETTINGS_SHOW_DIFF_STATS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-show-diff-stats"));
+    LazyLock::new(|| crate::tr!("settings", "show-diff-stats"));
 static SETTINGS_PROJECT_EXPLORER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-project-explorer"));
+    LazyLock::new(|| crate::tr!("settings", "project-explorer"));
 static SETTINGS_GLOBAL_FILE_SEARCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-global-file-search"));
+    LazyLock::new(|| crate::tr!("settings", "global-file-search"));
 
 /// Identifies which subpage of the Code settings the user is viewing.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1584,7 +1584,7 @@ impl CodePageWidget {
         let (status_text, status_color) = if index_state.has_pending() {
             let progress_text = match index_state.sync_progress() {
                 Some(SyncProgress::Discovering { total_nodes }) => {
-                    Cow::from(crate::tr!("settings", "settings-discovered-chunks", total_nodes = *total_nodes))
+                    Cow::from(crate::tr!("settings", "discovered-chunks", total_nodes = *total_nodes))
                 }
                 Some(SyncProgress::Syncing {
                     completed_nodes,
@@ -2330,7 +2330,7 @@ impl SettingsWidget for AutoOpenCodeReviewPaneCodeWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleAutoOpenCodeReviewPane);
                 })
                 .finish(),
-            Some(crate::tr!("settings", "settings-auto-open-code-review").into()),
+            Some(crate::tr!("settings", "auto-open-code-review").into()),
         )
     }
 }
@@ -2408,8 +2408,7 @@ impl SettingsWidget for CodeReviewPanelToggleWidget {
                 })
                 .finish(),
             Some(
-                crate::tr!("settings", "settings-show-code-review-btn")
-                    .into(),
+                crate::tr!("settings", "show-code-review-btn").into(),
             ),
         )
     }
@@ -2452,7 +2451,7 @@ impl SettingsWidget for CodeReviewDiffStatsToggleWidget {
                     );
                 })
                 .finish(),
-            Some(crate::tr!("settings", "settings-show-diff-stats").into()),
+            Some(crate::tr!("settings", "show-diff-stats").into()),
         )
     }
 }
@@ -2493,8 +2492,7 @@ impl SettingsWidget for ProjectExplorerToggleWidget {
                 })
                 .finish(),
             Some(
-                crate::tr!("settings", "settings-project-explorer")
-                    .into(),
+                crate::tr!("settings", "project-explorer").into(),
             ),
         )
     }
@@ -2535,7 +2533,7 @@ impl SettingsWidget for GlobalSearchToggleWidget {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ToggleGlobalSearch);
                 })
                 .finish(),
-            Some(crate::tr!("settings", "settings-global-search").into()),
+            Some(crate::tr!("settings", "global-search").into()),
         )
     }
 }

@@ -244,7 +244,7 @@ impl View for Body {
                 ButtonVariant::Accent,
                 self.button_mouse_states.start_sharing_button.clone(),
             )
-            .with_centered_text_label(crate::tr!("terminal", "terminal-start-sharing"))
+            .with_centered_text_label(crate::tr!("terminal", "start-sharing"))
             .with_style(style::button_styles());
 
         // If none of the scrollback options are available, the start sharing

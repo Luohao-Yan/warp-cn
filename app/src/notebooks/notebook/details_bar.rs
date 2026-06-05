@@ -137,7 +137,7 @@ impl DetailsBar {
             let ui_builder = appearance.ui_builder().clone();
             edit_button = edit_button.with_tooltip(move || {
                 ui_builder
-                    .tool_tip(crate::tr!("workflows", "workflows-sign-in-to-edit"))
+                    .tool_tip(crate::tr!("workflows", "sign-in-to-edit"))
                     .build()
                     .finish()
             });
@@ -174,13 +174,13 @@ impl DetailsBar {
         match editor.state {
             EditorState::None => appearance
                 .ui_builder()
-                .span(crate::tr!("notebooks", "notebooks-viewing"))
+                .span(crate::tr!("notebooks", "viewing"))
                 .with_style(base_text_styles)
                 .build()
                 .finish(),
             EditorState::CurrentUser => appearance
                 .ui_builder()
-                .span(crate::tr!("notebooks", "notebooks-editing"))
+                .span(crate::tr!("notebooks", "editing"))
                 .with_style(base_text_styles)
                 .build()
                 .finish(),
@@ -188,7 +188,7 @@ impl DetailsBar {
                 let editor = editor_display_name(editor.email.as_deref(), app);
                 appearance
                     .ui_builder()
-                    .span(crate::tr!("notebooks", "notebooks-editor-is-editing", editor = editor.clone()))
+                    .span(crate::tr!("notebooks", "editor-is-editing", editor = editor.clone()))
                     .with_style(base_text_styles)
                     .with_highlights(
                         (0..editor.chars().count()).collect(),

@@ -118,7 +118,7 @@ impl SettingsWidget for AboutPageWidget {
                 .with_child(version_row.finish())
                 .with_child(
                     ui_builder
-                        .span(crate::tr!("settings", "settings-copyright"))
+                        .span(crate::tr!("settings", "copyright"))
                         .build()
                         .with_margin_top(16.)
                         .finish(),

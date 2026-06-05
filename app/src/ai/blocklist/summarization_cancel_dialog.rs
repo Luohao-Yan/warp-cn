@@ -94,7 +94,7 @@ impl View for SummarizationCancelDialog {
             appearance
                 .ui_builder()
                 .button(ButtonVariant::Secondary, self.cancel_mouse.clone())
-                .with_centered_text_label(crate::tr!("ai_assistant", "ai-assistant-cancel-summarization"))
+                .with_centered_text_label(crate::tr!("ai_assistant", "cancel-summarization"))
                 .with_style(UiComponentStyles {
                     width: Some(CANCEL_BUTTON_WIDTH),
                     ..button_style
@@ -112,7 +112,7 @@ impl View for SummarizationCancelDialog {
         let continue_button = appearance
             .ui_builder()
             .button(ButtonVariant::Accent, self.continue_mouse.clone())
-            .with_centered_text_label(crate::tr!("ai_assistant", "ai-assistant-continue-summarization"))
+            .with_centered_text_label(crate::tr!("ai_assistant", "continue-summarization"))
             .with_style(UiComponentStyles {
                 width: Some(CONTINUE_BUTTON_WIDTH),
                 ..button_style

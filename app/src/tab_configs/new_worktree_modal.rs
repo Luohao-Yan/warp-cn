@@ -42,9 +42,9 @@ use crate::{
 };
 
 static TAB_NEW_WORKTREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-new-worktree"));
+    LazyLock::new(|| crate::tr!("workspace", "new-worktree"));
 static TAB_AUTOGENERATE_BRANCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-autogenerate-branch-name"));
+    LazyLock::new(|| crate::tr!("workspace", "autogenerate-branch-name"));
 
 /// Gap between sections in the modal body (repo picker, branch picker, checkbox).
 const SECTION_GAP: f32 = 16.;

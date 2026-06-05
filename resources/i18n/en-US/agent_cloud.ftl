@@ -56,52 +56,7 @@ agent-cloud-filter-with-count = { $label } ({ $count })
 
 ## -- Double-prefix aliases --
 
-agent-cloud-agent-cloud-tier-machine-text = Your agent is currently running on a { $specs } machine.
-agent-cloud-agent-cloud-upgrade-label = { agent-cloud-upgrade-label }
-agent-cloud-agent-cloud-upgrade-suffix = { agent-cloud-upgrade-suffix }
-agent-cloud-agent-cloud-failed-title = { agent-cloud-failed-title }
-agent-cloud-agent-cloud-github-auth-title = { agent-cloud-github-auth-title }
-agent-cloud-agent-cloud-github-auth-message = { agent-cloud-github-auth-message }
-agent-cloud-agent-cloud-github-auth-button = { agent-cloud-github-auth-button }
-agent-cloud-agent-cloud-cancelled-title = { agent-cloud-cancelled-title }
-agent-cloud-agent-cloud-cancelled-subtitle = { agent-cloud-cancelled-subtitle }
-agent-cloud-agent-cloud-start-title = { agent-cloud-start-title }
-agent-cloud-agent-cloud-description-text = { agent-cloud-description-text }
-agent-cloud-agent-cloud-visit-docs = { agent-cloud-visit-docs }
-agent-cloud-agent-cloud-subheading = { agent-cloud-subheading }
-agent-cloud-agent-cloud-credits-single = { agent-cloud-credits-single }
-agent-cloud-agent-cloud-credits-plural = You have { $count } free credits to use on Oz cloud agents.
-agent-cloud-agent-cloud-starting-up = { agent-cloud-starting-up }
-agent-cloud-agent-cloud-interact-soon = { agent-cloud-interact-soon }
-agent-cloud-agent-cloud-agent-failed = { agent-cloud-agent-failed }
-agent-cloud-agent-cloud-agent-harness-tooltip = { agent-cloud-agent-harness-tooltip }
-agent-cloud-agent-cloud-agent-harness-header = { agent-cloud-agent-harness-header }
-agent-cloud-agent-cloud-warp-handoff-tooltip = { agent-cloud-warp-handoff-tooltip }
-agent-cloud-agent-cloud-disabled-by-admin = { agent-cloud-disabled-by-admin }
-agent-cloud-agent-cloud-execution-host-tooltip = { agent-cloud-execution-host-tooltip }
-agent-cloud-agent-cloud-execution-host-header = { agent-cloud-execution-host-header }
-agent-cloud-agent-cloud-search-models = { agent-cloud-search-models }
-agent-cloud-agent-cloud-choose-agent-model = { agent-cloud-choose-agent-model }
-agent-cloud-agent-cloud-no-results = { agent-cloud-no-results }
-agent-cloud-agent-cloud-default-model = { agent-cloud-default-model }
-agent-cloud-agent-cloud-secret-name-required = { agent-cloud-secret-name-required }
-agent-cloud-agent-cloud-select-api-key = Please select an API key or create a new one to use { $display_name } as a cloud agent.
-agent-cloud-agent-cloud-failed-save-api-key = Failed to save API key: { $error }
-agent-cloud-agent-cloud-new-cloud-agent = { agent-cloud-new-cloud-agent }
-agent-cloud-agent-cloud-starting-environment = { agent-cloud-starting-environment }
-agent-cloud-agent-cloud-agent-working-on-task = { agent-cloud-agent-working-on-task }
-agent-cloud-agent-cloud-agent-failed-status = { agent-cloud-agent-failed-status }
-agent-cloud-agent-cloud-authentication-required = { agent-cloud-authentication-required }
-agent-cloud-agent-cloud-cancelled = { agent-cloud-cancelled }
-agent-cloud-agent-cloud-agent-fallback-name = { agent-cloud-agent-fallback-name }
-agent-cloud-agent-cloud-running-agent = Running { $cli_name }...
-
 ## -- Double-prefix aliases for agent status strings --
-
-agent-cloud-agent-cloud-completed = { $name } completed
-agent-cloud-agent-cloud-needs-attention = { $name } needs attention
-agent-cloud-agent-cloud-filter-with-count = { $label } ({ $count })
 
 ## -- Double-prefix aliases for migrated UI strings --
 
-agent-cloud-agent-cloud-loading-cloud-agent-runs = { agent-cloud-loading-cloud-agent-runs }

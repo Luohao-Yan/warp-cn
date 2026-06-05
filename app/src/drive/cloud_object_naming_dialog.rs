@@ -34,12 +34,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_MARGIN_BETWEEN: f32 = 8.;
 
-static NOTEBOOK_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-notebook-name"));
-static FOLDER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-folder-name"));
-static ENV_VAR_COLLECTION_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-collection-name"));
-static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-create"));
-static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-cancel"));
-static RENAME_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-rename"));
+static NOTEBOOK_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "notebook-name"));
+static FOLDER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "folder-name"));
+static ENV_VAR_COLLECTION_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "collection-name"));
+static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "create"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "cancel"));
+static RENAME_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "rename"));
 
 /// Struct holding necessary information and states for the dialog
 /// that opens when creating or updating a folder or notebook.

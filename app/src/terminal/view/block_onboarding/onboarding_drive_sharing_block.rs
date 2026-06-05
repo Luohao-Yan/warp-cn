@@ -53,9 +53,9 @@ impl Entity for OnboardingDriveSharingBlock {
     type Event = ();
 }
 
-static TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-sharing-in-warp-drive"));
-static BODY_TEXT_P1: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-drive-sharing-body-1"));
-static BODY_TEXT_P2: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-drive-sharing-body-2"));
+static TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sharing-in-warp-drive"));
+static BODY_TEXT_P1: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "drive-sharing-body-1"));
+static BODY_TEXT_P2: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "drive-sharing-body-2"));
 
 const BLOCK_PADDING: f32 = 16.;
 const BUTTON_WIDTH: f32 = 100.;
@@ -100,8 +100,8 @@ impl View for OnboardingDriveSharingBlock {
         }
 
         let button_label = match CloudModel::as_ref(app).get_by_uid(&self.object_id.uid()) {
-            Some(object) => crate::tr!("terminal", "terminal-share-object-name", name = object.display_name().to_string()),
-            None => crate::tr!("terminal", "terminal-share-this-object-type", object_type = self.object_id.object_type().to_string()),
+            Some(object) => crate::tr!("terminal", "share-object-name", name = object.display_name().to_string()),
+            None => crate::tr!("terminal", "share-this-object-type", object_type = self.object_id.object_type().to_string()),
         };
         let object_id = self.object_id;
         let button = appearance

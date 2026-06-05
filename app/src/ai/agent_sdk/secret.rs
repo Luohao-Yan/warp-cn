@@ -772,11 +772,11 @@ fn find_secret_type(
 
 fn format_secret_type(type_: &ManagedSecretType) -> String {
     match type_ {
-        ManagedSecretType::RawValue => crate::tr!("ai", "ai-secret-raw-value"),
+        ManagedSecretType::RawValue => crate::tr!("ai", "secret-raw-value"),
         ManagedSecretType::Dotenvx => "dotenvx".to_string(),
-        ManagedSecretType::AnthropicApiKey => crate::tr!("ai", "ai-secret-anthropic-key"),
-        ManagedSecretType::AnthropicBedrockAccessKey => crate::tr!("ai", "ai-secret-anthropic-bedrock-access"),
-        ManagedSecretType::AnthropicBedrockApiKey => crate::tr!("ai", "ai-secret-anthropic-bedrock-key"),
-        ManagedSecretType::OpenaiApiKey => crate::tr!("ai", "ai-secret-openai-key"),
+        ManagedSecretType::AnthropicApiKey => crate::tr!("ai", "secret-anthropic-key"),
+        ManagedSecretType::AnthropicBedrockAccessKey => crate::tr!("ai", "secret-anthropic-bedrock-access"),
+        ManagedSecretType::AnthropicBedrockApiKey => crate::tr!("ai", "secret-anthropic-bedrock-key"),
+        ManagedSecretType::OpenaiApiKey => crate::tr!("ai", "secret-openai-key"),
     }
 }

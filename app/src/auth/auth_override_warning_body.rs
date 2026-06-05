@@ -30,21 +30,21 @@ const ACTION_BUTTON_HORIZONTAL_PADDING: f32 = 8.;
 const ACTION_BUTTON_FONT_SIZE: f32 = 14.;
 
 static AUTH_OVERRIDE_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "auth-override-description"));
+    LazyLock::new(|| crate::tr!("auth", "override-description"));
 static AUTH_OVERRIDE_CONFIRMATION_WARNING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "auth-override-cannot-undo"));
+    LazyLock::new(|| crate::tr!("auth", "override-cannot-undo"));
 static AUTH_OVERRIDE_INITIAL_STEP_HEADER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "auth-override-new-login-header"));
+    LazyLock::new(|| crate::tr!("auth", "override-new-login-header"));
 static AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "auth-override-confirm-delete-header"));
+    LazyLock::new(|| crate::tr!("auth", "override-confirm-delete-header"));
 static AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "auth-override-export-data"));
+    LazyLock::new(|| crate::tr!("auth", "override-export-data"));
 static AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "auth-override-export-later"));
+    LazyLock::new(|| crate::tr!("auth", "override-export-later"));
 static AUTH_OVERRIDE_CANCEL_BUTTON_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
+    LazyLock::new(|| crate::tr!("common", "cancel-label"));
 static AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-continue-label"));
+    LazyLock::new(|| crate::tr!("common", "continue-label"));
 
 #[derive(Clone, Copy, Debug)]
 pub enum AuthOverrideWarningBodyAction {

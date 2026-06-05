@@ -70,7 +70,7 @@ pub struct CodexModal {
 impl CodexModal {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let cta_button = ctx.add_view(|_| {
-            ActionButton::new(crate::tr!("workspace", "workspace-use-latest-codex-model"), WhiteButtonTheme)
+            ActionButton::new(crate::tr!("workspace", "use-latest-codex-model"), WhiteButtonTheme)
                 .with_icon(Icon::OpenAILogo)
                 .with_full_width(true)
                 .on_click(|ctx| {
@@ -89,7 +89,7 @@ impl CodexModal {
         // Magenta/pink color for the badge
         let magenta: ColorU = theme.terminal_colors().normal.magenta.into();
         Container::new(
-            Text::new(crate::tr!("workspace", "workspace-new"), appearance.ui_font_family(), 12.)
+            Text::new(crate::tr!("workspace", "new"), appearance.ui_font_family(), 12.)
                 .with_color(magenta)
                 .finish(),
         )
@@ -108,7 +108,7 @@ impl CodexModal {
         let new_badge = self.render_new_badge(appearance);
 
         // Title
-        let codex_title = crate::tr!("workspace", "workspace-use-codex-models-in-warp");
+        let codex_title = crate::tr!("workspace", "use-codex-models-in-warp");
         let title = FormattedTextElement::from_str(
             codex_title,
             appearance.ui_font_family(),
@@ -122,7 +122,7 @@ impl CodexModal {
         .finish();
 
         // Description - first paragraph
-        let codex_desc_1 = crate::tr!("workspace", "workspace-codex-description-1");
+        let codex_desc_1 = crate::tr!("workspace", "codex-description-1");
         let description_1 = FormattedTextElement::from_str(
             codex_desc_1,
             appearance.ui_font_family(),
@@ -135,7 +135,7 @@ impl CodexModal {
         .finish();
 
         // Description - second paragraph
-        let codex_desc_2 = crate::tr!("workspace", "workspace-codex-description-2");
+        let codex_desc_2 = crate::tr!("workspace", "codex-description-2");
         let description_2 = FormattedTextElement::from_str(
             codex_desc_2,
             appearance.ui_font_family(),

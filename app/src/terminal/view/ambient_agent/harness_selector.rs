@@ -34,10 +34,10 @@ use crate::terminal::view::ambient_agent::AmbientAgentViewModel;
 use crate::view_components::action_button::{ActionButton, ActionButtonTheme, ButtonSize};
 
 /// Tooltip string for the closed-state button.
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-agent-harness-tooltip"));
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-harness-tooltip"));
 
 /// Label rendered at the top of the dropdown.
-static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-agent-harness-header"));
+static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-harness-header"));
 
 /// Font size for the header row (Figma: 12px).
 const HEADER_FONT_SIZE: f32 = 12.;
@@ -229,7 +229,7 @@ impl HarnessSelector {
             button.set_disabled(is_locked_to_oz, ctx);
             button.set_tooltip(
                 Some(if is_locked_to_oz {
-                    crate::tr!("agent_cloud", "agent-cloud-warp-handoff-tooltip")
+                    crate::tr!("agent_cloud", "warp-handoff-tooltip")
                 } else {
                     BUTTON_TOOLTIP.clone()
                 }),
@@ -316,7 +316,7 @@ fn build_menu_items(
             fields = fields
                 .with_disabled(true)
                 .with_override_text_color(disabled_text_color)
-                .with_tooltip(&crate::tr!("agent_cloud", "agent-cloud-disabled-by-admin"));
+                .with_tooltip(&crate::tr!("agent_cloud", "disabled-by-admin"));
         }
         items.push(MenuItem::Item(fields));
     }

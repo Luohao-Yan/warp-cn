@@ -5,8 +5,8 @@ use crate::search::command_palette::mixer::CommandPaletteItemAction;
 use crate::search::command_palette::SelectedItems;
 use std::sync::LazyLock;
 
-static COMMAND_PALETTE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-palette-placeholder").clone());
-static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-palette-no-results").clone());
+static COMMAND_PALETTE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-placeholder").clone());
+static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-no-results").clone());
 use crate::search::result_renderer::QueryResultRenderer;
 use crate::search::search_bar::SelectionUpdate;
 use crate::search::search_bar::{SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering};
@@ -861,7 +861,7 @@ impl View {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    crate::tr!("search", "search-toast-cannot-switch-conv"),
+                                    crate::tr!("search", "toast-cannot-switch-conv"),
                                 ),
                                 window_id,
                                 ctx,
@@ -1001,7 +1001,7 @@ impl View {
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                crate::tr!("search", "search-toast-cannot-start-conv"),
+                                crate::tr!("search", "toast-cannot-start-conv"),
                             ),
                             window_id,
                             ctx,

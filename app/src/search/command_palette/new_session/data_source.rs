@@ -205,12 +205,12 @@ impl Entity for NewSessionDataSource {
 type SearcherAction = <NewSessionDataSource as SyncDataSource>::Action;
 
 static SEARCHER_BASE_STRINGS: [LazyLock<String>; 6] = [
-    LazyLock::new(|| crate::tr!("search", "search-new-tab").clone()),
-    LazyLock::new(|| crate::tr!("search", "search-new-window").clone()),
-    LazyLock::new(|| crate::tr!("search", "search-split-down").clone()),
-    LazyLock::new(|| crate::tr!("search", "search-split-right").clone()),
-    LazyLock::new(|| crate::tr!("search", "search-split-up").clone()),
-    LazyLock::new(|| crate::tr!("search", "search-split-left").clone()),
+    LazyLock::new(|| crate::tr!("search", "new-tab").clone()),
+    LazyLock::new(|| crate::tr!("search", "new-window").clone()),
+    LazyLock::new(|| crate::tr!("search", "split-down").clone()),
+    LazyLock::new(|| crate::tr!("search", "split-right").clone()),
+    LazyLock::new(|| crate::tr!("search", "split-up").clone()),
+    LazyLock::new(|| crate::tr!("search", "split-left").clone()),
 ];
 
 trait NewSessionSearcher {

@@ -136,6 +136,6 @@ impl SearchItem for RepoSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-a11y-repo-label", path = self.metadata.path.display().to_string())
+        crate::tr!("search", "a11y-repo-label", path = self.metadata.path.display().to_string())
     }
 }

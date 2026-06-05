@@ -50,7 +50,7 @@ impl OpenInWarpBannerState {
 fn file_title_text(openable_path: &OpenablePath) -> String {
     match openable_path.file_type {
         OpenableFileType::Markdown => {
-            crate::tr!("terminal", "terminal-open-markdown-title")
+            crate::tr!("terminal", "open-markdown-title")
         }
         OpenableFileType::Code | OpenableFileType::Text => {
             cfg_if::cfg_if! {
@@ -61,13 +61,13 @@ fn file_title_text(openable_path: &OpenablePath) -> String {
 
                     match language.as_ref().map(|language| language.display_name()) {
                         Some(display_name) => {
-                            crate::tr!("terminal", "terminal-open-code-title", display_name = display_name)
+                            crate::tr!("terminal", "open-code-title", display_name = display_name)
                         }
-                        None => crate::tr!("terminal", "terminal-open-code-title-fallback"),
+                        None => crate::tr!("terminal", "open-code-title-fallback"),
                     }
                 } else {
                     // The `languages` crate is not available on WASM, so use a fallback message.
-                    crate::tr!("terminal", "terminal-open-code-title-fallback")
+                    crate::tr!("terminal", "open-code-title-fallback")
                 }
             }
         }
@@ -80,8 +80,8 @@ pub fn render_open_in_warp_banner(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let button_text = match state.target.file_type {
-        OpenableFileType::Markdown => crate::tr!("terminal", "terminal-view-in-warp"),
-        OpenableFileType::Code | OpenableFileType::Text => crate::tr!("terminal", "terminal-edit-in-warp"),
+        OpenableFileType::Markdown => crate::tr!("terminal", "view-in-warp"),
+        OpenableFileType::Code | OpenableFileType::Text => crate::tr!("terminal", "edit-in-warp"),
     };
 
     let open_button = InlineBannerTextButton {
@@ -100,7 +100,7 @@ pub fn render_open_in_warp_banner(
     };
 
     let learn_more_button = InlineBannerTextButton {
-        text: crate::tr!("common", "common-learn-more-label").clone(),
+        text: crate::tr!("common", "learn-more-label").clone(),
         text_color: appearance.theme().active_ui_text_color().into_solid(),
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::OpenInWarpBanner(OpenInWarpBannerAction::LearnMore),

@@ -22,7 +22,7 @@ use crate::code::editor::{add_color, remove_color};
 use crate::search::{ItemHighlightState, SearchItem};
 
 static TERMINAL_NO_CODE_RESTORED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-no-code-restored"));
+    LazyLock::new(|| crate::tr!("terminal", "no-code-restored"));
 use crate::terminal::input::inline_menu::styles::{
     font_size, icon_color, item_background, menu_background_color, primary_text_color, ICON_MARGIN,
     ITEM_CORNER_RADIUS, ITEM_HORIZONTAL_PADDING,
@@ -230,7 +230,7 @@ impl SearchItem for RewindSearchItem {
                 self.query_text, self.file_changes.lines_added, self.file_changes.lines_removed
             )
         } else {
-            crate::tr!("terminal", "terminal-search-rewind", query = self.query_text.clone())
+            crate::tr!("terminal", "search-rewind", query = self.query_text.clone())
         }
     }
 }

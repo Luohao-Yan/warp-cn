@@ -48,7 +48,7 @@ pub fn render_inline_notifications_discovery_banner(
     let active_ui_text_color = appearance.theme().active_ui_text_color().into_solid();
 
     let learn_more_button = InlineBannerTextButton {
-        text: crate::tr!("common", "common-learn-more-label").clone(),
+        text: crate::tr!("common", "learn-more-label").clone(),
         text_color: active_ui_text_color,
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::NotificationsDiscoveryBanner(
@@ -61,7 +61,7 @@ pub fn render_inline_notifications_discovery_banner(
         variant: InlineBannerTextButtonVariant::Secondary,
     };
     let troubleshoot_button = InlineBannerTextButton {
-        text: crate::tr!("terminal", "terminal-troubleshoot"),
+        text: crate::tr!("terminal", "troubleshoot"),
         text_color: active_ui_text_color,
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::NotificationsDiscoveryBanner(
@@ -76,11 +76,11 @@ pub fn render_inline_notifications_discovery_banner(
 
     let (title, buttons) = match notifications_mode {
         NotificationsMode::Dismissed => (
-            crate::tr!("terminal", "terminal-notifications-dismissed"),
+            crate::tr!("terminal", "notifications-dismissed"),
             vec![],
         ),
         NotificationsMode::Disabled => (
-            crate::tr!("terminal", "terminal-notifications-disabled"),
+            crate::tr!("terminal", "notifications-disabled"),
             vec![],
         ),
         NotificationsMode::Unset => (
@@ -88,7 +88,7 @@ pub fn render_inline_notifications_discovery_banner(
             vec![
                 learn_more_button,
                 InlineBannerTextButton {
-                    text: crate::tr!("common", "common-enable-label"),
+                    text: crate::tr!("common", "enable-label"),
                     text_color: active_ui_text_color,
                     button_state: InlineBannerButtonState {
                         on_click_event: TerminalAction::NotificationsDiscoveryBanner(
@@ -108,20 +108,20 @@ pub fn render_inline_notifications_discovery_banner(
             let (title, docs_button) = match request_outcome {
                 Some(request_outcome) => match request_outcome {
                     RequestPermissionsOutcome::Accepted => (
-                        crate::tr!("terminal", "terminal-notifications-success"),
+                        crate::tr!("terminal", "notifications-success"),
                         learn_more_button,
                     ),
                     RequestPermissionsOutcome::PermissionsDenied => (
-                        crate::tr!("terminal", "terminal-notifications-denied"),
+                        crate::tr!("terminal", "notifications-denied"),
                         troubleshoot_button,
                     ),
                     RequestPermissionsOutcome::OtherError { .. } => (
-                        crate::tr!("terminal", "terminal-notifications-error"),
+                        crate::tr!("terminal", "notifications-error"),
                         troubleshoot_button,
                     ),
                 },
                 None => (
-                    crate::tr!("terminal", "terminal-notifications-pending"),
+                    crate::tr!("terminal", "notifications-pending"),
                     learn_more_button,
                 ),
             };
@@ -131,7 +131,7 @@ pub fn render_inline_notifications_discovery_banner(
                 vec![
                     docs_button,
                     InlineBannerTextButton {
-                        text: crate::tr!("terminal", "terminal-configure-notifications"),
+                        text: crate::tr!("terminal", "configure-notifications"),
                         text_color: active_ui_text_color,
                         button_state: InlineBannerButtonState {
                             on_click_event: TerminalAction::NotificationsDiscoveryBanner(

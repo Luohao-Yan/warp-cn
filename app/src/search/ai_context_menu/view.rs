@@ -121,26 +121,26 @@ pub enum AIContextMenuCategory {
 impl AIContextMenuCategory {
     pub fn name(&self) -> String {
         match self {
-            AIContextMenuCategory::CurrentFolderFiles => crate::tr!("search", "search-category-files").clone(),
-            AIContextMenuCategory::RepoFiles => crate::tr!("search", "search-category-files").clone(),
-            AIContextMenuCategory::Commands => crate::tr!("search", "search-category-commands").clone(),
-            AIContextMenuCategory::Blocks => crate::tr!("search", "search-category-blocks").clone(),
-            AIContextMenuCategory::Workflows => crate::tr!("search", "search-category-workflows").clone(),
-            AIContextMenuCategory::Notebooks => crate::tr!("search", "search-category-notebooks").clone(),
-            AIContextMenuCategory::Plans => crate::tr!("search", "search-category-plans").clone(),
-            AIContextMenuCategory::Diffs => crate::tr!("search", "search-category-diffs").clone(),
-            AIContextMenuCategory::Docs => crate::tr!("search", "search-category-docs").clone(),
-            AIContextMenuCategory::Tasks => crate::tr!("search", "search-category-tasks").clone(),
-            AIContextMenuCategory::Rules => crate::tr!("search", "search-category-rules").clone(),
-            AIContextMenuCategory::Servers => crate::tr!("search", "search-category-servers").clone(),
-            AIContextMenuCategory::Terminal => crate::tr!("search", "search-category-terminal").clone(),
-            AIContextMenuCategory::Web => crate::tr!("search", "search-category-web").clone(),
-            AIContextMenuCategory::RecentDiff => crate::tr!("search", "search-category-recent-diff").clone(),
-            AIContextMenuCategory::RecentBlock => crate::tr!("search", "search-category-recent-block").clone(),
-            AIContextMenuCategory::Code => crate::tr!("search", "search-category-code").clone(),
-            AIContextMenuCategory::DiffSet => crate::tr!("search", "search-category-diff-sets").clone(),
-            AIContextMenuCategory::Conversations => crate::tr!("search", "search-category-conversations").clone(),
-            AIContextMenuCategory::Skills => crate::tr!("search", "search-category-skills").clone(),
+            AIContextMenuCategory::CurrentFolderFiles => crate::tr!("search", "category-files").clone(),
+            AIContextMenuCategory::RepoFiles => crate::tr!("search", "category-files").clone(),
+            AIContextMenuCategory::Commands => crate::tr!("search", "category-commands").clone(),
+            AIContextMenuCategory::Blocks => crate::tr!("search", "category-blocks").clone(),
+            AIContextMenuCategory::Workflows => crate::tr!("search", "category-workflows").clone(),
+            AIContextMenuCategory::Notebooks => crate::tr!("search", "category-notebooks").clone(),
+            AIContextMenuCategory::Plans => crate::tr!("search", "category-plans").clone(),
+            AIContextMenuCategory::Diffs => crate::tr!("search", "category-diffs").clone(),
+            AIContextMenuCategory::Docs => crate::tr!("search", "category-docs").clone(),
+            AIContextMenuCategory::Tasks => crate::tr!("search", "category-tasks").clone(),
+            AIContextMenuCategory::Rules => crate::tr!("search", "category-rules").clone(),
+            AIContextMenuCategory::Servers => crate::tr!("search", "category-servers").clone(),
+            AIContextMenuCategory::Terminal => crate::tr!("search", "category-terminal").clone(),
+            AIContextMenuCategory::Web => crate::tr!("search", "category-web").clone(),
+            AIContextMenuCategory::RecentDiff => crate::tr!("search", "category-recent-diff").clone(),
+            AIContextMenuCategory::RecentBlock => crate::tr!("search", "category-recent-block").clone(),
+            AIContextMenuCategory::Code => crate::tr!("search", "category-code").clone(),
+            AIContextMenuCategory::DiffSet => crate::tr!("search", "category-diff-sets").clone(),
+            AIContextMenuCategory::Conversations => crate::tr!("search", "category-conversations").clone(),
+            AIContextMenuCategory::Skills => crate::tr!("search", "category-skills").clone(),
         }
     }
 
@@ -1389,7 +1389,7 @@ impl AIContextMenu {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                crate::tr!("search", "search-no-results").clone(),
+                crate::tr!("search", "no-results").clone(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -1405,7 +1405,7 @@ impl AIContextMenu {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                crate::tr!("search", "search-loading").clone(),
+                crate::tr!("search", "loading").clone(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -1422,7 +1422,7 @@ impl AIContextMenu {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                crate::tr!("search", "search-indexing").clone(),
+                crate::tr!("search", "indexing").clone(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )

@@ -18,7 +18,7 @@ use warpui::elements::{Container, Flex, Highlight, ParentElement, Text};
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
 
-static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-untitled").clone());
+static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "untitled").clone());
 
 /// Search item result for a cloud notebook.
 #[derive(Debug)]
@@ -144,7 +144,7 @@ impl SearchItem for NotebookSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-notebook-a11y-label")
+        crate::tr!("search", "notebook-a11y-label")
             .replace("{ $title }", &self.cloud_notebook.model().title)
     }
 }

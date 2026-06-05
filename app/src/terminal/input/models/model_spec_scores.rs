@@ -18,17 +18,17 @@ const CORNER_RADIUS: f32 = 4.0;
 const ROW_SPACING: f32 = 12.0;
 
 pub static MODEL_SPECS_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-model-specs-title"));
+    LazyLock::new(|| crate::tr!("terminal", "model-specs-title"));
 pub static MODEL_SPECS_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-model-specs-description"));
+    LazyLock::new(|| crate::tr!("terminal", "model-specs-description"));
 
 pub static REASONING_LEVEL_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-reasoning-level-title"));
+    LazyLock::new(|| crate::tr!("terminal", "reasoning-level-title"));
 pub static REASONING_LEVEL_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-reasoning-level-description"));
+    LazyLock::new(|| crate::tr!("terminal", "reasoning-level-description"));
 
 static TERMINAL_BILLED_TO_API: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-billed-to-api"));
+    LazyLock::new(|| crate::tr!("terminal", "billed-to-api"));
 
 pub enum CostRow {
     Bar { value: Option<f32> },

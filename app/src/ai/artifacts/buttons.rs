@@ -212,7 +212,7 @@ fn make_plan_button(
     make_artifact_button(
         title,
         Icon::Compass,
-        crate::tr!("ai", "ai-open-plan"),
+        crate::tr!("ai", "open-plan"),
         None,
         ArtifactButtonAction::OpenPlan { notebook_uid },
         theme,
@@ -245,7 +245,7 @@ fn make_pr_button(
     make_artifact_button(
         display_text,
         Icon::Github,
-        crate::tr!("ai", "ai-open-pull-request"),
+        crate::tr!("ai", "open-pull-request"),
         None,
         ArtifactButtonAction::OpenPullRequest { url },
         theme,

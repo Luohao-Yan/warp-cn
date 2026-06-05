@@ -216,7 +216,7 @@ impl NotebookCommand {
                 ctx,
             );
 
-            let mermaid_display_label = crate::tr!("notebooks", "notebooks-mermaid-label");
+            let mermaid_display_label = crate::tr!("notebooks", "mermaid-label");
             let current_dropdown_selection = match &current_block_style {
                 CodeBlockType::Shell => CODE_BLOCK_SHELL_DISPLAY_LANG,
                 CodeBlockType::Mermaid => &mermaid_display_label,
@@ -679,7 +679,7 @@ impl RunnableCommandModel for NotebookCommand {
             .with_active_styles(active_highlight)
             .with_tooltip(move || {
                 tooltip_builder_raw
-                    .tool_tip(crate::tr!("notebooks", "notebooks-raw"))
+                    .tool_tip(crate::tr!("notebooks", "raw"))
                     .build()
                     .finish()
             })
@@ -704,7 +704,7 @@ impl RunnableCommandModel for NotebookCommand {
             .with_active_styles(active_highlight)
             .with_tooltip(move || {
                 tooltip_builder_rendered
-                    .tool_tip(crate::tr!("notebooks", "notebooks-rendered"))
+                    .tool_tip(crate::tr!("notebooks", "rendered"))
                     .build()
                     .finish()
             })
@@ -742,7 +742,7 @@ impl RunnableCommandModel for NotebookCommand {
                     appearance,
                     Icon::Copy,
                     self.mouse_state_handles.copy_button_state.clone(),
-                    crate::tr!("common", "common-copy-label"),
+                    crate::tr!("common", "copy-label"),
                     custom_action_to_display(CustomAction::Copy),
                 )
                 .on_click(move |ctx, app, _| {
@@ -769,7 +769,7 @@ impl RunnableCommandModel for NotebookCommand {
                         appearance,
                         Icon::TerminalInput,
                         self.mouse_state_handles.insert_button_state.clone(),
-                        crate::tr!("notebooks", "notebooks-run-in-terminal"),
+                        crate::tr!("notebooks", "run-in-terminal"),
                         NotebookKeybindings::as_ref(ctx).run_commands_keybinding(),
                     )
                     .on_click(move |ctx, app, _| {

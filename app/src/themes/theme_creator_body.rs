@@ -36,12 +36,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
-static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-theme-creator-subheader"));
-static IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-select-image"));
-static IMAGE_PICKER_BUTTON_SELECTING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-selecting-image"));
-static IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-select-new-image"));
-static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
-static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-create-theme"));
+static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "theme-creator-subheader"));
+static IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "select-image"));
+static IMAGE_PICKER_BUTTON_SELECTING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "selecting-image"));
+static IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "select-new-image"));
+static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
+static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "create-theme"));
 
 #[derive(Default)]
 struct MouseStateHandles {

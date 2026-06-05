@@ -132,7 +132,7 @@ fn build_tab_configs(is_agent_view: bool) -> Vec<InlineMenuTabConfig<HistoryTab>
     if !is_agent_view {
         return vec![InlineMenuTabConfig {
             id: HistoryTab::All,
-            label: crate::tr!("terminal", "terminal-tab-all"),
+            label: crate::tr!("terminal", "tab-all"),
             filters: HashSet::new(),
         }];
     }
@@ -140,17 +140,17 @@ fn build_tab_configs(is_agent_view: bool) -> Vec<InlineMenuTabConfig<HistoryTab>
     vec![
         InlineMenuTabConfig {
             id: HistoryTab::All,
-            label: crate::tr!("terminal", "terminal-tab-all"),
+            label: crate::tr!("terminal", "tab-all"),
             filters: HashSet::new(),
         },
         InlineMenuTabConfig {
             id: HistoryTab::Commands,
-            label: crate::tr!("terminal", "terminal-tab-commands"),
+            label: crate::tr!("terminal", "tab-commands"),
             filters: HashSet::from([QueryFilter::Commands]),
         },
         InlineMenuTabConfig {
             id: HistoryTab::Prompts,
-            label: crate::tr!("terminal", "terminal-tab-prompts"),
+            label: crate::tr!("terminal", "tab-prompts"),
             filters: HashSet::from([QueryFilter::PromptHistory]),
         },
     ]
@@ -263,7 +263,7 @@ impl InlineHistoryMenuView {
 
         let menu_view = if FeatureFlag::InlineMenuHeaders.is_enabled() {
             let configure_button = ctx.add_view(|_| {
-                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-configure"));
+                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "configure"));
                 ActionButton::new(&*LABEL, ConfigureButtonTheme)
                     .with_icon(Icon::Settings)
                     .with_size(ButtonSize::Small)
@@ -275,7 +275,7 @@ impl InlineHistoryMenuView {
                     })
             });
             let header_config = InlineMenuHeaderConfig {
-                label: crate::tr!("terminal", "terminal-history"),
+                label: crate::tr!("terminal", "history"),
                 trailing_element: Some(Box::new(move |_app: &AppContext| {
                     ChildView::new(&configure_button).finish()
                 })),

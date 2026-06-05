@@ -47,7 +47,7 @@ use crate::LLMPreferences;
 // ── Shared constants ────────────────────────────────────────────────
 
 pub const ORCHESTRATION_WARP_WORKER_HOST: &str = "warp";
-pub static ORCHESTRATION_ENV_NONE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-orchestration-env-none-label"));
+pub static ORCHESTRATION_ENV_NONE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "orchestration-env-none-label"));
 
 pub const ORCHESTRATION_PICKER_HEIGHT: f32 = 36.;
 pub const ORCHESTRATION_PICKER_BORDER_WIDTH: f32 = 1.;
@@ -55,18 +55,18 @@ pub const ORCHESTRATION_PICKER_FONT_SIZE: f32 = 14.;
 pub const ORCHESTRATION_PICKER_RADIUS: f32 = 4.;
 pub const ORCHESTRATION_PICKER_MAX_WIDTH: f32 = 205.;
 
-static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-default-model-label"));
+static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "default-model-label"));
 
-static AGENT_LOCATION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-location-label"));
-static LOCAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-local-label"));
-static CLOUD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-cloud-label"));
-static AGENT_HARNESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-harness-label"));
-static HOST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-host-label"));
-static ENVIRONMENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-environment-label"));
-static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-base-model-label"));
-static OPENCODE_CLOUD_DISABLED_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-opencode-cloud-disabled-reason"));
-static RECOMMEND_SELECT_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-recommend-select-env"));
-static RECOMMEND_CREATE_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-recommend-create-env"));
+static AGENT_LOCATION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-location-label"));
+static LOCAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "local-label"));
+static CLOUD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "cloud-label"));
+static AGENT_HARNESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-harness-label"));
+static HOST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "host-label"));
+static ENVIRONMENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "environment-label"));
+static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "base-model-label"));
+static OPENCODE_CLOUD_DISABLED_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "opencode-cloud-disabled-reason"));
+static RECOMMEND_SELECT_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "recommend-select-env"));
+static RECOMMEND_CREATE_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "recommend-create-env"));
 
 // ── Action trait ────────────────────────────────────────────────────
 

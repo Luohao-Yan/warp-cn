@@ -17,7 +17,7 @@ use std::sync::LazyLock;
 
 use crate::{terminal::model::session::SessionId, ui_components::icons::Icon, Appearance};
 
-static BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ssh-connection-failed"));
+static BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ssh-connection-failed"));
 
 const BANNER_BODY: &str =
     "While advanced features like file browsing and code review are currently \

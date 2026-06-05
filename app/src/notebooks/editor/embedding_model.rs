@@ -228,7 +228,7 @@ impl NotebookEmbed {
                     appearance,
                     Icon::Pencil,
                     self.mouse_state_handles.edit_button_state.clone(),
-                    crate::tr!("common", "common-edit-label"),
+                    crate::tr!("common", "edit-label"),
                     None,
                 )
                 .on_click(move |ctx, _, _| {
@@ -246,7 +246,7 @@ impl NotebookEmbed {
                     appearance,
                     Icon::Copy,
                     self.mouse_state_handles.copy_button_state.clone(),
-                    crate::tr!("common", "common-copy-label"),
+                    crate::tr!("common", "copy-label"),
                     custom_action_to_display(CustomAction::Copy),
                 )
                 .on_click(move |ctx, _, _| {

@@ -31,15 +31,15 @@ use crate::view_components::callout_bubble::{
 const PILL_GAP: f32 = 8.;
 
 static TAB_SELECT_DIRECTORY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-select-directory"));
+    LazyLock::new(|| crate::tr!("workspace", "select-directory"));
 static TAB_SELECT_GIT_REPO: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-select-git-repo"));
+    LazyLock::new(|| crate::tr!("workspace", "select-git-repo"));
 static TAB_AUTO_CREATE_WORKTREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-auto-create-worktree"));
+    LazyLock::new(|| crate::tr!("workspace", "auto-create-worktree"));
 static TAB_MUST_SELECT_WORKTREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-must-select-worktree"));
+    LazyLock::new(|| crate::tr!("workspace", "must-select-worktree"));
 static TAB_AUTO_GENERATE_BRANCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "workspace-auto-generate-branch"));
+    LazyLock::new(|| crate::tr!("workspace", "auto-generate-branch"));
 
 fn session_type_item_color(
     is_selected: bool,

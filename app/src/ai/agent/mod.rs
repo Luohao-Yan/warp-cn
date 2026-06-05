@@ -555,7 +555,7 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::CommentsAddressed {
                     comments: comment_ids,
                 } => {
-                    result.push(crate::tr!("ai_assistant", "ai-assistant-addressed-comments", count = comment_ids.len()));
+                    result.push(crate::tr!("ai_assistant", "addressed-comments", count = comment_ids.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::Reasoning { .. } => continue,
@@ -569,11 +569,11 @@ impl AIAgentOutput {
                 AIAgentOutputMessageType::ArtifactCreated(_) => continue,
                 AIAgentOutputMessageType::SkillInvoked(_) => continue,
                 AIAgentOutputMessageType::MessagesReceivedFromAgents { messages } => {
-                    result.push(crate::tr!("ai_assistant", "ai-assistant-received-messages", count = messages.len()));
+                    result.push(crate::tr!("ai_assistant", "received-messages", count = messages.len()));
                     last_was_action = false;
                 }
                 AIAgentOutputMessageType::EventsFromAgents { event_ids } => {
-                    result.push(crate::tr!("ai_assistant", "ai-assistant-received-events", count = event_ids.len()));
+                    result.push(crate::tr!("ai_assistant", "received-events", count = event_ids.len()));
                     last_was_action = false;
                 }
             }
@@ -2622,7 +2622,7 @@ impl AIAgentInput {
             } => Some(url.query.clone()),
             Self::InitProjectRules { display_query, .. }
             | Self::CreateEnvironment { display_query, .. } => display_query.clone(),
-            Self::CodeReview { .. } => Some(crate::tr!("ai", "ai-address-comments")),
+            Self::CodeReview { .. } => Some(crate::tr!("ai", "address-comments")),
             Self::FetchReviewComments { .. } => Some(commands::PR_COMMENTS.name.to_string()),
             Self::InvokeSkill {
                 skill, user_query, ..

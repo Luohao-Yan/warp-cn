@@ -70,10 +70,10 @@ impl crate::search::item::SearchItem for SearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-a11y-launch-config-selected", name = self.launch_config.name.clone())
+        crate::tr!("search", "a11y-launch-config-selected", name = self.launch_config.name.clone())
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some(crate::tr!("search", "search-a11y-launch-config-help").clone())
+        Some(crate::tr!("search", "a11y-launch-config-help").clone())
     }
 }

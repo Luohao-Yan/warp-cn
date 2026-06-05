@@ -242,14 +242,14 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Copy,
             CodeEditorViewAction::Copy,
-            crate::tr!("common", "common-copy-label").as_str(),
+            crate::tr!("common", "copy-label").as_str(),
             text_entry.clone(),
         ),
         // Bindings for paste require the StandardAction and CustomAction binding to work on all platforms.
         FixedBinding::custom(
             CustomAction::Paste,
             CodeEditorViewAction::Paste,
-            crate::tr!("common", "common-paste-label").as_str(),
+            crate::tr!("common", "paste-label").as_str(),
             text_entry.clone(),
         ),
         FixedBinding::standard(
@@ -261,32 +261,32 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::WindowsPaste,
             CodeEditorViewAction::Paste,
-            crate::tr!("common", "common-paste-label").as_str(),
+            crate::tr!("common", "paste-label").as_str(),
             text_entry.clone(),
         ),
         #[cfg(windows)]
         FixedBinding::custom(
             CustomAction::WindowsCopy,
             CodeEditorViewAction::WindowsCtrlC,
-            crate::tr!("common", "common-copy-label").as_str(),
+            crate::tr!("common", "copy-label").as_str(),
             text_entry.clone(),
         ),
         FixedBinding::custom(
             CustomAction::Cut,
             CodeEditorViewAction::Cut,
-            crate::tr!("common", "common-cut-label").as_str(),
+            crate::tr!("common", "cut-label").as_str(),
             text_entry.clone(),
         ),
         FixedBinding::custom(
             CustomAction::Undo,
             CodeEditorViewAction::Undo,
-            crate::tr!("common", "common-undo-label").as_str(),
+            crate::tr!("common", "undo-label").as_str(),
             text_entry.clone(),
         ),
         FixedBinding::custom(
             CustomAction::Redo,
             CodeEditorViewAction::Redo,
-            crate::tr!("common", "common-redo-label").as_str(),
+            crate::tr!("common", "redo-label").as_str(),
             text_entry.clone(),
         ),
         FixedBinding::new("escape", CodeEditorViewAction::Escape, text_entry.clone()),

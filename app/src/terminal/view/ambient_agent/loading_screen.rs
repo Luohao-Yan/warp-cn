@@ -50,7 +50,7 @@ pub fn render_cloud_mode_loading_screen(
         // Add link at the end if it exists
         if let Some(link_target) = tip.link() {
             fragments.push(FormattedTextFragment::plain_text(" "));
-            fragments.push(FormattedTextFragment::hyperlink(crate::tr!("common", "common-learn-more-label").as_str(), link_target));
+            fragments.push(FormattedTextFragment::hyperlink(crate::tr!("common", "learn-more-label").as_str(), link_target));
         }
 
         let formatted_text = FormattedText::new(vec![FormattedTextLine::Line(fragments)]);
@@ -156,7 +156,7 @@ fn render_tier_limits_footer(
 
     let mut fragments = vec![FormattedTextFragment::plain_text(format!(
         "{} ",
-        crate::tr!("agent_cloud", "agent-cloud-tier-machine-text", specs = specs.as_str())
+        crate::tr!("agent_cloud", "tier-machine-text", specs = specs.as_str())
     ))];
 
     // Get the upgrade URL for the current team
@@ -164,9 +164,9 @@ fn render_tier_limits_footer(
         .current_team()
         .map(|team| UserWorkspaces::upgrade_link_for_team(team.uid))?;
 
-    fragments.push(FormattedTextFragment::hyperlink(&crate::tr!("agent_cloud", "agent-cloud-upgrade-label"), upgrade_url));
+    fragments.push(FormattedTextFragment::hyperlink(&crate::tr!("agent_cloud", "upgrade-label"), upgrade_url));
     fragments.push(FormattedTextFragment::plain_text(
-        &format!(" {}", crate::tr!("agent_cloud", "agent-cloud-upgrade-suffix")),
+        &format!(" {}", crate::tr!("agent_cloud", "upgrade-suffix"))
     ));
 
     let formatted_text = FormattedText::new(vec![FormattedTextLine::Line(fragments)]);
@@ -233,7 +233,7 @@ pub fn render_cloud_mode_error_screen(
     .finish();
 
     // Error title text
-    let failed_title = crate::tr!("agent_cloud", "agent-cloud-failed-title");
+    let failed_title = crate::tr!("agent_cloud", "failed-title");
     let title_text = Text::new(
         failed_title,
         appearance.ui_font_family(),
@@ -324,7 +324,7 @@ pub fn render_cloud_mode_github_auth_required_screen(
         .finish();
 
     // Title text - "GitHub Authentication Required"
-    let github_auth_title = crate::tr!("agent_cloud", "agent-cloud-github-auth-title");
+    let github_auth_title = crate::tr!("agent_cloud", "github-auth-title");
     let title_text = Text::new(
         github_auth_title,
         appearance.ui_font_family(),
@@ -335,7 +335,7 @@ pub fn render_cloud_mode_github_auth_required_screen(
     .finish();
 
     // Message text - "Please authenticate with GitHub to continue"
-    let github_auth_message = crate::tr!("agent_cloud", "agent-cloud-github-auth-message");
+    let github_auth_message = crate::tr!("agent_cloud", "github-auth-message");
     let message_text = Text::new(
         github_auth_message,
         appearance.ui_font_family(),
@@ -349,7 +349,7 @@ pub fn render_cloud_mode_github_auth_required_screen(
     let auth_button = appearance
         .ui_builder()
         .button(ButtonVariant::Accent, auth_button_mouse_state.clone())
-        .with_centered_text_label(crate::tr!("agent_cloud", "agent-cloud-github-auth-button"))
+        .with_centered_text_label(crate::tr!("agent_cloud", "github-auth-button"))
         .build()
         .on_click(move |_, app, _| {
             app.open_url(&auth_url_clone);
@@ -413,7 +413,7 @@ pub fn render_cloud_mode_cancelled_screen(appearance: &Appearance) -> Box<dyn El
     .finish();
 
     // Title text - "Cloud Agent Run Cancelled"
-    let cancelled_title = crate::tr!("agent_cloud", "agent-cloud-cancelled-title");
+    let cancelled_title = crate::tr!("agent_cloud", "cancelled-title");
     let title_text = Text::new(
         cancelled_title,
         appearance.ui_font_family(),
@@ -424,7 +424,7 @@ pub fn render_cloud_mode_cancelled_screen(appearance: &Appearance) -> Box<dyn El
     .finish();
 
     // Subtitle text - "No cloud environment was started"
-    let cancelled_subtitle = crate::tr!("agent_cloud", "agent-cloud-cancelled-subtitle");
+    let cancelled_subtitle = crate::tr!("agent_cloud", "cancelled-subtitle");
     let subtitle_text = Text::new(
         cancelled_subtitle,
         appearance.ui_font_family(),

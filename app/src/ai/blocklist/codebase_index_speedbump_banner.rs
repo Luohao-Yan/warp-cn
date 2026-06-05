@@ -18,17 +18,17 @@ use warpui::{
     Element,
 };
 
-static SPEEDBUMP_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-index-codebase-question"));
-static SPEEDBUMP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-index-codebase-text"));
+static SPEEDBUMP_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "index-codebase-question"));
+static SPEEDBUMP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "index-codebase-text"));
 /// Uniform padding around the banner
 const PADDING: f32 = 12.;
 /// Text for the button that allows execution
-static ALLOW_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-index-codebase-button"));
-static ALLOW_SETTINGS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-allow-automatic-indexing"));
-static DISMISS_FOREVER_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-do-not-show-again"));
+static ALLOW_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "index-codebase-button"));
+static ALLOW_SETTINGS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "allow-automatic-indexing"));
+static DISMISS_FOREVER_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "do-not-show-again"));
 
-static INDEXING_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-indexing-codebase"));
-static VIEW_STATUS_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-view-status"));
+static INDEXING_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "indexing-codebase"));
+static VIEW_STATUS_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "view-status"));
 
 #[derive(PartialEq, Clone)]
 pub enum VisibilityState {

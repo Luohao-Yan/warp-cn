@@ -74,84 +74,84 @@ use warpui::fonts::Weight;
 const FONT_SIZE: f32 = 12.;
 
 static SAFE_MODE_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-secret-redaction"));
+    LazyLock::new(|| crate::tr!("settings", "secret-redaction"));
 static SAFE_MODE_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-secret-redaction-description")
+    crate::tr!("settings", "secret-redaction-description")
 });
 static USER_SECRET_REGEX_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-custom-secret-redaction"));
+    LazyLock::new(|| crate::tr!("settings", "custom-secret-redaction"));
 static USER_SECRET_REGEX_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-custom-secret-redaction-description")
+    crate::tr!("settings", "custom-secret-redaction-description")
 });
 static TELEMETRY_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-help-improve-warp"));
+    LazyLock::new(|| crate::tr!("settings", "help-improve-warp"));
 static TELEMETRY_DESCRIPTION_OLD: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-telemetry-description-old")
+    crate::tr!("settings", "telemetry-description-old")
 });
 static TELEMETRY_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-telemetry-description")
+    crate::tr!("settings", "telemetry-description")
 });
 static TELEMETRY_FREE_TIER_NOTE: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-telemetry-free-tier-note")
+    crate::tr!("settings", "telemetry-free-tier-note")
 });
 static DATA_MANAGEMENT_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-manage-your-data"));
+    LazyLock::new(|| crate::tr!("settings", "manage-your-data"));
 static DATA_MANAGEMENT_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-manage-your-data-description")
+    crate::tr!("settings", "manage-your-data-description")
 });
 static DATA_MANAGEMENT_LINK_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-visit-data-management-page"));
+    LazyLock::new(|| crate::tr!("settings", "visit-data-management-page"));
 static PRIVACY_POLICY_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-privacy-policy"));
+    LazyLock::new(|| crate::tr!("settings", "privacy-policy"));
 static PRIVACY_POLICY_LINK_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-read-privacy-policy"));
+    LazyLock::new(|| crate::tr!("settings", "read-privacy-policy"));
 static SETTINGS_PERSONAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-personal"));
+    LazyLock::new(|| crate::tr!("settings", "personal"));
 static SETTINGS_ENTERPRISE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-enterprise"));
+    LazyLock::new(|| crate::tr!("settings", "enterprise"));
 static SETTINGS_ENTERPRISE_CANNOT_MODIFY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-enterprise-cannot-modify"));
+    LazyLock::new(|| crate::tr!("settings", "enterprise-cannot-modify"));
 static SETTINGS_NO_ENTERPRISE_REGEXES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-enterprise-regexes"));
+    LazyLock::new(|| crate::tr!("settings", "no-enterprise-regexes"));
 static SETTINGS_RECOMMENDED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-recommended"));
+    LazyLock::new(|| crate::tr!("settings", "recommended"));
 static SETTINGS_ADD_ALL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-add-all"));
+    LazyLock::new(|| crate::tr!("settings", "add-all"));
 static SETTINGS_ADD_REGEX: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-add-regex-btn"));
+    LazyLock::new(|| crate::tr!("settings", "add-regex-btn"));
 static SETTINGS_ENABLED_BY_ORG: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-enabled-by-org"));
+    LazyLock::new(|| crate::tr!("settings", "enabled-by-org"));
 static SETTINGS_SECRET_VISUAL_REDACTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-secret-visual-redaction-mode"));
+    LazyLock::new(|| crate::tr!("settings", "secret-visual-redaction-mode"));
 static SETTINGS_SECRET_VISUAL_REDACTION_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-secret-visual-redaction-description")
+    crate::tr!("settings", "secret-visual-redaction-description")
 });
 static SETTINGS_MANAGED_BY_ORG: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-managed-by-org"));
+    LazyLock::new(|| crate::tr!("settings", "managed-by-org"));
 static SETTINGS_SEND_CRASH_REPORTS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-send-crash-reports"));
+    LazyLock::new(|| crate::tr!("settings", "send-crash-reports"));
 static SETTINGS_CRASH_REPORTS_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-crash-reports-description")
+    crate::tr!("settings", "crash-reports-description")
 });
 static SETTINGS_CLOUD_CONVERSATIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-store-ai-conversations-cloud"));
+    LazyLock::new(|| crate::tr!("settings", "store-ai-conversations-cloud"));
 static SETTINGS_CLOUD_CONVERSATIONS_ON_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-cloud-conversations-on-description")
+    crate::tr!("settings", "cloud-conversations-on-description")
 });
 static SETTINGS_CLOUD_CONVERSATIONS_OFF_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-cloud-conversations-off-description")
+    crate::tr!("settings", "cloud-conversations-off-description")
 });
 static SETTINGS_NETWORK_LOG_CONSOLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-network-log-console"));
+    LazyLock::new(|| crate::tr!("settings", "network-log-console"));
 static SETTINGS_NETWORK_LOG_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-network-log-description")
+    crate::tr!("settings", "network-log-description")
 });
 static SETTINGS_VIEW_NETWORK_LOG: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-view-network-logging"));
+    LazyLock::new(|| crate::tr!("settings", "view-network-logging"));
 static SETTINGS_READ_MORE_DATA: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-read-more-data-usage"));
+    LazyLock::new(|| crate::tr!("settings", "read-more-data-usage"));
 static SETTINGS_ZDR: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-zdr"));
+    LazyLock::new(|| crate::tr!("settings", "zdr"));
 
 const TELEMETRY_DOCS_URL: &str =
     "https://docs.warp.dev/support-and-community/privacy-and-security/privacy#what-telemetry-data-does-warp-collect-and-why";
@@ -218,7 +218,7 @@ impl PrivacyPageView {
         });
 
         let add_regex_modal_view = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(crate::tr!("settings", "settings-add-regex-pattern")), add_regex_body, ctx)
+            Modal::new(Some(crate::tr!("settings", "add-regex-pattern")), add_regex_body, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(600.),
                     height: Some(400.),
@@ -298,7 +298,7 @@ impl PrivacyPageView {
         }
         widgets.push(Box::new(DataManagementWidget::default()));
         widgets.push(Box::new(PrivacyPolicyWidget::default()));
-        PageType::new_uncategorized(widgets, Some(crate::tr!("settings", "settings-privacy")))
+        PageType::new_uncategorized(widgets, Some(crate::tr!("settings", "privacy")))
     }
 
     fn update_button_states(
@@ -1460,7 +1460,7 @@ impl AppAnalyticsWidget {
             let mut stack = Stack::new().with_child(badge);
             if is_hovered {
                 let tooltip = ui_builder.tool_tip(
-                    crate::tr!("settings", "settings-zdr-tooltip"),
+                    crate::tr!("settings", "zdr-tooltip"),
                 );
                 stack.add_positioned_child(
                     tooltip.build().finish(),

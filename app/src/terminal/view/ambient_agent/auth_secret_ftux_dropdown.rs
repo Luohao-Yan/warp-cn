@@ -95,7 +95,7 @@ impl AuthSecretFtuxDropdown {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(&crate::tr!("terminal", "terminal-ftux-search-placeholder"), ctx);
+            editor.set_placeholder_text(&crate::tr!("terminal", "ftux-search-placeholder"), ctx);
             editor
         });
 
@@ -317,7 +317,7 @@ impl AuthSecretFtuxDropdown {
                     ));
                 }
                 if !matched {
-                    let no_secrets_label = crate::tr!("terminal", "terminal-ftux-no-secrets-found");
+                    let no_secrets_label = crate::tr!("terminal", "ftux-no-secrets-found");
                     items.push(MenuItem::Item(
                         MenuItemFields::new(&no_secrets_label)
                             .with_font_size_override(FONT_SIZE)
@@ -331,7 +331,7 @@ impl AuthSecretFtuxDropdown {
                 }
             }
             AuthSecretFetchState::NotFetched | AuthSecretFetchState::Loading => {
-                let loading_label = crate::tr!("terminal", "terminal-ftux-loading");
+                let loading_label = crate::tr!("terminal", "ftux-loading");
                 items.push(MenuItem::Item(
                     MenuItemFields::new(&loading_label)
                         .with_font_size_override(FONT_SIZE)
@@ -341,7 +341,7 @@ impl AuthSecretFtuxDropdown {
                 ));
             }
             AuthSecretFetchState::Failed(_) => {
-                let unable_label = crate::tr!("terminal", "terminal-ftux-unable-to-load-secrets");
+                let unable_label = crate::tr!("terminal", "ftux-unable-to-load-secrets");
                 items.push(MenuItem::Item(
                     MenuItemFields::new(&unable_label)
                         .with_font_size_override(FONT_SIZE)
@@ -355,7 +355,7 @@ impl AuthSecretFtuxDropdown {
         items.push(MenuItem::Separator);
 
         for (index, info) in auth_secret_types_for_harness(harness).iter().enumerate() {
-            let new_type_label = crate::tr!("terminal", "terminal-ftux-new-type", display_name = info.display_name);
+            let new_type_label = crate::tr!("terminal", "ftux-new-type", display_name = info.display_name);
             items.push(MenuItem::Item(
                 MenuItemFields::new(new_type_label)
                     .with_font_size_override(FONT_SIZE)
@@ -368,8 +368,8 @@ impl AuthSecretFtuxDropdown {
 
         items.push(MenuItem::Separator);
 
-        let skip_label = crate::tr!("terminal", "terminal-ftux-skip-api-key");
-        let skip_sub = crate::tr!("terminal", "terminal-ftux-skip-api-key-sub");
+        let skip_label = crate::tr!("terminal", "ftux-skip-api-key");
+        let skip_sub = crate::tr!("terminal", "ftux-skip-api-key-sub");
         items.push(MenuItem::Item(
             MenuItemFields::new_with_label(
                 &skip_label,
@@ -464,7 +464,7 @@ impl AuthSecretFtuxDropdown {
         let appearance = Appearance::as_ref(app);
         let theme = appearance.theme();
         let color = internal_colors::text_sub(theme, theme.surface_1());
-        let helper_text = crate::tr!("terminal", "terminal-ftux-no-secrets-helper");
+        let helper_text = crate::tr!("terminal", "ftux-no-secrets-helper");
         Text::new_inline(
             helper_text,
             appearance.ui_font_family(),

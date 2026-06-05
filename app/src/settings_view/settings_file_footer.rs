@@ -25,18 +25,18 @@ use warpui::fonts::{FamilyId, Properties, Weight};
 use warpui::platform::Cursor;
 
 static SETTINGS_OPEN_SETTINGS_FILE_INLINE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-open-settings-file-inline"));
+    LazyLock::new(|| crate::tr!("settings", "open-settings-file-inline"));
 static SETTINGS_OPEN_FILE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-open-file"));
+    LazyLock::new(|| crate::tr!("settings", "open-file"));
 static SETTINGS_FIX_WITH_OZ: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-fix-with-oz"));
+    LazyLock::new(|| crate::tr!("settings", "fix-with-oz"));
 
 /// Horizontal + vertical padding applied to the footer inside the sidebar.
 const FOOTER_PADDING: f32 = 12.;
 /// Font size used for the button label and the alert copy; matches the
 /// Figma spec for both designs.
 const FOOTER_FONT_SIZE: f32 = 12.;
-/// Height of the plain crate::tr!("settings", "settings-open-settings-file") button.
+/// Height of the plain crate::tr!("settings", "open-settings-file") button.
 const OPEN_BUTTON_HEIGHT: f32 = 32.;
 /// Height of action buttons inside the error alert.
 const ALERT_ACTION_BUTTON_HEIGHT: f32 = 24.;

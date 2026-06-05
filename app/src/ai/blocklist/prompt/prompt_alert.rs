@@ -26,48 +26,48 @@ use ai::api_keys::ApiKeyManager;
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PERCENTAGE: f32 = 0.5;
 
 pub static TELEMETRY_DISABLED_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-telemetry-disabled-primary-text"));
+    LazyLock::new(|| crate::tr!("ai", "telemetry-disabled-primary-text"));
 pub static ENABLE_ANALYTICS_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-enable-analytics-action-text"));
+    LazyLock::new(|| crate::tr!("ai", "enable-analytics-action-text"));
 pub static UPGRADE_TO_BUILD_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-upgrade-to-build-action-text"));
+    LazyLock::new(|| crate::tr!("ai", "upgrade-to-build-action-text"));
 
 pub static NO_CONNECTION_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-no-connection-primary-text"));
+    LazyLock::new(|| crate::tr!("ai", "no-connection-primary-text"));
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PRIMARY_TEXT: &str = "";
 pub static ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-anonymous-user-request-limit-hard-gate-primary-text"));
+    LazyLock::new(|| crate::tr!("ai", "anonymous-user-request-limit-hard-gate-primary-text"));
 pub static DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-delinquent-due-to-payment-issue-primary-text"));
+    LazyLock::new(|| crate::tr!("ai", "delinquent-due-to-payment-issue-primary-text"));
 pub static OUT_OF_REQUESTS_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-out-of-requests-primary-text"));
+    LazyLock::new(|| crate::tr!("ai", "out-of-requests-primary-text"));
 
 pub static ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-anonymous-user-request-limit-action-text"));
+    LazyLock::new(|| crate::tr!("ai", "anonymous-user-request-limit-action-text"));
 pub static DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-delinquent-due-to-payment-issue-action-text"));
+    LazyLock::new(|| crate::tr!("ai", "delinquent-due-to-payment-issue-action-text"));
 pub static OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-overages-toggleable-but-not-enabled-action-text"));
+    LazyLock::new(|| crate::tr!("ai", "overages-toggleable-but-not-enabled-action-text"));
 pub static MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-monthly-overages-spend-limit-reached-action-text"));
+    LazyLock::new(|| crate::tr!("ai", "monthly-overages-spend-limit-reached-action-text"));
 pub static UPGRADE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-upgrade-text"));
+    LazyLock::new(|| crate::tr!("ai", "upgrade-text"));
 pub static COMPARE_PLANS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-compare-plans-text"));
+    LazyLock::new(|| crate::tr!("ai", "compare-plans-text"));
 pub static CONTACT_SUPPORT_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-contact-support-text"));
+    LazyLock::new(|| crate::tr!("ai", "contact-support-text"));
 pub static NON_ADMIN_CONTACT_ADMIN_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-non-admin-contact-admin-text"));
+    LazyLock::new(|| crate::tr!("ai", "non-admin-contact-admin-text"));
 pub static NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-non-admin-ask-admin-to-enable-overages-text"));
+    LazyLock::new(|| crate::tr!("ai", "non-admin-ask-admin-to-enable-overages-text"));
 pub static NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-non-admin-ask-admin-to-increase-overages-text"));
+    LazyLock::new(|| crate::tr!("ai", "non-admin-ask-admin-to-increase-overages-text"));
 pub static UPGRADE_TO_BUILD_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-upgrade-to-build-text"));
+    LazyLock::new(|| crate::tr!("ai", "upgrade-to-build-text"));
 pub static USE_YOUR_OWN_API_KEYS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-use-your-own-api-keys-text"));
+    LazyLock::new(|| crate::tr!("ai", "use-your-own-api-keys-text"));
 pub static ADD_CREDITS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "ai-add-credits-text"));
+    LazyLock::new(|| crate::tr!("ai", "add-credits-text"));
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PromptAlertAction {

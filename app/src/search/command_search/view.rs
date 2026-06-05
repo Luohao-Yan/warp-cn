@@ -65,7 +65,7 @@ use super::{
 
 use std::sync::LazyLock;
 
-static DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-command-placeholder"));
+static DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "command-placeholder"));
 const PANEL_POSITION_ID: &str = "CommandSearchViewPanel";
 const DETAILS_PANEL_MARGIN: f32 = 4.;
 const MIN_WIDTH_RATIO: f32 = 0.25;
@@ -521,13 +521,13 @@ impl CommandSearchView {
 
             let (a11y_content, a11y_help_content) = if was_immediately_executed {
                 (
-                    crate::tr!("search", "search-result-executed").clone(),
-                    crate::tr!("search", "search-navigate-output").clone(),
+                    crate::tr!("search", "result-executed").clone(),
+                    crate::tr!("search", "navigate-output").clone(),
                 )
             } else {
                 (
-                    crate::tr!("search", "search-result-accepted").clone(),
-                    crate::tr!("search", "search-edit-command-hint").clone(),
+                    crate::tr!("search", "result-accepted").clone(),
+                    crate::tr!("search", "edit-command-hint").clone(),
                 )
             };
             ctx.emit_a11y_content(AccessibilityContent::new(
@@ -584,7 +584,7 @@ impl CommandSearchView {
         let muted_color: ColorU = appearance.theme().nonactive_ui_text_color().into();
         let text = appearance
             .ui_builder()
-            .span(crate::tr!("common", "common-loading"))
+            .span(crate::tr!("common", "loading"))
             .with_style(UiComponentStyles {
                 font_size: Some(appearance.monospace_font_size()),
                 font_family_id: Some(appearance.ui_font_family()),
@@ -625,7 +625,7 @@ impl CommandSearchView {
                             current_user_id,
                         )
                     } else {
-                        self.render_error_header_text(crate::tr!("search", "search-out-of-credits"), appearance)
+                        self.render_error_header_text(crate::tr!("search", "out-of-credits"), appearance)
                     }
                 } else {
                     self.render_error_header_text(message, appearance)
@@ -690,7 +690,7 @@ impl CommandSearchView {
             appearance
                 .ui_builder()
                 .link(
-                    crate::tr!("search", "search-upgrade-label").clone(),
+                    crate::tr!("search", "upgrade-label").clone(),
                     None,
                     Some(Box::new(move |ctx| {
                         ctx.dispatch_typed_action(CommandSearchAction::AttemptLoginGatedUpgrade);
@@ -702,7 +702,7 @@ impl CommandSearchView {
             appearance
                 .ui_builder()
                 .link(
-                    crate::tr!("search", "search-upgrade-label").clone(),
+                    crate::tr!("search", "upgrade-label").clone(),
                     None,
                     Some(Box::new(move |ctx| {
                         ctx.dispatch_typed_action(CommandSearchAction::OpenUpgradeLink(
@@ -717,7 +717,7 @@ impl CommandSearchView {
         row.add_child(
             appearance
                 .ui_builder()
-                .span(crate::tr!("common", "common-out-of-credits"))
+                .span(crate::tr!("common", "out-of-credits"))
                 .with_style(UiComponentStyles {
                     font_size: Some(appearance.monospace_font_size()),
                     font_family_id: Some(appearance.ui_font_family()),
@@ -739,7 +739,7 @@ impl CommandSearchView {
         row.add_child(
             appearance
                 .ui_builder()
-                .span(crate::tr!("common", "common-credits-suffix"))
+                .span(crate::tr!("common", "credits-suffix"))
                 .with_style(UiComponentStyles {
                     font_size: Some(appearance.monospace_font_size()),
                     font_family_id: Some(appearance.ui_font_family()),
@@ -766,7 +766,7 @@ impl CommandSearchView {
                 // There are no results to display, so notify the user of that fact.
                 let text = appearance
                     .ui_builder()
-                    .span(crate::tr!("common", "common-no-results"))
+                    .span(crate::tr!("common", "no-results"))
                     .with_style(UiComponentStyles {
                         font_size: Some(appearance.monospace_font_size()),
                         font_family_id: Some(appearance.ui_font_family()),
@@ -986,7 +986,7 @@ impl TypedActionView for CommandSearchView {
             AttemptLoginGatedUpgrade => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        crate::tr!("search", "search-upgrade-ai-usage"),
+                        crate::tr!("search", "upgrade-ai-usage"),
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )
@@ -1009,8 +1009,8 @@ impl View for CommandSearchView {
 
     fn accessibility_contents(&self, _ctx: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            crate::tr!("search", "search-command-search-title").clone(),
-            crate::tr!("search", "search-command-search-a11y-desc").clone(),
+            crate::tr!("search", "command-search-title").clone(),
+            crate::tr!("search", "command-search-a11y-desc").clone(),
             WarpA11yRole::MenuRole,
         ))
     }

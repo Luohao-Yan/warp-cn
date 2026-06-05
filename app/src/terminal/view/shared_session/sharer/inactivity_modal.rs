@@ -149,7 +149,7 @@ impl InactivityModalBody {
     fn render_countdown(&self, appearance: &Appearance) -> Box<dyn Element> {
         let secs = self.duration.as_secs() % 60;
         let minutes = (self.duration.as_secs() / 60) as i64;
-        let text = crate::tr!("terminal", "terminal-sharing-will-end-due-to-inactivity", minutes = minutes, seconds = format!("{secs:02}"));
+        let text = crate::tr!("terminal", "sharing-will-end-due-to-inactivity", minutes = minutes, seconds = format!("{secs:02}"));
 
         Container::new(
             Text::new_inline(text, appearance.ui_font_family(), TEXT_FONT_SIZE)
@@ -176,7 +176,7 @@ impl InactivityModalBody {
                     font_weight: Some(Weight::Bold),
                     ..Default::default()
                 })
-                .with_centered_text_label(crate::tr!("terminal", "terminal-stop-sharing"))
+                .with_centered_text_label(crate::tr!("terminal", "stop-sharing"))
                 .build()
                 .with_cursor(Cursor::PointingHand)
                 .on_click(move |ctx, _, _| {
@@ -202,7 +202,7 @@ impl InactivityModalBody {
                 font_weight: Some(Weight::Bold),
                 ..Default::default()
             })
-            .with_centered_text_label(crate::tr!("terminal", "terminal-continue-sharing"))
+            .with_centered_text_label(crate::tr!("terminal", "continue-sharing"))
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -229,7 +229,7 @@ impl View for InactivityModalBody {
 
         let header = Container::new(
             Text::new_inline(
-                crate::tr!("terminal", "terminal-are-you-still-there"),
+                crate::tr!("terminal", "are-you-still-there"),
                 appearance.ui_font_family(),
                 HEADER_FONT_SIZE,
             )

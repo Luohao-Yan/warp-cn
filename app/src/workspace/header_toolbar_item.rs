@@ -35,11 +35,11 @@ pub enum HeaderToolbarItemKind {
     NotificationsMailbox,
 }
 
-static TOOLBAR_TABS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-tabs-panel").clone());
-static TOOLBAR_TOOLS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-tools-panel").clone());
-static TOOLBAR_AGENT_MANAGEMENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-agent-management").clone());
-static TOOLBAR_CODE_REVIEW: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-code-review").clone());
-static TOOLBAR_NOTIFICATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-notifications").clone());
+static TOOLBAR_TABS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-tabs-panel").clone());
+static TOOLBAR_TOOLS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-tools-panel").clone());
+static TOOLBAR_AGENT_MANAGEMENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-agent-management").clone());
+static TOOLBAR_CODE_REVIEW: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-code-review").clone());
+static TOOLBAR_NOTIFICATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-notifications").clone());
 
 impl HeaderToolbarItemKind {
     pub fn display_label(&self) -> &str {

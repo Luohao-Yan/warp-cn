@@ -32,15 +32,15 @@ const LABEL_FONT_SIZE: f32 = 14.;
 const INPUT_WIDTH: f32 = 428.; // 460px - (2 * 16px) padding
 
 static WARP_API_KEY_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warp-api-key"));
+    LazyLock::new(|| crate::tr!("settings", "warp-api-key"));
 static PERSONAL_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-personal-label"));
+    LazyLock::new(|| crate::tr!("settings", "personal-label"));
 static TEAM_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-team-label"));
+    LazyLock::new(|| crate::tr!("settings", "team-label"));
 static AGENT_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-agent-label"));
+    LazyLock::new(|| crate::tr!("settings", "agent-label"));
 static FAILED_CREATE_KEY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-create-key"));
+    LazyLock::new(|| crate::tr!("settings", "failed-create-key"));
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum ApiKeyType {
@@ -333,7 +333,7 @@ impl CreateApiKeyModal {
         let name = self.name_editor.as_ref(ctx).buffer_text(ctx);
 
         let final_name = if name.trim().is_empty() {
-            crate::tr!("settings", "settings-warp-api-key")
+            crate::tr!("settings", "warp-api-key")
         } else {
             name.trim().to_string()
         };
@@ -357,7 +357,7 @@ impl CreateApiKeyModal {
                 None => {
                     self.request_state = RequestState::Idle;
                     ctx.emit(CreateApiKeyModalEvent::Error {
-                        message: crate::tr!("settings", "settings-please-select-agent"),
+                        message: crate::tr!("settings", "please-select-agent"),
                     });
                     ctx.notify();
                     return;
@@ -555,7 +555,7 @@ impl CreateApiKeyModal {
                 ButtonVariant::Accent,
                 self.cancel_button_mouse_state.clone(),
             )
-            .with_text_label(crate::tr!("settings", "settings-done"))
+            .with_text_label(crate::tr!("settings", "done"))
             .with_style(button_style)
             .build()
             .on_click(|ctx, _, _| ctx.dispatch_typed_action(CreateApiKeyModalAction::Cancel))
@@ -619,7 +619,7 @@ impl View for CreateApiKeyModal {
                 .with_color(theme.nonactive_ui_text_color().into())
                 .finish();
 
-                let name_label = Text::new(crate::tr!("settings", "settings-name-label"), appearance.ui_font_family(), LABEL_FONT_SIZE)
+                let name_label = Text::new(crate::tr!("settings", "name-label"), appearance.ui_font_family(), LABEL_FONT_SIZE)
                     .with_color(theme.active_ui_text_color().into())
                     .finish();
 
@@ -653,9 +653,9 @@ impl View for CreateApiKeyModal {
                         self.create_button_mouse_state.clone(),
                     )
                     .with_text_label(if is_pending {
-                        crate::tr!("settings", "settings-creating")
+                        crate::tr!("settings", "creating")
                     } else {
-                        crate::tr!("settings", "settings-create-key")
+                        crate::tr!("settings", "create-key")
                     })
                     .with_style(button_style)
                     .build()
@@ -683,7 +683,7 @@ impl View for CreateApiKeyModal {
 
                 if self.has_team || self.has_named_agents {
                     let type_label =
-                        Text::new(crate::tr!("settings", "settings-type-label"), appearance.ui_font_family(), LABEL_FONT_SIZE)
+                        Text::new(crate::tr!("settings", "type-label"), appearance.ui_font_family(), LABEL_FONT_SIZE)
                             .with_color(theme.active_ui_text_color().into())
                             .finish();
                     col.add_child(Container::new(type_label).with_margin_bottom(4.).finish());
@@ -702,7 +702,7 @@ impl View for CreateApiKeyModal {
 
                 if selected_key_type == ApiKeyType::Agent {
                     let agent_label =
-                        Text::new(crate::tr!("settings", "settings-agent"), appearance.ui_font_family(), LABEL_FONT_SIZE)
+                        Text::new(crate::tr!("settings", "agent"), appearance.ui_font_family(), LABEL_FONT_SIZE)
                             .with_color(theme.active_ui_text_color().into())
                             .finish();
                     col.add_child(Container::new(agent_label).with_margin_bottom(4.).finish());
@@ -725,7 +725,7 @@ impl View for CreateApiKeyModal {
                                 ButtonVariant::Secondary,
                                 self.create_agent_button_mouse_state.clone(),
                             )
-                            .with_text_label(crate::tr!("settings", "settings-create-agent"))
+                            .with_text_label(crate::tr!("settings", "create-agent"))
                             .with_style(button_style)
                             .build()
                             .on_click(|ctx, _, _| {
@@ -778,7 +778,7 @@ impl View for CreateApiKeyModal {
                 );
 
                 let expiration_label =
-                    Text::new(crate::tr!("settings", "settings-expiration"), appearance.ui_font_family(), LABEL_FONT_SIZE)
+                    Text::new(crate::tr!("settings", "expiration"), appearance.ui_font_family(), LABEL_FONT_SIZE)
                         .with_color(theme.active_ui_text_color().into())
                         .finish();
 
@@ -821,7 +821,7 @@ impl TypedActionView for CreateApiKeyModal {
                 let window_id = ctx.window_id();
                 crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = crate::view_components::DismissibleToast::success(
-                        crate::tr!("settings", "settings-secret-key-copied"),
+                        crate::tr!("settings", "secret-key-copied"),
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });

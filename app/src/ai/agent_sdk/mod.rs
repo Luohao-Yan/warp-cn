@@ -1431,9 +1431,9 @@ fn launch_command(
                 dispatched = true;
                 let auth_state = AuthStateProvider::handle(ctx).as_ref(ctx).get();
                 let message = if auth_state.is_api_key_authenticated() {
-                    crate::tr!("ai_assistant", "ai-assistant-invalid-api-key")
+                    crate::tr!("ai_assistant", "invalid-api-key")
                 } else {
-                    crate::tr!("ai_assistant", "ai-assistant-invalid-credentials", cli = cli_name.clone())
+                    crate::tr!("ai_assistant", "invalid-credentials", cli = cli_name.clone())
                 };
                 report_fatal_error(anyhow::anyhow!(message), ctx);
             }

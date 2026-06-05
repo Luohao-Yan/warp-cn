@@ -54,7 +54,7 @@ use crate::{
 };
 
 const CLOUD_AGENT_DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
-static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-oz-updates-header"));
+static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "oz-updates-header"));
 static AI_RUN_IN_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-in-cloud-env"));
 static AI_RECENT_ACTIVITY: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recent-activity"));
 static AI_VIEW_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-changelog"));
@@ -769,7 +769,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                             key: "/model".to_owned(),
                             ..Default::default()
                         }),
-                        MessageItem::text(crate::tr!("ai", "ai-switch-model").to_lowercase()),
+                        MessageItem::text(crate::tr!("ai", "switch-model").to_lowercase()),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::OpenModelSelector);

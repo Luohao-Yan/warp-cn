@@ -101,8 +101,7 @@ impl crate::search::item::SearchItem for SearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-a11y-session-selected",
-            prompt = self.navigation_data().prompt(),
+        crate::tr!("search", "a11y-session-selected", prompt = self.navigation_data().prompt(),
             description = self.navigation_data()
                 .command_context()
                 .a11y_description()
@@ -111,6 +110,6 @@ impl crate::search::item::SearchItem for SearchItem {
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some(crate::tr!("search", "search-a11y-session-help").clone())
+        Some(crate::tr!("search", "a11y-session-help").clone())
     }
 }

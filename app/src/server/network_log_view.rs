@@ -35,10 +35,10 @@ use crate::ui_components::icons;
 use std::sync::LazyLock;
 
 /// Header text for the network log pane.
-pub static NETWORK_LOG_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-network-log-header").clone());
+pub static NETWORK_LOG_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "network-log-header").clone());
 
 /// Tooltip shown on hover over the refresh button in the pane header.
-static REFRESH_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-network-log-refresh-tooltip").clone());
+static REFRESH_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "network-log-refresh-tooltip").clone());
 
 /// Event emitted by the [`NetworkLogView`].
 #[derive(Debug, Clone, PartialEq, Eq)]

@@ -7,8 +7,8 @@ use crate::search::mixer::{DataSourceRunErrorWrapper, SyncDataSource};
 use std::sync::LazyLock;
 use warpui::AppContext;
 
-static UNCOMMITTED_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-diff-uncommitted"));
-static MAIN_BRANCH_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-diff-vs-main"));
+static UNCOMMITTED_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "diff-uncommitted"));
+static MAIN_BRANCH_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "diff-vs-main"));
 
 pub struct DiffSetDataSource;
 

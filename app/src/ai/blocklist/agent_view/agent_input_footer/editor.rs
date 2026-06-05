@@ -24,10 +24,10 @@ use crate::Appearance;
 
 use settings::Setting as _;
 
-static AVAILABLE_CHIPS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-available-chips"));
+static AVAILABLE_CHIPS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "available-chips"));
 
-static AGENT_MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-edit-agent-toolbelt"));
-static CLI_MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-edit-cli-agent-toolbelt"));
+static AGENT_MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "edit-agent-toolbelt"));
+static CLI_MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "edit-cli-agent-toolbelt"));
 
 /// Controls which set of items and settings the editor modal operates on.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]

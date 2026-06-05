@@ -258,9 +258,9 @@ where
     .with_tooltip(move || {
         ui_builder
             .tool_tip(if is_sidebar_expanded {
-                crate::tr!("code_review", "code-review-hide-file-navigation")
+                crate::tr!("code_review", "hide-file-navigation")
             } else {
-                crate::tr!("code_review", "code-review-show-file-navigation")
+                crate::tr!("code_review", "show-file-navigation")
             })
             .build()
             .finish()
@@ -334,9 +334,9 @@ enum InitButtons {
 
 pub fn get_discard_button_disabled_tooltip(git_operation_blocked: bool) -> String {
     if git_operation_blocked {
-        crate::tr!("code_review", "code-review-cannot-discard-while-git-operation")
+        crate::tr!("code_review", "cannot-discard-while-git-operation")
     } else {
-        crate::tr!("code_review", "code-review-no-changes-to-discard")
+        crate::tr!("code_review", "no-changes-to-discard")
     }
 }
 
@@ -527,26 +527,26 @@ impl DiscardOperationType {
     pub fn title(&self) -> String {
         match self {
             DiscardOperationType::AllUncommittedChanges => {
-                crate::tr!("code_review", "code-review-discard-uncommitted-changes-title")
+                crate::tr!("code_review", "discard-uncommitted-changes-title")
             }
             DiscardOperationType::FileUncommittedChanges => {
-                crate::tr!("code_review", "code-review-discard-file-uncommitted-changes-title")
+                crate::tr!("code_review", "discard-file-uncommitted-changes-title")
             }
-            DiscardOperationType::AllChangesAgainstBranch(_) => crate::tr!("code_review", "code-review-discard-all-changes-title"),
+            DiscardOperationType::AllChangesAgainstBranch(_) => crate::tr!("code_review", "discard-all-changes-title"),
             DiscardOperationType::FileChangesAgainstBranch(_) => {
-                crate::tr!("code_review", "code-review-discard-file-all-changes-title")
+                crate::tr!("code_review", "discard-file-all-changes-title")
             }
         }
     }
 
     pub fn description(&self) -> Option<String> {
         match self {
-            DiscardOperationType::AllUncommittedChanges => Some(crate::tr!("code_review", "code-review-discard-uncommitted-desc")),
-            DiscardOperationType::FileUncommittedChanges => Some(crate::tr!("code_review", "code-review-discard-file-uncommitted-desc")),
-            DiscardOperationType::AllChangesAgainstBranch(None) => Some(crate::tr!("code_review", "code-review-discard-all-changes-no-branch-desc")),
-            DiscardOperationType::FileChangesAgainstBranch(None) => Some(crate::tr!("code_review", "code-review-discard-file-no-branch-desc")),
-            DiscardOperationType::AllChangesAgainstBranch(Some(_)) => Some(crate::tr!("code_review", "code-review-discard-all-changes-no-branch-desc")),
-            DiscardOperationType::FileChangesAgainstBranch(Some(branch)) => Some(crate::tr!("code_review", "code-review-discard-file-branch-desc", branch = branch.clone())),
+            DiscardOperationType::AllUncommittedChanges => Some(crate::tr!("code_review", "discard-uncommitted-desc")),
+            DiscardOperationType::FileUncommittedChanges => Some(crate::tr!("code_review", "discard-file-uncommitted-desc")),
+            DiscardOperationType::AllChangesAgainstBranch(None) => Some(crate::tr!("code_review", "discard-all-changes-no-branch-desc")),
+            DiscardOperationType::FileChangesAgainstBranch(None) => Some(crate::tr!("code_review", "discard-file-no-branch-desc")),
+            DiscardOperationType::AllChangesAgainstBranch(Some(_)) => Some(crate::tr!("code_review", "discard-all-changes-no-branch-desc")),
+            DiscardOperationType::FileChangesAgainstBranch(Some(branch)) => Some(crate::tr!("code_review", "discard-file-branch-desc", branch = branch.clone())),
         }
     }
 
@@ -1120,7 +1120,7 @@ impl CodeReviewView {
         let maximize_button = ctx.add_typed_action_view(move |_| {
             // Since the view isn't part of a pane group yet, default to not-maximized. The button will be updated
             //when focus state changes.
-            let maximize_text = crate::tr!("code_editor", "code-editor-maximize");
+            let maximize_text = crate::tr!("code_editor", "maximize");
             let (icon, tooltip_text) = (Icon::Maximize, maximize_text.as_str());
 
             ActionButton::new("", NakedTheme)
@@ -1410,9 +1410,9 @@ impl CodeReviewView {
 
         let is_maximized = focus_handle.is_maximized(ctx);
         let (icon, tooltip) = if is_maximized {
-            (Icon::Minimize, crate::tr!("code_editor", "code-editor-restore"))
+            (Icon::Minimize, crate::tr!("code_editor", "restore"))
         } else {
-            (Icon::Maximize, crate::tr!("code_editor", "code-editor-maximize"))
+            (Icon::Maximize, crate::tr!("code_editor", "maximize"))
         };
 
         self.maximize_button.update(ctx, |button, ctx| {
@@ -1423,9 +1423,9 @@ impl CodeReviewView {
 
     fn update_file_nav_button_tooltip(&self, ctx: &mut ViewContext<Self>) {
         let tooltip = if self.file_sidebar_expanded {
-            crate::tr!("code_review", "code-review-hide-file-navigation")
+            crate::tr!("code_review", "hide-file-navigation")
         } else {
-            crate::tr!("code_review", "code-review-show-file-navigation")
+            crate::tr!("code_review", "show-file-navigation")
         };
         self.file_nav_button.update(ctx, |button, ctx| {
             button.set_tooltip(Some(tooltip), ctx);
@@ -1537,7 +1537,7 @@ impl CodeReviewView {
 
         // 1. Always add "Uncommitted changes" first.
         targets.push(DiffTarget::new(
-            crate::tr!("code_review", "code-review-uncommitted-changes"),
+            crate::tr!("code_review", "uncommitted-changes"),
             DiffMode::Head,
             matches!(current_mode, DiffMode::Head),
         ));
@@ -2566,7 +2566,7 @@ impl CodeReviewView {
         let discard_tooltip_text = if git_operation_blocked {
             get_discard_button_disabled_tooltip(git_operation_blocked)
         } else {
-            crate::tr!("code_review", "code-review-discard-changes")
+            crate::tr!("code_review", "discard-changes")
         };
 
         let mut file_states = vec![];
@@ -2608,7 +2608,7 @@ impl CodeReviewView {
                 ActionButton::new("", NakedTheme)
                     .with_icon(Icon::LinkExternal)
                     .with_size(ButtonSize::InlineActionHeader)
-                    .with_tooltip(crate::tr!("code_review", "code-review-open-file"))
+                    .with_tooltip(crate::tr!("code_review", "open-file"))
                     .on_click(move |ctx| {
                         ctx.dispatch_typed_action(CodeReviewAction::OpenInNewTab {
                             path: open_tab_path.clone(),
@@ -2645,7 +2645,7 @@ impl CodeReviewView {
                 ActionButton::new("", NakedTheme)
                     .with_icon(Icon::Paperclip)
                     .with_size(ButtonSize::InlineActionHeader)
-                    .with_tooltip(crate::tr!("code_review", "code-review-add-file-diff-context"))
+                    .with_tooltip(crate::tr!("code_review", "add-file-diff-context"))
                     .on_click(move |ctx| {
                         ctx.dispatch_typed_action(CodeReviewAction::AddDiffSetAsContext(
                             DiffSetScope::File(context_path.clone()),
@@ -2658,7 +2658,7 @@ impl CodeReviewView {
                 ActionButton::new("", NakedTheme)
                     .with_icon(Icon::Copy)
                     .with_size(ButtonSize::InlineActionHeader)
-                    .with_tooltip(crate::tr!("code_review", "code-review-copy-file-path"))
+                    .with_tooltip(crate::tr!("code_review", "copy-file-path"))
                     .on_click(move |ctx| {
                         ctx.dispatch_typed_action(CodeReviewAction::CopyFilePath(copy_path.clone()))
                     })
@@ -3612,7 +3612,7 @@ impl CodeReviewView {
     fn render_placeholder_header(appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
 
-        let header_text = crate::tr!("code_review", "code-review-loading-open-changes");
+        let header_text = crate::tr!("code_review", "loading-open-changes");
         let loading_icon = Icon::Loading
             .to_warpui_icon(warp_core::ui::theme::Fill::Solid(
                 internal_colors::neutral_6(theme),
@@ -3766,7 +3766,7 @@ impl CodeReviewView {
             )
             .with_child(
                 Text::new(
-                    crate::tr!("code_review", "code-review-error-loading-diffs"),
+                    crate::tr!("code_review", "error-loading-diffs"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() + 2.,
                 )
@@ -3809,7 +3809,7 @@ impl CodeReviewView {
                         )
                         .with_text_and_icon_label(TextAndIcon::new(
                             TextAndIconAlignment::IconFirst,
-                            crate::tr!("code_review", "code-review-retry"),
+                            crate::tr!("code_review", "retry"),
                             Icon::Refresh.to_warpui_icon(warp_core::ui::theme::Fill::Solid(
                                 theme.main_text_color(theme.background()).into(),
                             )),
@@ -3876,7 +3876,7 @@ impl CodeReviewView {
             )
             .with_child(
                 Text::new(
-                    crate::tr!("code_review", "code-review-cannot-detect-diffs"),
+                    crate::tr!("code_review", "cannot-detect-diffs"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() + 2.,
                 )
@@ -3956,7 +3956,7 @@ impl CodeReviewView {
             )
             .with_child(
                 Text::new(
-                    crate::tr!("code_review", "code-review-cannot-detect-diffs"),
+                    crate::tr!("code_review", "cannot-detect-diffs"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() + 2.,
                 )
@@ -4132,7 +4132,7 @@ impl CodeReviewView {
             .with_child(
                 Container::new(
                     Text::new(
-                        crate::tr!("code_review", "code-review-track-changes-hint"),
+                        crate::tr!("code_review", "track-changes-hint"),
                         appearance.ui_font_family(),
                         14.,
                     )
@@ -4171,7 +4171,7 @@ impl CodeReviewView {
                         zero_state_column.add_child(
                             Container::new(
                                 Text::new(
-                                    crate::tr!("code_review", "code-review-repo-initialized-with-file", file_name = file_name),
+                                    crate::tr!("code_review", "repo-initialized-with-file", file_name = file_name),
                                     appearance.ui_font_family(),
                                     12.,
                                 )
@@ -4317,7 +4317,7 @@ impl CodeReviewView {
 
                 self.clear_review_comments(ctx);
                 ToastStack::handle(ctx).update(ctx, |stack, ctx| {
-                    let toast = DismissibleToast::default(crate::tr!("code_review", "code-review-comments-sent-to-agent").into());
+                    let toast = DismissibleToast::default(crate::tr!("code_review", "comments-sent-to-agent").into());
                     stack.add_ephemeral_toast(toast, self.window_id, ctx);
                 });
                 ctx.emit(CodeReviewViewEvent::ReviewSubmitted);
@@ -4325,7 +4325,7 @@ impl CodeReviewView {
             }
             ReviewSubmissionResult::Error => {
                 log::error!("Failed to submit review comments");
-                let error_message = crate::tr!("code_review", "code-review-could-not-submit-comments");
+                let error_message = crate::tr!("code_review", "could-not-submit-comments");
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = DismissibleToast::error(error_message);
                     toast_stack.add_ephemeral_toast(toast, self.window_id, ctx);
@@ -4986,7 +4986,7 @@ impl CodeReviewView {
                 let save_keystroke = Keystroke::parse("cmdorctrl-s").unwrap_or_default();
                 let save_shortcut = save_keystroke.displayed();
                 let tooltip_text =
-                    crate::tr!("code_review", "code-review-unsaved-changes-tooltip", shortcut = save_shortcut);
+                    crate::tr!("code_review", "unsaved-changes-tooltip", shortcut = save_shortcut);
                 render_unsaved_circle_with_tooltip(
                     editor_state.unsaved_changes_mouse_state(),
                     tooltip_text,
@@ -5222,7 +5222,7 @@ impl CodeReviewView {
         if diff_size == DiffSize::Unrenderable {
             return Self::styled_file_content_container(
                 Text::new(
-                    crate::tr!("code_review", "code-review-diff-too-large"),
+                    crate::tr!("code_review", "diff-too-large"),
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -5235,7 +5235,7 @@ impl CodeReviewView {
         if file.file_diff.is_binary {
             Self::styled_file_content_container(
                 Text::new(
-                    crate::tr!("code_review", "code-review-binary-file"),
+                    crate::tr!("code_review", "binary-file"),
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -5246,7 +5246,7 @@ impl CodeReviewView {
         } else if file.file_diff.status.is_renamed() && file.file_diff.is_empty() {
             Self::styled_file_content_container(
                 Text::new(
-                    crate::tr!("code_review", "code-review-file-renamed-without-changes"),
+                    crate::tr!("code_review", "file-renamed-without-changes"),
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -5257,7 +5257,7 @@ impl CodeReviewView {
         } else if file.file_diff.status.is_new_file() && file.file_diff.is_empty() {
             Self::styled_file_content_container(
                 Text::new(
-                    crate::tr!("code_review", "code-review-new-empty-file"),
+                    crate::tr!("code_review", "new-empty-file"),
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -5287,7 +5287,7 @@ impl CodeReviewView {
         } else {
             Self::styled_file_content_container(
                 Text::new(
-                    crate::tr!("code_review", "code-review-unable-to-load-file"),
+                    crate::tr!("code_review", "unable-to-load-file"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )
@@ -5379,7 +5379,7 @@ impl CodeReviewView {
 
         if self.discard_dialog_state.discard_file_paths.is_empty() {
             return Text::new(
-                crate::tr!("code_review", "code-review-no-file-selected"),
+                crate::tr!("code_review", "no-file-selected"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
@@ -5394,7 +5394,7 @@ impl CodeReviewView {
 
         let CodeReviewViewState::Loaded(loaded) = self.state() else {
             return Text::new(
-                crate::tr!("code_review", "code-review-no-files-to-discard"),
+                crate::tr!("code_review", "no-files-to-discard"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
@@ -5653,7 +5653,7 @@ impl CodeReviewView {
                 let toast_id = self.revert_hunk_toast_id(ctx);
                 crate::workspace::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = crate::view_components::DismissibleToast::default(
-                        crate::tr!("code_review", "code-review-diff-removed"),
+                        crate::tr!("code_review", "diff-removed"),
                     )
                     .with_object_id(toast_id)
                     .with_action_button(self.undo_action_button.clone());
@@ -5748,7 +5748,7 @@ impl CodeReviewView {
                 let toast_id = self.attach_context_not_allowed_toast_id(ctx);
                 crate::workspace::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = crate::view_components::DismissibleToast::default(
-                        crate::tr!("code_review", "code-review-cannot-attach-context-terminal"),
+                        crate::tr!("code_review", "cannot-attach-context-terminal"),
                     )
                     .with_object_id(toast_id);
                     toast_stack.add_ephemeral_toast(toast, self.window_id, ctx);
@@ -5861,7 +5861,7 @@ impl CodeReviewView {
                 let toast_id = self.attach_diff_not_allowed_toast_id(ctx);
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = DismissibleToast::default(
-                        crate::tr!("code_review", "code-review-cannot-attach-diff-no-input"),
+                        crate::tr!("code_review", "cannot-attach-diff-no-input"),
                     )
                     .with_object_id(toast_id);
                     toast_stack.add_ephemeral_toast(toast, self.window_id, ctx);
@@ -6473,10 +6473,10 @@ impl CodeReviewView {
             PrimaryGitActionMode::Commit => {
                 let disabled = !self.has_uncommitted_changes(ctx);
                 self.git_primary_action_button.update(ctx, |button, ctx| {
-                    button.set_label(crate::tr!("code_review", "code-review-commit"), ctx);
+                    button.set_label(crate::tr!("code_review", "commit"), ctx);
                     button.set_icon(Some(Icon::GitCommit), ctx);
                     button.set_disabled(disabled, ctx);
-                    button.set_tooltip(disabled.then_some(crate::tr!("code_review", "code-review-no-changes-to-commit")), ctx);
+                    button.set_tooltip(disabled.then_some(crate::tr!("code_review", "no-changes-to-commit")), ctx);
                     button.set_on_click(
                         |ctx| ctx.dispatch_typed_action(CodeReviewAction::OpenCommitDialog),
                         ctx,
@@ -6485,12 +6485,12 @@ impl CodeReviewView {
                 });
                 self.git_operations_chevron.update(ctx, |button, ctx| {
                     button.set_disabled(disabled, ctx);
-                    button.set_tooltip(disabled.then_some(crate::tr!("code_review", "code-review-no-git-actions")), ctx);
+                    button.set_tooltip(disabled.then_some(crate::tr!("code_review", "no-git-actions")), ctx);
                 });
             }
             PrimaryGitActionMode::Push => {
                 self.git_primary_action_button.update(ctx, |button, ctx| {
-                    button.set_label(crate::tr!("code_review", "code-review-push"), ctx);
+                    button.set_label(crate::tr!("code_review", "push"), ctx);
                     button.set_icon(Some(Icon::ArrowUp), ctx);
                     button.set_disabled(false, ctx);
                     button.clear_tooltip(ctx);
@@ -6506,7 +6506,7 @@ impl CodeReviewView {
             }
             PrimaryGitActionMode::CreatePr => {
                 self.git_primary_action_button.update(ctx, |button, ctx| {
-                    button.set_label(crate::tr!("code_review", "code-review-create-pr"), ctx);
+                    button.set_label(crate::tr!("code_review", "create-pr"), ctx);
                     button.set_icon(Some(Icon::Github), ctx);
                     button.set_disabled(false, ctx);
                     button.clear_tooltip(ctx);
@@ -6524,13 +6524,13 @@ impl CodeReviewView {
                 if let Some(pr_info) = pr_info {
                     let url = pr_info.url.clone();
                     let number = pr_info.number;
-                    let label = crate::tr!("code_review", "code-review-view-pr", number = number as i64);
+                    let label = crate::tr!("code_review", "view-pr", number = number as i64);
                     self.git_primary_action_button.update(ctx, |button, ctx| {
                         button.set_label(label, ctx);
                         button.set_icon(Some(Icon::Github), ctx);
                         button.set_disabled(is_pr_info_refreshing, ctx);
                         button.set_tooltip(
-                            is_pr_info_refreshing.then_some(crate::tr!("code_review", "code-review-refreshing-pr-info")),
+                            is_pr_info_refreshing.then_some(crate::tr!("code_review", "refreshing-pr-info")),
                             ctx,
                         );
                         button.set_on_click(
@@ -6545,7 +6545,7 @@ impl CodeReviewView {
             }
             PrimaryGitActionMode::Publish => {
                 self.git_primary_action_button.update(ctx, |button, ctx| {
-                    button.set_label(crate::tr!("code_review", "code-review-publish"), ctx);
+                    button.set_label(crate::tr!("code_review", "publish"), ctx);
                     button.set_icon(Some(Icon::UploadCloud), ctx);
                     button.set_disabled(false, ctx);
                     button.clear_tooltip(ctx);
@@ -6602,7 +6602,7 @@ impl CodeReviewView {
         let diff_state = self.diff_state_model.as_ref(app);
         let is_pr_info_refreshing = diff_state.is_pr_info_refreshing(app);
         if let Some(pr_info) = diff_state.pr_info(app).cloned() {
-            MenuItemFields::new(crate::tr!("code_review", "code-review-view-pr", number = pr_info.number as i64))
+            MenuItemFields::new(crate::tr!("code_review", "view-pr", number = pr_info.number as i64))
                 .with_icon(Icon::Github)
                 .with_on_select_action(CodeReviewAction::ViewPr(pr_info.url))
                 .with_disabled(is_pr_info_refreshing)
@@ -6695,9 +6695,9 @@ impl CodeReviewView {
         }
 
         let (comment_label, comment_icon) = if self.get_existing_diffset_comment(ctx).is_some() {
-            (crate::tr!("code_review", "code-review-show-saved-comment"), Icon::MessageText)
+            (crate::tr!("code_review", "show-saved-comment"), Icon::MessageText)
         } else {
-            (crate::tr!("code_review", "code-review-add-comment"), Icon::MessagePlusSquare)
+            (crate::tr!("code_review", "add-comment"), Icon::MessagePlusSquare)
         };
 
         items.push(
@@ -6733,9 +6733,9 @@ impl CodeReviewView {
         if FeatureFlag::FileAndDiffSetComments.is_enabled() && has_changes {
             let (comment_label, comment_icon) = if self.get_existing_diffset_comment(ctx).is_some()
             {
-                (crate::tr!("code_review", "code-review-show-saved-comment"), Icon::MessageText)
+                (crate::tr!("code_review", "show-saved-comment"), Icon::MessageText)
             } else {
-                (crate::tr!("code_review", "code-review-add-comment"), Icon::MessagePlusSquare)
+                (crate::tr!("code_review", "add-comment"), Icon::MessagePlusSquare)
             };
 
             items.push(
@@ -7528,7 +7528,7 @@ impl BackingView for CodeReviewView {
         _ctx: &view::HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> view::HeaderContent {
-        view::HeaderContent::simple(crate::tr!("code_review", "code-review-reviewing-code-changes"))
+        view::HeaderContent::simple(crate::tr!("code_review", "reviewing-code-changes"))
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, ctx: &mut ViewContext<Self>) {

@@ -34,8 +34,8 @@ use super::{SharedSessionActionSource, SharedSessionScrollbackType};
 
 use std::sync::LazyLock;
 
-static MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-session"));
-static SESSION_LIMIT_REACHED_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-shared-session-limit-reached"));
+static MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-session"));
+static SESSION_LIMIT_REACHED_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "shared-session-limit-reached"));
 
 pub struct ShareSessionModal {
     modal: ViewHandle<Modal<Body>>,

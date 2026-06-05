@@ -277,9 +277,9 @@ impl SearchItem for InlineHistoryItem {
 
     fn accessibility_label(&self) -> String {
         match &self.item_type {
-            HistoryItemType::Conversation { title, .. } => crate::tr!("terminal", "terminal-search-conversation", title = title.clone()),
-            HistoryItemType::Command { command, .. } => crate::tr!("terminal", "terminal-search-command", command = command.clone()),
-            HistoryItemType::AIPrompt { query_text } => crate::tr!("terminal", "terminal-search-ai-prompt", query = query_text.clone()),
+            HistoryItemType::Conversation { title, .. } => crate::tr!("terminal", "search-conversation", title = title.clone()),
+            HistoryItemType::Command { command, .. } => crate::tr!("terminal", "search-command", command = command.clone()),
+            HistoryItemType::AIPrompt { query_text } => crate::tr!("terminal", "search-ai-prompt", query = query_text.clone()),
         }
     }
 }

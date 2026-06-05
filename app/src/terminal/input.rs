@@ -402,10 +402,10 @@ pub const DEBOUNCE_AI_QUERY_PREDICTION_PERIOD: Duration = Duration::from_millis(
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_MAX_HEIGHT: f32 = 236.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_TOP_PADDING: f32 = 10.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_BOTTOM_PADDING: f32 = 8.;
-pub(super) static CLI_AGENT_RICH_INPUT_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-cli-agent-hint"));
+pub(super) static CLI_AGENT_RICH_INPUT_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cli-agent-hint"));
 
-static CLOUD_MODE_V2_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-cloud-mode-v2-hint"));
-static CLOUD_HANDOFF_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-cloud-handoff-hint"));
+static CLOUD_MODE_V2_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cloud-mode-v2-hint"));
+static CLOUD_HANDOFF_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cloud-handoff-hint"));
 const SHORT_CIRCUIT_HIGHLIGHTING_ACTIONS: [Option<PlainTextEditorViewAction>; 7] = [
     Some(PlainTextEditorViewAction::Space),
     Some(PlainTextEditorViewAction::NonExpandingSpace),
@@ -427,11 +427,11 @@ pub fn get_input_box_top_border_width() -> f32 {
 
 pub const COMPLETIONS_MENU_WIDTH: f32 = 330.;
 pub const OPEN_COMPLETIONS_KEYBINDING_NAME: &str = "input:open_completion_suggestions";
-pub static INPUT_A11Y_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-input-a11y-label"));
-pub static INPUT_A11Y_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-input-a11y-helper"));
-pub const AI_COMMAND_SEARCH_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ai-command-search-hint"));
+pub static INPUT_A11Y_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "input-a11y-label"));
+pub static INPUT_A11Y_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "input-a11y-helper"));
+pub const AI_COMMAND_SEARCH_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ai-command-search-hint"));
 
-static AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-run-commands-hint"));
+static AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "run-commands-hint"));
 
 // Rotating hint text options for new Agent Mode conversations
 const AGENT_MODE_HINT_OPTIONS: &[&str] = &[
@@ -475,10 +475,10 @@ fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'
     }
 }
 
-static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-steer-agent-hint"));
-static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-steer-agent-classic"));
-static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ask-follow-up"));
-static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ask-follow-up-classic"));
+static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "steer-agent-hint"));
+static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "steer-agent-classic"));
+static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-follow-up"));
+static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-follow-up-classic"));
 
 /// Action name for setting input mode to agent mode
 pub const SET_INPUT_MODE_AGENT_ACTION_NAME: &str = "input:set_mode_agent";
@@ -521,11 +521,11 @@ enum InputPrefixMode {
 
 const VIM_STATUS_BAR_BOTTOM_PADDING: f32 = 20.;
 
-static DYNAMIC_ENUM_GENERATE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-dynamic-enum-generate"));
-static DYNAMIC_ENUM_RUN_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-dynamic-enum-run"));
-static DYNAMIC_ENUM_PENDING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-dynamic-enum-pending"));
-static DYNAMIC_ENUM_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-dynamic-enum-failure"));
-static DYNAMIC_ENUM_NO_RESULTS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-dynamic-enum-no-results"));
+static DYNAMIC_ENUM_GENERATE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-generate"));
+static DYNAMIC_ENUM_RUN_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-run"));
+static DYNAMIC_ENUM_PENDING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-pending"));
+static DYNAMIC_ENUM_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-failure"));
+static DYNAMIC_ENUM_NO_RESULTS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-no-results"));
 const DYNAMIC_ENUM_MENU_PADDING: f32 = 10.;
 const DYNAMIC_ENUM_MENU_HEIGHT_OFFSET: f32 = 25.;
 const DYNAMIC_ENUM_HORIZONTAL_TEXT_PADDING: f32 = 5.;
@@ -795,16 +795,16 @@ impl InputSuggestionsMode {
 
     /// Returns the placeholder text for this mode, if it has a custom one.
     pub fn placeholder_text(&self) -> Option<&'static str> {
-        static SEARCH_QUERIES: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-queries"));
-        static SEARCH_QUERIES_REWIND: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-queries-rewind"));
-        static SEARCH_CONVERSATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-conversations"));
-        static SEARCH_SKILLS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-skills"));
-        static SEARCH_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-models"));
-        static SEARCH_PROFILES: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-profiles"));
-        static SEARCH_COMMANDS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-commands"));
-        static SEARCH_PROMPTS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-prompts"));
-        static SEARCH_INDEXED_REPOS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-indexed-repos"));
-        static SEARCH_PLANS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-search-plans"));
+        static SEARCH_QUERIES: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-queries"));
+        static SEARCH_QUERIES_REWIND: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-queries-rewind"));
+        static SEARCH_CONVERSATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-conversations"));
+        static SEARCH_SKILLS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-skills"));
+        static SEARCH_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-models"));
+        static SEARCH_PROFILES: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-profiles"));
+        static SEARCH_COMMANDS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-commands"));
+        static SEARCH_PROMPTS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-prompts"));
+        static SEARCH_INDEXED_REPOS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-indexed-repos"));
+        static SEARCH_PLANS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-plans"));
         match self {
             InputSuggestionsMode::UserQueryMenu {
                 action: UserQueryMenuAction::ForkFrom,
@@ -1826,14 +1826,14 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "input:insert_network_logging_workflow",
-        crate::tr!("terminal", "terminal-show-warp-network-log"),
+        crate::tr!("terminal", "show-warp-network-log"),
         WorkspaceAction::OpenNetworkLogPane,
     )
     .with_enabled(|| ContextFlag::NetworkLogConsole.is_enabled())]);
 
     app.register_editable_bindings([EditableBinding::new(
         "input:clear_screen",
-        crate::tr!("terminal", "terminal-clear-screen"),
+        crate::tr!("terminal", "clear-screen"),
         InputAction::ClearScreen,
     )
     .with_context_predicate(id!("Input"))
@@ -1842,14 +1842,14 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "terminal:scroll_up_one_page",
-            crate::tr!("terminal", "terminal-scroll-output-up-one-page"),
+            crate::tr!("terminal", "scroll-output-up-one-page"),
             InputAction::PageUp,
         )
         .with_context_predicate(id!("Input") & !id!("IMEOpen"))
         .with_key_binding("pageup"),
         EditableBinding::new(
             "terminal:scroll_down_one_page",
-            crate::tr!("terminal", "terminal-scroll-output-down-one-page"),
+            crate::tr!("terminal", "scroll-output-down-one-page"),
             InputAction::PageDown,
         )
         .with_context_predicate(id!("Input") & !id!("IMEOpen"))
@@ -1858,8 +1858,8 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         "workspace:edit_prompt",
-        BindingDescription::new(crate::tr!("terminal", "terminal-edit-prompt"))
-            .with_custom_description(bindings::MAC_MENUS_CONTEXT, crate::tr!("terminal", "terminal-edit-prompt")),
+        BindingDescription::new(crate::tr!("terminal", "edit-prompt"))
+            .with_custom_description(bindings::MAC_MENUS_CONTEXT, crate::tr!("terminal", "edit-prompt")),
         WorkspaceAction::OpenPromptEditor {
             open_source: PromptEditorOpenSource::CommandPalette,
         },
@@ -1878,7 +1878,7 @@ pub fn init(app: &mut AppContext) {
     {
         app.register_editable_bindings([EditableBinding::new(
             "input:toggle_classic_completions_mode",
-            crate::tr!("terminal", "terminal-experimental-toggle-classic-completions-mode"),
+            crate::tr!("terminal", "experimental-toggle-classic-completions-mode"),
             InputAction::ToggleClassicCompletionsMode,
         )
         .with_context_predicate(id!("Input"))]);
@@ -1888,7 +1888,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:show_command_search",
-            crate::tr!("terminal", "terminal-command-search"),
+            crate::tr!("terminal", "command-search"),
             WorkspaceAction::ShowCommandSearch(Default::default()),
         )
         // Only show command search if none of the input-related panels are open, and if we aren't
@@ -1903,7 +1903,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::CommandSearch),
         EditableBinding::new(
             "input:search_command_history",
-            crate::tr!("terminal", "terminal-history-search"),
+            crate::tr!("terminal", "history-search"),
             WorkspaceAction::ShowCommandSearch(CommandSearchOptions {
                 filter: Some(QueryFilter::History),
                 init_content: Default::default(),
@@ -1913,7 +1913,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::HistorySearch),
         EditableBinding::new(
             OPEN_COMPLETIONS_KEYBINDING_NAME,
-            crate::tr!("terminal", "terminal-open-completions-menu"),
+            crate::tr!("terminal", "open-completions-menu"),
             InputAction::MaybeOpenCompletionSuggestions,
         )
         .with_context_predicate(id!("Input"))
@@ -1923,7 +1923,7 @@ pub fn init(app: &mut AppContext) {
     if let Some(custom_action) = workflows::CategoriesView::custom_action() {
         app.register_editable_bindings([EditableBinding::new(
             "input:toggle_workflows",
-            crate::tr!("terminal", "terminal-workflows"),
+            crate::tr!("terminal", "workflows"),
             InputAction::SelectAndRefreshVoltron(VoltronItem::Workflows),
         )
         .with_context_predicate(id!("Input"))
@@ -1946,7 +1946,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "input:toggle_natural_language_command_search",
-            crate::tr!("terminal", "terminal-open-ai-command-suggestions"),
+            crate::tr!("terminal", "open-ai-command-suggestions"),
             InputAction::ShowAiCommandSearch,
         )
         .with_context_predicate(
@@ -1959,7 +1959,7 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::AISearch),
         EditableBinding::new(
             START_NEW_CONVERSATION_KEYBINDING_NAME,
-            crate::tr!("terminal", "terminal-new-agent-conversation"),
+            crate::tr!("terminal", "new-agent-conversation"),
             InputAction::StartNewAgentConversation,
         )
         .with_enabled(|| !FeatureFlag::AgentView.is_enabled())
@@ -1971,7 +1971,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-alt-shift-N"),
         EditableBinding::new(
             "input:enable_auto_detection",
-            crate::tr!("terminal", "terminal-trigger-auto-detection"),
+            crate::tr!("terminal", "trigger-auto-detection"),
             InputAction::EnableAutoDetection,
         )
         .with_enabled(|| FeatureFlag::AgentMode.is_enabled())
@@ -1985,7 +1985,7 @@ pub fn init(app: &mut AppContext) {
         .with_key_binding("alt-shift-I"),
         EditableBinding::new(
             "input:clear_and_reset_ai_context_menu_query",
-            crate::tr!("terminal", "terminal-clear-and-reset-ai-context-menu-query"),
+            crate::tr!("terminal", "clear-and-reset-ai-context-menu-query"),
             InputAction::ClearAndResetAIContextMenuQuery,
         )
         .with_context_predicate(id!("Input") & id!("AIContextMenuOpen") & !id!("IMEOpen"))
@@ -2216,7 +2216,7 @@ impl Input {
                     event
                 {
                     let window_id = ctx.window_id();
-                    let toast_message = crate::tr!("terminal", "terminal-failed-cloud-handoff", error = error_message.clone());
+                    let toast_message = crate::tr!("terminal", "failed-cloud-handoff", error = error_message.clone());
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(toast_message),
@@ -3172,7 +3172,7 @@ impl Input {
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(
-                                crate::tr!("terminal", "terminal-images-removed-no-support"),
+                                crate::tr!("terminal", "images-removed-no-support"),
                             ),
                             window_id,
                             ctx,
@@ -5119,7 +5119,7 @@ impl Input {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(crate::tr!("terminal", "terminal-skill-not-found", reference = reference.to_string())),
+                        DismissibleToast::error(crate::tr!("terminal", "skill-not-found", reference = reference.to_string())),
                         window_id,
                         ctx,
                     );
@@ -5182,7 +5182,7 @@ impl Input {
             let window_id = ctx.window_id();
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 let toast =
-                    DismissibleToast::default(crate::tr!("terminal", "terminal-no-active-conversation-export"));
+                    DismissibleToast::default(crate::tr!("terminal", "no-active-conversation-export"));
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
             return;
@@ -5247,7 +5247,7 @@ impl Input {
             let display_path = file_path.display().to_string();
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 let toast = DismissibleToast::default(
-                    crate::tr!("terminal", "terminal-file-exists-overwrite", path = display_path.clone())
+                    crate::tr!("terminal", "file-exists-overwrite", path = display_path.clone())
                 );
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
@@ -5261,7 +5261,7 @@ impl Input {
                 let display_path = file_path.display().to_string();
                 ToastStack::handle(ctx).update(ctx, move |toast_stack, ctx| {
                     let toast = DismissibleToast::default(
-                        crate::tr!("terminal", "terminal-conversation-exported", path = display_path.clone())
+                        crate::tr!("terminal", "conversation-exported", path = display_path.clone())
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -5270,13 +5270,13 @@ impl Input {
                 // Show error toast with user-friendly message
                 let user_message = match e.kind() {
                     std::io::ErrorKind::PermissionDenied => {
-                        crate::tr!("terminal", "terminal-permission-denied", path = file_path.display().to_string())
+                        crate::tr!("terminal", "permission-denied", path = file_path.display().to_string())
                     }
                     std::io::ErrorKind::NotFound => {
-                        crate::tr!("terminal", "terminal-directory-not-found", path = file_path.parent().map(|p| p.display().to_string()).unwrap_or_default())
+                        crate::tr!("terminal", "directory-not-found", path = file_path.parent().map(|p| p.display().to_string()).unwrap_or_default())
                     }
                     std::io::ErrorKind::AlreadyExists => {
-                        crate::tr!("terminal", "terminal-file-already-exists", path = file_path.display().to_string())
+                        crate::tr!("terminal", "file-already-exists", path = file_path.display().to_string())
                     }
                     _ => {
                         format!("Failed to export to {}: {}", file_path.display(), e)
@@ -12584,7 +12584,7 @@ impl Input {
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
                                 DismissibleToast::default(
-                                    crate::tr!("terminal", "terminal-preparing-handoff"),
+                                    crate::tr!("terminal", "preparing-handoff"),
                                 )
                                 .with_object_id("local-to-cloud-handoff-not-ready".to_owned()),
                                 window_id,

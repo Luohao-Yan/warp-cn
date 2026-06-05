@@ -78,7 +78,7 @@ impl AcceptAutosuggestionKeybinding {
         let right_arrow = Keystroke::parse("right").expect("can parse keystroke");
         let tab = Keystroke::parse("tab").expect("can parse keystroke");
         let shift_right_arrow = Keystroke::parse("shift-right").expect("can parse keystroke");
-        let custom_label = crate::tr!("editor", "editor-custom-ellipsis");
+        let custom_label = crate::tr!("editor", "custom-ellipsis");
         let menu_items: Vec<crate::menu::MenuItem<AcceptAutosuggestionKeybindingAction>> = vec![
             MenuItemFields::new(right_arrow.displayed())
                 .with_on_select_action(
@@ -159,7 +159,7 @@ impl AcceptAutosuggestionKeybinding {
                     menu.set_selected_by_name(accept_autosuggestion_keybinding_displayed, ctx);
                 // If the keybinding is not one of our default options, select the "Custom..." item.
                 if !found {
-                    let custom_label = crate::tr!("editor", "editor-custom-ellipsis");
+                    let custom_label = crate::tr!("editor", "custom-ellipsis");
                     menu.set_selected_by_name(&custom_label, ctx);
                 }
             } else {
@@ -347,7 +347,7 @@ impl View for AcceptAutosuggestionKeybinding {
             if !is_menu_open && state.is_hovered() {
                 let tool_tip = appearance
                     .ui_builder()
-                    .autosuggestion_tool_tip(crate::tr!("editor", "editor-change-keybinding-tooltip"))
+                    .autosuggestion_tool_tip(crate::tr!("editor", "change-keybinding-tooltip"))
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(

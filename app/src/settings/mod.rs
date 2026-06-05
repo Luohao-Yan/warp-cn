@@ -98,16 +98,16 @@ impl SettingsFileError {
     pub fn heading_and_description(&self) -> (String, String) {
         match self {
             Self::FileParseFailed(_) => (
-                crate::tr!("settings", "settings-file-contains-error"),
+                crate::tr!("settings", "file-contains-error"),
                 format!("{self}. Open the file to fix it."),
             ),
             Self::InvalidSettings(keys) => match keys.len() {
                 1 => (
-                    crate::tr!("settings", "settings-file-contains-error"),
+                    crate::tr!("settings", "file-contains-error"),
                     format!("{self}. The default value is being used."),
                 ),
                 _ => (
-                    crate::tr!("settings", "settings-file-contains-errors"),
+                    crate::tr!("settings", "file-contains-errors"),
                     format!("{self}. Default values are being used."),
                 ),
             },
@@ -220,9 +220,9 @@ pub enum CtrlTabBehavior {
 impl CtrlTabBehavior {
     pub fn as_dropdown_label(&self) -> String {
         match self {
-            Self::ActivatePrevNextTab => crate::tr!("settings", "settings-ctrl-tab-activate-prev-next"),
-            Self::CycleMostRecentSession => crate::tr!("settings", "settings-ctrl-tab-cycle-recent-session"),
-            Self::CycleMostRecentTab => crate::tr!("settings", "settings-ctrl-tab-cycle-recent-tab"),
+            Self::ActivatePrevNextTab => crate::tr!("settings", "ctrl-tab-activate-prev-next"),
+            Self::CycleMostRecentSession => crate::tr!("settings", "ctrl-tab-cycle-recent-session"),
+            Self::CycleMostRecentTab => crate::tr!("settings", "ctrl-tab-cycle-recent-tab"),
         }
     }
 }
@@ -270,9 +270,9 @@ pub enum GlobalHotkeyMode {
 impl GlobalHotkeyMode {
     pub fn as_dropdown_label(&self) -> String {
         match self {
-            Self::Disabled => crate::tr!("settings", "settings-global-hotkey-disabled"),
-            Self::QuakeMode => crate::tr!("settings", "settings-global-hotkey-quake-mode"),
-            Self::ActivationHotkey => crate::tr!("settings", "settings-global-hotkey-activation"),
+            Self::Disabled => crate::tr!("settings", "global-hotkey-disabled"),
+            Self::QuakeMode => crate::tr!("settings", "global-hotkey-quake-mode"),
+            Self::ActivationHotkey => crate::tr!("settings", "global-hotkey-activation"),
         }
     }
 }

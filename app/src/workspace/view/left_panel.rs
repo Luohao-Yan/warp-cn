@@ -384,7 +384,7 @@ impl LeftPanelView {
                 ToolbeltButtonConfig {
                     icon: Icon::FileCopy,
                     active_icon: None,
-                    tooltip_text: crate::tr!("workspace", "workspace-project-explorer"),
+                    tooltip_text: crate::tr!("workspace", "project-explorer"),
                     action: LeftPanelAction::ProjectExplorer,
                     render_with_active_state: false,
                     tooltip_keybinding: toolbelt_tooltip_keybinding(&tooltip_keybinding_names, ctx),
@@ -400,7 +400,7 @@ impl LeftPanelView {
                 ToolbeltButtonConfig {
                     icon: Icon::Search,
                     active_icon: None,
-                    tooltip_text: crate::tr!("workspace", "workspace-global-search"),
+                    tooltip_text: crate::tr!("workspace", "global-search"),
                     action: LeftPanelAction::GlobalSearch {
                         entry_focus: GlobalSearchEntryFocus::QueryEditor,
                     },
@@ -418,7 +418,7 @@ impl LeftPanelView {
                 ToolbeltButtonConfig {
                     icon: Icon::WarpDrive,
                     active_icon: None,
-                    tooltip_text: crate::tr!("workspace", "workspace-warp-drive-label"),
+                    tooltip_text: crate::tr!("workspace", "warp-drive-label"),
                     action: LeftPanelAction::WarpDrive,
                     render_with_active_state: false,
                     tooltip_keybinding: toolbelt_tooltip_keybinding(&tooltip_keybinding_names, ctx),
@@ -434,7 +434,7 @@ impl LeftPanelView {
                 ToolbeltButtonConfig {
                     icon: Icon::Conversation,
                     active_icon: Some(Icon::Conversation),
-                    tooltip_text: crate::tr!("workspace", "workspace-agent-conversations"),
+                    tooltip_text: crate::tr!("workspace", "agent-conversations"),
                     action: LeftPanelAction::ConversationListView,
                     render_with_active_state: false,
                     tooltip_keybinding: toolbelt_tooltip_keybinding(&tooltip_keybinding_names, ctx),
@@ -793,12 +793,12 @@ impl LeftPanelView {
 
         let tooltip = if let Some(keybinding) = tooltip_keybinding {
             ui_builder
-                .tool_tip_with_sublabel(crate::tr!("workspace", "workspace-close-panel"), keybinding)
+                .tool_tip_with_sublabel(crate::tr!("workspace", "close-panel"), keybinding)
                 .build()
                 .finish()
         } else {
             ui_builder
-                .tool_tip(crate::tr!("workspace", "workspace-close-panel"))
+                .tool_tip(crate::tr!("workspace", "close-panel"))
                 .build()
                 .finish()
         };

@@ -210,9 +210,9 @@ fn poll_run_until_joinable_session(
                                         .map(|msg| msg.message.clone())
                                         .unwrap_or_else(|| {
                                             if task.state.is_failure_like() {
-                                                    crate::tr!("ai", "ai-cloud-agent-failed")
+                                                    crate::tr!("ai", "cloud-agent-failed")
                                                 } else {
-                                                    crate::tr!("ai", "ai-cloud-followup-finished")
+                                                    crate::tr!("ai", "cloud-followup-finished")
                                                 }
                                         });
                                     yield Err(anyhow!(message));

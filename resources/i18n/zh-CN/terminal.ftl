@@ -52,13 +52,6 @@ terminal-install-tmux-explanation-outdated = 要 Warpify 您的 SSH 会话，需
 terminal-install-tmux-explanation-missing = 要 Warpify 您的 SSH 会话，需要安装 tmux。
 terminal-install-tmux-why-link-text = 为什么需要 tmux？
 
-terminal-terminal-install-tmux-title = { terminal-install-tmux-title }
-terminal-terminal-install-tmux-run-script = { terminal-install-tmux-run-script }
-terminal-terminal-install-tmux-install-with-pm = { terminal-install-tmux-install-with-pm }
-terminal-terminal-install-tmux-install-to-home-warp = { terminal-install-tmux-install-to-home-warp }
-terminal-terminal-install-tmux-explanation-outdated = { terminal-install-tmux-explanation-outdated }
-terminal-terminal-install-tmux-explanation-missing = { terminal-install-tmux-explanation-missing }
-terminal-terminal-install-tmux-why-link-text = { terminal-install-tmux-why-link-text }
 
 ## -- 引导提示块 --------------------------------------------------
 
@@ -720,186 +713,7 @@ terminal-cancel-request = 取消请求
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
-terminal-terminal-filter-placeholder = { terminal-filter-placeholder }
-terminal-terminal-filter-show-context = { terminal-filter-show-context }
-terminal-terminal-filter-regex-toggle = { terminal-filter-regex-toggle }
-terminal-terminal-filter-case-sensitive = { terminal-filter-case-sensitive }
-terminal-terminal-filter-invert = { terminal-filter-invert }
 
-terminal-terminal-a11y-block-label = { terminal-a11y-block-label }
-terminal-terminal-a11y-block-output-label = { terminal-a11y-block-output-label }
-terminal-terminal-a11y-block-status = { terminal-a11y-block-status }
-terminal-terminal-a11y-copied-blocks = { terminal-a11y-copied-blocks }
-terminal-terminal-a11y-open-block-filter-editor = { terminal-a11y-open-block-filter-editor }
-terminal-terminal-a11y-scrolled-to-bottom = { terminal-a11y-scrolled-to-bottom }
-terminal-terminal-a11y-selected-all-blocks = { terminal-a11y-selected-all-blocks }
-terminal-terminal-a11y-selected-blocks = { terminal-a11y-selected-blocks }
-terminal-terminal-a11y-status-background = { terminal-a11y-status-background }
-terminal-terminal-a11y-status-failed = { terminal-a11y-status-failed }
-terminal-terminal-a11y-status-in-progress = { terminal-a11y-status-in-progress }
-terminal-terminal-a11y-status-succeeded = { terminal-a11y-status-succeeded }
-terminal-terminal-agent-task = { terminal-agent-task }
-terminal-terminal-auto-mode = { terminal-auto-mode }
-terminal-terminal-auto-mode-description = { terminal-auto-mode-description }
-terminal-terminal-auto-reload = { terminal-auto-reload }
-terminal-terminal-auto-reload-tooltip = { terminal-auto-reload-tooltip }
-terminal-terminal-auto-select-best-model = { terminal-auto-select-best-model }
-terminal-terminal-base = { terminal-base }
-terminal-terminal-billed-to-api = { terminal-billed-to-api }
-terminal-terminal-bundled-skills-cannot-be-edited = { terminal-bundled-skills-cannot-be-edited }
-terminal-terminal-buy = { terminal-buy }
-terminal-terminal-buying = { terminal-buying }
-terminal-terminal-change-role = { terminal-change-role }
-terminal-terminal-choose-agent-model-tooltip = { terminal-choose-agent-model-tooltip }
-terminal-terminal-choose-execution-profile-tooltip = { terminal-choose-execution-profile-tooltip }
-terminal-terminal-configure = { terminal-configure }
-terminal-terminal-context-select-all = { terminal-context-select-all }
-terminal-terminal-continue-in-cloud-tooltip = { terminal-continue-in-cloud-tooltip }
-terminal-terminal-continue-locally = { terminal-continue-locally }
-terminal-terminal-conversations-current-directory = { terminal-conversations-current-directory }
-terminal-terminal-cost = { terminal-cost }
-terminal-terminal-couldnt-continue-cloud-task = { terminal-couldnt-continue-cloud-task }
-terminal-terminal-credits-used-label = { terminal-credits-used-label }
-terminal-terminal-directory-label = { terminal-directory-label }
-terminal-terminal-editing-revoked-sharer-idle = { terminal-editing-revoked-sharer-idle }
-terminal-terminal-editing-skills-unsupported = { terminal-editing-skills-unsupported }
-terminal-terminal-ellipsis = { terminal-ellipsis }
-terminal-terminal-failed-enable-autoreload = { terminal-failed-enable-autoreload }
-terminal-terminal-auto-reload-settings-updated = { terminal-auto-reload-settings-updated }
-terminal-terminal-fork-locally-tooltip = { terminal-fork-locally-tooltip }
-terminal-terminal-ftux-loading = { terminal-ftux-loading }
-terminal-terminal-ftux-new-type = { terminal-ftux-new-type }
-terminal-terminal-ftux-no-secrets-found = { terminal-ftux-no-secrets-found }
-terminal-terminal-ftux-no-secrets-helper = { terminal-ftux-no-secrets-helper }
-terminal-terminal-ftux-search-placeholder = { terminal-ftux-search-placeholder }
-terminal-terminal-ftux-skip-api-key = { terminal-ftux-skip-api-key }
-terminal-terminal-ftux-skip-api-key-sub = { terminal-ftux-skip-api-key-sub }
-terminal-terminal-ftux-unable-to-load-secrets = { terminal-ftux-unable-to-load-secrets }
-terminal-terminal-full-terminal-use = { terminal-full-terminal-use }
-terminal-terminal-history = { terminal-history }
-terminal-terminal-increase-limit = { terminal-increase-limit }
-terminal-terminal-intelligence = { terminal-intelligence }
-terminal-terminal-loading-session = { terminal-loading-session }
-terminal-terminal-manage = { terminal-manage }
-terminal-terminal-manage-api-keys = { terminal-manage-api-keys }
-terminal-terminal-manage-billing = { terminal-manage-billing }
-terminal-terminal-manage-defaults = { terminal-manage-defaults }
-terminal-terminal-manage-profiles = { terminal-manage-profiles }
-terminal-terminal-menu-ai-command-search = { terminal-menu-ai-command-search }
-terminal-terminal-menu-ask-warp-ai = { terminal-menu-ask-warp-ai }
-terminal-terminal-menu-close-pane = { terminal-menu-close-pane }
-terminal-terminal-menu-command-search = { terminal-menu-command-search }
-terminal-terminal-menu-copy = { terminal-menu-copy }
-terminal-terminal-menu-copy-command = { terminal-menu-copy-command }
-terminal-terminal-menu-copy-commands = { terminal-menu-copy-commands }
-terminal-terminal-menu-copy-conversation-id = { terminal-menu-copy-conversation-id }
-terminal-terminal-menu-copy-conversation-text = { terminal-menu-copy-conversation-text }
-terminal-terminal-menu-copy-debugging-id = { terminal-menu-copy-debugging-id }
-terminal-terminal-menu-copy-debugging-link = { terminal-menu-copy-debugging-link }
-terminal-terminal-menu-copy-filtered-output = { terminal-menu-copy-filtered-output }
-terminal-terminal-menu-copy-git-branch = { terminal-menu-copy-git-branch }
-terminal-terminal-menu-copy-link = { terminal-menu-copy-link }
-terminal-terminal-menu-copy-output = { terminal-menu-copy-output }
-terminal-terminal-menu-copy-output-as-markdown = { terminal-menu-copy-output-as-markdown }
-terminal-terminal-menu-copy-path = { terminal-menu-copy-path }
-terminal-terminal-menu-copy-prompt = { terminal-menu-copy-prompt }
-terminal-terminal-menu-copy-right-prompt = { terminal-menu-copy-right-prompt }
-terminal-terminal-menu-copy-session-sharing-link = { terminal-menu-copy-session-sharing-link }
-terminal-terminal-menu-copy-url = { terminal-menu-copy-url }
-terminal-terminal-menu-copy-working-directory = { terminal-menu-copy-working-directory }
-terminal-terminal-menu-cut = { terminal-menu-cut }
-terminal-terminal-menu-edit-agent-toolbelt = { terminal-menu-edit-agent-toolbelt }
-terminal-terminal-menu-edit-cli-agent-toolbelt = { terminal-menu-edit-cli-agent-toolbelt }
-terminal-terminal-menu-edit-prompt = { terminal-menu-edit-prompt }
-terminal-terminal-menu-find-within-block = { terminal-menu-find-within-block }
-terminal-terminal-menu-find-within-blocks = { terminal-menu-find-within-blocks }
-terminal-terminal-menu-fork-from = { terminal-menu-fork-from }
-terminal-terminal-menu-fork-from-here-dev-only = { terminal-menu-fork-from-here-dev-only }
-terminal-terminal-menu-fork-from-last-query = { terminal-menu-fork-from-last-query }
-terminal-terminal-menu-hide-input-hint-text = { terminal-menu-hide-input-hint-text }
-terminal-terminal-menu-insert-into-input = { terminal-menu-insert-into-input }
-terminal-terminal-menu-make-editor = { terminal-menu-make-editor }
-terminal-terminal-menu-make-viewer = { terminal-menu-make-viewer }
-terminal-terminal-menu-open-in-editor = { terminal-menu-open-in-editor }
-terminal-terminal-menu-open-in-warp = { terminal-menu-open-in-warp }
-terminal-terminal-menu-open-on-desktop = { terminal-menu-open-on-desktop }
-terminal-terminal-menu-paste = { terminal-menu-paste }
-terminal-terminal-menu-request-edit-access = { terminal-menu-request-edit-access }
-terminal-terminal-menu-rewind-to-before-here = { terminal-menu-rewind-to-before-here }
-terminal-terminal-menu-save-as-prompt = { terminal-menu-save-as-prompt }
-terminal-terminal-menu-save-as-workflow = { terminal-menu-save-as-workflow }
-terminal-terminal-menu-scroll-to-bottom-of-block = { terminal-menu-scroll-to-bottom-of-block }
-terminal-terminal-menu-scroll-to-bottom-of-blocks = { terminal-menu-scroll-to-bottom-of-blocks }
-terminal-terminal-menu-scroll-to-top-of-block = { terminal-menu-scroll-to-top-of-block }
-terminal-terminal-menu-scroll-to-top-of-blocks = { terminal-menu-scroll-to-top-of-blocks }
-terminal-terminal-menu-select-all = { terminal-menu-select-all }
-terminal-terminal-menu-share = { terminal-menu-share }
-terminal-terminal-menu-share-block = { terminal-menu-share-block }
-terminal-terminal-menu-share-conversation = { terminal-menu-share-conversation }
-terminal-terminal-menu-share-session = { terminal-menu-share-session }
-terminal-terminal-menu-share-session-ellipsis = { terminal-menu-share-session-ellipsis }
-terminal-terminal-menu-show-containing-folder = { terminal-menu-show-containing-folder }
-terminal-terminal-menu-show-in-finder = { terminal-menu-show-in-finder }
-terminal-terminal-menu-show-input-hint-text = { terminal-menu-show-input-hint-text }
-terminal-terminal-menu-split-pane-down = { terminal-menu-split-pane-down }
-terminal-terminal-menu-split-pane-left = { terminal-menu-split-pane-left }
-terminal-terminal-menu-split-pane-right = { terminal-menu-split-pane-right }
-terminal-terminal-menu-split-pane-up = { terminal-menu-split-pane-up }
-terminal-terminal-menu-stop-sharing = { terminal-menu-stop-sharing }
-terminal-terminal-menu-stop-sharing-session = { terminal-menu-stop-sharing-session }
-terminal-terminal-menu-toggle-block-filter = { terminal-menu-toggle-block-filter }
-terminal-terminal-menu-toggle-bookmark = { terminal-menu-toggle-bookmark }
-terminal-terminal-model = { terminal-model }
-terminal-terminal-model-specs = { terminal-model-specs }
-terminal-terminal-model-specs-description = { terminal-model-specs-description }
-terminal-terminal-monthly-limit-reached-admin = { terminal-monthly-limit-reached-admin }
-terminal-terminal-monthly-limit-reached-non-admin = { terminal-monthly-limit-reached-non-admin }
-terminal-terminal-monthly-limit-reached-title = { terminal-monthly-limit-reached-title }
-terminal-terminal-new-agent-conversation = { terminal-new-agent-conversation }
-terminal-terminal-new-cloud-agent = { terminal-new-cloud-agent }
-terminal-terminal-new-models-available = { terminal-new-models-available }
-terminal-terminal-non-local-env-var-subshell = { terminal-non-local-env-var-subshell }
-terminal-terminal-open-in-desktop-tooltip = { terminal-open-in-desktop-tooltip }
-terminal-terminal-open-in-warp = { terminal-open-in-warp }
-terminal-terminal-out-of-credits-admin = { terminal-out-of-credits-admin }
-terminal-terminal-out-of-credits-non-admin = { terminal-out-of-credits-non-admin }
-terminal-terminal-out-of-credits-title = { terminal-out-of-credits-title }
-terminal-terminal-powershell-subshell-unsupported = { terminal-powershell-subshell-unsupported }
-terminal-terminal-profiles = { terminal-profiles }
-terminal-terminal-purchase-exceeds-limit = { terminal-purchase-exceeds-limit }
-terminal-terminal-reasoning-level = { terminal-reasoning-level }
-terminal-terminal-reasoning-level-description = { terminal-reasoning-level-description }
-terminal-terminal-request-edit-access-model = { terminal-request-edit-access-model }
-terminal-terminal-revoke-all-edit-permissions = { terminal-revoke-all-edit-permissions }
-terminal-terminal-run-time-label = { terminal-run-time-label }
-terminal-terminal-selector-api-key-header = { terminal-selector-api-key-header }
-terminal-terminal-selector-api-key-tooltip = { terminal-selector-api-key-tooltip }
-terminal-terminal-selector-choose-type = { terminal-selector-choose-type }
-terminal-terminal-selector-loading = { terminal-selector-loading }
-terminal-terminal-selector-new = { terminal-selector-new }
-terminal-terminal-selector-no-secret = { terminal-selector-no-secret }
-terminal-terminal-selector-unable-to-load-secrets = { terminal-selector-unable-to-load-secrets }
-terminal-terminal-sharing-edit-revoked-inactivity = { terminal-sharing-edit-revoked-inactivity }
-terminal-terminal-sharing-ended-inactivity = { terminal-sharing-ended-inactivity }
-terminal-terminal-skill-label = { terminal-skill-label }
-terminal-terminal-snapshot-subtitle = { terminal-snapshot-subtitle }
-terminal-terminal-source-label = { terminal-source-label }
-terminal-terminal-speed = { terminal-speed }
-terminal-terminal-tab-all = { terminal-tab-all }
-terminal-terminal-tab-commands = { terminal-tab-commands }
-terminal-terminal-tab-prompts = { terminal-tab-prompts }
-terminal-terminal-to-continue = { terminal-to-continue }
-terminal-terminal-tooltip-hide-details = { terminal-tooltip-hide-details }
-terminal-terminal-tooltip-show-details = { terminal-tooltip-show-details }
-terminal-terminal-use-agent = { terminal-use-agent }
-terminal-terminal-use-agent-tooltip = { terminal-use-agent-tooltip }
-terminal-terminal-viewing-snapshot = { terminal-viewing-snapshot }
-terminal-terminal-warpify-ssh-session = { terminal-warpify-ssh-session }
-terminal-terminal-warpify-subshell = { terminal-warpify-subshell }
-terminal-terminal-warpify-subshell-tooltip = { terminal-warpify-subshell-tooltip }
-terminal-terminal-free-credits = { terminal-free-credits }
-terminal-terminal-show-prompt = { terminal-show-prompt }
-terminal-terminal-view-index-status = { terminal-view-index-status }
 
 ## -- Additional terminal strings --
 terminal-regenerate-agents-md = 重新生成 AGENTS.md 文件
@@ -1036,423 +850,48 @@ terminal-what-is-the-command-to = 执行以下操作的命令是：
 
 ## -- Double-prefix aliases for inline banner strings --
 
-terminal-terminal-aws-bedrock-title = { terminal-aws-bedrock-title }
-terminal-terminal-aws-bedrock-description = { terminal-aws-bedrock-description }
-terminal-terminal-log-into-aws = { terminal-log-into-aws }
-terminal-terminal-notifications-dismissed = { terminal-notifications-dismissed }
-terminal-terminal-notifications-disabled = { terminal-notifications-disabled }
-terminal-terminal-notifications-success = { terminal-notifications-success }
-terminal-terminal-notifications-denied = { terminal-notifications-denied }
-terminal-terminal-notifications-error = { terminal-notifications-error }
-terminal-terminal-notifications-pending = { terminal-notifications-pending }
-terminal-terminal-configure-notifications = { terminal-configure-notifications }
-terminal-terminal-troubleshoot = { terminal-troubleshoot }
-terminal-terminal-notifications-long-running = { terminal-notifications-long-running }
-terminal-terminal-notifications-agent-task = { terminal-notifications-agent-task }
-terminal-terminal-notifications-needs-attention = { terminal-notifications-needs-attention }
-terminal-terminal-notifications-password-prompt = { terminal-notifications-password-prompt }
-terminal-terminal-notifications-a11y-help = { terminal-notifications-a11y-help }
-terminal-terminal-open-markdown-title = { terminal-open-markdown-title }
-terminal-terminal-open-code-title = { terminal-open-code-title }
-terminal-terminal-open-code-title-fallback = { terminal-open-code-title-fallback }
-terminal-terminal-view-in-warp = { terminal-view-in-warp }
-terminal-terminal-edit-in-warp = { terminal-edit-in-warp }
-terminal-terminal-ssh-wrapper-enabled = { terminal-ssh-wrapper-enabled }
-terminal-terminal-ssh-wrapper-disabled = { terminal-ssh-wrapper-disabled }
-terminal-terminal-ssh-connection-title = { terminal-ssh-connection-title }
-terminal-terminal-ssh-authenticating = { terminal-ssh-authenticating }
-terminal-terminal-ssh-connected = { terminal-ssh-connected }
-terminal-terminal-ssh-disconnected = { terminal-ssh-disconnected }
-terminal-terminal-ssh-error-title = { terminal-ssh-error-title }
-terminal-terminal-ssh-host-label = { terminal-ssh-host-label }
-terminal-terminal-ssh-user-label = { terminal-ssh-user-label }
-terminal-terminal-ssh-tmux-not-installed = { terminal-ssh-tmux-not-installed }
-terminal-terminal-ssh-unsupported-tmux = { terminal-ssh-unsupported-tmux }
-terminal-terminal-ssh-tmux-failed = { terminal-ssh-tmux-failed }
-terminal-terminal-ssh-warpify-timeout = { terminal-ssh-warpify-timeout }
-terminal-terminal-ssh-unsupported-shell = { terminal-ssh-unsupported-shell }
-terminal-terminal-ssh-tmux-install-error = { terminal-ssh-tmux-install-error }
-terminal-terminal-ssh-tmux-not-installed-title = { terminal-ssh-tmux-not-installed-title }
-terminal-terminal-ssh-unsupported-tmux-title = { terminal-ssh-unsupported-tmux-title }
-terminal-terminal-ssh-tmux-failed-title = { terminal-ssh-tmux-failed-title }
-terminal-terminal-ssh-tmux-install-timeout-title = { terminal-ssh-tmux-install-timeout-title }
-terminal-terminal-ssh-warpify-timeout-title = { terminal-ssh-warpify-timeout-title }
-terminal-terminal-ssh-unsupported-shell-title = { terminal-ssh-unsupported-shell-title }
-terminal-terminal-ssh-tmux-install-error-title = { terminal-ssh-tmux-install-error-title }
-terminal-terminal-ssh-error-warpifying-title = { terminal-ssh-error-warpifying-title }
-terminal-terminal-ssh-feedback-message-before-link = { terminal-ssh-feedback-message-before-link }
-terminal-terminal-ssh-feedback-link-text = { terminal-ssh-feedback-link-text }
-terminal-terminal-ssh-feedback-message-after-link = { terminal-ssh-feedback-message-after-link }
-terminal-terminal-ssh-warpify-without-tmux = { terminal-ssh-warpify-without-tmux }
-terminal-terminal-ssh-continue-without-warpification = { terminal-ssh-continue-without-warpification }
-terminal-terminal-settings = { terminal-settings }
-terminal-terminal-new-terminal-session = { terminal-new-terminal-session }
-terminal-terminal-zero-state-new-agent-conversation = { terminal-zero-state-new-agent-conversation }
-terminal-terminal-zero-state-new-cloud-agent-conversation = { terminal-zero-state-new-cloud-agent-conversation }
-terminal-terminal-zero-state-cycle-commands = { terminal-zero-state-cycle-commands }
-terminal-terminal-zero-state-open-code-review = { terminal-zero-state-open-code-review }
-terminal-terminal-zero-state-autodetect-nld = { terminal-zero-state-autodetect-nld }
 
 ## -- Double-prefix aliases for new terminal strings --
-terminal-terminal-regenerate-agents-md = { terminal-regenerate-agents-md }
-terminal-terminal-cli-agent-hint = { terminal-cli-agent-hint }
-terminal-terminal-cloud-mode-v2-hint = { terminal-cloud-mode-v2-hint }
-terminal-terminal-cloud-handoff-hint = { terminal-cloud-handoff-hint }
-terminal-terminal-input-a11y-label = { terminal-input-a11y-label }
-terminal-terminal-ai-command-search-hint = { terminal-ai-command-search-hint }
-terminal-terminal-run-commands-hint = { terminal-run-commands-hint }
-terminal-terminal-steer-agent-hint = { terminal-steer-agent-hint }
-terminal-terminal-ask-follow-up = { terminal-ask-follow-up }
-terminal-terminal-system-default-shell = { terminal-system-default-shell }
-terminal-terminal-type-searched-phrase = { terminal-type-searched-phrase }
-terminal-terminal-press-escape-to-quit = { terminal-press-escape-to-quit }
-terminal-terminal-conversation-restored = { terminal-conversation-restored }
-terminal-terminal-previous-session = { terminal-previous-session }
-terminal-terminal-sharing-link-copied = { terminal-sharing-link-copied }
-terminal-terminal-grants-ability-part1 = { terminal-grants-ability-part1 }
-terminal-terminal-use-with-caution = { terminal-use-with-caution }
-terminal-terminal-edit-requests = { terminal-edit-requests }
-terminal-terminal-cancel-request = { terminal-cancel-request }
 
 ## -- Double-prefix aliases for inline banner strings (new) --
 
-terminal-terminal-optimize-codebase-header = { terminal-optimize-codebase-header }
-terminal-terminal-optimize-codebase-text = { terminal-optimize-codebase-text }
-terminal-terminal-optimize = { terminal-optimize }
-terminal-terminal-enable-alias-expansion = { terminal-enable-alias-expansion }
-terminal-terminal-warp-can-auto-expand-aliases = { terminal-warp-can-auto-expand-aliases }
-terminal-terminal-login-for-ai = { terminal-login-for-ai }
-terminal-terminal-ai-features-unavailable = { terminal-ai-features-unavailable }
-terminal-terminal-sign-up = { terminal-sign-up }
-terminal-terminal-set-permissions = { terminal-set-permissions }
-terminal-terminal-restricted-due-to-payment-issue = { terminal-restricted-due-to-payment-issue }
-terminal-terminal-out-of-credits = { terminal-out-of-credits }
-terminal-terminal-suggestion-explain = { terminal-suggestion-explain }
-terminal-terminal-suggestion-fix = { terminal-suggestion-fix }
-terminal-terminal-suggestion-install = { terminal-suggestion-install }
-terminal-terminal-suggestion-code = { terminal-suggestion-code }
-terminal-terminal-suggestion-deploy = { terminal-suggestion-deploy }
-terminal-terminal-suggestion-something-else = { terminal-suggestion-something-else }
-terminal-terminal-environment-started = { terminal-environment-started }
-terminal-terminal-remote-control-active = { terminal-remote-control-active }
-terminal-terminal-sharing-started = { terminal-sharing-started }
-terminal-terminal-environment-ended = { terminal-environment-ended }
-terminal-terminal-remote-control-stopped = { terminal-remote-control-stopped }
-terminal-terminal-sharing-ended = { terminal-sharing-ended }
-terminal-terminal-today = { terminal-today }
-terminal-terminal-shell-process-exited-prematurely = { terminal-shell-process-exited-prematurely }
-terminal-terminal-shell-init-output-visible = { terminal-shell-init-output-visible }
-terminal-terminal-shell-process-exited = { terminal-shell-process-exited }
 
 ## -- Double-prefix aliases for share block modal strings --
 
-terminal-terminal-share-title-optional = { terminal-share-title-optional }
-terminal-terminal-share-embed-label = { terminal-share-embed-label }
-terminal-terminal-share-error = { terminal-share-error }
-terminal-terminal-share-link-copied = { terminal-share-link-copied }
-terminal-terminal-share-embed-copied = { terminal-share-embed-copied }
-terminal-terminal-share-creating = { terminal-share-creating }
-terminal-terminal-share-embed-error = { terminal-share-embed-error }
 
 ## -- Double-prefix aliases for block list element strings --
 
-terminal-terminal-block-tag-agent = { terminal-block-tag-agent }
-terminal-terminal-block-save-workflow = { terminal-block-save-workflow }
-terminal-terminal-block-secrets-cannot-save = { terminal-block-secrets-cannot-save }
-terminal-terminal-session-restored-from = { $banner_intro_text }，来自 { $timestamp }
-
 ## -- Double-prefix aliases for UDI strings --
-
-terminal-terminal-udi-no-objects = { terminal-udi-no-objects }
-terminal-terminal-udi-no-ssh = { terminal-udi-no-ssh }
-terminal-terminal-udi-no-subshell = { terminal-udi-no-subshell }
-terminal-terminal-udi-no-fs = { terminal-udi-no-fs }
-terminal-terminal-udi-disabled-terminal-mode = { terminal-udi-disabled-terminal-mode }
-terminal-terminal-udi-attach-context = { terminal-udi-attach-context }
-terminal-terminal-udi-voice-input = { terminal-udi-voice-input }
-terminal-terminal-udi-attach-file = { terminal-udi-attach-file }
-terminal-terminal-udi-slash-commands = { terminal-udi-slash-commands }
-terminal-terminal-udi-request-edit = { terminal-udi-request-edit }
-terminal-terminal-udi-mode-locked = { terminal-udi-mode-locked }
-terminal-terminal-udi-terminal = { terminal-udi-terminal }
-terminal-terminal-udi-agent-mode = { terminal-udi-agent-mode }
-terminal-terminal-starting-shell = { terminal-starting-shell }
-terminal-terminal-loading-prompt = { terminal-loading-prompt }
-terminal-terminal-when-enabled = { terminal-when-enabled }
-terminal-terminal-auto-reload-explanation = { terminal-auto-reload-explanation }
-terminal-terminal-enable-auto-reload-title = { terminal-enable-auto-reload-title }
-terminal-terminal-enable-auto-reload = { terminal-enable-auto-reload }
-terminal-terminal-team-data-not-found = { terminal-team-data-not-found }
-terminal-terminal-sharing-in-warp-drive = { terminal-sharing-in-warp-drive }
-terminal-terminal-drive-sharing-body-1 = { terminal-drive-sharing-body-1 }
-terminal-terminal-drive-sharing-body-2 = { terminal-drive-sharing-body-2 }
-terminal-terminal-share-object-name = 共享 { $name }
-terminal-terminal-share-this-object-type = 共享此 { $object_type }
-terminal-terminal-file-issue = { terminal-file-issue }
-terminal-terminal-more-info = { terminal-more-info }
-terminal-terminal-shell-process-exited = { terminal-shell-process-exited }
-terminal-terminal-shell-could-not-start = { terminal-shell-could-not-start }
-terminal-terminal-shell-exited-prematurely = { terminal-shell-exited-prematurely }
-terminal-terminal-warpify-failure-subtext = 启动 { $shell_detail } 并进行 Warpify 时出了点问题，导致进程终止。Warpify 脚本输出显示在此处，可能指向原因。
-terminal-terminal-open-folder = { terminal-open-folder }
-terminal-terminal-open-file = { terminal-open-file }
-terminal-terminal-open-link = { terminal-open-link }
-terminal-terminal-open-in-warp = { terminal-open-in-warp }
-terminal-terminal-show-in-finder = { terminal-show-in-finder }
-terminal-terminal-show-containing-folder = { terminal-show-containing-folder }
-terminal-terminal-reveal-secret = { terminal-reveal-secret }
-terminal-terminal-hide-secret = { terminal-hide-secret }
-terminal-terminal-copy-secret = { terminal-copy-secret }
-terminal-terminal-install-ssh-extension = { terminal-install-ssh-extension }
-terminal-terminal-install-ssh-extension-desc = { terminal-install-ssh-extension-desc }
-terminal-terminal-continue-without-installing = { terminal-continue-without-installing }
-terminal-terminal-continue-without-desc = { terminal-continue-without-desc }
-terminal-terminal-choose-remote-experience = { terminal-choose-remote-experience }
-terminal-terminal-manage-warpify-settings = { terminal-manage-warpify-settings }
-terminal-terminal-cannot-start-while-monitoring = { terminal-cannot-start-while-monitoring }
-terminal-terminal-open-in-warp-path = 在 Warp 中打开 { $path }
-terminal-terminal-close-warp-banner = { terminal-close-warp-banner }
-terminal-terminal-learn-more-markdown = { terminal-learn-more-markdown }
-terminal-terminal-shell-default = { terminal-shell-default }
-terminal-terminal-shell-bash = { terminal-shell-bash }
-terminal-terminal-shell-zsh = { terminal-shell-zsh }
-terminal-terminal-shell-fish = { terminal-shell-fish }
-terminal-terminal-shell-powershell = { terminal-shell-powershell }
-terminal-terminal-shell-windows-powershell = { terminal-shell-windows-powershell }
-terminal-terminal-shell-custom = { terminal-shell-custom }
-terminal-terminal-shell-docker-sandbox = { terminal-shell-docker-sandbox }
-terminal-terminal-wsl-details = { terminal-wsl-details }
-terminal-terminal-custom-shell-details = 自定义：{ $path }
-terminal-terminal-what-happened-here = { terminal-what-happened-here }
-terminal-terminal-checking = { terminal-checking }
-terminal-terminal-installing = { terminal-installing }
-terminal-terminal-updating = { terminal-updating }
-terminal-terminal-initializing = { terminal-initializing }
-terminal-terminal-starting-shell = { terminal-starting-shell }
-terminal-terminal-what-is-the-command-to = { terminal-what-is-the-command-to }
 
 ## -- 输入框 i18n 字符串的双前缀别名 --
 
-terminal-terminal-input-a11y-helper = { terminal-input-a11y-helper }
-terminal-terminal-steer-agent-classic = { terminal-steer-agent-classic }
-terminal-terminal-ask-follow-up-classic = { terminal-ask-follow-up-classic }
-terminal-terminal-dynamic-enum-generate = { terminal-dynamic-enum-generate }
-terminal-terminal-dynamic-enum-run = { terminal-dynamic-enum-run }
-terminal-terminal-dynamic-enum-pending = { terminal-dynamic-enum-pending }
-terminal-terminal-dynamic-enum-failure = { terminal-dynamic-enum-failure }
-terminal-terminal-dynamic-enum-no-results = { terminal-dynamic-enum-no-results }
-terminal-terminal-search-queries = { terminal-search-queries }
-terminal-terminal-search-queries-rewind = { terminal-search-queries-rewind }
-terminal-terminal-search-conversations = { terminal-search-conversations }
-terminal-terminal-search-skills = { terminal-search-skills }
-terminal-terminal-search-models = { terminal-search-models }
-terminal-terminal-search-profiles = { terminal-search-profiles }
-terminal-terminal-search-commands = { terminal-search-commands }
-terminal-terminal-search-prompts = { terminal-search-prompts }
-terminal-terminal-search-indexed-repos = { terminal-search-indexed-repos }
-terminal-terminal-search-plans = { terminal-search-plans }
 
 ## -- SSH 文件上传字符串的双前缀别名 --
 
-terminal-terminal-waiting-for-password = { terminal-waiting-for-password }
-terminal-terminal-uploading = { terminal-uploading }
-terminal-terminal-uploaded = { terminal-uploaded }
-terminal-terminal-failed-to-upload = { terminal-failed-to-upload }
-terminal-terminal-clear-upload = { terminal-clear-upload }
-terminal-terminal-file-uploads = { terminal-file-uploads }
-terminal-terminal-upload-session = { terminal-upload-session }
 
 ## -- 通用设置描述的双前缀别名 --
 
-terminal-terminal-setting-description-show-warning-before-quitting = { terminal-setting-description-show-warning-before-quitting }
-terminal-terminal-setting-description-quit-on-last-window-closed = { terminal-setting-description-quit-on-last-window-closed }
-terminal-terminal-setting-description-restore-session = { terminal-setting-description-restore-session }
-terminal-terminal-setting-description-login-item = { terminal-setting-description-login-item }
-terminal-terminal-setting-description-link-tooltip = { terminal-setting-description-link-tooltip }
-terminal-terminal-setting-description-auto-open-code-review-pane = { terminal-setting-description-auto-open-code-review-pane }
-terminal-terminal-setting-description-language = { terminal-setting-description-language }
 
 ## -- 快捷键描述字符串的双前缀别名 --
 
-terminal-terminal-alternate-terminal-paste = { terminal-alternate-terminal-paste }
-terminal-terminal-toggle-cli-agent-rich-input = { terminal-toggle-cli-agent-rich-input }
-terminal-terminal-accept-prompt-suggestion = { terminal-accept-prompt-suggestion }
-terminal-terminal-copy-text-or-cancel-active-process = { terminal-copy-text-or-cancel-active-process }
-terminal-terminal-cancel-active-process = { terminal-cancel-active-process }
-terminal-terminal-focus-terminal-input = { terminal-focus-terminal-input }
-terminal-terminal-reinput-selected-commands = { terminal-reinput-selected-commands }
-terminal-terminal-reinput-selected-commands-as-root = { terminal-reinput-selected-commands-as-root }
-terminal-terminal-find-in-terminal = { terminal-find-in-terminal }
-terminal-terminal-select-closest-bookmark-up = { terminal-select-closest-bookmark-up }
-terminal-terminal-select-closest-bookmark-down = { terminal-select-closest-bookmark-down }
-terminal-terminal-open-block-context-menu = { terminal-open-block-context-menu }
-terminal-terminal-toggle-team-workflows-modal = { terminal-toggle-team-workflows-modal }
-terminal-terminal-copy-git-branch = { terminal-copy-git-branch }
-terminal-terminal-clear-blocks = { terminal-clear-blocks }
-terminal-terminal-move-cursor-word-left-executing-command = { terminal-move-cursor-word-left-executing-command }
-terminal-terminal-move-cursor-word-right-executing-command = { terminal-move-cursor-word-right-executing-command }
-terminal-terminal-move-cursor-home-executing-command = { terminal-move-cursor-home-executing-command }
-terminal-terminal-move-cursor-end-executing-command = { terminal-move-cursor-end-executing-command }
-terminal-terminal-delete-word-left-executing-command = { terminal-delete-word-left-executing-command }
-terminal-terminal-delete-to-line-start-executing-command = { terminal-delete-to-line-start-executing-command }
-terminal-terminal-delete-to-line-end-executing-command = { terminal-delete-to-line-end-executing-command }
-terminal-terminal-backward-tabulation-executing-command = { terminal-backward-tabulation-executing-command }
-terminal-terminal-select-previous-block = { terminal-select-previous-block }
-terminal-terminal-select-next-block = { terminal-select-next-block }
-terminal-terminal-share-selected-block = { terminal-share-selected-block }
-terminal-terminal-bookmark-selected-block = { terminal-bookmark-selected-block }
-terminal-terminal-find-within-selected-block = { terminal-find-within-selected-block }
-terminal-terminal-copy-command-and-output = { terminal-copy-command-and-output }
-terminal-terminal-copy-command-output = { terminal-copy-command-output }
-terminal-terminal-copy-command = { terminal-copy-command }
-terminal-terminal-scroll-output-up-one-line = { terminal-scroll-output-up-one-line }
-terminal-terminal-scroll-output-down-one-line = { terminal-scroll-output-down-one-line }
-terminal-terminal-scroll-output-up-one-page = { terminal-scroll-output-up-one-page }
-terminal-terminal-scroll-output-down-one-page = { terminal-scroll-output-down-one-page }
-terminal-terminal-scroll-to-top-of-selected-block = { terminal-scroll-to-top-of-selected-block }
-terminal-terminal-scroll-to-bottom-of-selected-block = { terminal-scroll-to-bottom-of-selected-block }
-terminal-terminal-select-all-blocks = { terminal-select-all-blocks }
-terminal-terminal-expand-selected-blocks-above = { terminal-expand-selected-blocks-above }
-terminal-terminal-expand-selected-blocks-below = { terminal-expand-selected-blocks-below }
-terminal-terminal-attach-selected-block-as-agent-context = { terminal-attach-selected-block-as-agent-context }
-terminal-terminal-attach-selected-text-as-agent-context = { terminal-attach-selected-text-as-agent-context }
-terminal-terminal-attach-selection-as-agent-context = { terminal-attach-selection-as-agent-context }
-terminal-terminal-ask-warp-ai-about-selection = { terminal-ask-warp-ai-about-selection }
-terminal-terminal-ask-warp-ai-about-last-block = { terminal-ask-warp-ai-about-last-block }
-terminal-terminal-ask-warp-ai = { terminal-ask-warp-ai }
-terminal-terminal-insert-command-correction = { terminal-insert-command-correction }
-terminal-terminal-setup-guide = { terminal-setup-guide }
-terminal-terminal-import-external-settings = { terminal-import-external-settings }
-terminal-terminal-share-current-session = { terminal-share-current-session }
-terminal-terminal-stop-sharing-current-session = { terminal-stop-sharing-current-session }
-terminal-terminal-toggle-block-filter-on-selected-or-last-block = { terminal-toggle-block-filter-on-selected-or-last-block }
-terminal-terminal-toggle-sticky-command-header-in-active-pane = { terminal-toggle-sticky-command-header-in-active-pane }
-terminal-terminal-toggle-auto-execute-mode = { terminal-toggle-auto-execute-mode }
-terminal-terminal-toggle-queue-next-prompt = { terminal-toggle-queue-next-prompt }
-terminal-terminal-write-current-codebase-index-snapshot = { terminal-write-current-codebase-index-snapshot }
-terminal-terminal-load-agent-mode-conversation = { terminal-load-agent-mode-conversation }
-terminal-terminal-toggle-pty-recording-for-session = { terminal-toggle-pty-recording-for-session }
-terminal-terminal-initiate-project-for-warp = { terminal-initiate-project-for-warp }
-terminal-terminal-add-current-folder-as-project = { terminal-add-current-folder-as-project }
-terminal-terminal-toggle-conversation-details-panel = { terminal-toggle-conversation-details-panel }
-terminal-terminal-set-input-mode-to-agent-mode = { terminal-set-input-mode-to-agent-mode }
-terminal-terminal-set-input-mode-to-terminal-mode = { terminal-set-input-mode-to-terminal-mode }
-terminal-terminal-toggle-hide-cli-responses = { terminal-toggle-hide-cli-responses }
-terminal-terminal-show-warp-network-log = { terminal-show-warp-network-log }
-terminal-terminal-clear-screen = { terminal-clear-screen }
-terminal-terminal-edit-prompt = { terminal-edit-prompt }
-terminal-terminal-experimental-toggle-classic-completions-mode = { terminal-experimental-toggle-classic-completions-mode }
-terminal-terminal-command-search = { terminal-command-search }
-terminal-terminal-history-search = { terminal-history-search }
-terminal-terminal-open-completions-menu = { terminal-open-completions-menu }
-terminal-terminal-workflows = { terminal-workflows }
-terminal-terminal-open-ai-command-suggestions = { terminal-open-ai-command-suggestions }
-terminal-terminal-trigger-auto-detection = { terminal-trigger-auto-detection }
-terminal-terminal-clear-and-reset-ai-context-menu-query = { terminal-clear-and-reset-ai-context-menu-query }
 
 ## -- 搜索无障碍标签双前缀别名 -----------------------------------------------
 
-terminal-terminal-search-conversation = 对话：{ $title }
-terminal-terminal-search-command = 命令：{ $command }
-terminal-terminal-search-ai-prompt = AI 提示：{ $query }
-terminal-terminal-search-plan = 计划：{ $title }
-terminal-terminal-search-profile = 配置：{ $name }
-terminal-terminal-search-prompt = 提示词：{ $name }
-terminal-terminal-search-repo = 已索引的仓库：{ $name }
-terminal-terminal-search-rewind = 回退到：{ $query }（无代码更改）
-terminal-terminal-search-skill = 技能：{ $name }
-terminal-terminal-search-query = 查询：{ $query }
-terminal-terminal-search-block = 块：{ $command }
-terminal-terminal-warp-drive = { terminal-warp-drive }
-
 ## -- 模型规格和推理级别字符串双前缀别名 -----------------------------------------
 
-terminal-terminal-model-specs-title = { terminal-model-specs-title }
-terminal-terminal-model-specs-description = { terminal-model-specs-description }
-terminal-terminal-reasoning-level-title = { terminal-reasoning-level-title }
-terminal-terminal-reasoning-level-description = { terminal-reasoning-level-description }
 
 ## -- 初始化项目字符串双前缀别名 -----------------------------------------------
 
-terminal-terminal-init-project-onboarding-text = { terminal-init-project-onboarding-text }
-terminal-terminal-init-project-already-setup-text = { terminal-init-project-already-setup-text }
 
 ## -- 初始化环境字符串双前缀别名 -----------------------------------------------
 
-terminal-terminal-init-environment-explanation-text = { terminal-init-environment-explanation-text }
-terminal-terminal-init-environment-no-repos-help-text = { terminal-init-environment-no-repos-help-text }
 
 ## -- 提示消息双前缀别名 -----------------------------------------------------
 
-terminal-terminal-copied-to-clipboard = { terminal-copied-to-clipboard }
-terminal-terminal-failed-cloud-handoff = { terminal-failed-cloud-handoff }
-terminal-terminal-images-removed-no-support = { terminal-images-removed-no-support }
-terminal-terminal-skill-not-found = { terminal-skill-not-found }
-terminal-terminal-no-active-conversation-export = { terminal-no-active-conversation-export }
-terminal-terminal-file-exists-overwrite = { terminal-file-exists-overwrite }
-terminal-terminal-conversation-exported = { terminal-conversation-exported }
-terminal-terminal-permission-denied = { terminal-permission-denied }
-terminal-terminal-directory-not-found = { terminal-directory-not-found }
-terminal-terminal-file-already-exists = { terminal-file-already-exists }
-terminal-terminal-preparing-handoff = { terminal-preparing-handoff }
-terminal-terminal-invalid-uri = { terminal-invalid-uri }
-terminal-terminal-invalid-uri-detail = { terminal-invalid-uri-detail }
-terminal-terminal-project-rules-linked = { terminal-project-rules-linked }
-terminal-terminal-installed-enabled = { terminal-installed-enabled }
-terminal-terminal-failed-install = { terminal-failed-install }
-terminal-terminal-installing-background = { terminal-installing-background }
 
 ## -- 横幅和通知字符串的双前缀别名 -----------------------------------------------
 
-terminal-terminal-yes-emacs-bindings = { terminal-yes-emacs-bindings }
-terminal-terminal-no-keep-ide-bindings = { terminal-no-keep-ide-bindings }
-terminal-terminal-oz-permission-run = Oz 需要你的许可来运行 `{ $command }`
-terminal-terminal-oz-permission-read = { terminal-oz-permission-read }
-terminal-terminal-oz-permission-search = { terminal-oz-permission-search }
-terminal-terminal-oz-permission-edit = { terminal-oz-permission-edit }
-terminal-terminal-oz-permission-shell = { terminal-oz-permission-shell }
-terminal-terminal-oz-permission-confirm = { terminal-oz-permission-confirm }
-terminal-terminal-ssh-connection-failed = { terminal-ssh-connection-failed }
-terminal-terminal-latest-output = { terminal-latest-output }
-terminal-terminal-status-after-duration =  { $status }，用时 { $seconds }秒
-terminal-terminal-notification-finished =  已完成
-terminal-terminal-notification-failed =  已失败
-terminal-terminal-notification-error-prefix = 错误：
-terminal-terminal-notification-blocked =  已阻塞
-terminal-terminal-notification-waiting-password =  正在等待输入密码
-terminal-terminal-warpify-for-features-with-key = 你可以按 { $key } 来 Warpify 这个 { $title }，以获得更多 Warp 功能。
-terminal-terminal-warpify-for-features = 你可以 Warpify 这个 { $title }，以获得更多 Warp 功能。
-terminal-terminal-title-recognized = { $title } 已识别。
-terminal-terminal-did-you-intend = { terminal-did-you-intend }
-terminal-terminal-to-move-cursor = { terminal-to-move-cursor }
-terminal-terminal-sharing-usage-exceeded = { terminal-sharing-usage-exceeded }
-terminal-terminal-session-limit-exceeded = 会话限制（{ $limit }）已超出，请重新共享以继续。
-terminal-terminal-session-internal-error = { terminal-session-internal-error }
-
 ## -- 包含用户可见文本的格式字符串的双前缀别名 -----------------------------------
-
-terminal-terminal-default-shell = { terminal-default-shell }
-terminal-terminal-docker-sandbox = { terminal-docker-sandbox }
-terminal-terminal-custom-shell = 自定义（{ $command }）
-terminal-terminal-exit-code = 退出码 { $code }
-terminal-terminal-installing-ssh-progress = 正在安装 Warp SSH 扩展…（{ $percent }%）
-terminal-terminal-installing-ssh = 正在安装 Warp SSH 扩展…
-terminal-terminal-updating-ssh = 正在更新 Warp SSH 扩展…
-terminal-terminal-initializing = 正在初始化…
-terminal-terminal-starting-shell-with-name = 正在启动 { $name }…
-terminal-terminal-discount-percent = { $percent }% 折扣！
-terminal-terminal-selected-label = 已选择
-terminal-terminal-disabled-label = 已禁用
-terminal-terminal-attached-as-context = `{ $name }` 已作为上下文附加
-terminal-terminal-attached-with-one-more = `{ $name }` 和另外 1 条命令已作为上下文附加
-terminal-terminal-attached-with-more = `{ $name }` 和另外 { $count } 条命令已作为上下文附加
-terminal-terminal-to-remove = { terminal-to-remove }
-terminal-terminal-selected-text-as-context = { terminal-selected-text-as-context }
-terminal-terminal-enable-language-support = 启用 { $language } 支持
-terminal-terminal-install-and-enable-language = 安装并启用 { $language }
-terminal-terminal-link-to-agents-md = 将现有 { $file } 链接到我的 AGENTS.md 文件
-terminal-terminal-enable-language-for-codebase = 要为此代码库启用 { $language } 支持吗？这将为你提供更智能的代码导航、行内错误检查等功能。
-terminal-terminal-show-more = 显示更多 { $count } 项
 
 terminal-no-code-restored = 没有可恢复的代码
 terminal-project-skill = 项目技能
@@ -1471,42 +910,6 @@ terminal-enable-lang-support-desc = 你是否要为此代码库启用可用的�
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
 
-terminal-terminal-share-session = { terminal-share-session }
-terminal-terminal-shared-session-limit-reached = { terminal-shared-session-limit-reached }
-terminal-terminal-shared-session-denied-subheader = { terminal-shared-session-denied-subheader }
-terminal-terminal-view-plans = { terminal-view-plans }
-terminal-terminal-start-sharing = { terminal-start-sharing }
-terminal-terminal-stop-sharing = { terminal-stop-sharing }
-terminal-terminal-continue-sharing = { terminal-continue-sharing }
-terminal-terminal-make-editor = { terminal-make-editor }
-terminal-terminal-deny = { terminal-deny }
-terminal-terminal-requested-mode = { terminal-requested-mode }
-terminal-terminal-waiting-for = { terminal-waiting-for }
-terminal-terminal-create-team = { terminal-create-team }
-terminal-terminal-manage-shared-blocks = { terminal-manage-shared-blocks }
-terminal-terminal-install-and-enable = { terminal-install-and-enable }
-terminal-terminal-enable-selected-languages = { terminal-enable-selected-languages }
-terminal-terminal-are-you-still-there = { terminal-are-you-still-there }
-terminal-terminal-sharing-will-end-due-to-inactivity = { terminal-sharing-will-end-due-to-inactivity }
-terminal-terminal-edit-prompt = { terminal-edit-prompt }
-terminal-terminal-warp-terminal-prompt = { terminal-warp-terminal-prompt }
-terminal-terminal-shell-prompt-ps1 = { terminal-shell-prompt-ps1 }
-terminal-terminal-restore-default = { terminal-restore-default }
-terminal-terminal-cancel-request = { terminal-cancel-request }
-terminal-terminal-no-code-restored = { terminal-no-code-restored }
-terminal-terminal-project-skill = { terminal-project-skill }
-terminal-terminal-thinking = { terminal-thinking }
-terminal-terminal-customizable-appearance = { terminal-customizable-appearance }
-terminal-terminal-choose-setup-env = { terminal-choose-setup-env }
-terminal-terminal-aws-cli-required = { terminal-aws-cli-required }
-terminal-terminal-slow-bootstrap-msg = { terminal-slow-bootstrap-msg }
-terminal-terminal-more-info-link = { terminal-more-info-link }
-terminal-terminal-show-init-block = { terminal-show-init-block }
-terminal-terminal-use-agent-btn = { terminal-use-agent-btn }
-terminal-terminal-give-control-back-btn = { terminal-give-control-back-btn }
-terminal-terminal-ask-agent-assist-tooltip = { terminal-ask-agent-assist-tooltip }
-terminal-terminal-ask-agent-resume-tooltip = { terminal-ask-agent-resume-tooltip }
-terminal-terminal-enable-lang-support-desc = { terminal-enable-lang-support-desc }
 
 ## -- 插件管理器字符串 -----------------------------------------------------------
 
@@ -1582,9 +985,3 @@ terminal-command-and-output = 命令和输出
 terminal-command = 命令
 terminal-output = 输出
 
-terminal-terminal-share-create-link = { terminal-share-create-link }
-terminal-terminal-share-get-embed = { terminal-share-get-embed }
-terminal-terminal-redact-secrets = { terminal-redact-secrets }
-terminal-terminal-command-and-output = { terminal-command-and-output }
-terminal-terminal-command = { terminal-command }
-terminal-terminal-output = { terminal-output }

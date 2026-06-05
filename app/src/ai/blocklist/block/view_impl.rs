@@ -670,7 +670,7 @@ pub fn render_citation(
                 .to_warp_drive_item(appearance)?;
             (
                 item.icon(appearance, Some(theme.active_ui_text_color())),
-                item.display_name().unwrap_or(crate::tr!("common", "common-untitled-label")),
+                item.display_name().unwrap_or(crate::tr!("common", "untitled-label")),
             )
         }
         AIAgentCitation::WarpDocumentation { .. } => {

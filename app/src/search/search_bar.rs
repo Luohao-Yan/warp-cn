@@ -792,7 +792,7 @@ impl<T: Action + Clone> SearchBar<T> {
         if let Some(loading_filters) = self.mixer.as_ref(ctx).loading_query_filters() {
             for loading_filter in loading_filters.into_iter() {
                 ctx.emit_a11y_content(AccessibilityContent::new_without_help(
-                    crate::tr!("search", "search-loading-suggestions", filter = loading_filter.display_name()),
+                    crate::tr!("search", "loading-suggestions", filter = loading_filter.display_name()),
                     WarpA11yRole::MenuItemRole,
                 ));
             }

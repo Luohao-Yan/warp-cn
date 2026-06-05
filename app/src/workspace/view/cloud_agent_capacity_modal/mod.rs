@@ -36,17 +36,17 @@ const HEADER_HEIGHT: f32 = 92.;
 const BUTTON_DIAMETER: f32 = 20.;
 const BILLING_AND_USAGE_URL: &str = "warp://settings/billing_and_usage";
 
-static CONCURRENT_LIMIT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-concurrent-limit-reached"));
-static CONCURRENT_LIMIT_EXPLANATION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-concurrent-limit-explanation"));
-static OUT_OF_AI_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-you-are-out-of-ai-credits"));
-static OUT_OF_CREDITS_EXPLANATION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-out-of-credits-explanation"));
-static UPGRADE_MORE_CONCURRENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-upgrade-more-concurrent-agents"));
-static UPGRADE_CONTINUE_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-upgrade-continue-cloud-agents"));
-static PAID_PLANS_INCLUDE_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-paid-plans-include"));
-static BUSINESS_PLAN_INCLUDE_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-business-plan-include"));
-static EXTENDED_AI_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-extended-ai-credits-per-month"));
-static BYOK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-bring-your-own-api-key"));
-static SSO: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-saml-based-sso"));
+static CONCURRENT_LIMIT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "concurrent-limit-reached"));
+static CONCURRENT_LIMIT_EXPLANATION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "concurrent-limit-explanation"));
+static OUT_OF_AI_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "you-are-out-of-ai-credits"));
+static OUT_OF_CREDITS_EXPLANATION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "out-of-credits-explanation"));
+static UPGRADE_MORE_CONCURRENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "upgrade-more-concurrent-agents"));
+static UPGRADE_CONTINUE_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "upgrade-continue-cloud-agents"));
+static PAID_PLANS_INCLUDE_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "paid-plans-include"));
+static BUSINESS_PLAN_INCLUDE_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "business-plan-include"));
+static EXTENDED_AI_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "extended-ai-credits-per-month"));
+static BYOK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "bring-your-own-api-key"));
+static SSO: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "saml-based-sso"));
 
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
 pub enum CloudAgentCapacityModalVariant {
@@ -197,13 +197,13 @@ impl CloudAgentCapacityModal {
             let pricing_text = if customer_type == CustomerType::Free {
                 if let Some(pricing) = plan_pricing {
                     let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                    crate::tr!("workspace", "workspace-paid-plans-start-at", price = format!("{}", price))
+                    crate::tr!("workspace", "paid-plans-start-at", price = format!("{}", price))
                 } else {
                     PAID_PLANS_INCLUDE_FALLBACK.clone()
                 }
             } else if let Some(pricing) = plan_pricing {
                 let price = pricing.yearly_plan_price_per_month_usd_cents / 100;
-                crate::tr!("workspace", "workspace-business-plan-starts-at", price = format!("{}", price))
+                crate::tr!("workspace", "business-plan-starts-at", price = format!("{}", price))
             } else {
                 BUSINESS_PLAN_INCLUDE_FALLBACK.clone()
             };
@@ -223,14 +223,14 @@ impl CloudAgentCapacityModal {
             // Credits text from plan pricing
             let credits_text = if let Some(limit) = plan_pricing.and_then(|plan| plan.request_limit)
             {
-                crate::tr!("workspace", "workspace-ai-credits-per-month", credits = limit.separate_with_commas())
+                crate::tr!("workspace", "ai-credits-per-month", credits = limit.separate_with_commas())
             } else {
                 EXTENDED_AI_CREDITS.clone()
             };
 
             // Benefits list based on plan type
             let mut benefits = vec![
-                crate::tr!("workspace", "workspace-multiplier-concurrent-agents", multiplier = agent_multiplier),
+                crate::tr!("workspace", "multiplier-concurrent-agents", multiplier = agent_multiplier),
                 credits_text,
                 BYOK.clone(),
             ];
@@ -287,9 +287,9 @@ impl CloudAgentCapacityModal {
         let content = content.finish();
         let cta_button = if show_cta {
             let cta_button_label = if can_upgrade {
-                crate::tr!("workspace", "workspace-upgrade-plan")
+                crate::tr!("workspace", "upgrade-plan")
             } else {
-                crate::tr!("workspace", "workspace-open-billing")
+                crate::tr!("workspace", "open-billing")
             };
             Some(
                 appearance

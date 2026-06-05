@@ -30,12 +30,12 @@ const VARIABLE_DIVIDER_HEIGHT: f32 = 2.;
 const SECTION_FONT_SIZE: f32 = 16.;
 const BUTTON_HEIGHT: f32 = 32.;
 
-static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-save-label"));
-static VARIABLES_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-variables-label"));
-static TRASH_BANNER_DELETED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-trash-banner-deleted"));
-static TRASH_BANNER_MOVED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-trash-banner-moved"));
-static RESTORE_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-restore-tooltip"));
-static LOAD_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-load-label"));
+static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "save-label"));
+static VARIABLES_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "variables-label"));
+static TRASH_BANNER_DELETED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "trash-banner-deleted"));
+static TRASH_BANNER_MOVED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "trash-banner-moved"));
+static RESTORE_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "restore-tooltip"));
+static LOAD_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "load-label"));
 
 /// This file contains components that fixed in the view,
 /// i.e. the trash banner, breadcrumbs, and variables section header
@@ -113,7 +113,7 @@ impl EnvVarCollectionView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center);
 
             if !FeatureFlag::SharedWithMe.is_enabled() || access_level.can_trash() {
-                let restore_label = crate::tr!("drive", "drive-restore");
+                let restore_label = crate::tr!("drive", "restore");
                 let ui_builder = appearance.ui_builder().clone();
                 action_row.add_child(
                     Align::new(

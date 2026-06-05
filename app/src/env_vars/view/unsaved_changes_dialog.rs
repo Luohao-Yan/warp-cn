@@ -16,9 +16,9 @@ use crate::ui_components::dialog::{dialog_styles, Dialog};
 
 use super::env_var_collection::{EnvVarCollectionAction, EnvVarCollectionView};
 
-static UNSAVED_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-unsaved-changes"));
-static KEEP_EDITING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-keep-editing"));
-static DISCARD_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-discard-changes"));
+static UNSAVED_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "unsaved-changes"));
+static KEEP_EDITING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "keep-editing"));
+static DISCARD_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "discard-changes"));
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_PADDING: f32 = 12.;
 const MODAL_HORIZONTAL_MARGIN: f32 = 28.;

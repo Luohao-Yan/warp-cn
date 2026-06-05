@@ -115,19 +115,19 @@ use crate::view_components::action_button::{ActionButton, ButtonSize, NakedTheme
 
 // i18n statics for category titles and UI strings
 static SETTINGS_THEMES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-themes"));
+    LazyLock::new(|| crate::tr!("settings", "themes"));
 static SETTINGS_ICON: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-icon"));
+    LazyLock::new(|| crate::tr!("settings", "icon"));
 static SETTINGS_WINDOW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-window"));
+    LazyLock::new(|| crate::tr!("settings", "window"));
 static SETTINGS_INPUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-input"));
+    LazyLock::new(|| crate::tr!("settings", "input"));
 static SETTINGS_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-blocks"));
+    LazyLock::new(|| crate::tr!("settings", "blocks"));
 static SETTINGS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-text"));
+    LazyLock::new(|| crate::tr!("settings", "text"));
 static SETTINGS_TABS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-tabs"));
+    LazyLock::new(|| crate::tr!("settings", "tabs"));
 
 const FONT_SIZE_INPUT_BOX_WIDTH: f32 = 80.;
 const NOTEBOOK_FONT_SIZE_INPUT_BOX_WIDTH: f32 = 50.;
@@ -161,8 +161,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     builder: fn(SettingsAction) -> T,
 ) {
     // Add all the toggle settings from the Appearance Page that you want to show up on the Command Palette here.
-    let compact_mode = crate::tr!("settings", "settings-compact-mode");
-    let sync_os = crate::tr!("settings", "settings-themes-sync-os");
+    let compact_mode = crate::tr!("settings", "compact-mode");
+    let sync_os = crate::tr!("settings", "themes-sync-os");
     let mut toggle_binding_pairs = vec![
         ToggleSettingActionPair::new(
             compact_mode.as_str(),
@@ -182,7 +182,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ),
     ];
 
-    let cursor_blink = crate::tr!("settings", "settings-cursor-blink");
+    let cursor_blink = crate::tr!("settings", "cursor-blink");
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
             cursor_blink.as_str(),
@@ -199,7 +199,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ),
     );
 
-    let jump_bottom_block = crate::tr!("settings", "settings-jump-bottom-block");
+    let jump_bottom_block = crate::tr!("settings", "jump-bottom-block");
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
             jump_bottom_block.as_str(),
@@ -216,7 +216,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ),
     );
 
-    let block_dividers = crate::tr!("settings", "settings-block-dividers");
+    let block_dividers = crate::tr!("settings", "block-dividers");
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
             block_dividers.as_str(),
@@ -233,7 +233,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ),
     );
 
-    let dim_inactive = crate::tr!("settings", "settings-dim-inactive-panes");
+    let dim_inactive = crate::tr!("settings", "dim-inactive-panes");
     toggle_binding_pairs.push(ToggleSettingActionPair::new(
         dim_inactive.as_str(),
         builder(SettingsAction::AppearancePageToggle(
@@ -244,7 +244,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     ));
 
     app.register_fixed_bindings(vec![FixedBinding::empty(
-        crate::tr!("settings", "settings-start-input-top"),
+        crate::tr!("settings", "start-input-top"),
         builder(SettingsAction::AppearancePageToggle(
             AppearancePageAction::SetInputMode {
                 new_mode: InputMode::Waterfall,
@@ -256,7 +256,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     .with_group(bindings::BindingGroup::Settings.as_str())]);
 
     app.register_fixed_bindings(vec![FixedBinding::empty(
-        crate::tr!("settings", "settings-pin-input-top"),
+        crate::tr!("settings", "pin-input-top"),
         builder(SettingsAction::AppearancePageToggle(
             AppearancePageAction::SetInputMode {
                 new_mode: InputMode::PinnedToTop,
@@ -268,7 +268,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     .with_group(bindings::BindingGroup::Settings.as_str())]);
 
     app.register_fixed_bindings(vec![FixedBinding::empty(
-        crate::tr!("settings", "settings-pin-input-bottom"),
+        crate::tr!("settings", "pin-input-bottom"),
         builder(SettingsAction::AppearancePageToggle(
             AppearancePageAction::SetInputMode {
                 new_mode: InputMode::PinnedToBottom,
@@ -280,7 +280,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     // Add command palette entry for toggling between Warp and Classic input modes
     app.register_fixed_bindings(vec![FixedBinding::empty(
-        crate::tr!("settings", "settings-toggle-input-mode"),
+        crate::tr!("settings", "toggle-input-mode"),
         builder(SettingsAction::AppearancePageToggle(
             AppearancePageAction::ToggleInputMode,
         )),
@@ -288,7 +288,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     )
     .with_group(bindings::BindingGroup::Settings.as_str())]);
 
-    let tab_indicators = crate::tr!("settings", "settings-tab-indicators");
+    let tab_indicators = crate::tr!("settings", "tab-indicators");
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
             tab_indicators.as_str(),
@@ -306,8 +306,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     );
 
     if !FeatureFlag::OpenWarpNewSettingsModes.is_enabled() {
-        let show_code_review = crate::tr!("settings", "settings-show-code-review-tab");
-        let hide_code_review = crate::tr!("settings", "settings-hide-code-review-tab");
+        let show_code_review = crate::tr!("settings", "show-code-review-tab");
+        let hide_code_review = crate::tr!("settings", "hide-code-review-tab");
         toggle_binding_pairs.push(
             ToggleSettingActionPair::custom(
                 SettingActionPairDescriptions::new(
@@ -331,7 +331,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         );
     }
 
-    let focus_follows_mouse = crate::tr!("settings", "settings-focus-follows-mouse");
+    let focus_follows_mouse = crate::tr!("settings", "focus-follows-mouse");
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
             focus_follows_mouse.as_str(),
@@ -352,7 +352,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         // Add bindings for each visibility option.
         app.register_fixed_bindings([
             FixedBinding::empty(
-                crate::tr!("settings", "settings-always-show-tab-bar"),
+                crate::tr!("settings", "always-show-tab-bar"),
                 builder(SettingsAction::AppearancePageToggle(
                     AppearancePageAction::SetWorkspaceDecorationVisibility(
                         WorkspaceDecorationVisibility::AlwaysShow,
@@ -362,7 +362,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
             FixedBinding::empty(
-                crate::tr!("settings", "settings-hide-tab-bar-fullscreen"),
+                crate::tr!("settings", "hide-tab-bar-fullscreen"),
                 builder(SettingsAction::AppearancePageToggle(
                     AppearancePageAction::SetWorkspaceDecorationVisibility(
                         WorkspaceDecorationVisibility::HideFullscreen,
@@ -372,7 +372,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             )
             .with_group(bindings::BindingGroup::Settings.as_str()),
             FixedBinding::empty(
-                crate::tr!("settings", "settings-show-tab-bar-hover"),
+                crate::tr!("settings", "show-tab-bar-hover"),
                 builder(SettingsAction::AppearancePageToggle(
                     AppearancePageAction::SetWorkspaceDecorationVisibility(
                         WorkspaceDecorationVisibility::OnHover,
@@ -384,7 +384,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ]);
 
         // Add a toggle alias for "Zen mode".
-        let zen_mode = crate::tr!("settings", "settings-zen-mode");
+        let zen_mode = crate::tr!("settings", "zen-mode");
         toggle_binding_pairs.push(
             ToggleSettingActionPair::new(
                 zen_mode.as_str(),
@@ -403,8 +403,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     }
 
     if FeatureFlag::VerticalTabs.is_enabled() {
-        let vertical_tabs = crate::tr!("settings", "settings-vertical-tab-layout");
-        let show_vertical_tabs_restored = crate::tr!("settings", "settings-show-vertical-tabs-restored");
+        let vertical_tabs = crate::tr!("settings", "vertical-tab-layout");
+        let show_vertical_tabs_restored = crate::tr!("settings", "show-vertical-tabs-restored");
         toggle_binding_pairs.push(ToggleSettingActionPair::new(
             vertical_tabs.as_str(),
             builder(SettingsAction::AppearancePageToggle(
@@ -424,7 +424,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     }
 
     if FeatureFlag::Ligatures.is_enabled() {
-        let ligature = crate::tr!("settings", "settings-ligature-rendering");
+        let ligature = crate::tr!("settings", "ligature-rendering");
         toggle_binding_pairs.push(ToggleSettingActionPair::new(
             ligature.as_str(),
             builder(SettingsAction::AppearancePageToggle(
@@ -1557,40 +1557,40 @@ impl AppearanceSettingsPageView {
 
     fn app_icon_dropdown_item_label(val: AppIcon) -> String {
         match val {
-            AppIcon::Aurora => crate::tr!("settings", "settings-icon-aurora"),
-            AppIcon::Default => crate::tr!("settings", "settings-icon-default"),
-            AppIcon::Classic1 => crate::tr!("settings", "settings-icon-classic-1"),
-            AppIcon::Classic2 => crate::tr!("settings", "settings-icon-classic-2"),
-            AppIcon::Classic3 => crate::tr!("settings", "settings-icon-classic-3"),
-            AppIcon::Comets => crate::tr!("settings", "settings-icon-comets"),
-            AppIcon::GlassSky => crate::tr!("settings", "settings-icon-glass-sky"),
-            AppIcon::Glitch => crate::tr!("settings", "settings-icon-glitch"),
-            AppIcon::Cow => crate::tr!("settings", "settings-icon-cow"),
-            AppIcon::Glow => crate::tr!("settings", "settings-icon-glow"),
-            AppIcon::Holographic => crate::tr!("settings", "settings-icon-holographic"),
-            AppIcon::Mono => crate::tr!("settings", "settings-icon-mono"),
-            AppIcon::Neon => crate::tr!("settings", "settings-icon-neon"),
-            AppIcon::Original => crate::tr!("settings", "settings-icon-original"),
-            AppIcon::Starburst => crate::tr!("settings", "settings-icon-starburst"),
-            AppIcon::Sticker => crate::tr!("settings", "settings-icon-sticker"),
-            AppIcon::WarpOne => crate::tr!("settings", "settings-icon-warp-one"),
+            AppIcon::Aurora => crate::tr!("settings", "icon-aurora"),
+            AppIcon::Default => crate::tr!("settings", "icon-default"),
+            AppIcon::Classic1 => crate::tr!("settings", "icon-classic-1"),
+            AppIcon::Classic2 => crate::tr!("settings", "icon-classic-2"),
+            AppIcon::Classic3 => crate::tr!("settings", "icon-classic-3"),
+            AppIcon::Comets => crate::tr!("settings", "icon-comets"),
+            AppIcon::GlassSky => crate::tr!("settings", "icon-glass-sky"),
+            AppIcon::Glitch => crate::tr!("settings", "icon-glitch"),
+            AppIcon::Cow => crate::tr!("settings", "icon-cow"),
+            AppIcon::Glow => crate::tr!("settings", "icon-glow"),
+            AppIcon::Holographic => crate::tr!("settings", "icon-holographic"),
+            AppIcon::Mono => crate::tr!("settings", "icon-mono"),
+            AppIcon::Neon => crate::tr!("settings", "icon-neon"),
+            AppIcon::Original => crate::tr!("settings", "icon-original"),
+            AppIcon::Starburst => crate::tr!("settings", "icon-starburst"),
+            AppIcon::Sticker => crate::tr!("settings", "icon-sticker"),
+            AppIcon::WarpOne => crate::tr!("settings", "icon-warp-one"),
         }
     }
 
     fn thin_strokes_dropdown_item_label(val: ThinStrokes) -> String {
         match val {
-            ThinStrokes::Never => crate::tr!("settings", "settings-never"),
-            ThinStrokes::OnLowDpiDisplays => crate::tr!("settings", "settings-on-low-dpi"),
-            ThinStrokes::OnHighDpiDisplays => crate::tr!("settings", "settings-on-high-dpi"),
-            ThinStrokes::Always => crate::tr!("settings", "settings-always"),
+            ThinStrokes::Never => crate::tr!("settings", "never"),
+            ThinStrokes::OnLowDpiDisplays => crate::tr!("settings", "on-low-dpi"),
+            ThinStrokes::OnHighDpiDisplays => crate::tr!("settings", "on-high-dpi"),
+            ThinStrokes::Always => crate::tr!("settings", "always"),
         }
     }
 
     fn enforce_minimum_contrast_dropdown_item_label(val: EnforceMinimumContrast) -> String {
         match val {
-            EnforceMinimumContrast::Always => crate::tr!("settings", "settings-always"),
-            EnforceMinimumContrast::OnlyNamedColors => crate::tr!("settings", "settings-only-named-colors"),
-            EnforceMinimumContrast::Never => crate::tr!("settings", "settings-never"),
+            EnforceMinimumContrast::Always => crate::tr!("settings", "always"),
+            EnforceMinimumContrast::OnlyNamedColors => crate::tr!("settings", "only-named-colors"),
+            EnforceMinimumContrast::Never => crate::tr!("settings", "never"),
         }
     }
 
@@ -1598,9 +1598,9 @@ impl AppearanceSettingsPageView {
         value: WorkspaceDecorationVisibility,
     ) -> String {
         match value {
-            WorkspaceDecorationVisibility::AlwaysShow => crate::tr!("settings", "settings-always"),
-            WorkspaceDecorationVisibility::HideFullscreen => crate::tr!("settings", "settings-when-windowed"),
-            WorkspaceDecorationVisibility::OnHover => crate::tr!("settings", "settings-only-on-hover"),
+            WorkspaceDecorationVisibility::AlwaysShow => crate::tr!("settings", "always"),
+            WorkspaceDecorationVisibility::HideFullscreen => crate::tr!("settings", "when-windowed"),
+            WorkspaceDecorationVisibility::OnHover => crate::tr!("settings", "only-on-hover"),
         }
     }
 
@@ -1608,8 +1608,8 @@ impl AppearanceSettingsPageView {
         value: TabCloseButtonPosition,
     ) -> String {
         match value {
-            TabCloseButtonPosition::Right => crate::tr!("settings", "settings-right"),
-            TabCloseButtonPosition::Left => crate::tr!("settings", "settings-left"),
+            TabCloseButtonPosition::Right => crate::tr!("settings", "right"),
+            TabCloseButtonPosition::Left => crate::tr!("settings", "left"),
         }
     }
 
@@ -2669,9 +2669,9 @@ impl ThemeSelectWidget {
     ) -> Box<dyn Element> {
         let theme: WarpTheme = WarpConfig::as_ref(app).theme_config().theme(&theme_kind);
         let mode_ui_label = match theme_chooser_mode {
-            ThemeChooserMode::SystemLight => crate::tr!("settings", "settings-theme-light"),
-            ThemeChooserMode::SystemDark => crate::tr!("settings", "settings-theme-dark"),
-            ThemeChooserMode::SystemAgnostic => crate::tr!("settings", "settings-theme-current"),
+            ThemeChooserMode::SystemLight => crate::tr!("settings", "theme-light"),
+            ThemeChooserMode::SystemDark => crate::tr!("settings", "theme-dark"),
+            ThemeChooserMode::SystemAgnostic => crate::tr!("settings", "theme-current"),
         };
 
         ConstrainedBox::new(
@@ -2818,7 +2818,7 @@ impl SettingsWidget for ThemeSelectWidget {
                 appearance
                     .ui_builder()
                     .span(
-                        crate::tr!("settings", "settings-auto-switch-theme"),
+                        crate::tr!("settings", "auto-switch-theme"),
                     )
                     .with_style(
                         UiComponentStyles::default().set_margin(Coords::default().bottom(10.)),
@@ -2873,8 +2873,8 @@ impl SettingsWidget for CustomAppIconWidget {
 
         let dropdown = render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-customize-app-icon"),
-            show_bundle_warning.then_some(crate::tr!("settings", "settings-change-icon-bundled")).as_deref(),
+            &crate::tr!("settings", "customize-app-icon"),
+            show_bundle_warning.then_some(crate::tr!("settings", "change-icon-bundled").as_str()),
             None,
             LocalOnlyIconState::Hidden,
             None,
@@ -2898,7 +2898,7 @@ impl SettingsWidget for CustomAppIconWidget {
                         appearance
                             .ui_builder()
                             .wrappable_text(
-                                crate::tr!("settings", "settings-restart-macos-icon"),
+                                crate::tr!("settings", "restart-macos-icon"),
                                 true,
                             )
                             .with_style(UiComponentStyles {
@@ -3081,7 +3081,7 @@ impl SettingsWidget for WindowOpacityWidget {
                 .with_child(
                     Container::new(
                         FormattedTextElement::from_str(
-                            crate::tr!("settings", "settings-transparency-not-supported"),
+                            crate::tr!("settings", "transparency-not-supported"),
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -3131,7 +3131,7 @@ impl SettingsWidget for WindowOpacityWidget {
             // Skip showing the warning for OpenGL since WGPU often incorrectly reports it as not
             // supporting alpha.
             if !window.supports_transparency() && window.graphics_backend() != GraphicsBackend::Gl {
-                static TRANSPARENCY_WARNING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-graphics-no-transparency"));
+                static TRANSPARENCY_WARNING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "graphics-no-transparency"));
                 let mut message = Cow::Borrowed(&*TRANSPARENCY_WARNING);
                 let gpu_settings = GPUSettings::as_ref(app);
                 if (gpu_settings
@@ -3283,7 +3283,7 @@ impl SettingsWidget for WindowBlurTextureWidget {
                 col.add_child(
                     Container::new(
                         FormattedTextElement::from_str(
-                            crate::tr!("settings", "settings-hardware-no-transparency"),
+                            crate::tr!("settings", "hardware-no-transparency"),
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -3376,8 +3376,8 @@ impl SettingsWidget for InputTypeWidget {
             .radio_buttons(
                 self.radio_buttons_states.clone(),
                 vec![
-                    RadioButtonItem::text(crate::tr!("settings", "settings-warp-prompt")),
-                    RadioButtonItem::text(crate::tr!("settings", "settings-shell-ps1")),
+                    RadioButtonItem::text(crate::tr!("settings", "warp-prompt")),
+                    RadioButtonItem::text(crate::tr!("settings", "shell-ps1")),
                 ],
                 view.input_type_radio_state.clone(),
                 Some(input_type as usize),
@@ -3426,7 +3426,7 @@ impl SettingsWidget for InputModeWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-input-position"),
+            &crate::tr!("settings", "input-position"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -3815,7 +3815,7 @@ impl SettingsWidget for AIFontWidget {
         ai_font_row.add_child(
             appearance
                 .ui_builder()
-                .span(crate::tr!("settings", "settings-match-terminal"))
+                .span(crate::tr!("settings", "match-terminal"))
                 .build()
                 .with_margin_left(2.)
                 .with_margin_right(16.)
@@ -3888,7 +3888,7 @@ impl TerminalFontWidget {
             .with_padding_top(4.)
             .finish(),
         );
-        let reset_label = crate::tr!("settings", "settings-reset-to-default");
+        let reset_label = crate::tr!("settings", "reset-to-default");
         line_height.add_child({
             let button = appearance
                 .ui_builder()
@@ -3985,7 +3985,7 @@ impl SettingsWidget for TerminalFontWidget {
                             1.,
                             appearance
                                 .ui_builder()
-                                .span(crate::tr!("settings", "settings-view-all-system-fonts"))
+                                .span(crate::tr!("settings", "view-all-system-fonts"))
                                 .build()
                                 .with_margin_left(2.)
                                 .finish(),
@@ -4139,7 +4139,7 @@ impl SettingsWidget for NotebookFontSizeWidget {
                 .with_child(
                     appearance
                         .ui_builder()
-                        .span(crate::tr!("settings", "settings-match-terminal"))
+                        .span(crate::tr!("settings", "match-terminal"))
                         .build()
                         .with_margin_left(2.)
                         .with_margin_right(16.)
@@ -4197,7 +4197,7 @@ impl SettingsWidget for ThinStrokesWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-use-thin-strokes"),
+            &crate::tr!("settings", "use-thin-strokes"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -4230,7 +4230,7 @@ impl SettingsWidget for MinimumContrastWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-enforce-min-contrast"),
+            &crate::tr!("settings", "enforce-min-contrast"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -4348,7 +4348,7 @@ impl SettingsWidget for CursorTypeWidget {
                     .with_child(
                         appearance
                             .ui_builder()
-                            .span(crate::tr!("settings", "settings-cursor-type-disabled-vim"))
+                            .span(crate::tr!("settings", "cursor-type-disabled-vim"))
                             .build()
                             .finish(),
                     )
@@ -4444,7 +4444,7 @@ impl SettingsWidget for TabCloseButtonPositionWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-tab-close-position"),
+            &crate::tr!("settings", "tab-close-position"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -4735,7 +4735,7 @@ impl SettingsWidget for UseLatestUserPromptAsConversationTitleInTabNamesWidget {
                 })
                 .finish(),
             Some(
-                crate::tr!("settings", "settings-latest-prompt-vertical-tabs"),
+                crate::tr!("settings", "latest-prompt-vertical-tabs"),
             ),
         )
     }
@@ -4865,7 +4865,7 @@ impl SettingsWidget for DirectoryTabColorsWidget {
             .with_spacing(4.)
             .with_child(
                 Text::new(
-                    crate::tr!("settings", "settings-directory-tab-colors"),
+                    crate::tr!("settings", "directory-tab-colors"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )
@@ -4875,7 +4875,7 @@ impl SettingsWidget for DirectoryTabColorsWidget {
             )
             .with_child(
                 Text::new(
-                    crate::tr!("settings", "settings-auto-color-tabs"),
+                    crate::tr!("settings", "auto-color-tabs"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )
@@ -5012,7 +5012,7 @@ impl SettingsWidget for ZenModeWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-show-tab-bar"),
+            &crate::tr!("settings", "show-tab-bar"),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -5110,7 +5110,7 @@ impl SettingsWidget for AltScreenPaddingWidget {
                     Container::new(
                         Align::new(
                             Text::new(
-                                crate::tr!("settings", "settings-uniform-padding-px"),
+                                crate::tr!("settings", "uniform-padding-px"),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )
@@ -5168,8 +5168,8 @@ impl SettingsWidget for ZoomLevelWidget {
 
         render_dropdown_item(
             appearance,
-            &crate::tr!("settings", "settings-zoom-label"),
-            Some(crate::tr!("settings", "settings-zoom-tooltip")).as_deref(),
+            &crate::tr!("settings", "zoom-label"),
+            Some(crate::tr!("settings", "zoom-tooltip").as_str()),
             Some(reset_button),
             LocalOnlyIconState::for_setting(
                 crate::window_settings::ZoomLevel::storage_key(),

@@ -98,12 +98,12 @@ enum ReviewTerminalUnavailableReason {
 impl ReviewTerminalUnavailableReason {
     fn label(&self) -> String {
         match self {
-            Self::NoSelectedRepo => crate::tr!("workspace", "workspace-no-repo-selected"),
-            Self::SessionPathUnavailable => crate::tr!("workspace", "workspace-session-cwd-unavailable"),
-            Self::SessionOutsideSelectedRepo => crate::tr!("workspace", "workspace-session-outside-repo"),
-            Self::AIDisabled => crate::tr!("workspace", "workspace-ai-disabled-review"),
-            Self::TerminalExecuting => crate::tr!("workspace", "workspace-terminal-executing"),
-            Self::InputBoxNotVisible => crate::tr!("workspace", "workspace-input-box-not-visible"),
+            Self::NoSelectedRepo => crate::tr!("workspace", "no-repo-selected"),
+            Self::SessionPathUnavailable => crate::tr!("workspace", "session-cwd-unavailable"),
+            Self::SessionOutsideSelectedRepo => crate::tr!("workspace", "session-outside-repo"),
+            Self::AIDisabled => crate::tr!("workspace", "ai-disabled-review"),
+            Self::TerminalExecuting => crate::tr!("workspace", "terminal-executing"),
+            Self::InputBoxNotVisible => crate::tr!("workspace", "input-box-not-visible"),
         }
     }
 }
@@ -291,7 +291,7 @@ impl CodeReviewState {
                 .map(|repo_path| {
                     let display_name = self
                         .get_repo_display_name(repo_path)
-                        .unwrap_or_else(|| crate::tr!("workspace", "workspace-unknown"));
+                        .unwrap_or_else(|| crate::tr!("workspace", "unknown"));
                     DropdownItem::new(
                         display_name,
                         RightPanelAction::SelectRepo {
@@ -377,7 +377,7 @@ impl RightPanelView {
 
         app.register_editable_bindings([EditableBinding::new(
             "workspace:toggle_maximize_code_review_panel",
-            crate::tr!("workspace", "workspace-toggle-maximize-code-review-panel"),
+            crate::tr!("workspace", "toggle-maximize-code-review-panel"),
             RightPanelAction::ToggleMaximize,
         )
         .with_enabled(|| cfg!(feature = "local_fs"))
@@ -427,7 +427,7 @@ impl RightPanelView {
         let maximize_button = ctx.add_typed_action_view(|ctx| {
             let mut button = ActionButton::new("", PaneHeaderTheme)
                 .with_icon(Icon::Maximize)
-                .with_tooltip(crate::tr!("workspace", "workspace-maximize"))
+                .with_tooltip(crate::tr!("workspace", "maximize"))
                 .with_tooltip_positioning_provider(Arc::new(MenuPositioning::BelowInputBox))
                 .on_click(|ctx| ctx.dispatch_typed_action(RightPanelAction::ToggleMaximize));
 
@@ -443,10 +443,10 @@ impl RightPanelView {
 
         #[cfg(feature = "local_fs")]
         let open_repository_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-open-repository"));
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "open-repository"));
             ActionButton::new(&*LABEL, NakedTheme)
                 .with_size(crate::view_components::action_button::ButtonSize::Small)
-                .with_tooltip(crate::tr!("workspace", "workspace-open-repository-tooltip"))
+                .with_tooltip(crate::tr!("workspace", "open-repository-tooltip"))
                 .with_tooltip_alignment(TooltipAlignment::Center)
                 .on_click(|ctx| ctx.dispatch_typed_action(RightPanelAction::OpenRepository))
         });
@@ -748,7 +748,7 @@ impl RightPanelView {
         let tooltip_keybinding =
             keybinding_name_to_display_string(TOGGLE_RIGHT_PANEL_BINDING_NAME, app);
 
-        let close_label = crate::tr!("workspace", "workspace-close-panel");
+        let close_label = crate::tr!("workspace", "close-panel");
         let tooltip = if let Some(keybinding) = tooltip_keybinding {
             ui_builder
                 .tool_tip_with_sublabel(close_label.clone(), keybinding)
@@ -1020,7 +1020,7 @@ impl RightPanelView {
 
         let title = Shrinkable::new(
             1.0,
-            Text::new_inline(crate::tr!("workspace", "workspace-code-review"), appearance.ui_font_family(), 12.)
+            Text::new_inline(crate::tr!("workspace", "code-review"), appearance.ui_font_family(), 12.)
                 .with_style(Properties::default().weight(Weight::Bold))
                 .with_color(sub_text_color.into())
                 .finish(),
@@ -1066,9 +1066,9 @@ impl RightPanelView {
 
     pub fn set_maximized(&mut self, is_maximized: bool, ctx: &mut ViewContext<Self>) {
         let (icon, tooltip) = if is_maximized {
-            (Icon::Minimize, crate::tr!("workspace", "workspace-minimize"))
+            (Icon::Minimize, crate::tr!("workspace", "minimize"))
         } else {
-            (Icon::Maximize, crate::tr!("workspace", "workspace-maximize"))
+            (Icon::Maximize, crate::tr!("workspace", "maximize"))
         };
 
         self.maximize_button.update(ctx, |button, ctx| {

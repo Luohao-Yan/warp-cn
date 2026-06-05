@@ -62,8 +62,8 @@ const ENV_VAR_HORIZONTAL_MARGIN: f32 = 20.;
 const ENV_VAR_RIGHT_ELEMENT_VERTICAL_MARGIN: f32 = 5.;
 const ENV_VAR_SPAN_VERTICAL_MARGIN: f32 = 15.;
 const ENV_VAR_BUTTON_HEIGHT: f32 = 30.;
-static ENV_VAR_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-environment-variables"));
-static NEW_ENV_VAR_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-new-environment-variables"));
+static ENV_VAR_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "environment-variables"));
+static NEW_ENV_VAR_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "new-environment-variables"));
 
 /// Scale factor the title should be from the user's current font size.
 const TITLE_FONT_SIZE_SCALE_FACTOR: f32 = 1.12;
@@ -254,9 +254,9 @@ impl WorkflowsMoreInfoView {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let label = if cloud_workflow.model().data.is_agent_mode_workflow() {
-            crate::tr!("workflows", "workflows-edit-prompt")
+            crate::tr!("workflows", "edit-prompt")
         } else {
-            crate::tr!("workflows", "workflows-edit-workflow")
+            crate::tr!("workflows", "edit-workflow")
         };
         let workflow = cloud_workflow.clone();
         render_hoverable_card_button(
@@ -439,7 +439,7 @@ impl WorkflowsMoreInfoView {
             )
             .with_child(
                 Container::new({
-                    let text = crate::tr!("workflows", "workflows-command-edited");
+                    let text = crate::tr!("workflows", "command-edited");
                     Text::new_inline(
                         text,
                         appearance.ui_font_family(),
@@ -494,7 +494,7 @@ impl WorkflowsMoreInfoView {
                 appearance
                     .ui_builder()
                     .keyboard_shortcut(&Keystroke {
-                        key: crate::tr!("workflows", "workflows-tab-key"),
+                        key: crate::tr!("workflows", "tab-key"),
                         shift: true,
                         ..Default::default()
                     })
@@ -505,7 +505,7 @@ impl WorkflowsMoreInfoView {
                 Shrinkable::new(
                     1.,
                     Container::new({
-                        let text = crate::tr!("workflows", "workflows-to-cycle-parameters");
+                        let text = crate::tr!("workflows", "to-cycle-parameters");
                         Text::new_inline(
                             text,
                             appearance.ui_font_family(),
@@ -541,7 +541,7 @@ impl WorkflowsMoreInfoView {
         let workflow = self.workflow.as_workflow().to_owned();
         render_hoverable_card_button(
             icons::Icon::Workflow,
-            Some(crate::tr!("workflows", "workflows-save-as-workflow")),
+            Some(crate::tr!("workflows", "save-as-workflow")),
             self.button_mouse_states.save_as_workflow.clone(),
             move |ctx, _, _| {
                 ctx.dispatch_typed_action(TerminalAction::OpenWorkflowModalForAIWorkflow(
@@ -1012,7 +1012,7 @@ impl WorkflowsMoreInfoView {
             appearance
                 .ui_builder()
                 .link(
-                    crate::tr!("workflows", "workflows-view-context"),
+                    crate::tr!("workflows", "view-context"),
                     Some(workflow_source),
                     None,
                     self.button_mouse_states.view_context.clone(),

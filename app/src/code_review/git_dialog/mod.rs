@@ -50,7 +50,7 @@ use crate::{
 };
 use warp_core::send_telemetry_from_ctx;
 
-static CODE_REVIEW_BRANCH: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-branch"));
+static CODE_REVIEW_BRANCH: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "branch"));
 
 pub(crate) mod commit;
 pub(crate) mod pr;

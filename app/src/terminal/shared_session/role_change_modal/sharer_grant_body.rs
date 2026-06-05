@@ -83,7 +83,7 @@ impl SharerGrantBody {
                 width: Some(BUTTON_WIDTH),
                 ..Default::default()
             })
-            .with_centered_text_label(crate::tr!("terminal", "terminal-make-editor"))
+            .with_centered_text_label(crate::tr!("terminal", "make-editor"))
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -111,8 +111,8 @@ impl View for SharerGrantBody {
         let appearance = Appearance::as_ref(app);
         let button_row = self.render_button_row(appearance);
 
-        let text1 = crate::tr!("terminal", "terminal-grants-ability-part1");
-        let text2 = crate::tr!("terminal", "terminal-use-with-caution");
+        let text1 = crate::tr!("terminal", "grants-ability-part1");
+        let text2 = crate::tr!("terminal", "use-with-caution");
         let text_body = Container::new(
             Flex::column()
                 .with_child(
@@ -146,7 +146,7 @@ impl View for SharerGrantBody {
                     self.dont_show_again_mouse_state.clone(),
                     Some(TEXT_FONT_SIZE),
                 )
-                .with_label(Span::new(crate::tr!("common", "common-do-not-show-again").clone(), Default::default()))
+                .with_label(Span::new(crate::tr!("common", "do-not-show-again").clone(), Default::default()))
                 .check(self.dont_show_again)
                 .build()
                 .with_cursor(Cursor::PointingHand)

@@ -19,15 +19,15 @@ use crate::{
 };
 
 static SETTINGS_NEW_WINDOW_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-new-window"));
+    LazyLock::new(|| crate::tr!("settings", "new-window"));
 static SETTINGS_NEW_TAB_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-new-tab"));
+    LazyLock::new(|| crate::tr!("settings", "new-tab"));
 static SETTINGS_SPLIT_PANE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-split-pane"));
+    LazyLock::new(|| crate::tr!("settings", "split-pane"));
 static SETTINGS_ADVANCED_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-advanced"));
+    LazyLock::new(|| crate::tr!("settings", "advanced"));
 static SETTINGS_DIRECTORY_PATH_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-directory-path-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "directory-path-placeholder"));
 
 #[derive(Clone, Debug)]
 #[allow(clippy::enum_variant_names)]

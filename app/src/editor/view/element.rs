@@ -19,7 +19,7 @@ use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 use std::sync::LazyLock;
 
-static EDITOR_CYCLE_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-cycle-suggestions"));
+static EDITOR_CYCLE_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "cycle-suggestions"));
 use itertools::Itertools;
 use pathfinder_geometry::{
     rect::RectF,

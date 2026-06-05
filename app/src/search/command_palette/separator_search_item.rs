@@ -66,7 +66,7 @@ impl SearchItem for SeparatorSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-a11y-section-label", title = self.title.clone())
+        crate::tr!("search", "a11y-section-label", title = self.title.clone())
     }
 
     fn is_static_separator(&self) -> bool {

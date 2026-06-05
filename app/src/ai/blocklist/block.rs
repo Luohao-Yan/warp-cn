@@ -241,7 +241,7 @@ use super::{
 
 /// The default display name used for the user if they have no associated display name.
 fn default_user_display_name() -> String {
-    crate::tr!("common", "common-default-user-display-name")
+    crate::tr!("common", "default-user-display-name")
 }
 
 const HAS_PENDING_ACTION: &str = "HasPendingAction";
@@ -1875,7 +1875,7 @@ impl AIBlock {
 
             if !self.action_buttons.contains_key(&action.id) {
                 let run_button = CompactibleActionButton::new(
-                    crate::tr!("common", "common-run-label").clone(),
+                    crate::tr!("common", "run-label").clone(),
                     Some(KeystrokeSource::Fixed(ENTER_KEYSTROKE.clone())),
                     ButtonSize::InlineActionHeader,
                     AIBlockAction::ExecuteRequestedAction {
@@ -1887,7 +1887,7 @@ impl AIBlock {
                 );
 
                 let cancel_button = CompactibleActionButton::new(
-                    crate::tr!("common", "common-cancel-label").clone(),
+                    crate::tr!("common", "cancel-label").clone(),
                     Some(KeystrokeSource::Fixed(CTRL_C_KEYSTROKE.clone())),
                     ButtonSize::InlineActionHeader,
                     AIBlockAction::CancelRequestedAction {

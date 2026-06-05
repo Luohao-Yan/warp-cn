@@ -159,12 +159,12 @@ pub fn format_credits(credits: f32) -> String {
     if credits.fract() < 0.1 {
         let whole = credits.trunc() as i64;
         if whole == 1 {
-            crate::tr!("ai_assistant", "ai-assistant-one-credit", count = whole)
+            crate::tr!("ai_assistant", "one-credit", count = whole)
         } else {
-            crate::tr!("ai_assistant", "ai-assistant-credits", count = whole)
+            crate::tr!("ai_assistant", "credits", count = whole)
         }
     } else {
-        crate::tr!("ai_assistant", "ai-assistant-credits-decimal", count = format!("{credits:.1}"))
+        crate::tr!("ai_assistant", "credits-decimal", count = format!("{credits:.1}"))
     }
 }
 

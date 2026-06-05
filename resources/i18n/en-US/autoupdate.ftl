@@ -25,15 +25,3 @@ autoupdate-report-issues = Please report any issues
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
-autoupdate-autoupdate-update-available = { autoupdate-update-available }
-autoupdate-autoupdate-update-instructions = { autoupdate-update-instructions }
-autoupdate-autoupdate-no-updates = { autoupdate-no-updates }
-autoupdate-autoupdate-run-to-update = { autoupdate-run-to-update }
-autoupdate-autoupdate-if-installed-using = { autoupdate-if-installed-using }
-autoupdate-autoupdate-one-time-repo-config = { autoupdate-one-time-repo-config }
-autoupdate-autoupdate-dist-upgrade-explainer-prefix = { autoupdate-dist-upgrade-explainer-prefix }
-autoupdate-autoupdate-dist-upgrade-explainer-suffix = { autoupdate-dist-upgrade-explainer-suffix }
-autoupdate-autoupdate-review-command = { autoupdate-review-command }
-autoupdate-autoupdate-press-enter = { autoupdate-press-enter }
-autoupdate-autoupdate-to-install = { autoupdate-to-install }
-autoupdate-autoupdate-report-issues = { autoupdate-report-issues }

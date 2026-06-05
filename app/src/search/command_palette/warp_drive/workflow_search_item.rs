@@ -148,6 +148,6 @@ impl SearchItem for WorkflowSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-a11y-workflow-label", name = self.cloud_workflow.model().data.name())
+        crate::tr!("search", "a11y-workflow-label", name = self.cloud_workflow.model().data.name())
     }
 }

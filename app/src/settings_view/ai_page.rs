@@ -150,93 +150,93 @@ const AI_SETTINGS_DROPDOWN_MAX_HEIGHT: f32 = 250.;
 const CONTEXT_WINDOW_SLIDER_WIDTH: f32 = 220.;
 const CONTEXT_WINDOW_INPUT_BOX_WIDTH: f32 = 120.;
 
-static NEXT_COMMAND_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-next-command-description"));
-static PROMPT_SUGGESTIONS_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-prompt-suggestions-description"));
-static SUGGESTED_CODE_BANNERS_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-suggested-code-banners-description"));
+static NEXT_COMMAND_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-next-command-description"));
+static PROMPT_SUGGESTIONS_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-prompt-suggestions-description"));
+static SUGGESTED_CODE_BANNERS_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-suggested-code-banners-description"));
 static NATURAL_LANGUAGE_AUTOSUGGESTIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-ai-nl-autosuggestions-description"));
+    LazyLock::new(|| crate::tr!("settings", "ai-nl-autosuggestions-description"));
 static SHARED_BLOCK_TITLE_GENERATION_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-ai-shared-block-title-description"));
+    LazyLock::new(|| crate::tr!("settings", "ai-shared-block-title-description"));
 static GIT_OPERATIONS_AUTOGEN_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-ai-git-operations-description"));
-static MCP_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-mcp-description"));
-static MCP_LEARN_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-learn-more"));
-static AUTO_SPAWN_SERVERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-auto-spawn-servers"));
-static FILE_BASED_MCP_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-file-based-mcp-description"));
-static SEE_SUPPORTED_PROVIDERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-see-supported-providers"));
-static RULES_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-rules-description"));
-static RULES_LEARN_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-learn-more"));
-static SUGGESTED_RULES_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-suggested-rules-description"));
-static WARP_DRIVE_CONTEXT_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-warp-drive-context-description"));
-static VOICE_INPUT_DESCRIPTION_PREFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-voice-input-description-prefix"));
-static WISPR_FLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-wispr-flow"));
-static UPGRADE_AI_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-upgrade-ai-usage"));
-static UNKNOWN_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-unknown-reason"));
-static NEXT_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-next-command"));
-static TO_USE_AI_FEATURES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-to-use-ai-features"));
-static UPGRADE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-upgrade"));
-static TO_GET_MORE_AI_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-to-get-more-ai-usage"));
-static COMPARE_PLANS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-compare-plans"));
-static FOR_MORE_AI_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-for-more-ai-usage"));
-static CONTACT_SUPPORT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-contact-support"));
-static CONTACT_SALES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-contact-sales"));
-static TO_ENABLE_BRINGING_YOUR_OWN_API_KEYS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-to-enable-bringing-your-own-api-keys"));
-static UPGRADE_TO_THE_BUILD_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-upgrade-to-the-build-plan"));
-static TO_USE_YOUR_OWN_API_KEYS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-to-use-your-own-api-keys"));
-static ASK_YOUR_TEAMS_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-ask-your-teams-admin"));
-static CREATE_AN_ACCOUNT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-create-an-account"));
-static KEYBINDING_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-ai"));
-static KEYBINDING_ACTIVE_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-active-ai"));
-static KEYBINDING_TERMINAL_CMD_AUTODETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-terminal-cmd-autodetection"));
-static KEYBINDING_NL_DETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-nl-detection"));
-static KEYBINDING_AGENT_PROMPT_AUTODETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-agent-prompt-autodetection"));
-static KEYBINDING_PROMPT_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-prompt-suggestions"));
-static KEYBINDING_CODE_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-code-suggestions"));
-static KEYBINDING_NL_AUTOSUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-nl-autosuggestions"));
-static KEYBINDING_SHARED_BLOCK_TITLE_GEN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-shared-block-title-gen"));
-static KEYBINDING_VOICE_INPUT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-voice-input"));
-static KEYBINDING_CODEBASE_INDEX: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-keybinding-codebase-index"));
-static AGENT_DECIDES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-agent-decides"));
-static ALWAYS_ALLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-always-allow-dropdown"));
-static ALWAYS_ASK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-always-ask-dropdown"));
-static SHOW_AGENT_TIPS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-show-agent-tips"));
-static HIDE_AGENT_TIPS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-hide-agent-tips"));
-static SHOW_OZ_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-show-oz-changelog"));
-static HIDE_OZ_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-hide-oz-changelog"));
-static SHOW_USE_AGENT_FOOTER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-show-use-agent-footer"));
-static HIDE_USE_AGENT_FOOTER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-hide-use-agent-footer"));
-static OTHER_AGENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-other-agent"));
-static APPLY_CODE_DIFFS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-apply-code-diffs"));
-static READ_FILES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-read-files"));
-static EXECUTE_COMMANDS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-execute-commands"));
-static INTERACT_COMMANDS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-interact-commands"));
-static PERMISSIONS_MANAGED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-permissions-managed"));
-static COMMAND_DENYLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-command-denylist"));
-static COMMAND_DENYLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-command-denylist-desc"));
-static COMMAND_ALLOWLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-command-allowlist"));
-static COMMAND_ALLOWLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-command-allowlist-desc"));
-static DIRECTORY_ALLOWLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-directory-allowlist"));
-static DIRECTORY_ALLOWLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-directory-allowlist-desc"));
-static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-base-model"));
-static BASE_MODEL_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-base-model-desc"));
-static CALL_MCP_SERVERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-call-mcp-servers"));
-static MCP_ALLOWLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-mcp-allowlist"));
-static MCP_ALLOWLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-mcp-allowlist-desc"));
-static MCP_DENYLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-mcp-denylist"));
-static MCP_DENYLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-mcp-denylist-desc"));
-static NL_DENYLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-nl-denylist-label"));
-static MANAGE_MCP_SERVERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-manage-mcp-servers"));
-static MANAGE_RULES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-manage-rules"));
-static VOICE_INPUT_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-voice-input-key"));
-static VOICE_INPUT_KEY_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-voice-input-key-desc"));
-static THINKING_DISPLAY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-thinking-display"));
-static THINKING_DISPLAY_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-thinking-display-desc"));
-static PREFERRED_CONVERSATION_LAYOUT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-preferred-conversation-layout"));
-static OPENAI_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-openai-key"));
-static ANTHROPIC_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-anthropic-key"));
-static GOOGLE_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-google-key"));
-static LOGIN_COMMAND_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-login-command"));
-static AWS_PROFILE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-aws-profile"));
+    LazyLock::new(|| crate::tr!("settings", "ai-git-operations-description"));
+static MCP_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-mcp-description"));
+static MCP_LEARN_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-learn-more"));
+static AUTO_SPAWN_SERVERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-auto-spawn-servers"));
+static FILE_BASED_MCP_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-file-based-mcp-description"));
+static SEE_SUPPORTED_PROVIDERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-see-supported-providers"));
+static RULES_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-rules-description"));
+static RULES_LEARN_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-learn-more"));
+static SUGGESTED_RULES_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-suggested-rules-description"));
+static WARP_DRIVE_CONTEXT_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-warp-drive-context-description"));
+static VOICE_INPUT_DESCRIPTION_PREFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-voice-input-description-prefix"));
+static WISPR_FLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-wispr-flow"));
+static UPGRADE_AI_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-upgrade-ai-usage"));
+static UNKNOWN_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-unknown-reason"));
+static NEXT_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-next-command"));
+static TO_USE_AI_FEATURES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-to-use-ai-features"));
+static UPGRADE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-upgrade"));
+static TO_GET_MORE_AI_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-to-get-more-ai-usage"));
+static COMPARE_PLANS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-compare-plans"));
+static FOR_MORE_AI_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-for-more-ai-usage"));
+static CONTACT_SUPPORT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-contact-support"));
+static CONTACT_SALES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-contact-sales"));
+static TO_ENABLE_BRINGING_YOUR_OWN_API_KEYS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-to-enable-bringing-your-own-api-keys"));
+static UPGRADE_TO_THE_BUILD_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-upgrade-to-the-build-plan"));
+static TO_USE_YOUR_OWN_API_KEYS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-to-use-your-own-api-keys"));
+static ASK_YOUR_TEAMS_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-ask-your-teams-admin"));
+static CREATE_AN_ACCOUNT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-create-an-account"));
+static KEYBINDING_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-ai"));
+static KEYBINDING_ACTIVE_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-active-ai"));
+static KEYBINDING_TERMINAL_CMD_AUTODETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-terminal-cmd-autodetection"));
+static KEYBINDING_NL_DETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-nl-detection"));
+static KEYBINDING_AGENT_PROMPT_AUTODETECTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-agent-prompt-autodetection"));
+static KEYBINDING_PROMPT_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-prompt-suggestions"));
+static KEYBINDING_CODE_SUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-code-suggestions"));
+static KEYBINDING_NL_AUTOSUGGESTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-nl-autosuggestions"));
+static KEYBINDING_SHARED_BLOCK_TITLE_GEN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-shared-block-title-gen"));
+static KEYBINDING_VOICE_INPUT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-voice-input"));
+static KEYBINDING_CODEBASE_INDEX: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-keybinding-codebase-index"));
+static AGENT_DECIDES: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-agent-decides"));
+static ALWAYS_ALLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-always-allow-dropdown"));
+static ALWAYS_ASK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-always-ask-dropdown"));
+static SHOW_AGENT_TIPS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-show-agent-tips"));
+static HIDE_AGENT_TIPS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-hide-agent-tips"));
+static SHOW_OZ_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-show-oz-changelog"));
+static HIDE_OZ_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-hide-oz-changelog"));
+static SHOW_USE_AGENT_FOOTER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-show-use-agent-footer"));
+static HIDE_USE_AGENT_FOOTER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-hide-use-agent-footer"));
+static OTHER_AGENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-other-agent"));
+static APPLY_CODE_DIFFS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-apply-code-diffs"));
+static READ_FILES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-read-files"));
+static EXECUTE_COMMANDS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-execute-commands"));
+static INTERACT_COMMANDS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-interact-commands"));
+static PERMISSIONS_MANAGED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-permissions-managed"));
+static COMMAND_DENYLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-command-denylist"));
+static COMMAND_DENYLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-command-denylist-desc"));
+static COMMAND_ALLOWLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-command-allowlist"));
+static COMMAND_ALLOWLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-command-allowlist-desc"));
+static DIRECTORY_ALLOWLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-directory-allowlist"));
+static DIRECTORY_ALLOWLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-directory-allowlist-desc"));
+static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-base-model"));
+static BASE_MODEL_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-base-model-desc"));
+static CALL_MCP_SERVERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-call-mcp-servers"));
+static MCP_ALLOWLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-mcp-allowlist"));
+static MCP_ALLOWLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-mcp-allowlist-desc"));
+static MCP_DENYLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-mcp-denylist"));
+static MCP_DENYLIST_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-mcp-denylist-desc"));
+static NL_DENYLIST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-nl-denylist-label"));
+static MANAGE_MCP_SERVERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-manage-mcp-servers"));
+static MANAGE_RULES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-manage-rules"));
+static VOICE_INPUT_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-voice-input-key"));
+static VOICE_INPUT_KEY_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-voice-input-key-desc"));
+static THINKING_DISPLAY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-thinking-display"));
+static THINKING_DISPLAY_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-thinking-display-desc"));
+static PREFERRED_CONVERSATION_LAYOUT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-preferred-conversation-layout"));
+static OPENAI_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-openai-key"));
+static ANTHROPIC_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-anthropic-key"));
+static GOOGLE_KEY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-google-key"));
+static LOGIN_COMMAND_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-login-command"));
+static AWS_PROFILE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-aws-profile"));
 const WISPR_FLOW_URL: &str = "https://wisprflow.ai/";
 
 pub fn init_actions_from_parent_view<T: Action + Clone>(
@@ -681,7 +681,7 @@ impl AISettingsPageView {
                 let expanded = host_native_absolute_path(s, &None, &None);
                 Path::new(&expanded).is_dir()
             });
-            input.set_placeholder_text(&crate::tr!("settings", "settings-code-repo-dir-placeholder"), ctx);
+            input.set_placeholder_text(&crate::tr!("settings", "code-repo-dir-placeholder"), ctx);
             input
         });
         Self::update_editor_interaction_state(
@@ -720,7 +720,7 @@ impl AISettingsPageView {
             };
             let mut editor = EditorView::new(options, ctx);
 
-            editor.set_placeholder_text(&crate::tr!("settings", "settings-detection-denylist-placeholder"), ctx);
+            editor.set_placeholder_text(&crate::tr!("settings", "detection-denylist-placeholder"), ctx);
 
             let current_value = AISettings::as_ref(ctx)
                 .autodetection_command_denylist
@@ -742,7 +742,7 @@ impl AISettingsPageView {
         let command_execution_allowlist_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|s| Regex::new(s).is_ok());
-            input.set_placeholder_text(&crate::tr!("settings", "settings-execution-allowlist-placeholder"), ctx);
+            input.set_placeholder_text(&crate::tr!("settings", "execution-allowlist-placeholder"), ctx);
             input
         });
         Self::update_editor_interaction_state(
@@ -774,7 +774,7 @@ impl AISettingsPageView {
         let command_execution_denylist_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|s| Regex::new(s).is_ok());
-            input.set_placeholder_text(&crate::tr!("settings", "settings-execution-denylist-placeholder"), ctx);
+            input.set_placeholder_text(&crate::tr!("settings", "execution-denylist-placeholder"), ctx);
             input
         });
         Self::update_editor_interaction_state(
@@ -806,7 +806,7 @@ impl AISettingsPageView {
         let cli_agent_footer_command_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|s| Regex::new(s).is_ok());
-            input.set_placeholder_text(&crate::tr!("settings", "settings-cli-agent-footer-command-placeholder"), ctx);
+            input.set_placeholder_text(&crate::tr!("settings", "cli-agent-footer-command-placeholder"), ctx);
             input
         });
         // The coding agent footer command editor is always enabled,
@@ -1168,7 +1168,7 @@ impl AISettingsPageView {
         );
 
         let write_to_pty_autonomy_dropdown_menu = ctx.add_typed_action_view(|ctx| {
-            static ASK_ON_FIRST_WRITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-ask-first-write"));
+            static ASK_ON_FIRST_WRITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-ask-first-write"));
             let mut dropdown = Dropdown::new(ctx);
             dropdown.set_top_bar_max_width(AI_SETTINGS_DROPDOWN_WIDTH);
             dropdown.set_menu_width(AI_SETTINGS_DROPDOWN_WIDTH, ctx);
@@ -1232,7 +1232,7 @@ impl AISettingsPageView {
             let mut dropdown = FilterableDropdown::new(ctx);
             dropdown.set_top_bar_max_width(AI_SETTINGS_DROPDOWN_WIDTH);
             dropdown.set_menu_width(AI_SETTINGS_DROPDOWN_WIDTH, ctx);
-            dropdown.set_menu_header_to_static(crate::tr!("settings", "settings-ai-select-mcp-servers"));
+            dropdown.set_menu_header_to_static(crate::tr!("settings", "ai-select-mcp-servers"));
             dropdown
         });
         Self::refresh_mcp_allowlist_dropdown(&mcp_allowlist_dropdown, ctx);
@@ -1246,7 +1246,7 @@ impl AISettingsPageView {
             let mut dropdown = FilterableDropdown::new(ctx);
             dropdown.set_top_bar_max_width(AI_SETTINGS_DROPDOWN_WIDTH);
             dropdown.set_menu_width(AI_SETTINGS_DROPDOWN_WIDTH, ctx);
-            dropdown.set_menu_header_to_static(crate::tr!("settings", "settings-ai-select-mcp-servers"));
+            dropdown.set_menu_header_to_static(crate::tr!("settings", "ai-select-mcp-servers"));
             dropdown
         });
         Self::refresh_mcp_denylist_dropdown(&mcp_denylist_dropdown, ctx);
@@ -1294,7 +1294,7 @@ impl AISettingsPageView {
                 let expanded = host_native_absolute_path(s, &None, &None);
                 Path::new(&expanded).is_dir()
             });
-            input.set_placeholder_text(&crate::tr!("settings", "settings-code-repo-dir-placeholder"), ctx);
+            input.set_placeholder_text(&crate::tr!("settings", "code-repo-dir-placeholder"), ctx);
             input
         });
 
@@ -1329,7 +1329,7 @@ impl AISettingsPageView {
         let command_denylist_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|s| Regex::new(s).is_ok());
-            input.set_placeholder_text(crate::tr!("settings", "settings-ai-exec-denylist-placeholder"), ctx);
+            input.set_placeholder_text(crate::tr!("settings", "ai-exec-denylist-placeholder"), ctx);
             input
         });
         Self::update_editor_interaction_state(
@@ -1367,7 +1367,7 @@ impl AISettingsPageView {
         let command_allowlist_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|s| Regex::new(s).is_ok());
-            input.set_placeholder_text(crate::tr!("settings", "settings-ai-exec-allowlist-placeholder"), ctx);
+            input.set_placeholder_text(crate::tr!("settings", "ai-exec-allowlist-placeholder"), ctx);
             input
         });
         Self::update_editor_interaction_state(
@@ -1437,8 +1437,8 @@ impl AISettingsPageView {
             dropdown.set_top_bar_max_width(AI_SETTINGS_DROPDOWN_WIDTH);
             dropdown.set_menu_width(AI_SETTINGS_DROPDOWN_WIDTH, ctx);
 
-            static NEW_TAB: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-new-tab"));
-            static SPLIT_PANE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-split-pane"));
+            static NEW_TAB: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-new-tab"));
+            static SPLIT_PANE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-split-pane"));
             let items = vec![
                 DropdownItem::new(
                     (*NEW_TAB).clone(),
@@ -1885,11 +1885,11 @@ impl AISettingsPageView {
             menu.set_items(
                 vec![
                     DropdownItem::new(
-                        crate::tr!("settings", "settings-ai-read-only"),
+                        crate::tr!("settings", "ai-read-only"),
                         AISettingsPageAction::SetAutonomyReadonlyCommandsSetting,
                     ),
                     DropdownItem::new(
-                        crate::tr!("settings", "settings-ai-supervised"),
+                        crate::tr!("settings", "ai-supervised"),
                         AISettingsPageAction::SetAutonomySupervisedSetting,
                     ),
                 ],
@@ -2069,13 +2069,13 @@ impl AISettingsPageView {
                     .map(|t| {
                         let display = match t {
                             AgentModeCodingPermissionsType::AlwaysAskBeforeReading => {
-                                crate::tr!("settings", "settings-ai-always-ask")
+                                crate::tr!("settings", "ai-always-ask")
                             }
                             AgentModeCodingPermissionsType::AlwaysAllowReading => {
-                                crate::tr!("settings", "settings-ai-always-allow")
+                                crate::tr!("settings", "ai-always-allow")
                             }
                             AgentModeCodingPermissionsType::AllowReadingSpecificFiles => {
-                                crate::tr!("settings", "settings-ai-allow-specific-dirs")
+                                crate::tr!("settings", "ai-allow-specific-dirs")
                             }
                         };
                         DropdownItem::new(display, AISettingsPageAction::SetCodingPermission(t))
@@ -2224,7 +2224,7 @@ impl AISettingsPageView {
                     }
 
                     items.push(
-                        MenuItemFields::new(crate::tr!("settings", "settings-other"))
+                        MenuItemFields::new(crate::tr!("settings", "other"))
                             .with_on_select_action(DropdownAction::SelectActionAndClose(
                                 AISettingsPageAction::SetCLIAgentForCommand {
                                     pattern: pattern_clone.clone(),
@@ -2236,9 +2236,9 @@ impl AISettingsPageView {
 
                     dropdown.set_rich_items(items, ctx);
 
-                    static SELECT_CODING_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-select-coding-agent"));
+                    static SELECT_CODING_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-select-coding-agent"));
                     dropdown.set_menu_header_text_override(|label| {
-                        if label == crate::tr!("settings", "settings-ai-other-agent") {
+                        if label == crate::tr!("settings", "ai-other-agent") {
                             (*SELECT_CODING_AGENT).clone()
                         } else {
                             label.to_string()
@@ -3251,7 +3251,7 @@ fn render_toolbar_layout_editor(
     let label = Container::new(
         appearance
             .ui_builder()
-            .span(crate::tr!("settings", "settings-toolbar-layout"))
+            .span(crate::tr!("settings", "toolbar-layout"))
             .with_style(UiComponentStyles {
                 font_size: Some(CONTENT_FONT_SIZE),
                 ..Default::default()
@@ -3358,7 +3358,7 @@ impl SettingsWidget for GlobalAIWidget {
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
                 {
-                    static WARP_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-warp-agent"));
+                    static WARP_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-warp-agent"));
                     Text::new_inline(
                         &*WARP_AGENT,
                         appearance.ui_font_family(),
@@ -3371,7 +3371,7 @@ impl SettingsWidget for GlobalAIWidget {
             );
 
         if is_ai_disabled_due_to_remote_session_org_policy {
-            static ORG_DISALLOW_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-ai-org-disallow-remote"));
+            static ORG_DISALLOW_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "ai-org-disallow-remote"));
             row.add_child(
                 ConstrainedBox::new(
                     Container::new(
@@ -3390,7 +3390,7 @@ impl SettingsWidget for GlobalAIWidget {
 
         // Show sign-up button for anonymous users, toggle for logged-in users
         if is_anonymous {
-            let sign_up_label = crate::tr!("settings", "settings-sign-up");
+            let sign_up_label = crate::tr!("settings", "sign-up");
             row.add_child(
                 Flex::row()
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -3494,11 +3494,11 @@ impl UsageWidget {
         }
 
         let request_count_label = if workspace_is_delinquent_due_to_payment_issue {
-            crate::tr!("settings", "settings-ai-restricted-billing")
+            crate::tr!("settings", "ai-restricted-billing")
         } else if is_unlimited {
-            crate::tr!("settings", "settings-ai-unlimited")
+            crate::tr!("settings", "ai-unlimited")
         } else {
-            crate::tr!("settings", "settings-ai-usage-format", used = used, limit = limit)
+            crate::tr!("settings", "ai-usage-format", used = used, limit = limit)
         };
 
         row.add_child(
@@ -3643,7 +3643,7 @@ impl SettingsWidget for UsageWidget {
                 .with_child(
                     build_sub_header(
                         appearance,
-                        crate::tr!("settings", "settings-ai-usage-label"),
+                        crate::tr!("settings", "ai-usage-label"),
                         Some(styles::header_font_color(true, app)),
                     )
                     .finish(),
@@ -3651,7 +3651,7 @@ impl SettingsWidget for UsageWidget {
                 .with_child(
                     appearance
                         .ui_builder()
-                        .paragraph(crate::tr!("settings", "settings-ai-resets-time", time = formatted_next_refresh_time))
+                        .paragraph(crate::tr!("settings", "ai-resets-time", time = formatted_next_refresh_time))
                         .with_style(UiComponentStyles {
                             font_color: Some(blended_colors::text_sub(
                                 appearance.theme(),
@@ -3667,10 +3667,10 @@ impl SettingsWidget for UsageWidget {
         .with_padding_bottom(HEADER_PADDING)
         .finish();
 
-        let request_limit_description = crate::tr!("settings", "settings-ai-credit-limit-description", limit_type = ai_request_usage_model.refresh_duration_to_string());
+        let request_limit_description = crate::tr!("settings", "ai-credit-limit-description", limit_type = ai_request_usage_model.refresh_duration_to_string());
 
         let request_usage_row = self.render_ai_usage_limit_row(
-            crate::tr!("settings", "settings-ai-credits-label"),
+            crate::tr!("settings", "ai-credits-label"),
             request_limit_description,
             ai_request_usage_model.requests_used(),
             ai_request_usage_model.request_limit(),
@@ -3826,7 +3826,7 @@ impl ActiveAIWidget {
         Flex::column()
             .with_child(
                 render_ai_setting_toggle::<IntelligentAutosuggestionsEnabled>(
-                    crate::tr!("settings", "settings-ai-next-command-label"),
+                    crate::tr!("settings", "ai-next-command-label"),
                     AISettingsPageAction::ToggleIntelligentAutosuggestions,
                     *ai_settings.intelligent_autosuggestions_enabled_internal,
                     is_toggleable,
@@ -3853,7 +3853,7 @@ impl ActiveAIWidget {
         Flex::column()
             .with_child(
                 render_ai_setting_toggle::<AgentModeQuerySuggestionsEnabled>(
-                    crate::tr!("settings", "settings-ai-prompt-suggestions-label"),
+                    crate::tr!("settings", "ai-prompt-suggestions-label"),
                     AISettingsPageAction::TogglePromptSuggestions,
                     *ai_settings.prompt_suggestions_enabled_internal,
                     is_toggleable,
@@ -3880,7 +3880,7 @@ impl ActiveAIWidget {
         Flex::column()
             .with_child(
                 render_ai_setting_toggle::<AgentModeQuerySuggestionsEnabled>(
-                    crate::tr!("settings", "settings-ai-suggested-code-banners-label"),
+                    crate::tr!("settings", "ai-suggested-code-banners-label"),
                     AISettingsPageAction::ToggleCodeSuggestions,
                     *ai_settings.code_suggestions_enabled_internal,
                     is_toggleable,
@@ -3908,7 +3908,7 @@ impl ActiveAIWidget {
             .with_child(render_ai_setting_toggle::<
                 NaturalLanguageAutosuggestionsEnabled,
             >(
-                crate::tr!("settings", "settings-ai-nl-autosuggestions-label"),
+                crate::tr!("settings", "ai-nl-autosuggestions-label"),
                 AISettingsPageAction::ToggleNaturalLanguageAutosuggestions,
                 *ai_settings.natural_language_autosuggestions_enabled_internal,
                 is_toggleable,
@@ -3934,7 +3934,7 @@ impl ActiveAIWidget {
         Flex::column()
             .with_child(
                 render_ai_setting_toggle::<SharedBlockTitleGenerationEnabled>(
-                    crate::tr!("settings", "settings-ai-shared-block-title-gen-label"),
+                    crate::tr!("settings", "ai-shared-block-title-gen-label"),
                     AISettingsPageAction::ToggleSharedTitleGeneration,
                     *ai_settings.shared_block_title_generation_enabled_internal,
                     is_toggleable,
@@ -3960,7 +3960,7 @@ impl ActiveAIWidget {
         let is_toggleable = ai_settings.is_active_ai_enabled(app);
         Flex::column()
             .with_child(render_ai_setting_toggle::<GitOperationsAutogenEnabled>(
-                crate::tr!("settings", "settings-ai-commit-pr-gen-label"),
+                crate::tr!("settings", "ai-commit-pr-gen-label"),
                 AISettingsPageAction::ToggleGitOperationsAutogen,
                 *ai_settings.git_operations_autogen_enabled_internal,
                 is_toggleable,
@@ -4011,7 +4011,7 @@ impl SettingsWidget for ActiveAIWidget {
                         .with_child(
                             build_sub_header(
                                 appearance,
-                                crate::tr!("settings", "settings-ai-active-ai"),
+                                crate::tr!("settings", "ai-active-ai"),
                                 Some(styles::header_font_color(is_any_ai_enabled, app)),
                             )
                             .finish(),
@@ -4102,14 +4102,14 @@ impl SettingsWidget for AgentsWidget {
             agents_header.add_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-agents"),
+                    crate::tr!("settings", "ai-agents"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
                 .finish(),
             );
             agents_header.add_child(render_ai_setting_description(
-                crate::tr!("settings", "settings-ai-agents-desc"),
+                crate::tr!("settings", "ai-agents-desc"),
                 ai_settings.is_any_ai_enabled(app),
                 app,
             ));
@@ -4148,7 +4148,7 @@ impl AgentsWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-profiles"),
+                    crate::tr!("settings", "ai-profiles"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .finish(),
@@ -4156,7 +4156,7 @@ impl AgentsWidget {
             .with_child(
                 Container::new(
                     render_ai_setting_description(
-                        crate::tr!("settings", "settings-ai-profiles-desc"),
+                        crate::tr!("settings", "ai-profiles-desc"),
                         is_any_ai_enabled,
                         app,
                     )
@@ -4206,7 +4206,7 @@ impl AgentsWidget {
         let is_any_ai_enabled = ai_settings.is_any_ai_enabled(app);
         let model_subheader = Container::new(render_custom_size_header(
             appearance,
-            crate::tr!("settings", "settings-ai-models"),
+            crate::tr!("settings", "ai-models"),
             14.0,
             Some(styles::header_font_color(is_any_ai_enabled, app)),
         ))
@@ -4254,7 +4254,7 @@ impl AgentsWidget {
         let max = cw.max;
 
         let label = Container::new(render_body_item_label::<AISettingsPageAction>(
-            crate::tr!("settings", "settings-ai-context-window-label").into(),
+            crate::tr!("settings", "ai-context-window-label").into(),
             None,
             None,
             LocalOnlyIconState::Hidden,
@@ -4266,7 +4266,7 @@ impl AgentsWidget {
 
         let min_label = appearance
             .ui_builder()
-            .span(crate::tr!("settings", "settings-ai-min-value", min = min as i64))
+            .span(crate::tr!("settings", "ai-min-value", min = min as i64))
             .with_style(UiComponentStyles {
                 font_size: Some(CONTENT_FONT_SIZE),
                 ..Default::default()
@@ -4276,7 +4276,7 @@ impl AgentsWidget {
 
         let max_label = appearance
             .ui_builder()
-            .span(crate::tr!("settings", "settings-ai-max-value", max = max as i64))
+            .span(crate::tr!("settings", "ai-max-value", max = max as i64))
             .with_style(UiComponentStyles {
                 font_size: Some(CONTENT_FONT_SIZE),
                 ..Default::default()
@@ -4363,7 +4363,7 @@ impl AgentsWidget {
         let is_any_ai_enabled = ai_settings.is_any_ai_enabled(app);
         let permissions_subheader = Container::new(render_custom_size_header(
             appearance,
-            crate::tr!("settings", "settings-ai-permissions"),
+            crate::tr!("settings", "ai-permissions"),
             14.0,
             Some(styles::header_font_color(is_any_ai_enabled, app)),
         ))
@@ -4731,7 +4731,7 @@ impl AgentsWidget {
                             .finish(),
                         appearance
                             .ui_builder()
-                            .span(crate::tr!("settings", "settings-show-model-picker"))
+                            .span(crate::tr!("settings", "show-model-picker"))
                             .with_style(UiComponentStyles {
                                 font_color: Some(
                                     theme.sub_text_color(theme.surface_2()).into_solid(),
@@ -4771,7 +4771,7 @@ impl AgentsWidget {
     ) -> Box<dyn Element> {
         let code_settings = CodeSettings::as_ref(app);
         let toggle = render_ai_setting_toggle::<CodebaseContextEnabled>(
-            crate::tr!("settings", "settings-ai-codebase-context"),
+            crate::tr!("settings", "ai-codebase-context"),
             AISettingsPageAction::ToggleCodebaseContext,
             *code_settings.codebase_context_enabled,
             ai_settings.is_any_ai_enabled(app),
@@ -4783,10 +4783,10 @@ impl AgentsWidget {
         static CODEBASE_CONTEXT_DESC: LazyLock<Vec<FormattedTextFragment>> = LazyLock::new(|| {
             vec![
                 FormattedTextFragment::plain_text(
-                    crate::tr!("settings", "settings-ai-codebase-context-desc"),
+                    crate::tr!("settings", "ai-codebase-context-desc"),
                 ),
                 FormattedTextFragment::hyperlink(
-                    crate::tr!("settings", "settings-learn-more"),
+                    crate::tr!("settings", "learn-more"),
                     "https://docs.warp.dev/agent-platform/capabilities/codebase-context",
                 ),
             ]
@@ -4841,7 +4841,7 @@ impl AgentsWidget {
         app: &AppContext,
     ) -> Box<dyn Element> {
         let header = Container::new(render_body_item_label_with_icon::<AISettingsPageAction>(
-            crate::tr!("settings", "settings-ai-call-mcp-servers").into(),
+            crate::tr!("settings", "ai-call-mcp-servers").into(),
             Icon::Dataflow,
             Some(styles::header_font_color(
                 ai_settings.is_any_ai_enabled(app),
@@ -4860,17 +4860,17 @@ impl AgentsWidget {
                 LazyLock::new(|| {
                     vec![
                         FormattedTextFragment::plain_text(
-                            crate::tr!("settings", "settings-ai-mcp-zero-state-desc"),
+                            crate::tr!("settings", "ai-mcp-zero-state-desc"),
                         ),
                         FormattedTextFragment::hyperlink_action(
-                            crate::tr!("settings", "settings-ai-add-server"),
+                            crate::tr!("settings", "ai-add-server"),
                             AISettingsPageAction::OpenMCPServerCollection,
                         ),
                         FormattedTextFragment::plain_text(
-                            crate::tr!("settings", "settings-ai-or"),
+                            crate::tr!("settings", "ai-or"),
                         ),
                         FormattedTextFragment::hyperlink(
-                            crate::tr!("settings", "settings-ai-learn-more-mcps"),
+                            crate::tr!("settings", "ai-learn-more-mcps"),
                             "https://docs.warp.dev/agent-platform/capabilities/mcp",
                         ),
                     ]
@@ -5072,7 +5072,7 @@ impl SettingsWidget for AIInputWidget {
 
         let input_header = build_sub_header(
             appearance,
-            crate::tr!("settings", "settings-ai-input"),
+            crate::tr!("settings", "ai-input"),
             Some(styles::header_font_color(is_any_ai_enabled, app)),
         )
         .with_padding_bottom(HEADER_PADDING)
@@ -5089,7 +5089,7 @@ impl SettingsWidget for AIInputWidget {
         );
 
         let show_input_hint_text = render_ai_setting_toggle::<ShowHintText>(
-            crate::tr!("settings", "settings-ai-show-input-hint-text"),
+            crate::tr!("settings", "ai-show-input-hint-text"),
             AISettingsPageAction::ToggleShowInputHintText,
             *InputSettings::as_ref(app).show_hint_text,
             is_any_ai_enabled,
@@ -5107,7 +5107,7 @@ impl SettingsWidget for AIInputWidget {
 
         if FeatureFlag::AgentTips.is_enabled() {
             let agent_tips_toggle = render_ai_setting_toggle::<ShowAgentTips>(
-                crate::tr!("settings", "settings-ai-show-agent-tips"),
+                crate::tr!("settings", "ai-show-agent-tips"),
                 AISettingsPageAction::ToggleShowAgentTips,
                 *InputSettings::as_ref(app).show_agent_tips,
                 is_any_ai_enabled,
@@ -5119,7 +5119,7 @@ impl SettingsWidget for AIInputWidget {
         }
 
         widget_children.push(render_ai_setting_toggle::<IncludeAgentCommandsInHistory>(
-            crate::tr!("settings", "settings-ai-include-agent-commands"),
+            crate::tr!("settings", "ai-include-agent-commands"),
             AISettingsPageAction::ToggleIncludeAgentCommandsInHistory,
             *ai_settings.include_agent_commands_in_history,
             is_any_ai_enabled,
@@ -5169,10 +5169,10 @@ impl AIInputWidget {
                 LazyLock::new(|| {
                     vec![
                         FormattedTextFragment::plain_text(
-                            crate::tr!("settings", "settings-ai-incorrect-detection"),
+                            crate::tr!("settings", "ai-incorrect-detection"),
                         ),
                         FormattedTextFragment::hyperlink(
-                            crate::tr!("settings", "settings-ai-let-us-know"),
+                            crate::tr!("settings", "ai-let-us-know"),
                             "https://warpdotdev.typeform.com/to/offrTIpq",
                         ),
                     ]
@@ -5180,7 +5180,7 @@ impl AIInputWidget {
 
             section.add_children([
                 render_ai_setting_toggle::<NLDInTerminalEnabled>(
-                    crate::tr!("settings", "settings-ai-autodetect-prompts"),
+                    crate::tr!("settings", "ai-autodetect-prompts"),
                     AISettingsPageAction::ToggleNLDInTerminal,
                     ai_settings.is_nld_in_terminal_enabled(app),
                     is_toggleable,
@@ -5189,7 +5189,7 @@ impl AIInputWidget {
                     app,
                 ),
                 render_ai_setting_toggle::<AIAutoDetectionEnabled>(
-                    crate::tr!("settings", "settings-ai-autodetect-commands"),
+                    crate::tr!("settings", "ai-autodetect-commands"),
                     AISettingsPageAction::ToggleAIInputAutoDetection,
                     is_nld_enabled,
                     is_toggleable,
@@ -5225,13 +5225,13 @@ impl AIInputWidget {
             > = LazyLock::new(|| {
                 vec![
                     FormattedTextFragment::plain_text(
-                        crate::tr!("settings", "settings-ai-nl-detection-desc"),
+                        crate::tr!("settings", "ai-nl-detection-desc"),
                     ),
                     FormattedTextFragment::plain_text(
                         " ",
                     ),
                     FormattedTextFragment::hyperlink(
-                        crate::tr!("settings", "settings-ai-let-us-know"),
+                        crate::tr!("settings", "ai-let-us-know"),
                         "https://warpdotdev.typeform.com/to/offrTIpq",
                     ),
                 ]
@@ -5239,7 +5239,7 @@ impl AIInputWidget {
 
             section.add_children([
                 render_ai_setting_toggle::<AIAutoDetectionEnabled>(
-                    crate::tr!("settings", "settings-ai-nl-detection-label"),
+                    crate::tr!("settings", "ai-nl-detection-label"),
                     AISettingsPageAction::ToggleAIInputAutoDetection,
                     is_nld_enabled,
                     is_toggleable,
@@ -5279,7 +5279,7 @@ impl AIInputWidget {
                 app,
             ))
             .with_child(render_ai_setting_description(
-                crate::tr!("settings", "settings-ai-nl-denylist-desc"),
+                crate::tr!("settings", "ai-nl-denylist-desc"),
                 is_toggleable,
                 app,
             ))
@@ -5328,7 +5328,7 @@ impl SettingsWidget for MCPServersWidget {
 
         let header = build_sub_header(
             appearance,
-            crate::tr!("settings", "settings-ai-mcp-servers"),
+            crate::tr!("settings", "ai-mcp-servers"),
             Some(styles::header_font_color(is_any_ai_enabled, app)),
         )
         .with_padding_bottom(HEADER_PADDING)
@@ -5456,7 +5456,7 @@ impl AIFactWidget {
         app: &warpui::AppContext,
     ) -> Box<dyn Element> {
         let toggle = render_ai_setting_toggle::<MemoryEnabled>(
-            crate::tr!("settings", "settings-ai-rules"),
+            crate::tr!("settings", "ai-rules"),
             AISettingsPageAction::ToggleRules,
             *ai_settings.memory_enabled,
             ai_settings.is_any_ai_enabled(app),
@@ -5507,7 +5507,7 @@ impl AIFactWidget {
         app: &warpui::AppContext,
     ) -> Box<dyn Element> {
         let toggle = render_ai_setting_toggle::<RuleSuggestionsEnabled>(
-            crate::tr!("settings", "settings-ai-suggested-rules"),
+            crate::tr!("settings", "ai-suggested-rules"),
             AISettingsPageAction::ToggleRuleSuggestions,
             *ai_settings.rule_suggestions_enabled_internal,
             ai_settings.is_any_ai_enabled(app),
@@ -5535,7 +5535,7 @@ impl AIFactWidget {
         app: &warpui::AppContext,
     ) -> Box<dyn Element> {
         let toggle = render_ai_setting_toggle::<WarpDriveContextEnabled>(
-            crate::tr!("settings", "settings-ai-warp-drive-context"),
+            crate::tr!("settings", "ai-warp-drive-context"),
             AISettingsPageAction::ToggleWarpDriveContext,
             *ai_settings.warp_drive_context_enabled,
             ai_settings.is_any_ai_enabled(app),
@@ -5579,7 +5579,7 @@ impl SettingsWidget for AIFactWidget {
 
         let header = build_sub_header(
             appearance,
-            crate::tr!("settings", "settings-ai-knowledge"),
+            crate::tr!("settings", "ai-knowledge"),
             Some(styles::header_font_color(is_any_ai_enabled, app)),
         )
         .with_margin_bottom(HEADER_PADDING)
@@ -5624,7 +5624,7 @@ impl VoiceWidget {
         let ai_settings = AISettings::as_ref(app);
         let is_toggleable = ai_settings.is_any_ai_enabled(app);
         let mut column = Flex::column().with_child(render_ai_setting_toggle::<VoiceInputEnabled>(
-            crate::tr!("settings", "settings-ai-voice-input"),
+            crate::tr!("settings", "ai-voice-input"),
             AISettingsPageAction::ToggleVoiceInput,
             *ai_settings.voice_input_enabled_internal,
             is_toggleable,
@@ -5709,7 +5709,7 @@ impl SettingsWidget for VoiceWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-voice"),
+                    crate::tr!("settings", "ai-voice"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
@@ -5772,7 +5772,7 @@ impl SettingsWidget for OtherAIWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-other"),
+                    crate::tr!("settings", "ai-other"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
@@ -5782,7 +5782,7 @@ impl SettingsWidget for OtherAIWidget {
         if FeatureFlag::AgentView.is_enabled() {
             let mut agent_view_column = Flex::column()
                 .with_child(render_ai_setting_toggle::<ShouldShowOzUpdatesInZeroState>(
-                    crate::tr!("settings", "settings-ai-show-oz-changelog"),
+                    crate::tr!("settings", "ai-show-oz-changelog"),
                     AISettingsPageAction::ToggleShowOzUpdatesInZeroState,
                     *ai_settings.should_show_oz_updates_in_zero_state,
                     is_toggleable,
@@ -5791,7 +5791,7 @@ impl SettingsWidget for OtherAIWidget {
                     app,
                 ))
                 .with_child(render_ai_setting_toggle::<ShouldRenderUseAgentToolbarForUserCommands>(
-                    crate::tr!("settings", "settings-ai-show-use-agent-footer"),
+                    crate::tr!("settings", "ai-show-use-agent-footer"),
                     AISettingsPageAction::ToggleUseAgentToolbar,
                     *ai_settings.should_render_use_agent_footer_for_user_commands,
                     is_toggleable,
@@ -5800,7 +5800,7 @@ impl SettingsWidget for OtherAIWidget {
                     app,
                 ))
                 .with_child(render_ai_setting_description(
-                    crate::tr!("settings", "settings-ai-use-agent-footer-desc"),
+                    crate::tr!("settings", "ai-use-agent-footer-desc"),
                     is_toggleable,
                     app,
                 ));
@@ -5816,7 +5816,7 @@ impl SettingsWidget for OtherAIWidget {
         }
 
         column.add_child(render_ai_setting_toggle::<ShowConversationHistory>(
-            crate::tr!("settings", "settings-ai-show-conversation-history"),
+            crate::tr!("settings", "ai-show-conversation-history"),
             AISettingsPageAction::ToggleShowConversationHistory,
             *ai_settings.show_conversation_history,
             is_toggleable,
@@ -5899,7 +5899,7 @@ impl SettingsWidget for CLIAgentWidget {
         // global AI toggle, because these settings control third-party coding
         // agents (Claude Code, Codex, Gemini CLI) rather than Warp's own AI.
         let cli_agent_footer_toggle = render_ai_setting_toggle::<ShouldRenderCLIAgentToolbar>(
-            crate::tr!("settings", "settings-ai-show-coding-agent-toolbar"),
+            crate::tr!("settings", "ai-show-coding-agent-toolbar"),
             AISettingsPageAction::ToggleCLIAgentToolbar,
             *ai_settings.should_render_cli_agent_footer,
             true,
@@ -5911,7 +5911,7 @@ impl SettingsWidget for CLIAgentWidget {
         static CLI_AGENT_TOOLBAR_DESC: LazyLock<Vec<FormattedTextFragment>> = LazyLock::new(|| {
             vec![
                 FormattedTextFragment::plain_text(
-                    crate::tr!("settings", "settings-ai-coding-agent-toolbar-desc"),
+                    crate::tr!("settings", "ai-coding-agent-toolbar-desc"),
                 ),
             ]
         });
@@ -5932,7 +5932,7 @@ impl SettingsWidget for CLIAgentWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-third-party-cli-agents"),
+                    crate::tr!("settings", "ai-third-party-cli-agents"),
                     Some(styles::header_font_color(true, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
@@ -5957,14 +5957,14 @@ impl SettingsWidget for CLIAgentWidget {
             if FeatureFlag::CLIAgentRichInput.is_enabled() {
                 // Setting 1: Auto show/hide rich input based on agent status
                 let auto_show_toggle_label = render_body_item_label::<AISettingsPageAction>(
-                    crate::tr!("settings", "settings-ai-auto-show-hide-rich-input").into(),
+                    crate::tr!("settings", "ai-auto-show-hide-rich-input").into(),
                     Some(styles::header_font_color(true, app)),
                     Some(AdditionalInfo {
                         mouse_state: self.auto_toggle_rich_input_info_tooltip.clone(),
                         on_click_action: None,
                         secondary_text: None,
                         tooltip_override_text: Some(
-                            crate::tr!("settings", "settings-ai-requires-warp-plugin"),
+                            crate::tr!("settings", "ai-requires-warp-plugin"),
                         ),
                     }),
                     LocalOnlyIconState::for_setting(
@@ -5991,7 +5991,7 @@ impl SettingsWidget for CLIAgentWidget {
 
                 column.add_child(
                     render_ai_setting_toggle::<AutoOpenRichInputOnCLIAgentStart>(
-                        crate::tr!("settings", "settings-ai-auto-open-rich-input"),
+                        crate::tr!("settings", "ai-auto-open-rich-input"),
                         AISettingsPageAction::ToggleAutoOpenRichInputOnCLIAgentStart,
                         *ai_settings.auto_open_rich_input_on_cli_agent_start,
                         true,
@@ -6003,7 +6003,7 @@ impl SettingsWidget for CLIAgentWidget {
 
                 // Setting 2: Auto dismiss rich input after prompt submission
                 column.add_child(render_ai_setting_toggle::<AutoDismissRichInputAfterSubmit>(
-                    crate::tr!("settings", "settings-ai-auto-dismiss-rich-input"),
+                    crate::tr!("settings", "ai-auto-dismiss-rich-input"),
                     AISettingsPageAction::ToggleAutoDismissRichInputAfterSubmit,
                     *ai_settings.auto_dismiss_rich_input_after_submit,
                     true,
@@ -6019,7 +6019,7 @@ impl SettingsWidget for CLIAgentWidget {
                 list_column.add_child(
                     appearance
                         .ui_builder()
-                        .span(crate::tr!("settings", "settings-commands-enable-toolbar"))
+                        .span(crate::tr!("settings", "commands-enable-toolbar"))
                         .with_style(UiComponentStyles {
                             font_size: Some(CONTENT_FONT_SIZE),
                             ..Default::default()
@@ -6111,7 +6111,7 @@ impl SettingsWidget for CLIAgentWidget {
             let command_list_description = appearance
                 .ui_builder()
                 .paragraph(
-                    crate::tr!("settings", "settings-ai-command-patterns-desc"),
+                    crate::tr!("settings", "ai-command-patterns-desc"),
                 )
                 .with_style(UiComponentStyles {
                     font_size: Some(appearance.ui_font_size()),
@@ -6206,7 +6206,7 @@ impl SettingsWidget for AgentAttributionWidget {
             is_any_ai_enabled,
         );
 
-        let org_enforced_tooltip = crate::tr!("settings", "settings-ai-org-enforced-tooltip");
+        let org_enforced_tooltip = crate::tr!("settings", "ai-org-enforced-tooltip");
         let ui_builder = appearance.ui_builder();
         let toggle = if state.is_forced_by_org {
             ui_builder
@@ -6239,7 +6239,7 @@ impl SettingsWidget for AgentAttributionWidget {
 
         let toggle_row = build_toggle_element(
             render_body_item_label::<AISettingsPageAction>(
-                crate::tr!("settings", "settings-ai-agent-attribution").into(),
+                crate::tr!("settings", "ai-agent-attribution").into(),
                 Some(styles::header_font_color(!state.is_disabled, app)),
                 None,
                 LocalOnlyIconState::Hidden,
@@ -6256,7 +6256,7 @@ impl SettingsWidget for AgentAttributionWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-agent-attribution-header"),
+                    crate::tr!("settings", "ai-agent-attribution-header"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
@@ -6264,7 +6264,7 @@ impl SettingsWidget for AgentAttributionWidget {
             )
             .with_child(toggle_row)
             .with_child(render_ai_setting_description(
-                crate::tr!("settings", "settings-ai-agent-attribution-description"),
+                crate::tr!("settings", "ai-agent-attribution-description"),
                 !state.is_disabled,
                 app,
             ))
@@ -6308,7 +6308,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
         // Toggle is disabled if forced by org settings OR if AI is globally disabled
         let is_disabled = is_forced_by_org || !is_any_ai_enabled;
 
-        let org_enforced_tooltip = crate::tr!("settings", "settings-ai-org-enforced-tooltip");
+        let org_enforced_tooltip = crate::tr!("settings", "ai-org-enforced-tooltip");
         let ui_builder = appearance.ui_builder();
         let toggle = if is_forced_by_org {
             // Disabled by organization setting - show tooltip on hover
@@ -6344,7 +6344,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
 
         let toggle_row = build_toggle_element(
             render_body_item_label::<AISettingsPageAction>(
-                crate::tr!("settings", "settings-ai-computer-use-label").into(),
+                crate::tr!("settings", "ai-computer-use-label").into(),
                 Some(styles::header_font_color(!is_disabled, app)),
                 None,
                 LocalOnlyIconState::Hidden,
@@ -6361,7 +6361,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-experimental"),
+                    crate::tr!("settings", "ai-experimental"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
@@ -6369,7 +6369,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
             )
             .with_child(toggle_row)
             .with_child(render_ai_setting_description(
-                crate::tr!("settings", "settings-ai-computer-use-description"),
+                crate::tr!("settings", "ai-computer-use-description"),
                 !is_disabled,
                 app,
             ));
@@ -6377,7 +6377,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
         if FeatureFlag::Orchestration.is_enabled() {
             let ai_settings = AISettings::as_ref(app);
             column.add_child(render_ai_setting_toggle::<OrchestrationEnabled>(
-                crate::tr!("settings", "settings-ai-orchestration-label"),
+                crate::tr!("settings", "ai-orchestration-label"),
                 AISettingsPageAction::ToggleOrchestration,
                 *ai_settings.orchestration_enabled,
                 is_any_ai_enabled,
@@ -6386,7 +6386,7 @@ impl SettingsWidget for CloudAgentComputerUseWidget {
                 app,
             ));
             column.add_child(render_ai_setting_description(
-                crate::tr!("settings", "settings-ai-orchestration-description"),
+                crate::tr!("settings", "ai-orchestration-description"),
                 is_any_ai_enabled,
                 app,
             ));
@@ -6529,7 +6529,7 @@ impl ApiKeysWidget {
             .with_child(
                 Container::new(
                     render_ai_setting_description(
-                        crate::tr!("settings", "settings-ai-api-keys-desc"),
+                        crate::tr!("settings", "ai-api-keys-desc"),
                         is_enabled,
                         app,
                     ))
@@ -6688,7 +6688,7 @@ impl ApiKeysWidget {
         let ai_settings = AISettings::as_ref(app);
 
         let toggle = render_ai_setting_toggle::<CanUseWarpCreditsWithByok>(
-            crate::tr!("settings", "settings-ai-warp-credit-fallback"),
+            crate::tr!("settings", "ai-warp-credit-fallback"),
             AISettingsPageAction::ToggleCanUseWarpCreditsWithByok,
             *ai_settings.can_use_warp_credits_with_byok,
             ai_settings.is_any_ai_enabled(app),
@@ -6698,7 +6698,7 @@ impl ApiKeysWidget {
         );
 
         let description = render_ai_setting_description(
-            crate::tr!("settings", "settings-ai-warp-credit-fallback-desc"),
+            crate::tr!("settings", "ai-warp-credit-fallback-desc"),
             ai_settings.is_any_ai_enabled(app),
             app,
         );
@@ -6732,7 +6732,7 @@ impl SettingsWidget for ApiKeysWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-api-keys"),
+                    crate::tr!("settings", "ai-api-keys"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)
@@ -6789,7 +6789,7 @@ impl AwsBedrockWidget {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text(crate::tr!("settings", "settings-ai-footer-placeholder"), ctx);
+            editor.set_placeholder_text(crate::tr!("settings", "ai-footer-placeholder"), ctx);
             editor.set_buffer_text(&aws_auth_refresh_command, ctx);
             editor
         });
@@ -6971,15 +6971,15 @@ impl AwsBedrockWidget {
         let are_credentials_enabled = user_workspaces.is_aws_bedrock_credentials_enabled(app);
         let is_usage_enabled = is_section_enabled && are_credentials_enabled;
         let toggle_description = if is_admin_enforced {
-            crate::tr!("settings", "settings-ai-aws-bedrock-desc-org")
+            crate::tr!("settings", "ai-aws-bedrock-desc-org")
         } else {
-            crate::tr!("settings", "settings-ai-aws-bedrock-desc")
+            crate::tr!("settings", "ai-aws-bedrock-desc")
         };
 
         let mut column = Flex::column().with_spacing(16.).with_child(
             Flex::column()
                 .with_child(render_ai_setting_toggle::<AwsBedrockCredentialsEnabled>(
-                    crate::tr!("settings", "settings-ai-use-aws-bedrock"),
+                    crate::tr!("settings", "ai-use-aws-bedrock"),
                     AISettingsPageAction::ToggleAwsBedrockCredentialsEnabled,
                     are_credentials_enabled,
                     is_toggleable,
@@ -7127,7 +7127,7 @@ impl AwsBedrockWidget {
         let auto_login_enabled = *AISettings::as_ref(app).aws_bedrock_auto_login.value();
 
         let toggle = render_ai_setting_toggle::<AwsBedrockAutoLogin>(
-            crate::tr!("settings", "settings-ai-auto-login"),
+            crate::tr!("settings", "ai-auto-login"),
             AISettingsPageAction::ToggleAwsBedrockAutoLogin,
             auto_login_enabled,
             is_usage_enabled,
@@ -7136,7 +7136,7 @@ impl AwsBedrockWidget {
             app,
         );
         let description = render_ai_setting_description(
-            crate::tr!("settings", "settings-ai-auto-login-desc"),
+            crate::tr!("settings", "ai-auto-login-desc"),
             is_usage_enabled,
             app,
         );
@@ -7179,7 +7179,7 @@ impl SettingsWidget for AwsBedrockWidget {
             .with_child(
                 build_sub_header(
                     appearance,
-                    crate::tr!("settings", "settings-ai-aws-bedrock"),
+                    crate::tr!("settings", "ai-aws-bedrock"),
                     Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .with_padding_bottom(HEADER_PADDING)

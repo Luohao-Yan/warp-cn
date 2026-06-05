@@ -12,10 +12,10 @@ use crate::ui_components::dialog::{dialog_styles, Dialog};
 use warpui::elements::{Container, MouseStateHandle, Text};
 use warpui::ui_components::components::UiComponent;
 
-static EDIT_ANYWAY_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-edit-anyway-label"));
-static CANCEL_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
-static EDIT_ANYWAY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-grab-edit-warning"));
-static CURRENTLY_EDITED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-currently-edited"));
+static EDIT_ANYWAY_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "edit-anyway-label"));
+static CANCEL_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
+static EDIT_ANYWAY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "grab-edit-warning"));
+static CURRENTLY_EDITED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "currently-edited"));
 
 #[derive(Default)]
 struct MouseStateHandles {

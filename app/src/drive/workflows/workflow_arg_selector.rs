@@ -46,7 +46,7 @@ use strum_macros::{EnumIter, IntoStaticStr};
 
 use super::enum_creation_dialog::WorkflowEnumData;
 
-static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "workflows-default-value-placeholder"));
+static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "default-value-placeholder"));
 const ARGUMENT_EDITOR_FONT_SIZE: f32 = 14.;
 const DROPDOWN_PADDING: f32 = 8.;
 const DROPDOWN_BORDER_RADIUS: f32 = 6.;
@@ -808,7 +808,7 @@ impl WorkflowArgSelector {
 
         let mut menu = Hoverable::new(self.enum_menu_mouse_state.clone(), |state| {
             let button = Text::new_inline(
-                crate::tr!("common", "common-new-label").to_string(),
+                crate::tr!("common", "new-label").to_string(),
                 appearance.ui_font_family(),
                 ARGUMENT_EDITOR_FONT_SIZE,
             )

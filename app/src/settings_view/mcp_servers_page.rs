@@ -48,7 +48,7 @@ pub enum InstallOrigin {
     Deeplink,
 }
 
-static PAGE_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-mcp-servers"));
+static PAGE_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-servers"));
 #[derive(Debug, Default, Copy, Clone)]
 pub enum MCPServersSettingsPage {
     #[default]
@@ -147,8 +147,8 @@ impl MCPServersSettingsPageView {
         ctx: &mut ViewContext<Self>,
     ) {
         let message = match server_name {
-            Some(name) => crate::tr!("settings", "settings-mcp-logged-out", name = name),
-            None => crate::tr!("settings", "settings-mcp-logged-out-generic"),
+            Some(name) => crate::tr!("settings", "mcp-logged-out", name = name),
+            None => crate::tr!("settings", "mcp-logged-out-generic"),
         };
         match item_id {
             ServerCardItemId::TemplatableMCP(_) => {
@@ -330,7 +330,7 @@ impl MCPServersSettingsPageView {
             log::warn!(
                 "Unrecognized autoinstall value '{autoinstall_param}': no matching gallery item found"
             );
-            self.add_error_toast(crate::tr!("settings", "settings-mcp-unknown-server", param = autoinstall_param), ctx);
+            self.add_error_toast(crate::tr!("settings", "mcp-unknown-server", param = autoinstall_param), ctx);
             return;
         };
 
@@ -358,7 +358,7 @@ impl MCPServersSettingsPageView {
             // gallery entry cannot be turned into a valid template. Surface the
             // failure to the user rather than silently returning.
             self.add_error_toast(
-                crate::tr!("settings", "settings-mcp-cannot-install", title = gallery_title),
+                crate::tr!("settings", "mcp-cannot-install", title = gallery_title),
                 ctx,
             );
             return;

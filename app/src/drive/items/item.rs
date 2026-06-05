@@ -446,15 +446,15 @@ impl<'a> WarpDriveRow<'a> {
             Owner::User { user_uid } => {
                 UserProfiles::as_ref(app)
                     .displayable_identifier_for_uid(user_uid)
-                    .unwrap_or_else(|| crate::tr!("drive", "drive-unknown-user"))
+                    .unwrap_or_else(|| crate::tr!("drive", "unknown-user"))
             }
             Owner::Team { team_uid, .. } => UserWorkspaces::as_ref(app)
                 .team_from_uid(team_uid)
                 .map(|team| team.name.clone())
-                .unwrap_or_else(|| crate::tr!("drive", "drive-unknown-team")),
+                .unwrap_or_else(|| crate::tr!("drive", "unknown-team")),
         };
 
-        let owner_label = crate::tr!("drive", "drive-from-owner", owner = owner_name.as_str());
+        let owner_label = crate::tr!("drive", "from-owner", owner = owner_name.as_str());
 
         let background = appearance.theme().surface_1();
         let text_color = appearance.theme().sub_text_color(background);
@@ -657,7 +657,7 @@ impl<'a> WarpDriveRow<'a> {
         Span::new(
             self.item
                 .display_name()
-                .unwrap_or_else(|| crate::tr!("drive", "drive-untitled")),
+                .unwrap_or_else(|| crate::tr!("drive", "untitled")),
             style,
         )
         .build()

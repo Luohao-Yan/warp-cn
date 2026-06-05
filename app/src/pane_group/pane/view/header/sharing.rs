@@ -186,7 +186,7 @@ impl<P: BackingView> PaneHeader<P> {
                 (
                     Icon::Share,
                     self.open_overlay == OpenOverlay::SharingDialog,
-                    crate::tr!("common", "common-share-label"),
+                    crate::tr!("common", "share-label"),
                 )
             } else {
                 (Icon::Link, false, "Copy link".to_string())
@@ -243,9 +243,9 @@ impl<P: BackingView> PaneHeader<P> {
         element.add_child(primary_button);
 
         if !editability.can_edit() {
-            let mut tooltip_text = crate::tr!("workspace", "workspace-read-only");
+            let mut tooltip_text = crate::tr!("workspace", "read-only");
             if matches!(editability, ContentEditability::RequiresLogin) {
-                tooltip_text.push_str(&crate::tr!("workspace", "workspace-sign-in-to-edit"));
+                tooltip_text.push_str(&crate::tr!("workspace", "sign-in-to-edit"));
             }
 
             let ui_builder = appearance.ui_builder().clone();

@@ -779,7 +779,7 @@ impl Action {
                     if let Some(window_id) = primary_window_id {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             let toast =
-                                DismissibleToast::error(crate::tr!("terminal", "terminal-invalid-uri"));
+                                DismissibleToast::error(crate::tr!("terminal", "invalid-uri"));
                             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                         });
                     }
@@ -1023,7 +1023,7 @@ pub fn handle_incoming_uri(url: &Url, ctx: &mut AppContext) {
         Err(e) => {
             if let Some(window_id) = primary_window_id {
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::error(crate::tr!("terminal", "terminal-invalid-uri-detail", error = format!("{e:?}")));
+                    let toast = DismissibleToast::error(crate::tr!("terminal", "invalid-uri-detail", error = format!("{e:?}")));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }

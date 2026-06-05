@@ -73,9 +73,9 @@ pub enum CommitSubAction {
 const EDITOR_FONT_SIZE: f32 = 12.;
 const EDITOR_MIN_HEIGHT: f32 = 72.;
 
-static CODE_REVIEW_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-changes"));
-static CODE_REVIEW_INCLUDE_UNSTAGED: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-include-unstaged"));
-static CODE_REVIEW_COMMIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-commit-message"));
+static CODE_REVIEW_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "changes"));
+static CODE_REVIEW_INCLUDE_UNSTAGED: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "include-unstaged"));
+static CODE_REVIEW_COMMIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "commit-message"));
 
 pub struct CommitState {
     pub(super) intent: CommitIntent,
@@ -247,7 +247,7 @@ pub(super) fn is_ready_to_confirm(state: &CommitState, app: &AppContext) -> bool
 /// user needs to take action, or `None` when no tooltip is needed.
 pub(super) fn confirm_tooltip(state: &CommitState, app: &AppContext) -> Option<String> {
     if !state.file_changes.is_empty() && commit_message(state, app).is_none() {
-        Some(crate::tr!("code_review", "code-review-commit-placeholder"))
+Some(crate::tr!("code_review", "commit-placeholder"))
     } else {
         None
     }

@@ -260,9 +260,9 @@ impl PlanAndTodoListView {
                 chip_content.finish(),
                 self.plan_button_mouse_state.clone(),
                 if is_agent_unaware_of_plan_edits {
-                    crate::tr!("ai", "ai-agent-unaware-plan-edits")
+                    crate::tr!("ai", "agent-unaware-plan-edits")
                 } else {
-                    crate::tr!("ai", "ai-view-plan")
+                    crate::tr!("ai", "view-plan")
                 },
                 corner_radius,
                 appearance,
@@ -417,7 +417,7 @@ impl PlanAndTodoListView {
             .render_chip_button(
                 content,
                 self.todo_button_mouse_state.clone(),
-                crate::tr!("ai", "ai-view-todo-list"),
+                crate::tr!("ai", "view-todo-list"),
                 corner_radius,
                 appearance,
             )

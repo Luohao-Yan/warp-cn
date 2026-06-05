@@ -18,8 +18,8 @@ pub use task::{
     cancel_task_silently, cancel_task_with_toast, AgentConfigSnapshot, AgentSource,
     AmbientAgentTask, AmbientAgentTaskState, TaskStatusMessage,
 };
-pub static OUT_OF_CREDITS_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-out-of-credits-upgrade"));
-pub static SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-server-overloaded-short"));
+pub static OUT_OF_CREDITS_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "out-of-credits-upgrade"));
+pub static SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "server-overloaded-short"));
 
 #[derive(Debug, thiserror::Error)]
 #[error("Invalid task ID: {0}")]

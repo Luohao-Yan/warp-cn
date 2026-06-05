@@ -58,10 +58,10 @@ const CHECKBOX_SIZE: f32 = 16.;
 
 use std::sync::LazyLock;
 
-static MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-edit-prompt"));
-static WARP_PROMPT_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-warp-terminal-prompt"));
-static SHELL_PROMPT_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-shell-prompt-ps1"));
-static RESTORE_DEFAULT_BUTTON: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-restore-default"));
+static MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "edit-prompt"));
+static WARP_PROMPT_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "warp-terminal-prompt"));
+static SHELL_PROMPT_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "shell-prompt-ps1"));
+static RESTORE_DEFAULT_BUTTON: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "restore-default"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -639,7 +639,7 @@ impl EditorModal {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .span(crate::tr!("common", "common-separator"))
+                        .span(crate::tr!("common", "separator"))
                         .with_style(UiComponentStyles {
                             font_size: Some(MODAL_CONTENT_FONT_SIZE),
                             ..Default::default()
@@ -786,7 +786,7 @@ impl EditorModal {
 
     fn render_buttons(&self, appearance: &Appearance) -> Box<dyn Element> {
         let cancel_button = self.render_primary_button(
-            crate::tr!("common", "common-cancel-label").clone(),
+            crate::tr!("common", "cancel-label").clone(),
             ButtonVariant::Outlined,
             false,
             self.mouse_state_handles.cancel_button_handle.clone(),
@@ -801,7 +801,7 @@ impl EditorModal {
             || (matches!(self.prompt_type, PromptType::Warp)
                 && self.chip_configurator.used_chips.is_empty());
         let save_button = self.render_primary_button(
-            crate::tr!("common", "common-save-changes-label").clone(),
+            crate::tr!("common", "save-changes-label").clone(),
             ButtonVariant::Accent,
             save_disabled,
             self.mouse_state_handles.save_button_handle.clone(),

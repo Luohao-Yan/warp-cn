@@ -58,13 +58,13 @@ const SETTINGS_PAGE_HORIZONTAL_PADDING: f32 = 56.;
 const SETTINGS_PAGE_MAX_CONTENT_WIDTH: f32 = 800.;
 
 static NEW_API_KEY_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-new-api-key-title"));
+    LazyLock::new(|| crate::tr!("settings", "new-api-key-title"));
 static API_KEY_DELETED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-api-key-deleted"));
+    LazyLock::new(|| crate::tr!("settings", "api-key-deleted"));
 static SETTINGS_NO_API_KEYS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-api-keys"));
+    LazyLock::new(|| crate::tr!("settings", "no-api-keys"));
 static SETTINGS_CREATE_KEY_DESC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-create-key-desc"));
+    LazyLock::new(|| crate::tr!("settings", "create-key-desc"));
 fn settings_sidebar_width_for_platform_page() -> f32 {
     if FeatureFlag::SettingsFile.is_enabled() {
         SETTINGS_SIDEBAR_WIDTH_WITH_FOOTER
@@ -233,7 +233,7 @@ impl PlatformPageView {
 
     fn show_create_api_key_modal(&mut self, ctx: &mut ViewContext<Self>) {
         self.create_api_key_modal_state
-            .set_title(Some(crate::tr!("settings", "settings-new-api-key-title")), ctx);
+            .set_title(Some(crate::tr!("settings", "new-api-key-title")), ctx);
         self.create_api_key_modal_state.open(ctx);
         ctx.emit(PlatformPageViewEvent::ShowCreateApiKeyModal);
     }
@@ -262,7 +262,7 @@ impl PlatformPageView {
             }
             CreateApiKeyModalEvent::Created { api_key } => {
                 self.create_api_key_modal_state
-                    .set_title(Some(crate::tr!("settings", "settings-save-your-key-title")), ctx);
+                    .set_title(Some(crate::tr!("settings", "save-your-key-title")), ctx);
                 let uid = api_key.uid.clone().into_inner();
                 self.ensure_expire_button_for_key(ctx, uid.clone());
 
@@ -509,7 +509,7 @@ impl PlatformPageWidget {
                             ButtonVariant::Outlined,
                             self.create_api_key_button_mouse_state.clone(),
                         )
-                        .with_text_label(format!("+ {}", crate::tr!("settings", "settings-create-key")))
+                        .with_text_label(format!("+ {}", crate::tr!("settings", "create-key")))
                         .build()
                         .on_click(|ctx, _, _| {
                             ctx.dispatch_typed_action(PlatformPageAction::ShowCreateApiKeyModal);
@@ -553,7 +553,7 @@ impl PlatformPageWidget {
             .with_main_axis_size(MainAxisSize::Max);
         header_row.add_child(self.render_resizable_header_cell(
             appearance,
-            &crate::tr!("settings", "settings-name-label"),
+            &crate::tr!("settings", "name-label"),
             view.api_key_table_column_widths.name.clone(),
             API_KEY_NAME_COLUMN_MIN_WIDTH,
             min_non_resizable_columns_width,
@@ -717,9 +717,9 @@ impl PlatformPageWidget {
         );
         if FeatureFlag::TeamApiKeys.is_enabled() || FeatureFlag::NamedAgents.is_enabled() {
             let scope_display = match key.scope {
-                ApiKeyScope::Personal => crate::tr!("settings", "settings-personal-label"),
-                ApiKeyScope::Team => crate::tr!("settings", "settings-team-label"),
-                ApiKeyScope::Agent => crate::tr!("settings", "settings-agent-label"),
+                ApiKeyScope::Personal => crate::tr!("settings", "personal-label"),
+                ApiKeyScope::Team => crate::tr!("settings", "team-label"),
+                ApiKeyScope::Agent => crate::tr!("settings", "agent-label"),
             };
             row.add_child(
                 Expanded::new(

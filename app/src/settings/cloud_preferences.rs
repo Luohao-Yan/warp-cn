@@ -47,11 +47,11 @@ pub enum Platform {
 impl std::fmt::Display for Platform {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Mac => write!(f, "{}", crate::tr!("settings", "settings-platform-mac")),
-            Self::Linux => write!(f, "{}", crate::tr!("settings", "settings-platform-linux")),
-            Self::Windows => write!(f, "{}", crate::tr!("settings", "settings-platform-windows")),
-            Self::Web => write!(f, "{}", crate::tr!("settings", "settings-platform-web")),
-            Self::Global => write!(f, "{}", crate::tr!("settings", "settings-platform-global")),
+            Self::Mac => write!(f, "{}", crate::tr!("settings", "platform-mac")),
+            Self::Linux => write!(f, "{}", crate::tr!("settings", "platform-linux")),
+            Self::Windows => write!(f, "{}", crate::tr!("settings", "platform-windows")),
+            Self::Web => write!(f, "{}", crate::tr!("settings", "platform-web")),
+            Self::Global => write!(f, "{}", crate::tr!("settings", "platform-global")),
         }
     }
 }

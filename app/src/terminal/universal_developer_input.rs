@@ -101,23 +101,23 @@ impl AtContextMenuDisabledReason {
         match self {
             #[cfg(not(target_family = "wasm"))]
             AtContextMenuDisabledReason::NoObjectsAvailable => {
-                crate::tr!("terminal", "terminal-udi-no-objects")
+                crate::tr!("terminal", "udi-no-objects")
             }
             #[cfg(not(target_family = "wasm"))]
             AtContextMenuDisabledReason::SshSession => {
-                crate::tr!("terminal", "terminal-udi-no-ssh")
+                crate::tr!("terminal", "udi-no-ssh")
             }
             #[cfg(not(target_family = "wasm"))]
             AtContextMenuDisabledReason::Subshell => {
-                crate::tr!("terminal", "terminal-udi-no-subshell")
+                crate::tr!("terminal", "udi-no-subshell")
             }
             #[cfg(target_family = "wasm")]
             AtContextMenuDisabledReason::Wasm => {
-                crate::tr!("terminal", "terminal-udi-no-fs")
+                crate::tr!("terminal", "udi-no-fs")
             }
             #[cfg(not(target_family = "wasm"))]
             AtContextMenuDisabledReason::DisabledInTerminalMode => {
-                crate::tr!("terminal", "terminal-udi-disabled-terminal-mode")
+                crate::tr!("terminal", "udi-disabled-terminal-mode")
             }
         }
     }
@@ -189,7 +189,7 @@ impl AtContextMenuDisabledReason {
     }
 }
 
-static AT_CONTEXT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-udi-attach-context"));
+static AT_CONTEXT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "udi-attach-context"));
 
 const BLURRED_OPACITY: Opacity = 50;
 
@@ -346,7 +346,7 @@ impl UniversalDeveloperInputButtonBar {
             #[cfg_attr(not(feature = "voice_input"), allow(unused_mut))]
             let mut button = ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::Microphone)
-                .with_tooltip(crate::tr!("terminal", "terminal-udi-voice-input"))
+                .with_tooltip(crate::tr!("terminal", "udi-voice-input"))
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left);
             #[cfg(feature = "voice_input")]
@@ -377,7 +377,7 @@ impl UniversalDeveloperInputButtonBar {
         let file_button_view = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::Plus)
-                .with_tooltip(crate::tr!("terminal", "terminal-udi-attach-file"))
+                .with_tooltip(crate::tr!("terminal", "udi-attach-file"))
                 .with_size(button_size)
                 .with_disabled_theme(UDIDisabledButtonTheme)
                 .with_tooltip_alignment(TooltipAlignment::Left)
@@ -389,7 +389,7 @@ impl UniversalDeveloperInputButtonBar {
         let slash_command_menu_view = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::SlashCommands)
-                .with_tooltip(crate::tr!("terminal", "terminal-udi-slash-commands"))
+                .with_tooltip(crate::tr!("terminal", "udi-slash-commands"))
                 .with_size(button_size)
                 .with_disabled_theme(UDIDisabledButtonTheme)
                 .with_tooltip_alignment(TooltipAlignment::Left)
@@ -680,9 +680,9 @@ impl UniversalDeveloperInputButtonBar {
         };
 
         let tooltip = if is_reader {
-            Some(crate::tr!("terminal", "terminal-udi-request-edit"))
+Some(crate::tr!("terminal", "udi-request-edit"))
         } else if is_agent_in_control {
-            Some(crate::tr!("terminal", "terminal-udi-mode-locked"))
+Some(crate::tr!("terminal", "udi-mode-locked"))
         } else {
             None
         };
@@ -988,7 +988,7 @@ fn build_renderable_option_config(
                 icon_color: fg_color,
                 label: None,
                 tooltip: Some(tooltip_config(
-                    crate::tr!("terminal", "terminal-udi-terminal"),
+                    crate::tr!("terminal", "udi-terminal"),
                     Some(terminal_mode_tooltip_subtext(terminal_keybindings)),
                     app,
                 )),
@@ -1004,7 +1004,7 @@ fn build_renderable_option_config(
                 icon_color: fg_color,
                 label: None,
                 tooltip: Some(tooltip_config(
-                    crate::tr!("terminal", "terminal-udi-agent-mode"),
+                    crate::tr!("terminal", "udi-agent-mode"),
                     Some(agent_mode_tooltip_subtext(terminal_keybindings)),
                     app,
                 )),

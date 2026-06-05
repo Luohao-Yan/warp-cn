@@ -99,7 +99,7 @@ impl EnableAutoReloadModalBody {
                             );
 
                             ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
-                                message: crate::tr!("terminal", "terminal-auto-reload-settings-updated").clone(),
+                                message: crate::tr!("terminal", "auto-reload-settings-updated").clone(),
                                 flavor: ToastFlavor::Success,
                             });
                             ctx.emit(EnableAutoReloadModalBodyEvent::Close);
@@ -109,7 +109,7 @@ impl EnableAutoReloadModalBody {
                         if me.update_workspace_settings_loading {
                             me.update_workspace_settings_loading = false;
                             ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
-                                message: crate::tr!("terminal", "terminal-failed-enable-autoreload").clone(),
+                                message: crate::tr!("terminal", "failed-enable-autoreload").clone(),
                                 flavor: ToastFlavor::Error,
                             });
                             ctx.notify();
@@ -212,13 +212,13 @@ impl EnableAutoReloadModalBody {
     fn render_content(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         let explanation_fragments = vec![
-            FormattedTextFragment::plain_text(crate::tr!("terminal", "terminal-when-enabled")),
-            FormattedTextFragment::bold(&crate::tr!("terminal", "terminal-auto-reload-label")),
+            FormattedTextFragment::plain_text(crate::tr!("terminal", "when-enabled")),
+            FormattedTextFragment::bold(&crate::tr!("terminal", "auto-reload-label")),
             FormattedTextFragment::plain_text(
-                &crate::tr!("terminal", "terminal-auto-reload-explanation"),
+                &crate::tr!("terminal", "auto-reload-explanation"),
             ),
             FormattedTextFragment::hyperlink(
-                crate::tr!("common", "common-learn-more-label").as_str(),
+                crate::tr!("common", "learn-more-label").as_str(),
                 "https://docs.warp.dev/support-and-community/plans-and-billing/add-on-credits#id-2.-enable-auto-reload",
             ),
         ];
@@ -278,9 +278,9 @@ impl EnableAutoReloadModalBody {
             .finish();
 
         let button_text = if self.update_workspace_settings_loading {
-            crate::tr!("common", "common-saving-label")
+            crate::tr!("common", "saving-label")
         } else {
-            crate::tr!("terminal", "terminal-enable-auto-reload")
+            crate::tr!("terminal", "enable-auto-reload")
         };
 
         let mut enable_button = appearance
@@ -387,7 +387,7 @@ impl warpui::TypedActionView for EnableAutoReloadModalBody {
                 let workspaces = UserWorkspaces::as_ref(ctx);
                 let Some(team_uid) = workspaces.current_team_uid() else {
                     ctx.emit(EnableAutoReloadModalBodyEvent::ShowToast {
-                        message: crate::tr!("terminal", "terminal-team-data-not-found")
+                        message: crate::tr!("terminal", "team-data-not-found")
                         .to_string(),
                         flavor: ToastFlavor::Error,
                     });
@@ -419,7 +419,7 @@ impl EnableAutoReloadModal {
         let body = ctx.add_typed_action_view(EnableAutoReloadModalBody::new);
 
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(crate::tr!("terminal", "terminal-enable-auto-reload-title").to_string()), body.clone(), ctx).with_body_style(
+            Modal::new(Some(crate::tr!("terminal", "enable-auto-reload-title").to_string()), body.clone(), ctx).with_body_style(
                 UiComponentStyles {
                     // Padding of 0 here since we add a horizontal bar that needs to span the full width in the body
                     // So we handle padding in the body itself

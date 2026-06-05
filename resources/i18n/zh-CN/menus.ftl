@@ -70,8 +70,3 @@ menus-edit-config = 编辑配置
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
 
-menus-menus-remove-config-confirm = { menus-remove-config-confirm }
-menus-menus-delete-config-undo-warning = { menus-delete-config-undo-warning }
-menus-menus-make-default = { menus-make-default }
-menus-menus-already-the-default = { menus-already-the-default }
-menus-menus-edit-config = { menus-edit-config }

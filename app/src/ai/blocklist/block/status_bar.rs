@@ -891,11 +891,11 @@ impl BlocklistAIStatusBar {
 
         let progress = ambient_agent_model.agent_progress()?;
         let progress_text = if progress.harness_started_at.is_some() {
-            crate::tr!("ai", "ai-starting-env-step-3")
+            crate::tr!("ai", "starting-env-step-3")
         } else if progress.claimed_at.is_some() {
-            crate::tr!("ai", "ai-creating-env-step-2")
+            crate::tr!("ai", "creating-env-step-2")
         } else {
-            crate::tr!("ai", "ai-connecting-host-step-1")
+            crate::tr!("ai", "connecting-host-step-1")
         };
         Some(render_warping_indicator_base(
             WarpingIndicatorProps {
@@ -933,11 +933,11 @@ impl BlocklistAIStatusBar {
                     color: Some(error_color),
                 },
                 MessageItem::Text {
-                    content: crate::tr!("ai", "ai-missing-github-auth").into(),
+                    content: crate::tr!("ai", "missing-github-auth").into(),
                     color: Some(error_color),
                 },
                 MessageItem::hyperlink(
-                    crate::tr!("ai", "ai-authenticate-github"),
+                    crate::tr!("ai", "authenticate-github"),
                     auth_url.to_owned(),
                     self.state_handles.github_auth_link.clone(),
                 ),
@@ -965,7 +965,7 @@ impl BlocklistAIStatusBar {
                     color: Some(color),
                 },
                 MessageItem::Text {
-                    content: crate::tr!("ai", "ai-cloud-agent-cancelled").into(),
+                    content: crate::tr!("ai", "cloud-agent-cancelled").into(),
                     color: Some(color),
                 },
             ]));
@@ -1016,7 +1016,7 @@ fn render_agent_tip(tip: &AgentTip, app: &AppContext) -> Box<dyn Element> {
         fragments.push(FormattedTextFragment::hyperlink_action(text, action));
     } else if let Some(link_target) = tip.link.clone() {
         fragments.push(FormattedTextFragment::plain_text(" "));
-        fragments.push(FormattedTextFragment::hyperlink(crate::tr!("common", "common-learn-more-label").as_str(), link_target));
+        fragments.push(FormattedTextFragment::hyperlink(crate::tr!("common", "learn-more-label").as_str(), link_target));
     }
 
     let formatted_text =
@@ -1076,9 +1076,9 @@ fn render_fallback_explanation<V: View>(
         .map(|info| info.base_model_name.as_str());
     let text = match primary_name {
         Some(primary) => {
-            crate::tr!("ai", "ai-primary-model-failed-with-name", primary = primary)
+            crate::tr!("ai", "primary-model-failed-with-name", primary = primary)
         }
-        None => crate::tr!("ai", "ai-primary-model-failed"),
+        None => crate::tr!("ai", "primary-model-failed"),
     };
     let appearance = Appearance::as_ref(app);
     Text::new_inline(
@@ -1131,8 +1131,8 @@ fn resolve_fallback_warping_message<V: View>(
         return None;
     }
     Some(match display_name.as_deref() {
-        Some(name) => crate::tr!("ai", "ai-warping-with-model", name = name),
-        None => crate::tr!("ai", "ai-warping-with-another-model"),
+        Some(name) => crate::tr!("ai", "warping-with-model", name = name),
+        None => crate::tr!("ai", "warping-with-another-model"),
     })
 }
 
@@ -1170,7 +1170,7 @@ impl View for BlocklistAIStatusBar {
                     WarpingIndicatorProps {
                         icon: None,
                         warping_indicator_text: MaybeShimmeringText::Shimmering {
-                            text: crate::tr!("ai", "ai-setting-up-env").into(),
+                            text: crate::tr!("ai", "setting-up-env").into(),
                             shimmering_text_handle: self.shimmering_text_handle.clone(),
                         },
                         non_shimmering_text: None,
@@ -1193,8 +1193,8 @@ impl View for BlocklistAIStatusBar {
                     .current_message()
                     .is_none()
             {
-                let exit_text = crate::tr!("ai", "ai-exit");
-                let exit_tooltip = crate::tr!("ai", "ai-exit-agent-input");
+                let exit_text = crate::tr!("ai", "exit");
+                let exit_tooltip = crate::tr!("ai", "exit-agent-input");
                 render_warping_indicator_base(
                     WarpingIndicatorProps {
                         icon: Some(icons::gray_clock_icon(appearance).finish()),

@@ -49,9 +49,9 @@ pub enum ResourceCenterFooterItem {
 impl ResourceCenterFooterItem {
     pub fn ui_label(&self) -> String {
         match self {
-            ResourceCenterFooterItem::Docs => crate::tr!("resource_center", "resource-center-docs"),
-            ResourceCenterFooterItem::Slack => crate::tr!("resource_center", "resource-center-slack"),
-            ResourceCenterFooterItem::Feedback => crate::tr!("resource_center", "resource-center-feedback"),
+            ResourceCenterFooterItem::Docs => crate::tr!("resource_center", "docs"),
+            ResourceCenterFooterItem::Slack => crate::tr!("resource_center", "slack"),
+            ResourceCenterFooterItem::Feedback => crate::tr!("resource_center", "feedback"),
         }
     }
 
@@ -331,8 +331,7 @@ impl ResourceCenterView {
         let current_page = self.page_views.get(self.current_view_index).map(|x| x.page);
 
         let header_text = match current_page {
-            Some(ResourceCenterPage::Keybindings) => crate::tr!("common", "keyboard-shortcuts"),
-            _ => {
+            Some(ResourceCenterPage::Keybindings) => crate::tr!("common", "keyboard-shortcuts"), _ => {
                 if FeatureFlag::AvatarInTabBar.is_enabled() {
                     String::new()
                 } else {

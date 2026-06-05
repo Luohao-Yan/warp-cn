@@ -46,7 +46,7 @@ use std::sync::LazyLock;
 use super::output::{action_icon, Props};
 use super::WithContentItemSpacing;
 
-static GENERATING_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-generating-title"));
+static GENERATING_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "generating-title"));
 const ORCHESTRATION_COLLAPSED_MAX_HEIGHT: f32 = 200.;
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct OrchestrationParticipant {
@@ -57,7 +57,7 @@ struct OrchestrationParticipant {
 impl OrchestrationParticipant {
     fn orchestrator() -> Self {
         Self {
-            display_name: crate::tr!("ai", "ai-orchestrator"),
+            display_name: crate::tr!("ai", "orchestrator"),
             avatar: OrchestrationAvatar::Orchestrator,
         }
     }

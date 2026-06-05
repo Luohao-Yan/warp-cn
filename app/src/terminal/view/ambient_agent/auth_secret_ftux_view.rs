@@ -150,7 +150,7 @@ impl AuthSecretFtuxView {
                     if let Some(state) = me.creation_state.as_mut() {
                         state.is_saving = false;
                         let window_id = ctx.window_id();
-                        let message = crate::tr!("agent_cloud", "agent-cloud-failed-save-api-key", error = error.as_str());
+                        let message = crate::tr!("agent_cloud", "failed-save-api-key", error = error.as_str());
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
                                 DismissibleToast::error(message),
@@ -328,7 +328,7 @@ impl AuthSecretFtuxView {
         if trimmed_name.is_empty() {
             HarnessAvailabilityModel::handle(ctx).update(ctx, |_model, ctx| {
                 ctx.emit(HarnessAvailabilityEvent::AuthSecretCreationFailed {
-                    error: crate::tr!("agent_cloud", "agent-cloud-secret-name-required"),
+                    error: crate::tr!("agent_cloud", "secret-name-required"),
                 });
             });
             return;
@@ -544,7 +544,7 @@ impl AuthSecretFtuxView {
         row.add_child(Expanded::new(1., Empty::new().finish()).finish());
 
         row.add_child(self.render_button(
-            crate::tr!("common", "common-cancel-label"),
+            crate::tr!("common", "cancel-label"),
             self.cancel_mouse_state.clone(),
             None,
             AuthSecretFtuxAction::Cancel,
@@ -553,7 +553,7 @@ impl AuthSecretFtuxView {
 
         let accent_fill = Appearance::as_ref(app).theme().accent();
         row.add_child(self.render_button(
-            crate::tr!("common", "common-continue-label"),
+            crate::tr!("common", "continue-label"),
             self.continue_mouse_state.clone(),
             Some(accent_fill),
             AuthSecretFtuxAction::Continue,

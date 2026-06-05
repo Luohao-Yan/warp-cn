@@ -37,21 +37,21 @@ const LEFT_PANEL_WIDTH: f32 = 333.;
 const CORNER_RADIUS: f32 = 20.;
 const PANEL_PADDING: f32 = 24.;
 
-static AUTO_RELOAD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-auto-reload-title"));
-static AUTO_RELOAD_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-auto-reload-description"));
-static WELCOME_NEW_BUSINESS_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-welcome-new-business-plan"));
-static WELCOME_WARP_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-welcome-warp-build"));
-static INTRO_BUSINESS_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-intro-business-plan"));
-static INTRO_BUILD_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-intro-build-plan"));
-static PRICING_HEADER_BUSINESS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-pricing-header-business-plan"));
-static PRICING_HEADER_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-pricing-header-build-plan"));
-static FEATURES_HEADER_BUSINESS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-features-header-business-plan"));
-static FEATURES_HEADER_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-features-header-build-plan"));
-static ACCESS_RELOAD_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-access-reload-credits"));
-static BYOK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-bring-your-own-api-key"));
-static SSO: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-saml-based-sso"));
-static ZDR: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-team-wide-zero-data-retention"));
-static AND_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-and-more"));
+static AUTO_RELOAD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "auto-reload-title"));
+static AUTO_RELOAD_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "auto-reload-description"));
+static WELCOME_NEW_BUSINESS_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "welcome-new-business-plan"));
+static WELCOME_WARP_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "welcome-warp-build"));
+static INTRO_BUSINESS_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "intro-business-plan"));
+static INTRO_BUILD_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "intro-build-plan"));
+static PRICING_HEADER_BUSINESS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "pricing-header-business-plan"));
+static PRICING_HEADER_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "pricing-header-build-plan"));
+static FEATURES_HEADER_BUSINESS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "features-header-business-plan"));
+static FEATURES_HEADER_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "features-header-build-plan"));
+static ACCESS_RELOAD_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "access-reload-credits"));
+static BYOK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "bring-your-own-api-key"));
+static SSO: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "saml-based-sso"));
+static ZDR: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "team-wide-zero-data-retention"));
+static AND_MORE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "and-more"));
 
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub enum BuildPlanMigrationModalViewAction {
@@ -209,7 +209,7 @@ impl BuildPlanMigrationModal {
             UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
                 self.is_updating = false;
                 ctx.emit(BuildPlanMigrationModalEvent::ShowToast {
-                    message: crate::tr!("workspace", "workspace-failed-auto-reload"),
+                    message: crate::tr!("workspace", "failed-auto-reload"),
                     flavor: ToastFlavor::Error,
                 });
                 ctx.notify();
@@ -239,8 +239,7 @@ impl BuildPlanMigrationModal {
                         .enumerate()
                         .map(|(i, option)| {
                             DropdownItem::new(
-                                crate::tr!("workspace", "workspace-reload-denomination",
-                                    price = format!("{}", option.price_usd_cents / 100),
+                                crate::tr!("workspace", "reload-denomination", price = format!("{}", option.price_usd_cents / 100),
                                     credits = option.credits.separate_with_commas(),
                                 ),
                                 BuildPlanMigrationModalViewAction::SelectReloadDenomination(i),
@@ -281,7 +280,7 @@ impl BuildPlanMigrationModal {
             })
             .finish();
 
-        let auto_reload_text = crate::tr!("workspace", "workspace-auto-reload");
+        let auto_reload_text = crate::tr!("workspace", "auto-reload");
         let label = FormattedTextElement::from_str(auto_reload_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(
                 theme,
@@ -320,9 +319,9 @@ impl BuildPlanMigrationModal {
 
     fn render_get_started_button(&self, appearance: &Appearance) -> Box<dyn Element> {
         let button_text = if self.is_updating {
-            crate::tr!("workspace", "workspace-saving-label")
+            crate::tr!("workspace", "saving-label")
         } else {
-            crate::tr!("workspace", "workspace-get-started")
+            crate::tr!("workspace", "get-started")
         };
 
         let button_font_color = self.is_updating.then_some(
@@ -565,14 +564,14 @@ impl BuildPlanMigrationModal {
         );
 
         let price_monthly = Self::create_bullet_item(
-            crate::tr!("workspace", "workspace-price-per-user-month", price = format!("{}", base_plan_prices.0 / 100)),
+            crate::tr!("workspace", "price-per-user-month", price = format!("{}", base_plan_prices.0 / 100)),
             font_family,
             14.,
             text_color,
         );
 
         let price_annual = Self::create_bullet_item(
-            crate::tr!("workspace", "workspace-price-per-user-month-annual", price = format!("{}", base_plan_prices.1 / 100)),
+            crate::tr!("workspace", "price-per-user-month-annual", price = format!("{}", base_plan_prices.1 / 100)),
             font_family,
             14.,
             text_color,
@@ -592,7 +591,7 @@ impl BuildPlanMigrationModal {
         );
 
         let base_credits = Self::create_bullet_item(
-            crate::tr!("workspace", "workspace-base-credits-per-month", credits = base_credits_limit.separate_with_commas()),
+            crate::tr!("workspace", "base-credits-per-month", credits = base_credits_limit.separate_with_commas()),
             font_family,
             14.,
             text_color,
@@ -643,7 +642,7 @@ impl BuildPlanMigrationModal {
         // Parse the FTL key with <a> tag for the hyperlink part
         // The FTL entry: workspace-learn-more-pricing-page = Learn more on our <a>pricing page</a>.
         // We split at the <a> tag boundaries
-        let learn_more_text = crate::tr!("workspace", "workspace-learn-more-pricing-page");
+        let learn_more_text = crate::tr!("workspace", "learn-more-pricing-page");
         let learn_more_fragments = if let Some(start) = learn_more_text.find("<a>") {
             let end = learn_more_text.find("</a>").unwrap_or(learn_more_text.len());
             let before = &learn_more_text[..start];
@@ -812,7 +811,7 @@ impl TypedActionView for BuildPlanMigrationModal {
                 let workspaces = UserWorkspaces::as_ref(ctx);
                 let Some(team_uid) = workspaces.current_team_uid() else {
                     ctx.emit(BuildPlanMigrationModalEvent::ShowToast {
-                        message: crate::tr!("workspace", "workspace-oops-team-data-not-found"),
+                        message: crate::tr!("workspace", "oops-team-data-not-found"),
                         flavor: ToastFlavor::Error,
                     });
                     return;

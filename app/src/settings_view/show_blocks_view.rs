@@ -20,21 +20,21 @@ use std::sync::{Arc, LazyLock};
 use warp_core::ui::theme::color::internal_colors;
 
 static SETTINGS_NO_SHARED_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-no-shared-blocks"));
+    LazyLock::new(|| crate::tr!("settings", "no-shared-blocks"));
 static SETTINGS_GETTING_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-getting-blocks"));
+    LazyLock::new(|| crate::tr!("settings", "getting-blocks"));
 static SETTINGS_FAILED_LOAD_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-load-blocks"));
+    LazyLock::new(|| crate::tr!("settings", "failed-load-blocks"));
 static SETTINGS_UNSHARE_BLOCK: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-unshare-block"));
+    LazyLock::new(|| crate::tr!("settings", "unshare-block"));
 static SETTINGS_UNSHARE_BLOCK_CONFIRMATION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-unshare-block-confirmation"));
+    LazyLock::new(|| crate::tr!("settings", "unshare-block-confirmation"));
 static SETTINGS_LINK_COPIED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-link-copied"));
+    LazyLock::new(|| crate::tr!("settings", "link-copied"));
 static SETTINGS_BLOCK_UNSUCCESS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-block-successfully-unshared"));
+    LazyLock::new(|| crate::tr!("settings", "block-successfully-unshared"));
 static SETTINGS_BLOCK_UNSHARE_FAILED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-to-unshare-block"));
+    LazyLock::new(|| crate::tr!("settings", "failed-to-unshare-block"));
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{
@@ -822,7 +822,7 @@ impl SettingsWidget for ShowBlocksWidget {
             );
         }
 
-        let header = render_page_title(&crate::tr!("settings", "settings-shared-blocks"), HEADER_FONT_SIZE, appearance);
+        let header = render_page_title(&crate::tr!("settings", "shared-blocks"), HEADER_FONT_SIZE, appearance);
         let col = Flex::column()
             .with_child(Container::new(header).with_margin_bottom(24.).finish())
             .with_child(Expanded::new(1., stack.finish()).finish());

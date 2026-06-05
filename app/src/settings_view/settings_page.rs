@@ -561,7 +561,7 @@ pub fn render_info_icon<T: Clone + Action>(
             13.,
             additional_info
                 .tooltip_override_text
-                .unwrap_or(crate::tr!("settings", "settings-click-learn-more-docs")),
+                .unwrap_or(crate::tr!("settings", "click-learn-more-docs")),
             additional_info.mouse_state.clone(),
         )
         .on_click(move |ctx, _, _| {
@@ -587,7 +587,7 @@ pub fn render_local_only_icon(
         .ui_builder()
         .local_only_icon_with_tooltip(
             13.,
-            custom_tooltip.unwrap_or(crate::tr!("settings", "settings-local-only-tooltip")),
+            custom_tooltip.unwrap_or(crate::tr!("settings", "local-only-tooltip")),
             mouse_state.clone(),
         )
         .finish();
@@ -1007,7 +1007,7 @@ pub(crate) fn render_settings_info_banner(
 }
 
 static WORKSPACE_OVERRIDE_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-workspace-override-tooltip")
+    crate::tr!("settings", "workspace-override-tooltip")
 });
 
 pub struct InputListItem<SettingsPageAction: Action + Clone> {
@@ -1905,5 +1905,5 @@ pub(super) fn build_reset_button(
             font_size: Some(appearance.ui_font_size() * 0.8),
             ..Default::default()
         })
-        .with_text_label(crate::tr!("settings", "settings-reset-to-default"))
+        .with_text_label(crate::tr!("settings", "reset-to-default"))
 }

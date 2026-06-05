@@ -144,7 +144,7 @@ lazy_static! {
 const HAS_PENDING_CLI_ACTION_CONTEXT_KEY: &str = "HasPendingCLIAgentAction";
 const HAS_PENDING_NON_TRANSFER_CONTROL_ACTION_CONTEXT_KEY: &str =
     "HasPendingNonTransferControlCLIAgentAction";
-static BLOCKED_ACTION_MESSAGE_FOR_TRANSFER_CONTROL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-blocked-transfer-control"));
+static BLOCKED_ACTION_MESSAGE_FOR_TRANSFER_CONTROL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "blocked-transfer-control"));
 static AI_ALLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-allow-btn"));
 static AI_REFINE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-refine-btn"));
 static AI_TAKE_OVER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-take-over-btn"));
@@ -1450,7 +1450,7 @@ impl TypedActionView for CLISubagentView {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::success(crate::tr!("ai_assistant", "ai-assistant-copied-to-clipboard")),
+                        DismissibleToast::success(crate::tr!("ai_assistant", "copied-to-clipboard")),
                         window_id,
                         ctx,
                     );

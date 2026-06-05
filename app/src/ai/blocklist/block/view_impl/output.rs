@@ -143,7 +143,7 @@ use warpui::{
     Action, AppContext, Element, ModelHandle, SingletonEntity, View, ViewHandle,
 };
 
-static BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-blocked-upload-artifact"));
+static BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "blocked-upload-artifact"));
 
 /// Data required to render the AI block output component.
 #[derive(Copy, Clone)]

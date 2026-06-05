@@ -69,10 +69,10 @@ pub enum GeneratedCommandMetadataError {
 impl GeneratedCommandMetadataError {
     pub fn user_facing_message(&self) -> String {
         match self {
-            Self::BadCommand => crate::tr!("drive", "drive-workflow-bad-command"),
-            Self::AiProviderError => crate::tr!("drive", "drive-workflow-ai-provider-error"),
-            Self::RateLimited => crate::tr!("drive", "drive-workflow-rate-limited"),
-            Self::Other => crate::tr!("drive", "drive-workflow-ai-provider-error"),
+            Self::BadCommand => crate::tr!("drive", "workflow-bad-command"),
+            Self::AiProviderError => crate::tr!("drive", "workflow-ai-provider-error"),
+            Self::RateLimited => crate::tr!("drive", "workflow-rate-limited"),
+            Self::Other => crate::tr!("drive", "workflow-ai-provider-error"),
         }
     }
 }
@@ -148,7 +148,7 @@ impl WorkflowModal {
                                     if has_admin_permissions {
                                         ctx.emit(WorkflowModalEvent::AiAssistUpgradeError(Some(team.uid), current_user_id));
                                     } else {
-                                        ctx.emit(WorkflowModalEvent::AiAssistError(crate::tr!("drive", "drive-workflow-out-of-credits-admin")));
+                                        ctx.emit(WorkflowModalEvent::AiAssistError(crate::tr!("drive", "workflow-out-of-credits-admin")));
                                     }
                                 } else {
                                     ctx.emit(WorkflowModalEvent::AiAssistError(message.clone()));

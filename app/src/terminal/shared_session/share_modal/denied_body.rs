@@ -11,8 +11,8 @@ use super::style::{self, MODAL_PADDING};
 
 use std::sync::LazyLock;
 
-static SESSION_BUILD_FREE_PLAN_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-shared-session-denied-subheader"));
-static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-view-plans"));
+static SESSION_BUILD_FREE_PLAN_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "shared-session-denied-subheader"));
+static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "view-plans"));
 
 pub struct DeniedBody {
     button_mouse_state: MouseStateHandle,

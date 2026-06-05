@@ -32,40 +32,40 @@ use warpui::{
 };
 
 static TMUX_NOT_INSTALLED_ERROR: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-tmux-not-installed")
+    crate::tr!("terminal", "ssh-tmux-not-installed")
 });
 static UNSUPPORTED_TMUX_VERSION_ERROR: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-unsupported-tmux")
+    crate::tr!("terminal", "ssh-unsupported-tmux")
 });
 static TMUX_FAILED_ERROR: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-tmux-failed")
+    crate::tr!("terminal", "ssh-tmux-failed")
 });
 static WARPIFY_TIMEOUT_ERROR: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-warpify-timeout")
+    crate::tr!("terminal", "ssh-warpify-timeout")
 });
 static UNSUPPORTED_SHELL_ERROR: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-unsupported-shell")
+    crate::tr!("terminal", "ssh-unsupported-shell")
 });
 static TMUX_INSTALL_FAILED_ERROR: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-tmux-install-error")
+    crate::tr!("terminal", "ssh-tmux-install-error")
 });
 static SSH_ERROR_WARPIFYING_TITLE: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-error-warpifying-title")
+    crate::tr!("terminal", "ssh-error-warpifying-title")
 });
 static SSH_FEEDBACK_MESSAGE_BEFORE_LINK: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-feedback-message-before-link")
+    crate::tr!("terminal", "ssh-feedback-message-before-link")
 });
 static SSH_FEEDBACK_LINK_TEXT: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-feedback-link-text")
+    crate::tr!("terminal", "ssh-feedback-link-text")
 });
 static SSH_FEEDBACK_MESSAGE_AFTER_LINK: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-feedback-message-after-link")
+    crate::tr!("terminal", "ssh-feedback-message-after-link")
 });
 static SSH_WARPIFY_WITHOUT_TMUX: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-warpify-without-tmux")
+    crate::tr!("terminal", "ssh-warpify-without-tmux")
 });
 static SSH_CONTINUE_WITHOUT_WARPIFICATION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("terminal", "terminal-ssh-continue-without-warpification")
+    crate::tr!("terminal", "ssh-continue-without-warpification")
 });
 
 const SSH_GITHUB_ISSUE_URL: &str = "https://github.com/warpdotdev/Warp/issues/new?assignees=&labels=Bugs,SSH-tmux&projects=&template=03_ssh_tmux.yml";
@@ -99,28 +99,28 @@ impl WarpificationUnavailableReason {
     fn error_title(&self) -> String {
         match self {
             WarpificationUnavailableReason::TmuxNotInstalled { .. } => {
-                crate::tr!("terminal", "terminal-ssh-tmux-not-installed-title")
+                crate::tr!("terminal", "ssh-tmux-not-installed-title")
             }
             WarpificationUnavailableReason::UnsupportedTmuxVersion { .. } => {
-                crate::tr!("terminal", "terminal-ssh-unsupported-tmux-title")
+                crate::tr!("terminal", "ssh-unsupported-tmux-title")
             }
             WarpificationUnavailableReason::TmuxFailed => {
-                crate::tr!("terminal", "terminal-ssh-tmux-failed-title")
+                crate::tr!("terminal", "ssh-tmux-failed-title")
             }
             WarpificationUnavailableReason::Timeout {
                 is_tmux_install, ..
             } => {
                 if *is_tmux_install {
-                    crate::tr!("terminal", "terminal-ssh-tmux-install-timeout-title")
+                    crate::tr!("terminal", "ssh-tmux-install-timeout-title")
                 } else {
-                    crate::tr!("terminal", "terminal-ssh-warpify-timeout-title")
+                    crate::tr!("terminal", "ssh-warpify-timeout-title")
                 }
             }
             WarpificationUnavailableReason::UnsupportedShell { .. } => {
-                crate::tr!("terminal", "terminal-ssh-unsupported-shell-title")
+                crate::tr!("terminal", "ssh-unsupported-shell-title")
             }
             WarpificationUnavailableReason::TmuxInstallFailed { .. } => {
-                crate::tr!("terminal", "terminal-ssh-tmux-install-error-title")
+                crate::tr!("terminal", "ssh-tmux-install-error-title")
             }
         }
     }

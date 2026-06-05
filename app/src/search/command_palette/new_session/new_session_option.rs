@@ -7,10 +7,10 @@ use std::fmt;
 use std::sync::LazyLock;
 use warpui::Action;
 
-static DIR_DOWN: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-down").clone());
-static DIR_RIGHT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-right").clone());
-static DIR_UP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-up").clone());
-static DIR_LEFT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-dir-left").clone());
+static DIR_DOWN: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-down").clone());
+static DIR_RIGHT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-right").clone());
+static DIR_UP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-up").clone());
+static DIR_LEFT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-left").clone());
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct NewSessionOptionId(pub(crate) String);
@@ -87,11 +87,11 @@ impl NewSessionOption {
 impl NewSessionOption {
     pub(super) fn new(id: NewSessionOptionId, config: NewSessionConfig) -> Self {
         let description = match &config {
-            NewSessionConfig::NewTab(shell) => crate::tr!("search", "search-new-tab-shell")
+            NewSessionConfig::NewTab(shell) => crate::tr!("search", "new-tab-shell")
                 .replace("{ $shell }", shell.short_name().as_ref()),
-            NewSessionConfig::NewWindow(shell) => crate::tr!("search", "search-new-window-shell")
+            NewSessionConfig::NewWindow(shell) => crate::tr!("search", "new-window-shell")
                 .replace("{ $shell }", shell.short_name().as_ref()),
-            NewSessionConfig::Split(direction, shell) => crate::tr!("search", "search-split-pane-shell")
+            NewSessionConfig::Split(direction, shell) => crate::tr!("search", "split-pane-shell")
                 .replace("{ $direction }", &direction.to_string())
                 .replace("{ $shell }", shell.short_name().as_ref()),
         };

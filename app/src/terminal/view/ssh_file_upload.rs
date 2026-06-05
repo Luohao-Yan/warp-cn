@@ -302,7 +302,7 @@ impl FileUpload {
         if let FileUploadStatus::AwaitingPassword = file.status {
             session_action_row.add_child(
                 FormattedTextElement::from_str(
-                    crate::tr!("terminal", "terminal-waiting-for-password"),
+                    crate::tr!("terminal", "waiting-for-password"),
                     font_family,
                     font_size,
                 )
@@ -365,9 +365,9 @@ impl FileUpload {
     /// assembly.
     fn render_file_detail_text(&self, file: &FileUploadInfo) -> FormattedText {
         let status_string = match file.status {
-            FileUploadStatus::Started | FileUploadStatus::AwaitingPassword => crate::tr!("terminal", "terminal-uploading"),
-            FileUploadStatus::Completed { successful: true } => crate::tr!("terminal", "terminal-uploaded"),
-            FileUploadStatus::Completed { successful: false } => crate::tr!("terminal", "terminal-failed-to-upload"),
+            FileUploadStatus::Started | FileUploadStatus::AwaitingPassword => crate::tr!("terminal", "uploading"),
+            FileUploadStatus::Completed { successful: true } => crate::tr!("terminal", "uploaded"),
+            FileUploadStatus::Completed { successful: false } => crate::tr!("terminal", "failed-to-upload"),
         };
 
         let mut file_iter = file.local_file_paths.iter().peekable();
@@ -416,7 +416,7 @@ impl FileUpload {
         let ui_builder = appearance.ui_builder().clone();
         Container::new(
             icon_button(appearance, Icon::X, true, file.clear_button.clone())
-                .with_tooltip(move || ui_builder.tool_tip(crate::tr!("terminal", "terminal-clear-upload")).build().finish())
+                .with_tooltip(move || ui_builder.tool_tip(crate::tr!("terminal", "clear-upload")).build().finish())
                 .build()
                 .on_click(move |event_ctx, _, _| {
                     event_ctx
@@ -434,10 +434,10 @@ impl FileUpload {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let view_session_text = if file.local_session_open {
-            crate::tr!("common", "common-close-label").clone()
+            crate::tr!("common", "close-label").clone()
         } else {
-            crate::tr!("common", "common-view-label")
-        } + " " + &crate::tr!("terminal", "terminal-upload-session");
+            crate::tr!("common", "view-label")
+        } + " " + &crate::tr!("terminal", "upload-session");
         let upload_id = file.upload_id;
         Container::new(
             appearance
@@ -460,7 +460,7 @@ impl FileUpload {
             FormattedTextElement::new(
                 FormattedText::new(vec![FormattedTextLine::Heading(FormattedTextHeader {
                     heading_size: 3,
-                    text: vec![FormattedTextFragment::plain_text(crate::tr!("terminal", "terminal-file-uploads"))],
+                    text: vec![FormattedTextFragment::plain_text(crate::tr!("terminal", "file-uploads"))],
                 })]),
                 appearance.ui_font_size(),
                 appearance.ui_font_family(),

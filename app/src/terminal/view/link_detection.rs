@@ -70,11 +70,11 @@ impl GridHighlightedLink {
                     .map(|path| path.is_dir())
                     .unwrap_or(false) =>
             {
-                crate::tr!("terminal", "terminal-open-folder")
+                crate::tr!("terminal", "open-folder")
             }
             #[cfg(feature = "local_fs")]
-            GridHighlightedLink::File(_) => crate::tr!("terminal", "terminal-open-file"),
-            GridHighlightedLink::Url(_) => crate::tr!("terminal", "terminal-open-link"),
+            GridHighlightedLink::File(_) => crate::tr!("terminal", "open-file"),
+            GridHighlightedLink::Url(_) => crate::tr!("terminal", "open-link"),
         }
     }
 }
@@ -157,11 +157,11 @@ impl RichContentLink {
         match &self {
             #[cfg(feature = "local_fs")]
             RichContentLink::FilePath { absolute_path, .. } if absolute_path.is_dir() => {
-                crate::tr!("terminal", "terminal-open-folder")
+                crate::tr!("terminal", "open-folder")
             }
             #[cfg(feature = "local_fs")]
-            RichContentLink::FilePath { .. } => crate::tr!("terminal", "terminal-open-file"),
-            RichContentLink::Url(_) => crate::tr!("terminal", "terminal-open-link"),
+            RichContentLink::FilePath { .. } => crate::tr!("terminal", "open-file"),
+            RichContentLink::Url(_) => crate::tr!("terminal", "open-link"),
         }
     }
 }

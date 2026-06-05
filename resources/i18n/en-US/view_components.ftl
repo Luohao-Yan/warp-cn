@@ -20,16 +20,7 @@ view-components-raw = Raw
 
 ## -- Double-prefix aliases --
 
-view_components-view-components-find-result-of = Result { $current } of { $total }.
-view_components-view-components-find-navigate-help = { view-components-find-navigate-help }
-view_components-view-components-find-no-results = { view-components-find-no-results }
-view_components-view-components-find-type-phrase = { view-components-find-type-phrase }
-view_components-view-components-find-escape-help = { view-components-find-escape-help }
-view_components-view-components-find-next-occurrence = { view-components-find-next-occurrence }
-view_components-view-components-find-prev-occurrence = { view-components-find-prev-occurrence }
-view_components-view-components-rendered = { view-components-rendered }
-view_components-view-components-raw = { view-components-raw }
-
 ## -- Case-sensitive label for find view ----------------------------------------
 
 view-components-case-sensitive = Aa
+

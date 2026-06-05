@@ -15,7 +15,7 @@ use warpui::elements::{
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
 
-static RULE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-rule-label").clone());
+static RULE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "rule-label").clone());
 
 const MAX_COMBINED_LENGTH: usize = 55;
 

@@ -146,7 +146,7 @@ impl FirstTimeCloudAgentSetupView {
             .with_spacing(HEADER_SPACING);
 
         // Title - 20px medium weight
-        let title = crate::tr!("agent_cloud", "agent-cloud-start-title");
+        let title = crate::tr!("agent_cloud", "start-title");
         column.add_child(
             Text::new(
                 title,
@@ -161,10 +161,10 @@ impl FirstTimeCloudAgentSetupView {
         // Description with "Visit docs" link
         let description_fragments = vec![
             FormattedTextFragment::plain_text(
-                format!("{} ", crate::tr!("agent_cloud", "agent-cloud-description-text")),
+                format!("{} ", crate::tr!("agent_cloud", "description-text")),
             ),
             FormattedTextFragment::hyperlink(
-                &crate::tr!("agent_cloud", "agent-cloud-visit-docs"),
+                &crate::tr!("agent_cloud", "visit-docs"),
                 "https://docs.warp.dev/agent-platform/cloud-agents/overview",
             ),
         ];
@@ -192,7 +192,7 @@ impl FirstTimeCloudAgentSetupView {
         let theme = appearance.theme();
 
         // Bold/semibold text in foreground color (per Figma: font-semibold text-[#e3e2df])
-        let subheading = crate::tr!("agent_cloud", "agent-cloud-subheading");
+        let subheading = crate::tr!("agent_cloud", "subheading");
         Text::new(
             subheading,
             appearance.ui_font_family(),
@@ -214,7 +214,7 @@ impl FirstTimeCloudAgentSetupView {
 
         // Badge with blue border
         let badge = Container::new(
-            Text::new(crate::tr!("terminal", "terminal-free-credits"), appearance.ui_font_family(), 12.)
+            Text::new(crate::tr!("terminal", "free-credits"), appearance.ui_font_family(), 12.)
                 .with_style(Properties::default().weight(Weight::Semibold))
                 .with_color(theme.accent().into())
                 .finish(),
@@ -227,9 +227,9 @@ impl FirstTimeCloudAgentSetupView {
 
         // Banner text - dynamic based on credits
         let credits_text = if credits == 1 {
-            crate::tr!("agent_cloud", "agent-cloud-credits-single")
+            crate::tr!("agent_cloud", "credits-single")
         } else {
-            crate::tr!("agent_cloud", "agent-cloud-credits-plural", count = credits as i64)
+            crate::tr!("agent_cloud", "credits-plural", count = credits as i64)
         };
         let text = Text::new(credits_text, appearance.ui_font_family(), 12.)
             .with_color(blended_colors::text_sub(theme, theme.surface_1()))

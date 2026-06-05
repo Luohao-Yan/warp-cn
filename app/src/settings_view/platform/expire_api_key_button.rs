@@ -9,7 +9,7 @@ use warpui::{
 use crate::ui_components::{buttons::icon_button, icons::Icon};
 
 static FAILED_DELETE_KEY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-delete-key"));
+    LazyLock::new(|| crate::tr!("settings", "failed-delete-key"));
 
 #[derive(PartialEq, Eq)]
 enum RequestState {

@@ -125,8 +125,8 @@ impl View for WebHandoffView {
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         let label = match &self.state {
-            HandoffState::LoadingFromHost | HandoffState::LoadingFromSessionCookie => crate::tr!("auth", "auth-loading"),
-            HandoffState::Failed => crate::tr!("auth", "auth-error-authenticating"),
+            HandoffState::LoadingFromHost | HandoffState::LoadingFromSessionCookie => crate::tr!("auth", "loading"),
+            HandoffState::Failed => crate::tr!("auth", "error-authenticating"),
         };
 
         LoginErrorModal::new(app)

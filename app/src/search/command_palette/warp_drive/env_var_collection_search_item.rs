@@ -62,7 +62,7 @@ impl SearchItem for EnvVarCollectionSearchItem {
                 .string_model
                 .title
                 .clone()
-                .unwrap_or_else(|| crate::tr!("common", "common-untitled-label").clone()),
+                .unwrap_or_else(|| crate::tr!("common", "untitled-label").clone()),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -166,8 +166,8 @@ impl SearchItem for EnvVarCollectionSearchItem {
             .string_model
             .title
             .clone()
-            .unwrap_or_else(|| crate::tr!("common", "common-untitled-label").clone());
-        crate::tr!("search", "search-env-var-a11y-label")
+            .unwrap_or_else(|| crate::tr!("common", "untitled-label").clone());
+        crate::tr!("search", "env-var-a11y-label")
             .replace("{ $title }", &title)
     }
 }

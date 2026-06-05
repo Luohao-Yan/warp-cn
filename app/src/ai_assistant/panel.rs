@@ -77,8 +77,8 @@ const TITLE_FONT_SIZE: f32 = 16.;
 const ZERO_STATE_HELP_TEXT_FONT_SIZE: f32 = 12.;
 
 static ZERO_STATE_HELP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "zero-state-help-text"));
-static SCRIPT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-zero-state-script-prompt"));
-static GIT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-zero-state-git-prompt"));
+static SCRIPT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "zero-state-script-prompt"));
+static GIT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "zero-state-git-prompt"));
 static FILES_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "zero-state-files-prompt"));
 
 // The placeholder texts are prepended with a space to give them cushion from the cursor.

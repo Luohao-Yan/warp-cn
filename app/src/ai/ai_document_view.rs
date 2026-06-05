@@ -78,7 +78,7 @@ pub fn init(app: &mut AppContext) {
         // Reuse the save file keybinding name and description
         // so that there's only one entry in settings reused for both cases.
         SAVE_FILE_BINDING_NAME,
-        crate::tr!("code", "code-save-file"),
+        crate::tr!("code", "save-file"),
         AIDocumentAction::SendUpdatedPlan,
     )
     .with_context_predicate(id!("AIDocumentView") & !id!("IMEOpen"))
@@ -146,7 +146,7 @@ impl From<PaneEvent> for AIDocumentEvent {
     }
 }
 
-pub static DEFAULT_PLANNING_DOCUMENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-default-planning-document-title"));
+pub static DEFAULT_PLANNING_DOCUMENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "default-planning-document-title"));
 
 /// Entry for the version history dropdown menu.
 struct VersionMenuEntry {
@@ -405,8 +405,8 @@ impl AIDocumentView {
         // Read the actual configured keybinding for the save action
         let save_action = keybinding_name_to_keystroke(SAVE_FILE_BINDING_NAME, ctx)
             .map(|k| k.displayed())
-            .unwrap_or_else(|| crate::tr!("common", "common-click-label").to_string());
-        let tooltip_text = crate::tr!("ai", "ai-plan-update-tooltip", save_action = save_action.as_str());
+            .unwrap_or_else(|| crate::tr!("common", "click-label").to_string());
+        let tooltip_text = crate::tr!("ai", "plan-update-tooltip", save_action = save_action.as_str());
         static UPDATE_AGENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-update-agent"));
         let update_plan_button = ctx.add_typed_action_view(move |_ctx| {
             ActionButton::new(&*UPDATE_AGENT_LABEL, PrimaryTheme)
@@ -1026,7 +1026,7 @@ impl AIDocumentView {
         // Sanitize the title for use as a filename
         let sanitized_title = safe_filename(&title);
         let filename = if sanitized_title.is_empty() {
-            format!("{}.md", crate::tr!("common", "common-untitled-label"))
+            format!("{}.md", crate::tr!("common", "untitled-label"))
         } else {
             format!("{sanitized_title}.md")
         };
@@ -1244,7 +1244,7 @@ impl TypedActionView for AIDocumentView {
                         .ai_controller()
                         .update(ctx, |controller, ctx| {
                             controller.send_user_query_in_conversation(
-                                crate::tr!("ai", "ai-updated-plan"),
+                                crate::tr!("ai", "updated-plan"),
                                 conversation_id,
                                 None,
                                 ctx,

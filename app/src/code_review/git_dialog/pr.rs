@@ -36,7 +36,7 @@ use crate::{
 };
 use warp_core::send_telemetry_from_ctx;
 
-static CODE_REVIEW_PR_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-changes"));
+static CODE_REVIEW_PR_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "changes"));
 
 /// PR-mode sub-actions, dispatched wrapped in `GitDialogAction::Pr`.
 #[derive(Clone, Debug, PartialEq)]

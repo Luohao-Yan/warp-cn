@@ -191,6 +191,6 @@ impl SearchItem for RepoSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("terminal", "terminal-search-repo", name = self.display_name.clone())
+        crate::tr!("terminal", "search-repo", name = self.display_name.clone())
     }
 }

@@ -16,10 +16,10 @@ use crate::{
     ui_components::dialog::{dialog_styles, Dialog},
 };
 
-static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-cancel"));
-static EMPTY_TRASH_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-confirm-empty-trash"));
-static EMPTY_TRASH_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-cannot-undo"));
-static EMPTY_TRASH_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-yes-empty-trash"));
+static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "cancel"));
+static EMPTY_TRASH_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "confirm-empty-trash"));
+static EMPTY_TRASH_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "cannot-undo"));
+static EMPTY_TRASH_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "yes-empty-trash"));
 
 // This follows our new design standard for confirmation dialogs (e.g. used in the session sharing dialog)
 // Design team has discouraged us from continuing to use CloudActionConfirmationDialog's current design

@@ -304,7 +304,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     if !FeatureFlag::SSHTmuxWrapper.is_enabled() {
         toggle_binding_pairs.push(ToggleSettingActionPair::new(
-            &crate::tr!("settings", "settings-warp-ssh-wrapper"),
+            &crate::tr!("settings", "warp-ssh-wrapper"),
             builder(SettingsAction::FeaturesPageToggle(
                 #[allow(deprecated)]
                 FeaturesPageAction::ToggleSshWrapper,
@@ -422,7 +422,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            &crate::tr!("settings", "settings-vim-unnamed-register"),
+            &crate::tr!("settings", "vim-unnamed-register"),
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleVimUnnamedSystemClipboard,
             )),
@@ -438,7 +438,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     toggle_binding_pairs.push(
         ToggleSettingActionPair::new(
-            &crate::tr!("settings", "settings-vim-status-bar"),
+            &crate::tr!("settings", "vim-status-bar"),
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleVimStatusBar,
             )),
@@ -530,7 +530,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         if windowing_system_is_customizable(app) {
             toggle_binding_pairs.push(
                 ToggleSettingActionPair::new(
-                    &crate::tr!("settings", "settings-wayland-window"),
+                    &crate::tr!("settings", "wayland-window"),
                     builder(SettingsAction::FeaturesPageToggle(
                         FeaturesPageAction::ToggleForceX11,
                     )),
@@ -548,7 +548,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(toggle_binding_pairs, app);
 
     app.register_fixed_bindings([FixedBinding::empty(
-        crate::tr!("settings", "settings-configure-global-hotkey"),
+        crate::tr!("settings", "configure-global-hotkey"),
         WorkspaceAction::ScrollToSettingsWidget {
             page: SettingsSection::Features,
             widget_id: GlobalHotkeyWidget::static_widget_id(),
@@ -668,61 +668,61 @@ lazy_static! {
 
 // i18n statics for category titles
 static SETTINGS_GENERAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-general"));
+    LazyLock::new(|| crate::tr!("settings", "general"));
 static SETTINGS_SESSION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-session"));
+    LazyLock::new(|| crate::tr!("settings", "session"));
 static SETTINGS_KEYS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-keys"));
+    LazyLock::new(|| crate::tr!("settings", "keys"));
 static SETTINGS_TEXT_EDITING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-text-editing"));
+    LazyLock::new(|| crate::tr!("settings", "text-editing"));
 static SETTINGS_TERMINAL_INPUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-terminal-input"));
+    LazyLock::new(|| crate::tr!("settings", "terminal-input"));
 static SETTINGS_TERMINAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-terminal"));
+    LazyLock::new(|| crate::tr!("settings", "terminal"));
 static SETTINGS_NOTIFICATIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-notifications"));
+    LazyLock::new(|| crate::tr!("settings", "notifications"));
 static SETTINGS_SYSTEM: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-system"));
+    LazyLock::new(|| crate::tr!("settings", "system"));
 
 // i18n statics for features page strings used in closures needing 'static
 static FEATURES_LONGER_THAN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-longer-than"));
+    LazyLock::new(|| crate::tr!("settings", "features-longer-than"));
 static FEATURES_SECONDS_TO_COMPLETE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-seconds-to-complete"));
+    LazyLock::new(|| crate::tr!("settings", "features-seconds-to-complete"));
 static FEATURES_KEYBINDING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-keybinding"));
+    LazyLock::new(|| crate::tr!("settings", "features-keybinding"));
 static FEATURES_PRESS_NEW_SHORTCUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-press-new-shortcut"));
+    LazyLock::new(|| crate::tr!("settings", "features-press-new-shortcut"));
 static FEATURES_CHANGE_KEYBINDING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-change-keybinding"));
+    LazyLock::new(|| crate::tr!("settings", "features-change-keybinding"));
 static FEATURES_ALLOWED_VALUES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-allowed-values"));
+    LazyLock::new(|| crate::tr!("settings", "features-allowed-values"));
 static FEATURES_DEFAULT_TERMINAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-default-terminal"));
+    LazyLock::new(|| crate::tr!("settings", "features-default-terminal"));
 static FEATURES_MAKE_DEFAULT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-make-default"));
+    LazyLock::new(|| crate::tr!("settings", "features-make-default"));
 static FEATURES_TOAST_VISIBLE_FOR: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-toast-visible-for"));
+    LazyLock::new(|| crate::tr!("settings", "features-toast-visible-for"));
 static FEATURES_SECONDS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-seconds"));
+    LazyLock::new(|| crate::tr!("settings", "features-seconds"));
 static FEATURES_CHARACTERS_WORD: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-characters-word"));
+    LazyLock::new(|| crate::tr!("settings", "features-characters-word"));
 static FEATURES_CHANGES_NEW_WINDOWS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-changes-new-windows"));
+    LazyLock::new(|| crate::tr!("settings", "features-changes-new-windows"));
 static FEATURES_ACCEPT_AUTOSUGGESTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-accept-autosuggestion"));
+    LazyLock::new(|| crate::tr!("settings", "features-accept-autosuggestion"));
 static FEATURES_OPEN_COMPLETIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-features-open-completions"));
+    LazyLock::new(|| crate::tr!("settings", "features-open-completions"));
 static DISPLAY_LANGUAGE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-display-language"));
+    LazyLock::new(|| crate::tr!("settings", "display-language"));
 static NOTIFY_AGENT_COMPLETE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-notify-agent-complete"));
+    LazyLock::new(|| crate::tr!("settings", "notify-agent-complete"));
 static NOTIFY_AGENT_ATTENTION_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-notify-agent-attention"));
+    LazyLock::new(|| crate::tr!("settings", "notify-agent-attention"));
 static NEW_TAB_PLACEMENT_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-new-tab-placement"));
+    LazyLock::new(|| crate::tr!("settings", "new-tab-placement"));
 static PREFERRED_GRAPHICS_BACKEND_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-preferred-graphics-backend"));
+    LazyLock::new(|| crate::tr!("settings", "preferred-graphics-backend"));
 static FEATURES_GLOBAL_HOTKEY_LABEL: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "features-global-hotkey"));
 static FEATURES_CTRL_TAB_BEHAVIOR_LABEL: LazyLock<String> =
@@ -770,7 +770,7 @@ fn block_maximum_rows_description() -> String {
         "1 million"
     };
 
-    crate::tr!("settings", "settings-features-limit-warning", max_rows = max_rows)
+    crate::tr!("settings", "features-limit-warning", max_rows = max_rows)
 }
 
 fn to_string(b: bool) -> String {
@@ -2158,22 +2158,22 @@ impl FeaturesPageView {
             let mut dropdown = Dropdown::new(ctx);
 
             let top = DropdownItem::new(
-                crate::tr!("settings", "settings-pin-to-top"),
+                crate::tr!("settings", "pin-to-top"),
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Top),
             );
 
             let bottom = DropdownItem::new(
-                crate::tr!("settings", "settings-pin-to-bottom"),
+                crate::tr!("settings", "pin-to-bottom"),
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Bottom),
             );
 
             let left = DropdownItem::new(
-                crate::tr!("settings", "settings-pin-to-left"),
+                crate::tr!("settings", "pin-to-left"),
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Left),
             );
 
             let right = DropdownItem::new(
-                crate::tr!("settings", "settings-pin-to-right"),
+                crate::tr!("settings", "pin-to-right"),
                 FeaturesPageAction::QuakeEditorSetPinPosition(QuakeModePinPosition::Right),
             );
 
@@ -3269,7 +3269,7 @@ impl FeaturesPageView {
         ctx: &mut ViewContext<Self>,
     ) {
         self.graphics_backend_dropdown.update(ctx, |dropdown, ctx| {
-            let default_label = crate::tr!("settings", "settings-default-backend");
+            let default_label = crate::tr!("settings", "default-backend");
             if let Some(window) = ctx.windows().platform_window(ctx.window_id()) {
                 let mut items = vec![DropdownItem::new(
                     default_label.clone(),
@@ -3384,8 +3384,8 @@ impl FeaturesPageView {
 
     fn new_tab_placement_dropdown_item_label(val: NewTabPlacement) -> String {
         match val {
-            NewTabPlacement::AfterAllTabs => crate::tr!("settings", "settings-after-all-tabs"),
-            NewTabPlacement::AfterCurrentTab => crate::tr!("settings", "settings-after-current-tab"),
+            NewTabPlacement::AfterAllTabs => crate::tr!("settings", "after-all-tabs"),
+            NewTabPlacement::AfterCurrentTab => crate::tr!("settings", "after-current-tab"),
         }
     }
 
@@ -3394,12 +3394,12 @@ impl FeaturesPageView {
         ctx: &mut ViewContext<Self>,
     ) {
         dropdown.update(ctx, |dropdown, ctx| {
-            let auto_label = crate::tr!("settings", "settings-auto-system");
+            let auto_label = crate::tr!("settings", "auto-system");
             let values: Vec<(&str, String)> = vec![
                 ("auto", auto_label),
-                ("en-US", crate::tr!("settings", "settings-lang-en-us")),
-                ("zh-CN", crate::tr!("settings", "settings-lang-zh-cn")),
-                ("ja", crate::tr!("settings", "settings-lang-ja")),
+                ("en-US", crate::tr!("settings", "lang-en-us")),
+                ("zh-CN", crate::tr!("settings", "lang-zh-cn")),
+                ("ja", crate::tr!("settings", "lang-ja")),
             ];
             let current = GeneralSettings::as_ref(ctx).language.clone();
 
@@ -3599,7 +3599,7 @@ impl FeaturesPageView {
                         .with_child(
                             Container::new(
                                 Text::new_inline(
-                                    crate::tr!("settings", "settings-width-pct"),
+                                    crate::tr!("settings", "width-pct"),
                                     appearance.ui_font_family(),
                                     appearance.ui_font_size(),
                                 )
@@ -3637,7 +3637,7 @@ impl FeaturesPageView {
                         .with_child(
                             Container::new(
                                 Text::new_inline(
-                                    crate::tr!("settings", "settings-height-pct"),
+                                    crate::tr!("settings", "height-pct"),
                                     appearance.ui_font_family(),
                                     appearance.ui_font_size(),
                                 )
@@ -3715,7 +3715,7 @@ impl FeaturesPageView {
                 .with_child(
                     appearance
                         .ui_builder()
-                        .span(crate::tr!("settings", "settings-autohides-focus"))
+                        .span(crate::tr!("settings", "autohides-focus"))
                         .build()
                         .with_margin_left(5.)
                         .finish(),
@@ -4262,7 +4262,7 @@ fn init_display_count_dropdown(
     ctx: &mut ViewContext<Dropdown<FeaturesPageAction>>,
 ) {
     let no_preference = DropdownItem::new(
-        crate::tr!("settings", "settings-active-screen"),
+        crate::tr!("settings", "active-screen"),
         //|| {
         FeaturesPageAction::QuakeEditorSetPinScreen(None), //}
     );
@@ -4286,7 +4286,7 @@ fn init_display_count_dropdown(
         Some(idx) if idx.is_valid_given_display_count(display_count) => {
             dropdown.set_selected_by_name(format!("{idx}"), ctx)
         }
-        _ => dropdown.set_selected_by_name(crate::tr!("settings", "settings-active-screen"), ctx),
+        _ => dropdown.set_selected_by_name(crate::tr!("settings", "active-screen"), ctx),
     };
 }
 
@@ -5192,7 +5192,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                 {
                     view.render_notification_toggle(
                         session_settings.notifications.play_notification_sound,
-                        crate::tr!("settings", "settings-play-notification-sounds"),
+                        crate::tr!("settings", "play-notification-sounds"),
                         FeaturesPageAction::ToggleNotificationSound,
                         view.button_mouse_states.notification_sound_checkbox.clone(),
                         appearance,
@@ -5535,7 +5535,7 @@ impl SettingsWidget for GlobalHotkeyWidget {
                 Flex::row()
                     .with_children([
                         ui_builder
-                            .span(crate::tr!("settings", "settings-not-supported-wayland"))
+                            .span(crate::tr!("settings", "not-supported-wayland"))
                             .build()
                             .finish(),
                         ui_builder
@@ -6422,7 +6422,7 @@ impl TabKeyBehaviorWidget {
             TabBehavior::Completions if view.autosuggestions_keystroke.is_empty() => {
                 // If the "Accept autosuggestions" keybinding is unbound, the
                 // user can always still accept with right arrow.
-                Some(crate::tr!("settings", "settings-features-tab-accepts-autosuggestion"))
+Some(crate::tr!("settings", "features-tab-accepts-autosuggestion"))
             }
             TabBehavior::Completions => Some(crate::tr!(
                 "settings",
@@ -6433,7 +6433,7 @@ impl TabKeyBehaviorWidget {
                 if *input_settings.completions_open_while_typing.value() =>
             {
                 if view.completions_keystroke.is_empty() {
-                    Some(crate::tr!("settings", "settings-features-completions-as-you-type"))
+Some(crate::tr!("settings", "features-completions-as-you-type"))
                 } else {
                     Some(crate::tr!(
                         "settings",
@@ -6443,7 +6443,7 @@ impl TabKeyBehaviorWidget {
                 }
             }
             TabBehavior::Autosuggestions if view.completions_keystroke.is_empty() => {
-                Some(crate::tr!("settings", "settings-features-completions-unbound"))
+Some(crate::tr!("settings", "features-completions-unbound"))
             }
             TabBehavior::Autosuggestions => Some(crate::tr!(
                 "settings",
@@ -6507,7 +6507,7 @@ impl SettingsWidget for TabKeyBehaviorWidget {
             .with_child(
                 appearance
                     .ui_builder()
-                    .span(crate::tr!("settings", "settings-tab-key-behavior"))
+                    .span(crate::tr!("settings", "tab-key-behavior"))
                     .with_style(UiComponentStyles {
                         font_size: Some(CONTENT_FONT_SIZE + 1.),
                         ..Default::default()
@@ -7401,7 +7401,7 @@ impl SettingsWidget for GraphicsBackendWidget {
             col.add_child(
                 appearance
                     .ui_builder()
-                    .wrappable_text(crate::tr!("settings", "settings-features-current-backend", backend = backend.to_label()), true)
+                    .wrappable_text(crate::tr!("settings", "features-current-backend", backend = backend.to_label()), true)
                     .with_style(UiComponentStyles {
                         font_color: Some(theme.sub_text_color(theme.background()).into_solid()),
                         ..Default::default()

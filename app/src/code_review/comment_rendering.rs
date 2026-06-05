@@ -106,7 +106,7 @@ fn render_comment_file_path_header(
     if is_outdated {
         let yellow_border: ColorU = theme.terminal_colors().normal.yellow.into();
         let yellow_text: ColorU = theme.terminal_colors().bright.yellow.into();
-        let outdated_text = crate::tr!("code_review", "code-review-outdated");
+        let outdated_text = crate::tr!("code_review", "outdated");
         let outdated_chip = Container::new(
             Text::new(
                 outdated_text,
@@ -172,7 +172,7 @@ fn render_comment_text_section(
     if is_imported_from_github {
         left_section.add_child(
             Text::new(
-                crate::tr!("code_review", "code-review-from-github"),
+                crate::tr!("code_review", "from-github"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
@@ -470,7 +470,7 @@ impl CommentViewCard {
             _ => source
                 .head()
                 .map(|head| head.title())
-                .unwrap_or_else(|| crate::tr!("code_review", "code-review-comment")),
+                .unwrap_or_else(|| crate::tr!("code_review", "comment")),
         }
     }
 }

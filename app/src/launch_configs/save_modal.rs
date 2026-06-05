@@ -288,7 +288,7 @@ impl LaunchConfigSaveModal {
     pub fn reset_editor(&mut self, ctx: &mut ViewContext<Self>) {
         self.editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text(&crate::tr!("common", "common-launch-config-placeholder"), ctx);
+            editor.set_placeholder_text(&crate::tr!("common", "launch-config-placeholder"), ctx);
         });
     }
 
@@ -341,7 +341,7 @@ impl LaunchConfigSaveModal {
     ) -> Box<dyn Element> {
         self.save_modal_button(
             appearance,
-            crate::tr!("common", "common-save-configuration-button"),
+            crate::tr!("common", "save-configuration-button"),
             self.mouse_states.save_button_state.clone(),
             disabled,
         )
@@ -355,7 +355,7 @@ impl LaunchConfigSaveModal {
     fn render_open_file_button(&self, appearance: &Appearance) -> Box<dyn Element> {
         self.save_modal_button(
             appearance,
-            crate::tr!("common", "common-open-yaml-file-button"),
+            crate::tr!("common", "open-yaml-file-button"),
             self.mouse_states.open_file_button_state.clone(),
             false,
         )
@@ -432,7 +432,7 @@ impl LaunchConfigSaveModal {
 
     /// Renders the title of the modal
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
-        static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-save-current-configuration"));
+        static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "save-current-configuration"));
         let header = Flex::row()
             .with_child(
                 Shrinkable::new(
@@ -528,7 +528,7 @@ impl LaunchConfigSaveModal {
                 appearance
                     .ui_builder()
                     .link(
-                        crate::tr!("launch_configs", "launch-configs-docs-link"),
+                        crate::tr!("launch_configs", "docs-link"),
                         Some(
                             "https://docs.warp.dev/terminal/sessions/launch-configurations"
                                 .to_string(),
@@ -550,7 +550,7 @@ impl LaunchConfigSaveModal {
             SaveState::Success => header
                 .with_child(
                     self.render_formatted_text_line(appearance, vec![
-                        FormattedTextFragment::plain_text(crate::tr!("launch_configs", "launch-configs-saved-to", path = self.file_name.clone().unwrap_or_default())),
+                        FormattedTextFragment::plain_text(crate::tr!("launch_configs", "saved-to", path = self.file_name.clone().unwrap_or_default())),
                     ])
                     .with_padding_bottom(24.)
                     .finish(),
@@ -561,16 +561,16 @@ impl LaunchConfigSaveModal {
                     appearance,
                     match failure_type {
                         FailureType::FileAlreadyExists => {
-                            crate::tr!("launch_configs", "launch-configs-duplicate-name")
+                            crate::tr!("launch_configs", "duplicate-name")
                         }
-                        FailureType::Other => crate::tr!("launch_configs", "launch-configs-save-error"),
+                        FailureType::Other => crate::tr!("launch_configs", "save-error"),
                     },
                 )
                 .with_padding_bottom(24.)
                 .finish(),
             ),
             SaveState::NotSaved => {
-                let mut text = crate::tr!("launch_configs", "launch-configs-save-desc");
+                let mut text = crate::tr!("launch_configs", "save-desc");
                 if self.open_modal_keybinding_str.is_empty() {
                     text.push('.');
                 } else {
@@ -584,7 +584,7 @@ impl LaunchConfigSaveModal {
                     )
                     .with_child(
                         self.render_formatted_text_line(appearance, vec![
-                            FormattedTextFragment::plain_text(crate::tr!("launch_configs", "launch-configs-yaml-path", path = home_relative_path(&launch_configs_dir()).to_string())),
+                            FormattedTextFragment::plain_text(crate::tr!("launch_configs", "yaml-path", path = home_relative_path(&launch_configs_dir()).to_string())),
                         ])
                         .with_padding_bottom(24.)
                         .finish(),
@@ -652,8 +652,8 @@ impl View for LaunchConfigSaveModal {
 
     fn accessibility_contents(&self, _ctx: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            &crate::tr!("launch_configs", "launch-configs-modal-title"),
-            &crate::tr!("launch_configs", "launch-configs-modal-a11y-desc"),
+            &crate::tr!("launch_configs", "modal-title"),
+            &crate::tr!("launch_configs", "modal-a11y-desc"),
             WarpA11yRole::PopoverRole,
         ))
     }

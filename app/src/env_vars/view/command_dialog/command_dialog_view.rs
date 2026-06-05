@@ -32,11 +32,11 @@ const CONTAINER_PADDING: f32 = 25.;
 const ELEMENT_SPACING: f32 = 10.;
 const EDITOR_DIVIDE: f32 = 6.;
 
-static SECRET_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-secret-command"));
-static SAVE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-save-label"));
-static CANCEL_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
-static NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-name-label"));
-static COMMAND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "env-vars-command-placeholder"));
+static SECRET_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "secret-command"));
+static SAVE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "save-label"));
+static CANCEL_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
+static NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "name-label"));
+static COMMAND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "command-placeholder"));
 
 #[derive(Debug, Clone)]
 pub enum EnvVarCommandDialogAction {

@@ -218,7 +218,7 @@ impl CodeSymbolCache {
 }
 
 #[cfg(not(target_family = "wasm"))]
-static CODE_SEARCH_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-code-search-failed").clone());
+static CODE_SEARCH_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "code-search-failed").clone());
 
 #[cfg(not(target_family = "wasm"))]
 #[derive(Debug)]

@@ -1237,7 +1237,7 @@ impl Network {
     }
 }
 
-static NO_QUOTA_REMAINING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-sharing-usage-exceeded"));
+static NO_QUOTA_REMAINING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sharing-usage-exceeded"));
 
 /// Converts [`SessionTerminatedReason`] to a user-facing string.
 pub fn session_terminated_reason_string(
@@ -1251,10 +1251,10 @@ pub fn session_terminated_reason_string(
         }
         SessionTerminatedReason::ExceededSizeLimit => {
             let max_bytes = max_session_size.get_appropriate_unit(UnitType::Decimal);
-            crate::tr!("terminal", "terminal-session-limit-exceeded", limit = max_bytes.to_string())
+            crate::tr!("terminal", "session-limit-exceeded", limit = max_bytes.to_string())
         }
         SessionTerminatedReason::InternalServerError { .. } => {
-            crate::tr!("terminal", "terminal-session-internal-error")
+            crate::tr!("terminal", "session-internal-error")
         }
     }
 }

@@ -55,26 +55,3 @@ env-vars-type-label = Environment variables
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID
 
-env-vars-env-vars-secret-command = { env-vars-secret-command }
-env-vars-env-vars-command-placeholder = { env-vars-command-placeholder }
-env-vars-env-vars-variables-label = { env-vars-variables-label }
-env-vars-env-vars-command-label = { env-vars-command-label }
-env-vars-env-vars-clear-secret = { env-vars-clear-secret }
-env-vars-env-vars-title-label = { env-vars-title-label }
-env-vars-env-vars-description-label = { env-vars-description-label }
-env-vars-env-vars-value-label = { env-vars-value-label }
-env-vars-env-vars-variable-label = { env-vars-variable-label }
-env-vars-env-vars-title-placeholder = { env-vars-title-placeholder }
-env-vars-env-vars-description-placeholder = { env-vars-description-placeholder }
-env-vars-env-vars-load-label = { env-vars-load-label }
-env-vars-env-vars-education-text = { env-vars-education-text }
-env-vars-env-vars-trash-banner-deleted = { env-vars-trash-banner-deleted }
-env-vars-env-vars-trash-banner-moved = { env-vars-trash-banner-moved }
-env-vars-env-vars-restore-tooltip = { env-vars-restore-tooltip }
-env-vars-env-vars-unsaved-changes = { env-vars-unsaved-changes }
-env-vars-env-vars-keep-editing = { env-vars-keep-editing }
-env-vars-env-vars-discard-changes = { env-vars-discard-changes }
-env-vars-env-vars-validation-enterprise = { env-vars-validation-enterprise }
-env-vars-env-vars-validation-user = { env-vars-validation-user }
-env-vars-env-vars-invoke-error = { env-vars-invoke-error }
-env-vars-env-vars-close-env-var-collection = { env-vars-close-env-var-collection }

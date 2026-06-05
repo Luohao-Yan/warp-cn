@@ -18,17 +18,17 @@ use warpui::{
 };
 
 static SETTINGS_REGEX_NAME_OPTIONAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-regex-name-optional"));
+    LazyLock::new(|| crate::tr!("settings", "regex-name-optional"));
 static SETTINGS_REGEX_PATTERN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-regex-pattern"));
+    LazyLock::new(|| crate::tr!("settings", "regex-pattern"));
 static SETTINGS_ADD_REGEX: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-add-regex"));
+    LazyLock::new(|| crate::tr!("settings", "add-regex"));
 static SETTINGS_INVALID_REGEX: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-invalid-regex"));
+    LazyLock::new(|| crate::tr!("settings", "invalid-regex"));
 static SETTINGS_NAME_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-name-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "name-placeholder"));
 static SETTINGS_PATTERN_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-pattern-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "pattern-placeholder"));
 
 const LABEL_FONT_SIZE: f32 = 12.;
 

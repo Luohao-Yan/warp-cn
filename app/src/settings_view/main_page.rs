@@ -59,33 +59,33 @@ use std::sync::LazyLock;
 
 const PHOTO_SIZE: f32 = 40.;
 static REFERRAL_CTA: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-referral-cta"));
+    LazyLock::new(|| crate::tr!("settings", "referral-cta"));
 const REGULAR_TEXT_FONT_SIZE: f32 = 12.;
 const VERTICAL_MARGIN: f32 = 24.;
 static LOG_OUT_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-log-out"));
+    LazyLock::new(|| crate::tr!("settings", "log-out"));
 static SETTINGS_SIGN_UP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-sign-up-label"));
+    LazyLock::new(|| crate::tr!("settings", "sign-up-label"));
 static SETTINGS_SETTINGS_SYNC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-settings-sync"));
+    LazyLock::new(|| crate::tr!("settings", "sync"));
 static SETTINGS_REFER_A_FRIEND: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-refer-a-friend"));
+    LazyLock::new(|| crate::tr!("settings", "refer-a-friend"));
 static SETTINGS_FREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-free"));
+    LazyLock::new(|| crate::tr!("settings", "free"));
 static SETTINGS_COMPARE_PLANS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-compare-plans"));
+    LazyLock::new(|| crate::tr!("settings", "compare-plans"));
 static SETTINGS_CONTACT_SUPPORT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-contact-support"));
+    LazyLock::new(|| crate::tr!("settings", "contact-support"));
 static SETTINGS_MANAGE_BILLING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-manage-billing"));
+    LazyLock::new(|| crate::tr!("settings", "manage-billing"));
 static SETTINGS_UPGRADE_TURBO: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-upgrade-turbo"));
+    LazyLock::new(|| crate::tr!("settings", "upgrade-turbo"));
 static SETTINGS_UPGRADE_LIGHTSPEED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-upgrade-lightspeed"));
+    LazyLock::new(|| crate::tr!("settings", "upgrade-lightspeed"));
 static SETTINGS_ACCOUNT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-account"));
+    LazyLock::new(|| crate::tr!("settings", "account"));
 static SETTINGS_VERSION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-version"));
+    LazyLock::new(|| crate::tr!("settings", "version"));
 lazy_static! {
     static ref SETTINGS_SYNC_BINDINGS_ADDED: Arc<Mutex<bool>> = Default::default();
 }
@@ -171,35 +171,35 @@ impl MainPageAction {
 }
 
 static SETTINGS_UPGRADE_PLAN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-upgrade-plan"));
+    LazyLock::new(|| crate::tr!("settings", "upgrade-plan"));
 static SETTINGS_GENERATE_STRIPE_LINK: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-generate-stripe-link"));
+    LazyLock::new(|| crate::tr!("settings", "generate-stripe-link"));
 static SETTINGS_TOGGLE_SETTINGS_SYNC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-toggle-settings-sync"));
+    LazyLock::new(|| crate::tr!("settings", "toggle-settings-sync"));
 static SETTINGS_UNKNOWN_REASON: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-unknown-reason"));
+    LazyLock::new(|| crate::tr!("settings", "unknown-reason"));
 static SETTINGS_UP_TO_DATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-up-to-date"));
+    LazyLock::new(|| crate::tr!("settings", "up-to-date"));
 static SETTINGS_CHECK_FOR_UPDATES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-check-for-updates"));
+    LazyLock::new(|| crate::tr!("settings", "check-for-updates"));
 static SETTINGS_CHECKING_FOR_UPDATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-checking-for-update"));
+    LazyLock::new(|| crate::tr!("settings", "checking-for-update"));
 static SETTINGS_DOWNLOADING_UPDATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-downloading-update"));
+    LazyLock::new(|| crate::tr!("settings", "downloading-update"));
 static SETTINGS_UPDATE_AVAILABLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-update-available"));
+    LazyLock::new(|| crate::tr!("settings", "update-available"));
 static SETTINGS_RELAUNCH_WARP: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-relaunch-warp"));
+    LazyLock::new(|| crate::tr!("settings", "relaunch-warp"));
 static SETTINGS_UPDATING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-updating"));
+    LazyLock::new(|| crate::tr!("settings", "updating"));
 static SETTINGS_INSTALLED_UPDATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-installed-update"));
+    LazyLock::new(|| crate::tr!("settings", "installed-update"));
 static SETTINGS_UPDATE_CANT_INSTALL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-update-cant-install"));
+    LazyLock::new(|| crate::tr!("settings", "update-cant-install"));
 static SETTINGS_UPDATE_WARP_MANUALLY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-update-warp-manually"));
+    LazyLock::new(|| crate::tr!("settings", "update-warp-manually"));
 static SETTINGS_UPDATE_CANT_LAUNCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-update-cant-launch"));
+    LazyLock::new(|| crate::tr!("settings", "update-cant-launch"));
 
 impl From<&MainPageAction> for LoginGatedFeature {
     fn from(val: &MainPageAction) -> LoginGatedFeature {

@@ -133,13 +133,13 @@ pub(crate) fn render_action_sidecar(
         appearance
             .ui_builder()
             .button(ButtonVariant::Outlined, mouse_states.make_default.clone())
-            .with_centered_text_label(crate::tr!("menus", "menus-make-default").clone())
+            .with_centered_text_label(crate::tr!("menus", "make-default").clone())
             .with_style(disabled_style)
             .with_tooltip({
                 let ui_builder = appearance.ui_builder().clone();
                 move || {
                     ui_builder
-                        .tool_tip(crate::tr!("menus", "menus-already-the-default"))
+                        .tool_tip(crate::tr!("menus", "already-the-default"))
                         .build()
                         .finish()
                 }
@@ -152,7 +152,7 @@ pub(crate) fn render_action_sidecar(
         appearance
             .ui_builder()
             .button(ButtonVariant::Outlined, mouse_states.make_default.clone())
-            .with_centered_text_label(crate::tr!("menus", "menus-make-default").clone())
+            .with_centered_text_label(crate::tr!("menus", "make-default").clone())
             .with_style(button_style)
             .build()
             .with_cursor(Cursor::PointingHand)
@@ -174,7 +174,7 @@ pub(crate) fn render_action_sidecar(
             let edit_button = appearance
                 .ui_builder()
                 .button(ButtonVariant::Outlined, mouse_states.edit_config.clone())
-                .with_centered_text_label(crate::tr!("menus", "menus-edit-config").clone())
+                .with_centered_text_label(crate::tr!("menus", "edit-config").clone())
                 .with_style(button_style)
                 .build()
                 .with_cursor(Cursor::PointingHand)
@@ -205,7 +205,7 @@ pub(crate) fn render_action_sidecar(
             let remove_button = appearance
                 .ui_builder()
                 .button(ButtonVariant::Outlined, mouse_states.remove_config.clone())
-                .with_centered_text_label(crate::tr!("common", "common-remove-label").into())
+                .with_centered_text_label(crate::tr!("common", "remove-label").into())
                 .with_style(remove_style)
                 .with_hovered_styles(UiComponentStyles {
                     border_color: Some(theme.accent().into()),

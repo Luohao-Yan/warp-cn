@@ -15,7 +15,7 @@ use warpui::elements::{
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
 
-static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-untitled").clone());
+static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "untitled").clone());
 
 const MAX_COMBINED_LENGTH: usize = 55;
 

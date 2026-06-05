@@ -58,13 +58,13 @@ pub static SELECT_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("cod
 pub static REPLACE_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "replace-all"));
 pub static REPLACE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "replace-label"));
 
-static NO_RESULTS_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-no-results"));
-static USE_ENTER_NAVIGATE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-use-enter-navigate"));
-static FIND_BAR_DESCRIPTION_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-bar-description"));
-static REPLACE_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-field-focused"));
-static FIND_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-field-focused"));
-static REPLACE_CONTINUE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-continue"));
-static REPLACE_LAST_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-find-replace-last"));
+static NO_RESULTS_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-no-results"));
+static USE_ENTER_NAVIGATE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-use-enter-navigate"));
+static FIND_BAR_DESCRIPTION_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-bar-description"));
+static REPLACE_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-replace-field-focused"));
+static FIND_FIELD_FOCUSED_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-field-focused"));
+static REPLACE_CONTINUE_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-replace-continue"));
+static REPLACE_LAST_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-replace-last"));
 
 #[derive(Default)]
 struct ButtonMouseStates {
@@ -384,7 +384,7 @@ impl CodeEditorFind {
     pub fn emit_result_a11y_content(&mut self, ctx: &mut ViewContext<Self>) {
         let content = if let Some(match_index) = self.searcher.as_ref(ctx).selected_match() {
             AccessibilityContent::new(
-                crate::tr!("code", "code-find-result-of", match_index = match_index + 1, match_count = self.searcher.as_ref(ctx).match_count()),
+                crate::tr!("code", "find-result-of", match_index = match_index + 1, match_count = self.searcher.as_ref(ctx).match_count()),
                 USE_ENTER_NAVIGATE_A11Y.clone(),
                 WarpA11yRole::UserAction,
             )
@@ -400,7 +400,7 @@ impl CodeEditorFind {
         let content = if let Some(match_index) = self.searcher.as_ref(ctx).selected_match() {
             let remaining_matches = self.searcher.as_ref(ctx).match_count();
             AccessibilityContent::new(
-                crate::tr!("code", "code-find-replace-success", match_index = match_index, remaining_matches = remaining_matches),
+                crate::tr!("code", "find-replace-success", match_index = match_index, remaining_matches = remaining_matches),
                 REPLACE_CONTINUE_A11Y.clone(),
                 WarpA11yRole::UserAction,
             )
@@ -930,7 +930,7 @@ impl View for CodeEditorFind {
         let selected_match = self.searcher.as_ref(app).selected_match();
         let description = match (match_count, selected_match) {
             (0, _) | (_, None) => FIND_BAR_DESCRIPTION_A11Y.clone(),
-            (count, Some(current)) => crate::tr!("code", "code-find-bar-with-matches", count = count, current = current + 1, total = count),
+            (count, Some(current)) => crate::tr!("code", "find-bar-with-matches", count = count, current = current + 1, total = count),
         };
 
         let is_replace_focused = self.is_replace_open && self.replace_editor.is_focused(app);

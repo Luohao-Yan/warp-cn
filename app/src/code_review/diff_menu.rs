@@ -116,7 +116,7 @@ impl CodeReviewDiffMenu {
                 ..Default::default()
             };
             let mut editor = EditorView::new(options, ctx);
-            let placeholder = crate::tr!("code_editor", "code-editor-search-diff-placeholder");
+            let placeholder = crate::tr!("code_editor", "search-diff-placeholder");
             editor.set_placeholder_text(&placeholder, ctx);
             editor
         });
@@ -282,7 +282,7 @@ impl CodeReviewDiffMenu {
 
     fn render_empty_state(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
-        static NO_MATCHES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "code-editor-no-matches"));
+        static NO_MATCHES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "no-matches"));
         Container::new(
             Text::new(
                 &*NO_MATCHES_TEXT,

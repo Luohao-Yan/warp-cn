@@ -33,12 +33,12 @@ const MODAL_HEIGHT: f32 = 440.;
 const LEFT_PANEL_WIDTH: f32 = 360.;
 const RIGHT_PANEL_WIDTH: f32 = 360.;
 
-static OUT_OF_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-you-are-out-of-credits"));
-static UPGRADE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-to-continue-using-ai-upgrade"));
-static BUILD_PLAN_INCLUDES_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-build-plan-includes"));
-static EXTENDED_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-extended-credits-per-month"));
-static ACCESS_FRONTIER_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-access-frontier-models"));
-static EXTENDED_CLOUD_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-extended-cloud-agents"));
+static OUT_OF_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "you-are-out-of-credits"));
+static UPGRADE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "to-continue-using-ai-upgrade"));
+static BUILD_PLAN_INCLUDES_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "build-plan-includes"));
+static EXTENDED_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "extended-credits-per-month"));
+static ACCESS_FRONTIER_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "access-frontier-models"));
+static EXTENDED_CLOUD_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "extended-cloud-agents"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -189,7 +189,7 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let benefits_text = if let Some(plan) = Self::get_build_plan_details(app) {
                                     let price = plan.monthly_plan_price_per_month_usd_cents / 100;
-                                    crate::tr!("workspace", "workspace-build-plan-price-includes", price = format!("{}", price))
+                                    crate::tr!("workspace", "build-plan-price-includes", price = format!("{}", price))
                                 } else {
                                     BUILD_PLAN_INCLUDES_FALLBACK.clone()
                                 };
@@ -213,7 +213,7 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let credits_text = if let Some(plan) = Self::get_build_plan_details(app) {
                                     let limit = plan.request_limit.unwrap_or(1500);
-                                    crate::tr!("workspace", "workspace-credits-per-month", credits = limit.separate_with_commas())
+                                    crate::tr!("workspace", "credits-per-month", credits = limit.separate_with_commas())
                                 } else {
                                     EXTENDED_CREDITS.clone()
                                 };
@@ -236,7 +236,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new({
                                 // Parse the FTL key with <a> tag for the hyperlink part
-                                let ftl_text = crate::tr!("workspace", "workspace-access-reload-credits-link");
+                                let ftl_text = crate::tr!("workspace", "access-reload-credits-link");
                                 let formatted_text = if let Some(start) = ftl_text.find("<a>") {
                                     let end = ftl_text.find("</a>").unwrap_or(ftl_text.len());
                                     let before = &ftl_text[..start];
@@ -348,7 +348,7 @@ impl FreeTierLimitHitModal {
                                 width: Some(296.),
                                 ..Default::default()
                             })
-                            .with_centered_text_label(crate::tr!("workspace", "workspace-upgrade-plan"))
+                            .with_centered_text_label(crate::tr!("workspace", "upgrade-plan"))
                             .build()
                             .with_cursor(Cursor::PointingHand)
                             .on_click(move |ctx, _, _| {

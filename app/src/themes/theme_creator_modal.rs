@@ -18,7 +18,7 @@ use warpui::{Element, Entity, TypedActionView, View, ViewContext};
 
 use std::sync::LazyLock;
 
-static THEME_CREATOR_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-create-theme-from-image"));
+static THEME_CREATOR_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "create-theme-from-image"));
 
 pub struct ThemeCreatorModal {
     theme_creator_modal: ViewHandle<Modal<ThemeCreatorBody>>,

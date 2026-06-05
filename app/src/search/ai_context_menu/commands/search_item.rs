@@ -82,6 +82,6 @@ impl SearchItem for CommandSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("terminal", "terminal-search-command", command = self.command.clone())
+        crate::tr!("terminal", "search-command", command = self.command.clone())
     }
 }

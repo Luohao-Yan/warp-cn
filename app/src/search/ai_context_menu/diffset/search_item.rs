@@ -20,17 +20,17 @@ pub struct DiffSetSearchItem {
 impl DiffSetSearchItem {
     pub fn name(&self) -> String {
         match &self.diff_mode {
-            DiffMode::Head => crate::tr!("search", "search-diff-uncommitted").clone(),
-            DiffMode::MainBranch => crate::tr!("search", "search-diff-vs-main").clone(),
-            DiffMode::OtherBranch(branch) => crate::tr!("search", "search-diff-vs-branch").replace("{ $branch }", branch),
+            DiffMode::Head => crate::tr!("search", "diff-uncommitted").clone(),
+            DiffMode::MainBranch => crate::tr!("search", "diff-vs-main").clone(),
+            DiffMode::OtherBranch(branch) => crate::tr!("search", "diff-vs-branch").replace("{ $branch }", branch),
         }
     }
 
     pub fn description(&self) -> String {
         match &self.diff_mode {
-            DiffMode::Head => crate::tr!("search", "search-diff-uncommitted-desc").clone(),
-            DiffMode::MainBranch => crate::tr!("search", "search-diff-vs-main-desc").clone(),
-            DiffMode::OtherBranch(branch) => crate::tr!("search", "search-diff-vs-branch-desc").replace("{ $branch }", branch),
+            DiffMode::Head => crate::tr!("search", "diff-uncommitted-desc").clone(),
+            DiffMode::MainBranch => crate::tr!("search", "diff-vs-main-desc").clone(),
+            DiffMode::OtherBranch(branch) => crate::tr!("search", "diff-vs-branch-desc").replace("{ $branch }", branch),
         }
     }
 }

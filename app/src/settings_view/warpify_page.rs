@@ -73,17 +73,17 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
 // i18n statics for category titles
 static SETTINGS_SUBSHELLS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-subshells"));
+    LazyLock::new(|| crate::tr!("settings", "subshells"));
 static SETTINGS_SSH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-ssh"));
+    LazyLock::new(|| crate::tr!("settings", "ssh"));
 static SSH_SESSION_DETECTION_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-ssh-session-detection"));
+    LazyLock::new(|| crate::tr!("settings", "ssh-session-detection"));
 static SSH_TMUX_WARPIFICATION_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warpify-ssh-tmux-description"));
+    LazyLock::new(|| crate::tr!("settings", "warpify-ssh-tmux-description"));
 static WARPIFY_COMMAND_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warpify-command-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "warpify-command-placeholder"));
 static WARPIFY_HOST_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warpify-host-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "warpify-host-placeholder"));
 
 const CONTENT_FONT_SIZE: f32 = 12.;
 const ITEM_VERTICAL_SPACING: f32 = 24.;
@@ -92,11 +92,11 @@ const BUILT_IN_TEXT_INPUT_MARGIN: f32 = 10.;
 const SPACE_AFTER_TEXT_INPUT: f32 = ITEM_VERTICAL_SPACING - BUILT_IN_TEXT_INPUT_MARGIN;
 
 static SSH_EXTENSION_INSTALL_MODE_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-ssh-extension-behavior"));
+    LazyLock::new(|| crate::tr!("settings", "ssh-extension-behavior"));
 static SETTINGS_SUBSHELLS_SUPPORTED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-subshells-supported"));
+    LazyLock::new(|| crate::tr!("settings", "subshells-supported"));
 static SETTINGS_WARPIFY_INTERACTIVE_SSH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warpify-interactive-ssh"));
+    LazyLock::new(|| crate::tr!("settings", "warpify-interactive-ssh"));
 
 /// This page lets users configure when they get asked to warpify a session. Some shell commands
 /// are recognized by default. Users can add new shell commands, or prevent the default ones from
@@ -550,10 +550,10 @@ impl TitleWidget {
     fn render_top_of_page(&self, appearance: &Appearance, _app: &AppContext) -> Box<dyn Element> {
         let warpify_description = vec![
             FormattedTextFragment::plain_text(
-                crate::tr!("settings", "settings-warpify-configure"),
+                crate::tr!("settings", "warpify-configure"),
             ),
             FormattedTextFragment::hyperlink(
-                crate::tr!("settings", "settings-learn-more"),
+                crate::tr!("settings", "learn-more"),
                 "https://docs.warp.dev/terminal/warpify/subshells",
             ),
         ];
@@ -573,7 +573,7 @@ impl TitleWidget {
         .finish();
 
         Flex::column()
-            .with_child(render_page_title(&crate::tr!("settings", "settings-warpify-title"), HEADER_FONT_SIZE, appearance))
+            .with_child(render_page_title(&crate::tr!("settings", "warpify-title"), HEADER_FONT_SIZE, appearance))
             .with_child(warpify_description)
             .finish()
     }
@@ -614,7 +614,7 @@ impl SubshellsWidget {
 
         column.add_child(
             view.build_input_list(
-                &crate::tr!("settings", "settings-added-commands"),
+                &crate::tr!("settings", "added-commands"),
                 &warpify_settings.added_subshell_commands,
                 &view.remove_added_command_button_states,
                 WarpifyPageAction::RemoveAddedCommand,
@@ -626,7 +626,7 @@ impl SubshellsWidget {
 
         column.add_child(
             view.build_input_list(
-                &crate::tr!("settings", "settings-denylisted-commands"),
+                &crate::tr!("settings", "denylisted-commands"),
                 &warpify_settings.subshell_command_denylist,
                 &view.remove_denylisted_command_button_states,
                 WarpifyPageAction::RemoveDenylistedCommand,
@@ -734,7 +734,7 @@ impl SettingsWidget for SSHWidget {
                 move || {
                     Container::new(render_dropdown_item(
                         appearance,
-                        &crate::tr!("settings", "settings-install-ssh-extension"),
+                        &crate::tr!("settings", "install-ssh-extension"),
                         Some(&*SSH_EXTENSION_INSTALL_MODE_DESCRIPTION),
                         None,
                         LocalOnlyIconState::for_setting(
@@ -812,7 +812,7 @@ impl SettingsWidget for SSHWidget {
                     let warpify_settings = WarpifySettings::as_ref(app);
                     column.add_child(
                         view.build_input_list(
-                            &crate::tr!("settings", "settings-denylisted-hosts"),
+                            &crate::tr!("settings", "denylisted-hosts"),
                             &warpify_settings.ssh_hosts_denylist,
                             &view.remove_denylisted_ssh_button_states,
                             WarpifyPageAction::RemoveDenylistedSshHost,

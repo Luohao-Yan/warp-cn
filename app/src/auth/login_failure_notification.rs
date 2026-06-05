@@ -41,25 +41,25 @@ impl LoginFailureReason {
         let fragments = match self {
             LoginFailureReason::InvalidRedirectUrl { was_pasted } => {
                 let text = if *was_pasted {
-                    crate::tr!("auth", "auth-invalid-token-entered")
+                    crate::tr!("auth", "invalid-token-entered")
                 } else {
-                    crate::tr!("auth", "auth-failed-login-manual-copy")
+                    crate::tr!("auth", "failed-login-manual-copy")
                 };
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(&text)])
             }
             LoginFailureReason::FailedUserAuthentication => {
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(
-                    &crate::tr!("auth", "auth-request-login-failed"),
+                    &crate::tr!("auth", "request-login-failed"),
                 )])
             }
             LoginFailureReason::FailedMintCustomToken => {
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(
-                    &crate::tr!("auth", "auth-request-signup-failed"),
+                    &crate::tr!("auth", "request-signup-failed"),
                 )])
             }
             LoginFailureReason::InvalidStateParameter | LoginFailureReason::MissingStateParameter => {
                 with_troubleshooting_text(vec![FormattedTextFragment::plain_text(
-                    &crate::tr!("auth", "auth-invalid-redirect-url"),
+                    &crate::tr!("auth", "invalid-redirect-url"),
                 )])
             }
         };

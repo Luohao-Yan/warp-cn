@@ -212,7 +212,7 @@ impl HoaOnboardingFlow {
         });
 
         let cta_button = ctx.add_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-see-whats-new"));
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-see-whats-new"));
             ActionButton::new(&*LABEL, HoaWelcomeModalButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromWelcome))
@@ -220,7 +220,7 @@ impl HoaOnboardingFlow {
 
         let enter = Keystroke::parse("enter").unwrap_or_default();
 
-        static NEXT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-next"));
+        static NEXT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-next"));
         let next_vtabs_button = ctx.add_view(|ctx| {
             ActionButton::new(&*NEXT_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
@@ -229,7 +229,7 @@ impl HoaOnboardingFlow {
                 })
         });
 
-        static DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-dismiss"));
+        static DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-dismiss"));
         let dismiss_vtabs_button = ctx.add_view(|ctx| {
             ActionButton::new(&*DISMISS_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
@@ -242,7 +242,7 @@ impl HoaOnboardingFlow {
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromInbox))
         });
 
-        static FINISH_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-onboarding-finish"));
+        static FINISH_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-finish"));
         let finish_button = ctx.add_view(|ctx| {
             ActionButton::new(&*FINISH_LABEL, HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter), ctx)
@@ -433,7 +433,7 @@ impl HoaOnboardingFlow {
             .finish();
 
         let checkbox_label = Text::new_inline(
-            crate::tr!("workspace", "workspace-onboarding-switch-horizontal"),
+            crate::tr!("workspace", "onboarding-switch-horizontal"),
             appearance.ui_font_family(),
             12.,
         )
@@ -453,8 +453,8 @@ impl HoaOnboardingFlow {
             &self.next_vtabs_button
         };
 
-        let vertical_tabs_title = crate::tr!("workspace", "workspace-onboarding-vertical-tabs-title");
-        let vertical_tabs_desc = crate::tr!("workspace", "workspace-onboarding-vertical-tabs-desc");
+        let vertical_tabs_title = crate::tr!("workspace", "onboarding-vertical-tabs-title");
+        let vertical_tabs_desc = crate::tr!("workspace", "onboarding-vertical-tabs-desc");
         self.render_callout_content(
             vertical_tabs_title,
             vertical_tabs_desc,
@@ -466,7 +466,7 @@ impl HoaOnboardingFlow {
 
     fn render_inbox_callout(&self, appearance: &Appearance) -> Box<dyn Element> {
         let title = Text::new(
-            crate::tr!("workspace", "workspace-onboarding-inbox-title"),
+            crate::tr!("workspace", "onboarding-inbox-title"),
             appearance.ui_font_family(),
             16.,
         )
@@ -476,7 +476,7 @@ impl HoaOnboardingFlow {
 
         // Build the description with an inline "Learn more" hyperlink.
         let learn_more_fragment = FormattedTextFragment {
-            text: crate::tr!("workspace", "workspace-onboarding-inbox-learn-more"),
+            text: crate::tr!("workspace", "onboarding-inbox-learn-more"),
             styles: FormattedTextStyles {
                 underline: true,
                 hyperlink: Some(Hyperlink::Url(
@@ -488,7 +488,7 @@ impl HoaOnboardingFlow {
 
         let formatted = FormattedText::new([FormattedTextLine::Line(vec![
             FormattedTextFragment::plain_text(
-                &crate::tr!("workspace", "workspace-onboarding-inbox-desc"),
+                &crate::tr!("workspace", "onboarding-inbox-desc"),
             ),
             learn_more_fragment,
         ])]);

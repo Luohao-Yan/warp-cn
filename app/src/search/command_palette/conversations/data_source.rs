@@ -25,9 +25,9 @@ enum ConversationSection {
     Past,
 }
 
-static CONVERSATION_SECTION_ACTIVE_PANE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-active-pane").clone());
-static CONVERSATION_SECTION_OTHER_ACTIVE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-other-active").clone());
-static CONVERSATION_SECTION_PAST: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-section-past").clone());
+static CONVERSATION_SECTION_ACTIVE_PANE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-active-pane").clone());
+static CONVERSATION_SECTION_OTHER_ACTIVE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-other-active").clone());
+static CONVERSATION_SECTION_PAST: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-past").clone());
 
 impl ConversationSection {
     fn title(&self) -> &str {

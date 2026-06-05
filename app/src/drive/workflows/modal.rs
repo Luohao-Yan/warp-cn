@@ -100,19 +100,19 @@ const DIALOG_WIDTH: f32 = 460.;
 const AI_ASSIST_BUTTON_SIZE: f32 = 96.;
 const SCROLLBAR_WIDTH: ScrollbarWidth = ScrollbarWidth::Auto;
 
-static TITLE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-untitled"));
-static DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-description-placeholder"));
-static COMMAND_EDITOR_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-command-placeholder"));
-static ARGUMENT_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-new-argument"));
-static ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-argument-description"));
-static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-argument-default"));
-static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-save"));
-static AI_ASSIST_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-autofill"));
-static AI_ASSIST_LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-loading"));
+static TITLE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-untitled"));
+static DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-description-placeholder"));
+static COMMAND_EDITOR_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-command-placeholder"));
+static ARGUMENT_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-new-argument"));
+static ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-argument-description"));
+static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-argument-default"));
+static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-save"));
+static AI_ASSIST_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-autofill"));
+static AI_ASSIST_LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-loading"));
 static DEFAULT_ARGUMENT_PREFIX: &str = "argument";
-static UNSAVED_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-unsaved"));
-static KEEP_EDITING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-keep-editing"));
-static DISCARD_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-workflow-discard"));
+static UNSAVED_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-unsaved"));
+static KEEP_EDITING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-keep-editing"));
+static DISCARD_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-discard"));
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -690,7 +690,7 @@ impl WorkflowModal {
         let mut menu_items = Vec::new();
 
         // Add "Copy workflow text" to menu
-        let copy_workflow_text_label = crate::tr!("drive", "drive-workflow-copy-text");
+        let copy_workflow_text_label = crate::tr!("drive", "workflow-copy-text");
         menu_items.push(
             MenuItemFields::new(&copy_workflow_text_label)
                 .with_on_select_action(WorkflowModalAction::CopyObjectToClipboard)
@@ -700,7 +700,7 @@ impl WorkflowModal {
 
         // Add "Trash" to menu
         if self.is_online(app) {
-            let trash_label = crate::tr!("drive", "drive-workflow-trash");
+            let trash_label = crate::tr!("drive", "workflow-trash");
             menu_items.push(
                 MenuItemFields::new(&trash_label)
                     .with_on_select_action(WorkflowModalAction::TrashObject)
@@ -1741,7 +1741,7 @@ impl WorkflowModal {
                 .on_click(move |ctx, _, _| ctx.dispatch_typed_action(WorkflowModalAction::AiAssist))
                 .finish();
 
-            let ai_tooltip = crate::tr!("drive", "drive-workflow-ai-tooltip");
+            let ai_tooltip = crate::tr!("drive", "workflow-ai-tooltip");
             let button_with_tool_tip = appearance.ui_builder().tool_tip_on_element(
                 ai_tooltip,
                 self.button_mouse_states.ai_assist_tool_tip.clone(),

@@ -25,8 +25,8 @@ use crate::view_components::action_button::{
     ActionButton, ActionButtonTheme, ButtonSize, TooltipAlignment,
 };
 
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-execution-host-tooltip"));
-static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-execution-host-header"));
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "execution-host-tooltip"));
+static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "execution-host-header"));
 
 const HEADER_FONT_SIZE: f32 = 12.;
 

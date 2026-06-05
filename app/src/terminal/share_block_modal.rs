@@ -69,7 +69,7 @@ const INNER_MARGIN: f32 = 20.;
 const MODAL_WIDTH: f32 = 862.;
 const BLOCK_TITLE_INPUT_WIDTH: f32 = 800.;
 
-static BLOCK_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-title-optional"));
+static BLOCK_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-title-optional"));
 
 // TODO(vorporeal): This is 12 in the specs, but I think our 14pt font is a bit
 // taller than 14pt?
@@ -81,18 +81,18 @@ const NEW_BUTTON_HORIZONTAL_PADDING: f32 = 10.;
 const NEW_COPY_BUTTON_WIDTH: f32 = 80.;
 
 fn command_and_output_option() -> (String, DisplaySetting) {
-    (crate::tr!("terminal", "terminal-command-and-output"), DisplaySetting::CommandAndOutput)
+    (crate::tr!("terminal", "command-and-output"), DisplaySetting::CommandAndOutput)
 }
 fn command_option() -> (String, DisplaySetting) {
-    (crate::tr!("terminal", "terminal-command"), DisplaySetting::Command)
+    (crate::tr!("terminal", "command"), DisplaySetting::Command)
 }
 fn output_option() -> (String, DisplaySetting) {
-    (crate::tr!("terminal", "terminal-output"), DisplaySetting::Output)
+    (crate::tr!("terminal", "output"), DisplaySetting::Output)
 }
 
 /// This default title is helpful for screen readers.
-static DEFAULT_EMBED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-embed-label"));
-static BLOCK_CREATION_FAILED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-error"));
+static DEFAULT_EMBED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-embed-label"));
+static BLOCK_CREATION_FAILED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-error"));
 
 #[derive(PartialEq)]
 enum ShareRequestState {
@@ -169,7 +169,7 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::Copy,
             ShareBlockModalAction::CopyLink,
-            crate::tr!("common", "common-copy-label").as_str(),
+            crate::tr!("common", "copy-label").as_str(),
             id!(ShareBlockModal::ui_name()),
         ),
         FixedBinding::new(
@@ -509,7 +509,7 @@ impl ShareBlockModal {
             );
             ctx.clipboard().write(ClipboardContent::plain_text(link));
             ctx.emit(ShareBlockModalEvent::ShowToast {
-                message: crate::tr!("terminal", "terminal-share-link-copied").to_string(),
+                message: crate::tr!("terminal", "share-link-copied").to_string(),
                 flavor: ToastFlavor::Default,
             });
         }
@@ -553,7 +553,7 @@ impl ShareBlockModal {
         ctx.clipboard()
             .write(ClipboardContent::plain_text(embed_snippet));
         ctx.emit(ShareBlockModalEvent::ShowToast {
-            message: crate::tr!("terminal", "terminal-share-embed-copied").to_string(),
+            message: crate::tr!("terminal", "share-embed-copied").to_string(),
             flavor: ToastFlavor::Success,
         });
     }
@@ -631,8 +631,8 @@ impl ShareBlockModal {
     }
 
     fn render_create_block_buttons_row(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let create_link_label = crate::tr!("terminal", "terminal-share-create-link");
-        let get_embed_label = crate::tr!("terminal", "terminal-share-get-embed");
+        let create_link_label = crate::tr!("terminal", "share-create-link");
+        let get_embed_label = crate::tr!("terminal", "share-get-embed");
         let create_link_button = self.render_create_block_button(
             appearance,
             &create_link_label,
@@ -672,7 +672,7 @@ impl ShareBlockModal {
             TextAndIconAlignment::TextFirst,
             if let ShareRequestState::Pending(pending_share_type) = self.request_state {
                 if pending_share_type == share_type {
-                    crate::tr!("terminal", "terminal-share-creating").to_string()
+                    crate::tr!("terminal", "share-creating").to_string()
                 } else {
                     text_label.to_string()
                 }
@@ -747,7 +747,7 @@ impl ShareBlockModal {
         } else {
             let embed_snippet = self
                 .generate_embed_snippet(app)
-                .unwrap_or(crate::tr!("terminal", "terminal-share-embed-error").to_string());
+                .unwrap_or(crate::tr!("terminal", "share-embed-error").to_string());
             col.add_child(self.render_embed_label(appearance, embed_snippet));
             col.add_child(
                 Align::new(
@@ -773,7 +773,7 @@ impl ShareBlockModal {
                     .manage_permalinks_mouse_state
                     .clone(),
             )
-            .with_centered_text_label(crate::tr!("terminal", "terminal-manage-shared-blocks"))
+            .with_centered_text_label(crate::tr!("terminal", "manage-shared-blocks"))
             .with_style(
                 self.button_style_overrides(appearance)
                     .set_font_size(12.)
@@ -805,7 +805,7 @@ impl ShareBlockModal {
     ) -> Box<dyn Element> {
         let text_and_icon = TextAndIcon::new(
             TextAndIconAlignment::TextFirst,
-            crate::tr!("common", "common-copy-label").clone(),
+            crate::tr!("common", "copy-label").clone(),
             Icon::Copy.to_warpui_icon(appearance.theme().active_ui_text_color()),
             MainAxisSize::Max,
             MainAxisAlignment::Center,
@@ -879,7 +879,7 @@ impl ShareBlockModal {
             if link_generated {
                 self.block_title_editor.as_ref(app).buffer_text(app)
             } else {
-                crate::tr!("terminal", "terminal-share-title").to_string()
+                crate::tr!("terminal", "share-title").to_string()
             },
             appearance.ui_font_family(),
             24.,
@@ -967,7 +967,7 @@ impl ShareBlockModal {
                 .finish();
             let show_prompt_description = appearance
                 .ui_builder()
-                .span(crate::tr!("terminal", "terminal-show-prompt"))
+                .span(crate::tr!("terminal", "show-prompt"))
                 .build()
                 .with_margin_left(2.)
                 .finish();
@@ -1068,7 +1068,7 @@ impl ShareBlockModal {
 
             let redact_secrets_description = appearance
                 .ui_builder()
-                .span(crate::tr!("terminal", "terminal-redact-secrets"))
+                .span(crate::tr!("terminal", "redact-secrets"))
                 .build()
                 .with_margin_left(4.)
                 .finish();

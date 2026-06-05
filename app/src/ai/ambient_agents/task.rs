@@ -495,16 +495,16 @@ impl AmbientAgentTaskState {
 impl std::fmt::Display for AmbientAgentTaskState {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AmbientAgentTaskState::Queued => write!(f, "{}", crate::tr!("common", "common-status-queued")),
-            AmbientAgentTaskState::Pending => write!(f, "{}", crate::tr!("common", "common-status-pending")),
-            AmbientAgentTaskState::Claimed => write!(f, "{}", crate::tr!("common", "common-status-claimed")),
-            AmbientAgentTaskState::InProgress => write!(f, "{}", crate::tr!("common", "common-status-in-progress")),
-            AmbientAgentTaskState::Succeeded => write!(f, "{}", crate::tr!("common", "common-status-done")),
-            AmbientAgentTaskState::Failed => write!(f, "{}", crate::tr!("common", "common-status-failed")),
-            AmbientAgentTaskState::Error => write!(f, "{}", crate::tr!("common", "common-error-label")),
-            AmbientAgentTaskState::Blocked => write!(f, "{}", crate::tr!("common", "common-status-blocked")),
-            AmbientAgentTaskState::Cancelled => write!(f, "{}", crate::tr!("common", "common-status-cancelled")),
-            AmbientAgentTaskState::Unknown => write!(f, "{}", crate::tr!("common", "common-status-failed")),
+            AmbientAgentTaskState::Queued => write!(f, "{}", crate::tr!("common", "status-queued")),
+            AmbientAgentTaskState::Pending => write!(f, "{}", crate::tr!("common", "status-pending")),
+            AmbientAgentTaskState::Claimed => write!(f, "{}", crate::tr!("common", "status-claimed")),
+            AmbientAgentTaskState::InProgress => write!(f, "{}", crate::tr!("common", "status-in-progress")),
+            AmbientAgentTaskState::Succeeded => write!(f, "{}", crate::tr!("common", "status-done")),
+            AmbientAgentTaskState::Failed => write!(f, "{}", crate::tr!("common", "status-failed")),
+            AmbientAgentTaskState::Error => write!(f, "{}", crate::tr!("common", "error-label")),
+            AmbientAgentTaskState::Blocked => write!(f, "{}", crate::tr!("common", "status-blocked")),
+            AmbientAgentTaskState::Cancelled => write!(f, "{}", crate::tr!("common", "status-cancelled")),
+            AmbientAgentTaskState::Unknown => write!(f, "{}", crate::tr!("common", "status-failed")),
         }
     }
 }

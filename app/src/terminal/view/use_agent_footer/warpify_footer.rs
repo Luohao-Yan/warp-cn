@@ -33,10 +33,10 @@ impl WarpifyFooterView {
         let button_size = ButtonSize::XSmall;
 
         let warpify_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(crate::tr!("terminal", "terminal-warpify-subshell"), AgentFooterButtonTheme::new(None))
+            ActionButton::new(crate::tr!("terminal", "warpify-subshell"), AgentFooterButtonTheme::new(None))
                 .with_icon(Icon::Warp)
                 .with_size(button_size)
-                .with_tooltip(crate::tr!("terminal", "terminal-warpify-subshell-tooltip"))
+                .with_tooltip(crate::tr!("terminal", "warpify-subshell-tooltip"))
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WarpifyFooterViewAction::Warpify);
@@ -44,11 +44,11 @@ impl WarpifyFooterView {
         });
 
         let use_agent_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new(crate::tr!("terminal", "terminal-use-agent"), AgentFooterButtonTheme::new(None))
+            ActionButton::new(crate::tr!("terminal", "use-agent"), AgentFooterButtonTheme::new(None))
                 .with_icon(Icon::Oz)
                 .with_keybinding(KeystrokeSource::Fixed(USE_AGENT_KEYSTROKE.clone()), ctx)
                 .with_size(button_size)
-                .with_tooltip(crate::tr!("terminal", "terminal-use-agent-tooltip"))
+                .with_tooltip(crate::tr!("terminal", "use-agent-tooltip"))
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(WarpifyFooterViewAction::UseAgent);
@@ -76,9 +76,9 @@ impl WarpifyFooterView {
     pub fn set_mode(&mut self, mode: WarpificationMode, ctx: &mut ViewContext<Self>) {
         let (label, binding_name) = match mode {
             WarpificationMode::Ssh { .. } => {
-                (crate::tr!("terminal", "terminal-warpify-ssh-session"), "terminal:warpify_ssh_session")
+                (crate::tr!("terminal", "warpify-ssh-session"), "terminal:warpify_ssh_session")
             }
-            WarpificationMode::Subshell { .. } => (crate::tr!("terminal", "terminal-warpify-subshell"), "terminal:warpify_subshell"),
+            WarpificationMode::Subshell { .. } => (crate::tr!("terminal", "warpify-subshell"), "terminal:warpify_subshell"),
         };
         self.warpify_button.update(ctx, |button, ctx| {
             button.set_label(label, ctx);

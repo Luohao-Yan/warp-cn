@@ -51,15 +51,15 @@ const SECTION_FONT_SIZE: f32 = 16.;
 const SPAN_FONT_SIZE: f32 = 16.;
 const VARIANT_FONT_SIZE: f32 = 13.;
 
-static CANCEL_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-close"));
-static NEW_ENUM_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-new"));
-static EXISTING_ENUM_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-edit"));
-static NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-name"));
-static CREATE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-create"));
-static SAVE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-save"));
-static VARIANT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-variant"));
-static STATIC_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-variants"));
-static DYNAMIC_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-enum-command-placeholder"));
+static CANCEL_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-close"));
+static NEW_ENUM_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-new"));
+static EXISTING_ENUM_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-edit"));
+static NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-name"));
+static CREATE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-create"));
+static SAVE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-save"));
+static VARIANT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-variant"));
+static STATIC_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-variants"));
+static DYNAMIC_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "enum-command-placeholder"));
 
 #[derive(Debug, Clone)]
 pub enum EnumCreationDialogAction {
@@ -654,8 +654,7 @@ impl EnumCreationDialog {
                             .iter()
                             .map(|arg_type| {
                                 let label = match arg_type {
-                                    EnumType::Static => crate::tr!("drive", "drive-enum-static"),
-                                    EnumType::Dynamic => crate::tr!("drive", "drive-enum-dynamic"),
+                                    EnumType::Static => crate::tr!("drive", "enum-static"), EnumType::Dynamic => crate::tr!("drive", "enum-dynamic"),
                                 };
                                 ToggleMenuItem::new(label)
                             })

@@ -40,92 +40,92 @@ use warpui::{AppContext, SingletonEntity};
 type CheckmarkStatusGetter = dyn 'static + Fn(&mut AppContext) -> bool;
 
 static ENABLE_SHELL_DEBUG_MODE_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-enable-shell-debug-mode"));
+    LazyLock::new(|| crate::tr!("common", "enable-shell-debug-mode"));
 static DISABLE_SHELL_DEBUG_MODE_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-disable-shell-debug-mode"));
+    LazyLock::new(|| crate::tr!("common", "disable-shell-debug-mode"));
 static ENABLE_IN_BAND_GENERATORS_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-enable-in-band-generators"));
+    LazyLock::new(|| crate::tr!("common", "enable-in-band-generators"));
 static DISABLE_IN_BAND_GENERATORS_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-disable-in-band-generators"));
+    LazyLock::new(|| crate::tr!("common", "disable-in-band-generators"));
 static ENABLE_PTY_RECORDING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-enable-pty-recording"));
+    LazyLock::new(|| crate::tr!("common", "enable-pty-recording"));
 static DISABLE_PTY_RECORDING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-disable-pty-recording"));
+    LazyLock::new(|| crate::tr!("common", "disable-pty-recording"));
 static SHOW_BOOTSTRAP_BLOCK_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-show-bootstrap-block"));
+    LazyLock::new(|| crate::tr!("common", "show-bootstrap-block"));
 static HIDE_BOOTSTRAP_BLOCK_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-hide-bootstrap-block"));
+    LazyLock::new(|| crate::tr!("common", "hide-bootstrap-block"));
 static SHOW_IN_BAND_COMMAND_BLOCKS_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-show-in-band-command-blocks"));
+    LazyLock::new(|| crate::tr!("common", "show-in-band-command-blocks"));
 static HIDE_IN_BAND_COMMAND_BLOCKS_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-hide-in-band-command-blocks"));
+    LazyLock::new(|| crate::tr!("common", "hide-in-band-command-blocks"));
 static SHOW_SSH_COMMAND_BLOCKS_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-show-ssh-command-blocks"));
+    LazyLock::new(|| crate::tr!("common", "show-ssh-command-blocks"));
 static HIDE_SSH_COMMAND_BLOCKS_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-hide-ssh-command-blocks"));
+    LazyLock::new(|| crate::tr!("common", "hide-ssh-command-blocks"));
 static EXPORT_DEFAULT_SETTINGS_CSV_MENU_ITEM_NAME: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-export-default-settings-csv"));
+    LazyLock::new(|| crate::tr!("common", "export-default-settings-csv"));
 
-static MENU_WARP: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-warp"));
-static MENU_FILE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-file"));
-static MENU_EDIT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-edit"));
-static MENU_VIEW: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-view"));
-static MENU_TAB: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-tab"));
-static MENU_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-ai"));
-static MENU_BLOCKS: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-blocks"));
-static MENU_DRIVE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-drive"));
-static MENU_WINDOW: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-window"));
-static MENU_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-help"));
+static MENU_WARP: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-warp"));
+static MENU_FILE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-file"));
+static MENU_EDIT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-edit"));
+static MENU_VIEW: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-view"));
+static MENU_TAB: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-tab"));
+static MENU_AI: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-ai"));
+static MENU_BLOCKS: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-blocks"));
+static MENU_DRIVE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-drive"));
+static MENU_WINDOW: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-window"));
+static MENU_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-help"));
 
 static MENU_NEW_WINDOW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-new-window"));
+    LazyLock::new(|| crate::tr!("common", "menu-new-window"));
 static MENU_NEW_TERMINAL_TAB: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-new-terminal-tab"));
+    LazyLock::new(|| crate::tr!("common", "menu-new-terminal-tab"));
 static MENU_NEW_AGENT_TAB: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-new-agent-tab"));
+    LazyLock::new(|| crate::tr!("common", "menu-new-agent-tab"));
 static MENU_PREFERENCES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-preferences"));
+    LazyLock::new(|| crate::tr!("common", "menu-preferences"));
 static MENU_PRIVACY_POLICY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-privacy-policy"));
-static MENU_DEBUG: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-menu-debug"));
+    LazyLock::new(|| crate::tr!("common", "menu-privacy-policy"));
+static MENU_DEBUG: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "menu-debug"));
 static MENU_SET_WARP_AS_DEFAULT_TERMINAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-set-warp-as-default-terminal"));
+    LazyLock::new(|| crate::tr!("common", "menu-set-warp-as-default-terminal"));
 static MENU_LOG_OUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-log-out"));
+    LazyLock::new(|| crate::tr!("common", "menu-log-out"));
 static MENU_OPEN_RECENT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-open-recent"));
+    LazyLock::new(|| crate::tr!("common", "menu-open-recent"));
 static MENU_USE_WARPS_PROMPT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-use-warps-prompt"));
+    LazyLock::new(|| crate::tr!("common", "menu-use-warps-prompt"));
 static MENU_COPY_ON_SELECT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-copy-on-select"));
+    LazyLock::new(|| crate::tr!("common", "menu-copy-on-select"));
 static MENU_SYNCHRONIZE_INPUTS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-synchronize-inputs"));
+    LazyLock::new(|| crate::tr!("common", "menu-synchronize-inputs"));
 static MENU_TOGGLE_MOUSE_REPORTING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-toggle-mouse-reporting"));
+    LazyLock::new(|| crate::tr!("common", "menu-toggle-mouse-reporting"));
 static MENU_TOGGLE_SCROLL_REPORTING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-toggle-scroll-reporting"));
+    LazyLock::new(|| crate::tr!("common", "menu-toggle-scroll-reporting"));
 static MENU_TOGGLE_FOCUS_REPORTING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-toggle-focus-reporting"));
+    LazyLock::new(|| crate::tr!("common", "menu-toggle-focus-reporting"));
 static MENU_COMPACT_MODE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-compact-mode"));
+    LazyLock::new(|| crate::tr!("common", "menu-compact-mode"));
 static MENU_MANUALLY_TOGGLE_NETWORK_STATUS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-manually-toggle-network-status"));
+    LazyLock::new(|| crate::tr!("common", "menu-manually-toggle-network-status"));
 static MENU_CREATE_ANONYMOUS_USER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-create-anonymous-user"));
+    LazyLock::new(|| crate::tr!("common", "menu-create-anonymous-user"));
 static MENU_SEND_FEEDBACK: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-send-feedback"));
+    LazyLock::new(|| crate::tr!("common", "menu-send-feedback"));
 static MENU_WARP_DOCUMENTATION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-warp-documentation"));
+    LazyLock::new(|| crate::tr!("common", "menu-warp-documentation"));
 static MENU_GITHUB_ISSUES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-github-issues"));
+    LazyLock::new(|| crate::tr!("common", "menu-github-issues"));
 static MENU_WARP_SLACK_COMMUNITY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-warp-slack-community"));
+    LazyLock::new(|| crate::tr!("common", "menu-warp-slack-community"));
 static MENU_REOPEN_CLOSED_SESSION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-reopen-closed-session"));
+    LazyLock::new(|| crate::tr!("common", "menu-reopen-closed-session"));
 static MENU_LAUNCH_CONFIGURATIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-launch-configurations"));
+    LazyLock::new(|| crate::tr!("common", "menu-launch-configurations"));
 static MENU_SAVE_NEW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "common-menu-save-new"));
+    LazyLock::new(|| crate::tr!("common", "menu-save-new"));
 
 const SETTINGS_CSV_FILE_NAME: &str = "warp_default_settings.csv";
 const MAX_RECENT_REPOS_IN_MENU: usize = 10;

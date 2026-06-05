@@ -47,13 +47,13 @@ const SIDECAR_HORIZONTAL_GAP: f32 = 4.;
 
 const MENU_MAX_HEIGHT: f32 = 280.;
 
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-api-key-tooltip"));
-static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-api-key-header"));
-static SIDECAR_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-choose-type"));
-static NO_SECRET_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-no-secret"));
-static LOADING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-loading"));
-static UNABLE_TO_LOAD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-unable-to-load-secrets"));
-static NEW_ITEM_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selector-new"));
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-api-key-tooltip"));
+static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-api-key-header"));
+static SIDECAR_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-choose-type"));
+static NO_SECRET_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-no-secret"));
+static LOADING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-loading"));
+static UNABLE_TO_LOAD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-unable-to-load-secrets"));
+static NEW_ITEM_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-new"));
 
 const MAIN_MENU_SAVE_POSITION_ID: &str = "auth_secret_selector_main_menu";
 

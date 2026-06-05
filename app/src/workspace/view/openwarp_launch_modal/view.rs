@@ -46,26 +46,26 @@ fn feature_items() -> Vec<FeatureItem> {
     vec![
         FeatureItem {
             icon: Icon::HeartHand,
-            title: crate::tr!("workspace", "workspace-openwarp-contribute-title"),
-            description: crate::tr!("workspace", "workspace-openwarp-contribute-desc"),
+            title: crate::tr!("workspace", "openwarp-contribute-title"),
+            description: crate::tr!("workspace", "openwarp-contribute-desc"),
             inline_link: Some(InlineLink {
-                text: crate::tr!("workspace", "workspace-openwarp-contribute-link"),
+                text: crate::tr!("workspace", "openwarp-contribute-link"),
                 url: CONTRIBUTING_URL,
             }),
         },
         FeatureItem {
             icon: Icon::Oz,
-            title: crate::tr!("workspace", "workspace-openwarp-automated-title"),
-            description: crate::tr!("workspace", "workspace-openwarp-automated-desc"),
+            title: crate::tr!("workspace", "openwarp-automated-title"),
+            description: crate::tr!("workspace", "openwarp-automated-desc"),
             inline_link: Some(InlineLink {
-                text: crate::tr!("workspace", "workspace-openwarp-automated-link"),
+                text: crate::tr!("workspace", "openwarp-automated-link"),
                 url: OZ_URL,
             }),
         },
         FeatureItem {
             icon: Icon::MessageChatSquare,
-            title: crate::tr!("workspace", "workspace-openwarp-auto-weights-title"),
-            description: crate::tr!("workspace", "workspace-openwarp-auto-weights-desc"),
+            title: crate::tr!("workspace", "openwarp-auto-weights-title"),
+            description: crate::tr!("workspace", "openwarp-auto-weights-desc"),
             inline_link: None,
         },
     ]
@@ -145,7 +145,7 @@ impl OpenWarpLaunchModal {
         });
 
         let cta_button = ctx.add_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-openwarp-visit-repo"));
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "openwarp-visit-repo"));
             ActionButton::new(&*LABEL, CtaButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(OpenWarpLaunchModalAction::VisitRepo))
@@ -194,7 +194,7 @@ impl OpenWarpLaunchModal {
     }
 
     fn render_badge(appearance: &Appearance) -> Box<dyn Element> {
-        let text = Text::new_inline(crate::tr!("workspace", "workspace-openwarp-badge"), appearance.ui_font_family(), 14.)
+        let text = Text::new_inline(crate::tr!("workspace", "openwarp-badge"), appearance.ui_font_family(), 14.)
             .with_color(PhenomenonStyle::modal_badge_text())
             .finish();
         ConstrainedBox::new(
@@ -215,7 +215,7 @@ impl OpenWarpLaunchModal {
     }
 
     fn render_title(appearance: &Appearance) -> Box<dyn Element> {
-        Text::new(crate::tr!("workspace", "workspace-openwarp-title"), appearance.ui_font_family(), 20.)
+        Text::new(crate::tr!("workspace", "openwarp-title"), appearance.ui_font_family(), 20.)
             .with_color(PhenomenonStyle::modal_title_text())
             .with_style(Properties::default().weight(Weight::Semibold))
             .finish()
@@ -223,7 +223,7 @@ impl OpenWarpLaunchModal {
 
     fn render_description(appearance: &Appearance) -> Box<dyn Element> {
         Text::new(
-            crate::tr!("workspace", "workspace-openwarp-description"),
+            crate::tr!("workspace", "openwarp-description"),
             appearance.ui_font_family(),
             14.,
         )

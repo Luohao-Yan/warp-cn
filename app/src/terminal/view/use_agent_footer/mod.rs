@@ -154,10 +154,10 @@ fn rich_input_submit_strategy(agent: CLIAgent) -> RichInputSubmitStrategy {
 
 static USE_AGENT_KEYSTROKE: LazyLock<Keystroke> =
     LazyLock::new(|| Keystroke::parse(cmd_or_ctrl_shift("enter")).expect("valid keystroke"));
-static TERMINAL_USE_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-use-agent-btn"));
-static TERMINAL_GIVE_CONTROL_BACK: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-give-control-back-btn"));
-static TERMINAL_ASK_AGENT_ASSIST: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ask-agent-assist-tooltip"));
-static TERMINAL_ASK_AGENT_RESUME: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-ask-agent-resume-tooltip"));
+static TERMINAL_USE_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "use-agent-btn"));
+static TERMINAL_GIVE_CONTROL_BACK: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "give-control-back-btn"));
+static TERMINAL_ASK_AGENT_ASSIST: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-agent-assist-tooltip"));
+static TERMINAL_ASK_AGENT_RESUME: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-agent-resume-tooltip"));
 
 impl TerminalView {
     pub(super) fn register_subscriptions_for_use_agent_footer(
@@ -1124,7 +1124,7 @@ impl UseAgentToolbar {
         });
         let dismiss_button = ctx.add_typed_action_view(|_| {
             ActionButton::new(
-                crate::tr!("common", "common-dismiss-label"),
+                crate::tr!("common", "dismiss-label"),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .on_click(|ctx| {
@@ -1134,7 +1134,7 @@ impl UseAgentToolbar {
         });
         let dont_show_again_button = ctx.add_typed_action_view(|_| {
             ActionButton::new(
-                crate::tr!("common", "common-do-not-show-again"),
+                crate::tr!("common", "do-not-show-again"),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .on_click(|ctx| {

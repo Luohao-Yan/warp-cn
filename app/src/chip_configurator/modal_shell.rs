@@ -31,9 +31,9 @@ const PRIMARY_BUTTON_HEIGHT: f32 = 40.;
 const SECTION_UNIFORM_PADDING: f32 = 16.;
 const MARGIN_BETWEEN_MODAL_SECTIONS: f32 = 16.;
 const MODAL_CONTENT_FONT_SIZE: f32 = 14.;
-static RESTORE_DEFAULT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "chip-configurator-restore-default"));
-static LEFT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "chip-configurator-left-side"));
-static RIGHT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "chip-configurator-right-side"));
+static RESTORE_DEFAULT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "restore-default"));
+static LEFT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "left-side"));
+static RIGHT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "right-side"));
 
 /// Mouse state handles for interactive controls in chip editor sections and modals.
 #[derive(Default)]
@@ -297,7 +297,7 @@ fn render_buttons<A: Action + Clone + Copy + 'static>(
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let cancel_button = render_primary_button(
-        crate::tr!("common", "common-cancel-label").clone(),
+        crate::tr!("common", "cancel-label").clone(),
         ButtonVariant::Outlined,
         false,
         &config.mouse_handles.cancel,
@@ -306,7 +306,7 @@ fn render_buttons<A: Action + Clone + Copy + 'static>(
     );
 
     let save_button = render_primary_button(
-        crate::tr!("common", "common-save-changes-label").clone(),
+        crate::tr!("common", "save-changes-label").clone(),
         ButtonVariant::Accent,
         !config.is_dirty,
         &config.mouse_handles.save,

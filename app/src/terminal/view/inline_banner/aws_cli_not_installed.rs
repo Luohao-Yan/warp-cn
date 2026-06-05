@@ -14,7 +14,7 @@ const AWS_CLI_INSTALL_DOCS_URL: &str =
     "https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html";
 
 static TERMINAL_AWS_CLI_REQUIRED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-aws-cli-required"));
+    LazyLock::new(|| crate::tr!("terminal", "aws-cli-required"));
 
 pub struct AwsCliNotInstalledBannerState {
     pub id: usize,
@@ -50,7 +50,7 @@ pub fn render_aws_cli_not_installed_banner(
 ) -> Box<dyn Element> {
     let active_ui_text_color = appearance.theme().active_ui_text_color().into_solid();
     let buttons = vec![InlineBannerTextButton {
-        text: crate::tr!("common", "common-learn-more-label"),
+        text: crate::tr!("common", "learn-more-label"),
         text_color: active_ui_text_color,
         button_state: InlineBannerButtonState {
             on_click_event: TerminalAction::AwsCliNotInstalledBanner(
@@ -82,7 +82,7 @@ pub fn render_aws_cli_not_installed_banner(
         InlineBannerStyle::Recommendation,
         appearance,
         InlineBannerContent {
-            title: crate::tr!("terminal", "terminal-aws-cli-not-installed-title"),
+            title: crate::tr!("terminal", "aws-cli-not-installed-title"),
             content: Some(vec![description_text]),
             buttons,
             close_button: Some(close_button),

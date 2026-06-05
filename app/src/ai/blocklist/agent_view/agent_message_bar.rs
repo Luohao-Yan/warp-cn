@@ -376,7 +376,7 @@ impl View for AgentMessageBar {
             Some(FigmaMcpStatus::Installed) => {
                 message.items.push(figma_chip(
                     self.mouse_states.figma_enable_button.clone(),
-                    crate::tr!("ai", "ai-enable-figma-mcp"),
+                    crate::tr!("ai", "enable-figma-mcp"),
                     Some(InputAction::FigmaEnableButtonClicked),
                 ));
             }
@@ -459,7 +459,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for BootstrappingMessageProducer {
         {
             None
         } else {
-            Some(Message::from_text(crate::tr!("ai", "ai-starting-shell")))
+            Some(Message::from_text(crate::tr!("ai", "starting-shell")))
         }
     }
 }

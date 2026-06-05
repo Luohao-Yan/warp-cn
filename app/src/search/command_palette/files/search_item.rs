@@ -17,8 +17,8 @@ use warpui::{AppContext, Element, SingletonEntity};
 use crate::search::files::icon::icon_from_file_path;
 use crate::ui_components::render_file_search_row::{render_file_search_row, FileSearchRowOptions};
 
-static NAVIGATE_DIRECTORY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-file-navigate-directory").clone());
-static OPEN_FILE_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-file-open-file").clone());
+static NAVIGATE_DIRECTORY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "file-navigate-directory").clone());
+static OPEN_FILE_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "file-open-file").clone());
 
 #[derive(Debug)]
 pub struct FileSearchItem {
@@ -101,10 +101,10 @@ impl SearchItem for FileSearchItem {
 
     fn accessibility_label(&self) -> String {
         if self.is_directory {
-            crate::tr!("search", "search-file-directory-label")
+            crate::tr!("search", "file-directory-label")
                 .replace("{ $path }", &self.path.display().to_string())
         } else {
-            crate::tr!("search", "search-file-file-label")
+            crate::tr!("search", "file-file-label")
                 .replace("{ $path }", &self.path.display().to_string())
         }
     }
@@ -167,7 +167,7 @@ impl SearchItem for CreateFileSearchItem {
         let text_color = highlight_state.sub_text_fill(appearance).into_solid();
 
         let label = Text::new_inline(
-            crate::tr!("search", "search-create-file-display")
+            crate::tr!("search", "create-file-display")
                 .replace("{ $file_name }", &self.file_name),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
@@ -202,13 +202,13 @@ impl SearchItem for CreateFileSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-create-file-a11y-label")
+        crate::tr!("search", "create-file-a11y-label")
             .replace("{ $file_name }", &self.file_name)
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
         Some(
-            crate::tr!("search", "search-create-file-a11y-help")
+            crate::tr!("search", "create-file-a11y-help")
                 .replace("{ $file_name }", &self.file_name),
         )
     }

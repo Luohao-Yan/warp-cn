@@ -29,17 +29,17 @@ pub const WHY_INSTALL_TMUX_URL: &str =
     "https://docs.warp.dev/terminal/warpify/ssh#why-do-i-need-tmux-on-the-remote-machine";
 
 static INSTALL_TMUX_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-title"));
+    LazyLock::new(|| crate::tr!("terminal", "install-tmux-title"));
 static RUN_SCRIPT_TO_INSTALL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-run-script"));
+    LazyLock::new(|| crate::tr!("terminal", "install-tmux-run-script"));
 static INSTALL_TO_HOME_WARP: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-install-to-home-warp"));
+    LazyLock::new(|| crate::tr!("terminal", "install-tmux-install-to-home-warp"));
 static EXPLANATION_OUTDATED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-explanation-outdated"));
+    LazyLock::new(|| crate::tr!("terminal", "install-tmux-explanation-outdated"));
 static EXPLANATION_MISSING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-explanation-missing"));
+    LazyLock::new(|| crate::tr!("terminal", "install-tmux-explanation-missing"));
 static WHY_LINK_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-install-tmux-why-link-text"));
+    LazyLock::new(|| crate::tr!("terminal", "install-tmux-why-link-text"));
 
 #[derive(Debug, Clone)]
 pub struct TmuxInstallMethod {
@@ -271,7 +271,7 @@ impl SshInstallTmuxBlock {
         let package_manager = &self.system_details.package_manager;
         Container::new(requested_script::render_requested_scripts(
             TitledScript {
-                title: crate::tr!("terminal", "terminal-install-tmux-install-with-pm", package_manager = package_manager.as_str()),
+                title: crate::tr!("terminal", "install-tmux-install-with-pm", package_manager = package_manager.as_str()),
                 content: tmux_system_install_script.to_string(),
             },
             TitledScript {

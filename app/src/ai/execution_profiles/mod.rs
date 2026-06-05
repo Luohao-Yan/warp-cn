@@ -456,7 +456,7 @@ impl StringModel for AIExecutionProfile {
         if self.is_default_profile {
             crate::tr!("ai_assistant", "ai-default-profile-name")
         } else if self.name.trim().is_empty() {
-            crate::tr!("common", "common-untitled-label")
+            crate::tr!("common", "untitled-label")
         } else {
             self.name.clone()
         }

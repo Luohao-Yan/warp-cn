@@ -416,12 +416,12 @@ impl OrchestrationPillBar {
         } else {
             vec![
                 item(
-                    crate::tr!("ai", "ai-open-in-new-pane"),
+                    crate::tr!("ai", "open-in-new-pane"),
                     Icon::ArrowSplit,
                     OrchestrationPillBarAction::OpenInNewPane(conversation_id),
                 ),
                 item(
-                    crate::tr!("ai", "ai-open-in-new-tab"),
+                    crate::tr!("ai", "open-in-new-tab"),
                     Icon::Plus,
                     OrchestrationPillBarAction::OpenInNewTab(conversation_id),
                 ),
@@ -628,7 +628,7 @@ fn orchestrator_label(orchestrator: &AIConversation) -> String {
         .agent_name()
         .filter(|n| !n.is_empty())
         .map(|n| n.to_string())
-        .unwrap_or_else(|| crate::tr!("ai", "ai-orchestrator"))
+        .unwrap_or_else(|| crate::tr!("ai", "orchestrator"))
 }
 
 impl TypedActionView for OrchestrationPillBar {
@@ -1914,7 +1914,7 @@ pub fn render_orchestration_breadcrumbs(
                 .filter(|t| !t.is_empty())
                 .or_else(|| p.agent_name().map(str::to_string))
         })
-        .unwrap_or_else(|| crate::tr!("ai", "ai-orchestrator"));
+        .unwrap_or_else(|| crate::tr!("ai", "orchestrator"));
 
     // Treat empty `agent_name` as missing so the label, avatar color, and
     // initial all consistently fall back to "Agent". Without the

@@ -82,7 +82,7 @@ pub fn warpify_description(
         FormattedTextFragment::plain_text(
             "Bring Warp's features to your remote session. Blocks, full text editing, auto-complete, Oz, and more. "
         ),
-        FormattedTextFragment::hyperlink(crate::tr!("common", "common-learn-more-label").as_str(), SSH_DOCS_URL),
+        FormattedTextFragment::hyperlink(crate::tr!("common", "learn-more-label").as_str(), SSH_DOCS_URL),
     ])]);
     warpify::render::build_description_row(description, theme, appearance, hyperlink_index.clone())
         .with_hyperlink_font_color(appearance.theme().accent().into_solid())

@@ -401,29 +401,29 @@ impl<'a> QuitWarningDialog<'a> {
 
     pub fn build(self) -> AlertDialogWithCallbacks<AppModalCallback> {
         static YES_CLOSE: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-yes-close"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-yes-close"));
         static YES_QUIT: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-yes-quit"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-yes-quit"));
         static SAVE_BUTTON: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-save-button"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-save-button"));
         static DONT_SAVE_BUTTON: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-dont-save-button"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-dont-save-button"));
         static SHOW_PROCESSES: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-show-processes"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-show-processes"));
         static CANCEL_LABEL: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
+            LazyLock::new(|| crate::tr!("common", "cancel-label"));
         static CLOSE_PANE: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-pane"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-close-pane"));
         static CLOSE_TAB: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-tab"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-close-tab"));
         static CLOSE_TABS: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-tabs"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-close-tabs"));
         static CLOSE_WINDOW: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-close-window"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-close-window"));
         static QUIT_WARP: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-warp"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-warp"));
         static SAVE_CHANGES: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "workspace-quit-save-changes"));
+            LazyLock::new(|| crate::tr!("workspace", "quit-save-changes"));
 
         let QuitWarningDialog {
             state,

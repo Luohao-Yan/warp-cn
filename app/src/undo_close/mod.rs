@@ -11,7 +11,7 @@ pub use self::{settings::UndoCloseSettings, stack::UndoCloseStack, stack::UndoCl
 pub fn init(ctx: &mut AppContext) {
     ctx.register_editable_bindings([EditableBinding::new(
         "app:reopen_closed_session",
-        crate::tr!("workspace", "workspace-reopen-closed-session"),
+        crate::tr!("workspace", "reopen-closed-session"),
         // Trigger ReopenClosedSession on the active workspace when
         // the action is taken from the command palette.
         WorkspaceAction::ReopenClosedSession,

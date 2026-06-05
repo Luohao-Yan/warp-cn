@@ -61,63 +61,7 @@ workflows-no-longer-access = 您不再有权访问此工作流
 workflows-moved-to-trash = 工作流已移至回收站
 
 ## -- Double-prefix aliases for new workflow strings --
-workflows-workflows-editing = { workflows-editing }
-workflows-workflows-viewing = { workflows-viewing }
-workflows-workflows-default = { workflows-default }
-workflows-workflows-autofill = { workflows-autofill }
-workflows-workflows-loading = { workflows-loading }
-workflows-workflows-alias-help = { workflows-alias-help }
-workflows-workflows-run-in-warp = { workflows-run-in-warp }
-workflows-workflows-default-value-placeholder = { workflows-default-value-placeholder }
-workflows-workflows-category-all = { workflows-category-all }
-workflows-workflows-category-my-workflows = { workflows-category-my-workflows }
-workflows-workflows-category-repository-workflows = { workflows-category-repository-workflows }
-workflows-workflows-category-team-workflows = { workflows-category-team-workflows }
-workflows-workflows-showing-all = { workflows-showing-all }
-workflows-workflows-showing-my = { workflows-showing-my }
-workflows-workflows-showing-project = { workflows-showing-project }
-workflows-workflows-showing-team = { workflows-showing-team }
-workflows-workflows-showing-category = 显示中分类 { $category } 的工作流
-workflows-workflows-selected-workflow = 已选择 { $name } { $content }
-workflows-workflows-no-matching-found = { workflows-no-matching-found }
-workflows-workflows-try = { workflows-try }
-workflows-workflows-create-own-workflow = { workflows-create-own-workflow }
-workflows-workflows-categories-label = { workflows-categories-label }
-workflows-workflows-accessibility-title = { workflows-accessibility-title }
-workflows-workflows-accessibility-description = { workflows-accessibility-description }
-workflows-workflows-search-placeholder = { workflows-search-placeholder }
-workflows-workflows-save-workflow = { workflows-save-workflow }
-workflows-workflows-close-workflow = { workflows-close-workflow }
-workflows-workflows-title-placeholder = { workflows-title-placeholder }
-workflows-workflows-description-placeholder = { workflows-description-placeholder }
-workflows-workflows-command-placeholder = { workflows-command-placeholder }
-workflows-workflows-agent-mode-query-placeholder = { workflows-agent-mode-query-placeholder }
-workflows-workflows-arguments-label = { workflows-arguments-label }
-workflows-workflows-argument-description-placeholder = { workflows-argument-description-placeholder }
-workflows-workflows-argument-alias-description-placeholder = { workflows-argument-alias-description-placeholder }
-workflows-workflows-environment-variables = { workflows-environment-variables }
-workflows-workflows-new-environment-variables = { workflows-new-environment-variables }
-workflows-workflows-edit-prompt = { workflows-edit-prompt }
-workflows-workflows-edit-workflow = { workflows-edit-workflow }
-workflows-workflows-to-cycle-parameters = { workflows-to-cycle-parameters }
-workflows-workflows-save-as-workflow = { workflows-save-as-workflow }
-workflows-workflows-view-context = { workflows-view-context }
-workflows-workflows-add-a-workflow-argument = { workflows-add-a-workflow-argument }
-workflows-workflows-add-environment-variables = { workflows-add-environment-variables }
-workflows-workflows-aliases-label = { workflows-aliases-label }
-workflows-workflows-could-not-create = { workflows-could-not-create }
-workflows-workflows-out-of-credits-team = { workflows-out-of-credits-team }
-workflows-workflows-out-of-credits = { workflows-out-of-credits }
-workflows-workflows-command-edited = { workflows-command-edited }
-workflows-workflows-error-saving-aliases = { workflows-error-saving-aliases }
-workflows-workflows-cannot-save-secrets = { workflows-cannot-save-secrets }
-workflows-workflows-prompt-copied = { workflows-prompt-copied }
-workflows-workflows-command-copied = { workflows-command-copied }
-workflows-workflows-sign-in-to-edit = { workflows-sign-in-to-edit }
-workflows-workflows-generate-with-ai = { workflows-generate-with-ai }
-workflows-workflows-no-longer-access = { workflows-no-longer-access }
-workflows-workflows-moved-to-trash = { workflows-moved-to-trash }
-
 ## -- 键盘按键标签 -------------------------------------------------------------
 
 workflows-tab-key = Tab
+

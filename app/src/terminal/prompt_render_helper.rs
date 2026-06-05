@@ -253,31 +253,31 @@ impl PromptRenderHelper {
         if let Some(pending_session_id) = model.pending_session_id() {
             if let Some(state) = sessions.remote_server_setup_state(pending_session_id) {
                 return match state {
-                    RemoteServerSetupState::Checking => crate::tr!("terminal", "terminal-starting-shell"),
+                    RemoteServerSetupState::Checking => crate::tr!("terminal", "starting-shell"),
                     RemoteServerSetupState::Installing {
                         progress_percent: Some(p),
-                    } => crate::tr!("terminal", "terminal-installing-ssh-progress", percent = *p as i64),
+                    } => crate::tr!("terminal", "installing-ssh-progress", percent = *p as i64),
                     RemoteServerSetupState::Installing {
                         progress_percent: None,
-                    } => crate::tr!("terminal", "terminal-installing-ssh"),
+                    } => crate::tr!("terminal", "installing-ssh"),
                     RemoteServerSetupState::Updating => {
-                        crate::tr!("terminal", "terminal-updating-ssh")
+                        crate::tr!("terminal", "updating-ssh")
                     }
-                    RemoteServerSetupState::Initializing => crate::tr!("terminal", "terminal-initializing"),
-                    RemoteServerSetupState::Ready => crate::tr!("terminal", "terminal-starting-shell"),
+                    RemoteServerSetupState::Initializing => crate::tr!("terminal", "initializing"),
+                    RemoteServerSetupState::Ready => crate::tr!("terminal", "starting-shell"),
                     // Failed and Unsupported both fall back to the legacy SSH
                     // flow, so we render the same generic prompt as a normal
                     // SSH session that doesn't have the remote-server extension.
                     RemoteServerSetupState::Failed { .. }
-                    | RemoteServerSetupState::Unsupported { .. } => crate::tr!("terminal", "terminal-starting-shell").to_string(),
+                    | RemoteServerSetupState::Unsupported { .. } => crate::tr!("terminal", "starting-shell").to_string(),
                 };
             }
         }
 
         if !sessions.is_empty() {
-            crate::tr!("terminal", "terminal-starting-shell")
+            crate::tr!("terminal", "starting-shell")
         } else {
-            crate::tr!("terminal", "terminal-starting-shell-with-name", name = model.shell_launch_state().display_name().to_string())
+            crate::tr!("terminal", "starting-shell-with-name", name = model.shell_launch_state().display_name().to_string())
         }
     }
 
@@ -436,7 +436,7 @@ impl PromptRenderHelper {
             let prompt = PromptAndPadding {
                 element: PromptAndPaddingElement::Text(Box::new(
                     Text::new_inline(
-                        crate::tr!("terminal", "terminal-loading-prompt"),
+                        crate::tr!("terminal", "loading-prompt"),
                         appearance.monospace_font_family(),
                         appearance.monospace_font_size(),
                     )

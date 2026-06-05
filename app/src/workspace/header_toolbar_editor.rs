@@ -18,8 +18,8 @@ use crate::Appearance;
 
 use settings::Setting as _;
 
-static MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-edit-toolbar").clone());
-static AVAILABLE_ITEMS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-toolbar-available-items").clone());
+static MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "edit-toolbar").clone());
+static AVAILABLE_ITEMS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-available-items").clone());
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;

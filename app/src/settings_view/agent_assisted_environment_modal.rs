@@ -335,12 +335,12 @@ impl AgentAssistedEnvironmentModal {
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_spacing(8.);
 
-        col.add_child(self.render_section_title(&crate::tr!("settings", "settings-selected-repos"), appearance));
+        col.add_child(self.render_section_title(&crate::tr!("settings", "selected-repos"), appearance));
 
         if self.selected_repo_paths.is_empty() {
             col.add_child(
                 Text::new(
-                    crate::tr!("settings", "settings-no-repos-selected"),
+                    crate::tr!("settings", "no-repos-selected"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() * 0.95,
                 )
@@ -362,7 +362,7 @@ impl AgentAssistedEnvironmentModal {
                 .file_name()
                 .and_then(|s| s.to_str())
                 .map(ToOwned::to_owned)
-                .unwrap_or_else(|| crate::tr!("settings", "settings-unknown-repo"));
+                .unwrap_or_else(|| crate::tr!("settings", "unknown-repo"));
 
             let path_text = home_relative_path(repo_path);
 
@@ -416,7 +416,7 @@ impl AgentAssistedEnvironmentModal {
             .with_child(
                 Expanded::new(
                     1.,
-                    self.render_section_title(&crate::tr!("settings", "settings-available-indexed-repos"), appearance),
+                    self.render_section_title(&crate::tr!("settings", "available-indexed-repos"), appearance),
                 )
                 .finish(),
             )
@@ -436,12 +436,12 @@ impl AgentAssistedEnvironmentModal {
         if self.available_repos.is_empty() {
             let text = if cfg!(all(feature = "local_fs", not(target_family = "wasm"))) {
                 if self.available_repos_loading {
-                    crate::tr!("settings", "settings-loading-indexed-repos")
+                    crate::tr!("settings", "loading-indexed-repos")
                 } else {
-                    crate::tr!("settings", "settings-no-indexed-repos")
+                    crate::tr!("settings", "no-indexed-repos")
                 }
             } else {
-                crate::tr!("settings", "settings-local-repo-unavailable")
+                crate::tr!("settings", "local-repo-unavailable")
             };
 
             col.add_child(
@@ -511,7 +511,7 @@ impl AgentAssistedEnvironmentModal {
         if !has_any_available {
             col.add_child(
                 Text::new(
-                    crate::tr!("settings", "settings-all-repos-selected"),
+                    crate::tr!("settings", "all-repos-selected"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() * 0.95,
                 )
@@ -554,7 +554,7 @@ impl AgentAssistedEnvironmentModal {
         let path = home_relative_path(selected_path);
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             let toast =
-                DismissibleToast::error(crate::tr!("settings", "settings-folder-not-git-repo", path = path))
+                DismissibleToast::error(crate::tr!("settings", "folder-not-git-repo", path = path))
                     .with_object_id("agent_assisted_env_add_repo_not_git_repo".to_string());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
@@ -596,7 +596,7 @@ impl AgentAssistedEnvironmentModal {
 
         ctx.open_file_picker(
             move |paths_result, ctx| {
-                static NO_DIR_SELECTED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-no-directory-selected"));
+                static NO_DIR_SELECTED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "no-directory-selected"));
                 let result = paths_result.and_then(|paths| {
                     paths.into_iter().next().map(PathBuf::from).ok_or_else(|| {
                         FilePickerError::DialogFailed(NO_DIR_SELECTED.clone())
@@ -617,9 +617,9 @@ impl AgentAssistedEnvironmentModal {
 
     fn render_dialog(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let description = if FeatureFlag::FullSourceCodeEmbedding.is_enabled() {
-            crate::tr!("settings", "settings-select-local-repos-helper")
+            crate::tr!("settings", "select-local-repos-helper")
         } else {
-            crate::tr!("settings", "settings-select-repos-helper")
+            crate::tr!("settings", "select-repos-helper")
         };
 
         let close_button = icon_button(
@@ -642,7 +642,7 @@ impl AgentAssistedEnvironmentModal {
             .finish();
 
         let dialog = Dialog::new(
-            crate::tr!("settings", "settings-select-repos-title"),
+            crate::tr!("settings", "select-repos-title"),
             Some(description),
             dialog_styles(appearance),
         )

@@ -41,23 +41,3 @@ billing-shared-objects-limit-reached = 共享的{ $object_type }已达上限
 
 ## -- 双前缀别名（tr!() 调用中包含域前缀的 message ID）--
 
-billing-billing-shared-object-limit-reached = { billing-shared-object-limit-reached }
-billing-billing-compare-plans = { billing-compare-plans }
-billing-billing-manage-billing = { billing-manage-billing }
-billing-billing-delinquent-admin-subheader = { billing-delinquent-admin-subheader }
-billing-billing-delinquent-admin-enterprise-subheader = { billing-delinquent-admin-enterprise-subheader }
-billing-billing-delinquent-subheader = { billing-delinquent-subheader }
-billing-billing-admin-prosumer-subheader = { billing-admin-prosumer-subheader }
-billing-billing-prosumer-subheader = { billing-prosumer-subheader }
-billing-billing-admin-subheader = { billing-admin-subheader }
-billing-billing-default-subheader = { billing-default-subheader }
-billing-billing-shared-objects-restricted = { billing-shared-objects-restricted }
-billing-billing-shared-objects-limit-reached = { billing-shared-objects-limit-reached }
-billing-billing-delinquent-admin-dynamic-subheader = { billing-delinquent-admin-dynamic-subheader }
-billing-billing-delinquent-admin-enterprise-dynamic-subheader = { billing-delinquent-admin-enterprise-dynamic-subheader }
-billing-billing-delinquent-dynamic-subheader = { billing-delinquent-dynamic-subheader }
-billing-billing-admin-prosumer-dynamic-subheader = { billing-admin-prosumer-dynamic-subheader }
-billing-billing-prosumer-dynamic-subheader = { billing-prosumer-dynamic-subheader }
-billing-billing-admin-dynamic-subheader = { billing-admin-dynamic-subheader }
-billing-billing-default-dynamic-subheader = { billing-default-dynamic-subheader }
-billing-billing-view-plans = { billing-view-plans }

@@ -57,14 +57,14 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 use crate::view_components::dropdown::DropdownEvent;
 use crate::view_components::{FilterableDropdownEvent, FilterableDropdownOrientation};
 
-static RUN_AGENTS_CARD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-run-agents-card-title"));
+static RUN_AGENTS_CARD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "run-agents-card-title"));
 
-static REJECT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-reject-label"));
-static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-accept-label"));
-static ORCHESTRATION_DISABLED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-orchestration-disabled-message"));
-static CONFIGURING_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-configuring-agents"));
-static SPAWN_AGENTS_CANCELLED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-spawn-agents-cancelled"));
-static FAILED_TO_START_ORCHESTRATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-failed-to-start-orchestration"));
+static REJECT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "reject-label"));
+static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "accept-label"));
+static ORCHESTRATION_DISABLED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "orchestration-disabled-message"));
+static CONFIGURING_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "configuring-agents"));
+static SPAWN_AGENTS_CANCELLED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "spawn-agents-cancelled"));
+static FAILED_TO_START_ORCHESTRATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "failed-to-start-orchestration"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -963,7 +963,7 @@ fn render_body(state: &RunAgentsEditState, app: &AppContext) -> Box<dyn Element>
 fn render_summary(state: &RunAgentsEditState, appearance: &Appearance) -> Box<dyn Element> {
     let theme = appearance.theme();
     let summary = if state.summary.trim().is_empty() {
-        crate::tr!("ai", "ai-spawn-agents-summary", count = state.agent_run_configs.len())
+        crate::tr!("ai", "spawn-agents-summary", count = state.agent_run_configs.len())
     } else {
         state.summary.clone()
     };
@@ -985,7 +985,7 @@ fn render_agents_section(state: &RunAgentsEditState, app: &AppContext) -> Box<dy
     let appearance = Appearance::as_ref(app);
     let theme = appearance.theme();
     let label = Text::new(
-        crate::tr!("ai", "ai-agents-count-label", count = state.agent_run_configs.len()),
+        crate::tr!("ai", "agents-count-label", count = state.agent_run_configs.len()),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 1.,
     )
@@ -1026,12 +1026,12 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
                 .count();
             let label = if launched == total {
                 if total == 1 {
-                    crate::tr!("ai", "ai-spawned-one-agent")
+                    crate::tr!("ai", "spawned-one-agent")
                 } else {
-                    crate::tr!("ai", "ai-spawned-agents", total = total)
+                    crate::tr!("ai", "spawned-agents", total = total)
                 }
             } else {
-                crate::tr!("ai", "ai-spawned-of-agents", launched = launched, total = total)
+                crate::tr!("ai", "spawned-of-agents", launched = launched, total = total)
             };
             let kind = if launched == total {
                 StatusKind::Success
@@ -1044,7 +1044,7 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
             let body = if reason.is_empty() {
                 ORCHESTRATION_DISABLED_MESSAGE.clone()
             } else {
-                crate::tr!("ai", "ai-orchestration-disabled-with-reason", reason = reason.as_str())
+                crate::tr!("ai", "orchestration-disabled-with-reason", reason = reason.as_str())
             };
             (body, StatusKind::Cancelled)
         }
@@ -1052,7 +1052,7 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
             let label = if error.is_empty() {
                 FAILED_TO_START_ORCHESTRATION.clone()
             } else {
-                crate::tr!("ai", "ai-failed-to-start-orchestration-with-error", error = error.as_str())
+                crate::tr!("ai", "failed-to-start-orchestration-with-error", error = error.as_str())
             };
             (label, StatusKind::Failure)
         }
@@ -1076,9 +1076,9 @@ fn render_spawning_card(
 ) -> Box<dyn Element> {
     let total = snapshot.agent_count;
     let label = if total == 1 {
-        crate::tr!("ai", "ai-spawning-one-agent")
+        crate::tr!("ai", "spawning-one-agent")
     } else {
-        crate::tr!("ai", "ai-spawning-agents", total = total)
+        crate::tr!("ai", "spawning-agents", total = total)
     };
     render_status_only_card(label, appearance, StatusKind::Spawning, app)
 }

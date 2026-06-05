@@ -128,7 +128,7 @@ impl EnvironmentSetupModeSelector {
 
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         static TERMINAL_CHOOSE_SETUP: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("terminal", "terminal-choose-setup-env"));
+            LazyLock::new(|| crate::tr!("terminal", "choose-setup-env"));
         let theme = appearance.theme();
 
         let title = Text::new(
@@ -341,8 +341,8 @@ impl EnvironmentSetupModeSelector {
         let remote_github_option = self.render_option(
             0,
             Icon::Github,
-            crate::tr!("terminal", "terminal-quick-setup"),
-            crate::tr!("terminal", "terminal-quick-setup-desc"),
+            crate::tr!("terminal", "quick-setup"),
+            crate::tr!("terminal", "quick-setup-desc"),
             true,
             self.remote_github_mouse_state.clone(),
             EnvironmentSetupModeSelectorAction::SelectRemoteGitHub,
@@ -352,8 +352,8 @@ impl EnvironmentSetupModeSelector {
         let local_repos_option = self.render_option(
             1,
             Icon::Terminal,
-            crate::tr!("terminal", "terminal-use-agent"),
-            crate::tr!("terminal", "terminal-use-agent-desc"),
+            crate::tr!("terminal", "use-agent"),
+            crate::tr!("terminal", "use-agent-desc"),
             false,
             self.local_repos_mouse_state.clone(),
             EnvironmentSetupModeSelectorAction::SelectLocalRepositories,

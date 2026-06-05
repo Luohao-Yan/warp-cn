@@ -179,9 +179,9 @@ impl View for CloudModeSetupTextBlock {
                 .setup_command_state()
                 .is_running(self.group_id)
             {
-                crate::tr!("terminal", "terminal-running-setup")
+                crate::tr!("terminal", "running-setup")
             } else {
-                crate::tr!("terminal", "terminal-ran-setup")
+                crate::tr!("terminal", "ran-setup")
             };
             Flex::row()
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)

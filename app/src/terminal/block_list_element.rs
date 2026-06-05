@@ -156,13 +156,13 @@ const LINEAR_SCROLLING: ScrollingAcceleration = ScrollingAcceleration::Polynomia
 const BLOCK_HOVER_BUTTON_HEIGHT: f32 = 28.;
 
 static TAG_AGENT_FOR_ASSISTANCE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-block-tag-agent"));
+    LazyLock::new(|| crate::tr!("terminal", "block-tag-agent"));
 
 static SAVE_AS_WORKFLOW_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-block-save-workflow"));
+    LazyLock::new(|| crate::tr!("terminal", "block-save-workflow"));
 
 static SAVE_AS_WORKFLOW_SECRETS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-block-secrets-cannot-save"));
+    LazyLock::new(|| crate::tr!("terminal", "block-secrets-cannot-save"));
 
 enum ScrollingAcceleration {
     Polynomial(f32),
@@ -3418,17 +3418,14 @@ impl Element for BlockListElement {
                     // we want to show different text in the separator if this is an individual conversation
                     // restored from the command palette
                     let banner_intro_text = if is_historical_conversation_restoration {
-                        crate::tr!("terminal", "terminal-conversation-restored")
+                        crate::tr!("terminal", "conversation-restored")
                     } else {
-                        crate::tr!("terminal", "terminal-previous-session")
+                        crate::tr!("terminal", "previous-session")
                     };
 
                     let separator_text =
                         if let Some(ts) = (*model).block_list().restored_session_ts() {
-                            crate::tr!("terminal", "terminal-session-restored-from",
-                                banner_intro_text = banner_intro_text,
-                                timestamp = ts.format("%a %b %-d at %-I:%M %p").to_string()
-                            )
+                            crate::tr!("terminal", "session-restored-from", banner_intro_text = banner_intro_text, timestamp = ts.format("%a %b %-d at %-I:%M %p").to_string())
                         } else {
                             banner_intro_text
                         };

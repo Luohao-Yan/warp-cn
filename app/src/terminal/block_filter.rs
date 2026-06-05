@@ -34,7 +34,7 @@ use crate::{
 use super::model::find::{FindConfig, RegexDFAs};
 
 static FILTER_BLOCK_PLACEHOLDER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-placeholder"));
+    LazyLock::new(|| crate::tr!("terminal", "filter-placeholder"));
 
 const BLOCK_FILTER_BAR_WIDTH: f32 = 380.;
 const BLOCK_FILTER_BAR_PADDING: f32 = 4.;
@@ -53,13 +53,13 @@ const MAXIMUM_CONTEXT_LINE_EDITOR_BUFFER_LENGTH: usize = 2;
 pub type ContextLines = u16;
 pub const DEFAULT_CONTEXT_LINES_VALUE: ContextLines = 0;
 static CONTEXT_LINE_EDITOR_TOOLTIP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-show-context"));
+    LazyLock::new(|| crate::tr!("terminal", "filter-show-context"));
 static REGEX_TOOLTIP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-regex-toggle"));
+    LazyLock::new(|| crate::tr!("terminal", "filter-regex-toggle"));
 static CASE_SENSITIVITY_TOOLTIP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-case-sensitive"));
+    LazyLock::new(|| crate::tr!("terminal", "filter-case-sensitive"));
 static INVERT_FILTER_TOOLTIP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-filter-invert"));
+    LazyLock::new(|| crate::tr!("terminal", "filter-invert"));
 
 pub const BLOCK_FILTER_DOTTED_LINE_DASH: Dash = Dash {
     dash_length: 4.,
@@ -760,8 +760,8 @@ impl View for BlockFilterEditor {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            crate::tr!("terminal", "terminal-type-searched-phrase"),
-            crate::tr!("terminal", "terminal-press-escape-to-quit"),
+            crate::tr!("terminal", "type-searched-phrase"),
+            crate::tr!("terminal", "press-escape-to-quit"),
             WarpA11yRole::TextareaRole,
         ))
     }

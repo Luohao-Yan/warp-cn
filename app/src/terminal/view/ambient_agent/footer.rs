@@ -13,9 +13,9 @@ use warpui::{
 
 use crate::ui_components::blended_colors;
 
-static CLOUD_AGENT_STARTING: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-starting-up"));
-static INTERACT_SOON: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-interact-soon"));
-static AGENT_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-agent-failed"));
+static CLOUD_AGENT_STARTING: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "starting-up"));
+static INTERACT_SOON: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "interact-soon"));
+static AGENT_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-failed"));
 
 const CONTENT_SPACING: f32 = 4.;
 const HORIZONTAL_PADDING: f32 = 12.;

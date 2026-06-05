@@ -154,18 +154,18 @@ impl View for WasmNUXDialog {
 
         let dialog = if self.requested_download {
             Dialog::new(
-                crate::tr!("workspace", "workspace-open-desktop-question"),
-                Some(crate::tr!("workspace", "workspace-future-links-desktop")),
+                crate::tr!("workspace", "open-desktop-question"),
+                Some(crate::tr!("workspace", "future-links-desktop")),
                 dialog_styles,
             )
             .with_bottom_row_child(Self::render_dialog_button(
-                crate::tr!("workspace", "workspace-open-in-warp"),
+                crate::tr!("workspace", "open-in-warp"),
                 WasmNUXDialogAction::OpenNativeAndClose,
                 &self.confirm_mouse_state,
                 appearance,
             ))
         } else if app_install_detected == &UserAppInstallStatus::NotDetected {
-            Dialog::new(crate::tr!("workspace", "workspace-download-desktop-question"), None, dialog_styles)
+            Dialog::new(crate::tr!("workspace", "download-desktop-question"), None, dialog_styles)
                 .with_child(
                     Flex::column()
                         .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
@@ -173,7 +173,7 @@ impl View for WasmNUXDialog {
                         .with_child(
                             appearance
                                 .ui_builder()
-                                .span(crate::tr!("workspace", "workspace-intelligent-terminal-promo"))
+                                .span(crate::tr!("workspace", "intelligent-terminal-promo"))
                                 .with_style(UiComponentStyles {
                                     font_weight: Some(Weight::Thin),
                                     font_color: Some(
@@ -193,7 +193,7 @@ impl View for WasmNUXDialog {
                                 appearance
                                     .ui_builder()
                                     .link(
-                                        crate::tr!("common", "common-learn-more-label"),
+                                        crate::tr!("common", "learn-more-label"),
                                         None,
                                         Some(Box::new(|ctx| {
                                             ctx.dispatch_typed_action(
@@ -211,25 +211,24 @@ impl View for WasmNUXDialog {
                         .finish(),
                 )
                 .with_bottom_row_child(Self::render_dialog_button(
-                    crate::tr!("common", "common-download-label"),
+                    crate::tr!("common", "download-label"),
                     WasmNUXDialogAction::OpenDownloadDesktopAppLink,
                     &self.download_warp_mouse_state,
                     appearance,
                 ))
         } else {
             let object_kind = match web_intent_parser::current_web_intent() {
-                Some(WebIntent::DriveObject(_)) => crate::tr!("workspace", "workspace-warp-drive-objects"),
-                Some(WebIntent::SessionView(_)) => crate::tr!("workspace", "workspace-shared-sessions"),
-                _ => crate::tr!("workspace", "workspace-warp-links"),
+                Some(WebIntent::DriveObject(_)) => crate::tr!("workspace", "warp-drive-objects"),
+                Some(WebIntent::SessionView(_)) => crate::tr!("workspace", "shared-sessions"), _ => crate::tr!("workspace", "warp-links"),
             };
 
             Dialog::new(
-                crate::tr!("workspace", "workspace-always-open-web", object_kind = object_kind.as_str()),
-                Some(crate::tr!("workspace", "workspace-change-in-settings")),
+                crate::tr!("workspace", "always-open-web", object_kind = object_kind.as_str()),
+                Some(crate::tr!("workspace", "change-in-settings")),
                 dialog_styles,
             )
             .with_bottom_row_child(Self::render_dialog_button(
-                crate::tr!("common", "common-yes-label"),
+                crate::tr!("common", "yes-label"),
                 WasmNUXDialogAction::SetWebAndClose,
                 &self.confirm_mouse_state,
                 appearance,

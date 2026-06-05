@@ -22,7 +22,7 @@ use super::shared_objects_creation_denied_body::{
     SharedObjectsCreationDeniedBody, SharedObjectsCreationDeniedBodyEvent,
 };
 
-static DEFAULT_LIMIT_REACHED_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-shared-object-limit-reached"));
+static DEFAULT_LIMIT_REACHED_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "shared-object-limit-reached"));
 
 pub struct SharedObjectsCreationDeniedModal {
     shared_objects_creation_denied_modal: ViewHandle<Modal<SharedObjectsCreationDeniedBody>>,
@@ -126,9 +126,9 @@ impl SharedObjectsCreationDeniedModal {
         let appearance = Appearance::as_ref(ctx);
         self.team_uid = Some(team_uid);
         let title: Option<String> = if is_delinquent_due_to_payment_issue {
-            Some(crate::tr!("billing", "billing-shared-objects-restricted", object_type = object_type.to_string()))
+            Some(crate::tr!("billing", "shared-objects-restricted", object_type = object_type.to_string()))
         } else {
-            Some(crate::tr!("billing", "billing-shared-objects-limit-reached", object_type = object_type.to_string()))
+            Some(crate::tr!("billing", "shared-objects-limit-reached", object_type = object_type.to_string()))
         };
         let (icon, icon_color) = match object_type {
             DriveObjectType::Notebook { is_ai_document } => (

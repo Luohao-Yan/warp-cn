@@ -105,7 +105,7 @@ fn render_current_session_pill(
 ) -> Box<dyn Element> {
     let current_session_pill = appearance
         .ui_builder()
-        .span(crate::tr!("common", "common-current"))
+        .span(crate::tr!("common", "current"))
         .with_style(UiComponentStyles {
             font_family_id: Some(appearance.monospace_font_family()),
             // The font size is scaled down to make sure the pill fits in the row with its padding.
@@ -332,11 +332,11 @@ pub(super) struct CommandRenderInfo {
     hint_margin: f32,
 }
 
-static RUNNING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-status-running").clone());
-static COMPLETED_OVER_HOUR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-status-completed-hour").clone());
-static NO_TIMESTAMP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-status-no-timestamp").clone());
-static COMPLETED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-nav-completed").clone());
-static EMPTY_SESSION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-nav-empty-session").clone());
+static RUNNING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "status-running").clone());
+static COMPLETED_OVER_HOUR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "status-completed-hour").clone());
+static NO_TIMESTAMP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "status-no-timestamp").clone());
+static COMPLETED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "nav-completed").clone());
+static EMPTY_SESSION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "nav-empty-session").clone());
 
 impl CommandRenderInfo {
     pub fn from_context(command_context: CommandContext) -> CommandRenderInfo {
@@ -362,7 +362,7 @@ impl CommandRenderInfo {
                 command_text: Some(last_run_command),
                 hint_text: match mins_since_completion {
                     Some(mins) if mins >= 60 => COMPLETED_OVER_HOUR_LABEL.clone(),
-                    Some(mins) => crate::tr!("search", "search-status-completed-minute").replace("{ $mins }", &mins.to_string()),
+                    Some(mins) => crate::tr!("search", "status-completed-minute").replace("{ $mins }", &mins.to_string()),
                     None => NO_TIMESTAMP_LABEL.clone(),
                 },
             },

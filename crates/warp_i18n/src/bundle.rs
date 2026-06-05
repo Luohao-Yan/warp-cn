@@ -80,37 +80,26 @@ impl I18nBundle {
 
     /// Format a message.
     ///
-    /// `domain` and `id` are joined into the lookup key `"{domain}-{id}"`.
-    /// If that key is not found, falls back to `id` alone (supporting FTL
-    /// entries that already carry their own namespace prefix).
+    /// `domain` and `id` are joined into the lookup key `"{domain-hyphen}-{id}"`,
+    /// where domain underscores are converted to hyphens (e.g. `ai_assistant` → `ai-assistant`).
     pub fn format(&self, domain: &str, id: &str, args: Option<&FluentArgs>) -> String {
         let key = lookup_key(domain, id);
 
-        let try_format = |bundle: &FluentBundle<FluentResource>, msg_id: &str| -> Option<String> {
-            bundle.get_message(msg_id).and_then(|msg| {
-                msg.value().map(|pattern| Self::format_pattern(bundle, pattern, args))
-            })
-        };
-
-        // 1. Try primary locale with domain-prefixed key.
+        // 1. Try primary locale.
         if let Some(bundle) = &self.primary {
-            if let Some(result) = try_format(bundle, &key) {
-                return result;
-            }
-            // 2. Try primary locale with bare id (FTL entries with own prefix).
-            if let Some(result) = try_format(bundle, id) {
-                return result;
+            if let Some(msg) = bundle.get_message(&key) {
+                if let Some(pattern) = msg.value() {
+                    return Self::format_pattern(bundle, pattern, args);
+                }
             }
         }
 
-        // 3. Try fallback locale with domain-prefixed key.
+        // 2. Try fallback locale.
         if let Some(bundle) = &self.fallback {
-            if let Some(result) = try_format(bundle, &key) {
-                return result;
-            }
-            // 4. Try fallback locale with bare id.
-            if let Some(result) = try_format(bundle, id) {
-                return result;
+            if let Some(msg) = bundle.get_message(&key) {
+                if let Some(pattern) = msg.value() {
+                    return Self::format_pattern(bundle, pattern, args);
+                }
             }
         }
 
@@ -297,8 +286,10 @@ impl Default for I18nBundleBuilder {
 
 fn lookup_key(domain: &str, id: &str) -> String {
     // Hyphen-separated because FTL identifiers only support
-    // [a-zA-Z0-9_-], not dots.
-    format!("{domain}-{id}")
+    // [a-zA-Z0-9_-], not dots. Domain underscores are converted
+    // to hyphens so Rust module names (e.g. ai_assistant) map
+    // directly to FTL prefixes (e.g. ai-assistant).
+    format!("{}-{}", domain.replace('_', "-"), id)
 }
 
 // ---------------------------------------------------------------------------
@@ -328,19 +319,6 @@ common-search-placeholder = Search
         assert_eq!(
             bundle.format("common", "search-placeholder", None),
             "Search"
-        );
-    }
-
-    #[test]
-    fn test_missing_message_returns_key() {
-        let bundle = I18nBundleBuilder::new()
-            .with_fallback_ftl("common-existing = Hello\n")
-            .unwrap()
-            .build();
-
-        assert_eq!(
-            bundle.format("common", "missing-id", None),
-            "common-missing-id"
         );
     }
 
@@ -452,31 +430,31 @@ items-count = { $count ->
     }
 
     #[test]
-    fn test_bare_id_fallback() {
-        // When FTL entry uses its own prefix (e.g. "ai-deleted-conversation")
-        // but tr!() would look up "ai_assistant-ai-deleted-conversation",
-        // the format() method should fall back to the bare id.
+    fn test_underscore_domain_to_hyphen() {
+        // Domain underscores are converted to hyphens in the lookup key,
+        // matching the FTL prefix convention (e.g. ai_assistant → ai-assistant).
         let bundle = I18nBundleBuilder::new()
             .with_primary_ftl(
                 &langid!("zh-CN"),
                 r#"
-ai-deleted-conversation = 已删除的对话
+ai-assistant-deleted-conversation = 已删除的对话
 "#,
             )
             .unwrap()
             .with_fallback_ftl(
                 r#"
-ai-deleted-conversation = Deleted conversation
+ai-assistant-deleted-conversation = Deleted conversation
 "#,
             )
             .unwrap()
             .build();
 
         assert_eq!(
-            bundle.format("ai_assistant", "ai-deleted-conversation", None),
+            bundle.format("ai_assistant", "deleted-conversation", None),
             "已删除的对话"
         );
-        // Also works with the domain-prefixed key if the entry exists
+
+        // Domain without underscores works the same
         let bundle2 = I18nBundleBuilder::new()
             .with_fallback_ftl(
                 r#"
@@ -487,5 +465,31 @@ common-cancel-label = Cancel
             .build();
 
         assert_eq!(bundle2.format("common", "cancel-label", None), "Cancel");
+    }
+
+    #[test]
+    fn test_missing_message_returns_key() {
+        let bundle = I18nBundleBuilder::new()
+            .with_fallback_ftl("common-existing = Hello\n")
+            .unwrap()
+            .build();
+
+        assert_eq!(
+            bundle.format("common", "missing-id", None),
+            "common-missing-id"
+        );
+    }
+
+    #[test]
+    fn test_missing_underscore_domain_returns_hyphen_key() {
+        let bundle = I18nBundleBuilder::new()
+            .with_fallback_ftl("existing = Hello\n")
+            .unwrap()
+            .build();
+
+        assert_eq!(
+            bundle.format("ai_assistant", "missing-id", None),
+            "ai-assistant-missing-id"
+        );
     }
 }

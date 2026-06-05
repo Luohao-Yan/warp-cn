@@ -76,13 +76,13 @@ static TAB_CONFIGS: LazyLock<Vec<InlineMenuTabConfig<InlineModelSelectorTab>>> =
     LazyLock::new(|| {
         let mut configs = vec![InlineMenuTabConfig {
             id: InlineModelSelectorTab::BaseAgent,
-            label: crate::tr!("terminal", "terminal-base"),
+            label: crate::tr!("terminal", "base"),
             filters: HashSet::from([QueryFilter::BaseModels]),
         }];
         if FeatureFlag::InlineMenuHeaders.is_enabled() {
             configs.push(InlineMenuTabConfig {
                 id: InlineModelSelectorTab::FullTerminalUse,
-                label: crate::tr!("terminal", "terminal-full-terminal-use"),
+                label: crate::tr!("terminal", "full-terminal-use"),
                 filters: HashSet::from([QueryFilter::FullTerminalUseModels]),
             });
         }
@@ -142,7 +142,7 @@ impl InlineModelSelectorView {
 
         let menu_view = if FeatureFlag::InlineMenuHeaders.is_enabled() {
             let manage_defaults_button = ctx.add_view(|_| {
-                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-manage-defaults"));
+                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "manage-defaults"));
                 ActionButton::new(&*LABEL, ManageDefaultsTheme)
                     .with_icon(Icon::Settings)
                     .with_size(ButtonSize::Small)
@@ -154,7 +154,7 @@ impl InlineModelSelectorView {
                     })
             });
             let header_config = InlineMenuHeaderConfig {
-                label: crate::tr!("terminal", "terminal-model"),
+                label: crate::tr!("terminal", "model"),
                 trailing_element: Some(Box::new(move |_app: &AppContext| {
                     ChildView::new(&manage_defaults_button).finish()
                 })),

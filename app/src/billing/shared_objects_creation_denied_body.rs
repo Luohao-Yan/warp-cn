@@ -19,15 +19,15 @@ const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 
-static DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-delinquent-admin-subheader"));
-static DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-delinquent-admin-enterprise-subheader"));
-static DEFAULT_DELINQUENT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-delinquent-subheader"));
-static DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-admin-prosumer-subheader"));
-static DEFAULT_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-prosumer-subheader"));
-static DEFAULT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-admin-subheader"));
-static DEFAULT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-default-subheader"));
-static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-compare-plans"));
-static MANAGE_BILLING_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "billing-manage-billing"));
+static DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "delinquent-admin-subheader"));
+static DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "delinquent-admin-enterprise-subheader"));
+static DEFAULT_DELINQUENT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "delinquent-subheader"));
+static DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "admin-prosumer-subheader"));
+static DEFAULT_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "prosumer-subheader"));
+static DEFAULT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "admin-subheader"));
+static DEFAULT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "default-subheader"));
+static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "compare-plans"));
+static MANAGE_BILLING_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "manage-billing"));
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -98,20 +98,20 @@ impl View for SharedObjectsCreationDeniedBody {
                 match (self.is_delinquent_due_to_payment_issue, self.has_admin_permissions, self.customer_type) {
                     (true, true, _) => {
                         if is_stripe_paid_plan {
-                            crate::tr!("billing", "billing-delinquent-admin-dynamic-subheader", object_type = object_type.to_string())
+                            crate::tr!("billing", "delinquent-admin-dynamic-subheader", object_type = object_type.to_string())
                         } else {
-                            crate::tr!("billing", "billing-delinquent-admin-enterprise-dynamic-subheader", object_type = object_type.to_string())
+                            crate::tr!("billing", "delinquent-admin-enterprise-dynamic-subheader", object_type = object_type.to_string())
                         }
                     },
-                    (true, false, _) => crate::tr!("billing", "billing-delinquent-dynamic-subheader", object_type = object_type.to_string()),
+                    (true, false, _) => crate::tr!("billing", "delinquent-dynamic-subheader", object_type = object_type.to_string()),
                     (false, true, CustomerType::Prosumer) => {
-                        crate::tr!("billing", "billing-admin-prosumer-dynamic-subheader", object_type = object_type.to_string())
+                        crate::tr!("billing", "admin-prosumer-dynamic-subheader", object_type = object_type.to_string())
                     }
                     (false, false, CustomerType::Prosumer) => {
-                        crate::tr!("billing", "billing-prosumer-dynamic-subheader", object_type = object_type.to_string())
+                        crate::tr!("billing", "prosumer-dynamic-subheader", object_type = object_type.to_string())
                     }
-                    (false, true, _) => crate::tr!("billing", "billing-admin-dynamic-subheader", object_type = object_type.to_string()),
-                    (false, false, _) => crate::tr!("billing", "billing-default-dynamic-subheader", object_type = object_type.to_string()),
+                    (false, true, _) => crate::tr!("billing", "admin-dynamic-subheader", object_type = object_type.to_string()),
+                    (false, false, _) => crate::tr!("billing", "default-dynamic-subheader", object_type = object_type.to_string()),
                 }
             }
             _ => match (

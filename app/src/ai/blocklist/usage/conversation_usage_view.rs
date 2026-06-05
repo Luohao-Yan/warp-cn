@@ -134,7 +134,7 @@ impl ConversationUsageView {
 
         // Usage summary
         labels.push(render_section_header(
-            crate::tr!("ai", "ai-usage-summary-header"),
+            crate::tr!("ai", "usage-summary-header"),
             appearance,
         ));
         values.push(render_section_header("".to_string(), appearance));
@@ -144,7 +144,7 @@ impl ConversationUsageView {
         {
             let last_block_credits = self.usage_info.credits_spent_for_last_block.unwrap();
             labels.push(render_label_text(
-                &crate::tr!("ai", "ai-credits-spent-last-response"),
+                &crate::tr!("ai", "credits-spent-last-response"),
                 appearance,
             ));
             values.push(render_value_text(
@@ -152,20 +152,20 @@ impl ConversationUsageView {
                 appearance,
             ));
 
-            labels.push(render_label_text(&crate::tr!("ai", "ai-credits-spent-total"), appearance));
+            labels.push(render_label_text(&crate::tr!("ai", "credits-spent-total"), appearance));
             values.push(render_value_text(
                 format_credits(self.usage_info.credits_spent),
                 appearance,
             ));
         } else {
-            labels.push(render_label_text(&crate::tr!("ai", "ai-credits-spent"), appearance));
+            labels.push(render_label_text(&crate::tr!("ai", "credits-spent"), appearance));
             values.push(render_value_text(
                 format_credits(self.usage_info.credits_spent),
                 appearance,
             ));
         }
 
-        labels.push(render_label_text(&crate::tr!("ai", "ai-tool-calls"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai", "tool-calls"), appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.tool_calls, "call"),
             appearance,
@@ -187,7 +187,7 @@ impl ConversationUsageView {
 
             let label_text = if category == PRIMARY_AGENT_CATEGORY && entries_by_category.len() == 1
             {
-                crate::tr!("ai", "ai-models-label").to_string()
+                crate::tr!("ai", "models-label").to_string()
             } else {
                 format!("Models ({})", token_usage_category_display_name(&category))
             };
@@ -200,7 +200,7 @@ impl ConversationUsageView {
                     .ui_builder()
                     .info_button_with_tooltip(
                         font_size * 0.85,
-                        &crate::tr!("ai", "ai-change-model-settings"),
+                        &crate::tr!("ai", "change-model-settings"),
                         self.full_terminal_use_tooltip_mouse_state.clone(),
                     )
                     .finish();
@@ -263,7 +263,7 @@ impl ConversationUsageView {
             );
         }
 
-        labels.push(render_label_text(&crate::tr!("ai", "ai-context-window-used"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai", "context-window-used"), appearance));
         let context_usage_str =
             format!("{}%", (self.usage_info.context_window_usage * 100.).round());
         let context_window_element = Flex::row()
@@ -301,18 +301,18 @@ impl ConversationUsageView {
 
         // Tool call summary
         labels.push(render_section_header(
-            crate::tr!("ai", "ai-tool-call-summary-header"),
+            crate::tr!("ai", "tool-call-summary-header"),
             appearance,
         ));
         values.push(render_section_header("".to_string(), appearance));
 
-        labels.push(render_label_text(&crate::tr!("ai", "ai-files-changed"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai", "files-changed"), appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.files_changed, "file"),
             appearance,
         ));
 
-        labels.push(render_label_text(&crate::tr!("ai", "ai-diffs-applied"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai", "diffs-applied"), appearance));
         let diffs_element = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
@@ -349,7 +349,7 @@ impl ConversationUsageView {
             .finish();
         values.push(diffs_element);
 
-        labels.push(render_label_text(&crate::tr!("ai", "ai-commands-executed"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai", "commands-executed"), appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.commands_executed, "command"),
             appearance,
@@ -376,12 +376,12 @@ impl ConversationUsageView {
 
                     // Section header
                     labels.push(render_section_header(
-                        crate::tr!("ai", "ai-last-response-time-header"),
+                        crate::tr!("ai", "last-response-time-header"),
                         appearance,
                     ));
                     values.push(render_section_header("".to_string(), appearance));
 
-                    labels.push(render_label_text(&crate::tr!("ai", "ai-time-to-first-token"), appearance));
+                    labels.push(render_label_text(&crate::tr!("ai", "time-to-first-token"), appearance));
                     values.push(render_value_text(
                         format!(
                             "{:.1} seconds",
@@ -390,7 +390,7 @@ impl ConversationUsageView {
                         appearance,
                     ));
 
-                    labels.push(render_label_text(&crate::tr!("ai", "ai-total-agent-response-time"), appearance));
+                    labels.push(render_label_text(&crate::tr!("ai", "total-agent-response-time"), appearance));
                     values.push(render_value_text(
                         format!(
                             "{:.1} seconds",
@@ -402,7 +402,7 @@ impl ConversationUsageView {
                     if let Some(wall_ms) = timing.wall_to_wall_response_time_ms {
                         if wall_ms != 0 {
                             labels.push(render_label_text(
-                                &crate::tr!("ai", "ai-total-time-including-tools"),
+                                &crate::tr!("ai", "total-time-including-tools"),
                                 appearance,
                             ));
                             values.push(render_value_text(

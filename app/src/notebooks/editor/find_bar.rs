@@ -40,14 +40,14 @@ use super::{
     view::{EditorViewEvent, RichTextEditorView},
 };
 
-static NO_MATCHES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-no-matches"));
-static ENABLE_REGEX_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-enable-regex-search-a11y"));
-static DISABLE_REGEX_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-disable-regex-search-a11y"));
-static ENABLE_CASE_SENSITIVE_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-enable-case-sensitive-search-a11y"));
-static DISABLE_CASE_SENSITIVE_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-disable-case-sensitive-search-a11y"));
-static FOCUS_NEXT_MATCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-focus-next-match-a11y"));
-static FOCUS_PREVIOUS_MATCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-focus-previous-match-a11y"));
-static CLOSE_FIND_BAR_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "notebooks-close-find-bar-a11y"));
+static NO_MATCHES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "no-matches"));
+static ENABLE_REGEX_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "enable-regex-search-a11y"));
+static DISABLE_REGEX_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "disable-regex-search-a11y"));
+static ENABLE_CASE_SENSITIVE_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "enable-case-sensitive-search-a11y"));
+static DISABLE_CASE_SENSITIVE_SEARCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "disable-case-sensitive-search-a11y"));
+static FOCUS_NEXT_MATCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "focus-next-match-a11y"));
+static FOCUS_PREVIOUS_MATCH_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "focus-previous-match-a11y"));
+static CLOSE_FIND_BAR_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "close-find-bar-a11y"));
 
 /// View for the find bar within a notebook.
 pub struct FindBar {

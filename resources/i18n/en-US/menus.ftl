@@ -70,8 +70,3 @@ menus-edit-config = Edit config
 
 ## -- Double-prefix aliases for migrated UI strings --
 
-menus-menus-remove-config-confirm = { menus-remove-config-confirm }
-menus-menus-delete-config-undo-warning = { menus-delete-config-undo-warning }
-menus-menus-make-default = { menus-make-default }
-menus-menus-already-the-default = { menus-already-the-default }
-menus-menus-edit-config = { menus-edit-config }

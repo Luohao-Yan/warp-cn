@@ -157,7 +157,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         EDIT_COMMAND_ACTION_NAME,
-        crate::tr!("ai_assistant", "ai-assistant-edit-requested-command"),
+        crate::tr!("ai_assistant", "edit-requested-command"),
         RequestedCommandViewAction::OpenEditMode,
     )
     .with_key_binding(cmd_or_ctrl_shift("e"))
@@ -1448,13 +1448,13 @@ impl View for RequestedCommandView {
                 // If we have a result, show the JSON response.
                 let result_text = match result {
                     CallMCPToolResult::Success { result } => serde_json::to_string_pretty(result)
-                        .unwrap_or_else(|_| crate::tr!("ai", "ai-error-formatting-json")),
+                        .unwrap_or_else(|_| crate::tr!("ai", "error-formatting-json")),
                     CallMCPToolResult::Error(error) => {
-                        crate::tr!("ai", "ai-mcp-error", error = error.to_string())
+                        crate::tr!("ai", "mcp-error", error = error.to_string())
                     }
-                    CallMCPToolResult::Cancelled => crate::tr!("ai", "ai-tool-call-cancelled"),
+                    CallMCPToolResult::Cancelled => crate::tr!("ai", "tool-call-cancelled"),
                 };
-                crate::tr!("ai", "ai-mcp-response", command = command_text, result = result_text.as_str())
+                crate::tr!("ai", "mcp-response", command = command_text, result = result_text.as_str())
             } else if self.is_header_expanded {
                 command_text.to_string()
             } else {

@@ -14,8 +14,8 @@ use crate::terminal::input::message_bar::{
 use crate::terminal::input::InputAction;
 use crate::terminal::model::TerminalModel;
 
-static TERMINAL_TO_REMOVE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-to-remove"));
-static TERMINAL_SELECTED_TEXT_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-selected-text-as-context"));
+static TERMINAL_TO_REMOVE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "to-remove"));
+static TERMINAL_SELECTED_TEXT_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selected-text-as-context"));
 
 /// Trait for message args that can provide attached context information.
 /// Exposes the required dependencies for attached context message producers.
@@ -63,11 +63,11 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args> for AttachedBlocksM
             .map(|cmd| truncated_command_for_block(&cmd))?;
 
         let message_text = if context_block_ids.len() == 1 {
-            crate::tr!("terminal", "terminal-attached-as-context", name = block_command.clone())
+            crate::tr!("terminal", "attached-as-context", name = block_command.clone())
         } else if context_block_ids.len() == 2 {
-            crate::tr!("terminal", "terminal-attached-with-one-more", name = block_command.clone())
+            crate::tr!("terminal", "attached-with-one-more", name = block_command.clone())
         } else {
-            crate::tr!("terminal", "terminal-attached-with-more", name = block_command.clone(), count = context_block_ids.len().saturating_sub(1))
+            crate::tr!("terminal", "attached-with-more", name = block_command.clone(), count = context_block_ids.len().saturating_sub(1))
         };
 
         let mut items = vec![MessageItem::text(message_text)];

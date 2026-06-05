@@ -189,44 +189,9 @@ common-menu-save-new = 新建保存...
 
 ## -- 应用菜单名称的双前缀别名 -----------------------------------------------
 
-common-common-menu-warp = { common-menu-warp }
-common-common-menu-file = { common-menu-file }
-common-common-menu-edit = { common-menu-edit }
-common-common-menu-view = { common-menu-view }
-common-common-menu-tab = { common-menu-tab }
-common-common-menu-ai = { common-menu-ai }
-common-common-menu-blocks = { common-menu-blocks }
-common-common-menu-drive = { common-menu-drive }
-common-common-menu-window = { common-menu-window }
-common-common-menu-help = { common-menu-help }
 
 ## -- 应用菜单项标签的双前缀别名 --------------------------------------------
 
-common-common-menu-new-window = { common-menu-new-window }
-common-common-menu-new-terminal-tab = { common-menu-new-terminal-tab }
-common-common-menu-new-agent-tab = { common-menu-new-agent-tab }
-common-common-menu-preferences = { common-menu-preferences }
-common-common-menu-privacy-policy = { common-menu-privacy-policy }
-common-common-menu-debug = { common-menu-debug }
-common-common-menu-set-warp-as-default-terminal = { common-menu-set-warp-as-default-terminal }
-common-common-menu-log-out = { common-menu-log-out }
-common-common-menu-open-recent = { common-menu-open-recent }
-common-common-menu-use-warps-prompt = { common-menu-use-warps-prompt }
-common-common-menu-copy-on-select = { common-menu-copy-on-select }
-common-common-menu-synchronize-inputs = { common-menu-synchronize-inputs }
-common-common-menu-toggle-mouse-reporting = { common-menu-toggle-mouse-reporting }
-common-common-menu-toggle-scroll-reporting = { common-menu-toggle-scroll-reporting }
-common-common-menu-toggle-focus-reporting = { common-menu-toggle-focus-reporting }
-common-common-menu-compact-mode = { common-menu-compact-mode }
-common-common-menu-manually-toggle-network-status = { common-menu-manually-toggle-network-status }
-common-common-menu-create-anonymous-user = { common-menu-create-anonymous-user }
-common-common-menu-send-feedback = { common-menu-send-feedback }
-common-common-menu-warp-documentation = { common-menu-warp-documentation }
-common-common-menu-github-issues = { common-menu-github-issues }
-common-common-menu-warp-slack-community = { common-menu-warp-slack-community }
-common-common-menu-reopen-closed-session = { common-menu-reopen-closed-session }
-common-common-menu-launch-configurations = { common-menu-launch-configurations }
-common-common-menu-save-new = { common-menu-save-new }
 
 ## -- 窗格操作 ---------------------------------------------------------------
 
@@ -296,46 +261,6 @@ common-new-badge = 新
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID
 
-common-common-back-label = { common-back-label }
-common-common-cancel-label = { common-cancel-label }
-common-common-close-label = { common-close-label }
-common-common-delete-label = { common-delete-label }
-common-common-launch-config-placeholder = { common-launch-config-placeholder }
-common-common-open-yaml-file-button = { common-open-yaml-file-button }
-common-common-remove-label = { common-remove-label }
-common-common-save-configuration-button = { common-save-configuration-button }
-common-common-save-current-configuration = { common-save-current-configuration }
-common-common-download-label = { common-download-label }
-common-common-yes-label = { common-yes-label }
-common-common-done-label = { common-done-label }
-common-common-dismiss-label = { common-dismiss-label }
-common-common-learn-more-label = { common-learn-more-label }
-common-common-learn-more = { common-learn-more }
-common-common-copy-label = { common-copy-label }
-common-common-paste-label = { common-paste-label }
-common-common-cut-label = { common-cut-label }
-common-common-undo-label = { common-undo-label }
-common-common-redo-label = { common-redo-label }
-common-common-select-all-label = { common-select-all-label }
-common-common-open-label = { common-open-label }
-common-common-open-file-label = { common-open-file-label }
-common-common-view-label = { common-view-label }
-common-common-import-label = { common-import-label }
-common-common-share-label = { common-share-label }
-common-common-upload-label = { common-upload-label }
-common-common-split-pane-right = { common-split-pane-right }
-common-common-split-pane-left = { common-split-pane-left }
-common-common-split-pane-down = { common-split-pane-down }
-common-common-split-pane-up = { common-split-pane-up }
-common-common-close-pane = { common-close-pane }
-common-common-maximize-pane = { common-maximize-pane }
-common-common-minimize-pane = { common-minimize-pane }
-common-common-close-current-session = { common-close-current-session }
-common-common-switch-panes-left = { common-switch-panes-left }
-common-common-switch-panes-right = { common-switch-panes-right }
-common-common-switch-panes-up = { common-switch-panes-up }
-common-common-switch-panes-down = { common-switch-panes-down }
-common-common-toggle-maximize-active-pane = { common-toggle-maximize-active-pane }
 
 ## -- 其他 --------------------------------------------------------------------
 
@@ -357,17 +282,6 @@ common-manage = 管理
 common-no-matching-themes = 没有匹配的主题！
 
 ## -- Double-prefix aliases for new common strings --
-common-common-separator = { common-separator }
-common-common-current = { common-current }
-common-common-loading = { common-loading }
-common-common-out-of-credits = { common-out-of-credits }
-common-common-credits-suffix = { common-credits-suffix }
-common-common-no-results = { common-no-results }
-common-common-no-matches = { common-no-matches }
-common-common-manage = { common-manage }
-common-common-no-matching-themes = { common-no-matching-themes }
-common-common-run-label = { common-run-label }
-common-common-new-label = { common-new-label }
 
 ## -- 获取编辑权限模态框字符串 --
 common-edit-anyway-label = 仍然编辑
@@ -392,19 +306,6 @@ common-export-default-settings-csv = 将默认设置导出为 CSV 到主目录
 
 ## -- 应用菜单切换标签的双前缀别名 --
 
-common-common-enable-shell-debug-mode = { common-enable-shell-debug-mode }
-common-common-disable-shell-debug-mode = { common-disable-shell-debug-mode }
-common-common-enable-in-band-generators = { common-enable-in-band-generators }
-common-common-disable-in-band-generators = { common-disable-in-band-generators }
-common-common-enable-pty-recording = { common-enable-pty-recording }
-common-common-disable-pty-recording = { common-disable-pty-recording }
-common-common-show-bootstrap-block = { common-show-bootstrap-block }
-common-common-hide-bootstrap-block = { common-hide-bootstrap-block }
-common-common-show-in-band-command-blocks = { common-show-in-band-command-blocks }
-common-common-hide-in-band-command-blocks = { common-hide-in-band-command-blocks }
-common-common-show-ssh-command-blocks = { common-show-ssh-command-blocks }
-common-common-hide-ssh-command-blocks = { common-hide-ssh-command-blocks }
-common-common-export-default-settings-csv = { common-export-default-settings-csv }
 
 ## -- 主题选择器字符串 --
 common-themes-title = 主题
@@ -416,41 +317,8 @@ common-saving-label = 正在保存…
 common-beta-label = Beta
 
 ## -- 主题选择器字符串的双前缀别名 --
-common-common-themes-title = { common-themes-title }
-common-common-theme-hint-default = { common-theme-hint-default }
-common-common-theme-hint-light = { common-theme-hint-light }
-common-common-theme-hint-dark = { common-theme-hint-dark }
-common-common-saving-label = { common-saving-label }
-common-common-beta-label = { common-beta-label }
 
 ## -- Double-prefix aliases for grab edit access modal strings --
-common-common-edit-anyway-label = { common-edit-anyway-label }
-common-common-grab-edit-warning = { common-grab-edit-warning }
-common-common-currently-edited = { common-currently-edited }
-common-common-create-theme = { common-create-theme }
-common-common-delete-theme = { common-delete-theme }
-common-common-theme-creator-subheader = { common-theme-creator-subheader }
-common-common-select-image = { common-select-image }
-common-common-selecting-image = { common-selecting-image }
-common-common-select-new-image = { common-select-new-image }
-common-common-theme-delete-subheader = { common-theme-delete-subheader }
-common-common-save-changes-label = { common-save-changes-label }
-common-common-create-theme-label = { common-create-theme-label }
-common-common-delete-theme-label = { common-delete-theme-label }
-common-common-continue-label = { common-continue-label }
-common-common-do-not-show-again = { common-do-not-show-again }
-common-common-enable-label = { common-enable-label }
-common-common-status-done = { common-status-done }
-common-common-status-in-progress = { common-status-in-progress }
-common-common-status-cancelled = { common-status-cancelled }
-common-common-status-blocked = { common-status-blocked }
-common-common-status-failed = { common-status-failed }
-common-common-status-claimed = { common-status-claimed }
-common-common-status-queued = { common-status-queued }
-common-common-status-pending = { common-status-pending }
-common-common-untitled-label = { common-untitled-label }
-common-common-default-user-display-name = { common-default-user-display-name }
-common-common-new-badge = { common-new-badge }
 
 ## -- 应用级字符串 ------------------------------------------------------------
 
@@ -461,5 +329,5 @@ common-theme-dark = 深色
 ## -- 标签页和通知字符串 --------------------------------------------------------
 
 common-new-tab-label = 新标签页
-uri-new-tab-created = 新标签页已创建
-uri-new-tab-description = 前往 Warp 查看您的新标签页。
+common-uri-new-tab-created = 新标签页已创建
+common-uri-new-tab-description = 前往 Warp 查看您的新标签页。

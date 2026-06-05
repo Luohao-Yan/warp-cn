@@ -61,7 +61,7 @@ pub fn login(ctx: &mut AppContext) -> Result<()> {
                         AuthManagerEvent::AuthFailed(err) => {
                             format!("Authentication failed: {err:#}")
                         }
-                        _ => crate::tr!("ai", "ai-auth-failed"),
+                        _ => crate::tr!("ai", "auth-failed"),
                     };
                     ctx.terminate_app(
                         TerminationMode::ForceTerminate,

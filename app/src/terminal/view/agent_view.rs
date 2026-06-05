@@ -64,7 +64,7 @@ impl TerminalView {
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 toast_stack.add_ephemeral_toast(
                     DismissibleToast::error(
-                        crate::tr!("terminal", "terminal-cannot-start-while-monitoring"),
+                        crate::tr!("terminal", "cannot-start-while-monitoring"),
                     ),
                     window_id,
                     ctx,

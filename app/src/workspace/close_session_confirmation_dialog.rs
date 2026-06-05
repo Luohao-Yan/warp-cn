@@ -93,7 +93,7 @@ impl View for CloseSessionConfirmationDialog {
         let dont_show_again_checkbox = appearance
             .ui_builder()
             .checkbox(self.dont_show_again_mouse_state.clone(), Some(14.))
-            .with_label(Span::new(crate::tr!("common", "common-do-not-show-again").clone(), Default::default()))
+            .with_label(Span::new(crate::tr!("common", "do-not-show-again").clone(), Default::default()))
             .check(self.dont_show_again)
             .build()
             .with_cursor(Cursor::PointingHand)
@@ -131,9 +131,9 @@ impl View for CloseSessionConfirmationDialog {
 
         let dialog = Container::new(
             Dialog::new(
-                crate::tr!("workspace", "workspace-close-session-question").into(),
+                crate::tr!("workspace", "close-session-question").into(),
                 Some(
-                    crate::tr!("workspace", "workspace-close-session-sharing-warning")
+                    crate::tr!("workspace", "close-session-sharing-warning")
                         .into(),
                 ),
                 UiComponentStyles {

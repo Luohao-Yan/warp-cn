@@ -236,7 +236,7 @@ impl ConversationListView {
         // We use this as both the "view all" and "show less" button
         // (switching out the text on-toggle).
         let toggle_view_all_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-view-all"));
+            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "view-all"));
             ActionButton::new(&*LABEL, SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -682,7 +682,7 @@ fn render_zero_state(
         .with_cross_axis_alignment(CrossAxisAlignment::Center)
         .with_spacing(4.)
         .with_child(
-            Text::new(crate::tr!("workspace", "workspace-no-conversations-yet"), appearance.ui_font_family(), 14.)
+            Text::new(crate::tr!("workspace", "no-conversations-yet"), appearance.ui_font_family(), 14.)
                 .with_color(theme.sub_text_color(theme.background()).into_solid())
                 .with_style(Properties::default().weight(Weight::Semibold))
                 .finish(),
@@ -690,7 +690,7 @@ fn render_zero_state(
         .with_child(
             ConstrainedBox::new(
                 FormattedTextElement::from_str(
-                    crate::tr!("workspace", "workspace-conversations-subtitle"),
+                    crate::tr!("workspace", "conversations-subtitle"),
                     appearance.ui_font_family(),
                     14.,
                 )
@@ -805,8 +805,8 @@ fn render_section_header(
     .with_height(12.);
 
     let section_label = match section {
-        ConversationSection::Active => crate::tr!("workspace", "workspace-section-active"),
-        ConversationSection::Past => crate::tr!("workspace", "workspace-section-past"),
+        ConversationSection::Active => crate::tr!("workspace", "section-active"),
+        ConversationSection::Past => crate::tr!("workspace", "section-past"),
     };
     let title_text = Text::new_inline(
         section_label,
@@ -881,7 +881,7 @@ impl TypedActionView for ConversationListView {
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
                             DismissibleToast::error(
-                                    crate::tr!("workspace", "workspace-conversations-cannot-delete"),
+                                    crate::tr!("workspace", "conversations-cannot-delete"),
                                 ),
                             window_id,
                             ctx,
@@ -896,7 +896,7 @@ impl TypedActionView for ConversationListView {
                     .as_ref(ctx)
                     .get_item_by_id(&id, ctx)
                     .map(|entry| entry.display.title)
-                    .unwrap_or_else(|| crate::tr!("workspace", "workspace-conversation"));
+                    .unwrap_or_else(|| crate::tr!("workspace", "conversation"));
                 ctx.emit(Event::ShowDeleteConfirmationDialog {
                     conversation_id: *conversation_id,
                     conversation_title,
@@ -935,13 +935,13 @@ impl TypedActionView for ConversationListView {
                         .with_disabled(!entry.capabilities.can_delete);
                     if !entry.capabilities.can_delete {
                         delete_item =
-                            delete_item.with_tooltip(&crate::tr!("workspace", "workspace-cannot-delete-conversation-tooltip"));
+                            delete_item.with_tooltip(&crate::tr!("workspace", "cannot-delete-conversation-tooltip"));
                     }
 
                     // Only show share item if the conversation is shareable
                     let share_item = if entry.capabilities.can_share {
                         Some(
-                            MenuItemFields::new(&crate::tr!("workspace", "workspace-share-conversation"))
+                            MenuItemFields::new(&crate::tr!("workspace", "share-conversation"))
                                 .with_on_select_action(
                                     ConversationListViewAction::OpenShareDialog { conversation_id },
                                 )
@@ -955,7 +955,7 @@ impl TypedActionView for ConversationListView {
                         // Forking from a closed ambient agent conversation is not supported at this point.
                         if entry.capabilities.can_fork_locally {
                             Some([
-                                MenuItemFields::new(&crate::tr!("workspace", "workspace-fork-in-new-pane"))
+                                MenuItemFields::new(&crate::tr!("workspace", "fork-in-new-pane"))
                                     .with_on_select_action(
                                         ConversationListViewAction::ForkConversation {
                                             conversation_id,
@@ -963,7 +963,7 @@ impl TypedActionView for ConversationListView {
                                         },
                                     )
                                     .into_item(),
-                                MenuItemFields::new(&crate::tr!("workspace", "workspace-fork-in-new-tab"))
+                                MenuItemFields::new(&crate::tr!("workspace", "fork-in-new-tab"))
                                     .with_on_select_action(
                                         ConversationListViewAction::ForkConversation {
                                             conversation_id,
@@ -1043,7 +1043,7 @@ impl TypedActionView for ConversationListView {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    crate::tr!("workspace", "workspace-conversations-cannot-delete"),
+                                    crate::tr!("workspace", "conversations-cannot-delete"),
                                 ),
                                 window_id,
                                 ctx,
@@ -1110,9 +1110,9 @@ impl TypedActionView for ConversationListView {
                 self.view_all = !self.view_all;
 
                 let label = if self.view_all {
-                    crate::tr!("workspace", "workspace-show-less")
+                    crate::tr!("workspace", "show-less")
                 } else {
-                    crate::tr!("workspace", "workspace-view-all")
+                    crate::tr!("workspace", "view-all")
                 };
                 self.toggle_view_all_button
                     .update(ctx, |button, ctx| button.set_label(label, ctx));
@@ -1179,7 +1179,7 @@ impl View for ConversationListView {
         } else if self.item_count() == 0 {
             Container::new(
                 Text::new_inline(
-                    crate::tr!("workspace", "workspace-no-matching-conversations"),
+                    crate::tr!("workspace", "no-matching-conversations"),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )

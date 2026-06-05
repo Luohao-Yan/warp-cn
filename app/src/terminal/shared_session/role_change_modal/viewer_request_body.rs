@@ -66,13 +66,13 @@ impl View for ViewerRequestBody {
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
-        let header = crate::tr!("terminal", "terminal-requested-mode", role = self.role_label());
-        let text = crate::tr!("terminal", "terminal-waiting-for", name = &self.display_name);
+        let header = crate::tr!("terminal", "requested-mode", role = self.role_label());
+        let text = crate::tr!("terminal", "waiting-for", name = &self.display_name);
 
         let cancel_button = appearance
             .ui_builder()
             .button(ButtonVariant::Outlined, self.mouse_state_handle.clone())
-            .with_centered_text_label(crate::tr!("terminal", "terminal-cancel-request"))
+            .with_centered_text_label(crate::tr!("terminal", "cancel-request"))
             .with_style(UiComponentStyles {
                 font_size: Some(TEXT_FONT_SIZE),
                 font_weight: Some(Weight::Bold),

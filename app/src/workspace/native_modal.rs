@@ -137,7 +137,7 @@ impl View for NativeModal {
         let dont_show_again_checkbox = appearance
             .ui_builder()
             .checkbox(self.dont_show_again_mouse_state.clone(), Some(14.))
-            .with_label(Span::new(crate::tr!("common", "common-do-not-show-again").clone(), Default::default()))
+            .with_label(Span::new(crate::tr!("common", "do-not-show-again").clone(), Default::default()))
             .check(self.dont_show_again)
             .build()
             .with_cursor(Cursor::PointingHand)

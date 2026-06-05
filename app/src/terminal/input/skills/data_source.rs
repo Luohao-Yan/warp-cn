@@ -27,7 +27,7 @@ use crate::terminal::cli_agent_sessions::{CLIAgentInputState, CLIAgentSessionsMo
 use crate::terminal::input::inline_menu::styles as inline_styles;
 
 static TERMINAL_PROJECT_SKILL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-project-skill"));
+    LazyLock::new(|| crate::tr!("terminal", "project-skill"));
 use crate::terminal::input::inline_menu::{
     default_navigation_message_items, InlineMenuAction, InlineMenuMessageArgs, InlineMenuType,
 };
@@ -406,6 +406,6 @@ impl SearchItem for SkillSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("terminal", "terminal-search-skill", name = self.skill_name.clone())
+        crate::tr!("terminal", "search-skill", name = self.skill_name.clone())
     }
 }

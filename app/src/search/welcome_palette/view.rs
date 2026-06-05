@@ -54,8 +54,8 @@ use crate::ui_components::icons::Icon;
 use crate::workflows::{WorkflowSelectionSource, WorkflowSource, WorkflowType};
 use crate::workspace::WorkspaceAction;
 
-static WELCOME_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-welcome-placeholder").clone());
-static NO_RESULTS: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "search-no-results").clone());
+static WELCOME_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "welcome-placeholder").clone());
+static NO_RESULTS: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "no-results").clone());
 
 /// Position ID for the command palette list.
 const PALETTE_LIST_SAVE_POSITION_ID: &str = "welcome_palette:list";
@@ -705,9 +705,9 @@ impl WelcomePalette {
             .with_text_and_icon_label(TextAndIcon::new(
                 TextAndIconAlignment::IconFirst,
                 match &self.open_project_keybinding {
-                    Some(keystroke) => crate::tr!("search", "search-add-repo-keystroke")
+                    Some(keystroke) => crate::tr!("search", "add-repo-keystroke")
                         .replace("{ $keystroke }", keystroke),
-                    None => crate::tr!("search", "search-add-repo").clone(),
+                    None => crate::tr!("search", "add-repo").clone(),
                 },
                 Icon::Plus.to_warpui_icon(theme.foreground()),
                 MainAxisSize::Max,
@@ -729,9 +729,9 @@ impl WelcomePalette {
             .with_text_and_icon_label(TextAndIcon::new(
                 TextAndIconAlignment::IconFirst,
                 match &self.terminal_session_keybinding {
-                    Some(keystroke) => crate::tr!("search", "search-terminal-session-keystroke")
+                    Some(keystroke) => crate::tr!("search", "terminal-session-keystroke")
                         .replace("{ $keystroke }", keystroke),
-                    None => crate::tr!("search", "search-terminal-session").clone(),
+                    None => crate::tr!("search", "terminal-session").clone(),
                 },
                 Icon::Terminal.to_warpui_icon(theme.foreground()),
                 MainAxisSize::Max,

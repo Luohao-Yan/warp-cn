@@ -16,8 +16,8 @@ use warpui::{
 
 use crate::{terminal::model::terminal_model::ExitReason, ui_components};
 
-static FILE_ISSUE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-file-issue"));
-static MORE_INFO_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-more-info"));
+static FILE_ISSUE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "file-issue"));
+static MORE_INFO_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "more-info"));
 
 /// A banner to display when the shell process terminates.
 ///
@@ -166,9 +166,9 @@ impl TerminationType {
 
     fn text(&self, appearance: &Appearance) -> Box<dyn Element> {
         let text = match self {
-            TerminationType::Normal => crate::tr!("terminal", "terminal-shell-process-exited"),
-            TerminationType::PtySpawnFailure { .. } => crate::tr!("terminal", "terminal-shell-could-not-start"),
-            TerminationType::Premature { .. } => crate::tr!("terminal", "terminal-shell-exited-prematurely"),
+            TerminationType::Normal => crate::tr!("terminal", "shell-process-exited"),
+            TerminationType::PtySpawnFailure { .. } => crate::tr!("terminal", "shell-could-not-start"),
+            TerminationType::Premature { .. } => crate::tr!("terminal", "shell-exited-prematurely"),
         };
 
         Text::new(text, appearance.ui_font_family(), 14.)
@@ -183,7 +183,7 @@ impl TerminationType {
             TerminationType::PtySpawnFailure { pty_spawn_error } => {
                 format!("{pty_spawn_error:#}").into()
             }
-            TerminationType::Premature { shell_detail, .. } => crate::tr!("terminal", "terminal-warpify-failure-subtext", shell_detail = shell_detail.to_string()).into(),
+            TerminationType::Premature { shell_detail, .. } => crate::tr!("terminal", "warpify-failure-subtext", shell_detail = shell_detail.to_string()).into(),
         };
 
         let text = Text::new(text, appearance.ui_font_family(), 12.)

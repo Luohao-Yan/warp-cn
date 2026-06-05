@@ -42,26 +42,3 @@ onboarding-agent-mode-label = Agent Mode
 
 ## -- Double-prefix aliases --
 
-onboarding-onboarding-welcome-title = { onboarding-welcome-title }
-onboarding-onboarding-welcome-description = { onboarding-welcome-description }
-onboarding-onboarding-get-started = { onboarding-get-started }
-onboarding-onboarding-skip-button = { onboarding-skip-button }
-onboarding-onboarding-next-button = { onboarding-next-button }
-onboarding-onboarding-back-button = { onboarding-back-button }
-onboarding-onboarding-finish-button = { onboarding-finish-button }
-onboarding-onboarding-callout-submit = { onboarding-callout-submit }
-onboarding-onboarding-callout-finish = { onboarding-callout-finish }
-onboarding-onboarding-callout-got-it = { onboarding-callout-got-it }
-onboarding-onboarding-tip-title = { onboarding-tip-title }
-onboarding-onboarding-step-count = { onboarding-step-count }
-onboarding-onboarding-step-complete = { onboarding-step-complete }
-onboarding-onboarding-prompt-setup-text-1 = { onboarding-prompt-setup-text-1 }
-onboarding-onboarding-prompt-setup-text-2 = { onboarding-prompt-setup-text-2 }
-onboarding-onboarding-shell-prompt-ps1 = { onboarding-shell-prompt-ps1 }
-onboarding-onboarding-no-existing-prompt = { onboarding-no-existing-prompt }
-onboarding-onboarding-look-incorrect = { onboarding-look-incorrect }
-onboarding-onboarding-let-us-know = { onboarding-let-us-know }
-onboarding-onboarding-warp-prompt = { onboarding-warp-prompt }
-onboarding-onboarding-welcome-text = { onboarding-welcome-text }
-onboarding-onboarding-agent-examples-intro = { onboarding-agent-examples-intro }
-onboarding-onboarding-agent-mode-label = { onboarding-agent-mode-label }

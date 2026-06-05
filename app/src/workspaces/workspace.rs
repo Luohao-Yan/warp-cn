@@ -259,16 +259,16 @@ pub enum CustomerType {
 impl CustomerType {
     pub fn to_display_string(self) -> String {
         match self {
-            CustomerType::Free => crate::tr!("workspace", "workspace-plan-free"),
-            CustomerType::Turbo => crate::tr!("workspace", "workspace-plan-turbo"),
-            CustomerType::SelfServe => crate::tr!("workspace", "workspace-plan-team"),
-            CustomerType::Prosumer => crate::tr!("workspace", "workspace-plan-pro"),
-            CustomerType::Legacy => crate::tr!("workspace", "workspace-plan-early-adopter"),
-            CustomerType::Enterprise => crate::tr!("workspace", "workspace-plan-enterprise"),
-            CustomerType::Business => crate::tr!("workspace", "workspace-plan-business"),
-            CustomerType::Lightspeed => crate::tr!("workspace", "workspace-plan-lightspeed"),
-            CustomerType::Build => crate::tr!("workspace", "workspace-plan-build"),
-            CustomerType::BuildMax => crate::tr!("workspace", "workspace-plan-max"),
+            CustomerType::Free => crate::tr!("workspace", "plan-free"),
+            CustomerType::Turbo => crate::tr!("workspace", "plan-turbo"),
+            CustomerType::SelfServe => crate::tr!("workspace", "plan-team"),
+            CustomerType::Prosumer => crate::tr!("workspace", "plan-pro"),
+            CustomerType::Legacy => crate::tr!("workspace", "plan-early-adopter"),
+            CustomerType::Enterprise => crate::tr!("workspace", "plan-enterprise"),
+            CustomerType::Business => crate::tr!("workspace", "plan-business"),
+            CustomerType::Lightspeed => crate::tr!("workspace", "plan-lightspeed"),
+            CustomerType::Build => crate::tr!("workspace", "plan-build"),
+            CustomerType::BuildMax => crate::tr!("workspace", "plan-max"),
             CustomerType::Unknown => "".to_string(),
         }
     }

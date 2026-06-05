@@ -75,18 +75,18 @@ impl SshRemoteServerChoiceView {
         let buttons = ctx.add_typed_action_view(|_| {
             KeyboardNavigableButtons::new(vec![
                 rich_navigation_button(
-                    crate::tr!("terminal", "terminal-install-ssh-extension"),
+                    crate::tr!("terminal", "install-ssh-extension"),
                     Some(
-                        crate::tr!("terminal", "terminal-install-ssh-extension-desc"),
+                        crate::tr!("terminal", "install-ssh-extension-desc"),
                     ),
                     /* recommended */ true,
                     MouseStateHandle::default(),
                     SshRemoteServerChoiceViewAction::Install,
                 ),
                 rich_navigation_button(
-                    crate::tr!("terminal", "terminal-continue-without-installing"),
+                    crate::tr!("terminal", "continue-without-installing"),
                     Some(
-                        crate::tr!("terminal", "terminal-continue-without-desc"),
+                        crate::tr!("terminal", "continue-without-desc"),
                     ),
                     /* recommended */ false,
                     MouseStateHandle::default(),
@@ -117,7 +117,7 @@ impl SshRemoteServerChoiceView {
         // Match the Figma design: a plain title row, no icon / chevron /
         // action buttons. `HeaderConfig` without an `interaction_mode` set
         // renders exactly that.
-        HeaderConfig::new(crate::tr!("terminal", "terminal-choose-remote-experience"), app)
+        HeaderConfig::new(crate::tr!("terminal", "choose-remote-experience"), app)
             .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(
                 PROMPT_BORDER_RADIUS,
             )))
@@ -172,7 +172,7 @@ impl SshRemoteServerChoiceView {
         let manage_settings_link = appearance
             .ui_builder()
             .link(
-                crate::tr!("terminal", "terminal-manage-warpify-settings").into(),
+                crate::tr!("terminal", "manage-warpify-settings").into(),
                 None,
                 Some(Box::new(|ctx| {
                     ctx.dispatch_typed_action(SshRemoteServerChoiceViewAction::OpenWarpifySettings);

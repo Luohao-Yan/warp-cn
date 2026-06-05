@@ -33,8 +33,8 @@ impl MarkdownToggleView {
                         icon_color: theme.main_text_color(theme.background()).into(),
                         label: Some(LabelConfig {
                             label: match mode {
-                                MarkdownDisplayMode::Rendered => crate::tr!("view_components", "view-components-rendered").into(),
-                                MarkdownDisplayMode::Raw => crate::tr!("view_components", "view-components-raw").into(),
+                                MarkdownDisplayMode::Rendered => crate::tr!("view_components", "rendered").into(),
+                                MarkdownDisplayMode::Raw => crate::tr!("view_components", "raw").into(),
                             },
                             width_override: Some(55.0),
                             color: if is_selected {

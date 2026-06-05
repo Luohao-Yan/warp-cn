@@ -57,10 +57,10 @@ const SEARCH_VERTICAL_PADDING: f32 = 4.;
 // of total breathing room above the divider line.
 const SEARCH_FOOTER_TOP_MARGIN: f32 = 4.;
 
-static SEARCH_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-search-models"));
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-choose-agent-model"));
-static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-no-results"));
-static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-cloud-default-model"));
+static SEARCH_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "search-models"));
+static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "choose-agent-model"));
+static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "no-results"));
+static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "default-model"));
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ModelSelectorAction {

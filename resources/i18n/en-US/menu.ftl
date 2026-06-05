@@ -19,13 +19,3 @@ menu-action-select-help = Press the enter key to execute the selected menu item 
 
 ## -- Double-prefix aliases --
 
-menu-menu-instructions-with-submenu = { menu-instructions-with-submenu }
-menu-menu-instructions = { menu-instructions }
-menu-menu-submenu-expanded = { menu-submenu-expanded }
-menu-menu-open-submenu-help = { menu-open-submenu-help }
-menu-menu-submenu-closed = { menu-submenu-closed }
-menu-menu-close-submenu-help = { menu-close-submenu-help }
-menu-menu-closed = { menu-closed }
-menu-menu-close-help = { menu-close-help }
-menu-menu-action-selected = { menu-action-selected }
-menu-menu-action-select-help = { menu-action-select-help }

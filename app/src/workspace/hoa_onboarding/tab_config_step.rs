@@ -18,8 +18,8 @@ use crate::view_components::callout_bubble::{
 
 const SECTION_GAP: f32 = 16.;
 
-static TAB_CONFIG_STEP_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-tab-config-step-title").clone());
-static TAB_CONFIG_STEP_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "workspace-tab-config-step-desc").clone());
+static TAB_CONFIG_STEP_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "tab-config-step-title").clone());
+static TAB_CONFIG_STEP_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "tab-config-step-desc").clone());
 
 pub struct TabConfigFormState<'a> {
     pub session_types: &'a [SessionType],

@@ -58,7 +58,7 @@ lazy_static! {
 }
 
 static TERMINAL_THINKING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "terminal-thinking"));
+    LazyLock::new(|| crate::tr!("terminal", "thinking"));
 
 pub struct OnboardingAgenticSuggestionsBlock {
     agent_suggestions: Vec<(AgenticSuggestionsContent, MouseStateHandle)>,
@@ -594,9 +594,9 @@ impl OnboardingAgenticSuggestionsBlock {
         let font_size = appearance.monospace_font_size();
         let font_color = current_theme.main_text_color(current_theme.background());
 
-        static WELCOME_TEXT_LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-welcome-text"));
-        static WELCOME_TEXT_LINE_TWO_PART_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-agent-examples-intro"));
-        static WELCOME_TEXT_LINE_TWO_PART_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "onboarding-agent-mode-label"));
+        static WELCOME_TEXT_LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "welcome-text"));
+        static WELCOME_TEXT_LINE_TWO_PART_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "agent-examples-intro"));
+        static WELCOME_TEXT_LINE_TWO_PART_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "agent-mode-label"));
 
         Flex::column()
             .with_children(vec![

@@ -384,7 +384,7 @@ impl SearchItem for ModelSearchItem {
             let discount_percentage = self.discount_percentage.unwrap_or(0.);
             let chip = Container::new(
                 Text::new_inline(
-                    crate::tr!("terminal", "terminal-discount-percent", percent = discount_percentage.round() as i64),
+                    crate::tr!("terminal", "discount-percent", percent = discount_percentage.round() as i64),
                     appearance.ui_font_family(),
                     font_size,
                 )
@@ -432,7 +432,7 @@ impl SearchItem for ModelSearchItem {
                     ButtonVariant::Outlined,
                     self.manage_api_key_mouse_state.clone(),
                 )
-                .with_text_label(crate::tr!("common", "common-manage"))
+                .with_text_label(crate::tr!("common", "manage"))
                 .with_style(UiComponentStyles {
                     height: Some(24.),
                     padding: Some(Coords {
@@ -586,10 +586,10 @@ impl SearchItem for ModelSearchItem {
     fn accessibility_label(&self) -> String {
         let mut label = format!("Model: {}", self.display_text);
         if self.is_selected {
-            label.push_str(&format!(" ({})", crate::tr!("terminal", "terminal-selected-label")));
+            label.push_str(&format!(" ({})", crate::tr!("terminal", "selected-label")));
         }
         if self.is_disabled() {
-            label.push_str(&format!(" ({})", crate::tr!("terminal", "terminal-disabled-label")));
+            label.push_str(&format!(" ({})", crate::tr!("terminal", "disabled-label")));
         }
         label
     }

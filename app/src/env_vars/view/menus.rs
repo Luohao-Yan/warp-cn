@@ -32,7 +32,7 @@ pub struct Menus {
 impl EnvVarCollectionView {
     pub(super) fn initialize_menus(ctx: &mut ViewContext<Self>) -> Menus {
         let command_item = Self::item(
-            crate::tr!("env-vars", "env-vars-command-label").as_str(),
+            crate::tr!("env-vars", "command-label").as_str(),
             EnvVarCollectionAction::DisplayCommandDialog,
             None,
             Some(Icon::Terminal),
@@ -53,14 +53,14 @@ impl EnvVarCollectionView {
         );
 
         let edit_item = Self::item(
-            crate::tr!("common", "common-edit-label").as_str(),
+            crate::tr!("common", "edit-label").as_str(),
             EnvVarCollectionAction::EditCommand,
             None,
             Some(Icon::Terminal),
         );
 
         let clear_secret_item = Self::item(
-            crate::tr!("env-vars", "env-vars-clear-secret").as_str(),
+            crate::tr!("env-vars", "clear-secret").as_str(),
             EnvVarCollectionAction::ClearSecret,
             None,
             Some(Icon::Trash),
@@ -129,28 +129,28 @@ impl EnvVarCollectionView {
         ctx: &mut ViewContext<Self>,
     ) -> ViewHandle<Menu<EnvVarCollectionAction>> {
         let split_pane_right = Self::item(
-            crate::tr!("common", "common-split-pane-right").as_str(),
+            crate::tr!("common", "split-pane-right").as_str(),
             EnvVarCollectionAction::EmitPaneEvent(PaneEvent::SplitRight(None)),
             keybinding_name_to_display_string("pane_group:add_right", ctx),
             None,
         );
 
         let split_pane_left = Self::item(
-            crate::tr!("common", "common-split-pane-left").as_str(),
+            crate::tr!("common", "split-pane-left").as_str(),
             EnvVarCollectionAction::EmitPaneEvent(PaneEvent::SplitLeft(None)),
             keybinding_name_to_display_string("pane_group:add_left", ctx),
             None,
         );
 
         let split_pane_down = Self::item(
-            crate::tr!("common", "common-split-pane-down").as_str(),
+            crate::tr!("common", "split-pane-down").as_str(),
             EnvVarCollectionAction::EmitPaneEvent(PaneEvent::SplitDown(None)),
             keybinding_name_to_display_string("pane_group:add_down", ctx),
             None,
         );
 
         let split_pane_up = Self::item(
-            crate::tr!("common", "common-split-pane-up").as_str(),
+            crate::tr!("common", "split-pane-up").as_str(),
             EnvVarCollectionAction::EmitPaneEvent(PaneEvent::SplitUp(None)),
             keybinding_name_to_display_string("pane_group:add_up", ctx),
             None,
@@ -374,7 +374,7 @@ impl EnvVarCollectionView {
 
         // Add "Copy Link" to menu
         if let Some(link) = self.env_var_collection_link(ctx) {
-            let copy_link_label = crate::tr!("drive", "drive-menu-copy-link");
+            let copy_link_label = crate::tr!("drive", "menu-copy-link");
             menu_items.push(
                 MenuItemFields::new(&copy_link_label)
                     .with_on_select_action(EnvVarCollectionAction::CopyLink(link))
@@ -385,7 +385,7 @@ impl EnvVarCollectionView {
 
         // Add "Duplicate" to menu
         if space != Some(Space::Shared) {
-            let duplicate_label = crate::tr!("drive", "drive-menu-duplicate");
+            let duplicate_label = crate::tr!("drive", "menu-duplicate");
             menu_items.push(
                 MenuItemFields::new(&duplicate_label)
                     .with_on_select_action(EnvVarCollectionAction::Duplicate)
@@ -398,7 +398,7 @@ impl EnvVarCollectionView {
         if self.is_online(ctx)
             && (!FeatureFlag::SharedWithMe.is_enabled() || access_level.can_trash())
         {
-            let trash_label = crate::tr!("drive", "drive-menu-trash");
+            let trash_label = crate::tr!("drive", "menu-trash");
             menu_items.push(
                 MenuItemFields::new(&trash_label)
                     .with_on_select_action(EnvVarCollectionAction::Trash)
@@ -409,7 +409,7 @@ impl EnvVarCollectionView {
 
         #[cfg(feature = "local_fs")]
         {
-            let export_label = crate::tr!("drive", "drive-menu-export");
+            let export_label = crate::tr!("drive", "menu-export");
             menu_items.push(
                 MenuItemFields::new(&export_label)
                     .with_on_select_action(EnvVarCollectionAction::Export)

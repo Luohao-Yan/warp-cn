@@ -22,12 +22,12 @@ use crate::{
     ui_components::{blended_colors, icons::Icon},
 };
 
-static AGENT_PROMPT_TO_INTERACT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-prompt-to-interact"));
-static AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-waiting-on-instructions"));
-static AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-waiting-for-command-exit"));
-static AGENT_BLOCKED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-blocked"));
-static AGENT_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-agent-in-control"));
-static USER_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ai-user-in-control"));
+static AGENT_PROMPT_TO_INTERACT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-prompt-to-interact"));
+static AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-waiting-on-instructions"));
+static AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-waiting-for-command-exit"));
+static AGENT_BLOCKED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-blocked"));
+static AGENT_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-in-control"));
+static USER_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "user-in-control"));
 
 /// A header rendered as rich content above the active block when Agent View is in inline mode.
 pub struct InlineAgentViewHeader {

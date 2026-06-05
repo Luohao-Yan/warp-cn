@@ -317,7 +317,7 @@ impl AgentRunDisplayStatus {
                     .status_message
                     .as_ref()
                     .map(|m| m.message.clone())
-                    .unwrap_or_else(|| crate::tr!("ai", "ai-task-blocked")),
+                    .unwrap_or_else(|| crate::tr!("ai", "task-blocked")),
             },
             AmbientAgentTaskState::Cancelled => Self::TaskCancelled,
             AmbientAgentTaskState::Unknown => Self::TaskUnknown,
@@ -422,20 +422,20 @@ impl std::fmt::Display for AgentRunDisplayStatus {
         match self {
             AgentRunDisplayStatus::TaskQueued => write!(f, "Queued"),
             AgentRunDisplayStatus::TaskPending => write!(f, "Pending"),
-            AgentRunDisplayStatus::TaskClaimed => write!(f, "{}", crate::tr!("common", "common-status-claimed")),
+            AgentRunDisplayStatus::TaskClaimed => write!(f, "{}", crate::tr!("common", "status-claimed")),
             AgentRunDisplayStatus::TaskInProgress
-            | AgentRunDisplayStatus::ConversationInProgress => write!(f, "{}", crate::tr!("common", "common-status-in-progress")),
+            | AgentRunDisplayStatus::ConversationInProgress => write!(f, "{}", crate::tr!("common", "status-in-progress")),
             AgentRunDisplayStatus::TaskSucceeded | AgentRunDisplayStatus::ConversationSucceeded => {
-                write!(f, "{}", crate::tr!("common", "common-status-done"))
+                write!(f, "{}", crate::tr!("common", "status-done"))
             }
-            AgentRunDisplayStatus::TaskFailed => write!(f, "{}", crate::tr!("common", "common-status-failed")),
+            AgentRunDisplayStatus::TaskFailed => write!(f, "{}", crate::tr!("common", "status-failed")),
             AgentRunDisplayStatus::TaskError | AgentRunDisplayStatus::ConversationError => {
-                write!(f, "{}", crate::tr!("common", "common-error-label"))
+                write!(f, "{}", crate::tr!("common", "error-label"))
             }
             AgentRunDisplayStatus::TaskBlocked { .. }
-            | AgentRunDisplayStatus::ConversationBlocked { .. } => write!(f, "{}", crate::tr!("common", "common-status-blocked")),
+            | AgentRunDisplayStatus::ConversationBlocked { .. } => write!(f, "{}", crate::tr!("common", "status-blocked")),
             AgentRunDisplayStatus::TaskCancelled | AgentRunDisplayStatus::ConversationCancelled => {
-                write!(f, "{}", crate::tr!("common", "common-status-cancelled"))
+                write!(f, "{}", crate::tr!("common", "status-cancelled"))
             }
             AgentRunDisplayStatus::TaskUnknown => write!(f, "Failed"),
         }

@@ -148,7 +148,7 @@ impl SharerResponseBody {
                     ButtonVariant::Outlined,
                     role_request_params.button_mouse_states.deny_button,
                 )
-                .with_centered_text_label(crate::tr!("terminal", "terminal-deny"))
+                .with_centered_text_label(crate::tr!("terminal", "deny"))
                 .with_style(UiComponentStyles {
                     font_size: Some(BUTTON_FONT_SIZE),
                     font_weight: Some(Weight::Bold),
@@ -269,9 +269,9 @@ impl View for SharerResponseBody {
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
-        let header = crate::tr!("terminal", "terminal-edit-requests");
-        let text1 = crate::tr!("terminal", "terminal-grants-ability-part1");
-        let text2 = crate::tr!("terminal", "terminal-use-with-caution");
+        let header = crate::tr!("terminal", "edit-requests");
+        let text1 = crate::tr!("terminal", "grants-ability-part1");
+        let text2 = crate::tr!("terminal", "use-with-caution");
 
         let text_body = Container::new(
             Flex::column()

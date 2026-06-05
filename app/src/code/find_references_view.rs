@@ -28,7 +28,7 @@ use warpui::{
 use crate::search::result_renderer::ItemHighlightState;
 use warpui::ui_components::components::UiComponent;
 
-static CODE_LOADING: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "code-loading"));
+static CODE_LOADING: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "loading"));
 
 use super::{
     editor::view::{CodeEditorRenderOptions, CodeEditorView},
@@ -501,9 +501,9 @@ fn render_header(
 
     // "Showing X references" title
     let title_text = if total_refs == 1 {
-        crate::tr!("code", "code-showing-one-reference")
+        crate::tr!("code", "showing-one-reference")
     } else {
-        crate::tr!("code", "code-showing-references", count = total_refs)
+        crate::tr!("code", "showing-references", count = total_refs)
     };
 
     let title = Align::new(

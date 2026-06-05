@@ -46,7 +46,7 @@ impl View for NeedsSsoLinkView {
         let appearance = Appearance::as_ref(app);
         let ui_builder = appearance.ui_builder();
 
-        let link_sso_label = crate::tr!("auth", "auth-link-sso");
+        let link_sso_label = crate::tr!("auth", "link-sso");
         let link_sso_button = Shrinkable::new(
             1.,
             Align::new(
@@ -75,8 +75,8 @@ impl View for NeedsSsoLinkView {
         )
         .finish();
 
-        let sso_header = crate::tr!("auth", "auth-sso-header");
-        let sso_detail = crate::tr!("auth", "auth-sso-detail");
+        let sso_header = crate::tr!("auth", "sso-header");
+        let sso_detail = crate::tr!("auth", "sso-detail");
         LoginErrorModal::new(app)
             .with_header(sso_header)
             .with_detail(sso_detail)

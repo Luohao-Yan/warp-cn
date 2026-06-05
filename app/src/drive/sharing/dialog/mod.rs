@@ -86,7 +86,7 @@ const EMAIL_EDITOR_WIDTH: f32 = 100.;
 
 const SHARING_DIALOG_WIDTH: f32 = 425.;
 
-static NO_ACCESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-sharing-no-access"));
+static NO_ACCESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "sharing-no-access"));
 
 #[derive(Default)]
 struct UiStateHandles {
@@ -257,7 +257,7 @@ impl SharingDialog {
             email_editor: ctx.add_typed_action_view(|ctx| {
                 let mut view = WordBlockEditorView::new(
                     ctx,
-                    &crate::tr!("drive", "drive-sharing-emails-label"),
+                    &crate::tr!("drive", "sharing-emails-label"),
                     13.,
                     vec![' ', ','],
                     EMAIL_CHIP_WIDTH,
@@ -1432,7 +1432,7 @@ impl SharingDialog {
                 ButtonVariant::Accent,
                 self.ui_state_handles.invite_button.clone(),
             )
-            .with_centered_text_label(crate::tr!("drive", "drive-sharing-invite-label").into())
+            .with_centered_text_label(crate::tr!("drive", "sharing-invite-label").into())
             .with_style(UiComponentStyles {
                 // Adjust the height to match the email editor's padding.
                 height: Some(style::ACL_ITEM_HEIGHT + 6.),
@@ -1772,7 +1772,7 @@ impl SharingDialog {
     fn render_access_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         appearance
             .ui_builder()
-            .span(crate::tr!("drive", "drive-who-has-access"))
+            .span(crate::tr!("drive", "who-has-access"))
             .with_style(UiComponentStyles {
                 font_color: Some(style::label_text(appearance)),
                 font_size: Some(style::PRIMARY_TEXT_SIZE),
@@ -1836,8 +1836,8 @@ impl SharingDialog {
             return None;
         }
 
-        static PREFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-sharing-must-have-full"));
-        static SUFFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "drive-sharing-access-suffix"));
+        static PREFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "sharing-must-have-full"));
+        static SUFFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "sharing-access-suffix"));
         let access_level_start = PREFIX.chars().count();
         let access_level_end = access_level_start + access_level.name().chars().count();
 
@@ -1867,8 +1867,7 @@ impl SharingDialog {
         let owner = self.owner(app)?;
 
         let tooltip_text = match owner {
-            Subject::Team(_) => crate::tr!("drive", "drive-sharing-team-auto-permissions"),
-            _ => crate::tr!("drive", "drive-sharing-owner-full-permissions"),
+            Subject::Team(_) => crate::tr!("drive", "sharing-team-auto-permissions"), _ => crate::tr!("drive", "sharing-owner-full-permissions"),
         };
         let owner_access_label = render_with_detail_tooltip(
             tooltip_text,
@@ -2009,8 +2008,8 @@ impl SharingDialog {
         let current_access_level = self.link_sharing_state.access_level;
         let is_ai_conversation = matches!(self.target, Some(ShareableObject::AIConversation(_)));
 
-        let only_people_label = crate::tr!("drive", "drive-sharing-only-invited");
-        let anyone_link_label = crate::tr!("drive", "drive-sharing-anyone-link");
+        let only_people_label = crate::tr!("drive", "sharing-only-invited");
+        let anyone_link_label = crate::tr!("drive", "sharing-anyone-link");
         let mut items = vec![
             MenuItemFields::new(&only_people_label)
                 .with_on_select_action(SharingDialogAction::SetLinkPermissions(None))
@@ -2192,8 +2191,8 @@ impl SharingDialog {
     fn reset_team_sharing_menu(&mut self, ctx: &mut ViewContext<Self>) {
         let inherited_access = self.team_sharing_state.inheritance.is_some();
         let current_access_level = self.team_sharing_state.access_level;
-        let only_teammates_label = crate::tr!("drive", "drive-sharing-only-invited-teammates");
-        let teammates_link_label = crate::tr!("drive", "drive-sharing-teammates-link");
+        let only_teammates_label = crate::tr!("drive", "sharing-only-invited-teammates");
+        let teammates_link_label = crate::tr!("drive", "sharing-teammates-link");
         let items = [
             MenuItemFields::new(&only_teammates_label)
                 .with_on_select_action(SharingDialogAction::SetTeamPermissions(None))
@@ -2368,7 +2367,7 @@ impl SharingDialog {
             .with_padding_right(10.)
             .finish();
 
-        let name_text = subject.name(app).unwrap_or_else(|| Cow::Owned(crate::tr!("common", "common-unknown-label")));
+        let name_text = subject.name(app).unwrap_or_else(|| Cow::Owned(crate::tr!("common", "unknown-label")));
         let name_label = appearance
             .ui_builder()
             .span(name_text)
@@ -2439,7 +2438,7 @@ impl SharingDialog {
             )
             .with_text_and_icon_label(
                 {
-                    let copy_link_text = crate::tr!("drive", "drive-copy-link");
+                    let copy_link_text = crate::tr!("drive", "copy-link");
                     TextAndIcon::new(
                         TextAndIconAlignment::IconFirst,
                         copy_link_text,

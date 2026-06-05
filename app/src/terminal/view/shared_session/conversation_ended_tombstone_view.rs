@@ -219,7 +219,7 @@ impl ConversationEndedTombstoneView {
             .map(|task_id| {
                 ctx.add_typed_action_view(move |_| {
                     ActionButton::new(crate::tr!("common", "continue-label"), PrimaryTheme)
-                        .with_tooltip(crate::tr!("terminal", "terminal-continue-in-cloud-tooltip"))
+                        .with_tooltip(crate::tr!("terminal", "continue-in-cloud-tooltip"))
                         .on_click(move |ctx| {
                             ctx.dispatch_typed_action(
                                 ConversationEndedTombstoneAction::ContinueInCloud { task_id },
@@ -231,8 +231,8 @@ impl ConversationEndedTombstoneView {
         #[cfg(not(target_family = "wasm"))]
         let continue_locally_button = conversation_id.map(|conv_id| {
             ctx.add_typed_action_view(move |_| {
-                ActionButton::new(crate::tr!("terminal", "terminal-continue-locally"), PrimaryTheme)
-                    .with_tooltip(crate::tr!("terminal", "terminal-fork-locally-tooltip"))
+                ActionButton::new(crate::tr!("terminal", "continue-locally"), PrimaryTheme)
+                    .with_tooltip(crate::tr!("terminal", "fork-locally-tooltip"))
                     .on_click(move |ctx| {
                         ctx.dispatch_typed_action(
                             ConversationEndedTombstoneAction::ContinueLocally(conv_id),
@@ -246,8 +246,8 @@ impl ConversationEndedTombstoneView {
         #[cfg(target_family = "wasm")]
         let open_in_warp_button = conversation_id.map(|conv_id| {
             ctx.add_typed_action_view(move |_| {
-                ActionButton::new(crate::tr!("terminal", "terminal-open-in-warp"), PrimaryTheme)
-                    .with_tooltip(crate::tr!("terminal", "terminal-open-in-desktop-tooltip"))
+                ActionButton::new(crate::tr!("terminal", "open-in-warp"), PrimaryTheme)
+                    .with_tooltip(crate::tr!("terminal", "open-in-desktop-tooltip"))
                     .on_click(move |ctx| {
                         ctx.dispatch_typed_action(ConversationEndedTombstoneAction::OpenInWarp(
                             conv_id,
@@ -355,7 +355,7 @@ impl ConversationEndedTombstoneView {
 
         if is_transcript {
             return Text::new(
-                crate::tr!("terminal", "terminal-viewing-snapshot"),
+                crate::tr!("terminal", "viewing-snapshot"),
                 appearance.overline_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -387,7 +387,7 @@ impl ConversationEndedTombstoneView {
             .display_data
             .title
             .clone()
-            .unwrap_or_else(|| crate::tr!("terminal", "terminal-agent-task"));
+            .unwrap_or_else(|| crate::tr!("terminal", "agent-task"));
         Flex::row()
             .with_main_axis_size(MainAxisSize::Min)
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -414,7 +414,7 @@ impl ConversationEndedTombstoneView {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                crate::tr!("terminal", "terminal-snapshot-subtitle"),
+                crate::tr!("terminal", "snapshot-subtitle"),
                 appearance.overline_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -432,23 +432,23 @@ impl ConversationEndedTombstoneView {
 
         if let Some(dir) = &self.display_data.working_directory {
             let display_dir = home_relative_path(Path::new(dir));
-            parts.push(format!("{}: {display_dir}", crate::tr!("terminal", "terminal-directory-label")));
+            parts.push(format!("{}: {display_dir}", crate::tr!("terminal", "directory-label")));
         }
 
         if let Some(source) = &self.display_data.source {
-            parts.push(format!("{}: {source}", crate::tr!("terminal", "terminal-source-label")));
+            parts.push(format!("{}: {source}", crate::tr!("terminal", "source-label")));
         }
 
         if let Some(skill) = &self.display_data.skill_name {
-            parts.push(format!("{}: {skill}", crate::tr!("terminal", "terminal-skill-label")));
+            parts.push(format!("{}: {skill}", crate::tr!("terminal", "skill-label")));
         }
 
         if let Some(run_time) = &self.display_data.run_time {
-            parts.push(format!("{}: {run_time}", crate::tr!("terminal", "terminal-run-time-label")));
+            parts.push(format!("{}: {run_time}", crate::tr!("terminal", "run-time-label")));
         }
 
         if let Some(credits) = &self.display_data.credits {
-            parts.push(format!("{}: {credits}", crate::tr!("terminal", "terminal-credits-used-label")));
+            parts.push(format!("{}: {credits}", crate::tr!("terminal", "credits-used-label")));
         }
 
         if parts.is_empty() {

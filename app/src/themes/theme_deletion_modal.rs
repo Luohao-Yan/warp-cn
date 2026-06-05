@@ -12,7 +12,7 @@ use warpui::{Element, Entity, TypedActionView, View, ViewContext};
 
 use std::sync::LazyLock;
 
-static THEME_DELETION_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-delete-theme-confirm"));
+static THEME_DELETION_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-theme-confirm"));
 
 pub struct ThemeDeletionModal {
     theme_deletion_modal: ViewHandle<Modal<ThemeDeletionBody>>,

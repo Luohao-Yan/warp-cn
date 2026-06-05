@@ -905,22 +905,22 @@ impl CommentListView {
     ) -> Cow<'static, str> {
         if let ReviewDestination::Cli(agent) = destination {
             if !has_sendable_comments {
-                crate::tr!("code_review", "code-review-no-non-outdated-comments").into()
+                crate::tr!("code_review", "no-non-outdated-comments").into()
             } else {
                 let cmd = agent.command_prefix();
                 let label = if cmd.is_empty() { "CLI agent" } else { cmd };
-                crate::tr!("code_review", "code-review-send-comments-to-cli", label = label).into()
+                crate::tr!("code_review", "send-comments-to-cli", label = label.to_string()).into()
             }
         } else if !ai_enabled {
-            crate::tr!("code_review", "code-review-ai-must-be-enabled").into()
+            crate::tr!("code_review", "ai-must-be-enabled").into()
         } else if !ai_available {
-            crate::tr!("code_review", "code-review-agent-requires-credits").into()
+            crate::tr!("code_review", "agent-requires-credits").into()
         } else if matches!(destination, ReviewDestination::None) {
-            crate::tr!("code_review", "code-review-all-terminals-busy").into()
+            crate::tr!("code_review", "all-terminals-busy").into()
         } else if !has_sendable_comments {
-            crate::tr!("code_review", "code-review-no-non-outdated-comments").into()
+            crate::tr!("code_review", "no-non-outdated-comments").into()
         } else {
-            crate::tr!("code_review", "code-review-send-comments-to-agent").into()
+            crate::tr!("code_review", "send-comments-to-agent").into()
         }
     }
 
@@ -1077,9 +1077,9 @@ impl CommentListView {
             .with_on_select_action(CommentListAction::EditComment);
         if is_file_level || is_outdated {
             let tooltip_text = if is_file_level {
-                crate::tr!("code_review", "code-review-file-level-cannot-edit")
+                crate::tr!("code_review", "file-level-cannot-edit")
             } else {
-                crate::tr!("code_review", "code-review-outdated-cannot-edit")
+                crate::tr!("code_review", "outdated-cannot-edit")
             };
             edit_item = edit_item.with_disabled(true).with_tooltip(&tooltip_text);
         }

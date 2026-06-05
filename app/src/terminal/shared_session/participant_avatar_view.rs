@@ -165,7 +165,7 @@ impl ParticipantAvatarView {
 
         match self.role {
             Some(Role::Reader) => {
-                let label = crate::tr!("terminal", "terminal-menu-make-editor");
+                let label = crate::tr!("terminal", "menu-make-editor");
                 items.extend([MenuItemFields::new(&label)
                     .with_on_select_action(ParticipantAvatarAction::UpdateRole {
                         participant_id,
@@ -174,7 +174,7 @@ impl ParticipantAvatarView {
                     .into_item()])
             }
             Some(Role::Executor) => {
-                let label = crate::tr!("terminal", "terminal-menu-make-viewer");
+                let label = crate::tr!("terminal", "menu-make-viewer");
                 items.extend([MenuItemFields::new(&label)
                     .with_on_select_action(ParticipantAvatarAction::UpdateRole {
                         participant_id,
@@ -547,7 +547,7 @@ pub fn render_revoke_all_button(
                     Border::all(1.).with_border_color(appearance.theme().surface_3().into()),
                 );
 
-            let tooltip_text = crate::tr!("terminal", "terminal-revoke-all-edit-permissions");
+            let tooltip_text = crate::tr!("terminal", "revoke-all-edit-permissions");
             stack.add_positioned_child(
                 render_tooltip(tooltip_text, appearance),
                 OffsetPositioning::offset_from_parent(
@@ -590,7 +590,7 @@ pub fn render_viewer_role_button(
     let mut stack = Stack::new();
     let button = icon_button(appearance, icon, false, mouse_state_handle.clone())
         .with_tooltip(move || {
-            let tooltip_text = crate::tr!("terminal", "terminal-change-role");
+            let tooltip_text = crate::tr!("terminal", "change-role");
             ui_builder
                 .tool_tip(tooltip_text)
                 .build()

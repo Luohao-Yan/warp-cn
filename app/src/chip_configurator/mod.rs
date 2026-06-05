@@ -204,7 +204,7 @@ impl ControlItemRenderer {
         } else if let Some(kind) = &self.kind {
             kind.display_label()
         } else {
-            crate::tr!("common", "common-unknown-label")
+            crate::tr!("common", "unknown-label")
         }
     }
 

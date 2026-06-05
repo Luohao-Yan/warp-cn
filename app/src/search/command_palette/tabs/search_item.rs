@@ -98,10 +98,10 @@ impl SearchItemTrait for SearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("search", "search-a11y-tab-selected", title = self.tab.title.clone())
+        crate::tr!("search", "a11y-tab-selected", title = self.tab.title.clone())
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some(crate::tr!("search", "search-a11y-tab-help", title = self.tab.title.clone()))
+        Some(crate::tr!("search", "a11y-tab-help", title = self.tab.title.clone()))
     }
 }

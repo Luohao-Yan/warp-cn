@@ -188,7 +188,7 @@ impl View for RewindConfirmationDialog {
             )
             .with_child(
                 Text::new_inline(
-                    crate::tr!("workspace", "workspace-rewind-no-affect-files"),
+                    crate::tr!("workspace", "rewind-no-affect-files"),
                     appearance.ui_font_family(),
                     12.,
                 )
@@ -199,9 +199,9 @@ impl View for RewindConfirmationDialog {
 
         let dialog = Container::new(
             Dialog::new(
-                crate::tr!("workspace", "workspace-rewind").clone().into(),
+                crate::tr!("workspace", "rewind").clone().into(),
                 Some(
-                    crate::tr!("workspace", "workspace-rewind-ai-confirmation-body").into(),
+                    crate::tr!("workspace", "rewind-ai-confirmation-body").into(),
                 ),
                 UiComponentStyles {
                     width: Some(DIALOG_WIDTH),

@@ -71,9 +71,9 @@ impl GutterButton for AddAsContextButton {
 
     fn tooltip_text(&self) -> Option<String> {
         if self.is_enabled {
-            Some(crate::tr!("code", "code-add-diff-hunk-as-context"))
+Some(crate::tr!("code", "add-diff-hunk-as-context"))
         } else {
-            Some(crate::tr!("code", "code-save-changes-to-attach-as-context"))
+Some(crate::tr!("code", "save-changes-to-attach-as-context"))
         }
     }
 
@@ -100,9 +100,9 @@ impl GutterButton for RevertHunkButton {
 
     fn tooltip_text(&self) -> Option<String> {
         if self.is_enabled {
-            Some(crate::tr!("code", "code-revert-diff-hunk"))
+Some(crate::tr!("code", "revert-diff-hunk"))
         } else {
-            Some(crate::tr!("code", "code-save-changes-to-revert"))
+Some(crate::tr!("code", "save-changes-to-revert"))
         }
     }
 
@@ -153,9 +153,9 @@ impl GutterButton for CommentButton {
 
     fn tooltip_text(&self) -> Option<String> {
         match self {
-            CommentButton::CreateNewComment => Some(crate::tr!("code", "code-add-comment-on-line")),
-            CommentButton::Disabled => Some(crate::tr!("code", "code-save-changes-to-add-comment")),
-            CommentButton::AddedComment => Some(crate::tr!("code", "code-show-saved-comment")),
+            CommentButton::CreateNewComment => Some(crate::tr!("code", "add-comment-on-line")),
+            CommentButton::Disabled => Some(crate::tr!("code", "save-changes-to-add-comment")),
+            CommentButton::AddedComment => Some(crate::tr!("code", "show-saved-comment")),
             CommentButton::EditorOpenedToCreateNewComment
             | CommentButton::EditorOpenedToUpdateComment => None,
         }

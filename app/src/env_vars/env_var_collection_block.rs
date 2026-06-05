@@ -46,8 +46,8 @@ use crate::{
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 const ENV_VAR_COLLECTION_BODY_VERTICAL_PADDING: f32 = 16.;
 
-static ENV_VAR_COLLECTION_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-cancel-label"));
-static ENV_VAR_COLLECTION_ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "common-run-label"));
+static ENV_VAR_COLLECTION_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
+static ENV_VAR_COLLECTION_ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "run-label"));
 
 lazy_static! {
     static ref CANCEL_ENV_VAR_COLLECTION_KEYSTROKE: Keystroke = Keystroke {

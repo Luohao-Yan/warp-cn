@@ -132,6 +132,6 @@ impl SearchItem for UserQuerySearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("terminal", "terminal-search-query", query = self.query_text.clone())
+        crate::tr!("terminal", "search-query", query = self.query_text.clone())
     }
 }

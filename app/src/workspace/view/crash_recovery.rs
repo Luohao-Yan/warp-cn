@@ -16,10 +16,10 @@ pub fn banner_metadata(ctx: &AppContext) -> Option<WorkspaceBannerFields> {
             banner_type: super::WorkspaceBanner::WaylandCrashRecovery,
             severity: super::BannerSeverity::Warning,
             heading: None,
-            description: crate::tr!("workspace", "workspace-crash-recovery-message"),
+            description: crate::tr!("workspace", "crash-recovery-message"),
             secondary_button: None,
             button: Some(super::WorkspaceBannerButtonDetails {
-                text: crate::tr!("common", "common-learn-more"),
+                text: crate::tr!("common", "learn-more"),
                 action: super::WorkspaceAction::DismissWaylandCrashRecoveryBannerAndOpenLink,
                 variant: super::BannerButtonVariant::Outlined,
                 icon: None,

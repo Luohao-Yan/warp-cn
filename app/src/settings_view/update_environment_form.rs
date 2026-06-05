@@ -57,62 +57,62 @@ use warpui::{
 const SUBMIT_BUTTON_FOCUSED: &str = "SubmitButtonFocused";
 
 static SETTINGS_ENV_NAME_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-environment-name"));
+    LazyLock::new(|| crate::tr!("settings", "environment-name"));
 static SETTINGS_DOCKER_IMAGE_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-docker-image-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "docker-image-placeholder"));
 static SETTINGS_SETUP_COMMANDS_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-setup-commands-placeholder"));
+    LazyLock::new(|| crate::tr!("settings", "setup-commands-placeholder"));
 static SETTINGS_CREATE_ENV: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-create-environment"));
+    LazyLock::new(|| crate::tr!("settings", "create-environment"));
 static SETTINGS_SAVE_ENV: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-save-environment"));
+    LazyLock::new(|| crate::tr!("settings", "save-environment"));
 static SETTINGS_EDIT_ENV: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-edit-environment"));
+    LazyLock::new(|| crate::tr!("settings", "edit-environment"));
 static SETTINGS_SHARE_WITH_TEAM: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-share-with-team"));
+    LazyLock::new(|| crate::tr!("settings", "share-with-team"));
 static SETTINGS_PERSONAL_ENV_WARNING: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-personal-env-warning")
+    crate::tr!("settings", "personal-env-warning")
 });
 static SETTINGS_SETUP_COMMANDS_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-setup-commands"));
+    LazyLock::new(|| crate::tr!("settings", "setup-commands"));
 static SETTINGS_SETUP_COMMANDS_HELPER: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-setup-commands-helper")
+    crate::tr!("settings", "setup-commands-helper")
 });
 static SETTINGS_DESCRIPTION_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-description-label"));
+    LazyLock::new(|| crate::tr!("settings", "description-label"));
 static SETTINGS_REPOS_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-repos-label"));
+    LazyLock::new(|| crate::tr!("settings", "repos-label"));
 static SETTINGS_LOADING: LazyLock<String> =
     LazyLock::new(|| crate::tr!("common", "loading-label"));
 static SETTINGS_FAILED_LOAD_GITHUB_REPOS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-load-github-repos"));
+    LazyLock::new(|| crate::tr!("settings", "failed-load-github-repos"));
 static SETTINGS_MISSING_REPO: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-missing-repo"));
+    LazyLock::new(|| crate::tr!("settings", "missing-repo"));
 static SETTINGS_CONFIGURE_ACCESS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-configure-access-github"));
+    LazyLock::new(|| crate::tr!("settings", "configure-access-github"));
 static SETTINGS_SUGGEST_IMAGE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-suggest-image"));
+    LazyLock::new(|| crate::tr!("settings", "suggest-image"));
 static SETTINGS_LAUNCH_AGENT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-launch-agent"));
+    LazyLock::new(|| crate::tr!("settings", "launch-agent"));
 static SETTINGS_FAILED_SUGGEST_DOCKER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-suggest-docker-image"));
+    LazyLock::new(|| crate::tr!("settings", "failed-suggest-docker-image"));
 static SETTINGS_FAILED_SUGGEST_DOCKER_FULL: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-failed-suggest-docker-image-full")
+    crate::tr!("settings", "failed-suggest-docker-image-full")
 });
 static SETTINGS_FAILED_LOAD_GITHUB_REPOS_FULL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-failed-load-github-repos-full"));
+    LazyLock::new(|| crate::tr!("settings", "failed-load-github-repos-full"));
 static SETTINGS_DESCRIPTION_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-description-placeholder")
+    crate::tr!("settings", "description-placeholder")
 });
 static SETTINGS_GENERATING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-generating"));
+    LazyLock::new(|| crate::tr!("settings", "generating"));
 static SETTINGS_DOCKER_SUGGEST_TOOLTIP: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "settings-docker-suggest-tooltip")
+    crate::tr!("settings", "docker-suggest-tooltip")
 });
 static SETTINGS_DOCKER_IMAGE_REF: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-docker-image-ref"));
+    LazyLock::new(|| crate::tr!("settings", "docker-image-ref"));
 static SETTINGS_NAME_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-name-label"));
+    LazyLock::new(|| crate::tr!("settings", "name-label"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -403,9 +403,9 @@ pub struct UpdateEnvironmentForm {
 
 const DESCRIPTION_MAX_CHARS: usize = 240;
 static SETTINGS_REPOS_PLACEHOLDER_AUTHED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-enter-repos-format"));
+    LazyLock::new(|| crate::tr!("settings", "enter-repos-format"));
 static SETTINGS_REPOS_PLACEHOLDER_UNAUTHED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-paste-repo-urls"));
+    LazyLock::new(|| crate::tr!("settings", "paste-repo-urls"));
 static SETTINGS_CREATE_LABEL: LazyLock<String> =
     LazyLock::new(|| crate::tr!("common", "create-label"));
 static SETTINGS_SAVE_LABEL: LazyLock<String> =
@@ -1518,7 +1518,7 @@ impl UpdateEnvironmentForm {
                             };
                         }
                         warp_graphql::queries::suggest_cloud_environment_image::SuggestCloudEnvironmentImageResult::Unknown => {
-                            let error_message = crate::tr!("settings", "settings-unknown-suggest-response");
+                            let error_message = crate::tr!("settings", "unknown-suggest-response");
                             send_telemetry_from_ctx!(
                                 CloudAgentTelemetryEvent::ImageSuggestionFailed {
                                     error: error_message.clone(),
@@ -1911,7 +1911,7 @@ impl UpdateEnvironmentForm {
             .buffer_text(app)
             .chars()
             .count();
-        let count_text = crate::tr!("settings", "settings-char-count", char_count = char_count, max_chars = DESCRIPTION_MAX_CHARS);
+        let count_text = crate::tr!("settings", "char-count", char_count = char_count, max_chars = DESCRIPTION_MAX_CHARS);
         field.add_child(
             Text::new(
                 count_text,
@@ -2065,7 +2065,7 @@ impl UpdateEnvironmentForm {
                         )
                         .with_child(
                             Text::new(
-                                crate::tr!("settings", "settings-auth-with-github"),
+                                crate::tr!("settings", "auth-with-github"),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )
@@ -2414,7 +2414,7 @@ impl UpdateEnvironmentForm {
     fn render_repo_helper_text_row(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         let helper = Text::new(
-            crate::tr!("settings", "settings-type-owner-repo"),
+            crate::tr!("settings", "type-owner-repo"),
             appearance.ui_font_family(),
             appearance.ui_font_size() * 0.85,
         )
@@ -2627,7 +2627,7 @@ impl UpdateEnvironmentForm {
             content.add_child(
                 Container::new(
                     Text::new(
-                        crate::tr!("settings", "settings-no-repositories-found"),
+                        crate::tr!("settings", "no-repositories-found"),
                         appearance.ui_font_family(),
                         appearance.ui_font_size(),
                     )
@@ -3003,7 +3003,7 @@ impl UpdateEnvironmentForm {
                 let ui_builder = appearance.ui_builder().clone();
                 move || {
                     ui_builder
-                        .tool_tip(crate::tr!("settings", "settings-open-image-at", url = docker_hub_url))
+                        .tool_tip(crate::tr!("settings", "open-image-at", url = docker_hub_url))
                         .build()
                         .finish()
                 }
@@ -3251,7 +3251,7 @@ impl UpdateEnvironmentForm {
                 let auth_url_with_next = self.auth_url_with_next(auth_url);
                 let action = UpdateEnvironmentFormAction::OpenUrl(auth_url_with_next);
                 let button = WarningBoxButtonConfig::new(
-                    crate::tr!("settings", "settings-authenticate"),
+                    crate::tr!("settings", "authenticate"),
                     self.suggest_image_auth_button_mouse_state.clone(),
                     move |ctx| {
                         ctx.dispatch_typed_action(action.clone());
@@ -3259,7 +3259,7 @@ impl UpdateEnvironmentForm {
                 );
                 Some(render_warning_box(
                     WarningBoxConfig::new(
-                        crate::tr!("settings", "settings-github-access-warning"),
+                        crate::tr!("settings", "github-access-warning"),
                     )
                     .with_width(DROPDOWN_MAX_WIDTH)
                     .with_button(button),
@@ -3294,7 +3294,7 @@ impl UpdateEnvironmentForm {
 
         render_warning_box(
             WarningBoxConfig::new(
-                crate::tr!("settings", "settings-no-docker-match"),
+                crate::tr!("settings", "no-docker-match"),
             )
             .with_description(reason)
             .with_icon(Icon::AlertTriangle)

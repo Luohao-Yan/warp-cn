@@ -234,7 +234,7 @@ impl TabData {
                     .is_active_sharer()
                 {
                     menu_items.push(
-                        MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-stop-sharing"))
+                        MenuItemFields::new(&crate::tr!("workspace", "menu-stop-sharing"))
                             .with_on_select_action(WorkspaceAction::StopSharingSessionFromTabMenu {
                                 terminal_view_id: focused_session_view.id(),
                             })
@@ -242,7 +242,7 @@ impl TabData {
                     );
                 } else {
                     menu_items.push(
-                        MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-share-session"))
+                        MenuItemFields::new(&crate::tr!("workspace", "menu-share-session"))
                             .with_on_select_action(WorkspaceAction::OpenShareSessionModal(index))
                             .into_item(),
                     );
@@ -252,7 +252,7 @@ impl TabData {
             // Always show an option to stop sharing all when there's at least 1 shared session in the tab.
             if !shared_session_view_ids.is_empty() {
                 menu_items.push(
-                    MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-stop-sharing-all"))
+                    MenuItemFields::new(&crate::tr!("workspace", "menu-stop-sharing-all"))
                         .with_on_select_action(WorkspaceAction::StopSharingAllSessionsInTab {
                             pane_group: self.pane_group.downgrade(),
                         })
@@ -277,7 +277,7 @@ impl TabData {
 
         if is_shared_or_viewed {
             menu_items.push(
-                MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-copy-link"))
+                MenuItemFields::new(&crate::tr!("workspace", "menu-copy-link"))
                     .with_on_select_action(WorkspaceAction::CopySharedSessionLinkFromTab {
                         tab_index: index,
                     })
@@ -312,7 +312,7 @@ impl TabData {
         let mut menu_items = vec![];
         let tab_title = Self::copyable_metadata_value(Some(pane_group.display_title(ctx)));
         if !uses_vertical_tabs(ctx) {
-            Self::push_copy_metadata_menu_item(&mut menu_items, &crate::tr!("workspace", "workspace-menu-copy-tab-title"), tab_title);
+            Self::push_copy_metadata_menu_item(&mut menu_items, &crate::tr!("workspace", "menu-copy-tab-title"), tab_title);
             return menu_items;
         }
 
@@ -332,7 +332,7 @@ impl TabData {
                 })
                 .unwrap_or_else(|| pane_group.focused_pane_id(ctx));
             (
-                crate::tr!("workspace", "workspace-menu-copy-pane-title"),
+                crate::tr!("workspace", "menu-copy-pane-title"),
                 Self::copyable_pane_title(pane_group, pane_id, ctx),
                 pane_group.terminal_view_from_pane_id(pane_id, ctx),
             )
@@ -343,20 +343,20 @@ impl TabData {
                     pane_group.terminal_view_from_pane_id(target.locator.pane_id, ctx)
                 })
                 .or_else(|| pane_group.focused_session_view(ctx));
-            (crate::tr!("workspace", "workspace-menu-copy-tab-title"), tab_title, terminal_view)
+            (crate::tr!("workspace", "menu-copy-tab-title"), tab_title, terminal_view)
         };
 
         if let Some(terminal_view) = terminal_view {
             let terminal_view = terminal_view.as_ref(ctx);
             Self::push_copy_metadata_menu_item(
                 &mut menu_items,
-                &crate::tr!("workspace", "workspace-menu-copy-branch"),
+                &crate::tr!("workspace", "menu-copy-branch"),
                 Self::copyable_metadata_value(terminal_view.current_git_branch(ctx)),
             );
             Self::push_copy_metadata_menu_item(&mut menu_items, &title_label, title);
             Self::push_copy_metadata_menu_item(
                 &mut menu_items,
-                &crate::tr!("workspace", "workspace-menu-copy-working-directory"),
+                &crate::tr!("workspace", "menu-copy-working-directory"),
                 Self::copyable_metadata_value(
                     terminal_view
                         .pwd()
@@ -365,7 +365,7 @@ impl TabData {
             );
             Self::push_copy_metadata_menu_item(
                 &mut menu_items,
-                &crate::tr!("workspace", "workspace-menu-copy-pull-request-link"),
+                &crate::tr!("workspace", "menu-copy-pull-request-link"),
                 Self::copyable_metadata_value(terminal_view.current_pull_request_url(ctx)),
             );
         } else {
@@ -405,7 +405,7 @@ impl TabData {
 
         // TODO add option to show the keybinding once we figure out a nice API to retrieve
         // the actual keybinding (based on the user's preferences etc.)
-        menu_items.append(&mut vec![MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-rename-tab"))
+        menu_items.append(&mut vec![MenuItemFields::new(&crate::tr!("workspace", "menu-rename-tab"))
             .with_on_select_action(WorkspaceAction::RenameTab(index))
             .into_item()]);
         // Group together with rename option (note, resetting doesn't make
@@ -413,7 +413,7 @@ impl TabData {
         let title = self.pane_group.as_ref(ctx).custom_title(ctx);
         if title.is_some() {
             menu_items.push(
-                MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-reset-tab-name"))
+                MenuItemFields::new(&crate::tr!("workspace", "menu-reset-tab-name"))
                     .with_on_select_action(WorkspaceAction::ResetTabName(index))
                     .into_item(),
             );
@@ -425,8 +425,8 @@ impl TabData {
         // other tabs when you don't have any others to close)
         let not_last_tab = index != tabs_len - 1;
         if not_last_tab {
-            let move_down_label = crate::tr!("workspace", "workspace-menu-move-tab-down");
-            let move_right_label = crate::tr!("workspace", "workspace-menu-move-tab-right");
+            let move_down_label = crate::tr!("workspace", "menu-move-tab-down");
+            let move_right_label = crate::tr!("workspace", "menu-move-tab-right");
             let label = if uses_vertical_tabs {
                 move_down_label
             } else {
@@ -439,8 +439,8 @@ impl TabData {
             );
         }
         if index != 0 {
-            let move_up_label = crate::tr!("workspace", "workspace-menu-move-tab-up");
-            let move_left_label = crate::tr!("workspace", "workspace-menu-move-tab-left");
+            let move_up_label = crate::tr!("workspace", "menu-move-tab-up");
+            let move_left_label = crate::tr!("workspace", "menu-move-tab-left");
             let label = if uses_vertical_tabs {
                 move_up_label
             } else {
@@ -504,15 +504,15 @@ impl TabData {
         }
         if tabs_len > 1 {
             menu_items.push(
-                MenuItemFields::new(crate::tr!("workspace", "workspace-menu-close-other-tabs"))
+                MenuItemFields::new(crate::tr!("workspace", "menu-close-other-tabs"))
                     .with_on_select_action(WorkspaceAction::CloseOtherTabs(index))
                     .into_item(),
             );
         }
         let not_last_tab = index != tabs_len - 1;
         if not_last_tab {
-            let close_below_label = crate::tr!("workspace", "workspace-menu-close-tabs-below");
-            let close_right_label = crate::tr!("workspace", "workspace-menu-close-tabs-right");
+            let close_below_label = crate::tr!("workspace", "menu-close-tabs-below");
+            let close_right_label = crate::tr!("workspace", "menu-close-tabs-right");
             let label = if uses_vertical_tabs {
                 close_below_label
             } else {
@@ -531,7 +531,7 @@ impl TabData {
         if !FeatureFlag::TabConfigs.is_enabled() {
             return vec![];
         }
-        vec![MenuItemFields::new(&crate::tr!("workspace", "workspace-menu-save-new-config"))
+        vec![MenuItemFields::new(&crate::tr!("workspace", "menu-save-new-config"))
             .with_on_select_action(WorkspaceAction::SaveCurrentTabAsNewConfig(index))
             .into_item()]
     }
@@ -584,8 +584,7 @@ impl TabData {
                             Some(id) => id.to_ansi_color(&terminal_colors).into(),
                         };
                         let tooltip = match ansi_id {
-                            None => crate::tr!("workspace", "workspace-menu-default-no-color"),
-                            Some(id) => id.to_string(),
+                            None => crate::tr!("workspace", "menu-default-no-color"), Some(id) => id.to_string(),
                         };
 
                         let dot = render_color_dot(
@@ -1282,7 +1281,7 @@ impl<'a> TabComponent<'a> {
 
                         if state.is_hovered() {
                             let tooltip = ui_builder
-                                .tool_tip(crate::tr!("workspace", "workspace-menu-cloud-agent-run"))
+                                .tool_tip(crate::tr!("workspace", "menu-cloud-agent-run"))
                                 .build()
                                 .finish();
                             stack.add_positioned_overlay_child(

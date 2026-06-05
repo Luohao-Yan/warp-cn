@@ -34,7 +34,7 @@ struct BuildSuggestion {
 impl CreateProjectView {
     pub fn new(is_ftux: bool, ctx: &mut ViewContext<Self>) -> Self {
         let editor =
-            ctx.add_typed_action_view(|ctx| GlowingEditor::new(&crate::tr!("coding_entrypoints", "coding-entrypoints-what-to-build"), ctx));
+            ctx.add_typed_action_view(|ctx| GlowingEditor::new(&crate::tr!("coding_entrypoints", "what-to-build"), ctx));
 
         ctx.subscribe_to_view(&editor, move |me, _, event, ctx| {
             me.handle_editor_event(event, ctx);
@@ -42,23 +42,23 @@ impl CreateProjectView {
 
         let suggestions = vec![
             BuildSuggestion {
-                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-minesweeper"),
+                prompt: crate::tr!("coding_entrypoints", "suggestion-minesweeper"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-node-server"),
+                prompt: crate::tr!("coding_entrypoints", "suggestion-node-server"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-csv-converter"),
+                prompt: crate::tr!("coding_entrypoints", "suggestion-csv-converter"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-resume"),
+                prompt: crate::tr!("coding_entrypoints", "suggestion-resume"),
                 mouse_state: Default::default(),
             },
             BuildSuggestion {
-                prompt: crate::tr!("coding_entrypoints", "coding-entrypoints-suggestion-game-of-life"),
+                prompt: crate::tr!("coding_entrypoints", "suggestion-game-of-life"),
                 mouse_state: Default::default(),
             },
         ];

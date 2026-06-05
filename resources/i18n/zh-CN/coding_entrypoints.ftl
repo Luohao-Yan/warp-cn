@@ -28,18 +28,3 @@ coding-entrypoints-create-new-project-binding = 新建项目
 
 ## -- Double-prefix aliases --
 
-coding_entrypoints-coding-entrypoints-what-to-build = { coding-entrypoints-what-to-build }
-coding_entrypoints-coding-entrypoints-clone-repo-placeholder = { coding-entrypoints-clone-repo-placeholder }
-coding_entrypoints-coding-entrypoints-suggestion-minesweeper = { coding-entrypoints-suggestion-minesweeper }
-coding_entrypoints-coding-entrypoints-suggestion-node-server = { coding-entrypoints-suggestion-node-server }
-coding_entrypoints-coding-entrypoints-suggestion-csv-converter = { coding-entrypoints-suggestion-csv-converter }
-coding_entrypoints-coding-entrypoints-suggestion-resume = { coding-entrypoints-suggestion-resume }
-coding_entrypoints-coding-entrypoints-suggestion-game-of-life = { coding-entrypoints-suggestion-game-of-life }
-coding_entrypoints-coding-entrypoints-open-repository-binding = { coding-entrypoints-open-repository-binding }
-coding_entrypoints-coding-entrypoints-create-new-project-binding = { coding-entrypoints-create-new-project-binding }
-coding_entrypoints-coding-entrypoints-create-new-project = { coding-entrypoints-create-new-project }
-coding_entrypoints-coding-entrypoints-create-new-project-desc = { coding-entrypoints-create-new-project-desc }
-coding_entrypoints-coding-entrypoints-open-repository = { coding-entrypoints-open-repository }
-coding_entrypoints-coding-entrypoints-open-repository-desc = { coding-entrypoints-open-repository-desc }
-coding_entrypoints-coding-entrypoints-clone-repository = { coding-entrypoints-clone-repository }
-coding_entrypoints-coding-entrypoints-clone-repository-desc = { coding-entrypoints-clone-repository-desc }

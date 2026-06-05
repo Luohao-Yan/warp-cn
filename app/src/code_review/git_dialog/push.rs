@@ -34,7 +34,7 @@ use crate::{
 };
 use warp_core::send_telemetry_from_ctx;
 
-static CODE_REVIEW_INCLUDED_COMMITS: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "code-review-included-commits"));
+static CODE_REVIEW_INCLUDED_COMMITS: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "included-commits"));
 
 /// Push-specific sub-actions, dispatched wrapped in `GitDialogAction::Push`.
 #[derive(Clone, Debug, PartialEq)]

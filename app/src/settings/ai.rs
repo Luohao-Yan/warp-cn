@@ -176,31 +176,31 @@ impl VoiceInputToggleKey {
             };
 
         match self {
-            VoiceInputToggleKey::None => crate::tr!("settings", "settings-voice-key-none"),
+            VoiceInputToggleKey::None => crate::tr!("settings", "voice-key-none"),
             VoiceInputToggleKey::Fn => "Fn".to_string(),
             VoiceInputToggleKey::AltLeft => {
-                format!("{alt_key_name} ({})", crate::tr!("settings", "settings-key-left"))
+                format!("{alt_key_name} ({})", crate::tr!("settings", "key-left"))
             }
             VoiceInputToggleKey::AltRight => {
-                format!("{alt_key_name} ({})", crate::tr!("settings", "settings-key-right"))
+                format!("{alt_key_name} ({})", crate::tr!("settings", "key-right"))
             }
             VoiceInputToggleKey::ControlLeft => {
-                format!("Control ({})", crate::tr!("settings", "settings-key-left"))
+                format!("Control ({})", crate::tr!("settings", "key-left"))
             }
             VoiceInputToggleKey::ControlRight => {
-                format!("Control ({})", crate::tr!("settings", "settings-key-right"))
+                format!("Control ({})", crate::tr!("settings", "key-right"))
             }
             VoiceInputToggleKey::SuperLeft => {
-                format!("{super_key_name} ({})", crate::tr!("settings", "settings-key-left"))
+                format!("{super_key_name} ({})", crate::tr!("settings", "key-left"))
             }
             VoiceInputToggleKey::SuperRight => {
-                format!("{super_key_name} ({})", crate::tr!("settings", "settings-key-right"))
+                format!("{super_key_name} ({})", crate::tr!("settings", "key-right"))
             }
             VoiceInputToggleKey::ShiftLeft => {
-                format!("Shift ({})", crate::tr!("settings", "settings-key-left"))
+                format!("Shift ({})", crate::tr!("settings", "key-left"))
             }
             VoiceInputToggleKey::ShiftRight => {
-                format!("Shift ({})", crate::tr!("settings", "settings-key-right"))
+                format!("Shift ({})", crate::tr!("settings", "key-right"))
             }
         }
     }
@@ -271,9 +271,9 @@ impl VoiceInputToggleKey {
                     Some(side) => format!("{side} {symbol}"),
                     None => symbol,
                 };
-                crate::tr!("settings", "settings-voice-input-hold-key", key_name = key_name)
+                crate::tr!("settings", "voice-input-hold-key", key_name = key_name)
             }
-            None => crate::tr!("settings", "settings-voice-input"),
+            None => crate::tr!("settings", "voice-input"),
         }
     }
 
@@ -329,11 +329,11 @@ impl DefaultSessionMode {
     /// Display name for the settings dropdown.
     pub fn display_name(&self) -> String {
         match self {
-            DefaultSessionMode::Terminal => crate::tr!("settings", "settings-default-session-terminal"),
-            DefaultSessionMode::Agent => crate::tr!("settings", "settings-default-session-agent"),
-            DefaultSessionMode::CloudAgent => crate::tr!("settings", "settings-default-session-cloud-oz"),
-            DefaultSessionMode::TabConfig => crate::tr!("settings", "settings-default-session-tab-config"),
-            DefaultSessionMode::DockerSandbox => crate::tr!("settings", "settings-default-session-docker-sandbox"),
+            DefaultSessionMode::Terminal => crate::tr!("settings", "default-session-terminal"),
+            DefaultSessionMode::Agent => crate::tr!("settings", "default-session-agent"),
+            DefaultSessionMode::CloudAgent => crate::tr!("settings", "default-session-cloud-oz"),
+            DefaultSessionMode::TabConfig => crate::tr!("settings", "default-session-tab-config"),
+            DefaultSessionMode::DockerSandbox => crate::tr!("settings", "default-session-docker-sandbox"),
         }
     }
 }
@@ -379,17 +379,17 @@ impl ThinkingDisplayMode {
     /// Display name for the settings dropdown.
     pub fn display_name(&self) -> String {
         match self {
-            ThinkingDisplayMode::ShowAndCollapse => crate::tr!("settings", "settings-thinking-show-and-collapse"),
-            ThinkingDisplayMode::AlwaysShow => crate::tr!("settings", "settings-thinking-always-show"),
-            ThinkingDisplayMode::NeverShow => crate::tr!("settings", "settings-thinking-never-show"),
+            ThinkingDisplayMode::ShowAndCollapse => crate::tr!("settings", "thinking-show-and-collapse"),
+            ThinkingDisplayMode::AlwaysShow => crate::tr!("settings", "thinking-always-show"),
+            ThinkingDisplayMode::NeverShow => crate::tr!("settings", "thinking-never-show"),
         }
     }
 
     pub fn command_palette_description(&self) -> String {
         match self {
-            ThinkingDisplayMode::ShowAndCollapse => crate::tr!("settings", "settings-thinking-cmd-show-and-collapse"),
-            ThinkingDisplayMode::AlwaysShow => crate::tr!("settings", "settings-thinking-cmd-always-show"),
-            ThinkingDisplayMode::NeverShow => crate::tr!("settings", "settings-thinking-cmd-never-show"),
+            ThinkingDisplayMode::ShowAndCollapse => crate::tr!("settings", "thinking-cmd-show-and-collapse"),
+            ThinkingDisplayMode::AlwaysShow => crate::tr!("settings", "thinking-cmd-always-show"),
+            ThinkingDisplayMode::NeverShow => crate::tr!("settings", "thinking-cmd-never-show"),
         }
     }
 

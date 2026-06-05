@@ -20,11 +20,11 @@ use warpui::{
 };
 
 static SETTINGS_WARP_DRIVE_ACCOUNT_PROMPT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warp-drive-account-prompt"));
+    LazyLock::new(|| crate::tr!("settings", "warp-drive-account-prompt"));
 static SETTINGS_SIGN_UP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-sign-up-label"));
+    LazyLock::new(|| crate::tr!("settings", "sign-up-label"));
 static SETTINGS_WARP_DRIVE_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "settings-warp-drive-description"));
+    LazyLock::new(|| crate::tr!("settings", "warp-drive-description"));
 
 #[derive(Debug, Clone)]
 pub enum WarpDriveSettingsPageAction {
@@ -226,7 +226,7 @@ impl SettingsWidget for WarpDriveToggleWidget {
                 .is_anonymous_or_logged_out();
 
         render_body_item::<WarpDriveSettingsPageAction>(
-            crate::tr!("settings", "settings-warp-drive-toggle").into(),
+            crate::tr!("settings", "warp-drive-toggle").into(),
             Some(AdditionalInfo {
                 mouse_state: self.info_icon_mouse_state.clone(),
                 on_click_action: Some(WarpDriveSettingsPageAction::OpenUrl(

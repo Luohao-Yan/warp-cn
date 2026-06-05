@@ -71,7 +71,7 @@ const DEFAULT_JSON_TEXT: &str = r#"{
 }
 "#;
 
-static SETTINGS_JSON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-json-label"));
+static SETTINGS_JSON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "json-label"));
 
 #[derive(Debug, Clone)]
 pub enum MCPServersEditPageViewEvent {
@@ -195,7 +195,7 @@ impl MCPServersEditPageView {
         });
 
         let editing_disabled_banner = ctx.add_typed_action_view(|_| {
-            static MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-mcp-editing-disabled"));
+            static MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-editing-disabled"));
             Banner::new_without_close(BannerTextContent::plain_text(MSG.clone()))
                 .with_icon(Icon::Warning)
         });
@@ -319,11 +319,11 @@ impl MCPServersEditPageView {
     fn render_header(&self, app: &AppContext) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
         let title = if self.server_card_item_id.is_none() {
-            crate::tr!("settings", "settings-add-new-mcp").to_string()
+            crate::tr!("settings", "add-new-mcp").to_string()
         } else if let Some(name) = self.server_model.name() {
-            crate::tr!("settings", "settings-edit-mcp", name = name.as_str()).to_string()
+            crate::tr!("settings", "edit-mcp", name = name.as_str().to_string())
         } else {
-            crate::tr!("settings", "settings-edit-mcp", name = "").to_string()
+            crate::tr!("settings", "edit-mcp", name = "".to_string())
         };
 
         let ui_builder = appearance.ui_builder().clone();

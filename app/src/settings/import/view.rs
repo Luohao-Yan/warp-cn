@@ -273,7 +273,7 @@ impl SettingsImportView {
                     font_size: Some(FONT_SIZE),
                     ..Default::default()
                 })
-                .with_centered_text_label(crate::tr!("common", "common-import-label"))
+                .with_centered_text_label(crate::tr!("common", "import-label"))
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(SettingsImportAction::ImportButtonClicked);
@@ -300,7 +300,7 @@ impl SettingsImportView {
                 background: Some(appearance.theme().outline().into()),
                 ..Default::default()
             })
-            .with_centered_text_label(crate::tr!("settings", "settings-import-reset-defaults"))
+            .with_centered_text_label(crate::tr!("settings", "import-reset-defaults"))
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(SettingsImportAction::ResetButtonClicked);
@@ -972,8 +972,8 @@ impl View for SettingsImportView {
             })
             .with_button_vertical_offset(DROPDOWN_VERTICAL_PADDING);
 
-        static WELCOME_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-import-select-profile"));
-        static LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "settings-import-looking"));
+        static WELCOME_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "import-select-profile"));
+        static LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "import-looking"));
 
         let mut display_new_session_text = false;
 
@@ -995,7 +995,7 @@ impl View for SettingsImportView {
         let mut new_session_setting_text = Flex::row().finish();
 
         if display_new_session_text {
-            let new_session_text = crate::tr!("settings", "settings-import-new-session-effect");
+            let new_session_text = crate::tr!("settings", "import-new-session-effect");
             new_session_setting_text = Container::new(
                 Text::new(
                     new_session_text,

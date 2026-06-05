@@ -67,21 +67,21 @@ fn feature_items() -> Vec<FeatureItem> {
     vec![
     FeatureItem {
         icon: Icon::Cloud,
-        title: crate::tr!("workspace", "workspace-run-any-agent-harness"),
-        description: crate::tr!("workspace", "workspace-run-any-agent-harness-desc"),
+        title: crate::tr!("workspace", "run-any-agent-harness"),
+        description: crate::tr!("workspace", "run-any-agent-harness-desc"),
         badge: None,
     },
     FeatureItem {
         icon: Icon::Atom02,
-        title: crate::tr!("workspace", "workspace-multi-agent-orchestration"),
-        description: crate::tr!("workspace", "workspace-multi-agent-orchestration-desc"),
+        title: crate::tr!("workspace", "multi-agent-orchestration"),
+        description: crate::tr!("workspace", "multi-agent-orchestration-desc"),
         badge: None,
     },
     FeatureItem {
         icon: Icon::Cognition,
-        title: crate::tr!("workspace", "workspace-agent-memory"),
-        description: crate::tr!("workspace", "workspace-agent-memory-desc"),
-        badge: Some(crate::tr!("workspace", "workspace-research-preview")),
+        title: crate::tr!("workspace", "agent-memory"),
+        description: crate::tr!("workspace", "agent-memory-desc"),
+        badge: Some(crate::tr!("workspace", "research-preview")),
     },
     ]
 }
@@ -186,7 +186,7 @@ impl OrchestrationLaunchModal {
         });
 
         let learn_more_button = ctx.add_view(|_ctx| {
-            ActionButton::new(crate::tr!("workspace", "workspace-learn-more"), LearnMoreButtonTheme)
+            ActionButton::new(crate::tr!("workspace", "learn-more"), LearnMoreButtonTheme)
                 .with_icon(Icon::LinkExternal)
                 .with_full_width(true)
                 .on_click(|ctx| {
@@ -195,7 +195,7 @@ impl OrchestrationLaunchModal {
         });
 
         let go_to_warp_button = ctx.add_view(|_ctx| {
-            ActionButton::new(crate::tr!("workspace", "workspace-close"), CtaButtonTheme)
+            ActionButton::new(crate::tr!("workspace", "close"), CtaButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(OrchestrationLaunchModalAction::Close))
         });
@@ -249,7 +249,7 @@ impl OrchestrationLaunchModal {
     fn render_badge(appearance: &Appearance) -> Box<dyn Element> {
         let text_color = modal_terminal_magenta(appearance);
         let background_color = modal_terminal_magenta_overlay_1(appearance);
-        let text = Text::new_inline(crate::tr!("common", "common-new-label").clone(), appearance.ui_font_family(), 14.)
+        let text = Text::new_inline(crate::tr!("common", "new-label").clone(), appearance.ui_font_family(), 14.)
             .with_color(text_color)
             .finish();
         ConstrainedBox::new(
@@ -271,7 +271,7 @@ impl OrchestrationLaunchModal {
 
     fn render_title(appearance: &Appearance) -> Box<dyn Element> {
         Text::new(
-            crate::tr!("workspace", "workspace-orchestrate-any-agent"),
+            crate::tr!("workspace", "orchestrate-any-agent"),
             appearance.ui_font_family(),
             20.,
         )
@@ -282,7 +282,7 @@ impl OrchestrationLaunchModal {
 
     fn render_description(appearance: &Appearance) -> Box<dyn Element> {
         Text::new(
-            crate::tr!("workspace", "workspace-orchestration-improvements"),
+            crate::tr!("workspace", "orchestration-improvements"),
             appearance.ui_font_family(),
             14.,
         )

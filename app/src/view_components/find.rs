@@ -46,7 +46,7 @@ use std::sync::LazyLock;
 pub const REGEX_TOGGLE_LABEL: &str = ". *";
 pub static REGEX_TOGGLE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "regex-toggle-tooltip"));
 
-pub static CASE_SENSITIVE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("view_components", "view-components-case-sensitive"));
+pub static CASE_SENSITIVE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("view_components", "case-sensitive"));
 pub static CASE_SENSITIVE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "case-sensitive-tooltip"));
 
 pub static FIND_WITHIN_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-within-block-tooltip"));
@@ -132,7 +132,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "find:find_next_occurrence",
-            &crate::tr!("view_components", "view-components-find-next-occurrence"),
+            &crate::tr!("view_components", "find-next-occurrence"),
             FindAction::CmdG,
         )
         .with_context_predicate(id!("Find"))
@@ -142,7 +142,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("f3"),
         EditableBinding::new(
             "find:find_prev_occurrence",
-            &crate::tr!("view_components", "view-components-find-prev-occurrence"),
+            &crate::tr!("view_components", "find-prev-occurrence"),
             FindAction::CmdShiftG,
         )
         .with_context_predicate(id!("Find"))
@@ -254,12 +254,12 @@ impl<T: FindModel + Entity<Event = FindEvent> + 'static> Find<T> {
     pub fn emit_result_a11y_content(&mut self, ctx: &mut ViewContext<Self>) {
         let content = if let Some(match_index) = self.model.as_ref(ctx).focused_match_index() {
             AccessibilityContent::new(
-                crate::tr!("view_components", "view-components-find-result-of", current = match_index + 1, total = self.model.as_ref(ctx).match_count()),
-                &crate::tr!("view_components", "view-components-find-navigate-help"),
+                crate::tr!("view_components", "find-result-of", current = match_index + 1, total = self.model.as_ref(ctx).match_count()),
+                &crate::tr!("view_components", "find-navigate-help"),
                 WarpA11yRole::UserAction,
             )
         } else {
-            AccessibilityContent::new_without_help(&crate::tr!("view_components", "view-components-find-no-results"), WarpA11yRole::UserAction)
+            AccessibilityContent::new_without_help(&crate::tr!("view_components", "find-no-results"), WarpA11yRole::UserAction)
         };
         ctx.emit_a11y_content(content);
     }
@@ -496,8 +496,8 @@ impl<T: FindModel + Entity<Event = FindEvent> + 'static> View for Find<T> {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            &crate::tr!("view_components", "view-components-find-type-phrase"),
-            &crate::tr!("view_components", "view-components-find-escape-help"),
+            &crate::tr!("view_components", "find-type-phrase"),
+            &crate::tr!("view_components", "find-escape-help"),
             WarpA11yRole::TextareaRole,
         ))
     }

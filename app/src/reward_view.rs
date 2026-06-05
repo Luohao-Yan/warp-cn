@@ -20,21 +20,21 @@ const TADA_FONT_SIZE: f32 = 60.;
 const TADA_MARGIN_TOP: f32 = 0.;
 const TADA_MARGIN_BOTTOM: f32 = 50.;
 // Constants for the main title
-static TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "reward-congrats"));
+static TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "congrats"));
 const TITLE_FONT_SIZE: f32 = 20.;
 const TITLE_MARGIN_BOTTOM: f32 = 25.;
 // Constants for the subtitle
-static SUBTITLE_SENT_REFERRAL: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "reward-sent-referral-subtitle"));
-static SUBTITLE_RECEIVED_REFERRAL: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "reward-received-referral-subtitle"));
+static SUBTITLE_SENT_REFERRAL: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "sent-referral-subtitle"));
+static SUBTITLE_RECEIVED_REFERRAL: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "received-referral-subtitle"));
 const SUBTITLE_FONT_SIZE: f32 = 14.;
 const SUBTITLE_MARGIN_BOTTOM: f32 = 40.;
 // Constants for the button
-static BUTTON_CTA: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "reward-try-it-out"));
+static BUTTON_CTA: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "try-it-out"));
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_HEIGHT: f32 = 45.;
 const BUTTON_WIDTH: f32 = 240.;
 const BUTTON_MARGIN_BOTTOM: f32 = 14.;
-static ACCESSIBILITY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "reward-a11y-help"));
+static ACCESSIBILITY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "a11y-help"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;

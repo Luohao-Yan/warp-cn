@@ -465,7 +465,7 @@ impl NotificationMailboxView {
             let label = if count == 0 {
                 filter.label().to_string()
             } else {
-                crate::tr!("agent_cloud", "agent-cloud-filter-with-count", label = filter.label(), count = count)
+                crate::tr!("agent_cloud", "filter-with-count", label = filter.label(), count = count)
             };
             let text_color = if is_active {
                 theme.main_text_color(theme.surface_2())

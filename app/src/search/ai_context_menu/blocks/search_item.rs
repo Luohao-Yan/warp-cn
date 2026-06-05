@@ -20,20 +20,20 @@ use warp_core::command::ExitCode;
 /// Calculate how long ago a timestamp was
 fn time_ago_string(timestamp: Option<&DateTime<Local>>) -> String {
     let Some(timestamp) = timestamp else {
-        return crate::tr!("search", "search-just-now").clone();
+        return crate::tr!("search", "just-now").clone();
     };
 
     let now = Local::now();
     let duration = now.signed_duration_since(*timestamp);
 
     if duration.num_seconds() < 60 {
-        crate::tr!("search", "search-just-now").clone()
+        crate::tr!("search", "just-now").clone()
     } else if duration.num_minutes() < 60 {
-        crate::tr!("search", "search-minutes-ago").replace("{ $count }", &duration.num_minutes().to_string())
+        crate::tr!("search", "minutes-ago").replace("{ $count }", &duration.num_minutes().to_string())
     } else if duration.num_hours() < 24 {
-        crate::tr!("search", "search-hours-ago").replace("{ $count }", &duration.num_hours().to_string())
+        crate::tr!("search", "hours-ago").replace("{ $count }", &duration.num_hours().to_string())
     } else {
-        crate::tr!("search", "search-days-ago").replace("{ $count }", &duration.num_days().to_string())
+        crate::tr!("search", "days-ago").replace("{ $count }", &duration.num_days().to_string())
     }
 }
 
@@ -136,7 +136,7 @@ impl SearchItem for BlockSearchItem {
 
         // Create sub text: last 3 lines of output
         let sub_text = if self.output_lines.is_empty() {
-            crate::tr!("search", "search-block-no-output").clone()
+            crate::tr!("search", "block-no-output").clone()
         } else {
             let joined = self.output_lines.join("\n").trim().to_string();
             // Additional safety truncation for the hover card
@@ -207,6 +207,6 @@ impl SearchItem for BlockSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        crate::tr!("terminal", "terminal-search-block", command = self.command.clone())
+        crate::tr!("terminal", "search-block", command = self.command.clone())
     }
 }
