@@ -29,3 +29,7 @@ view_components-view-components-find-next-occurrence = { view-components-find-ne
 view_components-view-components-find-prev-occurrence = { view-components-find-prev-occurrence }
 view_components-view-components-rendered = { view-components-rendered }
 view_components-view-components-raw = { view-components-raw }
+
+## -- Case-sensitive label for find view ----------------------------------------
+
+view-components-case-sensitive = Aa

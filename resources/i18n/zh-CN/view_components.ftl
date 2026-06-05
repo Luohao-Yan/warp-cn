@@ -29,3 +29,7 @@ view_components-view-components-find-next-occurrence = { view-components-find-ne
 view_components-view-components-find-prev-occurrence = { view-components-find-prev-occurrence }
 view_components-view-components-rendered = { view-components-rendered }
 view_components-view-components-raw = { view-components-raw }
+
+## -- 查找视图的区分大小写标签 ------------------------------------------------
+
+view-components-case-sensitive = Aa

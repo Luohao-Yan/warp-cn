@@ -105,12 +105,12 @@ pub fn init(app: &mut AppContext) {
             text_entry.clone() & id!("Vim"),
         ),
         FixedBinding::new(
-            crate::tr!("common", "common-delete-label"),
+            "delete",
             CodeEditorViewAction::Delete,
             text_entry.clone() & !id!("Vim"),
         ),
         FixedBinding::new(
-            crate::tr!("common", "common-delete-label"),
+            "delete",
             CodeEditorViewAction::VimDelete,
             text_entry.clone() & id!("Vim"),
         ),

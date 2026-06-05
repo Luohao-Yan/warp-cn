@@ -292,6 +292,44 @@ search-nav-empty-session = Empty Session
 search-palette-placeholder = Search for a command
 search-palette-no-results = No results found
 
+## -- Command palette accessibility labels ---
+
+search-a11y-conversation-label = Conversation: { $title }
+search-a11y-conversation-nav = Press enter to navigate to conversation "{ $title }".
+search-a11y-fork-conversation = Press enter to fork the current conversation into a new conversation.
+search-a11y-new-conversation = Press enter to create a new conversation.
+search-a11y-launch-config-selected = Selected { $name }.
+search-a11y-launch-config-help = Press enter to use this launch configuration.
+search-a11y-session-selected = Selected { $prompt }. { $description }.
+search-a11y-session-help = Press enter to navigate to this session.
+search-a11y-new-session-selected = Selected { $description }.
+search-a11y-new-session-help = Press enter to launch this session.
+search-a11y-repo-label = Repo: { $path }
+search-a11y-section-label = Section: { $title }
+search-a11y-tab-selected = Selected tab: { $title }.
+search-a11y-tab-help = Press enter to navigate to tab: { $title }.
+search-a11y-workflow-label = Workflow: { $name }
+
+## -- Command palette toast messages ---
+
+search-toast-cannot-switch-conv = Cannot switch conversations while agent is monitoring a command.
+search-toast-cannot-start-conv = Cannot start a new conversation while agent is monitoring a command.
+
+## -- Command search result accessibility ---
+
+search-result-executed = Result executed
+search-navigate-output = Press Cmd-Up to navigate to the command's output.
+search-result-accepted = Result accepted.
+search-edit-command-hint = You can edit the command here before pressing Enter to execute it.
+
+## -- Command search upgrade link ---
+
+search-upgrade-label = Upgrade
+
+## -- Command search login-gated feature ---
+
+search-upgrade-ai-usage = Upgrade AI Usage
+
 ## -- Double-prefix aliases for additional search strings ---
 
 search-search-block-no-output = { search-block-no-output }
@@ -342,3 +380,26 @@ search-search-nav-completed = { search-nav-completed }
 search-search-nav-empty-session = { search-nav-empty-session }
 search-search-palette-placeholder = { search-palette-placeholder }
 search-search-palette-no-results = { search-palette-no-results }
+search-search-a11y-conversation-label = { search-a11y-conversation-label }
+search-search-a11y-conversation-nav = { search-a11y-conversation-nav }
+search-search-a11y-fork-conversation = { search-a11y-fork-conversation }
+search-search-a11y-new-conversation = { search-a11y-new-conversation }
+search-search-a11y-launch-config-selected = { search-a11y-launch-config-selected }
+search-search-a11y-launch-config-help = { search-a11y-launch-config-help }
+search-search-a11y-session-selected = { search-a11y-session-selected }
+search-search-a11y-session-help = { search-a11y-session-help }
+search-search-a11y-new-session-selected = { search-a11y-new-session-selected }
+search-search-a11y-new-session-help = { search-a11y-new-session-help }
+search-search-a11y-repo-label = { search-a11y-repo-label }
+search-search-a11y-section-label = { search-a11y-section-label }
+search-search-a11y-tab-selected = { search-a11y-tab-selected }
+search-search-a11y-tab-help = { search-a11y-tab-help }
+search-search-a11y-workflow-label = { search-a11y-workflow-label }
+search-search-toast-cannot-switch-conv = { search-toast-cannot-switch-conv }
+search-search-toast-cannot-start-conv = { search-toast-cannot-start-conv }
+search-search-result-executed = { search-result-executed }
+search-search-navigate-output = { search-navigate-output }
+search-search-result-accepted = { search-result-accepted }
+search-search-edit-command-hint = { search-edit-command-hint }
+search-search-upgrade-label = { search-upgrade-label }
+search-search-upgrade-ai-usage = { search-upgrade-ai-usage }

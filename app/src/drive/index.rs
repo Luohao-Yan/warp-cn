@@ -1813,7 +1813,7 @@ impl DriveIndex {
         let title = Container::new(
             appearance
                 .ui_builder()
-                .wrappable_text("TRASH".to_string(), false)
+                .wrappable_text(crate::tr!("drive", "drive-trash-label"), false)
                 .with_style(UiComponentStyles {
                     font_family_id: Some(appearance.ui_font_family()),
                     font_size: Some(SECTION_HEADER_FONT_SIZE),
@@ -2618,8 +2618,7 @@ impl DriveIndex {
                         appearance
                             .ui_builder()
                             .wrappable_text(
-                                "Items in the trash will be deleted forever after 30 days."
-                                    .to_string(),
+                                crate::tr!("drive", "drive-trash-warning"),
                                 true,
                             )
                             .with_style(UiComponentStyles {
@@ -4121,13 +4120,13 @@ impl DriveIndex {
         let name = match object_type {
             DriveObjectType::Notebook { .. } => crate::tr!("drive", "drive-notebooks"),
             DriveObjectType::Workflow => crate::tr!("drive", "drive-workflows"),
-            DriveObjectType::EnvVarCollection => "Environment Variables".to_string(),
+            DriveObjectType::EnvVarCollection => crate::tr!("drive", "drive-env-vars-type"),
             DriveObjectType::Folder => crate::tr!("drive", "drive-folders"),
-            DriveObjectType::AgentModeWorkflow => "Agent Workflows".to_string(),
-            DriveObjectType::AIFact => "AI Fact".to_string(),
+            DriveObjectType::AgentModeWorkflow => crate::tr!("drive", "drive-agent-workflows-type"),
+            DriveObjectType::AIFact => crate::tr!("drive", "drive-ai-fact-type"),
             DriveObjectType::AIFactCollection => crate::tr!("drive", "drive-rules"),
-            DriveObjectType::MCPServer => "MCP Server".to_string(),
-            DriveObjectType::MCPServerCollection => "MCP Servers".to_string(),
+            DriveObjectType::MCPServer => crate::tr!("drive", "drive-mcp-server-type"),
+            DriveObjectType::MCPServerCollection => crate::tr!("drive", "drive-mcp-servers-type"),
         };
         let name_styles = UiComponentStyles {
             font_family_id: Some(appearance.ui_font_family()),
@@ -4916,7 +4915,7 @@ impl DriveIndex {
         if self.auth_state.is_anonymous_or_logged_out() {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    "Share Object".to_string(),
+                    crate::tr!("drive", "drive-share-object"),
                     AuthViewVariant::ShareRequirementCloseable,
                     ctx,
                 )

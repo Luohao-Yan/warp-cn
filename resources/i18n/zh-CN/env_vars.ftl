@@ -49,6 +49,10 @@ env-vars-validation-user = 由于与密钥脱敏设置冲突，无法创建此�
 env-vars-invoke-error = 尝试调用环境变量时发生错误
 env-vars-close-env-var-collection = 关闭环境变量集合
 
+## -- 类型标签 -----------------------------------------------------------------
+
+env-vars-type-label = 环境变量
+
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID
 
 env-vars-env-vars-secret-command = { env-vars-secret-command }

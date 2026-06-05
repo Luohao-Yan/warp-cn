@@ -216,9 +216,10 @@ impl NotebookCommand {
                 ctx,
             );
 
+            let mermaid_display_label = crate::tr!("notebooks", "notebooks-mermaid-label");
             let current_dropdown_selection = match &current_block_style {
                 CodeBlockType::Shell => CODE_BLOCK_SHELL_DISPLAY_LANG,
-                CodeBlockType::Mermaid => "Mermaid",
+                CodeBlockType::Mermaid => &mermaid_display_label,
                 CodeBlockType::Code { lang } if lang == "text" => CODE_BLOCK_DEFAULT_DISPLAY_LANG,
                 CodeBlockType::Code { lang } => lang,
             };
@@ -768,7 +769,7 @@ impl RunnableCommandModel for NotebookCommand {
                         appearance,
                         Icon::TerminalInput,
                         self.mouse_state_handles.insert_button_state.clone(),
-                        "Run in terminal",
+                        crate::tr!("notebooks", "notebooks-run-in-terminal"),
                         NotebookKeybindings::as_ref(ctx).run_commands_keybinding(),
                     )
                     .on_click(move |ctx, app, _| {

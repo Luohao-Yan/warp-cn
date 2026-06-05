@@ -214,7 +214,7 @@ impl EnvironmentSelector {
         let button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::Globe4)
-                .with_tooltip("Choose an environment")
+                .with_tooltip(crate::tr!("ai_assistant", "ai-choose-environment-tooltip"))
                 .with_size(ButtonSize::AgentInputButton)
                 .with_disabled_theme(DisabledTheme)
                 .on_click(|ctx| {
@@ -450,9 +450,9 @@ impl EnvironmentSelector {
             button.set_label(label, ctx);
             button.set_tooltip(
                 if is_configuring {
-                    Some("Choose an environment")
+                    Some(crate::tr!("ai_assistant", "ai-choose-environment-tooltip"))
                 } else {
-                    Some("Agent environment")
+                    Some(crate::tr!("ai_assistant", "ai-agent-environment-label"))
                 },
                 ctx,
             );

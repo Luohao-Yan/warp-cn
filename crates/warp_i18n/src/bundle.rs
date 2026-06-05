@@ -81,24 +81,36 @@ impl I18nBundle {
     /// Format a message.
     ///
     /// `domain` and `id` are joined into the lookup key `"{domain}-{id}"`.
+    /// If that key is not found, falls back to `id` alone (supporting FTL
+    /// entries that already carry their own namespace prefix).
     pub fn format(&self, domain: &str, id: &str, args: Option<&FluentArgs>) -> String {
         let key = lookup_key(domain, id);
 
-        // Try primary first.
+        let try_format = |bundle: &FluentBundle<FluentResource>, msg_id: &str| -> Option<String> {
+            bundle.get_message(msg_id).and_then(|msg| {
+                msg.value().map(|pattern| Self::format_pattern(bundle, pattern, args))
+            })
+        };
+
+        // 1. Try primary locale with domain-prefixed key.
         if let Some(bundle) = &self.primary {
-            if let Some(msg) = bundle.get_message(&key) {
-                if let Some(pattern) = msg.value() {
-                    return Self::format_pattern(bundle, pattern, args);
-                }
+            if let Some(result) = try_format(bundle, &key) {
+                return result;
+            }
+            // 2. Try primary locale with bare id (FTL entries with own prefix).
+            if let Some(result) = try_format(bundle, id) {
+                return result;
             }
         }
 
-        // Fallback to en-US.
+        // 3. Try fallback locale with domain-prefixed key.
         if let Some(bundle) = &self.fallback {
-            if let Some(msg) = bundle.get_message(&key) {
-                if let Some(pattern) = msg.value() {
-                    return Self::format_pattern(bundle, pattern, args);
-                }
+            if let Some(result) = try_format(bundle, &key) {
+                return result;
+            }
+            // 4. Try fallback locale with bare id.
+            if let Some(result) = try_format(bundle, id) {
+                return result;
             }
         }
 
@@ -437,5 +449,43 @@ items-count = { $count ->
             bundle.format("items", "count", Some(&args2)),
             "3 items"
         );
+    }
+
+    #[test]
+    fn test_bare_id_fallback() {
+        // When FTL entry uses its own prefix (e.g. "ai-deleted-conversation")
+        // but tr!() would look up "ai_assistant-ai-deleted-conversation",
+        // the format() method should fall back to the bare id.
+        let bundle = I18nBundleBuilder::new()
+            .with_primary_ftl(
+                &langid!("zh-CN"),
+                r#"
+ai-deleted-conversation = 已删除的对话
+"#,
+            )
+            .unwrap()
+            .with_fallback_ftl(
+                r#"
+ai-deleted-conversation = Deleted conversation
+"#,
+            )
+            .unwrap()
+            .build();
+
+        assert_eq!(
+            bundle.format("ai_assistant", "ai-deleted-conversation", None),
+            "已删除的对话"
+        );
+        // Also works with the domain-prefixed key if the entry exists
+        let bundle2 = I18nBundleBuilder::new()
+            .with_fallback_ftl(
+                r#"
+common-cancel-label = Cancel
+"#,
+            )
+            .unwrap()
+            .build();
+
+        assert_eq!(bundle2.format("common", "cancel-label", None), "Cancel");
     }
 }

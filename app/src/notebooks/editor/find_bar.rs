@@ -436,7 +436,7 @@ impl View for FindBar {
                     app,
                 ),
                 self.render_toggle_button(
-                    CASE_SENSITIVE_LABEL,
+                    &*CASE_SENSITIVE_LABEL,
                     &*CASE_SENSITIVE_TOOLTIP,
                     FindBarAction::ToggleCaseSensitive,
                     searcher.is_case_sensitive(),

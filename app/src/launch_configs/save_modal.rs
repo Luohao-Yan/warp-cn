@@ -528,7 +528,7 @@ impl LaunchConfigSaveModal {
                 appearance
                     .ui_builder()
                     .link(
-                        "Link to Documentation".to_string(),
+                        crate::tr!("launch_configs", "launch-configs-docs-link"),
                         Some(
                             "https://docs.warp.dev/terminal/sessions/launch-configurations"
                                 .to_string(),
@@ -550,9 +550,7 @@ impl LaunchConfigSaveModal {
             SaveState::Success => header
                 .with_child(
                     self.render_formatted_text_line(appearance, vec![
-                        FormattedTextFragment::plain_text("Saved successfully to "),
-                        FormattedTextFragment::inline_code(self.file_name.clone().unwrap_or_default()),
-                        FormattedTextFragment::plain_text(".")
+                        FormattedTextFragment::plain_text(crate::tr!("launch_configs", "launch-configs-saved-to", path = self.file_name.clone().unwrap_or_default())),
                     ])
                     .with_padding_bottom(24.)
                     .finish(),
@@ -563,17 +561,16 @@ impl LaunchConfigSaveModal {
                     appearance,
                     match failure_type {
                         FailureType::FileAlreadyExists => {
-                            "Failed to save. A launch configuration with the same name already exists.".to_string()
+                            crate::tr!("launch_configs", "launch-configs-duplicate-name")
                         }
-                        FailureType::Other => "An issue was encountered while saving.".to_string(),
+                        FailureType::Other => crate::tr!("launch_configs", "launch-configs-save-error"),
                     },
                 )
                 .with_padding_bottom(24.)
                 .finish(),
             ),
             SaveState::NotSaved => {
-                let mut text = "This will save your current configuration of windows, tabs \
-                and panes to a file so you can easily open it again".to_string();
+                let mut text = crate::tr!("launch_configs", "launch-configs-save-desc");
                 if self.open_modal_keybinding_str.is_empty() {
                     text.push('.');
                 } else {
@@ -587,9 +584,7 @@ impl LaunchConfigSaveModal {
                     )
                     .with_child(
                         self.render_formatted_text_line(appearance, vec![
-                            FormattedTextFragment::plain_text("\nThe YAML file is saved to "),
-                            FormattedTextFragment::inline_code(home_relative_path(&launch_configs_dir())),
-                            FormattedTextFragment::plain_text("."),
+                            FormattedTextFragment::plain_text(crate::tr!("launch_configs", "launch-configs-yaml-path", path = home_relative_path(&launch_configs_dir()).to_string())),
                         ])
                         .with_padding_bottom(24.)
                         .finish(),
@@ -657,10 +652,8 @@ impl View for LaunchConfigSaveModal {
 
     fn accessibility_contents(&self, _ctx: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            "Save Config Modal",
-            "Type the name of the file to which you want to save your
-            current configuration of windows, tabs, and panes. Use enter to save the
-            launch configuration, esc to quit the save configuration modal.",
+            &crate::tr!("launch_configs", "launch-configs-modal-title"),
+            &crate::tr!("launch_configs", "launch-configs-modal-a11y-desc"),
             WarpA11yRole::PopoverRole,
         ))
     }

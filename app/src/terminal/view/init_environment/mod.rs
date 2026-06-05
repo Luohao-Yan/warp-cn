@@ -161,7 +161,7 @@ impl View for InitEnvironmentBlock {
 
         let rendered_step = match &self.setup_state {
             SetupState::Pending { action_view } => self.render_pending_step(action_view, app),
-            SetupState::Skipped => RenderableAction::new("Environment setup cancelled", app)
+            SetupState::Skipped => RenderableAction::new(&crate::tr!("terminal", "terminal-env-setup-cancelled"), app)
                 .with_icon(cancelled_icon(appearance).finish())
                 .with_content_item_spacing()
                 .render(app)

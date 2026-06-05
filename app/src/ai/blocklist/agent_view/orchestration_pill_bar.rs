@@ -409,7 +409,7 @@ impl OrchestrationPillBar {
 
         let mut items = if is_open_elsewhere {
             vec![item(
-                "Focus pane".to_string(),
+                crate::tr!("ai_assistant", "ai-focus-pane"),
                 Icon::ArrowSplit,
                 OrchestrationPillBarAction::FocusOpenedConversation(conversation_id),
             )]
@@ -433,13 +433,13 @@ impl OrchestrationPillBar {
         items.push(MenuItem::Separator);
         if is_in_progress {
             items.push(destructive_item(
-                "Stop agent".to_string(),
+                crate::tr!("ai_assistant", "ai-stop-agent"),
                 Icon::StopFilled,
                 OrchestrationPillBarAction::Stop(conversation_id),
             ));
         }
         items.push(destructive_item(
-            "Kill agent".to_string(),
+            crate::tr!("ai_assistant", "ai-kill-agent"),
             Icon::X,
             OrchestrationPillBarAction::Kill(conversation_id),
         ));
@@ -560,10 +560,11 @@ impl OrchestrationPillBar {
         // the active views model so we can distinguish hidden vs. visible
         // child panes.
         for child in children {
+            let fallback_name = crate::tr!("ai_assistant", "ai-agent-fallback");
             let name = child
                 .agent_name()
                 .filter(|n| !n.is_empty())
-                .unwrap_or("Agent");
+                .unwrap_or(&fallback_name);
             specs.push(PillSpec {
                 conversation_id: child.id(),
                 label: name.to_string(),
@@ -996,7 +997,7 @@ fn render_hover_card(
         .filter(|n| !n.is_empty())
         .map(|n| n.to_string())
         .or_else(|| conversation.title())
-        .unwrap_or_else(|| "Agent".to_string());
+        .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-agent-fallback"));
 
     // Header: small avatar disc + bold agent name on the left, status
     // badge right-aligned. We use the conversation's `ConversationStatus`
@@ -1920,10 +1921,11 @@ pub fn render_orchestration_breadcrumbs(
     // `.filter(|n| !n.is_empty())` on `child_name`, an unnamed agent would
     // show "Agent" as the label but be hashed/initialed against the empty
     // string, producing a different color/letter from a real "Agent".
+    let fallback_name = crate::tr!("ai_assistant", "ai-agent-fallback");
     let child_name = active
         .agent_name()
         .filter(|n| !n.is_empty())
-        .unwrap_or("Agent");
+        .unwrap_or(&fallback_name);
     let child_label = child_name.to_string();
 
     // Parent crumb uses the Oz glyph on a neutral disc to match the

@@ -49,6 +49,10 @@ env-vars-validation-user = This environment variable cannot be created due to co
 env-vars-invoke-error = An error occurred while trying to invoke the env var
 env-vars-close-env-var-collection = Close Env Var Collection
 
+## -- Type label ----------------------------------------------------------------
+
+env-vars-type-label = Environment variables
+
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID
 
 env-vars-env-vars-secret-command = { env-vars-secret-command }

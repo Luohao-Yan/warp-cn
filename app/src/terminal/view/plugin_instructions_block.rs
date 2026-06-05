@@ -230,7 +230,7 @@ impl View for PluginInstructionsBlock {
                 .unwrap_or(step.command);
             content.add_child(self.render_step(
                 step_index,
-                step.description,
+                &step.description,
                 command,
                 step.executable,
                 step.link,
@@ -239,8 +239,8 @@ impl View for PluginInstructionsBlock {
             ));
         }
 
-        for note in self.instructions.post_install_notes {
-            let post_note = Text::new((*note).to_owned(), appearance.ui_font_family(), 14.)
+        for note in &self.instructions.post_install_notes {
+            let post_note = Text::new(note.clone(), appearance.ui_font_family(), 14.)
                 .with_color(theme.nonactive_ui_text_color().into_solid())
                 .finish();
             content.add_child(post_note);

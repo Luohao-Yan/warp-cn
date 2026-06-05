@@ -169,7 +169,7 @@ fn render_deleted_state(
         .with_main_axis_size(MainAxisSize::Max)
         .with_child(
             Text::new(
-                cached_title.unwrap_or_else(|| "Deleted conversation".to_string()),
+                cached_title.unwrap_or_else(|| crate::tr!("ai_assistant", "ai-deleted-conversation")),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -180,7 +180,7 @@ fn render_deleted_state(
             })
             .finish(),
         )
-        .with_child(render_subtext("Deleted".to_string(), appearance))
+        .with_child(render_subtext(crate::tr!("ai_assistant", "ai-deleted"), appearance))
         .finish();
 
     render_block_container(
@@ -264,7 +264,7 @@ impl View for AgentViewEntryBlock {
                     Text::new(
                         conversation
                             .title()
-                            .unwrap_or("Untitled conversation".to_string()),
+                            .unwrap_or(crate::tr!("ai_assistant", "ai-untitled-conversation")),
                         appearance.ui_font_family(),
                         appearance.monospace_font_size(),
                     )
@@ -296,7 +296,7 @@ impl View for AgentViewEntryBlock {
         let subtext = if is_open_elsewhere {
             Some(crate::tr!("ai", "ai-open-in-different-pane"))
         } else if self.is_restored {
-            Some("Restored".to_string())
+            Some(crate::tr!("ai_assistant", "ai-restored"))
         } else if !self.is_new
             && !matches!(
                 self.origin,
@@ -304,7 +304,7 @@ impl View for AgentViewEntryBlock {
                     | AgentViewEntryOrigin::AgentRequestedNewConversation
             )
         {
-            Some("Continued".to_string())
+            Some(crate::tr!("ai_assistant", "ai-continued"))
         } else {
             None
         };
@@ -396,7 +396,7 @@ impl TypedActionView for AgentViewEntryBlock {
                         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                             toast_stack.add_ephemeral_toast(
                                 DismissibleToast::error(
-                                    "Couldn't navigate to conversation.".to_string(),
+                                    crate::tr!("ai_assistant", "ai-couldnt-navigate"),
                                 ),
                                 window_id,
                                 ctx,

@@ -23,3 +23,14 @@ pane-type-get-started = 入门
 pane-type-network-log = 网络日志
 pane-type-welcome = 欢迎
 pane-type-placeholder = 占位符
+
+## -- 窗格标题 ----------------------------------------------------------------
+
+pane-get-started-title = 入门
+pane-new-tab-title = 新标签页
+pane-code-diff-title = 请求的编辑
+
+## -- 操作和横幅 ------------------------------------------------------------
+
+pane-group-share-session = 共享会话
+pane-group-unsupported-shell-fallback = Warp 目前不支持您的默认 shell，将回退到 zsh。

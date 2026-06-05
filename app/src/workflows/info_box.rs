@@ -494,7 +494,7 @@ impl WorkflowsMoreInfoView {
                 appearance
                     .ui_builder()
                     .keyboard_shortcut(&Keystroke {
-                        key: "Tab".to_string(),
+                        key: crate::tr!("workflows", "workflows-tab-key"),
                         shift: true,
                         ..Default::default()
                     })

@@ -88,10 +88,10 @@ fn config_name(directory: &Path, enable_worktree: bool) -> String {
         .and_then(|n| n.to_str())
         .or_else(|| directory.to_str())
         .unwrap_or("untitled");
-    let prefix = if enable_worktree {
-        "Worktree"
+    let prefix: String = if enable_worktree {
+        "Worktree".to_string()
     } else {
-        "New tab"
+        crate::tr!("common", "common-new-tab-label")
     };
     format!("{prefix}: {repo}")
 }

@@ -267,6 +267,41 @@ search-nav-empty-session = 空会话
 search-palette-placeholder = 搜索命令
 search-palette-no-results = 未找到结果
 
+## -- 命令面板无障碍标签 ---
+
+search-a11y-conversation-label = 对话：{ $title }
+search-a11y-conversation-nav = 按 Enter 导航到对话"{ $title }"。
+search-a11y-fork-conversation = 按 Enter 将当前对话分叉为新对话。
+search-a11y-new-conversation = 按 Enter 创建新对话。
+search-a11y-launch-config-selected = 已选择 { $name }。
+search-a11y-launch-config-help = 按 Enter 使用此启动配置。
+search-a11y-session-selected = 已选择 { $prompt }。{ $description }。
+search-a11y-session-help = 按 Enter 导航到此会话。
+search-a11y-new-session-selected = 已选择 { $description }。
+search-a11y-new-session-help = 按 Enter 启动此会话。
+search-a11y-repo-label = 仓库：{ $path }
+search-a11y-section-label = 分区：{ $title }
+search-a11y-tab-selected = 已选择标签页：{ $title }。
+search-a11y-tab-help = 按 Enter 导航到标签页：{ $title }。
+search-a11y-workflow-label = 工作流：{ $name }
+
+## -- 命令面板提示消息 ---
+
+search-toast-cannot-switch-conv = 代理正在监控命令时无法切换对话。
+search-toast-cannot-start-conv = 代理正在监控命令时无法开始新对话。
+
+## -- 命令搜索结果无障碍 ---
+
+search-result-executed = 结果已执行
+search-navigate-output = 按 Cmd-Up 导航到命令输出。
+search-result-accepted = 结果已接受。
+search-edit-command-hint = 您可以在此编辑命令，然后按 Enter 执行。
+search-upgrade-label = 升级
+
+## -- 命令搜索登录限制功能 ---
+
+search-upgrade-ai-usage = 升级 AI 使用
+
 ## -- 额外搜索字符串的双前缀别名 ---
 
 search-search-block-no-output = { search-block-no-output }
@@ -340,3 +375,26 @@ search-search-nav-completed = { search-nav-completed }
 search-search-nav-empty-session = { search-nav-empty-session }
 search-search-palette-placeholder = { search-palette-placeholder }
 search-search-palette-no-results = { search-palette-no-results }
+search-search-a11y-conversation-label = { search-a11y-conversation-label }
+search-search-a11y-conversation-nav = { search-a11y-conversation-nav }
+search-search-a11y-fork-conversation = { search-a11y-fork-conversation }
+search-search-a11y-new-conversation = { search-a11y-new-conversation }
+search-search-a11y-launch-config-selected = { search-a11y-launch-config-selected }
+search-search-a11y-launch-config-help = { search-a11y-launch-config-help }
+search-search-a11y-session-selected = { search-a11y-session-selected }
+search-search-a11y-session-help = { search-a11y-session-help }
+search-search-a11y-new-session-selected = { search-a11y-new-session-selected }
+search-search-a11y-new-session-help = { search-a11y-new-session-help }
+search-search-a11y-repo-label = { search-a11y-repo-label }
+search-search-a11y-section-label = { search-a11y-section-label }
+search-search-a11y-tab-selected = { search-a11y-tab-selected }
+search-search-a11y-tab-help = { search-a11y-tab-help }
+search-search-a11y-workflow-label = { search-a11y-workflow-label }
+search-search-toast-cannot-switch-conv = { search-toast-cannot-switch-conv }
+search-search-toast-cannot-start-conv = { search-toast-cannot-start-conv }
+search-search-result-executed = { search-result-executed }
+search-search-navigate-output = { search-navigate-output }
+search-search-result-accepted = { search-result-accepted }
+search-search-edit-command-hint = { search-edit-command-hint }
+search-search-upgrade-label = { search-upgrade-label }
+search-search-upgrade-ai-usage = { search-upgrade-ai-usage }

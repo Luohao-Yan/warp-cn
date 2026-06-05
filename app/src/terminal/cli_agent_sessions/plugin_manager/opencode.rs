@@ -33,46 +33,45 @@ impl CliAgentPluginManager for OpenCodePluginManager {
 
 static INSTALL_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
     PluginInstructions {
-        title: "Install Warp Plugin for OpenCode",
-        subtitle:
-            "Add the Warp plugin to your OpenCode configuration, then restart OpenCode.",
-        steps: &[
+        title: crate::tr!("terminal", "plugin-install-opencode-title"),
+        subtitle: crate::tr!("terminal", "plugin-opencode-install-subtitle"),
+        steps: vec![
             PluginInstructionStep {
-                description: "Open or create your opencode.json. This can be in your project root, or the global config path:",
+                description: crate::tr!("terminal", "plugin-opencode-open-config-step"),
                 command: "~/.config/opencode/opencode.json",
                 executable: false,
                 link: None,
             },
             PluginInstructionStep {
-                description: "Add \"@warp-dot-dev/opencode-warp\" to the \"plugin\" array in the top-level JSON object:",
+                description: crate::tr!("terminal", "plugin-opencode-add-plugin-step"),
                 command: "\"plugin\": [\"@warp-dot-dev/opencode-warp\"]",
                 executable: false,
                 link: None,
             },
         ],
-        post_install_notes: &["Restart OpenCode to activate the plugin."],
+        post_install_notes: vec![crate::tr!("terminal", "plugin-opencode-restart-activate")],
     }
 });
 
 static UPDATE_INSTRUCTIONS: LazyLock<PluginInstructions> = LazyLock::new(|| {
     PluginInstructions {
-        title: "Update Warp Plugin for OpenCode",
-        subtitle: "Pin the plugin to the latest version in your opencode.json. OpenCode caches plugins per version spec, so changing the pin forces it to re-fetch on restart.",
-        steps: &[
+        title: crate::tr!("terminal", "plugin-update-opencode-title"),
+        subtitle: crate::tr!("terminal", "plugin-opencode-update-subtitle"),
+        steps: vec![
             PluginInstructionStep {
-                description: "Open or create your opencode.json. This can be in your project root, or the global config path:",
+                description: crate::tr!("terminal", "plugin-opencode-open-config-step"),
                 command: "~/.config/opencode/opencode.json",
                 executable: false,
                 link: None,
             },
             PluginInstructionStep {
-                description: "Replace the existing \"@warp-dot-dev/opencode-warp\" entry in the \"plugin\" array with the explicit version:",
+                description: crate::tr!("terminal", "plugin-opencode-replace-plugin-step"),
                 command: "\"plugin\": [\"@warp-dot-dev/opencode-warp@0.1.5\"]",
                 executable: false,
                 link: None,
             },
         ],
-        post_install_notes: &["Restart OpenCode to load the updated plugin."],
+        post_install_notes: vec![crate::tr!("terminal", "plugin-opencode-restart-update")],
     }
 });
 

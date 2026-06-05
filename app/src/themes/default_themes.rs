@@ -268,7 +268,7 @@ pub fn dark_theme() -> WarpTheme {
         Some(Details::Darker),
         dark_mode_colors(),
         None,
-        Some("Dark".to_string()),
+        Some(crate::tr!("appearance", "theme-dark")),
     )
 }
 
@@ -281,7 +281,7 @@ pub fn light_theme() -> WarpTheme {
         Some(Details::Lighter),
         light_mode_colors(),
         None,
-        Some("Light".to_string()),
+        Some(crate::tr!("appearance", "theme-light")),
     )
 }
 
@@ -294,7 +294,7 @@ pub(super) fn dracula() -> WarpTheme {
         Some(Details::Darker),
         dracula_colors(),
         None,
-        Some("Dracula".to_string()),
+        Some(crate::tr!("appearance", "theme-dracula")),
     )
 }
 
@@ -307,7 +307,7 @@ pub(super) fn solarized_light() -> WarpTheme {
         Some(Details::Lighter),
         solarized_light_colors(),
         None,
-        Some("Solarized Light".to_string()),
+        Some(crate::tr!("appearance", "theme-solarized-light")),
     )
 }
 
@@ -320,7 +320,7 @@ pub(super) fn solarized_dark() -> WarpTheme {
         Some(Details::Darker),
         solarized_dark_colors(),
         None,
-        Some("Solarized Dark".to_string()),
+        Some(crate::tr!("appearance", "theme-solarized-dark")),
     )
 }
 
@@ -333,7 +333,7 @@ pub(super) fn gruvbox_dark() -> WarpTheme {
         Some(Details::Darker),
         gruvbox_dark_colors(),
         None,
-        Some("Gruvbox Dark".to_string()),
+        Some(crate::tr!("appearance", "theme-gruvbox-dark")),
     )
 }
 
@@ -346,7 +346,7 @@ pub(super) fn gruvbox_light() -> WarpTheme {
         Some(Details::Lighter),
         gruvbox_light_colors(),
         None,
-        Some("Gruvbox Light".to_string()),
+        Some(crate::tr!("appearance", "theme-gruvbox-light")),
     )
 }
 
@@ -366,7 +366,7 @@ pub(super) fn cyber_wave() -> WarpTheme {
         Some(Details::Darker),
         dark_mode_colors(),
         None,
-        Some("Cyber Wave".to_string()),
+        Some(crate::tr!("appearance", "theme-cyber-wave")),
     )
 }
 
@@ -385,7 +385,7 @@ pub(super) fn willow_dream() -> WarpTheme {
         Some(Details::Darker),
         dark_mode_colors(),
         None,
-        Some("Willow Dream".to_string()),
+        Some(crate::tr!("appearance", "theme-willow-dream")),
     )
 }
 
@@ -404,7 +404,7 @@ pub(super) fn fancy_dracula() -> WarpTheme {
         Some(Details::Darker),
         dracula_colors(),
         None,
-        Some("Fancy Dracula".to_string()),
+        Some(crate::tr!("appearance", "theme-fancy-dracula")),
     )
 }
 
@@ -420,7 +420,7 @@ pub(super) fn phenomenon() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/phenomenon_bg.jpg"),
             opacity: 100,
         }),
-        Some("Phenomenon".to_string()),
+        Some(crate::tr!("appearance", "theme-phenomenon")),
     )
 }
 
@@ -437,7 +437,7 @@ pub(super) fn jellyfish() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/jellyfish_bg.jpg"),
             opacity: 30,
         }),
-        Some("Jellyfish".to_string()),
+        Some(crate::tr!("appearance", "theme-jellyfish")),
     )
 }
 
@@ -453,7 +453,7 @@ pub(super) fn koi() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/koi_bg.jpg"),
             opacity: 30,
         }),
-        Some("Koi".to_string()),
+        Some(crate::tr!("appearance", "theme-koi")),
     )
 }
 
@@ -469,7 +469,7 @@ pub(super) fn leafy() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/leafy_bg.jpg"),
             opacity: 30,
         }),
-        Some("Leafy".to_string()),
+        Some(crate::tr!("appearance", "theme-leafy")),
     )
 }
 
@@ -485,7 +485,7 @@ pub(super) fn marble() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/marble_bg.jpg"),
             opacity: 50,
         }),
-        Some("Marble".to_string()),
+        Some(crate::tr!("appearance", "theme-marble")),
     )
 }
 
@@ -504,7 +504,7 @@ pub(super) fn pink_city() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/pink_city_bg.jpg"),
             opacity: 40,
         }),
-        Some("Pink City".to_string()),
+        Some(crate::tr!("appearance", "theme-pink-city")),
     )
 }
 
@@ -523,7 +523,7 @@ pub(super) fn snowy() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/snowy_bg.jpg"),
             opacity: 20,
         }),
-        Some("Snowy".to_string()),
+        Some(crate::tr!("appearance", "theme-snowy")),
     )
 }
 
@@ -544,7 +544,7 @@ pub(super) fn red_rock() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/red_rock_bg.jpg"),
             opacity: 30,
         }),
-        Some("Red Rock".to_string()),
+        Some(crate::tr!("appearance", "theme-red-rock")),
     )
 }
 
@@ -565,7 +565,7 @@ pub(super) fn dark_city() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/dark_city_bg.jpg"),
             opacity: 20,
         }),
-        Some("Dark City".to_string()),
+        Some(crate::tr!("appearance", "theme-dark-city")),
     )
 }
 
@@ -581,7 +581,7 @@ pub(super) fn sent_referral_reward() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/sent_referral_reward_bg.jpg"),
             opacity: 100,
         }),
-        Some("Warp Referral".to_string()),
+        Some(crate::tr!("appearance", "theme-warp-referral")),
     )
 }
 
@@ -597,7 +597,7 @@ pub(super) fn solar_flare() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/solarflare_bg.jpg"),
             opacity: 20,
         }),
-        Some("Solar Flare".to_string()),
+        Some(crate::tr!("appearance", "theme-solar-flare")),
     )
 }
 
@@ -610,7 +610,7 @@ pub(super) fn adeberry() -> WarpTheme {
         Some(Details::Darker),
         adeberry_colors(),
         None,
-        Some("Adeberry".to_string()),
+        Some(crate::tr!("appearance", "theme-adeberry")),
     )
 }
 
@@ -626,6 +626,6 @@ pub(super) fn received_referral_reward() -> WarpTheme {
             source: bundled_or_fetched_asset!("jpg/received_referral_reward_bg.jpg"),
             opacity: 100,
         }),
-        Some("Received Referral Reward".to_string()),
+        Some(crate::tr!("appearance", "theme-received-referral-reward")),
     )
 }

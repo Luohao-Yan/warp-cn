@@ -23,3 +23,14 @@ pane-type-get-started = GetStarted
 pane-type-network-log = Network Log
 pane-type-welcome = Welcome
 pane-type-placeholder = Placeholder
+
+## -- Pane titles ----------------------------------------------------------------
+
+pane-get-started-title = Get started
+pane-new-tab-title = New tab
+pane-code-diff-title = Requested Edit
+
+## -- Actions and banners --------------------------------------------------------
+
+pane-group-share-session = Share Session
+pane-group-unsupported-shell-fallback = Warp doesn't currently support your default shell, falling back to zsh.

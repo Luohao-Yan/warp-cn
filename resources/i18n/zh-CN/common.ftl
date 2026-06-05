@@ -349,7 +349,8 @@ common-delete-theme-label = 删除主题
 common-separator = 分隔符
 common-current = 当前
 common-loading = 加载中...
-common-out-of-credits = 看来您的积分已用完。 
+common-out-of-credits = 看来您的积分已用完。
+common-credits-suffix =  获取更多积分。
 common-no-results = 未找到结果。
 common-no-matches = 未找到匹配项。
 common-manage = 管理
@@ -360,6 +361,7 @@ common-common-separator = { common-separator }
 common-common-current = { common-current }
 common-common-loading = { common-loading }
 common-common-out-of-credits = { common-out-of-credits }
+common-common-credits-suffix = { common-credits-suffix }
 common-common-no-results = { common-no-results }
 common-common-no-matches = { common-no-matches }
 common-common-manage = { common-manage }
@@ -449,3 +451,15 @@ common-common-status-pending = { common-status-pending }
 common-common-untitled-label = { common-untitled-label }
 common-common-default-user-display-name = { common-default-user-display-name }
 common-common-new-badge = { common-new-badge }
+
+## -- 应用级字符串 ------------------------------------------------------------
+
+common-app-title = Warp
+common-create-environment = 创建环境
+common-theme-dark = 深色
+
+## -- 标签页和通知字符串 --------------------------------------------------------
+
+common-new-tab-label = 新标签页
+uri-new-tab-created = 新标签页已创建
+uri-new-tab-description = 前往 Warp 查看您的新标签页。

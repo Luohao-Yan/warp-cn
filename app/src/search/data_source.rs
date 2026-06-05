@@ -237,36 +237,36 @@ impl QueryFilter {
     }
 
     /// Returns placeholder text to be shown in an empty input when the filter is active.
-    pub fn placeholder_text(&self) -> &'static str {
+    pub fn placeholder_text(&self) -> String {
         match self {
-            QueryFilter::History => "Search history",
-            QueryFilter::Workflows => "Search workflows",
-            QueryFilter::AgentModeWorkflows => "Search prompts",
-            QueryFilter::Notebooks => "Search notebooks",
-            QueryFilter::Plans => "Search plans",
-            QueryFilter::NaturalLanguage => "e.g. replace string in file",
-            QueryFilter::Actions => "Search actions",
-            QueryFilter::Sessions => "Search sessions",
-            QueryFilter::Tabs => "Search tabs",
-            QueryFilter::Conversations => "Search conversations",
-            QueryFilter::HistoricalConversations => "Search historical conversations",
-            QueryFilter::LaunchConfigurations => "Search launch configurations",
-            QueryFilter::Drive => "Search objects in drive",
-            QueryFilter::EnvironmentVariables => "Search environment variables",
-            QueryFilter::PromptHistory => "Search prompt history",
-            QueryFilter::Files => "Search files",
-            QueryFilter::Commands => "Search commands",
-            QueryFilter::Blocks => "Search blocks",
-            QueryFilter::Code => "Search code symbols",
-            QueryFilter::Rules => "Search AI rules",
-            QueryFilter::Repos => "Search code repos",
-            QueryFilter::DiffSets => "Search diff sets",
-            QueryFilter::StaticSlashCommands => "Search static slash commands",
-            QueryFilter::Skills => "Search skills",
-            QueryFilter::BaseModels => "Search base models",
-            QueryFilter::FullTerminalUseModels => "Search full terminal use models",
+            QueryFilter::History => crate::tr!("search", "search-placeholder-history"),
+            QueryFilter::Workflows => crate::tr!("search", "search-placeholder-workflows"),
+            QueryFilter::AgentModeWorkflows => crate::tr!("search", "search-placeholder-prompts"),
+            QueryFilter::Notebooks => crate::tr!("search", "search-placeholder-notebooks"),
+            QueryFilter::Plans => crate::tr!("search", "search-placeholder-plans"),
+            QueryFilter::NaturalLanguage => crate::tr!("search", "search-placeholder-example"),
+            QueryFilter::Actions => crate::tr!("search", "search-placeholder-actions"),
+            QueryFilter::Sessions => crate::tr!("search", "search-placeholder-sessions"),
+            QueryFilter::Tabs => crate::tr!("search", "search-placeholder-tabs"),
+            QueryFilter::Conversations => crate::tr!("search", "search-placeholder-conversations"),
+            QueryFilter::HistoricalConversations => crate::tr!("search", "search-placeholder-historical-convs"),
+            QueryFilter::LaunchConfigurations => crate::tr!("search", "search-placeholder-launch-configs"),
+            QueryFilter::Drive => crate::tr!("search", "search-placeholder-warp-drive"),
+            QueryFilter::EnvironmentVariables => crate::tr!("search", "search-placeholder-env-vars"),
+            QueryFilter::PromptHistory => crate::tr!("search", "search-placeholder-prompt-history"),
+            QueryFilter::Files => crate::tr!("search", "search-placeholder-files"),
+            QueryFilter::Commands => crate::tr!("search", "search-placeholder-commands"),
+            QueryFilter::Blocks => crate::tr!("search", "search-placeholder-blocks"),
+            QueryFilter::Code => crate::tr!("search", "search-placeholder-code-symbols"),
+            QueryFilter::Rules => crate::tr!("search", "search-placeholder-rules"),
+            QueryFilter::Repos => crate::tr!("search", "search-placeholder-repos"),
+            QueryFilter::DiffSets => crate::tr!("search", "search-placeholder-diff-sets"),
+            QueryFilter::StaticSlashCommands => crate::tr!("search", "search-placeholder-slash-commands"),
+            QueryFilter::Skills => crate::tr!("search", "search-placeholder-skills"),
+            QueryFilter::BaseModels => crate::tr!("search", "search-placeholder-base-models"),
+            QueryFilter::FullTerminalUseModels => crate::tr!("search", "search-placeholder-terminal-models"),
             QueryFilter::CurrentDirectoryConversations => {
-                "Search conversations in current directory"
+                crate::tr!("search", "search-placeholder-cwd-convs")
             }
         }
     }
@@ -305,35 +305,37 @@ impl QueryFilter {
     }
 
     /// Returns the display name (e.g. the string to be used in UI) representing the filter.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         match self {
-            QueryFilter::History => "history",
-            QueryFilter::Workflows => "workflows",
-            QueryFilter::AgentModeWorkflows => "prompts",
-            QueryFilter::Notebooks => "notebooks",
-            QueryFilter::Plans => "plans",
-            QueryFilter::NaturalLanguage => "AI command suggestions",
-            QueryFilter::Actions => "actions",
-            QueryFilter::Sessions => "sessions",
-            QueryFilter::Tabs => "tabs",
-            QueryFilter::Conversations => "conversations",
-            QueryFilter::LaunchConfigurations => "launch configurations",
-            QueryFilter::Drive => &*WARP_DRIVE_FILTER_NAME,
-            QueryFilter::EnvironmentVariables => "environment variables",
-            QueryFilter::PromptHistory => "prompt history",
-            QueryFilter::Files => "files",
-            QueryFilter::Commands => "commands",
-            QueryFilter::Blocks => "blocks",
-            QueryFilter::Code => "code",
-            QueryFilter::Rules => "rules",
-            QueryFilter::Repos => "repos",
-            QueryFilter::DiffSets => "diff sets",
-            QueryFilter::StaticSlashCommands => "slash commands",
-            QueryFilter::HistoricalConversations => "historical conversations",
-            QueryFilter::Skills => "skills",
-            QueryFilter::BaseModels => "base models",
-            QueryFilter::FullTerminalUseModels => "full terminal use models",
-            QueryFilter::CurrentDirectoryConversations => "current directory conversations",
+            QueryFilter::History => crate::tr!("search", "search-source-history"),
+            QueryFilter::Workflows => crate::tr!("search", "search-source-workflows"),
+            QueryFilter::AgentModeWorkflows => crate::tr!("search", "search-source-prompts"),
+            QueryFilter::Notebooks => crate::tr!("search", "search-source-notebooks"),
+            QueryFilter::Plans => crate::tr!("search", "search-source-plans"),
+            QueryFilter::NaturalLanguage => crate::tr!("search", "search-source-ai-suggestions"),
+            QueryFilter::Actions => crate::tr!("search", "search-source-actions"),
+            QueryFilter::Sessions => crate::tr!("search", "search-source-sessions"),
+            QueryFilter::Tabs => crate::tr!("search", "search-source-tabs"),
+            QueryFilter::Conversations => crate::tr!("search", "search-source-conversations"),
+            QueryFilter::LaunchConfigurations => crate::tr!("search", "search-source-launch-configs"),
+            QueryFilter::Drive => WARP_DRIVE_FILTER_NAME.clone(),
+            QueryFilter::EnvironmentVariables => crate::tr!("search", "search-source-env-vars"),
+            QueryFilter::PromptHistory => crate::tr!("search", "search-source-prompt-history"),
+            QueryFilter::Files => crate::tr!("search", "search-source-files"),
+            QueryFilter::Commands => crate::tr!("search", "search-source-commands"),
+            QueryFilter::Blocks => crate::tr!("search", "search-source-blocks"),
+            QueryFilter::Code => crate::tr!("search", "search-source-code"),
+            QueryFilter::Rules => crate::tr!("search", "search-source-rules"),
+            QueryFilter::Repos => crate::tr!("search", "search-source-repos"),
+            QueryFilter::DiffSets => crate::tr!("search", "search-source-diff-sets"),
+            QueryFilter::StaticSlashCommands => crate::tr!("search", "search-source-slash-commands"),
+            QueryFilter::HistoricalConversations => crate::tr!("search", "search-source-historical-convs"),
+            QueryFilter::Skills => crate::tr!("search", "search-source-skills"),
+            QueryFilter::BaseModels => crate::tr!("search", "search-source-base-models"),
+            QueryFilter::FullTerminalUseModels => crate::tr!("search", "search-source-terminal-models"),
+            QueryFilter::CurrentDirectoryConversations => {
+                crate::tr!("search", "search-source-cwd-convs")
+            }
         }
     }
 

@@ -1288,6 +1288,25 @@ workspace-workspace-terminal-session = { workspace-terminal-session }
 workspace-workspace-share-pane = { workspace-share-pane }
 workspace-workspace-add-repository = { workspace-add-repository }
 
+## -- 计划层级名称 -----------------------------------------------------------
+
+workspace-plan-free = 免费
+workspace-plan-turbo = Turbo
+workspace-plan-team = 团队
+workspace-plan-pro = 专业
+workspace-plan-early-adopter = 早期用户
+workspace-plan-enterprise = 企业
+workspace-plan-business = 商业
+workspace-plan-lightspeed = Lightspeed
+workspace-plan-build = Build
+workspace-plan-max = Max
+
+## -- 团队删除错误 -------------------------------------------------------------
+
+workspace-team-delete-active-sub = 存在活跃订阅时无法删除团队。
+workspace-team-delete-unused-credits = 存在未使用的附加额度时无法删除团队。
+workspace-team-delete-members = 存在其他团队成员时无法删除团队。
+
 ## -- 移至云端字符串 --------------------------------------------------------
 
 workspace-moved-to-cloud = { $title }（已移至云端）

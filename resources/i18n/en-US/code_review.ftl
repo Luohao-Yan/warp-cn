@@ -139,6 +139,10 @@ code-review-commit-message = Commit message
 code-review-branch = Branch
 code-review-included-commits = Included commits
 
+## -- Commit mode placeholder ---------------------------------------------------
+
+code-review-commit-placeholder = Enter a commit message
+
 ## -- Double-prefix aliases --
 
 code_review-code-review-outdated = { code-review-outdated }

@@ -75,10 +75,10 @@ impl crate::search::item::SearchItem for SearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-        format!("Selected {}.", self.option.description())
+        crate::tr!("search", "search-a11y-new-session-selected", description = self.option.description())
     }
 
     fn accessibility_help_message(&self) -> Option<String> {
-        Some("Press enter to launch this session.".into())
+        Some(crate::tr!("search", "search-a11y-new-session-help").clone())
     }
 }

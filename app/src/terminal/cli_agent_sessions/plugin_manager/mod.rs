@@ -29,7 +29,7 @@ pub enum PluginModalKind {
 
 /// A single step in the plugin install/update instructions pane.
 pub(crate) struct PluginInstructionStep {
-    pub description: &'static str,
+    pub description: String,
     pub command: &'static str,
     /// When true, the code block shows a "Run" button that inserts the command into the terminal.
     /// Defaults-by-convention to `true`; set to `false` for steps that are not runnable
@@ -42,11 +42,11 @@ pub(crate) struct PluginInstructionStep {
 
 /// All content needed to render the plugin instructions pane for a given agent.
 pub(crate) struct PluginInstructions {
-    pub title: &'static str,
-    pub subtitle: &'static str,
-    pub steps: &'static [PluginInstructionStep],
+    pub title: String,
+    pub subtitle: String,
+    pub steps: Vec<PluginInstructionStep>,
     /// Displayed after the steps in the same style as the subtitle, one per paragraph.
-    pub post_install_notes: &'static [&'static str],
+    pub post_install_notes: Vec<String>,
 }
 
 /// Error returned when plugin installation fails.
@@ -164,7 +164,7 @@ pub(crate) trait CliAgentPluginManager: Send + Sync {
     /// Default returns an error — only agents with `can_auto_install() == true` should override.
     async fn install(&self) -> Result<(), PluginInstallError> {
         Err(PluginInstallError {
-            message: "Auto-install not supported for this agent".to_owned(),
+            message: crate::tr!("terminal", "plugin-auto-install-unsupported"),
             log: String::new(),
         })
     }
@@ -173,19 +173,19 @@ pub(crate) trait CliAgentPluginManager: Send + Sync {
     /// Default returns an error — only agents with `can_auto_install() == true` should override.
     async fn update(&self) -> Result<(), PluginInstallError> {
         Err(PluginInstallError {
-            message: "Auto-update not supported for this agent".to_owned(),
+            message: crate::tr!("terminal", "plugin-auto-update-unsupported"),
             log: String::new(),
         })
     }
 
     /// Toast message shown after a successful auto-install.
-    fn install_success_message(&self) -> &'static str {
-        "Warp plugin installed. Please restart the session to activate."
+    fn install_success_message(&self) -> String {
+        crate::tr!("terminal", "plugin-installed-restart")
     }
 
     /// Toast message shown after a successful auto-update.
-    fn update_success_message(&self) -> &'static str {
-        "Warp plugin updated. Please restart the session to activate."
+    fn update_success_message(&self) -> String {
+        crate::tr!("terminal", "plugin-updated-restart")
     }
 
     /// Manual installation instructions for the modal UI.

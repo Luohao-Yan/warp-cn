@@ -84,7 +84,9 @@ auth-skip-login-confirm = Are you sure you want to skip login?
 auth-skip-login-warning-1 = You can sign up later, but some features, such as AI,
 auth-skip-login-warning-2 = are only available to logged-in users.
 auth-skip-login-yes = Yes, skip login
-auth-browser-sign-in-header = Sign in on your browser {"\n"}to continue
+auth-browser-sign-in-header =
+    Sign in on your browser
+    to continue
 auth-copy-url = copy the URL
 auth-open-manually = and open the page manually.
 

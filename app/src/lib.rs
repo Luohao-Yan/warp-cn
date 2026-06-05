@@ -1001,9 +1001,11 @@ fn run_internal(mut launch_mode: LaunchMode) -> Result<()> {
     // intercept the binding), but just to be safe we only enable this in cases where we don't
     // include mac menus.
     #[cfg(not(target_os = "macos"))]
-    app_builder.convert_custom_triggers_to_keystroke_triggers(
-        crate::util::bindings::custom_tag_to_keystroke,
-    );
+    {
+        app_builder.convert_custom_triggers_to_keystroke_triggers(
+            crate::util::bindings::custom_tag_to_keystroke,
+        );
+    }
 
     #[cfg(target_os = "macos")]
     app_builder.register_default_keystroke_triggers_for_custom_actions(

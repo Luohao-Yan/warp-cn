@@ -114,6 +114,15 @@ editor-image-limit-per-query = 图片附件已禁用 — 每次查询上限为 {
 editor-image-limit-per-conversation = 图片附件已禁用 — 每次对话上限为 { $count }
 editor-attach-images = 附加图片
 
+## -- 编辑器视图字符串 ---------------------------------------------------------
+
+editor-ignore-suggestion-tooltip = 忽略此建议
+editor-image-not-supported = 此模型不支持图片附件
+editor-loading = 加载中...
+editor-attach-images-action = 添加图片
+editor-image-too-large = 无法添加图片 - 文件过大。
+editor-image-processing-error = 无法添加图片 - 处理出错。
+
 ## -- 语音输入 --------------------------------------------------------------
 
 editor-voice-limit-hit = 您已达到语音请求的限制。您的限制将在下一个周期刷新。

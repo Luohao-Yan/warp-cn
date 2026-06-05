@@ -425,3 +425,35 @@ notebooks-notebooks-open-embed-search-a11y = { notebooks-open-embed-search-a11y 
 notebooks-notebooks-restore-from-trash-tooltip = { notebooks-restore-from-trash-tooltip }
 notebooks-notebooks-copy-notebook-contents-tooltip = { notebooks-copy-notebook-contents-tooltip }
 notebooks-notebooks-copy-notebook-contents-to-personal-tooltip = { notebooks-copy-notebook-contents-to-personal-tooltip }
+
+## -- Link and code block migrated strings --
+
+notebooks-open-terminal-tooltip = Open a new terminal session in this directory
+notebooks-open-in-terminal = Open in terminal session
+notebooks-edit-link = Edit Link
+notebooks-mermaid-label = Mermaid
+
+## -- Code block language labels (proper nouns) --
+
+notebooks-go-lang = Go
+notebooks-java-lang = Java
+notebooks-javascript-lang = JavaScript
+notebooks-python-lang = Python
+notebooks-rust-lang = Rust
+notebooks-ruby-lang = Ruby on Rails
+
+## -- Double-prefix aliases for link and code block migrated strings --
+
+notebooks-notebooks-open-terminal-tooltip = { notebooks-open-terminal-tooltip }
+notebooks-notebooks-open-in-terminal = { notebooks-open-in-terminal }
+notebooks-notebooks-edit-link = { notebooks-edit-link }
+notebooks-notebooks-mermaid-label = { notebooks-mermaid-label }
+notebooks-notebooks-go-lang = { notebooks-go-lang }
+notebooks-notebooks-java-lang = { notebooks-java-lang }
+notebooks-notebooks-javascript-lang = { notebooks-javascript-lang }
+notebooks-notebooks-python-lang = { notebooks-python-lang }
+notebooks-notebooks-rust-lang = { notebooks-rust-lang }
+notebooks-notebooks-ruby-lang = { notebooks-ruby-lang }
+
+notebooks-notebooks-show-find-bar-a11y = { notebooks-show-find-bar-a11y }
+notebooks-notebooks-open-block-insertion-menu-a11y = { notebooks-open-block-insertion-menu-a11y }

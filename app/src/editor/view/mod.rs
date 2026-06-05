@@ -233,7 +233,7 @@ pub fn init(ctx: &mut AppContext) {
             id!("EditorView") & !id!("IMEOpen"),
         ),
         FixedBinding::new(
-            crate::tr!("common", "common-delete-label"),
+            "delete",
             EditorAction::Delete,
             id!("EditorView") & !id!("IMEOpen"),
         ),
@@ -1693,11 +1693,11 @@ impl ImageContextOptions {
         } = self
         {
             if *unsupported_model {
-                return "Image attachment isn't supported by this model".into();
+                return crate::tr!("editor", "editor-image-not-supported");
             }
 
             if *is_processing_attached_images {
-                return "Loading...".into();
+                return crate::tr!("editor", "editor-loading");
             }
 
             if *num_images_attached >= MAX_IMAGE_COUNT_FOR_QUERY {
@@ -1714,7 +1714,7 @@ impl ImageContextOptions {
             }
         }
 
-        "Attach images".into()
+        crate::tr!("editor", "editor-attach-images-action")
     }
 
     pub fn num_images_attached(&self) -> usize {
@@ -5250,7 +5250,7 @@ impl EditorView {
 
                 if num_oversized_images > 0 {
                     let message = if num_oversized_images == 1 && num_images_user_attached == 1 {
-                        "Image cannot be attached - file is too large.".into()
+                        crate::tr!("editor", "editor-image-too-large")
                     } else if num_oversized_images == 1 {
                         "1 image wasn't attached — file is too large.".into()
                     } else {
@@ -5270,7 +5270,7 @@ impl EditorView {
 
                 if num_unprocessed_images > 0 {
                     let message = if num_unprocessed_images == 1 && num_images_user_attached == 1 {
-                        "Image cannot be attached - error processing.".into()
+                        crate::tr!("editor", "editor-image-processing-error")
                     } else if num_unprocessed_images == 1 {
                         "1 image wasn't attached - error processing.".into()
                     } else {

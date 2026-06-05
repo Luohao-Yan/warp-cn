@@ -350,7 +350,8 @@ common-delete-theme-label = Delete Theme
 common-separator = Separator
 common-current = Current
 common-loading = Loading...
-common-out-of-credits = Looks like you're out of credits. 
+common-out-of-credits = Looks like you're out of credits.
+common-credits-suffix =  for more credits.
 common-no-results = No results found.
 common-no-matches = No matches found.
 common-manage = Manage
@@ -361,6 +362,7 @@ common-common-separator = { common-separator }
 common-common-current = { common-current }
 common-common-loading = { common-loading }
 common-common-out-of-credits = { common-out-of-credits }
+common-common-credits-suffix = { common-credits-suffix }
 common-common-no-results = { common-no-results }
 common-common-no-matches = { common-no-matches }
 common-common-manage = { common-manage }
@@ -450,3 +452,15 @@ common-common-status-pending = { common-status-pending }
 common-common-untitled-label = { common-untitled-label }
 common-common-default-user-display-name = { common-default-user-display-name }
 common-common-new-badge = { common-new-badge }
+
+## -- App-level strings ---------------------------------------------------------
+
+common-app-title = Warp
+common-create-environment = Create Environment
+common-theme-dark = Dark
+
+## -- Tab and notification strings -----------------------------------------------
+
+common-new-tab-label = New tab
+uri-new-tab-created = New tab created
+uri-new-tab-description = Go to Warp to see your new tab.

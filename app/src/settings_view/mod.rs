@@ -530,8 +530,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             vec![
                 ToggleSettingActionPair::custom(
                     SettingActionPairDescriptions::new(
-                        "Show initialization block",
-                        "Hide initialization block",
+                        &crate::tr!("settings", "settings-toggle-show-init-block"),
+                        &crate::tr!("settings", "settings-toggle-hide-init-block"),
                     ),
                     builder(SettingsAction::Debug(
                         DebugSettingsAction::ToggleInitializationBlock,
@@ -544,8 +544,8 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 ),
                 ToggleSettingActionPair::custom(
                     SettingActionPairDescriptions::new(
-                        "Show in-band command blocks",
-                        "Hide in-band command blocks",
+                        &crate::tr!("settings", "settings-toggle-show-inband-commands"),
+                        &crate::tr!("settings", "settings-toggle-hide-inband-commands"),
                     ),
                     builder(SettingsAction::Debug(
                         DebugSettingsAction::ToggleInBandCommandBlocks,
@@ -565,25 +565,25 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
             vec![
                 ToggleSettingActionPair::new(
-                    "recording mode",
+                    &crate::tr!("settings", "settings-toggle-recording-mode"),
                     WorkspaceAction::ToggleRecordingMode,
                     &id!("Workspace"),
                     flags::RECORDING_MODE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "in-band generators for new sessions",
+                    &crate::tr!("settings", "settings-toggle-inband-generators"),
                     WorkspaceAction::ToggleInBandGenerators,
                     &id!("Workspace"),
                     flags::IN_BAND_GENERATORS_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "debug network status",
+                    &crate::tr!("settings", "settings-toggle-debug-network"),
                     WorkspaceAction::ToggleDebugNetworkStatus,
                     &id!("Workspace"),
                     flags::DEBUG_NETWORK_ONLINE_FLAG,
                 ),
                 ToggleSettingActionPair::new(
-                    "memory statistics",
+                    &crate::tr!("settings", "settings-toggle-memory-stats"),
                     WorkspaceAction::ToggleShowMemoryStats,
                     &id!("Workspace"),
                     flags::DEBUG_SHOW_MEMORY_STATS_FLAG,
@@ -1217,19 +1217,19 @@ impl SettingsView {
         let mut nav_items = vec![
             SettingsNavItem::Page(SettingsSection::Account),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "Agents",
+                crate::tr!("settings", "agents-umbrella"),
                 SettingsSection::ai_subpages().to_vec(),
             )),
             SettingsNavItem::Page(SettingsSection::BillingAndUsage),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "Code",
+                crate::tr!("settings", "code-umbrella"),
                 vec![
                     SettingsSection::CodeIndexing,
                     SettingsSection::EditorAndCodeReview,
                 ],
             )),
             SettingsNavItem::Umbrella(SettingsUmbrella::new(
-                "Cloud platform",
+                crate::tr!("settings", "cloud-platform-umbrella"),
                 vec![
                     SettingsSection::CloudEnvironments,
                     SettingsSection::OzCloudAPIKeys,

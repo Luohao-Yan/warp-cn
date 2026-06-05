@@ -236,7 +236,30 @@ drive-workflow-env-variables = 环境变量
 drive-failed-export = 导出失败
 drive-failed-export-name = 导出 { $name } 失败
 
-## -- 团队部分字符串 --
+## -- Drive 项目附加字符串 ---------------------------------------------------
+
+drive-from-owner = 来自 { $owner }
+drive-unknown-user = 未知用户
+drive-unknown-team = 未知团队
+
+## -- Drive 索引附加字符串（续）-----------------------------------------------
+
+drive-env-vars-type = 环境变量
+drive-agent-workflows-type = 代理工作流
+drive-ai-fact-type = AI 事实
+drive-mcp-server-type = MCP 服务器
+drive-mcp-servers-type = MCP 服务器
+drive-trash-warning = 回收站中的项目将在 30 天后永久删除。
+
+## -- 共享继承字符串 -----------------------------------------------------------
+
+drive-inherited-from = 继承自 { $parent }
+drive-edit-inherited-tooltip = 编辑父文件夹上的继承权限
+drive-inherited-permission = 继承的权限
+drive-cannot-edit-inherited = 无法编辑继承的权限
+drive-anyone-with-link = 任何拥有链接的人
+
+## -- 团队部分字符串 -----------------------------------------------------------
 
 drive-collaborate-with-teammates = 与 { $count } 位已在 Warp 上的队友协作。
 drive-team-space-zero-state = 拖拽或移动个人工作流或笔记本到此处与团队共享。
@@ -397,3 +420,18 @@ drive-drive-copy-link = { drive-copy-link }
 drive-drive-learn-file-support = { drive-learn-file-support }
 drive-drive-failed-upload-file = { drive-failed-upload-file }
 drive-drive-failed-upload-folder = { drive-failed-upload-folder }
+drive-drive-from-owner = 来自 { $owner }
+drive-drive-unknown-user = { drive-unknown-user }
+drive-drive-unknown-team = { drive-unknown-team }
+drive-drive-env-vars-type = { drive-env-vars-type }
+drive-drive-agent-workflows-type = { drive-agent-workflows-type }
+drive-drive-trash-warning = { drive-trash-warning }
+drive-drive-share-object = { drive-share-object }
+drive-drive-inherited-from = 继承自 { $parent }
+drive-drive-edit-inherited-tooltip = { drive-edit-inherited-tooltip }
+drive-drive-inherited-permission = { drive-inherited-permission }
+drive-drive-cannot-edit-inherited = { drive-cannot-edit-inherited }
+drive-drive-anyone-with-link = { drive-anyone-with-link }
+drive-drive-ai-fact-type = { drive-ai-fact-type }
+drive-drive-mcp-server-type = { drive-mcp-server-type }
+drive-drive-mcp-servers-type = { drive-mcp-servers-type }

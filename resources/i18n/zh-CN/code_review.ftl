@@ -135,6 +135,10 @@ code-review-commit-message = 提交消息
 code-review-branch = 分支
 code-review-included-commits = 包含的提交
 
+## -- 提交模式占位符 -----------------------------------------------------------
+
+code-review-commit-placeholder = 输入提交消息
+
 ## -- Double-prefix aliases --
 
 code_review-code-review-outdated = { code-review-outdated }

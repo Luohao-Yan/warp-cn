@@ -1286,6 +1286,25 @@ workspace-workspace-terminal-session = { workspace-terminal-session }
 workspace-workspace-share-pane = { workspace-share-pane }
 workspace-workspace-add-repository = { workspace-add-repository }
 
+## -- Plan tier names -----------------------------------------------------------
+
+workspace-plan-free = Free
+workspace-plan-turbo = Turbo
+workspace-plan-team = Team
+workspace-plan-pro = Pro
+workspace-plan-early-adopter = Early adopter
+workspace-plan-enterprise = Enterprise
+workspace-plan-business = Business
+workspace-plan-lightspeed = Lightspeed
+workspace-plan-build = Build
+workspace-plan-max = Max
+
+## -- Team deletion errors -------------------------------------------------------
+
+workspace-team-delete-active-sub = Your team cannot be deleted with an active subscription.
+workspace-team-delete-unused-credits = Your team cannot be deleted with unused add-on credits.
+workspace-team-delete-members = Your team cannot be deleted with other team members.
+
 ## -- Moved to cloud string --------------------------------------------------------
 
 workspace-moved-to-cloud = { $title } (Moved to cloud)

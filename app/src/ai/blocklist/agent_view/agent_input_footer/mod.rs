@@ -1285,7 +1285,7 @@ impl AgentInputFooter {
                 else {
                     return Err((
                         PluginInstallError {
-                            message: "No plugin manager available".to_owned(),
+                            message: crate::tr!("terminal", "plugin-no-manager"),
                             log: String::new(),
                         },
                         None,
@@ -1367,13 +1367,13 @@ impl AgentInputFooter {
             .cli_agent(ctx)
             .and_then(plugin_manager_for)
             .map(|m| m.install_success_message())
-            .unwrap_or("Warp plugin installed. Please restart the session to activate.");
+            .unwrap_or_else(|| crate::tr!("terminal", "plugin-installed-restart"));
         let installing_label = crate::tr!("ai_assistant", "ai-installing-warp-plugin");
         let failed_install_label = crate::tr!("ai_assistant", "ai-failed-install-warp-plugin");
         self.handle_plugin_operation(
             &installing_label,
             &failed_install_label,
-            success_msg,
+            &success_msg,
             PluginChipTelemetryKind::Install,
             |manager| async move { manager.install().await },
             ctx,
@@ -1386,13 +1386,13 @@ impl AgentInputFooter {
             .cli_agent(ctx)
             .and_then(plugin_manager_for)
             .map(|m| m.update_success_message())
-            .unwrap_or("Warp plugin updated. Please restart the session to activate.");
+            .unwrap_or_else(|| crate::tr!("terminal", "plugin-updated-restart"));
         let updating_label = crate::tr!("ai_assistant", "ai-updating-warp-plugin");
         let failed_update_label = crate::tr!("ai_assistant", "ai-failed-update-warp-plugin");
         self.handle_plugin_operation(
             &updating_label,
             &failed_update_label,
-            success_msg,
+            &success_msg,
             PluginChipTelemetryKind::Update,
             |manager| async move { manager.update().await },
             ctx,

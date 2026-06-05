@@ -1508,3 +1508,84 @@ terminal-terminal-give-control-back-btn = { terminal-give-control-back-btn }
 terminal-terminal-ask-agent-assist-tooltip = { terminal-ask-agent-assist-tooltip }
 terminal-terminal-ask-agent-resume-tooltip = { terminal-ask-agent-resume-tooltip }
 terminal-terminal-enable-lang-support-desc = { terminal-enable-lang-support-desc }
+
+## -- Plugin manager strings -----------------------------------------------------------
+
+terminal-plugin-install-claude-title = Install Warp Plugin for Claude Code
+terminal-plugin-install-claude-subtitle = Ensure that jq is installed on your machine. Then, run these commands.
+terminal-plugin-add-repo-step = Add the Warp plugin marketplace repository
+terminal-plugin-install-step = Install the Warp plugin
+terminal-plugin-restart-activate = Restart Claude Code to activate the plugin.
+terminal-plugin-claude-known-issues = There are some known issues with Claude Code's plugin system. If the plugin is not found after step 1, you can try manually adding an "extraKnownMarketplaces" entry to ~/.claude/settings.json.
+terminal-plugin-update-claude-title = Update Warp Plugin for Claude Code
+terminal-plugin-update-claude-subtitle = Run the following commands.
+terminal-plugin-update-step = Install the latest plugin version
+terminal-plugin-restart-update = Restart Claude Code to activate the update.
+terminal-plugin-remove-marketplace-step = Remove the existing marketplace (if present)
+terminal-plugin-readd-marketplace-step = Re-add the marketplace
+terminal-plugin-install-codex-title = Enable Warp Notifications for Codex
+terminal-plugin-install-codex-subtitle = Update Codex to the latest version, then enable in-focus notifications so Warp can display them while you work.
+terminal-plugin-codex-update-step = Update Codex to the latest version.
+terminal-plugin-codex-config-step = Set the notification condition to "always" in your Codex config. Open or create ~/.codex/config.toml and add:
+terminal-plugin-restart-codex = Restart Codex to apply the changes.
+terminal-plugin-install-gemini-title = Install Warp Plugin for Gemini CLI
+terminal-plugin-install-gemini-subtitle = Run the following command, then restart Gemini CLI.
+terminal-plugin-install-gemini-extension-step = Install the Warp extension
+terminal-plugin-restart-gemini-plugin = Restart Gemini CLI to activate the plugin.
+terminal-plugin-update-gemini-title = Update Warp Plugin for Gemini CLI
+terminal-plugin-update-gemini-subtitle = Run the following command, then restart Gemini CLI.
+terminal-plugin-update-gemini-extension-step = Update the Warp extension
+terminal-plugin-restart-gemini-update-note = Restart Gemini CLI to activate the update.
+terminal-plugin-install-opencode-title = Install Warp Plugin for OpenCode
+terminal-plugin-opencode-install-subtitle = Add the Warp plugin to your OpenCode configuration, then restart OpenCode.
+terminal-plugin-opencode-open-config-step = Open or create your opencode.json. This can be in your project root, or the global config path:
+terminal-plugin-opencode-add-plugin-step = Add "@warp-dot-dev/opencode-warp" to the "plugin" array in the top-level JSON object:
+terminal-plugin-opencode-restart-activate = Restart OpenCode to activate the plugin.
+terminal-plugin-update-opencode-title = Update Warp Plugin for OpenCode
+terminal-plugin-opencode-update-subtitle = Pin the plugin to the latest version in your opencode.json. OpenCode caches plugins per version spec, so changing the pin forces it to re-fetch on restart.
+terminal-plugin-opencode-replace-plugin-step = Replace the existing "@warp-dot-dev/opencode-warp" entry in the "plugin" array with the explicit version:
+terminal-plugin-opencode-restart-update = Restart OpenCode to load the updated plugin.
+terminal-plugin-installed-restart = Warp plugin installed. Please restart the session to activate.
+terminal-plugin-updated-restart = Warp plugin updated. Please restart the session to activate.
+terminal-plugin-no-manager = No plugin manager available
+terminal-plugin-auto-install-unsupported = Auto-install not supported for this agent
+terminal-plugin-auto-update-unsupported = Auto-update not supported for this agent
+terminal-plugin-restart-claude-activate = Warp plugin installed. Please run /reload-plugins to activate.
+terminal-plugin-restart-claude-update = Warp plugin updated. Please run /reload-plugins to activate.
+terminal-plugin-restart-gemini-activate = Warp plugin installed. Please restart Gemini CLI to activate.
+terminal-plugin-restart-gemini-update = Warp plugin updated. Please restart Gemini CLI to activate.
+
+## -- Inline banners -----------------------------------------------------------
+
+terminal-enable-vim-title = Enable Warp's Vim keybindings?
+terminal-aws-cli-not-installed-title = AWS CLI Not Installed
+
+## -- Environment setup --------------------------------------------------------
+
+terminal-connecting-host-step1 = Connecting to Host (Step 1/3)
+terminal-creating-env-step2 = Creating Environment (Step 2/3)
+terminal-starting-env-step3 = Starting Environment (Step 3/3)
+terminal-running-setup = Running setup commands...
+terminal-ran-setup = Ran setup commands
+terminal-cloud-agent-failed = Cloud agent failed
+terminal-quick-setup = Quick setup
+terminal-quick-setup-desc = Select the GitHub repositories you'd like to work with and we'll suggest a base image and config
+terminal-use-agent = Use the agent
+terminal-use-agent-desc = Choose a locally set up project and we'll help you set up an environment based on it
+terminal-env-setup-cancelled = Environment setup cancelled
+
+## -- Share block modal --------------------------------------------------------
+
+terminal-share-create-link = Create link
+terminal-share-get-embed = Get embed
+terminal-redact-secrets = Redact secrets (API keys, passwords, IP addresses, PII etc.)
+terminal-command-and-output = Command and Output
+terminal-command = Command
+terminal-output = Output
+
+terminal-terminal-share-create-link = { terminal-share-create-link }
+terminal-terminal-share-get-embed = { terminal-share-get-embed }
+terminal-terminal-redact-secrets = { terminal-redact-secrets }
+terminal-terminal-command-and-output = { terminal-command-and-output }
+terminal-terminal-command = { terminal-command }
+terminal-terminal-output = { terminal-output }

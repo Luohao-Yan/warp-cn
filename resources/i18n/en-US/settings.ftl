@@ -33,6 +33,16 @@ settings-code-indexing = Indexing and projects
 settings-editor-code-review = Editor and Code Review
 settings-oz-cloud-api-keys = Oz Cloud API Keys
 
+## -- Navigation umbrella labels -----------------------------------------------
+
+settings-agents-umbrella = Agents
+settings-code-umbrella = Code
+settings-cloud-platform-umbrella = Cloud platform
+
+settings-settings-agents-umbrella = { settings-agents-umbrella }
+settings-settings-code-umbrella = { settings-code-umbrella }
+settings-settings-cloud-platform-umbrella = { settings-cloud-platform-umbrella }
+
 ## -- Sections and categories --------------------------------------------------
 
 settings-section-general = General
@@ -1544,3 +1554,20 @@ settings-settings-no-match = { settings-no-match }
 settings-settings-no-match-hint = { settings-no-match-hint }
 settings-settings-no-api-keys = { settings-no-api-keys }
 settings-settings-create-key-desc = { settings-create-key-desc }
+
+## -- Toggle action descriptions for debug/dev features -----------------------
+
+settings-toggle-show-init-block = Show initialization block
+settings-toggle-hide-init-block = Hide initialization block
+settings-toggle-show-inband-commands = Show in-band command blocks
+settings-toggle-hide-inband-commands = Hide in-band command blocks
+settings-toggle-recording-mode = recording mode
+settings-toggle-inband-generators = in-band generators for new sessions
+settings-toggle-debug-network = debug network status
+settings-toggle-memory-stats = memory statistics
+
+## -- Language display names (shown in native script by convention) ------------
+
+settings-lang-en-us = English (US)
+settings-lang-zh-cn = 中文 (简体)
+settings-lang-ja = 日本語

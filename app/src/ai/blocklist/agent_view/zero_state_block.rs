@@ -409,13 +409,13 @@ impl View for AgentViewZeroStateBlock {
 
         let header_props = if self.origin.is_cloud_agent() {
             HeaderProps {
-                title: "New Oz cloud agent conversation".into(),
+                title: crate::tr!("ai_assistant", "ai-new-cloud-agent-conversation").into(),
                 description: AgentViewDescription::CloudModeWithDocsLink,
                 icon: Icon::OzCloud,
             }
         } else {
             let mut local_description =
-                "Send a prompt below to start a new conversation".to_owned();
+                crate::tr!("ai_assistant", "ai-new-cloud-agent-body");
             let active_session = self.active_session(app);
             let location_label = active_session.as_deref().and_then(|session| {
                 format_session_location(session, self.current_working_directory.as_deref())
@@ -425,7 +425,7 @@ impl View for AgentViewZeroStateBlock {
             }
 
             HeaderProps {
-                title: "New Oz agent conversation".into(),
+                title: crate::tr!("ai_assistant", "ai-new-agent-conversation").into(),
                 description: AgentViewDescription::PlainText(vec![local_description.into()]),
                 icon: Icon::Oz,
             }
@@ -666,9 +666,9 @@ fn render_title_and_description(props: HeaderProps, app: &AppContext) -> Vec<Box
             // Second line: text with "Visit docs" hyperlink.
             let description_with_link = FormattedText::new([FormattedTextLine::Line(vec![
                 FormattedTextFragment::plain_text(
-                    "Use cloud agents to run parallel agents, build agents that run autonomously, and check in on your agents from anywhere. ",
+                    crate::tr!("ai_assistant", "ai-cloud-agents-description") + " ",
                 ),
-                FormattedTextFragment::hyperlink("Visit docs", CLOUD_AGENT_DOCS_URL),
+                FormattedTextFragment::hyperlink(&crate::tr!("ai_assistant", "ai-visit-cloud-docs"), CLOUD_AGENT_DOCS_URL),
             ])]);
 
             items.push(
@@ -738,7 +738,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                 Message::new(vec![MessageItem::clickable(
                     vec![
                         MessageItem::keystroke(ENTER_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE.clone()),
-                        MessageItem::text("start a new agent conversation"),
+                        MessageItem::text(crate::tr!("ai_assistant", "ai-new-agent-conversation").to_lowercase()),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::StartNewAgentConversation);
@@ -753,7 +753,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                         MessageItem::keystroke(
                             ENTER_CLOUD_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE.clone(),
                         ),
-                        MessageItem::text("start a new cloud agent conversation"),
+                        MessageItem::text(crate::tr!("ai_assistant", "ai-new-cloud-agent-conversation").to_lowercase()),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::EnterCloudAgentView);
@@ -769,7 +769,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                             key: "/model".to_owned(),
                             ..Default::default()
                         }),
-                        MessageItem::text("switch model"),
+                        MessageItem::text(crate::tr!("ai", "ai-switch-model").to_lowercase()),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::OpenModelSelector);
@@ -1072,11 +1072,12 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                             Container::new(
                                 Text::new(
                                     if changelog_model.oz_updates.len() == 1 {
-                                        "1 update".to_owned()
+                                        crate::tr!("ai_assistant", "ai-one-update", count = 1)
                                     } else {
-                                        format!(
-                                            "{} updates",
-                                            changelog_model
+                                        crate::tr!(
+                                            "ai_assistant",
+                                            "ai-update-count",
+                                            count = changelog_model
                                                 .oz_updates
                                                 .len()
                                                 .min(MAX_OZ_UPDATE_COUNT)

@@ -145,7 +145,7 @@ pub fn init(app: &mut AppContext) {
             EditorViewAction::Backspace,
             id!("RichTextEditorView") & !id!("IMEOpen"),
         ),
-        FixedBinding::new(crate::tr!("common", "common-delete-label"), EditorViewAction::Delete, text_entry.clone()),
+        FixedBinding::new("delete", EditorViewAction::Delete, text_entry.clone()),
         FixedBinding::new(
             "shift-up",
             EditorViewAction::SelectUp,
@@ -2504,11 +2504,10 @@ impl RichTextEditorView {
         let path = selected_file_path.path.clone();
         let line_and_column_num = selected_file_path.line_and_column_num;
         let primary_text = if path.is_dir() {
-            "Open folder"
+            crate::tr!("notebooks", "notebooks-open-folder")
         } else {
-            "Open file"
-        }
-        .to_string();
+            crate::tr!("notebooks", "notebooks-open-file")
+        };
         let show_open_in_warp = should_show_open_in_warp_link(&path, ctx);
         let path_for_primary = path.clone();
         let modifier = directly_open_link_keybinding_string();
@@ -2529,7 +2528,7 @@ impl RichTextEditorView {
         if show_open_in_warp {
             let path_for_warp = path.clone();
             links.push(TooltipLink {
-                text: "Open in Warp".to_string(),
+                text: crate::tr!("notebooks", "notebooks-open-in-warp"),
                 on_click: Box::new(move |ctx: &mut EventContext| {
                     ctx.dispatch_typed_action(EditorViewAction::OpenFile {
                         path: path_for_warp.clone(),
@@ -3141,7 +3140,7 @@ impl TypedActionView for RichTextEditorView {
             ),
             EditorViewAction::EditLink | EditorViewAction::CreateOrEditLink => {
                 ActionAccessibilityContent::Custom(AccessibilityContent::new_without_help(
-                    "Edit Link",
+                    crate::tr!("notebooks", "notebooks-edit-link"),
                     WarpA11yRole::UserAction,
                 ))
             }
@@ -3209,11 +3208,11 @@ impl TypedActionView for RichTextEditorView {
                 ))
             }
             EditorViewAction::ShowFindBar => ActionAccessibilityContent::Custom(
-                AccessibilityContent::new_without_help("Show find bar", WarpA11yRole::UserAction),
+                AccessibilityContent::new_without_help(crate::tr!("notebooks", "notebooks-show-find-bar-a11y"), WarpA11yRole::UserAction),
             ),
             EditorViewAction::OpenBlockInsertionMenu => {
                 ActionAccessibilityContent::Custom(AccessibilityContent::new_without_help(
-                    "Open block-insertion menu",
+                    crate::tr!("notebooks", "notebooks-open-block-insertion-menu-a11y"),
                     WarpA11yRole::UserAction,
                 ))
             }

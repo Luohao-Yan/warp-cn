@@ -743,6 +743,69 @@ ai-no-urls-fetched = No URLs fetched
 ai-no-urls-found = No URLs found
 ai-view-details = View details
 
+## -- Blocklist agent view and orchestration strings --
+
+ai-deleted-conversation = Deleted conversation
+ai-untitled-conversation = Untitled conversation
+ai-agent-fallback = Agent
+ai-unknown-agent = Unknown agent
+ai-focus-pane = Focus pane
+ai-stop-agent = Stop agent
+ai-kill-agent = Kill agent
+ai-new-cloud-agent-conversation = New Oz cloud agent conversation
+ai-new-agent-conversation = New Oz agent conversation
+ai-new-cloud-agent-body = Send a prompt below to start a new conversation
+ai-cloud-agents-description = Use cloud agents to run parallel agents, build agents that run autonomously, and check in on your agents from anywhere.
+ai-visit-cloud-docs = Visit docs
+ai-choose-environment-tooltip = Choose an environment
+ai-agent-environment-label = Agent environment
+ai-sending-message-to = Sending message to
+ai-started-agent = Started agent
+ai-cancelled-suffix = cancelled.
+ai-failed-start-agent = Failed to start agent
+ai-failed-start-remote-agent = Failed to start remote agent
+ai-start-agent-prefix = Start agent
+ai-start-remote-agent-prefix = Start remote agent
+ai-starting-agent = Starting agent
+ai-starting-remote-agent = Starting remote agent
+ai-locally-suffix = locally.
+ai-remotely-suffix = remotely.
+ai-manage-command-execution = Manage command execution setting
+ai-autoexecute-readonly-speedbump = Always allow Oz to execute read-only commands (relies on model)
+ai-deleted = Deleted
+ai-restored = Restored
+ai-continued = Continued
+ai-couldnt-navigate = Couldn't navigate to conversation.
+ai-warp-docs = Warp Docs
+ai-add-as-context = Add as Context
+ai-open-in-warp = Open in Warp
+ai-run-in-terminal = Run in terminal
+ai-one-update = { $count } update
+ai-update-count = { $count } updates
+ai-switch-model = Switch model
+
+## -- Model disable reason tooltips --
+
+ai-model-disabled-admin = This model has been disabled by your team admin.
+ai-model-out-of-requests = Please upgrade your plan to make more requests.
+ai-model-provider-outage = This model is temporarily unavailable due to a provider outage.
+ai-model-requires-upgrade = Please upgrade your plan to access this model.
+ai-model-unavailable = This model is unavailable.
+
+## -- Artifact button and label strings --
+
+ai-untitled-plan = Untitled Plan
+ai-screenshots-label = Screenshots
+ai-copy-branch-name = Copy branch name
+ai-view-screenshots = View screenshots
+ai-download-file = Download file
+ai-file-type-label = File
+ai-artifact-failed-load = Failed to load
+ai-daily-summary = daily summary
+ai-dashboard-screenshot = dashboard screenshot
+ai-pr-label = PR
+ai-file-fallback-name = file
+
 ## -- Double-prefix aliases for new AI assistant strings --
 ai_assistant-ai-enter-custom-docker-image = { ai-enter-custom-docker-image }
 ai_assistant-ai-dont-show-suggested-code-banners = { ai-dont-show-suggested-code-banners }
@@ -760,6 +823,47 @@ ai_assistant-ai-global-scope-tab = { ai-global-scope-tab }
 ai_assistant-ai-project-based-scope-tab = { ai-project-based-scope-tab }
 ai_assistant-ai-rule-name-placeholder = { ai-rule-name-placeholder }
 ai_assistant-ai-rule-description-placeholder = { ai-rule-description-placeholder }
+
+## -- Double-prefix aliases for blocklist agent view and orchestration strings --
+
+ai_assistant-ai-deleted-conversation = { ai-deleted-conversation }
+ai_assistant-ai-untitled-conversation = { ai-untitled-conversation }
+ai_assistant-ai-agent-fallback = { ai-agent-fallback }
+ai_assistant-ai-unknown-agent = { ai-unknown-agent }
+ai_assistant-ai-focus-pane = { ai-focus-pane }
+ai_assistant-ai-stop-agent = { ai-stop-agent }
+ai_assistant-ai-kill-agent = { ai-kill-agent }
+ai_assistant-ai-new-cloud-agent-conversation = { ai-new-cloud-agent-conversation }
+ai_assistant-ai-new-agent-conversation = { ai-new-agent-conversation }
+ai_assistant-ai-new-cloud-agent-body = { ai-new-cloud-agent-body }
+ai_assistant-ai-cloud-agents-description = { ai-cloud-agents-description }
+ai_assistant-ai-visit-cloud-docs = { ai-visit-cloud-docs }
+ai_assistant-ai-choose-environment-tooltip = { ai-choose-environment-tooltip }
+ai_assistant-ai-agent-environment-label = { ai-agent-environment-label }
+ai_assistant-ai-sending-message-to = { ai-sending-message-to }
+ai_assistant-ai-started-agent = { ai-started-agent }
+ai_assistant-ai-cancelled-suffix = { ai-cancelled-suffix }
+ai_assistant-ai-failed-start-agent = { ai-failed-start-agent }
+ai_assistant-ai-failed-start-remote-agent = { ai-failed-start-remote-agent }
+ai_assistant-ai-start-agent-prefix = { ai-start-agent-prefix }
+ai_assistant-ai-start-remote-agent-prefix = { ai-start-remote-agent-prefix }
+ai_assistant-ai-starting-agent = { ai-starting-agent }
+ai_assistant-ai-starting-remote-agent = { ai-starting-remote-agent }
+ai_assistant-ai-locally-suffix = { ai-locally-suffix }
+ai_assistant-ai-remotely-suffix = { ai-remotely-suffix }
+ai_assistant-ai-manage-command-execution = { ai-manage-command-execution }
+ai_assistant-ai-autoexecute-readonly-speedbump = { ai-autoexecute-readonly-speedbump }
+ai_assistant-ai-deleted = { ai-deleted }
+ai_assistant-ai-restored = { ai-restored }
+ai_assistant-ai-continued = { ai-continued }
+ai_assistant-ai-couldnt-navigate = { ai-couldnt-navigate }
+ai_assistant-ai-warp-docs = { ai-warp-docs }
+ai_assistant-ai-add-as-context = { ai-add-as-context }
+ai_assistant-ai-open-in-warp = { ai-open-in-warp }
+ai_assistant-ai-run-in-terminal = { ai-run-in-terminal }
+ai_assistant-ai-one-update = { $count }
+ai_assistant-ai-update-count = { $count }
+ai_assistant-ai-switch-model = { ai-switch-model }
 
 ## -- Double-prefix aliases for static prompt suggestion strings --
 
@@ -1374,19 +1478,19 @@ ai-default-cli-profile-name = Default (CLI)
 ai-ai-default-profile-name = { ai-default-profile-name }
 ai-ai-agent-mode-eval-profile-name = { ai-agent-mode-eval-profile-name }
 ai-ai-default-cli-profile-name = { ai-default-cli-profile-name }
-ai-resume-when-network = {$error_message}
-
-Will resume conversation when network connectivity is restored...
-ai-attempting-resume = {$error_message}
-
-Attempting to resume conversation...
+ai-resume-when-network =
+    {$error_message}
+    Will resume conversation when network connectivity is restored...
+ai-attempting-resume =
+    {$error_message}
+    Attempting to resume conversation...
 
 ai-error-formatting-json = Error formatting JSON
 ai-mcp-error = Error: {$error}
 ai-tool-call-cancelled = Tool call was cancelled
-ai-mcp-response = {$command}
-
-Response: {$result}
+ai-mcp-response =
+    {$command}
+    Response: {$result}
 ai-ai-error-formatting-json = { ai-error-formatting-json }
 ai-ai-mcp-error = { ai-mcp-error }
 ai-ai-tool-call-cancelled = { ai-tool-call-cancelled }

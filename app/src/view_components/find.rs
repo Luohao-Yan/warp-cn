@@ -46,7 +46,7 @@ use std::sync::LazyLock;
 pub const REGEX_TOGGLE_LABEL: &str = ". *";
 pub static REGEX_TOGGLE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "regex-toggle-tooltip"));
 
-pub const CASE_SENSITIVE_LABEL: &str = "Aa";
+pub static CASE_SENSITIVE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("view_components", "view-components-case-sensitive"));
 pub static CASE_SENSITIVE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "case-sensitive-tooltip"));
 
 pub static FIND_WITHIN_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-within-block-tooltip"));

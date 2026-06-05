@@ -194,7 +194,8 @@ impl View for ChildAgentStatusCard {
                 continue;
             }
 
-            let agent_name = child.agent_name().unwrap_or("Agent").to_string();
+            let fallback = crate::tr!("ai_assistant", "ai-agent-fallback");
+            let agent_name = child.agent_name().unwrap_or(&fallback).to_string();
             let title = child.title().unwrap_or_else(|| crate::tr!("common", "common-untitled-label"));
             let status_icon = child
                 .status()

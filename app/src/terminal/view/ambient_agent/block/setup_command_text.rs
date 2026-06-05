@@ -173,20 +173,21 @@ impl View for CloudModeSetupTextBlock {
             .disabled_text_color(agent_view_bg_color(app).into())
             .into_solid();
         let expandable = Hoverable::new(self.mouse_state.clone(), move |_is_hovered| {
+            let label = if self
+                .ambient_agent_view_model
+                .as_ref(app)
+                .setup_command_state()
+                .is_running(self.group_id)
+            {
+                crate::tr!("terminal", "terminal-running-setup")
+            } else {
+                crate::tr!("terminal", "terminal-ran-setup")
+            };
             Flex::row()
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_child(
                     Text::new(
-                        if self
-                            .ambient_agent_view_model
-                            .as_ref(app)
-                            .setup_command_state()
-                            .is_running(self.group_id)
-                        {
-                            "Running setup commands..."
-                        } else {
-                            "Ran setup commands"
-                        },
+                        label,
                         appearance.ai_font_family(),
                         appearance.monospace_font_size(),
                     )

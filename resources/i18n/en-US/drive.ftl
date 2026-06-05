@@ -248,7 +248,30 @@ drive-workflow-env-variables = Environment variables
 drive-failed-export = Export failed
 drive-failed-export-name = Failed to export { $name }
 
-## -- Team section strings --
+## -- Drive item additional strings -------------------------------------------
+
+drive-from-owner = From { $owner }
+drive-unknown-user = unknown user
+drive-unknown-team = unknown team
+
+## -- Drive index additional strings (continued) -------------------------------
+
+drive-env-vars-type = Environment Variables
+drive-agent-workflows-type = Agent Workflows
+drive-ai-fact-type = AI Fact
+drive-mcp-server-type = MCP Server
+drive-mcp-servers-type = MCP Servers
+drive-trash-warning = Items in the trash will be deleted forever after 30 days.
+
+## -- Sharing inheritance strings -----------------------------------------------
+
+drive-inherited-from = Inherited from { $parent }
+drive-edit-inherited-tooltip = Edit inherited permissions on the parent folder
+drive-inherited-permission = Inherited permission
+drive-cannot-edit-inherited = Cannot edit inherited permissions
+drive-anyone-with-link = Anyone with the link
+
+## -- Team section strings -----------------------------------------------------
 
 drive-collaborate-with-teammates = Collaborate with { $count } of your teammates already on Warp.
 drive-team-space-zero-state = Drag or move a personal workflow or notebook here to share it with your team.
@@ -404,3 +427,18 @@ drive-drive-copy-link = { drive-copy-link }
 drive-drive-learn-file-support = { drive-learn-file-support }
 drive-drive-failed-upload-file = { drive-failed-upload-file }
 drive-drive-failed-upload-folder = { drive-failed-upload-folder }
+drive-drive-from-owner = From { $owner }
+drive-drive-unknown-user = { drive-unknown-user }
+drive-drive-unknown-team = { drive-unknown-team }
+drive-drive-env-vars-type = { drive-env-vars-type }
+drive-drive-agent-workflows-type = { drive-agent-workflows-type }
+drive-drive-trash-warning = { drive-trash-warning }
+drive-drive-share-object = { drive-share-object }
+drive-drive-inherited-from = Inherited from { $parent }
+drive-drive-edit-inherited-tooltip = { drive-edit-inherited-tooltip }
+drive-drive-inherited-permission = { drive-inherited-permission }
+drive-drive-cannot-edit-inherited = { drive-cannot-edit-inherited }
+drive-drive-anyone-with-link = { drive-anyone-with-link }
+drive-drive-ai-fact-type = { drive-ai-fact-type }
+drive-drive-mcp-server-type = { drive-mcp-server-type }
+drive-drive-mcp-servers-type = { drive-mcp-servers-type }

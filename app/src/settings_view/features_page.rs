@@ -3397,9 +3397,9 @@ impl FeaturesPageView {
             let auto_label = crate::tr!("settings", "settings-auto-system");
             let values: Vec<(&str, String)> = vec![
                 ("auto", auto_label),
-                ("en-US", "English (US)".to_string()),
-                ("zh-CN", "中文 (简体)".to_string()),
-                ("ja", "日本語".to_string()),
+                ("en-US", crate::tr!("settings", "settings-lang-en-us")),
+                ("zh-CN", crate::tr!("settings", "settings-lang-zh-cn")),
+                ("ja", crate::tr!("settings", "settings-lang-ja")),
             ];
             let current = GeneralSettings::as_ref(ctx).language.clone();
 

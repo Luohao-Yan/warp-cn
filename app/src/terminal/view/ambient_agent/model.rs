@@ -1205,7 +1205,7 @@ impl AmbientAgentViewModel {
                         | AmbientAgentTaskState::Unknown => {
                             let error = status_message
                                 .map(|msg| msg.message)
-                                .unwrap_or_else(|| "Cloud agent failed".to_string());
+                                .unwrap_or_else(|| crate::tr!("terminal", "terminal-cloud-agent-failed"));
                             self.handle_spawn_error(error, ctx);
                         }
                     }

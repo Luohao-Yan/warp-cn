@@ -259,16 +259,16 @@ pub enum CustomerType {
 impl CustomerType {
     pub fn to_display_string(self) -> String {
         match self {
-            CustomerType::Free => "Free".to_string(),
-            CustomerType::Turbo => "Turbo".to_string(),
-            CustomerType::SelfServe => "Team".to_string(),
-            CustomerType::Prosumer => "Pro".to_string(),
-            CustomerType::Legacy => "Early adopter".to_string(),
-            CustomerType::Enterprise => "Enterprise".to_string(),
-            CustomerType::Business => "Business".to_string(),
-            CustomerType::Lightspeed => "Lightspeed".to_string(),
-            CustomerType::Build => "Build".to_string(),
-            CustomerType::BuildMax => "Max".to_string(),
+            CustomerType::Free => crate::tr!("workspace", "workspace-plan-free"),
+            CustomerType::Turbo => crate::tr!("workspace", "workspace-plan-turbo"),
+            CustomerType::SelfServe => crate::tr!("workspace", "workspace-plan-team"),
+            CustomerType::Prosumer => crate::tr!("workspace", "workspace-plan-pro"),
+            CustomerType::Legacy => crate::tr!("workspace", "workspace-plan-early-adopter"),
+            CustomerType::Enterprise => crate::tr!("workspace", "workspace-plan-enterprise"),
+            CustomerType::Business => crate::tr!("workspace", "workspace-plan-business"),
+            CustomerType::Lightspeed => crate::tr!("workspace", "workspace-plan-lightspeed"),
+            CustomerType::Build => crate::tr!("workspace", "workspace-plan-build"),
+            CustomerType::BuildMax => crate::tr!("workspace", "workspace-plan-max"),
             CustomerType::Unknown => "".to_string(),
         }
     }

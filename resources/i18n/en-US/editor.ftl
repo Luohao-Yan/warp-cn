@@ -114,6 +114,15 @@ editor-image-limit-per-query = Image attachment is disabled — limit is { $coun
 editor-image-limit-per-conversation = Image attachment is disabled — limit is { $count } per conversation
 editor-attach-images = Attach images
 
+## -- Editor view strings -------------------------------------------------------
+
+editor-ignore-suggestion-tooltip = Ignore this suggestion
+editor-image-not-supported = Image attachment isn't supported by this model
+editor-loading = Loading...
+editor-attach-images-action = Attach images
+editor-image-too-large = Image cannot be attached - file is too large.
+editor-image-processing-error = Image cannot be attached - error processing.
+
 ## -- Voice input --------------------------------------------------------------
 
 editor-voice-limit-hit = You have hit the limit for Voice requests. Your limit will be refreshed as a part of your next cycle.

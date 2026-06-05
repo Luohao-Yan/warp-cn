@@ -1507,3 +1507,84 @@ terminal-terminal-give-control-back-btn = { terminal-give-control-back-btn }
 terminal-terminal-ask-agent-assist-tooltip = { terminal-ask-agent-assist-tooltip }
 terminal-terminal-ask-agent-resume-tooltip = { terminal-ask-agent-resume-tooltip }
 terminal-terminal-enable-lang-support-desc = { terminal-enable-lang-support-desc }
+
+## -- 插件管理器字符串 -----------------------------------------------------------
+
+terminal-plugin-install-claude-title = 为 Claude Code 安装 Warp 插件
+terminal-plugin-install-claude-subtitle = 请确保您的机器上已安装 jq，然后运行这些命令。
+terminal-plugin-add-repo-step = 添加 Warp 插件市场仓库
+terminal-plugin-install-step = 安装 Warp 插件
+terminal-plugin-restart-activate = 重启 Claude Code 以激活插件。
+terminal-plugin-claude-known-issues = Claude Code 的插件系统存在一些已知问题。如果在第 1 步后未找到插件，您可以尝试手动向 ~/.claude/settings.json 添加 "extraKnownMarketplaces" 条目。
+terminal-plugin-update-claude-title = 更新 Claude Code 的 Warp 插件
+terminal-plugin-update-claude-subtitle = 运行以下命令。
+terminal-plugin-update-step = 安装最新版本的插件
+terminal-plugin-restart-update = 重启 Claude Code 以激活更新。
+terminal-plugin-remove-marketplace-step = 移除现有市场（如果存在）
+terminal-plugin-readd-marketplace-step = 重新添加市场
+terminal-plugin-install-codex-title = 为 Codex 启用 Warp 通知
+terminal-plugin-install-codex-subtitle = 将 Codex 更新到最新版本，然后启用焦点通知...
+terminal-plugin-codex-update-step = 将 Codex 更新到最新版本。
+terminal-plugin-codex-config-step = 在您的 Codex 配置中将通知条件设为"always"。打开或创建 ~/.codex/config.toml 并添加：
+terminal-plugin-restart-codex = 重启 Codex 以应用更改。
+terminal-plugin-install-gemini-title = 为 Gemini CLI 安装 Warp 插件
+terminal-plugin-install-gemini-subtitle = 运行以下命令，然后重启 Gemini CLI。
+terminal-plugin-install-gemini-extension-step = 安装 Warp 扩展
+terminal-plugin-restart-gemini-plugin = 重启 Gemini CLI 以激活插件。
+terminal-plugin-update-gemini-title = 更新 Gemini CLI 的 Warp 插件
+terminal-plugin-update-gemini-subtitle = 运行以下命令，然后重启 Gemini CLI。
+terminal-plugin-update-gemini-extension-step = 更新 Warp 扩展
+terminal-plugin-restart-gemini-update-note = 重启 Gemini CLI 以激活更新。
+terminal-plugin-install-opencode-title = 为 OpenCode 安装 Warp 插件
+terminal-plugin-opencode-install-subtitle = 将 Warp 插件添加到您的 OpenCode 配置中，然后重启 OpenCode。
+terminal-plugin-opencode-open-config-step = 打开或创建您的 opencode.json。该文件可以在您的项目根目录，或全局配置路径：
+terminal-plugin-opencode-add-plugin-step = 在顶层 JSON 对象的 "plugin" 数组中添加 "@warp-dot-dev/opencode-warp"：
+terminal-plugin-opencode-restart-activate = 重启 OpenCode 以激活插件。
+terminal-plugin-update-opencode-title = 更新 OpenCode 的 Warp 插件
+terminal-plugin-opencode-update-subtitle = 在您的 opencode.json 中将插件固定到最新版本。OpenCode 会按版本规范缓存插件，因此更改固定版本会强制其在重启时重新获取。
+terminal-plugin-opencode-replace-plugin-step = 将 "plugin" 数组中现有的 "@warp-dot-dev/opencode-warp" 条目替换为显式版本：
+terminal-plugin-opencode-restart-update = 重启 OpenCode 以加载更新的插件。
+terminal-plugin-installed-restart = Warp 插件已安装。请重启会话以激活。
+terminal-plugin-updated-restart = Warp 插件已更新。请重启会话以激活。
+terminal-plugin-no-manager = 无可用插件管理器
+terminal-plugin-auto-install-unsupported = 此代理不支持自动安装
+terminal-plugin-auto-update-unsupported = 此代理不支持自动更新
+terminal-plugin-restart-claude-activate = Warp 插件已安装。请运行 /reload-plugins 以激活。
+terminal-plugin-restart-claude-update = Warp 插件已更新。请运行 /reload-plugins 以激活。
+terminal-plugin-restart-gemini-activate = Warp 插件已安装。请重启 Gemini CLI 以激活。
+terminal-plugin-restart-gemini-update = Warp 插件已更新。请重启 Gemini CLI 以激活。
+
+## -- 内联横幅 ----------------------------------------------------------------
+
+terminal-enable-vim-title = 启用 Warp 的 Vim 快捷键？
+terminal-aws-cli-not-installed-title = AWS CLI 未安装
+
+## -- 环境设置 ----------------------------------------------------------------
+
+terminal-connecting-host-step1 = 正在连接到主机（步骤 1/3）
+terminal-creating-env-step2 = 正在创建环境（步骤 2/3）
+terminal-starting-env-step3 = 正在启动环境（步骤 3/3）
+terminal-running-setup = 正在运行设置命令...
+terminal-ran-setup = 已运行设置命令
+terminal-cloud-agent-failed = 云代理失败
+terminal-quick-setup = 快速设置
+terminal-quick-setup-desc = 选择您想使用的 GitHub 仓库，我们将推荐基础镜像和配置
+terminal-use-agent = 使用代理
+terminal-use-agent-desc = 选择一个本地项目，我们将帮您基于此设置环境
+terminal-env-setup-cancelled = 环境设置已取消
+
+## -- 分享块模态框 --------------------------------------------------------
+
+terminal-share-create-link = 创建链接
+terminal-share-get-embed = 获取嵌入
+terminal-redact-secrets = 脱敏处理（API 密钥、密码、IP 地址、个人身份信息等）
+terminal-command-and-output = 命令和输出
+terminal-command = 命令
+terminal-output = 输出
+
+terminal-terminal-share-create-link = { terminal-share-create-link }
+terminal-terminal-share-get-embed = { terminal-share-get-embed }
+terminal-terminal-redact-secrets = { terminal-redact-secrets }
+terminal-terminal-command-and-output = { terminal-command-and-output }
+terminal-terminal-command = { terminal-command }
+terminal-terminal-output = { terminal-output }

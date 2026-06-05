@@ -83,7 +83,9 @@ auth-skip-login-confirm = 确定要跳过登录吗？
 auth-skip-login-warning-1 = 您可以稍后注册，但某些功能（如 AI）
 auth-skip-login-warning-2 = 仅对登录用户可用。
 auth-skip-login-yes = 是的，跳过登录
-auth-browser-sign-in-header = 在浏览器中登录{"\n"}以继续
+auth-browser-sign-in-header =
+    在浏览器中登录
+    以继续
 auth-copy-url = 复制 URL
 auth-open-manually = 并手动打开页面。
 

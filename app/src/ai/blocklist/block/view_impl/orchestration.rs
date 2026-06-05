@@ -64,8 +64,8 @@ impl OrchestrationParticipant {
 
     fn unknown_child() -> Self {
         Self {
-            display_name: "Unknown agent".to_string(),
-            avatar: OrchestrationAvatar::agent("Unknown agent".to_string()),
+            display_name: crate::tr!("ai_assistant", "ai-unknown-agent"),
+            avatar: OrchestrationAvatar::agent(crate::tr!("ai_assistant", "ai-unknown-agent")),
         }
     }
 
@@ -121,7 +121,8 @@ fn participant_for_conversation(
         return OrchestrationParticipant::orchestrator();
     }
 
-    let display_name = conversation.agent_name().unwrap_or("Agent").to_string();
+    let fallback = crate::tr!("ai_assistant", "ai-agent-fallback");
+    let display_name = conversation.agent_name().unwrap_or(&fallback).to_string();
     OrchestrationParticipant {
         display_name: display_name.clone(),
         avatar: OrchestrationAvatar::agent(display_name),
@@ -415,7 +416,7 @@ pub(super) fn render_send_message(
         || status.as_ref().is_some_and(|s| s.is_queued());
 
     let label_fragments = vec![
-        FormattedTextFragment::plain_text("Sending message to "),
+        FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-sending-message-to") + " "),
         FormattedTextFragment::bold(&recipients),
         FormattedTextFragment::plain_text(format!(": {subject}")),
     ];
@@ -492,7 +493,7 @@ pub(super) fn render_start_agent(
         let (label_fragments, status_icon) = match result {
             StartAgentResult::Success { .. } => (
                 vec![
-                    FormattedTextFragment::plain_text("Started agent "),
+                    FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-started-agent") + " "),
                     FormattedTextFragment::bold(name),
                     FormattedTextFragment::plain_text(start_agent_success_suffix(execution_mode)),
                 ],
@@ -500,7 +501,7 @@ pub(super) fn render_start_agent(
             ),
             StartAgentResult::Error { error, .. } => (
                 vec![
-                    FormattedTextFragment::plain_text(start_agent_error_prefix(execution_mode)),
+                    FormattedTextFragment::plain_text(start_agent_error_prefix(execution_mode) + " "),
                     FormattedTextFragment::bold(name),
                     FormattedTextFragment::plain_text(format!(": {error}")),
                 ],
@@ -508,9 +509,9 @@ pub(super) fn render_start_agent(
             ),
             StartAgentResult::Cancelled { .. } => (
                 vec![
-                    FormattedTextFragment::plain_text(start_agent_cancelled_prefix(execution_mode)),
+                    FormattedTextFragment::plain_text(start_agent_cancelled_prefix(execution_mode) + " "),
                     FormattedTextFragment::bold(name),
-                    FormattedTextFragment::plain_text(" cancelled."),
+                    FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-cancelled-suffix")),
                 ],
                 inline_action_icons::cancelled_icon(appearance).finish(),
             ),
@@ -587,7 +588,7 @@ pub(super) fn render_start_agent(
         || status.as_ref().is_some_and(|s| s.is_queued());
 
     let label_fragments = vec![
-        FormattedTextFragment::plain_text(start_agent_in_progress_prefix(execution_mode)),
+        FormattedTextFragment::plain_text(start_agent_in_progress_prefix(execution_mode) + " "),
         FormattedTextFragment::bold(name),
         FormattedTextFragment::plain_text(" ..."),
     ];
@@ -639,31 +640,31 @@ pub(super) fn render_start_agent(
         .finish()
 }
 
-fn start_agent_success_suffix(execution_mode: &StartAgentExecutionMode) -> &'static str {
+fn start_agent_success_suffix(execution_mode: &StartAgentExecutionMode) -> String {
     match execution_mode {
-        StartAgentExecutionMode::Local { .. } => " locally.",
-        StartAgentExecutionMode::Remote { .. } => " remotely.",
+        StartAgentExecutionMode::Local { .. } => crate::tr!("ai_assistant", "ai-locally-suffix"),
+        StartAgentExecutionMode::Remote { .. } => crate::tr!("ai_assistant", "ai-remotely-suffix"),
     }
 }
 
-fn start_agent_error_prefix(execution_mode: &StartAgentExecutionMode) -> &'static str {
+fn start_agent_error_prefix(execution_mode: &StartAgentExecutionMode) -> String {
     match execution_mode {
-        StartAgentExecutionMode::Local { .. } => "Failed to start agent ",
-        StartAgentExecutionMode::Remote { .. } => "Failed to start remote agent ",
+        StartAgentExecutionMode::Local { .. } => crate::tr!("ai_assistant", "ai-failed-start-agent"),
+        StartAgentExecutionMode::Remote { .. } => crate::tr!("ai_assistant", "ai-failed-start-remote-agent"),
     }
 }
 
-fn start_agent_cancelled_prefix(execution_mode: &StartAgentExecutionMode) -> &'static str {
+fn start_agent_cancelled_prefix(execution_mode: &StartAgentExecutionMode) -> String {
     match execution_mode {
-        StartAgentExecutionMode::Local { .. } => "Start agent ",
-        StartAgentExecutionMode::Remote { .. } => "Start remote agent ",
+        StartAgentExecutionMode::Local { .. } => crate::tr!("ai_assistant", "ai-start-agent-prefix"),
+        StartAgentExecutionMode::Remote { .. } => crate::tr!("ai_assistant", "ai-start-remote-agent-prefix"),
     }
 }
 
-fn start_agent_in_progress_prefix(execution_mode: &StartAgentExecutionMode) -> &'static str {
+fn start_agent_in_progress_prefix(execution_mode: &StartAgentExecutionMode) -> String {
     match execution_mode {
-        StartAgentExecutionMode::Local { .. } => "Starting agent ",
-        StartAgentExecutionMode::Remote { .. } => "Starting remote agent ",
+        StartAgentExecutionMode::Local { .. } => crate::tr!("ai_assistant", "ai-starting-agent"),
+        StartAgentExecutionMode::Remote { .. } => crate::tr!("ai_assistant", "ai-starting-remote-agent"),
     }
 }
 
@@ -716,7 +717,8 @@ fn child_conversation_card_data_for_result(
             let conversation_id = conversation_id_for_agent_id(agent_id, app)?;
             let conversation =
                 BlocklistAIHistoryModel::as_ref(app).conversation(&conversation_id)?;
-            let agent_name = conversation.agent_name().unwrap_or("Agent").to_string();
+            let fallback = crate::tr!("ai_assistant", "ai-agent-fallback");
+            let agent_name = conversation.agent_name().unwrap_or(&fallback).to_string();
             let status = conversation.status().clone();
             let title = available_conversation_title_for_id(conversation_id, app)?;
             Some(ChildConversationCardData {

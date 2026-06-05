@@ -80,10 +80,15 @@ const NEW_BUTTON_VERTICAL_PADDING: f32 = 10.;
 const NEW_BUTTON_HORIZONTAL_PADDING: f32 = 10.;
 const NEW_COPY_BUTTON_WIDTH: f32 = 80.;
 
-const COMMAND_AND_OUTPUT_OPTION: (&str, DisplaySetting) =
-    ("Command and Output", DisplaySetting::CommandAndOutput);
-const COMMAND_OPTION: (&str, DisplaySetting) = ("Command", DisplaySetting::Command);
-const OUTPUT_OPTION: (&str, DisplaySetting) = ("Output", DisplaySetting::Output);
+fn command_and_output_option() -> (String, DisplaySetting) {
+    (crate::tr!("terminal", "terminal-command-and-output"), DisplaySetting::CommandAndOutput)
+}
+fn command_option() -> (String, DisplaySetting) {
+    (crate::tr!("terminal", "terminal-command"), DisplaySetting::Command)
+}
+fn output_option() -> (String, DisplaySetting) {
+    (crate::tr!("terminal", "terminal-output"), DisplaySetting::Output)
+}
 
 /// This default title is helpful for screen readers.
 static DEFAULT_EMBED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "terminal-share-embed-label"));
@@ -223,9 +228,10 @@ impl ShareBlockModal {
             ..Default::default()
         };
 
-        let embed_display_options = [COMMAND_AND_OUTPUT_OPTION, COMMAND_OPTION, OUTPUT_OPTION]
-            .map(|(name, display_setting)| (name.to_string(), display_setting))
-            .to_vec();
+        let embed_display_options = [command_and_output_option(), command_option(), output_option()]
+            .into_iter()
+            .map(|(name, display_setting)| (name, display_setting))
+            .collect::<Vec<_>>();
 
         let ligature_handle = LigatureSettings::handle(ctx);
         ctx.subscribe_to_model(&ligature_handle, |_, _, _, ctx| ctx.notify());
@@ -625,9 +631,11 @@ impl ShareBlockModal {
     }
 
     fn render_create_block_buttons_row(&self, appearance: &Appearance) -> Box<dyn Element> {
+        let create_link_label = crate::tr!("terminal", "terminal-share-create-link");
+        let get_embed_label = crate::tr!("terminal", "terminal-share-get-embed");
         let create_link_button = self.render_create_block_button(
             appearance,
-            "Create link",
+            &create_link_label,
             Icon::Link,
             ButtonVariant::Accent,
             self.mouse_state_handles
@@ -637,7 +645,7 @@ impl ShareBlockModal {
         );
         let get_embed_button = self.render_create_block_button(
             appearance,
-            "Get embed",
+            &get_embed_label,
             Icon::Code1,
             ButtonVariant::Basic,
             self.mouse_state_handles
@@ -871,7 +879,7 @@ impl ShareBlockModal {
             if link_generated {
                 self.block_title_editor.as_ref(app).buffer_text(app)
             } else {
-                "Share block".to_string()
+                crate::tr!("terminal", "terminal-share-title").to_string()
             },
             appearance.ui_font_family(),
             24.,
@@ -1060,7 +1068,7 @@ impl ShareBlockModal {
 
             let redact_secrets_description = appearance
                 .ui_builder()
-                .span("Redact secrets (API keys, passwords, IP addresses, PII etc.)".to_string())
+                .span(crate::tr!("terminal", "terminal-redact-secrets"))
                 .build()
                 .with_margin_left(4.)
                 .finish();

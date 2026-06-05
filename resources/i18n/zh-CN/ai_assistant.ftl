@@ -742,6 +742,69 @@ ai-no-urls-fetched = 未获取到 URL
 ai-no-urls-found = 未找到 URL
 ai-view-details = 查看详情
 
+## -- Blocklist 代理视图和编排字符串 --
+
+ai-deleted-conversation = 已删除的对话
+ai-untitled-conversation = 无标题对话
+ai-agent-fallback = 代理
+ai-unknown-agent = 未知代理
+ai-focus-pane = 聚焦面板
+ai-stop-agent = 停止代理
+ai-kill-agent = 终止代理
+ai-new-cloud-agent-conversation = 新的 Oz 云端代理对话
+ai-new-agent-conversation = 新的 Oz 代理对话
+ai-new-cloud-agent-body = 在下方发送提示词以开始新对话
+ai-cloud-agents-description = 使用云端代理来运行并行代理、构建自主运行的代理，并随时随地查看您的代理状态。
+ai-visit-cloud-docs = 访问文档
+ai-choose-environment-tooltip = 选择环境
+ai-agent-environment-label = 代理环境
+ai-sending-message-to = 正在向
+ai-started-agent = 已启动代理
+ai-cancelled-suffix = 已取消。
+ai-failed-start-agent = 启动代理失败
+ai-failed-start-remote-agent = 启动远程代理失败
+ai-start-agent-prefix = 启动代理
+ai-start-remote-agent-prefix = 启动远程代理
+ai-starting-agent = 正在启动代理
+ai-starting-remote-agent = 正在启动远程代理
+ai-locally-suffix = 本地。
+ai-remotely-suffix = 远程。
+ai-manage-command-execution = 管理命令执行设置
+ai-autoexecute-readonly-speedbump = 始终允许 Oz 执行只读命令（依赖模型）
+ai-deleted = 已删除
+ai-restored = 已恢复
+ai-continued = 已继续
+ai-couldnt-navigate = 无法导航到对话。
+ai-warp-docs = Warp 文档
+ai-add-as-context = 添加为上下文
+ai-open-in-warp = 在 Warp 中打开
+ai-run-in-terminal = 在终端中运行
+ai-one-update = { $count } 次更新
+ai-update-count = { $count } 次更新
+ai-switch-model = 切换模型
+
+## -- 模型禁用原因工具提示 --
+
+ai-model-disabled-admin = 此模型已被您的团队管理员禁用。
+ai-model-out-of-requests = 请升级您的套餐以发送更多请求。
+ai-model-provider-outage = 由于提供商服务中断，此模型暂时不可用。
+ai-model-requires-upgrade = 请升级您的套餐以访问此模型。
+ai-model-unavailable = 此模型不可用。
+
+## -- Artifact button and label strings --
+
+ai-untitled-plan = 无标题计划
+ai-screenshots-label = 截图
+ai-copy-branch-name = 复制分支名
+ai-view-screenshots = 查看截图
+ai-download-file = 下载文件
+ai-file-type-label = 文件
+ai-artifact-failed-load = 加载失败
+ai-daily-summary = 每日摘要
+ai-dashboard-screenshot = 仪表板截图
+ai-pr-label = PR
+ai-file-fallback-name = 文件
+
 ## -- Double-prefix aliases for new AI assistant strings --
 ai_assistant-ai-enter-custom-docker-image = { ai-enter-custom-docker-image }
 ai_assistant-ai-dont-show-suggested-code-banners = { ai-dont-show-suggested-code-banners }
@@ -759,6 +822,47 @@ ai_assistant-ai-global-scope-tab = { ai-global-scope-tab }
 ai_assistant-ai-project-based-scope-tab = { ai-project-based-scope-tab }
 ai_assistant-ai-rule-name-placeholder = { ai-rule-name-placeholder }
 ai_assistant-ai-rule-description-placeholder = { ai-rule-description-placeholder }
+
+## -- Blocklist 代理视图和编排字符串的双前缀别名 --
+
+ai_assistant-ai-deleted-conversation = { ai-deleted-conversation }
+ai_assistant-ai-untitled-conversation = { ai-untitled-conversation }
+ai_assistant-ai-agent-fallback = { ai-agent-fallback }
+ai_assistant-ai-unknown-agent = { ai-unknown-agent }
+ai_assistant-ai-focus-pane = { ai-focus-pane }
+ai_assistant-ai-stop-agent = { ai-stop-agent }
+ai_assistant-ai-kill-agent = { ai-kill-agent }
+ai_assistant-ai-new-cloud-agent-conversation = { ai-new-cloud-agent-conversation }
+ai_assistant-ai-new-agent-conversation = { ai-new-agent-conversation }
+ai_assistant-ai-new-cloud-agent-body = { ai-new-cloud-agent-body }
+ai_assistant-ai-cloud-agents-description = { ai-cloud-agents-description }
+ai_assistant-ai-visit-cloud-docs = { ai-visit-cloud-docs }
+ai_assistant-ai-choose-environment-tooltip = { ai-choose-environment-tooltip }
+ai_assistant-ai-agent-environment-label = { ai-agent-environment-label }
+ai_assistant-ai-sending-message-to = { ai-sending-message-to }
+ai_assistant-ai-started-agent = { ai-started-agent }
+ai_assistant-ai-cancelled-suffix = { ai-cancelled-suffix }
+ai_assistant-ai-failed-start-agent = { ai-failed-start-agent }
+ai_assistant-ai-failed-start-remote-agent = { ai-failed-start-remote-agent }
+ai_assistant-ai-start-agent-prefix = { ai-start-agent-prefix }
+ai_assistant-ai-start-remote-agent-prefix = { ai-start-remote-agent-prefix }
+ai_assistant-ai-starting-agent = { ai-starting-agent }
+ai_assistant-ai-starting-remote-agent = { ai-starting-remote-agent }
+ai_assistant-ai-locally-suffix = { ai-locally-suffix }
+ai_assistant-ai-remotely-suffix = { ai-remotely-suffix }
+ai_assistant-ai-manage-command-execution = { ai-manage-command-execution }
+ai_assistant-ai-autoexecute-readonly-speedbump = { ai-autoexecute-readonly-speedbump }
+ai_assistant-ai-deleted = { ai-deleted }
+ai_assistant-ai-restored = { ai-restored }
+ai_assistant-ai-continued = { ai-continued }
+ai_assistant-ai-couldnt-navigate = { ai-couldnt-navigate }
+ai_assistant-ai-warp-docs = { ai-warp-docs }
+ai_assistant-ai-add-as-context = { ai-add-as-context }
+ai_assistant-ai-open-in-warp = { ai-open-in-warp }
+ai_assistant-ai-run-in-terminal = { ai-run-in-terminal }
+ai_assistant-ai-one-update = { $count }
+ai_assistant-ai-update-count = { $count }
+ai_assistant-ai-switch-model = { ai-switch-model }
 
 ## -- Double-prefix aliases for static prompt suggestion strings --
 
@@ -1373,19 +1477,19 @@ ai-default-cli-profile-name = 默认 (CLI)
 ai-ai-default-profile-name = { ai-default-profile-name }
 ai-ai-agent-mode-eval-profile-name = { ai-agent-mode-eval-profile-name }
 ai-ai-default-cli-profile-name = { ai-default-cli-profile-name }
-ai-resume-when-network = {$error_message}
-
-网络连接恢复后将继续对话...
-ai-attempting-resume = {$error_message}
-
-正在尝试继续对话...
+ai-resume-when-network =
+    {$error_message}
+    网络连接恢复后将继续对话...
+ai-attempting-resume =
+    {$error_message}
+    正在尝试继续对话...
 
 ai-error-formatting-json = JSON 格式化出错
 ai-mcp-error = 错误：{$error}
 ai-tool-call-cancelled = 工具调用已取消
-ai-mcp-response = {$command}
-
-响应：{$result}
+ai-mcp-response =
+    {$command}
+    响应：{$result}
 ai-ai-error-formatting-json = { ai-error-formatting-json }
 ai-ai-mcp-error = { ai-mcp-error }
 ai-ai-tool-call-cancelled = { ai-tool-call-cancelled }

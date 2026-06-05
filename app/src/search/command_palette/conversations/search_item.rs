@@ -418,13 +418,10 @@ impl SearchItem for ConversationSearchItem {
     fn accessibility_label(&self) -> String {
         match &self.action_info {
             ConversationAction::Resume(matched_conversation) => {
-                format!(
-                    "Conversation: {}",
-                    matched_conversation.as_ref().conversation.title()
-                )
+                crate::tr!("search", "search-a11y-conversation-label", title = matched_conversation.as_ref().conversation.title())
             }
-            ConversationAction::Fork { title, .. } => {
-                format!("Fork current conversation ({title})")
+            ConversationAction::Fork { .. } => {
+                FORK_CURRENT_CONVERSATION.clone()
             }
             ConversationAction::New => NEW_CONVERSATION.clone(),
         }
@@ -432,14 +429,13 @@ impl SearchItem for ConversationSearchItem {
 
     fn accessibility_help_message(&self) -> Option<String> {
         match &self.action_info {
-            ConversationAction::Resume(matched_conversation) => Some(format!(
-                "Press enter to navigate to conversation \"{}\".",
-                matched_conversation.as_ref().conversation.title()
-            )),
+            ConversationAction::Resume(matched_conversation) => Some(
+                crate::tr!("search", "search-a11y-conversation-nav", title = matched_conversation.as_ref().conversation.title())
+            ),
             ConversationAction::Fork { .. } => {
-                Some("Press enter to fork the current conversation into a new conversation.".into())
+                Some(crate::tr!("search", "search-a11y-fork-conversation").clone())
             }
-            ConversationAction::New => Some("Press enter to create a new conversation.".into()),
+            ConversationAction::New => Some(crate::tr!("search", "search-a11y-new-conversation").clone()),
         }
     }
 }

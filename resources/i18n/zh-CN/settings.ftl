@@ -32,6 +32,16 @@ settings-code-indexing = 代码索引
 settings-editor-code-review = 编辑器和代码审查
 settings-oz-cloud-api-keys = Oz 云 API 密钥
 
+## -- Navigation umbrella labels -----------------------------------------------
+
+settings-agents-umbrella = 代理
+settings-code-umbrella = 代码
+settings-cloud-platform-umbrella = 云平台
+
+settings-settings-agents-umbrella = { settings-agents-umbrella }
+settings-settings-code-umbrella = { settings-code-umbrella }
+settings-settings-cloud-platform-umbrella = { settings-cloud-platform-umbrella }
+
 ## -- 分区与分类 --------------------------------------------------
 
 settings-section-general = 通用
@@ -1321,8 +1331,7 @@ settings-api-key-no-team-error = 无法创建团队 API 密钥，因为没有当
 settings-api-key-personal-desc = 此 API 密钥与您的用户绑定，可以对您的 Warp 账户发起请求。
 settings-api-key-secret-shown-once = 此密钥仅显示一次，请复制并安全存储。
 settings-api-key-team-desc = 此 API 密钥与您的团队绑定，可以代表您的团队发起请求。
-settings-api-keys-description = 创建和管理 API 密钥，以允许其他 Oz 云代理访问您的 Warp 账户。
-更多信息，请访问 
+settings-api-keys-description = 创建和管理 API 密钥，以允许其他 Oz 云代理访问您的 Warp 账户。更多信息，请访问
 settings-appearance-blinking-cursor = 闪烁光标
 settings-appearance-columns = 列数
 settings-appearance-compact-mode = 紧凑模式
@@ -1544,3 +1553,20 @@ settings-settings-no-match = { settings-no-match }
 settings-settings-no-match-hint = { settings-no-match-hint }
 settings-settings-no-api-keys = { settings-no-api-keys }
 settings-settings-create-key-desc = { settings-create-key-desc }
+
+## -- 调试/开发功能的切换操作描述 --------------------------------------------
+
+settings-toggle-show-init-block = 显示初始化块
+settings-toggle-hide-init-block = 隐藏初始化块
+settings-toggle-show-inband-commands = 显示带内命令块
+settings-toggle-hide-inband-commands = 隐藏带内命令块
+settings-toggle-recording-mode = 录制模式
+settings-toggle-inband-generators = 新会话的带内生成器
+settings-toggle-debug-network = 调试网络状态
+settings-toggle-memory-stats = 内存统计
+
+## -- 语言显示名称（按惯例以各自语言原文显示）----------------------------------
+
+settings-lang-en-us = English (US)
+settings-lang-zh-cn = 中文 (简体)
+settings-lang-ja = 日本語

@@ -215,10 +215,11 @@ fn render_linked_code_block_internal(
         let code_clone = code.to_owned();
 
         if let (Some(on_insert), Some(insert_text)) = (on_insert, insert_text) {
+            let insert_label = crate::tr!("ai_assistant", "ai-add-as-context");
             let insert_button = render_button(
                 appearance,
                 Icon::AtSign,
-                "Add as Context",
+                &insert_label,
                 mouse_handles.insert_button,
                 insert_text,
                 on_insert,
@@ -254,10 +255,11 @@ fn render_linked_code_block_internal(
         }
 
         if let Some(on_open) = on_open {
+            let open_label = crate::tr!("ai_assistant", "ai-open-in-warp");
             let open_button = render_button(
                 appearance,
                 Icon::LinkExternal,
-                "Open in Warp",
+                &open_label,
                 mouse_handles.open_button,
                 code_clone.clone(),
                 on_open,
@@ -339,10 +341,11 @@ fn render_plain_code_block_internal(
         }
 
         if let Some(on_execute) = on_execute {
+            let execute_label = crate::tr!("ai_assistant", "ai-run-in-terminal");
             let insert_button = render_button(
                 appearance,
                 Icon::TerminalInput,
-                "Run in terminal",
+                &execute_label,
                 mouse_handles.insert_button,
                 code_clone.clone(),
                 on_execute,

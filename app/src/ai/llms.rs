@@ -63,15 +63,17 @@ pub enum DisableReason {
 
 impl DisableReason {
     /// Returns a user-facing tooltip explaining why the model is disabled.
-    pub fn tooltip_text(&self) -> &'static str {
+    pub fn tooltip_text(&self) -> String {
         match self {
-            DisableReason::AdminDisabled => "This model has been disabled by your team admin.",
-            DisableReason::OutOfRequests => "Please upgrade your plan to make more requests.",
+            DisableReason::AdminDisabled => crate::tr!("ai_assistant", "ai-model-disabled-admin"),
+            DisableReason::OutOfRequests => crate::tr!("ai_assistant", "ai-model-out-of-requests"),
             DisableReason::ProviderOutage => {
-                "This model is temporarily unavailable due to a provider outage."
+                crate::tr!("ai_assistant", "ai-model-provider-outage")
             }
-            DisableReason::RequiresUpgrade => "Please upgrade your plan to access this model.",
-            DisableReason::Unavailable => "This model is unavailable.",
+            DisableReason::RequiresUpgrade => {
+                crate::tr!("ai_assistant", "ai-model-requires-upgrade")
+            }
+            DisableReason::Unavailable => crate::tr!("ai_assistant", "ai-model-unavailable"),
         }
     }
 

@@ -245,9 +245,9 @@ pub(super) fn is_ready_to_confirm(state: &CommitState, app: &AppContext) -> bool
 
 /// Returns a tooltip to show on the disabled Confirm button when the
 /// user needs to take action, or `None` when no tooltip is needed.
-pub(super) fn confirm_tooltip(state: &CommitState, app: &AppContext) -> Option<&'static str> {
+pub(super) fn confirm_tooltip(state: &CommitState, app: &AppContext) -> Option<String> {
     if !state.file_changes.is_empty() && commit_message(state, app).is_none() {
-        Some("Enter a commit message")
+        Some(crate::tr!("code_review", "code-review-commit-placeholder"))
     } else {
         None
     }

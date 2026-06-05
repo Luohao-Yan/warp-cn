@@ -115,3 +115,7 @@ workflows-workflows-sign-in-to-edit = { workflows-sign-in-to-edit }
 workflows-workflows-generate-with-ai = { workflows-generate-with-ai }
 workflows-workflows-no-longer-access = { workflows-no-longer-access }
 workflows-workflows-moved-to-trash = { workflows-moved-to-trash }
+
+## -- Keyboard key label --------------------------------------------------------
+
+workflows-tab-key = Tab
