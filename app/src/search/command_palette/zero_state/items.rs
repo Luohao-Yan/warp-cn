@@ -4,6 +4,7 @@ use crate::search::result_renderer::QueryResultRenderer;
 use crate::search::search_bar::SelectionUpdate;
 use std::sync::LazyLock;
 
+
 use warpui::elements::{Container, Flex, ParentElement};
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::ui_components::text::WrappableText;
@@ -11,6 +12,7 @@ use warpui::{AppContext, Element, Entity, ModelContext, SingletonEntity};
 
 static RECENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-recent").clone());
 static SUGGESTED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-suggested").clone());
+
 
 /// List of items shown within the zero state. "Recent" items are shown first followed by
 /// "Suggested" items.

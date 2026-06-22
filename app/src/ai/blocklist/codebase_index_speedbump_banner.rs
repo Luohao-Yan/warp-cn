@@ -1,22 +1,19 @@
 use std::path::PathBuf;
 use std::sync::LazyLock;
 
+use warpui::elements::{
+    Align, ConstrainedBox, Container, CrossAxisAlignment, Flex, MainAxisSize, MouseStateHandle,
+    ParentElement, Shrinkable,
+};
+use warpui::platform::Cursor;
+use warpui::ui_components::button::ButtonVariant;
+use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use warpui::Element;
+
 use crate::appearance::Appearance;
 use crate::terminal::view::{InlineBannerId, TerminalAction};
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
-use warpui::elements::{Align, ConstrainedBox};
-use warpui::ui_components::button::ButtonVariant;
-use warpui::ui_components::components::Coords;
-use warpui::{
-    elements::{
-        Container, CrossAxisAlignment, Flex, MainAxisSize, MouseStateHandle, ParentElement,
-        Shrinkable,
-    },
-    platform::Cursor,
-    ui_components::components::{UiComponent, UiComponentStyles},
-    Element,
-};
 
 static SPEEDBUMP_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "index-codebase-question"));
 static SPEEDBUMP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "index-codebase-text"));

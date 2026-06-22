@@ -1,57 +1,39 @@
+use std::borrow::Cow;
+use std::cmp::Reverse;
+use std::path::Path;
+use std::sync::Arc;
+
 use itertools::Itertools as _;
 use markdown_parser::{parse_markdown, FormattedText, FormattedTextFragment, FormattedTextLine};
 use parking_lot::FairMutex;
 use settings::Setting;
-use std::{borrow::Cow, cmp::Reverse, path::Path, sync::Arc, sync::LazyLock};
+use std::sync::LazyLock;
 use warp_core::{features::FeatureFlag, report_if_error, ui::Icon};
 use warpui::{
-    elements::{
-        Clipped, Container, CornerRadius, CrossAxisAlignment, Flex, FormattedTextElement,
-        HighlightedHyperlink, MainAxisSize, MouseStateHandle, ParentElement, Radius, Shrinkable,
-        Text,
-    },
-    fonts::{Properties, Weight},
-    keymap::Keystroke,
-    prelude::{Align, ConstrainedBox, Cursor, Empty, Hoverable, MainAxisAlignment, SavePosition},
-    scene::Border,
     AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
 };
 
-use crate::{
-    ai::{
-        active_agent_views_model::{ActiveAgentViewsModel, ConversationOrTaskId},
-        agent::conversation::AIConversationId,
-        blocklist::{
-            agent_view::{
-                agent_view_bg_color, AgentViewController, AgentViewEntryOrigin,
-                ENTER_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE,
-                ENTER_CLOUD_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE,
-            },
-            history_model::{BlocklistAIHistoryEvent, BlocklistAIHistoryModel},
-        },
-        conversation_navigation::ConversationNavigationData,
-    },
-    appearance::Appearance,
-    changelog_model::{self, ChangelogModel},
-    settings::{AISettings, AISettingsChangedEvent},
-    terminal::{
-        self,
-        event::BlockType,
-        input::message_bar::{common::render_standard_message, Message, MessageItem},
-        model::{
-            blocks::BlockHeightItem,
-            session::{BootstrapSessionType, Session, SessionType, Sessions},
-        },
-        model_events::{AnsiHandlerEvent, ModelEvent, ModelEventDispatcher},
-        prompt,
-        view::{
-            ambient_agent::{AmbientAgentViewModel, AmbientAgentViewModelEvent},
-            TerminalAction,
-        },
-        TerminalModel,
-    },
-    util::time_format::format_approx_duration_from_now_utc,
+use crate::ai::active_agent_views_model::{ActiveAgentViewsModel, ConversationOrTaskId};
+use crate::ai::agent::conversation::AIConversationId;
+use crate::ai::blocklist::agent_view::{
+    agent_view_bg_color, AgentViewController, AgentViewEntryOrigin,
+    ENTER_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE, ENTER_CLOUD_AGENT_VIEW_NEW_CONVERSATION_KEYSTROKE,
 };
+use crate::ai::blocklist::history_model::{BlocklistAIHistoryEvent, BlocklistAIHistoryModel};
+use crate::ai::conversation_navigation::ConversationNavigationData;
+use crate::appearance::Appearance;
+use crate::changelog_model::{self, ChangelogModel};
+use crate::settings::{AISettings, AISettingsChangedEvent};
+use crate::terminal::event::BlockType;
+use crate::terminal::input::message_bar::common::render_standard_message;
+use crate::terminal::input::message_bar::{Message, MessageItem};
+use crate::terminal::model::blocks::BlockHeightItem;
+use crate::terminal::model::session::{BootstrapSessionType, Session, SessionType, Sessions};
+use crate::terminal::model_events::{AnsiHandlerEvent, ModelEvent, ModelEventDispatcher};
+use crate::terminal::view::ambient_agent::{AmbientAgentViewModel, AmbientAgentViewModelEvent};
+use crate::terminal::view::TerminalAction;
+use crate::terminal::{self, prompt, TerminalModel};
+use crate::util::time_format::format_approx_duration_from_now_utc;
 
 const CLOUD_AGENT_DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
 static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "oz-updates-header"));
@@ -264,6 +246,10 @@ impl AgentViewZeroStateBlock {
                 Self::recent_conversations_for_working_directory(current_working_directory, ctx)
             })
             .unwrap_or_default();
+        let should_hide = matches!(origin, AgentViewEntryOrigin::AcceptedPassiveCodeDiff)
+            || is_local_to_cloud_handoff;
+        let is_oz_updates_expanded = !origin.is_cloud_agent()
+            && *AISettings::handle(ctx).as_ref(ctx).should_expand_oz_updates;
 
         Self {
             conversation_id,
@@ -273,13 +259,11 @@ impl AgentViewZeroStateBlock {
             terminal_model,
             current_working_directory,
             cached_recent_conversations,
-            should_hide: matches!(origin, AgentViewEntryOrigin::AcceptedPassiveCodeDiff)
-                || is_local_to_cloud_handoff,
+            should_hide,
             should_show_init_callout,
             has_parent_terminal,
             state_handles,
-            is_oz_updates_expanded: !origin.is_cloud_agent()
-                && *AISettings::handle(ctx).as_ref(ctx).should_expand_oz_updates,
+            is_oz_updates_expanded,
         }
     }
 
@@ -453,7 +437,7 @@ impl View for AgentViewZeroStateBlock {
         let active_session = self.active_session(app);
         let body = render_body(
             ZeroStateBodyProps {
-                origin: self.origin,
+                origin: self.origin.clone(),
                 has_parent_terminal: self.has_parent_terminal,
                 should_show_init_callout: self.should_show_init_callout,
                 recent_conversations: &self.cached_recent_conversations,
@@ -741,7 +725,11 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                         MessageItem::text(crate::tr!("ai_assistant", "ai-new-agent-conversation").to_lowercase()),
                     ],
                     |ctx| {
-                        ctx.dispatch_typed_action(TerminalAction::StartNewAgentConversation);
+                        ctx.dispatch_typed_action(TerminalAction::StartNewAgentConversation {
+                            origin: AgentViewEntryOrigin::Input {
+                                was_prompt_autodetected: false,
+                            },
+                        });
                     },
                     state_handles.start_new_conversation.clone(),
                 )]),

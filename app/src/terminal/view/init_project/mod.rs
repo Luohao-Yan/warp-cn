@@ -1,7 +1,25 @@
 mod lsp_server_selector;
 pub mod model;
 
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
+
+use ai::index::full_source_code_embedding::manager::CodebaseIndexManager;
+use lsp::supported_servers::LSPServerType;
+use lsp_server_selector::{create_lsp_server_selector, LSPServerInfo};
+pub use model::{InitProjectModel, InitProjectModelEvent, InitStepKind};
+use model::{InitStepData, InitStepStatus};
+use warp_core::ui::theme::Fill;
+use warpui::elements::{
+    Border, ChildView, Container, CrossAxisAlignment, Empty, Flex, MouseStateHandle, ParentElement,
+    Text,
+};
+use warpui::ui_components::button::ButtonVariant;
+use warpui::ui_components::components::UiComponent;
+use warpui::{
+    AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
+    ViewHandle,
+};
 
 use crate::ai::agent::icons::{in_progress_icon, yellow_stop_icon};
 use crate::ai::blocklist::block::keyboard_navigable_buttons::{
@@ -14,7 +32,6 @@ use crate::ai::blocklist::inline_action::requested_action::RenderableAction;
 use crate::ai::persisted_workspace::PersistedWorkspace;
 use crate::appearance::Appearance;
 use crate::code::lsp_telemetry::{LspEnablementSource, LspTelemetryEvent};
-use crate::send_telemetry_from_ctx;
 use crate::server::telemetry::{
     AgentModeSetupCodebaseContextActionType, AgentModeSetupCreateEnvironmentActionType,
     AgentModeSetupProjectScopedRulesActionType,
@@ -22,23 +39,7 @@ use crate::server::telemetry::{
 use crate::ui_components::icons::Icon;
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
-use crate::TelemetryEvent;
-use ai::index::full_source_code_embedding::manager::CodebaseIndexManager;
-use lsp::supported_servers::LSPServerType;
-use lsp_server_selector::{create_lsp_server_selector, LSPServerInfo};
-pub use model::{InitProjectModel, InitProjectModelEvent, InitStepKind};
-use model::{InitStepData, InitStepStatus};
-use std::path::{Path, PathBuf};
-use warp_core::ui::theme::Fill;
-use warpui::{
-    elements::{
-        Border, ChildView, Container, CrossAxisAlignment, Empty, Flex, MouseStateHandle,
-        ParentElement, Text,
-    },
-    ui_components::{button::ButtonVariant, components::UiComponent},
-    AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
-    ViewHandle,
-};
+use crate::{send_telemetry_from_ctx, TelemetryEvent};
 
 static ONBOARDING_TEXT: LazyLock<String> = LazyLock::new(|| {
     crate::tr!("terminal", "init-project-onboarding-text")

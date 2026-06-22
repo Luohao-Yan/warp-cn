@@ -1,6 +1,5 @@
 use crate::features::FeatureFlag;
-use crate::search::slash_command_menu::static_commands::commands;
-use crate::search::slash_command_menu::static_commands::Availability;
+use crate::search::slash_command_menu::static_commands::{commands, Availability};
 const BASELINE_AVAILABILITY: Availability = Availability::AGENT_VIEW
     .union(Availability::AI_ENABLED)
     .union(Availability::NO_LRC_CONTROL);
@@ -16,7 +15,7 @@ fn not_cloud_agent_commands_are_only_active_outside_cloud_mode() {
     assert!(!commands::NEW.is_active(cloud_context));
 
     let _cloud_mode_input_v2 = FeatureFlag::CloudModeInputV2.override_enabled(true);
-    let cloud_mode_v2_context = BASELINE_AVAILABILITY | Availability::CLOUD_AGENT_V2;
+    let cloud_mode_v2_context = BASELINE_AVAILABILITY | Availability::CLOUD_MODE_V2_COMPOSER;
     assert!(!commands::AGENT.is_active(cloud_mode_v2_context));
     assert!(!commands::NEW.is_active(cloud_mode_v2_context));
 }
@@ -27,7 +26,7 @@ fn cloud_mode_v2_commands_are_active_only_in_cloud_mode_v2_context() {
     assert!(!commands::HARNESS.is_active(cloud_context));
 
     let _cloud_mode_input_v2 = FeatureFlag::CloudModeInputV2.override_enabled(true);
-    let cloud_mode_v2_context = BASELINE_AVAILABILITY | Availability::CLOUD_AGENT_V2;
+    let cloud_mode_v2_context = BASELINE_AVAILABILITY | Availability::CLOUD_MODE_V2_COMPOSER;
     assert!(commands::PLAN.is_active(cloud_mode_v2_context));
     assert!(commands::MODEL.is_active(cloud_mode_v2_context));
     assert!(commands::HARNESS.is_active(cloud_mode_v2_context));
@@ -37,12 +36,11 @@ fn cloud_mode_v2_commands_are_active_only_in_cloud_mode_v2_context() {
 mod windows {
     use std::sync::Arc;
 
+    use super::super::*;
     use crate::terminal::model::session::command_executor::testing::TestCommandExecutor;
     use crate::terminal::model::session::SessionInfo;
     use crate::terminal::shell::ShellType;
     use crate::terminal::ShellLaunchData;
-
-    use super::super::*;
 
     fn wsl_session() -> Session {
         Session::new(

@@ -1,27 +1,21 @@
-use std::sync::LazyLock;
-
+use ai::api_keys::ApiKeyManager;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use warp_core::ui::appearance::Appearance;
-use warpui::{
-    elements::{
-        ConstrainedBox, Container, CrossAxisAlignment, Flex, FormattedTextElement,
-        HighlightedHyperlink, HyperlinkLens, MainAxisAlignment, MainAxisSize, ParentElement,
-    },
-    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext,
+use warpui::elements::{
+    ConstrainedBox, Container, CrossAxisAlignment, Flex, FormattedTextElement,
+    HighlightedHyperlink, HyperlinkLens, MainAxisAlignment, MainAxisSize, ParentElement,
 };
+use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
-use crate::{
-    ai::{blocklist::error_color, AIRequestUsageModel},
-    auth::AuthStateProvider,
-    network::NetworkStatus,
-    server::ids::ServerId,
-    settings::PrivacySettings,
-    settings_view::SettingsSection,
-    ui_components::icons::Icon,
-    workspace::WorkspaceAction,
-    workspaces::user_workspaces::UserWorkspaces,
-};
-use ai::api_keys::ApiKeyManager;
+use crate::ai::blocklist::error_color;
+use crate::ai::AIRequestUsageModel;
+use crate::auth::AuthStateProvider;
+use crate::network::NetworkStatus;
+use crate::server::ids::ServerId;
+use crate::settings_view::SettingsSection;
+use crate::ui_components::icons::Icon;
+use crate::workspace::WorkspaceAction;
+use crate::workspaces::user_workspaces::UserWorkspaces;
 
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PERCENTAGE: f32 = 0.5;
 
@@ -73,7 +67,6 @@ pub static ADD_CREDITS_TEXT: LazyLock<String> =
 pub enum PromptAlertAction {
     SignUpClickedForAnonymousUser,
     OpenSettingsClicked,
-    OpenPrivacySettingsClicked,
     ManageBillingClicked { team_uid: ServerId },
 }
 
@@ -81,7 +74,6 @@ pub enum PromptAlertAction {
 pub enum PromptAlertEvent {
     SignupAnonymousUser,
     OpenBillingAndUsagePage,
-    OpenPrivacyPage,
     OpenBillingPortal { team_uid: ServerId },
 }
 
@@ -90,9 +82,6 @@ pub enum PromptAlertEvent {
 pub enum PromptAlertState {
     /// The user is offline (no connection).
     NoConnection,
-    /// Telemetry is disabled and the user is on a free tier.
-    /// Free tier users must enable telemetry or upgrade to use AI features.
-    TelemetryDisabledOnFreeTier,
     /// An anonymous user has reached a certain percentage of requests used.
     /// This doesn't use a primary text to avoid being too in-your-face.
     AnonymousUserRequestLimitSoftGate,
@@ -120,7 +109,6 @@ impl PromptAlertView {
         let request_usage_model = AIRequestUsageModel::handle(ctx);
         let user_workspaces = UserWorkspaces::handle(ctx);
         let network_status = NetworkStatus::handle(ctx);
-        let privacy_settings = PrivacySettings::handle(ctx);
         let api_key_manager = ApiKeyManager::handle(ctx);
 
         ctx.subscribe_to_model(&request_usage_model, |me, _, _, ctx| {
@@ -134,11 +122,6 @@ impl PromptAlertView {
         });
 
         ctx.subscribe_to_model(&network_status, |me, _, _, ctx| {
-            me.state = Self::determine_state(ctx);
-            ctx.notify();
-        });
-
-        ctx.subscribe_to_model(&privacy_settings, |me, _, _, ctx| {
             me.state = Self::determine_state(ctx);
             ctx.notify();
         });
@@ -158,21 +141,6 @@ impl PromptAlertView {
         // First, if the user is offline, no AI features will work.
         if !NetworkStatus::as_ref(app).is_online() {
             return PromptAlertState::NoConnection;
-        }
-
-        // Check if telemetry is disabled for free tier users.
-        // Free tier users must enable telemetry or upgrade to use AI features.
-        let privacy_settings = PrivacySettings::as_ref(app);
-        if !privacy_settings.is_telemetry_enabled {
-            // Fail safe: if billing status is unknown, assume paid to avoid showing confusing message to paying users
-            let is_on_paid_plan = UserWorkspaces::as_ref(app)
-                .current_workspace()
-                .map(|w| w.billing_metadata.is_user_on_paid_plan())
-                .unwrap_or(true);
-
-            if !is_on_paid_plan {
-                return PromptAlertState::TelemetryDisabledOnFreeTier;
-            }
         }
 
         let request_usage_model = AIRequestUsageModel::as_ref(app);
@@ -253,11 +221,7 @@ impl PromptAlertView {
                     NO_CONNECTION_PRIMARY_TEXT.as_str(),
                 ));
             }
-            PromptAlertState::TelemetryDisabledOnFreeTier => {
-                text_fragments.push(FormattedTextFragment::plain_text(
-                    TELEMETRY_DISABLED_PRIMARY_TEXT.as_str(),
-                ));
-            }
+
             PromptAlertState::AnonymousUserRequestLimitSoftGate => {
                 text_fragments.push(FormattedTextFragment::plain_text(
                     ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PRIMARY_TEXT,
@@ -298,28 +262,7 @@ impl PromptAlertView {
 
         match state {
             PromptAlertState::NoConnection => {}
-            PromptAlertState::TelemetryDisabledOnFreeTier => {
-                // Show "enable analytics" action link
-                text_fragments.push(FormattedTextFragment::plain_text("  "));
-                text_fragments.push(FormattedTextFragment::hyperlink_action(
-                    ENABLE_ANALYTICS_ACTION_TEXT.as_str(),
-                    PromptAlertAction::OpenPrivacySettingsClicked,
-                ));
 
-                // Show "or upgrade to Build" link
-                text_fragments.push(FormattedTextFragment::plain_text(" or "));
-                let upgrade_url = if let Some(team) = UserWorkspaces::as_ref(app).current_team() {
-                    UserWorkspaces::upgrade_link_for_team(team.uid)
-                } else {
-                    let user_id = auth_state.user_id().unwrap_or_default();
-                    UserWorkspaces::upgrade_link(user_id)
-                };
-                text_fragments.push(FormattedTextFragment::hyperlink(
-                    UPGRADE_TO_BUILD_ACTION_TEXT.as_str(),
-                    upgrade_url,
-                ));
-                text_fragments.push(FormattedTextFragment::plain_text("."));
-            }
             PromptAlertState::AnonymousUserRequestLimitSoftGate
             | PromptAlertState::AnonymousUserRequestLimitHardGate => {
                 text_fragments.push(FormattedTextFragment::plain_text("  "));
@@ -429,7 +372,6 @@ fn does_alert_block_ai_requests(state: &PromptAlertState) -> bool {
     match state {
         PromptAlertState::AnonymousUserRequestLimitSoftGate | PromptAlertState::NoAlert => false,
         PromptAlertState::NoConnection
-        | PromptAlertState::TelemetryDisabledOnFreeTier
         | PromptAlertState::AnonymousUserRequestLimitHardGate
         | PromptAlertState::DelinquentDueToPaymentIssue
         | PromptAlertState::OveragesToggleableButNotEnabled
@@ -550,9 +492,6 @@ impl TypedActionView for PromptAlertView {
             }
             PromptAlertAction::OpenSettingsClicked => {
                 ctx.emit(PromptAlertEvent::OpenBillingAndUsagePage);
-            }
-            PromptAlertAction::OpenPrivacySettingsClicked => {
-                ctx.emit(PromptAlertEvent::OpenPrivacyPage);
             }
             PromptAlertAction::ManageBillingClicked { team_uid } => {
                 ctx.emit(PromptAlertEvent::OpenBillingPortal {

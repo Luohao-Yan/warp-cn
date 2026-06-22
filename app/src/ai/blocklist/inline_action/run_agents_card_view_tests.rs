@@ -1,12 +1,15 @@
+use std::path::PathBuf;
+
 use ai::agent::action::{RunAgentsAgentRunConfig, RunAgentsExecutionMode, RunAgentsRequest};
 use ai::agent::action_result::{
     RunAgentsAgentOutcome, RunAgentsAgentOutcomeKind, RunAgentsLaunchedExecutionMode,
     RunAgentsResult,
 };
 use ai::skills::SkillReference;
-use std::path::PathBuf;
+use warp_util::local_or_remote_path::LocalOrRemotePath;
 
 use super::RunAgentsEditState;
+use crate::ai::blocklist::inline_action::orchestration_controls::OrchestrationEditState;
 
 fn make_request(harness: &str, mode: RunAgentsExecutionMode) -> RunAgentsRequest {
     make_request_with_skills(harness, mode, Vec::new())
@@ -30,6 +33,26 @@ fn make_request_with_skills(
             title: "Child agent".to_string(),
         }],
         plan_id: String::new(),
+        harness_auth_secret_name: None,
+    }
+}
+
+fn make_edit_state_with_orch_fields(
+    harness: &str,
+    mode: RunAgentsExecutionMode,
+) -> RunAgentsEditState {
+    let request = make_request(harness, mode);
+    RunAgentsEditState {
+        orch: OrchestrationEditState::from_run_agents_fields(
+            &request.model_id,
+            &request.harness_type,
+            &request.execution_mode,
+        ),
+        agent_run_configs: request.agent_run_configs,
+        base_prompt: request.base_prompt,
+        summary: request.summary,
+        skills: request.skills,
+        plan_id: request.plan_id,
     }
 }
 
@@ -126,6 +149,25 @@ fn local_with_any_harness_does_not_disable_accept() {
 }
 
 #[test]
+fn local_with_disabled_codex_disables_accept() {
+    let state = make_edit_state_with_orch_fields("codex", RunAgentsExecutionMode::Local);
+    assert_eq!(
+        state.orch.accept_disabled_reason(),
+        Some("Local Codex child agents are temporarily disabled.")
+    );
+}
+
+#[test]
+fn from_request_sanitizes_disabled_local_harness_to_oz() {
+    let state =
+        RunAgentsEditState::from_request(&make_request("codex", RunAgentsExecutionMode::Local));
+
+    assert_eq!(state.orch.harness_type, "oz");
+    assert_eq!(state.orch.model_id, "");
+    assert!(state.orch.accept_disabled_reason().is_none());
+}
+
+#[test]
 fn cloud_with_env_and_non_opencode_harness_allows_accept() {
     for harness in ["oz", "claude", "gemini"] {
         let state = RunAgentsEditState::from_request(&make_request(
@@ -173,7 +215,7 @@ fn set_environment_id_updates_remote() {
 
 #[test]
 fn to_request_round_trips_request_fields() {
-    let req = make_request_with_skills(
+    let mut req = make_request_with_skills(
         "claude",
         RunAgentsExecutionMode::Remote {
             environment_id: "env-2".to_string(),
@@ -182,9 +224,12 @@ fn to_request_round_trips_request_fields() {
         },
         vec![
             SkillReference::BundledSkillId("writing-pr-descriptions".to_string()),
-            SkillReference::Path(PathBuf::from("/tmp/skill/SKILL.md")),
+            SkillReference::Path(LocalOrRemotePath::Local(PathBuf::from(
+                "/tmp/skill/SKILL.md",
+            ))),
         ],
     );
+    req.plan_id = "plan-1".to_string();
     let state = RunAgentsEditState::from_request(&req);
     let round_tripped = state.to_request();
     assert_eq!(round_tripped.summary, req.summary);
@@ -194,6 +239,7 @@ fn to_request_round_trips_request_fields() {
     assert_eq!(round_tripped.execution_mode, req.execution_mode);
     assert_eq!(round_tripped.agent_run_configs, req.agent_run_configs);
     assert_eq!(round_tripped.skills, req.skills);
+    assert_eq!(round_tripped.plan_id, req.plan_id);
 }
 
 mod format_terminal_state_tests {
@@ -260,6 +306,26 @@ mod format_terminal_state_tests {
     }
 
     #[test]
+    fn all_failed_uses_failure_status_not_mixed() {
+        let result = launched_result(vec![
+            failed("a", "boom"),
+            failed("b", "boom"),
+            failed("c", "boom"),
+        ]);
+        let (label, kind) = format_terminal_state(&result);
+        assert_eq!(label, "Failed to spawn 3 agents");
+        assert!(matches!(kind, StatusKind::Failure));
+    }
+
+    #[test]
+    fn single_failed_uses_singular_failure_label() {
+        let result = launched_result(vec![failed("a", "boom")]);
+        let (label, kind) = format_terminal_state(&result);
+        assert_eq!(label, "Failed to spawn agent");
+        assert!(matches!(kind, StatusKind::Failure));
+    }
+
+    #[test]
     fn failure_with_error_includes_error_text() {
         let (label, kind) = format_terminal_state(&RunAgentsResult::Failure {
             error: "server rejected request".to_string(),
@@ -307,9 +373,10 @@ mod format_terminal_state_tests {
 }
 
 mod override_from_approved_config_tests {
+    use ai::agent::orchestration_config::{OrchestrationConfig, OrchestrationExecutionMode};
+
     use super::super::RunAgentsEditState;
     use super::*;
-    use ai::agent::orchestration_config::{OrchestrationConfig, OrchestrationExecutionMode};
 
     fn local_config(model: &str, harness: &str) -> OrchestrationConfig {
         OrchestrationConfig {
@@ -442,67 +509,17 @@ mod override_from_approved_config_tests {
             "computer_use_enabled should default to false when original was Local"
         );
     }
-}
-
-mod compute_is_denied_tests {
-    use super::super::compute_is_denied;
-    use ai::agent::orchestration_config::{
-        OrchestrationConfig, OrchestrationConfigStatus, OrchestrationExecutionMode,
-    };
-
-    fn some_config(
-        status: OrchestrationConfigStatus,
-    ) -> Option<(OrchestrationConfig, OrchestrationConfigStatus)> {
-        Some((
-            OrchestrationConfig {
-                model_id: "auto".to_string(),
-                harness_type: "oz".to_string(),
-                execution_mode: OrchestrationExecutionMode::Local,
-            },
-            status,
-        ))
-    }
 
     #[test]
-    fn false_when_no_denied_result_and_no_config() {
-        assert!(!compute_is_denied(false, &None));
-    }
-
-    #[test]
-    fn true_when_has_denied_result_from_history() {
-        assert!(compute_is_denied(true, &None));
-    }
-
-    #[test]
-    fn true_when_config_is_disapproved() {
-        let config = some_config(OrchestrationConfigStatus::Disapproved);
-        assert!(compute_is_denied(false, &config));
-    }
-
-    #[test]
-    fn true_when_both_denied_and_disapproved() {
-        let config = some_config(OrchestrationConfigStatus::Disapproved);
-        assert!(compute_is_denied(true, &config));
-    }
-
-    #[test]
-    fn false_when_config_is_approved() {
-        let config = some_config(OrchestrationConfigStatus::Approved);
-        assert!(!compute_is_denied(false, &config));
-    }
-
-    #[test]
-    fn false_when_config_status_is_none() {
-        let config = some_config(OrchestrationConfigStatus::None);
-        assert!(!compute_is_denied(false, &config));
-    }
-
-    #[test]
-    fn denied_result_overrides_approved_config() {
-        let config = some_config(OrchestrationConfigStatus::Approved);
-        assert!(
-            compute_is_denied(true, &config),
-            "History denied result should take precedence over approved config"
+    fn approved_local_disabled_harness_reports_disabled_reason_after_override() {
+        let mut state =
+            RunAgentsEditState::from_request(&make_request("oz", RunAgentsExecutionMode::Local));
+        state
+            .orch
+            .override_from_approved_config(&local_config("auto", "codex"));
+        assert_eq!(
+            state.orch.accept_disabled_reason(),
+            Some("Local Codex child agents are temporarily disabled.")
         );
     }
 }

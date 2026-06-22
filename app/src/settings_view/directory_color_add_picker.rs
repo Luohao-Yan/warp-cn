@@ -7,24 +7,23 @@ use ai::index::full_source_code_embedding::manager::{
 };
 use settings::Setting;
 use warp_util::path::user_friendly_path;
+use warpui::elements::{
+    Border, ChildView, ConstrainedBox, Container, CrossAxisAlignment, Flex, Hoverable,
+    MainAxisSize, MouseStateHandle, ParentElement, Text,
+};
+use warpui::platform::Cursor;
 use warpui::{
-    elements::{
-        Border, ChildView, ConstrainedBox, Container, CrossAxisAlignment, Flex, Hoverable,
-        MainAxisSize, MouseStateHandle, ParentElement, Text,
-    },
-    platform::Cursor,
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 
-use crate::{
-    ai::persisted_workspace::{PersistedWorkspace, PersistedWorkspaceEvent},
-    appearance::Appearance,
-    ui_components::icons,
-    view_components::action_button::{ActionButton, SecondaryTheme},
-    view_components::{DropdownItem, FilterableDropdown},
-    workspace::tab_settings::{
-        DirectoryTabColor, DirectoryTabColors, TabSettings, TabSettingsChangedEvent,
-    },
+use crate::ai::persisted_workspace::{PersistedWorkspace, PersistedWorkspaceEvent};
+use crate::appearance::Appearance;
+use crate::ui_components::icons;
+use crate::view_components::action_button::{ActionButton, SecondaryTheme};
+use crate::view_components::{DropdownItem, FilterableDropdown};
+use crate::workspace::tab_settings::{
+    canonical_directory_key, DirectoryTabColor, DirectoryTabColors, TabSettings,
+    TabSettingsChangedEvent,
 };
 
 static ADD_DIRECTORY_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "add-directory-label"));
@@ -87,8 +86,8 @@ impl DirectoryColorAddPicker {
             // cache in `refresh_items`, so the noisier events (`Modified`/`Queried`) are
             // cheap when nothing relevant has changed.
             match event {
-                CodebaseIndexManagerEvent::NewIndexCreated
-                | CodebaseIndexManagerEvent::SyncStateUpdated
+                CodebaseIndexManagerEvent::NewIndexCreated { .. }
+                | CodebaseIndexManagerEvent::SyncStateUpdated { .. }
                 | CodebaseIndexManagerEvent::RemoveExpiredIndexMetadata { .. }
                 | CodebaseIndexManagerEvent::IndexMetadataUpdated { .. } => {
                     me.refresh_items(ctx);
@@ -286,15 +285,6 @@ impl TypedActionView for DirectoryColorAddPicker {
     }
 }
 
-/// Canonicalizes `path` using the same fallback logic that [`DirectoryTabColors::with_color`]
-/// uses, so candidate keys line up with the keys stored in the setting.
-fn canonical_key(path: &Path) -> String {
-    path.canonicalize()
-        .unwrap_or_else(|_| path.to_path_buf())
-        .to_string_lossy()
-        .to_string()
-}
-
 /// Computes the set of directory paths that should be offered in the add-directory dropdown.
 ///
 /// Candidates are the union of indexed codebase paths and persisted workspace
@@ -322,7 +312,7 @@ fn compute_candidate_paths(
             continue;
         }
 
-        let key = canonical_key(&path);
+        let key = canonical_directory_key(&path);
 
         if let Some(existing_color) = existing.0.get(&key) {
             if !matches!(existing_color, DirectoryTabColor::Suppressed) {

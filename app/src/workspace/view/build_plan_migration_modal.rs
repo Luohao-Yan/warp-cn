@@ -1,9 +1,3 @@
-use crate::pricing::{PricingInfoModel, PricingInfoModelEvent};
-use crate::terminal::general_settings::GeneralSettings;
-use crate::ui_components::blended_colors;
-use crate::view_components::{Dropdown, DropdownEvent, DropdownItem, ToastFlavor};
-use crate::workspaces::user_workspaces::{UserWorkspaces, UserWorkspacesEvent};
-use crate::workspaces::workspace::CustomerType;
 use asset_macro::bundled_or_fetched_asset;
 use itertools::Itertools;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
@@ -28,6 +22,13 @@ use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 use std::sync::LazyLock;
+
+use crate::pricing::{PricingInfoModel, PricingInfoModelEvent};
+use crate::terminal::general_settings::GeneralSettings;
+use crate::ui_components::blended_colors;
+use crate::view_components::{Dropdown, DropdownEvent, DropdownItem, ToastFlavor};
+use crate::workspaces::user_workspaces::{UserWorkspaces, UserWorkspacesEvent};
+use crate::workspaces::workspace::CustomerType;
 
 const BUTTON_DIAMETER: f32 = 20.;
 const DROPDOWN_WIDTH: f32 = 160.;

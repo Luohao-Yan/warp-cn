@@ -6,11 +6,13 @@
 //! * An inline yellow error alert (mirroring the workspace-level banner in
 //!   `Workspace::render_settings_error_banner`) when the settings file has an
 //!   error *and* the user has dismissed the workspace banner.
+
 //! * Otherwise, a plain bordered crate::tr!("settings", "open-settings-file") button.
 use crate::appearance::Appearance;
 use crate::settings::SettingsFileError;
 use crate::ui_components::icons::Icon;
 use crate::WorkspaceAction;
+
 use pathfinder_color::ColorU;
 use std::sync::LazyLock;
 use warp_core::ui::color::coloru_with_opacity;
@@ -24,12 +26,14 @@ use warpui::elements::{
 use warpui::fonts::{FamilyId, Properties, Weight};
 use warpui::platform::Cursor;
 
+
 static SETTINGS_OPEN_SETTINGS_FILE_INLINE: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "open-settings-file-inline"));
 static SETTINGS_OPEN_FILE: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "open-file"));
 static SETTINGS_FIX_WITH_OZ: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "fix-with-oz"));
+
 
 /// Horizontal + vertical padding applied to the footer inside the sidebar.
 const FOOTER_PADDING: f32 = 12.;

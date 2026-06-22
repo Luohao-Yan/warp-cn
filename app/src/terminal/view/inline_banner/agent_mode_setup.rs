@@ -1,21 +1,17 @@
 use std::path::PathBuf;
 use std::sync::LazyLock;
 
-use warpui::{
-    elements::{MouseStateHandle, Text},
-    Element,
-};
-
-use crate::{
-    appearance::Appearance,
-    terminal::view::{inline_banner::InlineBannerIcon, InlineBannerId, TerminalAction},
-};
+use warpui::elements::{MouseStateHandle, Text};
+use warpui::Element;
 
 use super::{
     render_inline_block_list_banner, InlineBannerButtonState, InlineBannerCloseButton,
     InlineBannerContent, InlineBannerStyle, InlineBannerTextButton, InlineBannerTextButtonFont,
     InlineBannerTextButtonVariant,
 };
+use crate::appearance::Appearance;
+use crate::terminal::view::inline_banner::InlineBannerIcon;
+use crate::terminal::view::{InlineBannerId, TerminalAction};
 
 static SPEEDBUMP_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "optimize-codebase-header"));
 static SPEEDBUMP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "optimize-codebase-text"));

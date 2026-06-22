@@ -1,28 +1,18 @@
-use crate::{
-    ai::agent::SuggestedAgentModeWorkflow,
-    modal::{Modal, ModalEvent},
-    pane_group::PaneEvent,
-    server::ids::SyncId,
-    ui_components::blended_colors,
-    workflows::{
-        workflow_view::{WorkflowView, WorkflowViewEvent},
-        WorkflowSelectionSource, WorkflowSource, WorkflowType,
-    },
-    workspaces::user_workspaces::UserWorkspaces,
-    TelemetryEvent,
-};
+use std::collections::HashMap;
+use std::default::Default;
+use std::sync::Arc;
+
 use pathfinder_geometry::vector::vec2f;
-use std::{collections::HashMap, default::Default, sync::Arc, sync::LazyLock};
-use warp_core::{send_telemetry_from_ctx, ui::appearance::Appearance};
+use warp_core::send_telemetry_from_ctx;
+use warp_core::ui::appearance::Appearance;
+use warpui::elements::{
+    ChildAnchor, Empty, OffsetPositioning, PositionedElementAnchor, PositionedElementOffsetBounds,
+};
+use warpui::fonts::Weight;
+use warpui::keymap::FixedBinding;
+use warpui::presenter::ChildView;
+use warpui::ui_components::components::{Coords, UiComponentStyles};
 use warpui::{
-    elements::{
-        ChildAnchor, Empty, OffsetPositioning, PositionedElementAnchor,
-        PositionedElementOffsetBounds,
-    },
-    fonts::Weight,
-    keymap::FixedBinding,
-    presenter::ChildView,
-    ui_components::components::{Coords, UiComponentStyles},
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 

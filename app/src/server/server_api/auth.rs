@@ -1,19 +1,8 @@
-use std::{result::Result as StdResult, sync::Arc};
-
-use anyhow::{anyhow, bail, Context as _, Result};
-use async_trait::async_trait;
-use cynic::{MutationBuilder, QueryBuilder};
-use firebase::{FetchAccessTokenResponse, FirebaseError};
-use futures::FutureExt;
-use instant::Duration;
-#[cfg(test)]
-use mockall::{automock, predicate::*};
-use oauth2::TokenResponse;
 use thiserror::Error;
-use warp_core::errors::{AnyhowErrorExt, ErrorExt};
-use warp_graphql::client::Operation;
-use warp_graphql::mutations::expire_api_key::{
-    ExpireApiKey, ExpireApiKeyResult, ExpireApiKeyVariables,
+#[cfg(test)]
+pub use warp_server_client::auth::MockAuthClient;
+pub use warp_server_client::auth::{
+    AuthClient, FetchUserResult, MintCustomTokenError, SyncedUserSettings, UserAuthenticationError,
 };
 use warp_graphql::queries::get_conversation_usage::{
     ConversationUsage, GetConversationUsage, GetConversationUsageVariables, UserResult,
@@ -869,71 +858,7 @@ impl From<GqlUserOutput> for UserProperties {
 }
 
 #[derive(Error, Debug)]
-/// Error type when retrieving a user and validating it against Firebase.
-pub enum UserAuthenticationError {
-    /// The user's refresh token is invalid. This could occur if the user authed through
-    /// e.g. Google/GitHub and changed their password.
-    #[error("Firebase returned a token error when fetching an ID token")]
-    DeniedAccessToken(FirebaseError),
-    /// The user's account is invalid. This could occur if the user requested their account
-    /// be deleted per their GDPR/CCPA rights.
-    #[error("Firebase returned a user error when fetching an ID token")]
-    UserAccountDisabled(FirebaseError),
-    #[error("Invalid state parameter in auth redirect")]
-    InvalidStateParameter,
-    #[error("Missing state parameter in auth redirect")]
-    MissingStateParameter,
-    #[error("unexpected error occurred when fetching an ID token: {0:#}")]
-    Unexpected(#[from] anyhow::Error),
-}
-
-impl ErrorExt for UserAuthenticationError {
-    fn is_actionable(&self) -> bool {
-        match self {
-            UserAuthenticationError::DeniedAccessToken(err) => {
-                // If a request to our server failed because the user's refresh token
-                // has expired, they should re-auth, but there's no value in reporting
-                // this back to us.
-                log::info!("ignoring denied access token error: {err:#}");
-                false
-            }
-            UserAuthenticationError::UserAccountDisabled(err) => {
-                // Similarly, if their account is disabled, they can't make requests.
-                log::info!("ignoring user account disabled error: {err:#}");
-                false
-            }
-            UserAuthenticationError::Unexpected(err) => err.is_actionable(),
-            UserAuthenticationError::InvalidStateParameter
-            | UserAuthenticationError::MissingStateParameter => {
-                // For now, we're marking these as actionable, since a surplus of these errors
-                // could mean that something is wrong in our login flow (e.g. we're not properly
-                // passing the `state` variable back to the desktop client).
-                // But in general, someone attempting to trick another into logging into their
-                // account with a spoofed `state` variable is not actionable.
-                true
-            }
-        }
-    }
-}
-register_error!(UserAuthenticationError);
-
-impl From<FirebaseError> for UserAuthenticationError {
-    fn from(error: FirebaseError) -> Self {
-        if FETCH_ACCESS_TOKEN_SOFT_ERROR_MESSAGES.contains(&error.message.as_str()) {
-            UserAuthenticationError::DeniedAccessToken(error)
-        } else if FETCH_ACCESS_TOKEN_HARD_ERROR_MESSAGES.contains(&error.message.as_str()) {
-            UserAuthenticationError::UserAccountDisabled(error)
-        } else {
-            UserAuthenticationError::Unexpected(
-                anyhow::Error::from(error)
-                    .context("Failed to exchange refresh token with access token."),
-            )
-        }
-    }
-}
-
-#[derive(Error, Debug)]
-/// Error type when creating anonymous users
+/// Error type when creating anonymous users.
 pub enum AnonymousUserCreationError {
     #[error("The network request to create the anonymous user failed")]
     CreationFailed,
@@ -946,15 +871,6 @@ pub enum AnonymousUserCreationError {
     UserAuthenticationFailed(#[from] UserAuthenticationError),
 
     #[error("Failed to create anonymous user with unknown error")]
-    Unknown,
-}
-
-#[derive(Error, Debug)]
-/// Error type when minting a new custom token for an anonymous user
-pub enum MintCustomTokenError {
-    #[error("Received a user facing error: {0}")]
-    UserFacingError(String),
-    #[error("Failed to create new custom token with unknown error")]
     Unknown,
 }
 

@@ -5,14 +5,11 @@ use std::sync::LazyLock;
 use std::time::Duration;
 
 use pathfinder_geometry::vector::vec2f;
-
-use warp_core::ui::theme::color::internal_colors;
-use warpui::r#async::{SpawnedFutureHandle, Timer};
-
 use regex::Regex;
 use settings::Setting as _;
 use warp_core::context_flag::ContextFlag;
 use warp_core::features::FeatureFlag;
+use warp_core::ui::theme::color::internal_colors;
 use warp_core::ui::theme::WarpTheme;
 use warpui::elements::{
     Align, ChildAnchor, ChildView, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment,
@@ -20,56 +17,47 @@ use warpui::elements::{
     OffsetPositioning, ParentAnchor, ParentElement, ParentOffsetBounds, Radius, Rect, Shrinkable,
     Stack, Text,
 };
+use warpui::fonts::Weight;
 use warpui::keymap::ContextPredicate;
 use warpui::platform::Cursor;
+use warpui::r#async::{SpawnedFutureHandle, Timer};
 use warpui::ui_components::button::{ButtonVariant, TextAndIcon, TextAndIconAlignment};
-use warpui::ui_components::{
-    components::{Coords, UiComponent, UiComponentStyles},
-    switch::{SwitchStateHandle, TooltipConfig},
-};
+use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use warpui::ui_components::switch::{SwitchStateHandle, TooltipConfig};
 use warpui::{
-    Action, AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView,
+    id, Action, AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView,
     UpdateModel, View, ViewContext, ViewHandle,
 };
 
-use crate::settings::{CustomSecretRegex, RegexDisplayInfo};
+use super::privacy::{AddRegexModal, AddRegexModalEvent};
+use super::settings_page::{
+    render_body_item, render_sub_header, LocalOnlyIconState, MatchData, PageType, SettingsPageMeta,
+    SettingsPageViewHandle, SettingsWidget, ToggleState, HEADER_PADDING, PAGE_PADDING,
+    TOGGLE_BUTTON_RIGHT_PADDING,
+};
+use super::{flags, SettingsAction, SettingsSection, ToggleSettingActionPair};
+use crate::appearance::Appearance;
+use crate::auth::auth_manager::AuthManager;
+use crate::channel::ChannelState;
+use crate::modal::{Modal, ModalEvent, ModalViewState};
+use crate::server::telemetry::TelemetryEvent;
+use crate::settings::{AISettings, CustomSecretRegex, PrivacySettings, RegexDisplayInfo};
 use crate::settings_view::privacy::AddRegexModalViewState;
 use crate::settings_view::render_body_item_label;
 use crate::settings_view::settings_page::CONTENT_FONT_SIZE;
 use crate::terminal::safe_mode_settings::{
-    get_effective_secret_display_mode, SecretDisplayMode, SecretDisplayModeSetting,
+    get_effective_secret_display_mode, SafeModeEnabled, SafeModeSettings, SecretDisplayMode,
+    SecretDisplayModeSetting,
 };
 use crate::ui_components::buttons::icon_button;
+use crate::ui_components::icons::Icon;
+use crate::util::links::PRIVACY_POLICY_URL;
 use crate::view_components::{Dropdown, DropdownItem};
-use crate::{
-    appearance::Appearance,
-    auth::auth_manager::AuthManager,
-    channel::ChannelState,
-    report_if_error, send_telemetry_from_ctx,
-    server::telemetry::TelemetryEvent,
-    settings::{AISettings, PrivacySettings},
-    terminal::safe_mode_settings::{SafeModeEnabled, SafeModeSettings},
-    ui_components::icons::Icon,
-    util::links::PRIVACY_POLICY_URL,
-    workspaces::{
-        user_workspaces::UserWorkspaces,
-        workspace::{AdminEnablementSetting, CustomerType, UgcCollectionEnablementSetting},
-    },
+use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::workspaces::workspace::{
+    AdminEnablementSetting, CustomerType, UgcCollectionEnablementSetting,
 };
-
-use super::{
-    flags,
-    privacy::{AddRegexModal, AddRegexModalEvent},
-    settings_page::{
-        render_body_item, render_sub_header, SettingsPageMeta, SettingsPageViewHandle, ToggleState,
-        HEADER_PADDING, TOGGLE_BUTTON_RIGHT_PADDING,
-    },
-    settings_page::{LocalOnlyIconState, MatchData, PageType, SettingsWidget, PAGE_PADDING},
-    SettingsAction, SettingsSection, ToggleSettingActionPair,
-};
-
-use crate::modal::{Modal, ModalEvent, ModalViewState};
-use warpui::fonts::Weight;
+use crate::{report_if_error, send_telemetry_from_ctx};
 
 const FONT_SIZE: f32 = 12.;
 
@@ -78,6 +66,7 @@ static SAFE_MODE_TITLE: LazyLock<String> =
 static SAFE_MODE_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
     crate::tr!("settings", "secret-redaction-description")
 });
+
 static USER_SECRET_REGEX_TITLE: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "custom-secret-redaction"));
 static USER_SECRET_REGEX_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
@@ -152,6 +141,7 @@ static SETTINGS_READ_MORE_DATA: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "read-more-data-usage"));
 static SETTINGS_ZDR: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "zdr"));
+
 
 const TELEMETRY_DOCS_URL: &str =
     "https://docs.warp.dev/support-and-community/privacy-and-security/privacy#what-telemetry-data-does-warp-collect-and-why";
@@ -1578,13 +1568,6 @@ impl SettingsWidget for AppAnalyticsWidget {
                 .finish()
         };
 
-        // Check if user is on free tier to show the AI requirement note
-        // Fail safe: if billing status is unknown, assume paid (don't show free tier note)
-        let is_on_paid_plan = UserWorkspaces::as_ref(app)
-            .current_workspace()
-            .map(|w| w.billing_metadata.is_user_on_paid_plan())
-            .unwrap_or(true);
-
         let mut column = Flex::column();
         column.add_child(super::settings_page::build_toggle_element(
             zdr_label_component,
@@ -1608,22 +1591,7 @@ impl SettingsWidget for AppAnalyticsWidget {
                 .finish(),
         );
 
-        // Show free tier note only for non-paid users
-        if !is_on_paid_plan {
-            column.add_child(
-                ui_builder
-                    .paragraph(TELEMETRY_FREE_TIER_NOTE.clone())
-                    .with_style(UiComponentStyles {
-                        font_color: Some(description_text_color),
-                        margin: Some(
-                            Coords::default().bottom(styles::DESCRIPTION_LINE_MARGIN_BOTTOM),
-                        ),
-                        ..Default::default()
-                    })
-                    .build()
-                    .finish(),
-            );
-        }
+
 
         column.add_child(
             Align::new(
@@ -2064,6 +2032,20 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
         context,
         flags::SAFE_MODE_FLAG,
     ));
+
+    toggle_binding_pairs.push(
+        ToggleSettingActionPair::new(
+            "cloud AI conversation storage",
+            builder(SettingsAction::PrivacyPageToggle(
+                PrivacyPageAction::ToggleCloudConversationStorage,
+            )),
+            &(context.clone()
+                & id!(flags::IS_ANY_AI_ENABLED)
+                & id!(flags::CLOUD_CONVERSATION_STORAGE_EDITABLE_FLAG)),
+            flags::CLOUD_CONVERSATION_STORAGE_FLAG,
+        )
+        .with_enabled(|| FeatureFlag::CloudConversations.is_enabled()),
+    );
 
     ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(toggle_binding_pairs, app);
 }

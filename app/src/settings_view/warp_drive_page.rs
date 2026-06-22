@@ -1,23 +1,20 @@
-use super::{
-    settings_page::{
-        render_body_item, AdditionalInfo, MatchData, PageType, SettingsPageMeta,
-        SettingsPageViewHandle, SettingsWidget,
-    },
-    LocalOnlyIconState, SettingsSection, ToggleState,
+use warp_core::features::FeatureFlag;
+use warp_core::report_if_error;
+use warp_core::settings::ToggleableSetting as _;
+use warpui::elements::{
+    Container, Element, Flex, MouseStateHandle, ParentElement, Shrinkable, Text,
 };
-use crate::{appearance::Appearance, auth::AuthStateProvider, drive::settings::WarpDriveSettings};
-use std::sync::LazyLock;
-use warp_core::{features::FeatureFlag, report_if_error, settings::ToggleableSetting as _};
+
+use warpui::fonts::Weight;
+use warpui::keymap::ContextPredicate;
+use warpui::ui_components::button::ButtonVariant;
+use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use warpui::ui_components::switch::SwitchStateHandle;
+
 use warpui::{
-    elements::{Container, Element, Flex, MouseStateHandle, ParentElement, Shrinkable, Text},
-    fonts::Weight,
-    ui_components::{
-        button::ButtonVariant,
-        components::{Coords, UiComponent, UiComponentStyles},
-        switch::SwitchStateHandle,
-    },
-    AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
+    id, Action, AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
+
 
 static SETTINGS_WARP_DRIVE_ACCOUNT_PROMPT: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "warp-drive-account-prompt"));
@@ -26,11 +23,34 @@ static SETTINGS_SIGN_UP_LABEL: LazyLock<String> =
 static SETTINGS_WARP_DRIVE_DESCRIPTION: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "warp-drive-description"));
 
+
 #[derive(Debug, Clone)]
 pub enum WarpDriveSettingsPageAction {
     ToggleShowWarpDrive,
     SignUp,
     OpenUrl(String),
+}
+
+pub fn init_actions_from_parent_view<T: Action + Clone>(
+    app: &mut AppContext,
+    context: &ContextPredicate,
+    builder: fn(SettingsAction) -> T,
+) {
+    ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
+        vec![ToggleSettingActionPair::custom(
+            SettingActionPairDescriptions::new("Enable Warp Drive", "Disable Warp Drive"),
+            builder(SettingsAction::WarpDrive(
+                WarpDriveSettingsPageAction::ToggleShowWarpDrive,
+            )),
+            SettingActionPairContexts::new(
+                context.clone() & !id!(flags::ENABLE_WARP_DRIVE) & !id!("IsAnonymousUser"),
+                context.clone() & id!(flags::ENABLE_WARP_DRIVE) & !id!("IsAnonymousUser"),
+            ),
+            None,
+        )
+        .with_enabled(|| FeatureFlag::OpenWarpNewSettingsModes.is_enabled())],
+        app,
+    );
 }
 
 pub enum WarpDriveSettingsPageEvent {

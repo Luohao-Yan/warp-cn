@@ -4,18 +4,18 @@
 use remote_server::transport::UserFacingError;
 use warp_core::ui::theme::color::internal_colors;
 use warp_core::ui::theme::AnsiColorIdentifier;
-use warpui::{
-    elements::{
-        ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Flex, Hoverable,
-        MainAxisAlignment, MainAxisSize, MouseStateHandle, ParentElement, Radius, Shrinkable, Text,
-    },
-    platform::Cursor,
-    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext,
+use warpui::elements::{
+    ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Flex, Hoverable,
+    MainAxisAlignment, MainAxisSize, MouseStateHandle, ParentElement, Radius, Shrinkable, Text,
 };
+use warpui::platform::Cursor;
+use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
 use std::sync::LazyLock;
 
-use crate::{terminal::model::session::SessionId, ui_components::icons::Icon, Appearance};
+use crate::terminal::model::session::SessionId;
+use crate::ui_components::icons::Icon;
+use crate::Appearance;
 
 static BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ssh-connection-failed"));
 

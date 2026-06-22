@@ -166,9 +166,65 @@ fn resolve_openai_api_key_uses_resolved_map_when_env_empty() {
     assert_eq!(result.as_deref(), Some("sk-from-secret"));
 }
 
+#[test]
+#[serial_test::serial]
+fn prepare_codex_environment_config_honors_codex_home() {
+    let tmp = TempDir::new().unwrap();
+    let codex_home = tmp.path().join("codex-home");
+    let working_dir = tmp.path().join("workspace");
+    fs::create_dir_all(&working_dir).unwrap();
+    let prev_codex_home = std::env::var(CODEX_HOME_ENV).ok();
+    let prev_openai_api_key = std::env::var(OPENAI_API_KEY_ENV).ok();
+    std::env::set_var(CODEX_HOME_ENV, &codex_home);
+    std::env::remove_var(OPENAI_API_KEY_ENV);
+    let resolved = HashMap::from([(
+        OsString::from(OPENAI_API_KEY_ENV),
+        OsString::from("sk-from-secret"),
+    )]);
+
+    let model_config = harness_model_config("gpt-5.5", None);
+    let result = prepare_codex_environment_config(
+        &working_dir,
+        Some("system prompt"),
+        &resolved,
+        &HashMap::new(),
+        &HashMap::new(),
+        Some(&model_config),
+    );
+
+    match prev_codex_home {
+        Some(v) => std::env::set_var(CODEX_HOME_ENV, v),
+        None => std::env::remove_var(CODEX_HOME_ENV),
+    }
+    match prev_openai_api_key {
+        Some(v) => std::env::set_var(OPENAI_API_KEY_ENV, v),
+        None => std::env::remove_var(OPENAI_API_KEY_ENV),
+    }
+
+    result.unwrap();
+    assert_eq!(
+        fs::read_to_string(codex_home.join(CODEX_AGENTS_OVERRIDE_FILE_NAME)).unwrap(),
+        "system prompt"
+    );
+    let auth: Value =
+        serde_json::from_slice(&fs::read(codex_home.join(CODEX_AUTH_FILE_NAME)).unwrap()).unwrap();
+    assert_eq!(auth["OPENAI_API_KEY"], "sk-from-secret");
+    let cfg = read_codex_config(&codex_home.join(CODEX_CONFIG_TOML_FILE_NAME));
+    assert_eq!(cfg["model"].as_str(), Some("gpt-5.5"));
+    assert!(!cfg.contains_key("openai_base_url"));
+    assert!(!tmp.path().join(CODEX_CONFIG_DIR).exists());
+}
+
 fn read_codex_config(path: &std::path::Path) -> toml::Table {
     let content = fs::read_to_string(path).unwrap();
     toml::from_str(&content).unwrap()
+}
+
+fn harness_model_config(model_id: &str, reasoning_level: Option<&str>) -> HarnessModelConfig {
+    HarnessModelConfig {
+        model_id: model_id.to_string(),
+        reasoning_level: reasoning_level.map(str::to_string),
+    }
 }
 
 #[test]
@@ -444,7 +500,7 @@ fn prepare_codex_config_toml_writes_model_when_specified() {
         &config_path,
         &working_dir,
         &HashMap::new(),
-        Some("gpt-5.5"),
+        Some(&harness_model_config("gpt-5.5", None)),
         None,
     )
     .unwrap();
@@ -470,7 +526,7 @@ fn prepare_codex_config_toml_writes_model_migration_for_older_model() {
         &config_path,
         &working_dir,
         &HashMap::new(),
-        Some("gpt-5.2"),
+        Some(&harness_model_config("gpt-5.2", None)),
         None,
     )
     .unwrap();
@@ -496,7 +552,7 @@ fn prepare_codex_config_toml_skips_model_for_default_sentinel() {
         &config_path,
         &working_dir,
         &HashMap::new(),
-        Some("default"),
+        Some(&harness_model_config("default", None)),
         None,
     )
     .unwrap();
@@ -535,6 +591,41 @@ fn prepare_codex_config_toml_skips_model_when_none() {
 }
 
 #[test]
+fn prepare_codex_config_toml_writes_model_reasoning_effort_when_specified() {
+    let tmp = TempDir::new().unwrap();
+    let config_path = tmp.path().join("config.toml");
+    let working_dir = tmp.path().join("workspace");
+    fs::create_dir_all(&working_dir).unwrap();
+
+    prepare_codex_config_toml(
+        &config_path,
+        &working_dir,
+        &HashMap::new(),
+        Some(&harness_model_config("gpt-5.5", Some("medium"))),
+        None,
+    )
+    .unwrap();
+
+    let cfg = read_codex_config(&config_path);
+    assert_eq!(cfg["model"].as_str(), Some("gpt-5.5"));
+    assert_eq!(cfg["model_reasoning_effort"].as_str(), Some("medium"));
+}
+
+#[test]
+fn prepare_codex_config_toml_removes_stale_model_reasoning_effort_when_none() {
+    let tmp = TempDir::new().unwrap();
+    let config_path = tmp.path().join("config.toml");
+    let working_dir = tmp.path().join("workspace");
+    fs::create_dir_all(&working_dir).unwrap();
+    fs::write(&config_path, "model_reasoning_effort = \"high\"\n").unwrap();
+
+    prepare_codex_config_toml(&config_path, &working_dir, &HashMap::new(), None, None).unwrap();
+
+    let cfg = read_codex_config(&config_path);
+    assert!(cfg.get("model_reasoning_effort").is_none());
+}
+
+#[test]
 fn find_child_git_repos_returns_only_repo_children() {
     let tmp = TempDir::new().unwrap();
     let workspace = tmp.path().join("workspace");
@@ -562,13 +653,30 @@ fn codex_command_with_session_id_invokes_resume_subcommand() {
     let cmd = codex_command("codex", Some(&uuid), "/tmp/prompt.txt");
     assert!(
         cmd.contains(&format!(
-            "resume --dangerously-bypass-approvals-and-sandbox {uuid}"
+            "resume --dangerously-bypass-approvals-and-sandbox --dangerously-bypass-hook-trust {uuid}"
         )),
         "resume command should pass UUID to `resume`: {cmd}"
     );
     assert!(
         cmd.contains("\"$(cat '/tmp/prompt.txt')\""),
         "resume command should pipe prompt: {cmd}"
+    );
+}
+
+#[test]
+fn codex_command_without_session_id_bypasses_hook_trust() {
+    let cmd = codex_command("codex", None, "/tmp/prompt.txt");
+    assert!(
+        cmd.contains("--dangerously-bypass-approvals-and-sandbox"),
+        "command should bypass approvals and sandbox: {cmd}"
+    );
+    assert!(
+        cmd.contains("--dangerously-bypass-hook-trust"),
+        "command should bypass hook trust for driver-installed hooks: {cmd}"
+    );
+    assert!(
+        cmd.contains("\"$(cat '/tmp/prompt.txt')\""),
+        "command should pipe prompt: {cmd}"
     );
 }
 

@@ -1,23 +1,14 @@
+use warpui::elements::{Container, CornerRadius, Dismiss, MouseStateHandle, Radius};
+use warpui::fonts::Weight;
+use warpui::platform::Cursor;
+use warpui::ui_components::button::ButtonVariant;
+use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 use std::sync::LazyLock;
 
-use warpui::{
-    elements::{CornerRadius, Dismiss, MouseStateHandle, Radius},
-    fonts::Weight,
-    platform::Cursor,
-    ui_components::{
-        button::ButtonVariant,
-        components::{Coords, UiComponent, UiComponentStyles},
-    },
-    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext,
-};
-
-use crate::{
-    appearance::Appearance,
-    ui_components::{
-        blended_colors,
-        dialog::{dialog_styles, Dialog},
-    },
-};
+use crate::appearance::Appearance;
+use crate::ui_components::blended_colors;
+use crate::ui_components::dialog::{dialog_styles, Dialog};
 
 static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "cancel"));
 static DELETE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "confirm-delete-team"));
@@ -34,6 +25,14 @@ const BORDER_WIDTH: f32 = 1.;
 
 const DIALOG_WIDTH: f32 = 450.;
 
+const REMOVE_TEAM_MEMBER_TITLE_TEXT: &str = "Are you sure you want to remove this member?";
+
+const LEAVE_TEAM_RELOAD_CREDITS_BODY_TEXT: &str = "If you leave this team, you’ll lose access to any remaining reload credits tied to it. You’ll regain access to any unused, non-expired credits if you rejoin the same team later.";
+const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_BODY_TEXT: &str = "This member will lose access to any remaining reload credits tied to this team. If they rejoin later, they’ll regain access to any unused, non-expired credits.";
+
+const LEAVE_TEAM_RELOAD_CREDITS_CONFIRM_TEXT: &str = "Leave Team";
+const REMOVE_TEAM_MEMBER_RELOAD_CREDITS_CONFIRM_TEXT: &str = "Remove Member";
+
 pub enum CloudActionConfirmationDialogEvent {
     Cancel,
     Confirm,
@@ -49,6 +48,8 @@ pub enum CloudActionConfirmationDialogAction {
 pub enum CloudActionConfirmationDialogVariant {
     LeaveTeam,
     DeleteTeam,
+    LeaveTeamReloadCredits,
+    RemoveTeamMemberReloadCredits,
     #[default]
     None,
 }
@@ -100,7 +101,13 @@ impl CloudActionConfirmationDialog {
             CloudActionConfirmationDialogVariant::DeleteTeam => {
                 DELETE_TEAM_CONFIRM_TEXT.clone()
             }
-            CloudActionConfirmationDialogVariant::None => "".to_string(),
+            CloudActionConfirmationDialogVariant::LeaveTeamReloadCredits => {
+                LEAVE_TEAM_RELOAD_CREDITS_CONFIRM_TEXT.to_string()
+            }
+            CloudActionConfirmationDialogVariant::RemoveTeamMemberReloadCredits => {
+                REMOVE_TEAM_MEMBER_RELOAD_CREDITS_CONFIRM_TEXT.to_string()
+            }
+            CloudActionConfirmationDialogVariant::None => String::new(),
         }
     }
 }
@@ -193,7 +200,11 @@ impl View for CloudActionConfirmationDialog {
             dialog_styles(appearance),
         )
         .with_bottom_row_child(cancel_button)
-        .with_bottom_row_child(confirm_button)
+        .with_bottom_row_child(
+            Container::new(confirm_button)
+                .with_margin_left(12.)
+                .finish(),
+        )
         .with_width(DIALOG_WIDTH)
         .build()
         .finish();

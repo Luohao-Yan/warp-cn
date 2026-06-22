@@ -1,13 +1,8 @@
-use crate::appearance::Appearance;
-use crate::search::mixer::SearchMixer;
-use crate::search::search_bar::{
-    CreateQueryResultRendererFn, SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering,
-};
-use crate::search::QueryFilter;
-use itertools::Itertools;
 use std::marker::PhantomData;
 use std::ops::Range;
 use std::sync::LazyLock;
+
+use itertools::Itertools;
 use warpui::elements::{
     ConstrainedBox, Container, Empty, Flex, ParentElement, SavePosition, ScrollStateHandle,
     Scrollable, ScrollableElement, ScrollbarWidth, Text, UniformList, UniformListState,
@@ -21,6 +16,12 @@ use warpui::{
 static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "no-results").clone());
 
 use super::styles::{ESTIMATED_RESULT_HEIGHT, MAX_DISPLAYED_RESULT_COUNT};
+use crate::appearance::Appearance;
+use crate::search::mixer::SearchMixer;
+use crate::search::search_bar::{
+    CreateQueryResultRendererFn, SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering,
+};
+use crate::search::QueryFilter;
 
 const HEADER_HORIZONTAL_PADDING: f32 = 16.;
 const HEADER_VERTICAL_PADDING: f32 = 4.;
@@ -270,7 +271,7 @@ impl<T: Action + Clone> SearchResultsMenuView<T> {
         ctx: &mut ViewContext<Self>,
     ) {
         self.search_bar.update(ctx, |view, ctx| {
-            view.set_visible_query_filter(
+            view.set_query_filter(
                 filter.map(|filter| (filter, filter.filter_atom().primary_text)),
                 ctx,
             )
@@ -285,7 +286,7 @@ impl<T: Action + Clone> SearchResultsMenuView<T> {
         let selected_index = state.selected_index();
         let query_result_renderers = state.query_result_renderers();
 
-        let active_filter = state.active_visible_query_filter();
+        let active_filter = state.active_query_filter();
         let appearance = Appearance::as_ref(app);
 
         let mut column = Flex::column();

@@ -1,11 +1,12 @@
+use warpui::AppContext;
+
 use super::search_item::DiffSetSearchItem;
 use crate::code_review::diff_state::DiffMode;
-
 use crate::search::ai_context_menu::mixer::AIContextMenuSearchableAction;
 use crate::search::data_source::{Query, QueryResult};
 use crate::search::mixer::{DataSourceRunErrorWrapper, SyncDataSource};
 use std::sync::LazyLock;
-use warpui::AppContext;
+
 
 static UNCOMMITTED_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "diff-uncommitted"));
 static MAIN_BRANCH_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "diff-vs-main"));

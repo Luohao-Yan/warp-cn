@@ -1,6 +1,32 @@
 #![cfg_attr(not(feature = "local_fs"), allow(dead_code))]
+use std::cell::RefCell;
+use std::collections::{HashMap, HashSet};
+#[cfg(not(target_family = "wasm"))]
+use std::path::Path;
+use std::path::PathBuf;
+#[cfg(not(target_family = "wasm"))]
+use std::time::Duration;
+
+use ai::index::Symbol;
+use fuzzy_match::FuzzyMatchResult;
+#[cfg(not(target_family = "wasm"))]
+use instant::Instant;
+#[cfg(not(target_family = "wasm"))]
+use itertools::Itertools;
+#[cfg(not(target_family = "wasm"))]
+use repo_metadata::repositories::DetectedRepositories;
+#[cfg(not(target_family = "wasm"))]
+use warp_util::local_or_remote_path::LocalOrRemotePath;
+use warpui::AppContext;
+#[cfg(not(target_family = "wasm"))]
+use warpui::ModelSpawner;
+#[cfg(not(target_family = "wasm"))]
+use warpui::SingletonEntity;
+
 #[cfg(not(target_family = "wasm"))]
 use super::search_item::CodeSearchItem;
+#[cfg(not(target_family = "wasm"))]
+use crate::ai::outline::{OutlineStatus, RepoOutlines, RepoOutlinesEvent};
 #[cfg(not(target_family = "wasm"))]
 use crate::search::ai_context_menu::mixer::AIContextMenuSearchableAction;
 #[cfg(not(target_family = "wasm"))]
@@ -31,14 +57,9 @@ use warpui::ModelSpawner;
 
 #[cfg(not(target_family = "wasm"))]
 use crate::ai::outline::{OutlineStatus, RepoOutlines, RepoOutlinesEvent};
+
 #[cfg(not(target_family = "wasm"))]
 use crate::workspace::ActiveSession;
-#[cfg(not(target_family = "wasm"))]
-use repo_metadata::repositories::DetectedRepositories;
-#[cfg(not(target_family = "wasm"))]
-use std::path::Path;
-#[cfg(not(target_family = "wasm"))]
-use warpui::SingletonEntity;
 
 const MAX_RESULTS: usize = 200;
 
@@ -86,12 +107,15 @@ impl CodeSymbolCache {
             spawner,
         };
 
-        ctx.subscribe_to_model(&RepoOutlines::handle(ctx), |me, event, ctx| match event {
-            RepoOutlinesEvent::OutlinesUpdated(repo_path) => {
-                me.symbol_cache.get_mut().remove(repo_path);
-                ctx.emit(());
-            }
-        });
+        ctx.subscribe_to_model(
+            &RepoOutlines::handle(ctx),
+            |me, _, event, ctx| match event {
+                RepoOutlinesEvent::OutlinesUpdated(repo_path) => {
+                    me.symbol_cache.get_mut().remove(repo_path);
+                    ctx.emit(());
+                }
+            },
+        );
 
         cache
     }
@@ -120,7 +144,11 @@ impl CodeSymbolCache {
             .active_window
             .and_then(|window_id| ActiveSession::as_ref(app).path_if_local(window_id))
             .and_then(|current_dir| {
-                DetectedRepositories::as_ref(app).get_root_for_path(Path::new(current_dir))
+                DetectedRepositories::as_ref(app)
+                    .get_root_for_path(&LocalOrRemotePath::Local(
+                        Path::new(current_dir).to_path_buf(),
+                    ))
+                    .and_then(|r| PathBuf::try_from(r).ok())
             })?;
 
         let (outline_status, _) = RepoOutlines::as_ref(app).get_outline(&git_repo_path)?;
@@ -200,7 +228,11 @@ impl CodeSymbolCache {
             .active_window
             .and_then(|window_id| ActiveSession::as_ref(app).path_if_local(window_id))
             .and_then(|current_dir| {
-                DetectedRepositories::as_ref(app).get_root_for_path(Path::new(current_dir))
+                DetectedRepositories::as_ref(app)
+                    .get_root_for_path(&LocalOrRemotePath::Local(
+                        Path::new(current_dir).to_path_buf(),
+                    ))
+                    .and_then(|r| PathBuf::try_from(r).ok())
             })
         else {
             return HashSet::new();

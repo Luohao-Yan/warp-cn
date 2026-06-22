@@ -1,51 +1,54 @@
-use crate::ai::blocklist::BlocklistAIPermissions;
-use crate::ai::execution_profiles::model_menu_items::available_model_menu_items;
-use crate::ai::execution_profiles::{
-    profiles::{AIExecutionProfilesModel, AIExecutionProfilesModelEvent, ClientProfileId},
-    AIExecutionProfile, ActionPermission, WriteToPtyPermission,
-};
-use crate::ai::llms::{
-    DisableReason, LLMContextWindow, LLMId, LLMInfo, LLMPreferences, LLMPreferencesEvent,
-};
-use crate::ai::paths::host_native_absolute_path;
-use crate::editor::InteractionState;
-use crate::editor::{EditorView, Event as EditorEvent, SingleLineEditorOptions, TextOptions};
-use crate::pane_group::focus_state::PaneFocusHandle;
-use crate::settings::{AISettings, AISettingsChangedEvent, AgentModeCommandExecutionPredicate};
-use crate::ui_components::icons::Icon;
-use crate::view_components::{
-    action_button::{ActionButton, DangerSecondaryTheme},
-    Dropdown, DropdownItem, FilterableDropdown, SubmittableTextInput, SubmittableTextInputEvent,
-};
-use crate::workspace::WorkspaceAction;
-use crate::workspaces::user_workspaces::UserWorkspacesEvent;
-use crate::TemplatableMCPServerManager;
-use crate::UserWorkspaces;
-use crate::{
-    pane_group::{pane::view, BackingView, PaneConfiguration, PaneEvent},
-    Appearance,
-};
+use std::path::{Path, PathBuf};
+
 use ai::api_keys::{ApiKeyManager, ApiKeyManagerEvent};
 use itertools::Itertools;
 use regex::Regex;
 use thousands::Separable;
 use warp_core::ui::theme::color::internal_colors;
+use warpui::elements::{
+    Align, Border, ChildView, ClippedScrollStateHandle, ClippedScrollable, ConstrainedBox,
+    Container, CrossAxisAlignment, Expanded, Flex, Highlight, MouseStateHandle, ParentElement,
+    PartialClickableElement, ScrollbarWidth, Text,
+};
 use warpui::fonts::Properties;
 use warpui::platform::Cursor;
 use warpui::ui_components::slider::SliderStateHandle;
 use warpui::ui_components::switch::SwitchStateHandle;
 
-use std::path::{Path, PathBuf};
-use std::sync::LazyLock;
 use warpui::{
-    elements::{
-        Align, Border, ChildView, ClippedScrollStateHandle, ClippedScrollable, ConstrainedBox,
-        Container, CrossAxisAlignment, Expanded, Flex, Highlight, MouseStateHandle, ParentElement,
-        PartialClickableElement, ScrollbarWidth, Text,
-    },
     AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
     ViewHandle,
 };
+
+use crate::ai::blocklist::BlocklistAIPermissions;
+use crate::ai::execution_profiles::model_menu_items::available_model_menu_items;
+use crate::ai::execution_profiles::profiles::{
+    AIExecutionProfilesModel, AIExecutionProfilesModelEvent, ClientProfileId,
+};
+use crate::ai::execution_profiles::{
+    AIExecutionProfile, AIExecutionProfileAppExt as _, ActionPermission, RunAgentsPermission,
+    WriteToPtyPermission,
+};
+use crate::ai::llms::{
+    DisableReason, LLMContextWindow, LLMId, LLMInfo, LLMPreferences, LLMPreferencesEvent,
+};
+use crate::ai::paths::host_native_absolute_path;
+use crate::editor::{
+    EditorView, Event as EditorEvent, InteractionState, SingleLineEditorOptions, TextOptions,
+};
+use crate::pane_group::focus_state::PaneFocusHandle;
+use crate::pane_group::pane::view;
+use crate::pane_group::{BackingView, PaneConfiguration, PaneEvent};
+use crate::settings::{AISettings, AISettingsChangedEvent, AgentModeCommandExecutionPredicate};
+use crate::ui_components::icons::Icon;
+use crate::view_components::action_button::{ActionButton, DangerSecondaryTheme};
+use crate::view_components::dropdown::DropdownAction;
+use crate::view_components::{
+    Dropdown, DropdownItem, FilterableDropdown, SubmittableTextInput, SubmittableTextInputEvent,
+};
+use crate::workspace::WorkspaceAction;
+use crate::workspaces::user_workspaces::UserWorkspacesEvent;
+use crate::{Appearance, TemplatableMCPServerManager, UserWorkspaces};
 
 const MODEL_MENU_WIDTH: f32 = 250.;
 
@@ -125,6 +128,7 @@ struct TooltipMouseStateHandles {
     write_to_pty_tooltip_mouse_state: MouseStateHandle,
     computer_use_tooltip_mouse_state: MouseStateHandle,
     ask_user_question_tooltip_mouse_state: MouseStateHandle,
+    run_agents_tooltip_mouse_state: MouseStateHandle,
     call_mcp_servers_tooltip_mouse_state: MouseStateHandle,
     // Separate mouse state handles for text input editors (for workspace override tooltips)
     command_allowlist_editor_tooltip_mouse_state: MouseStateHandle,
@@ -191,6 +195,9 @@ pub enum ExecutionProfileEditorViewAction {
     SetAskUserQuestion {
         permission: super::AskUserQuestionPermission,
     },
+    SetRunAgents {
+        permission: RunAgentsPermission,
+    },
     AddToCommandAllowlist {
         predicate: AgentModeCommandExecutionPredicate,
     },
@@ -239,6 +246,7 @@ pub struct ExecutionProfileEditorView {
     context_window_slider_state: SliderStateHandle,
     context_window_editor: ViewHandle<EditorView>,
     last_synced_context_window_editor_value: Option<u32>,
+    dragged_context_window_value: Option<u32>,
     coding_model_dropdown: ViewHandle<Dropdown<ExecutionProfileEditorViewAction>>,
     full_terminal_use_model_dropdown:
         ViewHandle<FilterableDropdown<ExecutionProfileEditorViewAction>>,
@@ -250,6 +258,7 @@ pub struct ExecutionProfileEditorView {
     call_mcp_servers_dropdown: ViewHandle<Dropdown<ExecutionProfileEditorViewAction>>,
     computer_use_dropdown: ViewHandle<Dropdown<ExecutionProfileEditorViewAction>>,
     ask_user_question_dropdown: ViewHandle<Dropdown<ExecutionProfileEditorViewAction>>,
+    run_agents_dropdown: ViewHandle<Dropdown<ExecutionProfileEditorViewAction>>,
     command_allowlist_editor: ViewHandle<SubmittableTextInput>,
     command_denylist_editor: ViewHandle<SubmittableTextInput>,
     directory_allowlist_editor: ViewHandle<SubmittableTextInput>,
@@ -476,7 +485,33 @@ impl ExecutionProfileEditorView {
             dropdown
         });
 
-        static SELECT_MCP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-select-mcp-servers"));
+        let run_agents_dropdown = ctx.add_typed_action_view(|ctx| {
+            let mut dropdown = Dropdown::new(ctx);
+            dropdown.set_items(
+                vec![
+                    DropdownItem::new(
+                        crate::tr!("ai", "never"),
+                        ExecutionProfileEditorViewAction::SetRunAgents {
+                            permission: RunAgentsPermission::NeverAllow,
+                        },
+                    ),
+                    DropdownItem::new(
+                        crate::tr!("ai", "always-allow"),
+                        ExecutionProfileEditorViewAction::SetRunAgents {
+                            permission: RunAgentsPermission::AlwaysAllow,
+                        },
+                    ),
+                    DropdownItem::new(
+                        crate::tr!("ai", "always-ask"),
+                        ExecutionProfileEditorViewAction::SetRunAgents {
+                            permission: RunAgentsPermission::AlwaysAsk,
+                        },
+                    ),
+                ],
+                ctx,
+            );
+            dropdown
+        });
         let mcp_allowlist_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = FilterableDropdown::new(ctx);
             dropdown.set_menu_header_to_static(&*SELECT_MCP_LABEL);
@@ -629,6 +664,7 @@ impl ExecutionProfileEditorView {
             context_window_slider_state,
             context_window_editor,
             last_synced_context_window_editor_value,
+            dragged_context_window_value: None,
             coding_model_dropdown,
             full_terminal_use_model_dropdown,
             computer_use_model_dropdown,
@@ -639,6 +675,7 @@ impl ExecutionProfileEditorView {
             call_mcp_servers_dropdown,
             computer_use_dropdown,
             ask_user_question_dropdown,
+            run_agents_dropdown,
             command_allowlist_editor,
             command_denylist_editor,
             directory_allowlist_editor,
@@ -731,7 +768,7 @@ impl ExecutionProfileEditorView {
                     Self::refresh_filterable_model_dropdown(
                         &me.base_model_dropdown,
                         current_permissions.base_model.clone(),
-                        |prefs| prefs.get_base_llm_choices_for_agent_mode().collect_vec(),
+                        |prefs, app| prefs.get_base_llm_choices_for_agent_mode(app).collect_vec(),
                         |id| ExecutionProfileEditorViewAction::SetBaseModel { id },
                         |prefs| prefs.get_default_base_model().id.clone(),
                         &me.upgrade_footer_mouse_state,
@@ -745,7 +782,7 @@ impl ExecutionProfileEditorView {
                     Self::refresh_filterable_model_dropdown(
                         &me.full_terminal_use_model_dropdown,
                         current_permissions.cli_agent_model.clone(),
-                        |prefs| prefs.get_cli_agent_llm_choices().collect_vec(),
+                        |prefs, app| prefs.get_cli_agent_llm_choices(app).collect_vec(),
                         |id| ExecutionProfileEditorViewAction::SetFullTerminalUseModel { id },
                         |prefs| prefs.get_default_cli_agent_model().id.clone(),
                         &me.upgrade_footer_mouse_state,
@@ -754,7 +791,7 @@ impl ExecutionProfileEditorView {
                     Self::refresh_filterable_model_dropdown(
                         &me.computer_use_model_dropdown,
                         current_permissions.computer_use_model.clone(),
-                        |prefs| prefs.get_computer_use_llm_choices().collect_vec(),
+                        |prefs, _| prefs.get_computer_use_llm_choices().collect_vec(),
                         |id| ExecutionProfileEditorViewAction::SetComputerUseModel { id },
                         |prefs| prefs.get_default_computer_use_model().id.clone(),
                         &me.upgrade_footer_mouse_state,
@@ -766,7 +803,7 @@ impl ExecutionProfileEditorView {
                     Self::refresh_filterable_model_dropdown(
                         &me.base_model_dropdown,
                         current_permissions.base_model.clone(),
-                        |prefs| prefs.get_base_llm_choices_for_agent_mode().collect_vec(),
+                        |prefs, app| prefs.get_base_llm_choices_for_agent_mode(app).collect_vec(),
                         |id| ExecutionProfileEditorViewAction::SetBaseModel { id },
                         |prefs| prefs.get_default_base_model().id.clone(),
                         &me.upgrade_footer_mouse_state,
@@ -794,7 +831,7 @@ impl ExecutionProfileEditorView {
                 Self::refresh_filterable_model_dropdown(
                     &me.base_model_dropdown,
                     current_permissions.base_model.clone(),
-                    |prefs| prefs.get_base_llm_choices_for_agent_mode().collect_vec(),
+                    |prefs, app| prefs.get_base_llm_choices_for_agent_mode(app).collect_vec(),
                     |id| ExecutionProfileEditorViewAction::SetBaseModel { id },
                     |prefs| prefs.get_default_base_model().id.clone(),
                     &me.upgrade_footer_mouse_state,
@@ -904,12 +941,13 @@ impl ExecutionProfileEditorView {
         let computer_use_disabled = !ai_settings.is_computer_use_permissions_editable(ctx);
         let ask_user_question_disabled =
             !ai_settings.is_ask_user_question_permissions_editable(ctx);
+        let run_agents_disabled = !ai_settings.is_run_agents_permissions_editable(ctx);
         let mcp_disabled = !ai_settings.is_mcp_permission_editable(ctx);
 
         Self::refresh_filterable_model_dropdown(
             &self.base_model_dropdown,
             current_permissions.base_model.clone(),
-            |prefs| prefs.get_base_llm_choices_for_agent_mode().collect_vec(),
+            |prefs, app| prefs.get_base_llm_choices_for_agent_mode(app).collect_vec(),
             |id| ExecutionProfileEditorViewAction::SetBaseModel { id },
             |prefs| prefs.get_default_base_model().id.clone(),
             &self.upgrade_footer_mouse_state,
@@ -923,7 +961,7 @@ impl ExecutionProfileEditorView {
         Self::refresh_filterable_model_dropdown(
             &self.full_terminal_use_model_dropdown,
             current_permissions.cli_agent_model.clone(),
-            |prefs| prefs.get_cli_agent_llm_choices().collect_vec(),
+            |prefs, app| prefs.get_cli_agent_llm_choices(app).collect_vec(),
             |id| ExecutionProfileEditorViewAction::SetFullTerminalUseModel { id },
             |prefs| prefs.get_default_cli_agent_model().id.clone(),
             &self.upgrade_footer_mouse_state,
@@ -932,7 +970,7 @@ impl ExecutionProfileEditorView {
         Self::refresh_filterable_model_dropdown(
             &self.computer_use_model_dropdown,
             current_permissions.computer_use_model.clone(),
-            |prefs| prefs.get_computer_use_llm_choices().collect_vec(),
+            |prefs, _| prefs.get_computer_use_llm_choices().collect_vec(),
             |id| ExecutionProfileEditorViewAction::SetComputerUseModel { id },
             |prefs| prefs.get_default_computer_use_model().id.clone(),
             &self.upgrade_footer_mouse_state,
@@ -979,6 +1017,12 @@ impl ExecutionProfileEditorView {
             &self.ask_user_question_dropdown,
             current_permissions.ask_user_question,
             ask_user_question_disabled,
+            ctx,
+        );
+        Self::refresh_run_agents_dropdown_menu(
+            &self.run_agents_dropdown,
+            current_permissions.run_agents,
+            run_agents_disabled,
             ctx,
         );
         Self::refresh_mcp_dropdown(
@@ -1101,6 +1145,31 @@ impl ExecutionProfileEditorView {
         ctx.notify();
     }
 
+    fn refresh_run_agents_dropdown_menu(
+        menu: &ViewHandle<Dropdown<ExecutionProfileEditorViewAction>>,
+        current_permission: RunAgentsPermission,
+        disabled: bool,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        menu.update(ctx, |menu, ctx| {
+            if !disabled {
+                menu.set_enabled(ctx);
+            } else {
+                menu.set_disabled(ctx);
+            }
+
+            let active = match current_permission {
+                RunAgentsPermission::NeverAllow | RunAgentsPermission::Unknown => 0,
+                RunAgentsPermission::AlwaysAllow => 1,
+                RunAgentsPermission::AlwaysAsk => 2,
+            };
+
+            menu.set_selected_by_index(active, ctx);
+            ctx.notify();
+        });
+        ctx.notify();
+    }
+
     fn refresh_filterable_model_dropdown<G, A, D>(
         menu: &ViewHandle<FilterableDropdown<ExecutionProfileEditorViewAction>>,
         profile_model: Option<LLMId>,
@@ -1110,7 +1179,7 @@ impl ExecutionProfileEditorView {
         upgrade_mouse_state: &MouseStateHandle,
         ctx: &mut ViewContext<Self>,
     ) where
-        G: FnOnce(&LLMPreferences) -> Vec<&LLMInfo>,
+        G: for<'a> FnOnce(&'a LLMPreferences, &AppContext) -> Vec<&'a LLMInfo>,
         A: Fn(LLMId) -> ExecutionProfileEditorViewAction,
         D: FnOnce(&LLMPreferences) -> LLMId,
     {
@@ -1125,7 +1194,7 @@ impl ExecutionProfileEditorView {
 
             let llm_prefs = LLMPreferences::handle(ctx);
             let llm_prefs = llm_prefs.as_ref(ctx);
-            let choices = get_choices(llm_prefs);
+            let choices = get_choices(llm_prefs, ctx);
 
             let has_upgrade_gated_models = choices
                 .iter()
@@ -1133,7 +1202,7 @@ impl ExecutionProfileEditorView {
 
             let items = available_model_menu_items(
                 choices,
-                |llm| create_action(llm.id.clone()).into(),
+                |llm| DropdownAction::select_action_and_close(create_action(llm.id.clone())),
                 None,
                 None,
                 false,
@@ -1176,13 +1245,15 @@ impl ExecutionProfileEditorView {
             }
 
             let choices = LLMPreferences::as_ref(ctx)
-                .get_coding_llm_choices()
+                .get_coding_llm_choices(ctx)
                 .collect_vec();
 
             let items = available_model_menu_items(
                 choices,
                 |llm| {
-                    ExecutionProfileEditorViewAction::SetCodingModel { id: llm.id.clone() }.into()
+                    DropdownAction::select_action_and_close(
+                        ExecutionProfileEditorViewAction::SetCodingModel { id: llm.id.clone() },
+                    )
                 },
                 None,
                 None,
@@ -1387,6 +1458,7 @@ impl ExecutionProfileEditorView {
     }
 
     fn sync_context_window_editor(&mut self, ctx: &mut ViewContext<Self>, force: bool) {
+        self.dragged_context_window_value = None;
         let Some(value) = self.current_context_window_display_value(ctx) else {
             self.last_synced_context_window_editor_value = None;
             self.context_window_slider_state.reset_offset();
@@ -1523,6 +1595,7 @@ impl TypedActionView for ExecutionProfileEditorView {
                 // in the input box without persisting to the profile yet.
                 // Persistence happens on SetContextWindowSize (drop / commit).
                 if self.configurable_context_window(ctx).is_some() {
+                    self.dragged_context_window_value = Some(*value);
                     let formatted = value.separate_with_commas();
                     self.context_window_editor.update(ctx, |editor, ctx| {
                         editor.system_reset_buffer_text(&formatted, ctx);
@@ -1531,6 +1604,7 @@ impl TypedActionView for ExecutionProfileEditorView {
                 }
             }
             ExecutionProfileEditorViewAction::SetContextWindowSize { value } => {
+                self.dragged_context_window_value = None;
                 if !AISettings::as_ref(ctx).is_any_ai_enabled(ctx) {
                     self.sync_context_window_editor(ctx, true);
                     return;
@@ -1602,6 +1676,12 @@ impl TypedActionView for ExecutionProfileEditorView {
             ExecutionProfileEditorViewAction::SetAskUserQuestion { permission } => {
                 AIExecutionProfilesModel::handle(ctx).update(ctx, |profiles_model, ctx| {
                     profiles_model.set_ask_user_question(self.profile_id, *permission, ctx);
+                });
+                ctx.notify();
+            }
+            ExecutionProfileEditorViewAction::SetRunAgents { permission } => {
+                AIExecutionProfilesModel::handle(ctx).update(ctx, |profiles_model, ctx| {
+                    profiles_model.set_run_agents(self.profile_id, *permission, ctx);
                 });
                 ctx.notify();
             }

@@ -2,6 +2,14 @@ pub mod mode_selector;
 
 use std::sync::LazyLock;
 
+use warpui::elements::{
+    ChildView, Container, CornerRadius, CrossAxisAlignment, Flex, MouseStateHandle, ParentElement,
+    Radius, Text,
+};
+use warpui::{
+    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
+};
+
 use crate::ai::agent::icons::yellow_stop_icon;
 use crate::ai::blocklist::block::keyboard_navigable_buttons::{
     simple_navigation_button, KeyboardNavigableButtons,
@@ -12,13 +20,6 @@ use crate::ai::blocklist::inline_action::inline_action_header::{
 use crate::ai::blocklist::inline_action::inline_action_icons::cancelled_icon;
 use crate::ai::blocklist::inline_action::requested_action::RenderableAction;
 use crate::appearance::Appearance;
-use warpui::elements::{
-    ChildView, Container, CornerRadius, CrossAxisAlignment, Flex, MouseStateHandle, ParentElement,
-    Radius, Text,
-};
-use warpui::{
-    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
-};
 
 static EXPLANATION_TEXT: LazyLock<String> = LazyLock::new(|| {
     crate::tr!("terminal", "init-environment-explanation-text")

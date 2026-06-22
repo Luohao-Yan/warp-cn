@@ -1,18 +1,33 @@
-use crate::ai::mcp::templatable::GalleryData;
-use crate::ai::mcp::MCPServerUpdate;
-use crate::modal::Modal;
-use crate::modal::ModalEvent;
-use crate::modal::ModalViewState;
-use crate::server::telemetry::{MCPTemplateInstallationSource, TelemetryEvent};
-use crate::settings::{AISettings, AISettingsChangedEvent};
-use crate::settings_view::mcp_servers_page::InstallOrigin;
-use crate::settings_view::settings_page::{
-    build_toggle_element, render_body_item_label, LocalOnlyIconState, ToggleState,
-};
-use crate::util::truncation::truncate_from_end;
-use crate::view_components::DismissibleToast;
-use crate::ToastStack;
+use std::cmp::Ordering;
+use std::collections::HashMap;
+use std::path::PathBuf;
+use std::sync::LazyLock;
 
+use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
+use settings::ToggleableSetting as _;
+use strum::IntoEnumIterator;
+use uuid::Uuid;
+use warp_core::features::FeatureFlag;
+use warp_core::send_telemetry_from_ctx;
+use warp_core::ui::appearance::AppearanceEvent;
+use warp_core::ui::theme::color::internal_colors;
+use warp_core::ui::Icon;
+use warpui::elements::{
+    Align, Border, ChildView, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment,
+    Expanded, Fill, Flex, FormattedTextElement, HighlightedHyperlink, MainAxisAlignment,
+    MainAxisSize, ParentElement, Radius, Text,
+};
+use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use warpui::ui_components::switch::SwitchStateHandle;
+use warpui::{
+    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
+};
+
+use crate::ai::mcp::gallery::MCPGalleryManagerEvent;
+use crate::ai::mcp::templatable::{GalleryData, TemplatableMCPServer};
+use crate::ai::mcp::templatable_manager::{
+    TemplatableMCPServerManager, TemplatableMCPServerManagerEvent,
+};
 #[cfg(feature = "local_fs")]
 use crate::ai::mcp::{
     // Import events for file-based manager and watcher conditionally
@@ -21,60 +36,23 @@ use crate::ai::mcp::{
     FileMCPWatcher,
     FileMCPWatcherEvent,
 };
+use crate::ai::mcp::{
+    logs, FileBasedMCPManager, MCPGalleryManager, MCPProvider, MCPServerUpdate,
+    TemplatableMCPServerInstallation,
+};
 
-use crate::{
-    ai::mcp::{
-        gallery::MCPGalleryManagerEvent,
-        logs,
-        templatable::TemplatableMCPServer,
-        templatable_manager::{TemplatableMCPServerManager, TemplatableMCPServerManagerEvent},
-        FileBasedMCPManager, MCPGalleryManager, MCPProvider, TemplatableMCPServerInstallation,
-    },
-    appearance::Appearance,
-    cloud_object::{
-        model::persistence::{CloudModel, CloudModelEvent},
-        GenericStringObjectFormat, JsonObjectType,
-    },
-    drive::CloudObjectTypeAndId,
-    editor::{EditorView, PropagateAndNoOpNavigationKeys, SingleLineEditorOptions, TextOptions},
-    pane_group::Direction,
-    search_bar::SearchBar,
-    settings_view::mcp_servers::{
-        server_card::{
-            ServerCardEvent, ServerCardOptions, ServerCardStatus, ServerCardView, TitleChip,
-        },
-        style,
-        update_modal::{UpdateModalBody, UpdateModalBodyEvent},
-        ServerCardItemId,
-    },
-    ui_components::blended_colors,
-    view_components::action_button::{ActionButton, NakedTheme},
-    workflows::local_workflows::tail_command_for_shell,
-    workspace::Workspace,
-    workspaces::user_workspaces::UserWorkspaces,
+use crate::appearance::Appearance;
+use crate::cloud_object::model::persistence::{CloudModel, CloudModelEvent};
+use crate::cloud_object::{GenericStringObjectFormat, JsonObjectType};
+use crate::drive::CloudObjectTypeAndId;
+use crate::editor::{
+    EditorView, PropagateAndNoOpNavigationKeys, SingleLineEditorOptions, TextOptions,
 };
-use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
-use settings::ToggleableSetting as _;
-use std::cmp::Ordering;
-use std::sync::LazyLock;
-use std::{collections::HashMap, path::PathBuf};
-use strum::IntoEnumIterator;
-use uuid::Uuid;
-use warp_core::features::FeatureFlag;
-use warp_core::send_telemetry_from_ctx;
-use warp_core::ui::{appearance::AppearanceEvent, theme::color::internal_colors, Icon};
-use warpui::{
-    elements::{
-        Align, Border, ChildView, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment,
-        Expanded, Fill, Flex, FormattedTextElement, HighlightedHyperlink, MainAxisAlignment,
-        MainAxisSize, ParentElement, Radius, Text,
-    },
-    ui_components::{
-        components::{Coords, UiComponent, UiComponentStyles},
-        switch::SwitchStateHandle,
-    },
-    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
-};
+use crate::modal::{Modal, ModalEvent, ModalViewState};
+use crate::pane_group::Direction;
+use crate::search_bar::SearchBar;
+use crate::server::telemetry::{MCPTemplateInstallationSource, TelemetryEvent};
+use crate::settings::{AISettings, AISettingsChangedEvent};
 
 static DESCRIPTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-add-description"));
 static SEE_SUPPORTED_PROVIDERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "see-supported-providers"));
@@ -189,7 +167,7 @@ impl MCPServersListPageView {
             }
         });
 
-        let update_modal_body = ctx.add_typed_action_view(|_ctx| UpdateModalBody::new());
+        let update_modal_body = ctx.add_typed_action_view(UpdateModalBody::new);
         ctx.subscribe_to_view(&update_modal_body, |me, _, event, ctx| {
             me.handle_update_modal_body_event(event, ctx);
         });
@@ -780,7 +758,7 @@ impl MCPServersListPageView {
         } else {
             self.update_modal_state.view.update(ctx, |modal, ctx| {
                 modal.body().update(ctx, |body, ctx| {
-                    body.set_installation(installation_uuid, server_name, available_updates);
+                    body.set_installation(installation_uuid, server_name, available_updates, ctx);
                     ctx.notify();
                 });
             });
@@ -999,8 +977,8 @@ impl MCPServersListPageView {
         match event {
             UpdateModalBodyEvent::Cancel => {
                 self.update_modal_state.view.update(ctx, |modal, ctx| {
-                    modal.body().update(ctx, |body, _ctx| {
-                        body.clear();
+                    modal.body().update(ctx, |body, ctx| {
+                        body.clear(ctx);
                     });
                 });
                 self.update_modal_state.close();
@@ -1017,8 +995,8 @@ impl MCPServersListPageView {
                 };
                 self.process_server_update(*installation_uuid, update.clone(), ctx);
                 self.update_modal_state.view.update(ctx, |modal, ctx| {
-                    modal.body().update(ctx, |body, _ctx| {
-                        body.clear();
+                    modal.body().update(ctx, |body, ctx| {
+                        body.clear(ctx);
                     });
                 });
                 self.update_modal_state.close();

@@ -16,9 +16,10 @@ use warp_util::path::ShellFamily;
 use warpui::r#async::{Spawnable, Timer};
 use warpui::{Entity, EntityId, ModelContext, ModelHandle, SingletonEntity};
 
+use super::{ActionExecution, AnyActionExecution, ExecuteActionInput, PreprocessActionInput};
 use crate::ai::agent::{
-    AIAgentActionId, AIAgentActionType, AIAgentPtyWriteMode, ReadShellCommandOutputResult,
-    RequestCommandOutputResult, ShellCommandDelay, ShellCommandError,
+    AIAgentActionId, AIAgentActionResultType, AIAgentActionType, AIAgentPtyWriteMode,
+    ReadShellCommandOutputResult, RequestCommandOutputResult, ShellCommandDelay, ShellCommandError,
     TransferShellCommandControlToUserResult, WriteToLongRunningShellCommandResult,
 };
 use crate::ai::blocklist::permissions::CommandExecutionPermission;
@@ -28,18 +29,11 @@ use crate::terminal::event::BlockMetadataReceivedEvent;
 use crate::terminal::model::block::{
     formatted_terminal_contents_for_input, Block, BlockId, CURSOR_MARKER,
 };
+use crate::terminal::model::session::active_session::ActiveSession;
+use crate::terminal::model_events::{ModelEvent, ModelEventDispatcher};
 use crate::terminal::shell::ShellType;
-use crate::{
-    ai::agent::AIAgentActionResultType,
-    terminal::{
-        model::session::active_session::ActiveSession,
-        model_events::{ModelEvent, ModelEventDispatcher},
-        TerminalModel,
-    },
-};
+use crate::terminal::TerminalModel;
 use crate::{send_telemetry_from_ctx, TelemetryEvent};
-
-use super::{ActionExecution, AnyActionExecution, ExecuteActionInput, PreprocessActionInput};
 
 pub struct ShellCommandExecutor {
     active_session: ModelHandle<ActiveSession>,
@@ -80,7 +74,12 @@ impl ShellCommandExecutor {
         }
     }
 
-    fn handle_terminal_model_event(&mut self, event: &ModelEvent, _ctx: &mut ModelContext<Self>) {
+    fn handle_terminal_model_event(
+        &mut self,
+        _: ModelHandle<ModelEventDispatcher>,
+        event: &ModelEvent,
+        _ctx: &mut ModelContext<Self>,
+    ) {
         // We wait for precmd for the block _after_ the requested command's block so that
         // downstream checks for current working directory are fresh. The precmd hook is when
         // the shell relays current working directory to warp.
@@ -238,6 +237,18 @@ impl ShellCommandExecutor {
                     .is_active_and_long_running()
                 {
                     // If there is an active block, we can't execute another command.
+                    return ActionExecution::Sync(AIAgentActionResultType::RequestCommandOutput(
+                        RequestCommandOutputResult::CancelledBeforeExecution,
+                    ));
+                }
+                // If another conversation has taken over the agent view since this command
+                // was requested, cancel instead of executing.
+                let is_displaced_by_other_conversation = model
+                    .block_list()
+                    .agent_view_state()
+                    .active_conversation_id()
+                    .is_some_and(|active_id| active_id != input.conversation_id);
+                if is_displaced_by_other_conversation {
                     return ActionExecution::Sync(AIAgentActionResultType::RequestCommandOutput(
                         RequestCommandOutputResult::CancelledBeforeExecution,
                     ));
@@ -924,3 +935,7 @@ enum ActionResult {
     Cancelled,
     BlockNotFound,
 }
+
+#[cfg(test)]
+#[path = "shell_command_tests.rs"]
+mod tests;

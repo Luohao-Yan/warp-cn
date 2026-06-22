@@ -1,15 +1,14 @@
 use std::sync::LazyLock;
 
-use warpui::{
-    elements::{
-        ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Flex, Hoverable,
-        MouseStateHandle, ParentElement, Radius, Text,
-    },
-    platform::Cursor,
-    AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext,
+use warpui::elements::{
+    ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Flex, Hoverable, MouseStateHandle,
+    ParentElement, Radius, Text,
 };
+use warpui::platform::Cursor;
+use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
-use crate::{appearance::Appearance, ui_components::icons::Icon};
+use crate::appearance::Appearance;
+use crate::ui_components::icons::Icon;
 
 static COMMON_NEW: LazyLock<String> =
     LazyLock::new(|| crate::tr!("common", "new-badge"));

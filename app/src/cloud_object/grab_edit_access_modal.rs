@@ -1,16 +1,14 @@
+use warpui::elements::{Container, Element, MouseStateHandle, Text};
 use std::sync::LazyLock;
-
 use warpui::fonts::{Properties, Style, Weight};
 use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
-use warpui::{elements::Element, AppContext, View};
-use warpui::{Entity, SingletonEntity, TypedActionView, ViewContext};
+use warpui::ui_components::components::UiComponent;
+use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
 use crate::appearance::Appearance;
 use crate::ui_components::buttons::close_button;
 use crate::ui_components::dialog::{dialog_styles, Dialog};
-use warpui::elements::{Container, MouseStateHandle, Text};
-use warpui::ui_components::components::UiComponent;
 
 static EDIT_ANYWAY_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "edit-anyway-label"));
 static CANCEL_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
