@@ -17,11 +17,7 @@ use crate::search::notebooks::fuzzy_match::{
 };
 use crate::search::result_renderer::ItemHighlightState;
 use crate::ui_components::icons::Icon;
-use ordered_float::OrderedFloat;
 use std::sync::LazyLock;
-use warpui::elements::{Container, Flex, Highlight, ParentElement, Text};
-use warpui::fonts::{Properties, Weight};
-use warpui::{AppContext, Element, SingletonEntity};
 
 
 static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "untitled").clone());

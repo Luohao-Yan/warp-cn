@@ -34,20 +34,8 @@ use warpui::{
     ViewContext, ViewHandle,
 };
 
-use crate::app_state::{get_app_state, AppState};
-use crate::appearance::Appearance;
-use crate::editor::{
-    EditorView, Event as EditorEvent, PropagateAndNoOpNavigationKeys, SingleLineEditorOptions,
-};
-use crate::launch_configs::launch_config::LaunchConfig;
-use crate::send_telemetry_from_ctx;
-use crate::server::telemetry::TelemetryEvent;
-use crate::user_config::launch_configs_dir;
 #[cfg(feature = "local_fs")]
-use crate::user_config::{util::file_name_to_human_readable_name, WarpConfig};
-use crate::util::bindings::keybinding_name_to_display_string;
 #[cfg(feature = "local_fs")]
-use crate::util::openable_file_type::FileTarget;
 
 const MODAL_WIDTH: f32 = 660.;
 const SIDE_PADDING: f32 = 16.;

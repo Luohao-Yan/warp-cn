@@ -140,6 +140,6 @@ define_settings_group!(AppIconSettings, settings: [
         private: false,
         storage_key: "ShowDockIcon",
         toml_path: "appearance.icon.show_dock_icon",
-        description: "Whether Warp is shown in the macOS Dock and Cmd-Tab switcher.",
+        description: "Whether Warp is shown in the macOS Dock and Cmd-Tab switcher.".to_string(),
     },
 ]);

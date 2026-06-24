@@ -313,8 +313,7 @@ impl Display for SettingsSection {
             SettingsSection::CodeIndexing => f.write_str(&crate::tr!("settings", "code-indexing")),
             SettingsSection::EditorAndCodeReview => f.write_str(&crate::tr!("settings", "editor-code-review")),
             SettingsSection::OzCloudAPIKeys => f.write_str(&crate::tr!("settings", "oz-cloud-api-keys")),
-            SettingsSection::Scripting => f.write_str(&crate::tr!("settings", "scripting-tab")),
-            _ => write!(f, "{self:?}"),
+            SettingsSection::Scripting => write!(f, "Scripting"),
         }
     }
 }
@@ -631,7 +630,6 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
     privacy_page::init_actions_from_parent_view(app, context, builder);
     ai_page::init_actions_from_parent_view(app, context, builder);
     code_page::init_actions_from_parent_view(app, context, builder);
-    warp_drive_page::init_actions_from_parent_view(app, context, builder);
 
     if ChannelState::enable_debug_features() || cfg!(windows) {
         ToggleSettingActionPair::add_toggle_setting_action_pairs_as_bindings(
@@ -2817,7 +2815,7 @@ impl BackingView for SettingsView {
         _ctx: &view::HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> view::HeaderContent {
-        view::HeaderContent::simple(&crate::tr!("settings", "header"))
+        view::HeaderContent::simple("Settings")
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, _ctx: &mut ViewContext<Self>) {

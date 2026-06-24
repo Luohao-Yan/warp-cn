@@ -14644,7 +14644,7 @@ dependencies = [
 
 [[package]]
 name = "warp"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "addr",
  "aha-reqwest-eventsource",
@@ -15381,6 +15381,7 @@ dependencies = [
  "strum_macros",
  "tantivy",
  "warp_core",
+ "warp_i18n",
  "warpui_core",
 ]
 

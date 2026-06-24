@@ -7,13 +7,13 @@
 )]
 
 use std::collections::HashMap;
+use std::sync::LazyLock;
 use std::pin::pin;
 use std::sync::Arc;
 use std::time::Duration;
 
 use async_channel::Receiver;
 use byte_unit::{Byte, UnitType};
-use std::sync::LazyLock;
 use futures_util::stream::AbortHandle;
 use futures_util::{SinkExt, StreamExt};
 use instant::Instant;
@@ -1696,9 +1696,15 @@ impl Network {
     }
 }
 
-
 static NO_QUOTA_REMAINING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sharing-usage-exceeded"));
 
+fn session_terminated_reason_diagnostic_label(reason: &SessionTerminatedReason) -> &'static str {
+    match reason {
+        SessionTerminatedReason::NoUserQuotaRemaining {} => "no_user_quota_remaining",
+        SessionTerminatedReason::ExceededSizeLimit => "exceeded_size_limit",
+        SessionTerminatedReason::InternalServerError { .. } => "internal_server_error",
+    }
+}
 
 /// Converts [`SessionTerminatedReason`] to a user-facing string.
 pub fn session_terminated_reason_string(

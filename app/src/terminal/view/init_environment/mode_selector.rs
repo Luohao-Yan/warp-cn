@@ -18,8 +18,6 @@ use warpui::platform::Cursor;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
-use crate::appearance::Appearance;
-use crate::ui_components::icons::Icon;
 
 // Figma node 6583:23542
 const MODAL_WIDTH: f32 = 441.;

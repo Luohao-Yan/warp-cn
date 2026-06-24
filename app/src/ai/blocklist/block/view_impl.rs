@@ -29,13 +29,13 @@ pub mod output;
 pub mod query;
 mod todos;
 
+use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 
 use common::get_highlight_ranges_for_find_matches;
 use itertools::Itertools;
 use pathfinder_color::ColorU;
 use settings::Setting as _;
-
 use warp_core::features::FeatureFlag;
 use warp_core::semantic_selection::SemanticSelection;
 use warp_core::ui::color::contrast::{
@@ -727,7 +727,7 @@ pub fn render_citation(
 /// "Manage AI Autonomy permissions" link. Matches the visual rhythm of
 /// [`render_autonomy_checkbox_setting_speedbump_footer`].
 pub fn render_autonomy_dropdown_setting_speedbump_footer<A>(
-    description: &str,
+    description: impl Into<Cow<'static, str>>,
     dropdown: &warpui::ViewHandle<crate::view_components::dropdown::Dropdown<A>>,
     settings_link_handle: MouseStateHandle,
     app: &AppContext,
@@ -737,6 +737,7 @@ where
 {
     let appearance = Appearance::as_ref(app);
     let theme = appearance.theme();
+    let description = description.into();
     Clipped::new(
         Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
@@ -755,31 +756,35 @@ where
                 .with_margin_right(8.)
                 .finish(),
             )
-            .with_margin_right(8.)
-            .finish(),
-        )
-        .with_child(warpui::elements::ChildView::new(dropdown).finish())
-        .with_child(
-            Expanded::new(
-                1.,
-                Align::new(
-                    appearance
-                        .ui_builder()
-                        .link(
-                            crate::tr!("ai_assistant", "ai-manage-autonomy-permissions").into(),
-                            None,
-                            Some(Box::new(move |ctx| {
-                                ctx.dispatch_typed_action(
-                                    WorkspaceAction::ShowSettingsPageWithSearch {
-                                        search_query: "Autonomy".to_string(),
-                                        section: Some(SettingsSection::AI),
-                                    },
-                                );
-                            })),
-                            settings_link_handle,
-                        )
-                        .build()
-                        .finish(),
+            .with_child(
+                Container::new(warpui::elements::ChildView::new(dropdown).finish())
+                    .with_margin_right(8.)
+                    .finish(),
+            )
+            .with_child(
+                Expanded::new(
+                    1.,
+                    Align::new(
+                        appearance
+                            .ui_builder()
+                            .link(
+                                crate::tr!("ai_assistant", "ai-manage-autonomy-permissions").into(),
+                                None,
+                                Some(Box::new(move |ctx| {
+                                    ctx.dispatch_typed_action(
+                                        WorkspaceAction::ShowSettingsPageWithSearch {
+                                            search_query: "Autonomy".to_string(),
+                                            section: Some(SettingsSection::AI),
+                                        },
+                                    );
+                                })),
+                                settings_link_handle,
+                            )
+                            .build()
+                            .finish(),
+                    )
+                    .right()
+                    .finish(),
                 )
                 .finish(),
             )

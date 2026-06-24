@@ -34,6 +34,7 @@ use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::LazyLock;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -348,8 +349,6 @@ use crate::{
     ServerApiProvider,
 };
 
-
-
 /// Drop target data for dropping content on the [`Input`].
 #[derive(Debug, Clone)]
 pub struct InputDropTargetData {
@@ -379,10 +378,8 @@ pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_TOP_PADDING: f32 = 10.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_BOTTOM_PADDING: f32 = 8.;
 pub(super) static CLI_AGENT_RICH_INPUT_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cli-agent-hint"));
 
-
 static CLOUD_MODE_V2_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cloud-mode-v2-hint"));
 static CLOUD_HANDOFF_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cloud-handoff-hint"));
-
 const SHORT_CIRCUIT_HIGHLIGHTING_ACTIONS: [Option<PlainTextEditorViewAction>; 7] = [
     Some(PlainTextEditorViewAction::Space),
     Some(PlainTextEditorViewAction::NonExpandingSpace),
@@ -406,7 +403,7 @@ pub const COMPLETIONS_MENU_WIDTH: f32 = 330.;
 pub const OPEN_COMPLETIONS_KEYBINDING_NAME: &str = "input:open_completion_suggestions";
 pub static INPUT_A11Y_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "input-a11y-label"));
 pub static INPUT_A11Y_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "input-a11y-helper"));
-pub const AI_COMMAND_SEARCH_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ai-command-search-hint"));
+pub static AI_COMMAND_SEARCH_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ai-command-search-hint"));
 
 static AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "run-commands-hint"));
 
@@ -452,12 +449,13 @@ fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'
     }
 }
 
-
 static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "steer-agent-hint"));
 static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "steer-agent-classic"));
+const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI: &str = "Queue a follow up for the running agent";
+const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC: &str =
+    "Queue a follow up for the running agent, or backspace to exit";
 static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-follow-up"));
 static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-follow-up-classic"));
-
 
 /// Action name for setting input mode to agent mode
 pub const SET_INPUT_MODE_AGENT_ACTION_NAME: &str = "input:set_mode_agent";
@@ -774,36 +772,26 @@ impl InputSuggestionsMode {
     }
 
     /// Returns the placeholder text for this mode, if it has a custom one.
-    pub fn placeholder_text(&self) -> Option<&'static str> {
-        static SEARCH_QUERIES: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-queries"));
-        static SEARCH_QUERIES_REWIND: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-queries-rewind"));
-        static SEARCH_CONVERSATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-conversations"));
-        static SEARCH_SKILLS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-skills"));
-        static SEARCH_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-models"));
-        static SEARCH_PROFILES: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-profiles"));
-        static SEARCH_COMMANDS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-commands"));
-        static SEARCH_PROMPTS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-prompts"));
-        static SEARCH_INDEXED_REPOS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-indexed-repos"));
-        static SEARCH_PLANS: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "search-plans"));
+    pub fn placeholder_text(&self) -> Option<String> {
         match self {
             InputSuggestionsMode::UserQueryMenu {
                 action: UserQueryMenuAction::ForkFrom,
                 ..
-            } => Some(&*SEARCH_QUERIES),
+            } => Some(crate::tr!("terminal", "search-queries")),
             InputSuggestionsMode::UserQueryMenu {
                 action: UserQueryMenuAction::Rewind,
                 ..
-            } => Some(&*SEARCH_QUERIES_REWIND),
-            InputSuggestionsMode::ConversationMenu => Some(&*SEARCH_CONVERSATIONS),
-            InputSuggestionsMode::SkillMenu => Some(&*SEARCH_SKILLS),
-            InputSuggestionsMode::ModelSelector => Some(&*SEARCH_MODELS),
-            InputSuggestionsMode::ProfileSelector => Some(&*SEARCH_PROFILES),
+            } => Some(crate::tr!("terminal", "search-queries-rewind")),
+            InputSuggestionsMode::ConversationMenu => Some(crate::tr!("terminal", "search-conversations")),
+            InputSuggestionsMode::SkillMenu => Some(crate::tr!("terminal", "search-skills")),
+            InputSuggestionsMode::ModelSelector => Some(crate::tr!("terminal", "search-models")),
+            InputSuggestionsMode::ProfileSelector => Some(crate::tr!("terminal", "search-profiles")),
             InputSuggestionsMode::SlashCommands if FeatureFlag::AgentView.is_enabled() => {
-                Some(&*SEARCH_COMMANDS)
+                Some(crate::tr!("terminal", "search-commands"))
             }
-            InputSuggestionsMode::PromptsMenu => Some(&*SEARCH_PROMPTS),
-            InputSuggestionsMode::IndexedReposMenu => Some(&*SEARCH_INDEXED_REPOS),
-            InputSuggestionsMode::PlanMenu { .. } => Some(&*SEARCH_PLANS),
+            InputSuggestionsMode::PromptsMenu => Some(crate::tr!("terminal", "search-prompts")),
+            InputSuggestionsMode::IndexedReposMenu => Some(crate::tr!("terminal", "search-indexed-repos")),
+            InputSuggestionsMode::PlanMenu { .. } => Some(crate::tr!("terminal", "search-plans")),
             _ => None,
         }
     }
@@ -1997,10 +1985,12 @@ pub fn init(app: &mut AppContext) {
         .with_custom_action(CustomAction::AISearch),
         EditableBinding::new(
             START_NEW_CONVERSATION_KEYBINDING_NAME,
-
             crate::tr!("terminal", "new-agent-conversation"),
-            InputAction::StartNewAgentConversation,
-
+            InputAction::StartNewAgentConversation {
+                origin: AgentViewEntryOrigin::Input {
+                    was_prompt_autodetected: false,
+                },
+            },
         )
         .with_enabled(|| !FeatureFlag::AgentView.is_enabled())
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -3308,7 +3298,7 @@ impl Input {
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(
-                                crate::tr!("terminal", "images-removed-no-support"),
+                                "Attached images were removed — the selected model does not support images.".to_string(),
                             ),
                             window_id,
                             ctx,
@@ -5544,9 +5534,7 @@ impl Input {
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-
-                        DismissibleToast::error(crate::tr!("terminal", "skill-not-found", reference = reference.to_string())),
-
+                        DismissibleToast::error(error.to_string()),
                         window_id,
                         ctx,
                     );
@@ -5615,7 +5603,7 @@ impl Input {
             let window_id = ctx.window_id();
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                 let toast =
-                    DismissibleToast::default(crate::tr!("terminal", "no-active-conversation-export"));
+                    DismissibleToast::default(String::from(crate::tr!("terminal", "no-active-conversation-export")));
                 toast_stack.add_ephemeral_toast(toast, window_id, ctx);
             });
             return;
@@ -6195,11 +6183,9 @@ impl Input {
             input_model.input_type(),
             input_model.should_run_input_autodetection(app),
         ) {
-
             (InputType::Shell, false) => {
                 AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.to_owned()
             }
-
             (InputType::Shell, true) => {
                 // Ensure hint text is cached for new conversations
                 get_stable_agent_mode_hint_text(&mut self.cached_agent_mode_hint_text).to_owned()
@@ -6223,14 +6209,13 @@ impl Input {
                 // Follow the `agent_indicator` pattern (see `app/src/tab.rs`):
                 //  * `None` (no conversation, empty, passive, or untitled) => new conversation => "Warp anything"
                 //  * `InProgress`                                           => agent running    => "Steer"
-                //  * Any other status                                       => finished         => "Ask a follow up"
+                //  * Any other status                                       => finished         => crate::tr!("terminal", "ask-follow-up")
                 match self
                     .ai_context_model
                     .as_ref(app)
                     .selected_conversation_status_for_hint(app)
                 {
                     Some(status) if status.is_in_progress() => {
-
                         if is_queue_next_prompt_enabled {
                             if is_udi_enabled {
                                 AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI.to_owned()
@@ -6241,16 +6226,13 @@ impl Input {
                             AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI.to_owned()
                         } else {
                             AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC.to_owned()
-
                         }
                     }
                     Some(_) => {
                         if is_udi_enabled {
-
                             AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI.to_owned()
                         } else {
                             AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC.to_owned()
-
                         }
                     }
                     None => {
@@ -6680,19 +6662,20 @@ impl Input {
     }
     fn cli_agent_rich_input_hint_text(&self, ctx: &ViewContext<Self>) -> Cow<'static, str> {
         if self.is_locked_in_shell_mode(ctx) {
-            return Cow::Owned(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.as_str().to_owned());
+            return Cow::Owned(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.clone());
         }
 
         CLIAgentSessionsModel::as_ref(ctx)
             .session(self.terminal_view_id)
             .map(|session| match session.agent {
-                CLIAgent::Unknown => Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.as_str().to_owned()),
+                CLIAgent::Unknown => Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.clone()),
                 _ => Cow::Owned(format!(
-                    "Enter prompt for {}...",
-                    session.agent.display_name()
+                    "{}{}...",
+                    crate::tr!("terminal", "enter-prompt-for", agent = session.agent.display_name().to_string()),
+                    ""
                 )),
             })
-            .unwrap_or(Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.as_str().to_owned()))
+            .unwrap_or(Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.clone()))
     }
 
     pub fn set_zero_state_hint_text(&mut self, ctx: &mut ViewContext<Self>) {
@@ -6714,8 +6697,8 @@ impl Input {
                     .as_ref(ctx)
                     .selected_environment_id()
                     .and_then(|id| CloudAmbientAgentEnvironment::get_by_id(id, ctx))
-                    .map(|env| format!("Hand off to {}", env.model().string_model.display_name()))
-                    .unwrap_or_else(|| "Handoff to cloud".to_owned())
+                    .map(|env| crate::tr!("terminal", "hand-off-to", env_name = env.model().string_model.display_name().to_string()))
+                    .unwrap_or_else(|| CLOUD_HANDOFF_HINT_TEXT.to_owned())
             };
             self.editor.update(ctx, |editor, ctx| {
                 editor.set_placeholder_text(&hint, ctx);
@@ -6727,7 +6710,7 @@ impl Input {
             let show_hint = *InputSettings::as_ref(ctx).show_hint_text;
             self.editor.update(ctx, |editor, ctx| {
                 if show_hint {
-                    editor.set_placeholder_text(CLOUD_MODE_V2_HINT_TEXT.as_str(), ctx);
+                    editor.set_placeholder_text(&*CLOUD_MODE_V2_HINT_TEXT, ctx);
                 } else {
                     editor.clear_placeholder_text(ctx);
                 }
@@ -6777,7 +6760,7 @@ impl Input {
                 });
             } else {
                 self.editor.update(ctx, |editor, ctx| {
-                    editor.set_placeholder_text(AI_COMMAND_SEARCH_HINT_TEXT.as_str(), ctx);
+                    editor.set_placeholder_text(&*AI_COMMAND_SEARCH_HINT_TEXT, ctx);
                 });
             }
         } else {
@@ -13251,7 +13234,7 @@ impl Input {
                         ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                             ts.add_ephemeral_toast(
                                 DismissibleToast::default(
-                                    crate::tr!("terminal", "preparing-handoff"),
+                                    "Preparing handoff — try again in a moment.".to_owned(),
                                 )
                                 .with_object_id("local-to-cloud-handoff-not-ready".to_owned()),
                                 window_id,

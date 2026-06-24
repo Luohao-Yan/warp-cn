@@ -330,7 +330,7 @@ impl Entity for OrchestrationPillBar {
 
 impl OrchestrationPillBar {
     fn overflow_menu_item(
-        label: String,
+        label: impl Into<String>,
         icon: Icon,
         action: OrchestrationPillBarAction,
         hover_background: Fill,
@@ -466,12 +466,12 @@ impl OrchestrationPillBar {
         } else {
             vec![
                 item(
-                    crate::tr!("ai", "open-in-new-pane"),
+                    crate::tr!("ai_assistant", "ai-open-in-new-pane"),
                     Icon::ArrowSplit,
                     OrchestrationPillBarAction::OpenInNewPane(conversation_id),
                 ),
                 item(
-                    crate::tr!("ai", "open-in-new-tab"),
+                    crate::tr!("ai_assistant", "ai-open-in-new-tab"),
                     Icon::Plus,
                     OrchestrationPillBarAction::OpenInNewTab(conversation_id),
                 ),
@@ -479,7 +479,7 @@ impl OrchestrationPillBar {
         };
         if Self::oz_run_url_for_conversation(conversation_id, ctx).is_some() {
             items.push(item(
-                "View in Oz",
+                crate::tr!("ai_assistant", "ai-view-in-oz"),
                 Icon::Oz,
                 OrchestrationPillBarAction::ViewInOz(conversation_id),
             ));
@@ -645,12 +645,12 @@ impl OrchestrationPillBar {
 
         // Stamp each child's current pin state; partitioning happens at render.
         let pill_bar_model = OrchestrationPillBarModel::as_ref(app);
+        let agent_fallback = crate::tr!("ai_assistant", "ai-agent-fallback");
         for child in children {
-            let fallback_name = crate::tr!("ai_assistant", "ai-agent-fallback");
             let name = child
                 .agent_name()
                 .filter(|n| !n.is_empty())
-                .unwrap_or(&fallback_name);
+                .unwrap_or(&agent_fallback);
             let pin_state = if pill_bar_model.is_pinned(&child.id()) {
                 PillPinState::Pinned
             } else {
@@ -719,7 +719,7 @@ fn orchestrator_label(orchestrator: &AIConversation) -> String {
         .agent_name()
         .filter(|n| !n.is_empty())
         .map(|n| n.to_string())
-        .unwrap_or_else(|| crate::tr!("ai", "orchestrator"))
+        .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-orchestrator"))
 }
 
 impl OrchestrationPillBar {
@@ -2267,18 +2267,18 @@ pub fn render_orchestration_breadcrumbs(
                 .filter(|t| !t.is_empty())
                 .or_else(|| p.agent_name().map(str::to_string))
         })
-        .unwrap_or_else(|| crate::tr!("ai", "orchestrator"));
+        .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-orchestrator"));
 
     // Treat empty `agent_name` as missing so the label, avatar color, and
     // initial all consistently fall back to "Agent". Without the
     // `.filter(|n| !n.is_empty())` on `child_name`, an unnamed agent would
     // show "Agent" as the label but be hashed/initialed against the empty
     // string, producing a different color/letter from a real "Agent".
-    let fallback_name = crate::tr!("ai_assistant", "ai-agent-fallback");
+    let agent_fallback = crate::tr!("ai_assistant", "ai-agent-fallback");
     let child_name = active
         .agent_name()
         .filter(|n| !n.is_empty())
-        .unwrap_or(&fallback_name);
+        .unwrap_or(&agent_fallback);
     let child_label = child_name.to_string();
 
     // Parent crumb uses the Oz glyph on a neutral disc to match the

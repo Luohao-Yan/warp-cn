@@ -322,7 +322,6 @@ static DEFAULT_TIPS: LazyLock<Vec<AgentTip>> = LazyLock::new(|| {
             kind: AgentTipKind::General,
         },
         AgentTip {
-        AgentTip {
             description: crate::tr!("ai", "tip-handoff"),
             link: None,
             binding_name: None,

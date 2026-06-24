@@ -970,3 +970,5 @@ terminal-command-and-output = Command and Output
 terminal-command = Command
 terminal-output = Output
 
+terminal-enter-prompt-for = Enter prompt for { $agent }
+terminal-hand-off-to = Hand off to { $env_name }

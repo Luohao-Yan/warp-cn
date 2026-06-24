@@ -1123,9 +1123,9 @@ impl BackingView for FileNotebookView {
 
             #[cfg(feature = "local_fs")]
             {
-                let open_in_editor_label = crate::tr!("notebooks", "open-in-editor");
                 // The markdown rendered/raw toggle is always visible in the pane header, so we don't
                 // duplicate it in the overflow menu. Keep "Open in editor" available for local files.
+                let open_in_editor_label = crate::tr!("notebooks", "open-in-editor");
                 actions.push(
                     MenuItemFields::new(&open_in_editor_label)
                         .with_on_select_action(FileNotebookAction::OpenInEditor)

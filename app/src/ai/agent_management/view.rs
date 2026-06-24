@@ -114,7 +114,7 @@ const BUTTON_SIZE: f32 = 20.;
 const CARD_AGENT_ICON_SIZE: f32 = 24.;
 const CREATOR_AVATAR_FONT_SIZE: f32 = 10.;
 
-static SESSION_EXPIRED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "session-expired-text"));
+static SESSION_EXPIRED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-session-expired-text"));
 
 pub fn init(app: &mut AppContext) {
     use crate::util::bindings::cmd_or_ctrl_shift;
@@ -222,9 +222,9 @@ impl AgentManagementView {
 
         let list_state = Self::construct_fresh_list_state(ctx.handle());
 
-        static ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-all"));
-        let all_tooltip = crate::tr!("ai_assistant", "ai-all-tooltip");
         let all_filter_button = ctx.add_typed_action_view(|_ctx| {
+            static ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-all"));
+            let all_tooltip = crate::tr!("ai_assistant", "ai-all-tooltip");
             ActionButton::new(&*ALL_LABEL, NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_tooltip(&all_tooltip)
@@ -235,9 +235,9 @@ impl AgentManagementView {
                 })
         });
 
-        static PERSONAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-personal"));
-        let personal_tooltip = crate::tr!("ai_assistant", "ai-personal-tooltip");
         let personal_filter_button = ctx.add_typed_action_view(|_ctx| {
+            static PERSONAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-personal"));
+            let personal_tooltip = crate::tr!("ai_assistant", "ai-personal-tooltip");
             ActionButton::new(&*PERSONAL_LABEL, NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_tooltip(&personal_tooltip)
@@ -259,8 +259,8 @@ impl AgentManagementView {
             ctx,
         );
 
-        static VIEW_AGENTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-agents"));
         let view_agents_button = ctx.add_typed_action_view(|_ctx| {
+            static VIEW_AGENTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-agents"));
             ActionButton::new(&*VIEW_AGENTS_LABEL, NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_icon(Icon::ArrowLeft)
@@ -278,8 +278,8 @@ impl AgentManagementView {
         let environment_dropdown = ctx.add_typed_action_view(Self::create_environment_dropdown);
         let creator_dropdown = ctx.add_typed_action_view(Self::create_creator_dropdown);
 
-        static CLEAR_FILTERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-clear-filters"));
         let no_filter_results_button = ctx.add_typed_action_view(move |_ctx| {
+            static CLEAR_FILTERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-clear-filters"));
             ActionButton::new(&*CLEAR_FILTERS_LABEL, SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(move |ctx| {
@@ -287,8 +287,8 @@ impl AgentManagementView {
                 })
         });
 
-        static CLEAR_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-clear-all"));
         let clear_all_filters_button = ctx.add_typed_action_view(move |_ctx| {
+            static CLEAR_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-clear-all"));
             ActionButton::new(&*CLEAR_ALL_LABEL, NakedTheme)
                 .with_icon(Icon::X)
                 .with_size(ButtonSize::Small)
@@ -328,9 +328,8 @@ impl AgentManagementView {
             me.handle_search_editor_event(event, ctx);
         });
 
-        let new_agent_label = crate::tr!("ai_assistant", "ai-new-agent");
         let new_agent_button = CompactibleActionButton::new(
-            new_agent_label,
+            crate::tr!("ai_assistant", "ai-new-agent"),
             None,
             ButtonSize::Small,
             AgentManagementViewAction::ShowAgentTypeSelector,
@@ -511,24 +510,28 @@ impl AgentManagementView {
                 MenuItem::Item(fields)
             };
 
+        let all_label = crate::tr!("ai_assistant", "ai-filter-status-all");
+        let working_label = crate::tr!("ai_assistant", "ai-filter-status-working");
+        let done_label = crate::tr!("ai_assistant", "ai-filter-status-done");
+        let failed_label = crate::tr!("ai_assistant", "ai-filter-status-failed");
         let items = vec![
             make_status_option(
-                &crate::tr!("ai_assistant", "ai-filter-status-all"),
+                &all_label,
                 AgentManagementViewAction::SetStatusFilter(StatusFilter::All),
                 None,
             ),
             make_status_option(
-                &crate::tr!("ai_assistant", "ai-filter-status-working"),
+                &working_label,
                 AgentManagementViewAction::SetStatusFilter(StatusFilter::Working),
                 Some((Icon::ClockLoader, Fill::from(magenta))),
             ),
             make_status_option(
-                &crate::tr!("ai_assistant", "ai-filter-status-done"),
+                &done_label,
                 AgentManagementViewAction::SetStatusFilter(StatusFilter::Done),
                 Some((Icon::Check, Fill::from(green))),
             ),
             make_status_option(
-                &crate::tr!("ai_assistant", "ai-filter-status-failed"),
+                &failed_label,
                 AgentManagementViewAction::SetStatusFilter(StatusFilter::Failed),
                 Some((Icon::X, Fill::from(red))),
             ),
@@ -611,33 +614,30 @@ impl AgentManagementView {
         Self::setup_filter_menu(&mut dropdown, "Created on", ctx);
 
         let all_label = crate::tr!("ai_assistant", "ai-filter-last-24-hours");
-        let last24_item = MenuItem::Item(MenuItemFields::new(&all_label).with_on_select_action(
-            DropdownAction::SelectActionAndClose(
-                AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::Last24Hours),
-            ),
-        ));
         let past3_label = crate::tr!("ai_assistant", "ai-filter-past-3-days");
-        let past3_item = MenuItem::Item(MenuItemFields::new(&past3_label).with_on_select_action(
-            DropdownAction::SelectActionAndClose(
-                AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::Past3Days),
-            ),
-        ));
         let lastweek_label = crate::tr!("ai_assistant", "ai-filter-last-week");
-        let lastweek_item = MenuItem::Item(MenuItemFields::new(&lastweek_label).with_on_select_action(
-            DropdownAction::SelectActionAndClose(
-                AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::LastWeek),
-            ),
-        ));
-
+        let all_none_label = crate::tr!("ai_assistant", "ai-filter-all");
         let items = vec![
-            MenuItem::Item(MenuItemFields::new(&crate::tr!("ai_assistant", "ai-filter-all")).with_on_select_action(
+            MenuItem::Item(MenuItemFields::new(&all_none_label).with_on_select_action(
                 DropdownAction::select_action_and_close(
                     AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::All),
                 ),
             )),
-            last24_item,
-            past3_item,
-            lastweek_item,
+            MenuItem::Item(MenuItemFields::new(&all_label).with_on_select_action(
+                DropdownAction::select_action_and_close(
+                    AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::Last24Hours),
+                ),
+            )),
+            MenuItem::Item(MenuItemFields::new(&past3_label).with_on_select_action(
+                DropdownAction::select_action_and_close(
+                    AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::Past3Days),
+                ),
+            )),
+            MenuItem::Item(MenuItemFields::new(&lastweek_label).with_on_select_action(
+                DropdownAction::select_action_and_close(
+                    AgentManagementViewAction::SetCreatedOnFilter(CreatedOnFilter::LastWeek),
+                ),
+            )),
         ];
 
         dropdown.set_rich_items(items, ctx);
@@ -656,7 +656,6 @@ impl AgentManagementView {
         let plan_label = crate::tr!("ai_assistant", "ai-filter-plan");
         let screenshot_label = crate::tr!("ai_assistant", "ai-filter-screenshot");
         let file_label = crate::tr!("ai_assistant", "ai-filter-file");
-
         let items = vec![
             MenuItem::Item(MenuItemFields::new(&all_label).with_on_select_action(
                 DropdownAction::select_action_and_close(
@@ -702,12 +701,10 @@ impl AgentManagementView {
         dropdown
     }
 
-    fn build_harness_dropdown_items(
-        app: &AppContext,
-    ) -> Vec<MenuItem<DropdownAction<AgentManagementViewAction>>> {
-        let all_label = crate::tr!("ai_assistant", "ai-filter-all");
+    fn build_harness_dropdown_items(app: &AppContext) -> Vec<MenuItem<DropdownAction>> {
+        let all_text = crate::tr!("ai_assistant", "ai-filter-all");
         let mut items = vec![MenuItem::Item(
-            MenuItemFields::new(&all_label).with_on_select_action(
+            MenuItemFields::new(&all_text).with_on_select_action(
                 DropdownAction::select_action_and_close(
                     AgentManagementViewAction::SetHarnessFilter(HarnessFilter::All),
                 ),
@@ -735,23 +732,24 @@ impl AgentManagementView {
         ctx: &mut ViewContext<FilterableDropdown<AgentManagementViewAction>>,
     ) -> FilterableDropdown<AgentManagementViewAction> {
         let mut dropdown = FilterableDropdown::new(ctx);
-        Self::setup_searchable_filter_menu(&mut dropdown, "Environment", ctx);
+        let env_label: &'static str = crate::tr!("ai_assistant", "ai-environment-label").leak() as &'static str;
+        Self::setup_searchable_filter_menu(&mut dropdown, env_label, ctx);
 
         // Keep the button compact when a specific environment ID is selected by abbreviating the
         // displayed ID. (The dropdown menu still shows the full ID.)
-        let all_text = crate::tr!("ai_assistant", "ai-filter-all");
-        let none_text = crate::tr!("ai_assistant", "ai-filter-none");
+        let all_text = crate::tr!("ai_assistant", "ai-filter-all").leak() as &'static str;
+        let none_text = crate::tr!("ai_assistant", "ai-filter-none").leak() as &'static str;
+        let env_label_for_closure = env_label;
         dropdown.set_menu_header_text_override(move |text| {
-            if text == all_text || text == none_text {
-                return crate::tr!("ai_assistant", "ai-environment-label") + ": " + text;
+            if matches!(text, t if t == all_text || t == none_text) {
+                return format!("{}: {text}", env_label_for_closure);
             }
 
-            let env_label = crate::tr!("ai_assistant", "ai-environment-label");
             let abbreviated = text.chars().take(6).collect::<String>();
             if abbreviated == text {
-                format!("{env_label}: {text}")
+                format!("{}: {text}", env_label_for_closure)
             } else {
-                format!("{env_label}: {abbreviated}…")
+                format!("{}: {abbreviated}…", env_label_for_closure)
             }
         });
 
@@ -815,6 +813,7 @@ impl AgentManagementView {
 
         self.environment_dropdown.update(ctx, |dropdown, ctx| {
             let all_label = crate::tr!("ai_assistant", "ai-filter-all");
+            let none_label = crate::tr!("ai_assistant", "ai-filter-none");
             let mut items = vec![MenuItem::Item(
                 MenuItemFields::new(&all_label).with_on_select_action(
                     DropdownAction::select_action_and_close(
@@ -823,7 +822,6 @@ impl AgentManagementView {
                 ),
             )];
 
-            let none_label = crate::tr!("ai_assistant", "ai-filter-none");
             items.push(MenuItem::Item(
                 MenuItemFields::new(&none_label).with_on_select_action(
                     DropdownAction::select_action_and_close(
@@ -858,8 +856,10 @@ impl AgentManagementView {
 
     fn update_creator_dropdown(&mut self, ctx: &mut ViewContext<Self>) {
         let creators = AgentConversationsModel::as_ref(ctx).get_all_creators(ctx);
+        let all_filter_label = crate::tr!("ai_assistant", "ai-filter-all");
         let creator_filter_name = match &self.filters.creator {
-            CreatorFilter::All => &crate::tr!("ai_assistant", "ai-filter-all"), CreatorFilter::Specific { name, .. } => name,
+            CreatorFilter::All => all_filter_label.as_str(),
+            CreatorFilter::Specific { name, .. } => name.as_str(),
         };
         self.creator_dropdown.update(ctx, |dropdown, ctx| {
             let all_label = crate::tr!("ai_assistant", "ai-filter-all");
@@ -1249,7 +1249,7 @@ impl AgentManagementView {
 
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                let copied_branch_label = crate::tr!("ai_assistant", "ai-copied-branch-name");
+                    let copied_branch_label = crate::tr!("ai_assistant", "ai-copied-branch-name");
                     let toast = DismissibleToast::default(copied_branch_label);
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -1828,14 +1828,15 @@ impl AgentManagementView {
         let mut metadata_parts = Vec::new();
 
         if let Some(source) = &entry.display.source {
-            metadata_parts.push(crate::tr!("ai", "source-label", source = source.display_name()));
+            metadata_parts.push(crate::tr!("ai_assistant", "ai-source-label", source = source.display_name()));
         }
 
         let availability = HarnessAvailabilityModel::as_ref(app);
         if availability.should_show_harness_selector() {
             if let Some(harness) = entry.display.harness {
                 metadata_parts.push(format!(
-                    "Harness: {}",
+                    "{}: {}",
+                    crate::tr!("ai_assistant", "ai-harness-label"),
                     availability.display_name_for(harness)
                 ));
             }
@@ -1860,11 +1861,11 @@ impl AgentManagementView {
         }
 
         if let Some(run_time) = &entry.display.run_time {
-            metadata_parts.push(crate::tr!("ai", "run-time-label", run_time = run_time.as_str()));
+            metadata_parts.push(crate::tr!("ai_assistant", "ai-run-time-label", run_time = run_time.as_str()));
         }
 
         if let Some(usage) = entry.display.request_usage.map(format_credits) {
-            metadata_parts.push(crate::tr!("ai", "credits-used-label", usage = usage.as_str()));
+            metadata_parts.push(crate::tr!("ai_assistant", "ai-credits-used-label", usage = usage.as_str()));
         }
 
         Text::new(metadata_parts.join(" • "), font_family, font_size)
@@ -1933,9 +1934,8 @@ impl AgentManagementView {
         let size_switch_threshold = MEDIUM_SIZE_SWITCH_THRESHOLD * appearance.monospace_ui_scalar();
 
         let build_header = |use_expanded: bool| {
-            let runs_label = crate::tr!("ai_assistant", "ai-runs");
             let title = Text::new_inline(
-                runs_label,
+                crate::tr!("ai_assistant", "ai-runs"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size() + 4.,
             )
@@ -2067,9 +2067,8 @@ impl AgentManagementView {
         let appearance = Appearance::as_ref(app);
         let theme = appearance.theme();
 
-        let runs_label = crate::tr!("ai_assistant", "ai-runs");
         let title = Text::new_inline(
-            runs_label,
+            crate::tr!("ai_assistant", "ai-runs"),
             appearance.ui_font_family(),
             appearance.ui_font_size() + 4.,
         )

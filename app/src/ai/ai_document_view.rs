@@ -66,7 +66,7 @@ pub fn init(app: &mut AppContext) {
         // Reuse the save file keybinding name and description
         // so that there's only one entry in settings reused for both cases.
         SAVE_FILE_BINDING_NAME,
-        crate::tr!("code", "save-file"),
+        SAVE_FILE_BINDING_DESCRIPTION,
         AIDocumentAction::SendUpdatedPlan,
     )
     .with_context_predicate(id!("AIDocumentView") & !id!("IMEOpen"))
@@ -92,10 +92,6 @@ use crate::notebooks::file::MarkdownDisplayMode;
 use crate::util::file::external_editor::settings::EditorLayout;
 #[cfg(feature = "local_fs")]
 use crate::util::openable_file_type::FileTarget;
-#[cfg(feature = "local_fs")]
-use warp_util::path::LineAndColumnArg;
-
-use crate::notebooks::file::MarkdownDisplayMode;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AIDocumentAction {
@@ -138,7 +134,7 @@ impl From<PaneEvent> for AIDocumentEvent {
     }
 }
 
-pub static DEFAULT_PLANNING_DOCUMENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "default-planning-document-title"));
+pub static DEFAULT_PLANNING_DOCUMENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-default-planning-document-title"));
 
 /// Entry for the version history dropdown menu.
 struct VersionMenuEntry {
@@ -408,8 +404,8 @@ impl AIDocumentView {
         let save_action = keybinding_name_to_keystroke(SAVE_FILE_BINDING_NAME, ctx)
             .map(|k| k.displayed())
             .unwrap_or_else(|| crate::tr!("common", "click-label").to_string());
-        let tooltip_text = crate::tr!("ai", "plan-update-tooltip", save_action = save_action.as_str());
         static UPDATE_AGENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-update-agent"));
+        let tooltip_text = crate::tr!("ai_assistant", "ai-plan-update-tooltip", save_action = save_action.as_str());
         let update_plan_button = ctx.add_typed_action_view(move |_ctx| {
             ActionButton::new(&*UPDATE_AGENT_LABEL, PrimaryTheme)
                 .with_size(ButtonSize::Small)
@@ -1141,6 +1137,7 @@ impl TypedActionView for AIDocumentView {
             AIDocumentAction::Export => self.export(ctx),
             AIDocumentAction::CreateWarpDriveNotebook => self.create_warp_drive_notebook(ctx),
             AIDocumentAction::CopyLink(link) => {
+                let link_copied_label = crate::tr!("ai_assistant", "ai-link-copied-toast");
                 send_telemetry_from_ctx!(
                     TelemetryEvent::ObjectLinkCopied { link: link.clone() },
                     ctx
@@ -1149,7 +1146,6 @@ impl TypedActionView for AIDocumentView {
                     .write(ClipboardContent::plain_text(link.to_owned()));
 
                 let window_id = ctx.window_id();
-                let link_copied_label = crate::tr!("ai_assistant", "ai-link-copied-toast");
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
                         DismissibleToast::success(link_copied_label),
@@ -1159,11 +1155,11 @@ impl TypedActionView for AIDocumentView {
                 });
             }
             AIDocumentAction::CopyPlanId => {
+                let plan_id_copied_label = crate::tr!("ai_assistant", "ai-plan-id-copied-toast");
                 ctx.clipboard()
                     .write(ClipboardContent::plain_text(self.document_id.to_string()));
 
                 let window_id = ctx.window_id();
-                let plan_id_copied_label = crate::tr!("ai_assistant", "ai-plan-id-copied-toast");
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
                         DismissibleToast::success(plan_id_copied_label),
@@ -1247,7 +1243,7 @@ impl TypedActionView for AIDocumentView {
                         .ai_controller()
                         .update(ctx, |controller, ctx| {
                             controller.send_user_query_in_conversation(
-                                crate::tr!("ai", "updated-plan"),
+                                "I've updated the plan.".to_string(),
                                 conversation_id,
                                 None,
                                 ctx,
@@ -1315,16 +1311,14 @@ impl BackingView for AIDocumentView {
         if let Some(link) =
             AIDocumentModel::as_ref(ctx).get_document_warp_drive_object_link(&self.document_id, ctx)
         {
-            let copy_link_label = crate::tr!("ai_assistant", "ai-doc-copy-link");
             menu_items.push(
-                MenuItemFields::new(&copy_link_label)
+                MenuItemFields::new("Copy link")
                     .with_on_select_action(AIDocumentAction::CopyLink(link))
                     .with_icon(Icon::Link)
                     .into_item(),
             );
-            let show_in_drive_label = crate::tr!("ai_assistant", "ai-doc-show-in-warp-drive");
             menu_items.push(
-                MenuItemFields::new(&show_in_drive_label)
+                MenuItemFields::new("Show in Warp Drive")
                     .with_on_select_action(AIDocumentAction::ShowInWarpDrive)
                     .with_icon(Icon::WarpDrive)
                     .into_item(),
@@ -1333,9 +1327,8 @@ impl BackingView for AIDocumentView {
 
         #[cfg(feature = "local_fs")]
         {
-            let save_md_label = crate::tr!("ai_assistant", "ai-doc-save-as-markdown");
             menu_items.push(
-                crate::menu::MenuItemFields::new(&save_md_label)
+                crate::menu::MenuItemFields::new("Save as markdown file")
                     .with_on_select_action(AIDocumentAction::Export)
                     .with_icon(Icon::Download)
                     .into_item(),
@@ -1343,18 +1336,16 @@ impl BackingView for AIDocumentView {
         }
 
         // Add "Attach to active session" menu item
-        let attach_label = crate::tr!("ai_assistant", "ai-doc-attach-to-active-session");
         menu_items.push(
-            MenuItemFields::new(&attach_label)
+            MenuItemFields::new("Attach to active session")
                 .with_on_select_action(AIDocumentAction::AttachToActiveSession)
                 .with_icon(Icon::Paperclip)
                 .into_item(),
         );
 
         // Add "Copy plan ID" menu item
-        let copy_plan_label = crate::tr!("ai_assistant", "ai-doc-copy-plan-id");
         menu_items.push(
-            MenuItemFields::new(&copy_plan_label)
+            MenuItemFields::new("Copy plan ID")
                 .with_on_select_action(AIDocumentAction::CopyPlanId)
                 .with_icon(Icon::Copy)
                 .into_item(),

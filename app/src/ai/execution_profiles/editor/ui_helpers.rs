@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 
 use pathfinder_geometry::vector::vec2f;
 use thousands::Separable;
@@ -91,8 +92,9 @@ pub fn render_header_section(
         );
 
     if is_default_profile {
+        let default_name_msg = crate::tr!("ai_assistant", "ai-default-profile-name-cannot-change");
         column.add_child(render_info_section(
-            &crate::tr!("ai_assistant", "ai-default-profile-name-cannot-change"),
+            &default_name_msg,
             None,
             appearance,
         ));
@@ -449,40 +451,29 @@ pub fn render_permissions_section(
     let ai_settings = AISettings::as_ref(app);
     let mut column = Flex::column().with_children([
         render_separator(appearance),
-        {
-            let label = crate::tr!("ai_assistant", "ai-permissions-section");
-            render_section_label(&label, appearance)
-        },
-        {
-            let label = crate::tr!("ai_assistant", "ai-apply-code-diffs");
-            let desc = crate::tr!("ai_assistant", profile_data.apply_code_diffs.description());
-            render_permission_row(
-                appearance,
-                Icon::Code2,
-                &label,
-                &view.apply_code_diffs_dropdown,
-                &desc,
-                !ai_settings.is_code_diffs_permissions_editable(app),
-                view.tooltip_mouse_state_handles
-                    .apply_code_diffs_tooltip_mouse_state
-                    .clone(),
-            )
-        },
-        {
-            let label = crate::tr!("ai_assistant", "ai-read-files");
-            let desc = crate::tr!("ai_assistant", profile_data.read_files.description());
-            render_permission_row(
-                appearance,
-                Icon::Notebook,
-                &label,
-                &view.read_files_dropdown,
-                &desc,
-                !ai_settings.is_read_files_permissions_editable(app),
-                view.tooltip_mouse_state_handles
-                    .read_files_tooltip_mouse_state
-                    .clone(),
-            )
-        },
+        render_section_label(&crate::tr!("ai_assistant", "ai-permissions-section"), appearance),
+        render_permission_row(
+            appearance,
+            Icon::Code2,
+            &crate::tr!("ai_assistant", "ai-apply-code-diffs"),
+            &view.apply_code_diffs_dropdown,
+            &crate::tr!("ai_assistant", profile_data.apply_code_diffs.description()),
+            !ai_settings.is_code_diffs_permissions_editable(app),
+            view.tooltip_mouse_state_handles
+                .apply_code_diffs_tooltip_mouse_state
+                .clone(),
+        ),
+        render_permission_row(
+            appearance,
+            Icon::Notebook,
+            &crate::tr!("ai_assistant", "ai-read-files"),
+            &view.read_files_dropdown,
+            &crate::tr!("ai_assistant", profile_data.read_files.description()),
+            !ai_settings.is_read_files_permissions_editable(app),
+            view.tooltip_mouse_state_handles
+                .read_files_tooltip_mouse_state
+                .clone(),
+        ),
     ]);
 
     if profile_data.read_files == ActionPermission::AlwaysAsk
@@ -496,21 +487,17 @@ pub fn render_permissions_section(
         ));
     }
 
-    {
-        let label = crate::tr!("ai_assistant", "ai-execute-commands");
-        let desc = crate::tr!("ai_assistant", profile_data.execute_commands.description());
-        column.add_child(render_permission_row(
-            appearance,
-            Icon::Terminal,
-            &label,
-            &view.execute_commands_dropdown,
-            &desc,
-            !ai_settings.is_execute_commands_permissions_editable(app),
-            view.tooltip_mouse_state_handles
-                .execute_commands_tooltip_mouse_state
-                .clone(),
-        ));
-    }
+    column.add_child(render_permission_row(
+        appearance,
+        Icon::Terminal,
+        "Execute commands",
+        &view.execute_commands_dropdown,
+        profile_data.execute_commands.description(),
+        !ai_settings.is_execute_commands_permissions_editable(app),
+        view.tooltip_mouse_state_handles
+            .execute_commands_tooltip_mouse_state
+            .clone(),
+    ));
 
     match profile_data.execute_commands {
         ActionPermission::AlwaysAllow => {
@@ -537,31 +524,25 @@ pub fn render_permissions_section(
         }
     }
 
-    {
-        let label = crate::tr!("ai_assistant", "ai-interact-with-running-commands");
-        let desc = crate::tr!("ai_assistant", profile_data.write_to_pty.description());
-        column.add_child(render_permission_row(
-            appearance,
-            Icon::Workflow,
-            &label,
-            &view.write_to_pty_dropdown,
-            &desc,
-            !ai_settings.is_write_to_pty_permissions_editable(app),
-            view.tooltip_mouse_state_handles
-                .write_to_pty_tooltip_mouse_state
-                .clone(),
-        ));
-    }
+    column.add_child(render_permission_row(
+        appearance,
+        Icon::Workflow,
+        "Interact with running commands",
+        &view.write_to_pty_dropdown,
+        profile_data.write_to_pty.description(),
+        !ai_settings.is_write_to_pty_permissions_editable(app),
+        view.tooltip_mouse_state_handles
+            .write_to_pty_tooltip_mouse_state
+            .clone(),
+    ));
 
     if FeatureFlag::LocalComputerUse.is_enabled() {
-        let label = crate::tr!("ai_assistant", "ai-computer-use");
-        let desc = crate::tr!("ai_assistant", profile_data.computer_use.description());
         column.add_child(render_permission_row(
             appearance,
             Icon::Laptop,
-            &label,
+            "Computer use",
             &view.computer_use_dropdown,
-            &desc,
+            profile_data.computer_use.description(),
             !ai_settings.is_computer_use_permissions_editable(app),
             view.tooltip_mouse_state_handles
                 .computer_use_tooltip_mouse_state
@@ -569,37 +550,40 @@ pub fn render_permissions_section(
         ));
     }
 
-    {
-        let label = crate::tr!("ai_assistant", "ai-ask-questions");
-        let desc = crate::tr!("ai_assistant", profile_data.ask_user_question.description());
-        column.add_child(render_permission_row(
-            appearance,
-            Icon::MessageText,
-            &label,
-            &view.ask_user_question_dropdown,
-            &desc,
-            !ai_settings.is_ask_user_question_permissions_editable(app),
-            view.tooltip_mouse_state_handles
-                .ask_user_question_tooltip_mouse_state
-                .clone(),
-        ));
-    }
+    column.add_child(render_permission_row(
+        appearance,
+        Icon::MessageText,
+        "Ask questions",
+        &view.ask_user_question_dropdown,
+        profile_data.ask_user_question.description(),
+        !ai_settings.is_ask_user_question_permissions_editable(app),
+        view.tooltip_mouse_state_handles
+            .ask_user_question_tooltip_mouse_state
+            .clone(),
+    ));
+    column.add_child(render_permission_row(
+        appearance,
+        Icon::Atom,
+        "Run orchestrated agents",
+        &view.run_agents_dropdown,
+        profile_data.run_agents.description(),
+        !ai_settings.is_run_agents_permissions_editable(app),
+        view.tooltip_mouse_state_handles
+            .run_agents_tooltip_mouse_state
+            .clone(),
+    ));
 
-    {
-        let label = crate::tr!("ai_assistant", "ai-call-mcp-servers");
-        let desc = crate::tr!("ai_assistant", profile_data.mcp_permissions.description());
-        column.add_child(render_permission_row(
-            appearance,
-            Icon::Dataflow,
-            &label,
-            &view.call_mcp_servers_dropdown,
-            &desc,
-            !ai_settings.is_mcp_permission_editable(app),
-            view.tooltip_mouse_state_handles
-                .call_mcp_servers_tooltip_mouse_state
-                .clone(),
-        ));
-    }
+    column.add_child(render_permission_row(
+        appearance,
+        Icon::Dataflow,
+        "Call MCP servers",
+        &view.call_mcp_servers_dropdown,
+        profile_data.mcp_permissions.description(),
+        !ai_settings.is_mcp_permission_editable(app), // Use MCP override for this permission
+        view.tooltip_mouse_state_handles
+            .call_mcp_servers_tooltip_mouse_state
+            .clone(),
+    ));
 
     match profile_data.mcp_permissions {
         ActionPermission::AlwaysAllow => {
@@ -739,8 +723,8 @@ fn render_directory_allowlist_section(
     let is_editable = ai_settings.is_directory_allowlist_editable(app);
 
     render_list_section(
-        &crate::tr!("ai_assistant", "ai-directory-allowlist"),
-        &crate::tr!("ai_assistant", "ai-directory-allowlist-desc"),
+        "Directory allowlist",
+        "Give the agent file access to certain directories.",
         &profile_data.directory_allowlist,
         &view.directory_allowlist_mouse_state_handles,
         Some(&view.directory_allowlist_editor),
@@ -764,8 +748,8 @@ fn render_command_allowlist_section(
     let is_editable = ai_settings.is_command_allowlist_editable(app);
 
     render_list_section(
-        &crate::tr!("ai_assistant", "ai-command-allowlist"),
-        &crate::tr!("ai_assistant", "ai-command-allowlist-desc"),
+        "Command allowlist",
+        "Regular expressions to match commands that can be automatically executed by Oz.",
         &profile_data.command_allowlist,
         &view.command_allowlist_mouse_state_handles,
         Some(&view.command_allowlist_editor),
@@ -830,8 +814,8 @@ fn render_command_denylist_section(
     );
 
     let mut column = Flex::column().with_child(create_section_header(
-        &crate::tr!("ai_assistant", "ai-command-denylist"),
-        &crate::tr!("ai_assistant", "ai-command-denylist-desc"),
+        "Command denylist",
+        "Regular expressions to match commands that Oz should always ask permission to execute.",
         appearance,
     ));
     column = column.with_child(list);
@@ -842,9 +826,9 @@ fn render_command_denylist_section(
 }
 
 fn display_mcp_name(uuid: &Uuid, app: &AppContext) -> String {
-    TemplatableMCPServerManager::get_mcp_name(uuid, app).unwrap_or_else(|| {
+    TemplatableMCPServerManager::get_mcp_name(uuid, app).unwrap_or({
         log::warn!("Expected a name for MCP server {uuid} but could not find one.");
-        crate::tr!("ai_assistant", "ai-mcp-server-fallback", uuid = uuid.to_string())
+        format!("MCP Server {uuid}")
     })
 }
 
@@ -858,8 +842,8 @@ fn render_mcp_allowlist_section(
     let is_editable = ai_settings.is_mcp_permission_editable(app);
 
     render_list_section(
-        &crate::tr!("ai_assistant", "ai-mcp-allowlist"),
-        &crate::tr!("ai_assistant", "ai-mcp-allowlist-desc"),
+        "MCP allowlist",
+        "MCP servers that are allowed to be called by Oz.",
         &profile_data.mcp_allowlist,
         &view.mcp_allowlist_mouse_state_handles,
         None,
@@ -884,8 +868,8 @@ fn render_mcp_denylist_section(
     let is_editable = ai_settings.is_mcp_permission_editable(app);
 
     render_list_section(
-        &crate::tr!("ai_assistant", "ai-mcp-denylist"),
-        &crate::tr!("ai_assistant", "ai-mcp-denylist-desc"),
+        "MCP denylist",
+        "MCP servers that are not allowed to be called by Oz.",
         &profile_data.mcp_denylist,
         &view.mcp_denylist_mouse_state_handles,
         None,
@@ -919,7 +903,7 @@ pub fn render_plan_auto_sync_toggle(
     .finish();
 
     let label_elem = Text::new(
-        crate::tr!("ai_assistant", "ai-plan-auto-sync"),
+        "Plan auto-sync".to_string(),
         appearance.ui_font_family(),
         13.,
     )
@@ -927,7 +911,8 @@ pub fn render_plan_auto_sync_toggle(
     .finish();
 
     let desc_elem = Text::new(
-        crate::tr!("ai_assistant", "ai-plan-auto-sync-desc"),
+        "The plans this agent creates will be automatically added and synced to Warp Drive."
+            .to_string(),
         appearance.ui_font_family(),
         11.,
     )
@@ -992,7 +977,7 @@ pub fn render_web_search_toggle(
     .finish();
 
     let label_elem = Text::new(
-        crate::tr!("ai_assistant", "ai-call-web-tools"),
+        "Call web tools".to_string(),
         appearance.ui_font_family(),
         13.,
     )
@@ -1000,7 +985,7 @@ pub fn render_web_search_toggle(
     .finish();
 
     let desc_elem = Text::new(
-        crate::tr!("ai_assistant", "ai-call-web-tools-desc"),
+        "The agent may use web search when helpful for completing tasks.".to_string(),
         appearance.ui_font_family(),
         11.,
     )

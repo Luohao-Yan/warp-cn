@@ -7,6 +7,7 @@ use std::ops::{Deref, Range, RangeInclusive};
 use std::rc::Rc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::LazyLock;
 
 use enum_iterator::Sequence;
 use itertools::Itertools;

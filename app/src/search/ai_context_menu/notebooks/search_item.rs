@@ -9,7 +9,6 @@ use warpui::elements::{
 use warpui::fonts::{Properties, Weight};
 use warpui::{AppContext, Element, SingletonEntity};
 
-use std::sync::LazyLock;
 use crate::appearance::Appearance;
 use crate::cloud_object::ObjectType;
 use crate::search::ai_context_menu::mixer::AIContextMenuSearchableAction;

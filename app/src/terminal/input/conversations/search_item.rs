@@ -172,8 +172,6 @@ impl SearchItem for ConversationSearchItem {
     }
 
     fn accessibility_label(&self) -> String {
-
-        format!("{}", crate::tr!("terminal", "search-conversation", title = self.navigation_data.title.clone()))
-
+        crate::tr!("terminal", "search-conversation", title = self.entry.display.title.clone())
     }
 }

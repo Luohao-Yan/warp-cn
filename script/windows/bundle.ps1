@@ -112,7 +112,7 @@ if ("$CHANNEL" -eq 'local') {
     $APP_NAME = 'WarpOss'
     # The OSS channel does not ship Sentry, so drop the crash_reporting feature
     # (which would otherwise pull in the Sentry SDK as a dependency).
-    $FEATURES = 'release_bundle,gui'
+    $FEATURES = 'release_bundle,gui,server-all,skip_firebase_anonymous_user'
 }
 
 # All channels ship the v3 classifier and v2 heuristic.

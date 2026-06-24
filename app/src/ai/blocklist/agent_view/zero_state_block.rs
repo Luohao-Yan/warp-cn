@@ -2,13 +2,23 @@ use std::borrow::Cow;
 use std::cmp::Reverse;
 use std::path::Path;
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use itertools::Itertools as _;
 use markdown_parser::{parse_markdown, FormattedText, FormattedTextFragment, FormattedTextLine};
 use parking_lot::FairMutex;
 use settings::Setting;
-use std::sync::LazyLock;
 use warp_core::{features::FeatureFlag, report_if_error, ui::Icon};
+use warpui::elements::{
+    Clipped, Container, CornerRadius, CrossAxisAlignment, Flex, FormattedTextElement,
+    HighlightedHyperlink, MainAxisSize, MouseStateHandle, ParentElement, Radius, Shrinkable, Text,
+};
+use warpui::fonts::{Properties, Weight};
+use warpui::keymap::Keystroke;
+use warpui::prelude::{
+    Align, ConstrainedBox, Cursor, Empty, Hoverable, MainAxisAlignment, SavePosition,
+};
+use warpui::scene::Border;
 use warpui::{
     AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
 };
@@ -36,7 +46,7 @@ use crate::terminal::{self, prompt, TerminalModel};
 use crate::util::time_format::format_approx_duration_from_now_utc;
 
 const CLOUD_AGENT_DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
-static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "oz-updates-header"));
+static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-oz-updates-header"));
 static AI_RUN_IN_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-in-cloud-env"));
 static AI_RECENT_ACTIVITY: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recent-activity"));
 static AI_VIEW_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-changelog"));
@@ -757,7 +767,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                             key: "/model".to_owned(),
                             ..Default::default()
                         }),
-                        MessageItem::text(crate::tr!("ai", "switch-model").to_lowercase()),
+                        MessageItem::text(crate::tr!("ai_assistant", "ai-switch-model").to_lowercase()),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::OpenModelSelector);
@@ -1068,7 +1078,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                                             count = changelog_model
                                                 .oz_updates
                                                 .len()
-                                                .min(MAX_OZ_UPDATE_COUNT)
+                                                .min(MAX_OZ_UPDATE_COUNT) as i64
                                         )
                                     },
                                     appearance.ui_font_family(),
@@ -1106,7 +1116,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                                 .with_child(
                                     Container::new(
                                         Text::new(
-                                            &*AI_VIEW_CHANGELOG,
+                                            "View changelog",
                                             appearance.ui_font_family(),
                                             appearance.monospace_font_size() - 2.,
                                         )

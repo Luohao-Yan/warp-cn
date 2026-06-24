@@ -5,7 +5,7 @@ description = "The cloud-backed terminal for individuals and teams"
 edition = "2021"
 autobins = false
 name = "warp"
-version = "0.1.0"
+version = "1.0.0"
 publish.workspace = true
 license.workspace = true
 
@@ -674,7 +674,7 @@ default = [
     "skip_firebase_anonymous_user",
     "settings_file",
     "directory_tab_colors",
-    "configurable_context_window",
+    "gpt_configurable_context_window",
     "server-all",
     "git_credential_refresh",
     "oz_handoff",
@@ -1068,6 +1068,8 @@ oss-default = [
     "file_based_mcp",
     "agent_shared_sessions",
     "bundled_skills",
+    "server-all",
+    "skip_firebase_anonymous_user",
 ]
 
 [package.metadata.bundle.bin.warp-oss]

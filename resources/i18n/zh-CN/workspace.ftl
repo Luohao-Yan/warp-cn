@@ -788,3 +788,16 @@ workspace-moved-to-cloud = { $title }（已移至云端）
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
 
+## -- 自动交接 / Warp Control CLI 调试绑定 -----------------------------------
+
+workspace-debug-open-auto-handoff-sleep-modal = [调试] 打开自动交接休眠模态框
+workspace-debug-reset-auto-handoff-sleep-modal-state = [调试] 重置自动交接休眠模态框状态
+workspace-debug-trigger-auto-handoff-to-cloud = [调试] 触发自动交接至云端
+workspace-debug-open-free-ai-removal-modal = [调试] 打开免费 AI 移除模态框
+workspace-debug-reset-free-ai-removal-modal-state = [调试] 重置免费 AI 移除模态框状态
+
+## -- Warp Control CLI 绑定 -------------------------------------------------
+
+workspace-install-warpctrl = 安装 Warp Control CLI 命令
+workspace-uninstall-warpctrl = 卸载 Warp Control CLI 命令
+

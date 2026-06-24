@@ -8,6 +8,7 @@ use std::collections::HashMap;
 use std::path::{Component, Path};
 use std::rc::Rc;
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use ai::agent::action::{
     RequestComputerUseRequest, SuggestPromptRequest, UploadArtifactRequest, UseComputerRequest,
@@ -37,7 +38,6 @@ use warpui::ui_components::radio_buttons::{RadioButtonItem, RadioButtonLayout};
 use warpui::{
     Action, AppContext, Element, EntityId, ModelHandle, SingletonEntity, View, ViewHandle,
 };
-
 
 use super::common::{
     format_elapsed_seconds, render_debug_footer, render_failed_output, render_informational_footer,
@@ -126,7 +126,7 @@ use crate::view_components::compactible_action_button::{
 use crate::workspace::WorkspaceAction;
 use crate::{AIAgentTodoList, FeatureFlag};
 
-static BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "blocked-upload-artifact"));
+static BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-upload-artifact"));
 
 /// Data required to render the AI block output component.
 #[derive(Copy, Clone)]
@@ -1162,7 +1162,6 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                             icon_right_margin: 16.,
                         },
                         app,
-                        crate::tr!("ai_assistant", "ai-response-wont-count"),
                     )
                     .with_content_item_spacing()
                     .finish(),
@@ -1176,7 +1175,7 @@ pub(super) fn render(props: Props, app: &AppContext) -> Box<dyn Element> {
                     output_items.add_child(
                         render_informational_footer(
                             app,
-                            "This response won't count towards your usage.".to_string(),
+                            crate::tr!("ai_assistant", "ai-response-wont-count"),
                         )
                         .with_agent_output_item_spacing(app)
                         .finish(),
@@ -1576,7 +1575,7 @@ fn render_search_codebase(
             renderable_action(
                 props,
                 id,
-                crate::tr!("ai_assistant", "ai-search-in", path = root_repo_path.to_string_lossy().to_string()).as_str(),
+                format!("Search in {}", root_repo_path.to_string_lossy()).as_str(),
                 app,
                 footer,
                 appearance,
@@ -1777,7 +1776,7 @@ fn render_read_skill(
 
                 let skill_icon_override = icon_override_for_skill_name(&skill.name);
                 let open_button = render_skill_button(
-                    crate::tr!("ai", "open-skill"),
+                    "Open skill",
                     button_handle,
                     appearance,
                     skill.provider,
@@ -2012,15 +2011,20 @@ fn render_stopped_output(props: Props, app: &AppContext) -> Box<dyn Element> {
                         .get_item_index(&item.id)
                         .map(|index| (item, index))
                 }) {
-                    return Some(crate::tr!("ai_assistant", "ai-stopped-task-with-index", current = item_index + 1, total = todo_list.len(), title = item.title.clone()));
+                    return Some(format!(
+                        "Stopped task {}/{}: \"{}\"",
+                        item_index + 1,
+                        todo_list.len(),
+                        item.title
+                    ));
                 }
             }
 
             conversation
                 .initial_query()
-                .map(|task_name| crate::tr!("ai_assistant", "ai-stopped-task-with-name", task_name = task_name.clone()))
+                .map(|task_name| format!("Stopped task: \"{task_name}\""))
         })
-        .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-stopped-task"));
+        .unwrap_or_else(|| "Stopped task".to_string());
 
     let stop_icon = Container::new(
         ConstrainedBox::new(gray_stop_icon(appearance).finish())
@@ -2115,7 +2119,7 @@ fn render_stopped_output(props: Props, app: &AppContext) -> Box<dyn Element> {
         .with_custom_label(button_content)
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(crate::tr!("ai_assistant", "ai-resume-conversation"))
+                .tool_tip("Resume conversation".to_string())
                 .build()
                 .finish()
         })
@@ -2164,12 +2168,11 @@ fn render_requested_edits_output_message(
         .is_some_and(|status| status.is_failed())
         && !is_passive_code_gen_block
     {
-        let fallback_title = crate::tr!("ai_assistant", "ai-could-not-apply-changes");
         let title = requested_edit
             .view
             .as_ref(app)
             .title()
-            .unwrap_or(&fallback_title);
+            .unwrap_or("Could not apply changes to file.");
         RenderableAction::new(title, app)
             .with_icon(inline_action_icons::cancelled_icon(appearance).finish())
             .render(app)
@@ -2178,7 +2181,7 @@ fn render_requested_edits_output_message(
         match requested_edit.view.as_ref(app).display_mode() {
             DisplayMode::FullPane => Align::new(
                 Text::new_inline(
-                    crate::tr!("ai_assistant", "ai-suggestion-edited-in-another-tab"),
+                    "This suggestion is being edited in another tab.",
                     appearance.ui_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -2288,11 +2291,11 @@ fn render_suggest_new_conversation(
         };
         let (label, status_icon) = match result {
             SuggestNewConversationResult::Accepted { .. } => (
-                crate::tr!("ai_assistant", "ai-new-conversation-started"),
+                "New conversation started",
                 inline_action_icons::green_check_icon(appearance).finish(),
             ),
             SuggestNewConversationResult::Rejected => (
-                crate::tr!("ai_assistant", "ai-continuing-current-conversation"),
+                "Continuing current conversation",
                 warpui::elements::Icon::new(
                     Icon::FlipForward.into(),
                     internal_colors::neutral_6(theme),
@@ -2300,7 +2303,7 @@ fn render_suggest_new_conversation(
                 .finish(),
             ),
             SuggestNewConversationResult::Cancelled => (
-                crate::tr!("ai_assistant", "ai-new-conversation-cancelled"),
+                "New conversation suggestion cancelled",
                 inline_action_icons::cancelled_icon(appearance).finish(),
             ),
         };
@@ -2322,7 +2325,7 @@ fn render_suggest_new_conversation(
     }
 
     if props.shared_session_status.is_viewer() {
-        let header_element = HeaderConfig::new(crate::tr!("ai_assistant", "ai-start-a-new-conversation"), app)
+        let header_element = HeaderConfig::new("Start a new conversation", app)
             .with_icon(gray_stop_icon(appearance))
             .render(app);
 
@@ -2338,7 +2341,7 @@ fn render_suggest_new_conversation(
     let mut content = Flex::column().with_cross_axis_alignment(CrossAxisAlignment::Stretch);
 
     let new_conversation_header_text =
-        crate::tr!("ai_assistant", "ai-topic-changed");
+        "It seems like the topic changed. Would you like to make a new conversation?";
     let new_conversation_header_element = HeaderConfig::new(new_conversation_header_text, app)
         .with_icon(yellow_stop_icon(appearance))
         .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(8.)))
@@ -2384,9 +2387,8 @@ fn create_formatted_text_for_grep(
         .as_ref()
         .is_some_and(|status| status.is_queued());
 
-    let current_dir_label = crate::tr!("ai_assistant", "ai-the-current-directory");
     let display_path = if path == "." {
-        current_dir_label.as_str()
+        "the current directory"
     } else {
         path
     };
@@ -2397,19 +2399,19 @@ fn create_formatted_text_for_grep(
             .expect("Queries slice should have an element");
         let mut fragments = if is_cancelled || is_queued {
             vec![
-                FormattedTextFragment::plain_text(format!("{} ", crate::tr!("ai_assistant", "ai-grep-for"))),
+                FormattedTextFragment::plain_text("Grep for "),
                 FormattedTextFragment::inline_code(query),
             ]
         } else {
             vec![
-                FormattedTextFragment::plain_text(format!("{} ", crate::tr!("ai_assistant", "ai-grepping-for"))),
+                FormattedTextFragment::plain_text("Grepping for "),
                 FormattedTextFragment::inline_code(query),
             ]
         };
         fragments.push(if is_cancelled {
-            FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-in-path-cancelled", path = display_path.to_string()))
+            FormattedTextFragment::plain_text(format!(" in {display_path} cancelled"))
         } else {
-            FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-in-path", path = display_path.to_string()))
+            FormattedTextFragment::plain_text(format!(" in {display_path}"))
         });
         FormattedText::new([FormattedTextLine::Line(fragments)])
     } else {
@@ -2417,19 +2419,19 @@ fn create_formatted_text_for_grep(
 
         if is_cancelled {
             lines.push(FormattedTextLine::Line(vec![
-                FormattedTextFragment::plain_text(
-                    crate::tr!("ai_assistant", "ai-cancelled-grep", path = display_path.to_string()),
-                ),
+                FormattedTextFragment::plain_text(format!(
+                    "Cancelled grep for the following patterns in {display_path}"
+                )),
             ]));
         } else {
             lines.push(FormattedTextLine::Line(vec![if is_queued {
-                FormattedTextFragment::plain_text(
-                    crate::tr!("ai_assistant", "ai-grep-patterns", path = display_path.to_string()),
-                )
+                FormattedTextFragment::plain_text(format!(
+                    "Grep for the following patterns in {display_path}"
+                ))
             } else {
-                FormattedTextFragment::plain_text(
-                    crate::tr!("ai_assistant", "ai-grepping-patterns", path = display_path.to_string()),
-                )
+                FormattedTextFragment::plain_text(format!(
+                    "Grepping for the following patterns in {display_path}"
+                ))
             }]));
         }
 
@@ -2485,8 +2487,7 @@ fn create_formatted_text_for_file_glob(
         .as_ref()
         .is_some_and(|status| status.is_queued());
 
-    let the_current_directory = crate::tr!("ai_assistant", "ai-the-current-directory");
-    let path = path.unwrap_or(the_current_directory.as_str());
+    let path = path.unwrap_or("the current directory");
 
     let formatted_text = if patterns.len() == 1 {
         let pattern = patterns
@@ -2495,19 +2496,19 @@ fn create_formatted_text_for_file_glob(
 
         let mut fragments = if is_cancelled || is_queued {
             vec![
-                FormattedTextFragment::plain_text(format!("{} ", crate::tr!("ai_assistant", "ai-search-files-match"))),
+                FormattedTextFragment::plain_text("Search for files that match "),
                 FormattedTextFragment::inline_code(pattern),
             ]
         } else {
             vec![
-                FormattedTextFragment::plain_text(format!("{} ", crate::tr!("ai_assistant", "ai-finding-files-match"))),
+                FormattedTextFragment::plain_text("Finding files that match "),
                 FormattedTextFragment::inline_code(pattern),
             ]
         };
         fragments.push(if is_cancelled {
-            FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-in-path-cancelled", path = path.to_string()))
+            FormattedTextFragment::plain_text(format!(" in {path} cancelled"))
         } else {
-            FormattedTextFragment::plain_text(crate::tr!("ai_assistant", "ai-in-path", path = path.to_string()))
+            FormattedTextFragment::plain_text(format!(" in {path}"))
         });
         FormattedText::new([FormattedTextLine::Line(fragments)])
     } else {
@@ -2515,19 +2516,19 @@ fn create_formatted_text_for_file_glob(
 
         if is_cancelled {
             lines.push(FormattedTextLine::Line(vec![
-                FormattedTextFragment::plain_text(
-                    crate::tr!("ai_assistant", "ai-cancelled-search-files", path = path.to_string()),
-                ),
+                FormattedTextFragment::plain_text(format!(
+                    "Cancelled search for files that match the following patterns in {path}"
+                )),
             ]));
         } else {
             lines.push(FormattedTextLine::Line(vec![if is_queued {
-                FormattedTextFragment::plain_text(
-                    crate::tr!("ai_assistant", "ai-find-files-match", path = path.to_string()),
-                )
+                FormattedTextFragment::plain_text(format!(
+                    "Find files that match the following patterns in {path}"
+                ))
             } else {
-                FormattedTextFragment::plain_text(
-                    crate::tr!("ai_assistant", "ai-finding-files-match", path = path.to_string()),
-                )
+                FormattedTextFragment::plain_text(format!(
+                    "Finding files that match the following patterns in {path}"
+                ))
             }]));
         }
 
@@ -2655,7 +2656,7 @@ fn render_comment_addressed_header(comment: &ReviewComment, app: &AppContext) ->
         Shrinkable::new(
             1.,
             Text::new_inline(
-                format!("{}", crate::tr!("ai_assistant", "ai-comment-addressed", content = content.clone())),
+                format!("Comment addressed: \"{content}\""),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -2701,7 +2702,7 @@ fn render_read_mcp_resource(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                crate::tr!("ai_assistant", "ai-ok-read-mcp-resource"),
+                "OK if I read this MCP resource?",
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2731,10 +2732,10 @@ fn format_upload_artifact_text(
     request: &UploadArtifactRequest,
     result: Option<&UploadArtifactResult>,
 ) -> String {
-    let mut lines = vec![crate::tr!("ai_assistant", "ai-upload-artifact", file_path = request.file_path.clone())];
+    let mut lines = vec![format!("Upload artifact: {}", request.file_path)];
 
     if let Some(description) = request.description.as_deref() {
-        lines.push(crate::tr!("ai_assistant", "ai-description-label", description = description));
+        lines.push(format!("Description: {description}"));
     }
 
     match result {
@@ -2743,13 +2744,13 @@ fn format_upload_artifact_text(
             filepath,
             ..
         }) => {
-            lines.push(crate::tr!("ai_assistant", "ai-status-uploaded", artifact_uid = artifact_uid.clone()));
+            lines.push(format!("Status: uploaded artifact {artifact_uid}"));
             if let Some(filepath) = filepath.as_deref() {
-                lines.push(crate::tr!("ai_assistant", "ai-uploaded-file", filepath = filepath.to_string()));
+                lines.push(format!("Uploaded file: {filepath}"));
             }
         }
         Some(UploadArtifactResult::Error(error)) => {
-            lines.push(crate::tr!("ai_assistant", "ai-status-upload-failed", error = error.clone()));
+            lines.push(format!("Status: upload failed: {error}"));
         }
         Some(UploadArtifactResult::Cancelled) => {}
         None => {}
@@ -2844,7 +2845,7 @@ fn render_use_computer(
             btn.render(
                 appearance,
                 button::Params {
-                    content: button::Content::Label(crate::tr!("ai_assistant", "ai-view-screenshot").into()),
+                    content: button::Content::Label("View screenshot".into()),
                     theme: &button::themes::Secondary,
                     options: button::Options {
                         size: button::Size::Small,
@@ -2887,7 +2888,7 @@ fn render_request_computer_use(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                crate::tr!("ai_assistant", "ai-ok-computer-control"),
+                "OK if I use computer control for this task?",
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2933,7 +2934,7 @@ fn render_references_footer(
     )?;
 
     let title = Text::new_inline(
-        crate::tr!("ai_assistant", "ai-references"),
+        "References",
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3018,7 +3019,7 @@ fn render_suggested_rules_and_prompts_footer(
     let theme = appearance.theme();
     let title_row_color = theme.sub_text_color(theme.background());
     let title_text = Text::new_inline(
-        crate::tr!("ai_assistant", "ai-suggestions"),
+        "Suggestions:",
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3123,7 +3124,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
         )
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(crate::tr!("ai_assistant", "ai-good-response"))
+                .tool_tip("Good response".to_string())
                 .build()
                 .finish()
         })
@@ -3144,7 +3145,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
         .with_tooltip(move || {
             ui_builder
                 .clone()
-                .tool_tip(crate::tr!("ai_assistant", "ai-bad-response"))
+                .tool_tip("Bad response".to_string())
                 .build()
                 .finish()
         })
@@ -3216,7 +3217,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
         )
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(crate::tr!("ai_assistant", "ai-continue-conversation"))
+                .tool_tip("Continue conversation".to_string())
                 .build()
                 .finish()
         })
@@ -3248,7 +3249,7 @@ fn render_response_footer(props: Props, app: &AppContext) -> Option<Box<dyn Elem
         )
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(crate::tr!("ai_assistant", "ai-fork-conversation"))
+                .tool_tip(fork_button_tooltip.to_string())
                 .build()
                 .finish()
         })
@@ -3424,7 +3425,7 @@ fn render_usage_button(props: Props, app: &AppContext) -> Box<dyn Element> {
                 // Show tooltip on hover or while clicked
                 let mut stack = Stack::new().with_child(content.finish());
                 let tooltip = ui_builder
-                    .tool_tip(crate::tr!("ai_assistant", "ai-show-credit-usage"))
+                    .tool_tip("Show credit usage details".to_string())
                     .build()
                     .finish();
                 stack.add_positioned_overlay_child(
@@ -3499,7 +3500,7 @@ pub fn action_icon<V: View>(
 
 pub(super) fn blocked_action_header<V: View>(
     action_id: AIAgentActionId,
-    text: impl AsRef<str>,
+    text: &str,
     accept_button: CompactibleActionButton,
     cancel_button: CompactibleActionButton,
     action_model: &ModelHandle<BlocklistAIActionModel>,
@@ -3510,7 +3511,7 @@ pub(super) fn blocked_action_header<V: View>(
         Rc::new(cancel_button.clone()),
         Rc::new(accept_button.clone()),
     ];
-    HeaderConfig::new(text.as_ref().to_owned(), app)
+    HeaderConfig::new(text.to_owned(), app)
         .with_icon(action_icon(&action_id, action_model, block_model, app))
         .with_interaction_mode(InteractionMode::ActionButtons {
             action_buttons,
@@ -3758,7 +3759,7 @@ fn render_collapsible_debug_output(
         // "Debug output" label
         row.add_child(
             Text::new(
-                crate::tr!("ai_assistant", "ai-debug-output"),
+                "Debug output".to_string(),
                 appearance.ai_font_family(),
                 appearance.monospace_font_size(),
             )
@@ -3901,16 +3902,16 @@ fn conversation_search_phase(task: &crate::ai::agent::task::Task) -> Conversatio
 
 fn format_conversation_search_phase(phase: &ConversationSearchPhase) -> String {
     match phase {
-        ConversationSearchPhase::ListingMessages => crate::tr!("ai_assistant", "ai-listing-messages"),
+        ConversationSearchPhase::ListingMessages => "Listing messages".to_string(),
         ConversationSearchPhase::Grepping { patterns } => {
             if patterns.is_empty() {
-                return crate::tr!("ai_assistant", "ai-grepping-for-patterns");
+                return "Grepping for patterns".to_string();
             }
             let joined = truncate_from_end(&patterns.join(", "), 60);
-            crate::tr!("ai_assistant", "ai-grepping-for-patterns-with-query", query = joined)
+            format!("Grepping for patterns: {joined}")
         }
         ConversationSearchPhase::ReadingMessages { count } => {
-            crate::tr!("ai_assistant", "ai-reading-messages", count = *count)
+            format!("Reading {count} messages")
         }
     }
 }

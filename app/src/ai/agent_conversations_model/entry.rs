@@ -17,7 +17,6 @@ use crate::ai::artifacts::Artifact;
 use crate::ai::blocklist::history_model::{AIConversationMetadata, BlocklistAIHistoryModel};
 use crate::ai::conversation_navigation::ConversationNavigationData;
 use crate::auth::{AuthStateProvider, UserUid};
-use crate::util::time_format::human_readable_precise_duration;
 use crate::workspace::RestoreConversationLayout;
 use crate::workspaces::user_profiles::{UserProfileWithUID, UserProfiles};
 
@@ -343,9 +342,8 @@ fn task_session_status(task: &AmbientAgentTask) -> SessionStatus {
 }
 
 fn task_run_time(task: &AmbientAgentTask) -> Option<String> {
-fn task_run_time(task: &AmbientAgentTask) -> Option<String> {
     let Some(duration) = task.run_time() else {
-        return Some(crate::tr!("ai", "not-started"));
+        return Some(crate::tr!("ai_assistant", "ai-not-started"));
     };
     if duration.num_minutes() < 1 {
         Some(crate::tr!("ai_assistant", "seconds", count = duration.num_seconds()))

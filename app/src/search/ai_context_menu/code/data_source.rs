@@ -39,25 +39,6 @@ use crate::search::mixer::{
 };
 #[cfg(not(target_family = "wasm"))]
 use std::sync::LazyLock;
-use ai::index::Symbol;
-use fuzzy_match::FuzzyMatchResult;
-#[cfg(not(target_family = "wasm"))]
-use instant::Instant;
-#[cfg(not(target_family = "wasm"))]
-use itertools::Itertools;
-use std::cell::RefCell;
-use std::collections::HashMap;
-use std::collections::HashSet;
-use std::path::PathBuf;
-#[cfg(not(target_family = "wasm"))]
-use std::time::Duration;
-use warpui::AppContext;
-#[cfg(not(target_family = "wasm"))]
-use warpui::ModelSpawner;
-
-#[cfg(not(target_family = "wasm"))]
-use crate::ai::outline::{OutlineStatus, RepoOutlines, RepoOutlinesEvent};
-
 #[cfg(not(target_family = "wasm"))]
 use crate::workspace::ActiveSession;
 

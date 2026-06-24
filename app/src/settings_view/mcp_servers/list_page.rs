@@ -1,7 +1,6 @@
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::LazyLock;
 
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use settings::ToggleableSetting as _;
@@ -40,7 +39,6 @@ use crate::ai::mcp::{
     logs, FileBasedMCPManager, MCPGalleryManager, MCPProvider, MCPServerUpdate,
     TemplatableMCPServerInstallation,
 };
-
 use crate::appearance::Appearance;
 use crate::cloud_object::model::persistence::{CloudModel, CloudModelEvent};
 use crate::cloud_object::{GenericStringObjectFormat, JsonObjectType};
@@ -53,9 +51,25 @@ use crate::pane_group::Direction;
 use crate::search_bar::SearchBar;
 use crate::server::telemetry::{MCPTemplateInstallationSource, TelemetryEvent};
 use crate::settings::{AISettings, AISettingsChangedEvent};
+use crate::settings_view::mcp_servers::server_card::{
+    ServerCardEvent, ServerCardOptions, ServerCardStatus, ServerCardView, TitleChip,
+};
+use crate::settings_view::mcp_servers::update_modal::{UpdateModalBody, UpdateModalBodyEvent};
+use crate::settings_view::mcp_servers::{style, ServerCardItemId};
+use crate::settings_view::mcp_servers_page::InstallOrigin;
+use crate::settings_view::settings_page::{
+    build_toggle_element, render_body_item_label, LocalOnlyIconState, ToggleState,
+};
+use crate::ui_components::blended_colors;
+use crate::util::truncation::truncate_from_end;
+use crate::view_components::action_button::{ActionButton, NakedTheme};
+use crate::view_components::DismissibleToast;
+use crate::workflows::local_workflows::tail_command_for_shell;
+use crate::workspace::Workspace;
+use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::ToastStack;
 
-static DESCRIPTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-add-description"));
-static SEE_SUPPORTED_PROVIDERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "see-supported-providers"));
+const DESCRIPTION_TEXT: &str = "Add MCP servers to extend the Warp Agent's capabilities. MCP servers expose data sources or tools to agents through a standardized interface, essentially acting like plugins. Add a custom server, or use the presets to get started with popular servers. You can also find team servers that have been shared with you here. ";
 
 #[derive(Debug, Clone)]
 pub enum MCPServersListPageViewEvent {
@@ -81,8 +95,8 @@ pub enum MCPServersListPageViewAction {
     ToggleFileBasedMcp,
 }
 
-static EMPTY_STATE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-empty-state"));
-static NO_SEARCH_RESULTS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-no-search-results"));
+const EMPTY_STATE_TEXT: &str = "Once you add a MCP server, it will be shown here.";
+const NO_SEARCH_RESULTS_TEXT: &str = "No search results found";
 
 pub struct MCPServersListPageView {
     server_cards: HashMap<ServerCardItemId, ViewHandle<ServerCardView>>,
@@ -207,7 +221,7 @@ impl MCPServersListPageView {
 
         search_editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text(crate::tr!("settings", "mcp-search-placeholder"), ctx);
+            editor.set_placeholder_text("Search MCP Servers", ctx);
         });
         let search_bar = ctx.add_typed_action_view(|_| SearchBar::new(search_editor.clone()));
 
@@ -821,7 +835,7 @@ impl MCPServersListPageView {
                 // Show the toast that the server updated, even though we don't update the cloud template in this case
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::success(crate::tr!("settings", "mcp-updated-toast"));
+                    let toast = DismissibleToast::success(String::from("MCP server updated"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }
@@ -1126,7 +1140,7 @@ impl MCPServersListPageView {
                     "Automatically detect and spawn MCP servers from globally-scoped third-party AI agent configuration files (e.g. in your home directory). Servers detected inside a repository are never spawned automatically and must be enabled individually in the \"Detected from\" sections below. ",
                 ),
                 FormattedTextFragment::hyperlink(
-                    &*SEE_SUPPORTED_PROVIDERS,
+                    "See supported providers.",
                     "https://docs.warp.dev/agent-platform/capabilities/mcp#file-based-mcp-servers",
                 ),
             ]
@@ -1162,9 +1176,9 @@ impl MCPServersListPageView {
 
     fn render_page_body(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let description_fragments = vec![
-            FormattedTextFragment::plain_text(&*DESCRIPTION_TEXT),
+            FormattedTextFragment::plain_text(DESCRIPTION_TEXT),
             FormattedTextFragment::hyperlink(
-                &crate::tr!("settings", "learn-more"),
+                "Learn more.",
                 "https://docs.warp.dev/agent-platform/capabilities/mcp",
             ),
         ];
@@ -1260,8 +1274,8 @@ impl MCPServersListPageView {
                         .current_team()
                         .map(|team| team.name.clone());
                     let shared_by_text = match team_name {
-                        Some(name) => crate::tr!("settings", "mcp-shared-by-warp-and-name", name = name),
-                        None => crate::tr!("settings", "mcp-shared-by-warp"),
+                        Some(name) => format!("Shared by Warp and {name}"),
+                        None => "Shared by Warp and from other devices".to_string(),
                     };
 
                     page.add_child(self.render_server_cards_section(
@@ -1272,7 +1286,7 @@ impl MCPServersListPageView {
                     ));
                 } else if !filtered_gallery_cards.is_empty() {
                     page.add_child(self.render_server_cards_section(
-                        &crate::tr!("settings", "mcp-shared-from-warp"),
+                        "Shared from Warp",
                         &filtered_gallery_cards,
                         appearance,
                         app,
@@ -1281,7 +1295,7 @@ impl MCPServersListPageView {
 
                 // Render one section per provider (e.g. "Detected from Claude").
                 for (provider, cards) in &filtered_file_based_cards {
-                    let section_title = crate::tr!("settings", "mcp-detected-from", provider = provider.display_name());
+                    let section_title = format!("Detected from {}", provider.display_name());
                     page.add_child(self.render_server_cards_section(
                         &section_title,
                         cards,
@@ -1477,7 +1491,7 @@ impl MCPServersListPageView {
                         .with_child(
                             appearance
                                 .ui_builder()
-                                .wrappable_text(&*EMPTY_STATE_TEXT, true)
+                                .wrappable_text(EMPTY_STATE_TEXT, true)
                                 .with_style(style::description_text(appearance))
                                 .build()
                                 .finish(),
@@ -1508,7 +1522,7 @@ impl MCPServersListPageView {
                         .with_child(
                             appearance
                                 .ui_builder()
-                                .wrappable_text(&*NO_SEARCH_RESULTS_TEXT, true)
+                                .wrappable_text(NO_SEARCH_RESULTS_TEXT, true)
                                 .with_style(style::description_text(appearance))
                                 .build()
                                 .finish(),
@@ -1752,11 +1766,11 @@ impl MCPServersListPageView {
 
                 if is_shared {
                     match creator {
-                        Some(creator) => Some(TitleChip::text(crate::tr!("settings", "mcp-shared-by-creator", creator = creator))),
-                        None => Some(TitleChip::text(crate::tr!("settings", "mcp-shared-by-member"))),
+                        Some(creator) => Some(TitleChip::text(format!("Shared by: {creator}"))),
+                        None => Some(TitleChip::text("Shared by a team member")),
                     }
                 } else if matches!(item_id, ServerCardItemId::TemplatableMCP(_)) {
-                    Some(TitleChip::text(crate::tr!("settings", "mcp-from-another-device")))
+                    Some(TitleChip::text("From another device"))
                 } else {
                     None
                 }

@@ -985,3 +985,5 @@ terminal-command-and-output = 命令和输出
 terminal-command = 命令
 terminal-output = 输出
 
+terminal-enter-prompt-for = 输入 { $agent } 的提示...
+terminal-hand-off-to = 移交至 { $env_name }

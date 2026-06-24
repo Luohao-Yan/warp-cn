@@ -288,7 +288,7 @@ impl PrivacyPageView {
         }
         widgets.push(Box::new(DataManagementWidget::default()));
         widgets.push(Box::new(PrivacyPolicyWidget::default()));
-        PageType::new_uncategorized(widgets, Some(crate::tr!("settings", "privacy")))
+        PageType::new_uncategorized(widgets, Some(crate::tr!("settings", "privacy").leak()))
     }
 
     fn update_button_states(

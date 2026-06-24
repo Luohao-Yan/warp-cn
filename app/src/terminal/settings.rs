@@ -185,7 +185,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "terminal.osc52_clipboard_access",
-        description: "Controls whether terminal programs can access the system clipboard via OSC 52 escape sequences. Options: deny (default), write_only, read_write.",
+        description: "Controls whether terminal programs can access the system clipboard via OSC 52 escape sequences. Options: deny (default), write_only, read_write.".to_string(),
     },
     // Opt-in toggle for running terminal find on a background thread. Only consulted on
     // channels where `FeatureFlag::AsyncFind` is off; channels with the flag on force the
@@ -197,7 +197,7 @@ define_settings_group!(TerminalSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "experimental.async_find_enabled",
-        description: "Use an improved implementation of find to keep the UI responsive while searching for matches on large outputs.",
+        description: "Use an improved implementation of find to keep the UI responsive while searching for matches on large outputs.".to_string(),
     },
 ]);
 

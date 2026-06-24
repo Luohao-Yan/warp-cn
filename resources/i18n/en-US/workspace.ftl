@@ -781,3 +781,16 @@ workspace-moved-to-cloud = { $title } (Moved to cloud)
 
 ## -- Double-prefix aliases for migrated UI strings --
 
+## -- Auto-handoff / warpctrl debug bindings -----------------------------------
+
+workspace-debug-open-auto-handoff-sleep-modal = [Debug] Open Auto-Handoff Sleep Modal
+workspace-debug-reset-auto-handoff-sleep-modal-state = [Debug] Reset Auto-Handoff Sleep Modal State
+workspace-debug-trigger-auto-handoff-to-cloud = [Debug] Trigger Auto-Handoff to Cloud
+workspace-debug-open-free-ai-removal-modal = [Debug] Open Free AI Removal Modal
+workspace-debug-reset-free-ai-removal-modal-state = [Debug] Reset Free AI Removal Modal State
+
+## -- Warp Control CLI bindings -------------------------------------------------
+
+workspace-install-warpctrl = Install Warp Control CLI command
+workspace-uninstall-warpctrl = Uninstall Warp Control CLI command
+

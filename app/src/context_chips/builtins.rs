@@ -303,3 +303,21 @@ fn safe_git_powershell(cmd: &str) -> String {
         }}"
     )
 }
+
+pub fn github_pull_request_url() -> ShellCommandGenerator {
+    // `gh pr view` exits non-zero both when there is no PR for the current branch and when the
+    // command actually fails. We inspect its output so that "no PR found" is treated as an empty
+    // success, while auth/config/network failures still propagate as real failures.
+    const SH_COMMAND: &str = include_str!("scripts/github_pull_request_prompt_chip.sh");
+    const FISH_COMMAND: &str = include_str!("scripts/github_pull_request_prompt_chip.fish");
+    const PWSH_COMMAND: &str = include_str!("scripts/github_pull_request_prompt_chip.ps1");
+
+    let command = ShellCommand::shell_specific([
+        (ShellType::PowerShell, PWSH_COMMAND.to_string()),
+        (ShellType::Bash, SH_COMMAND.to_string()),
+        (ShellType::Zsh, SH_COMMAND.to_string()),
+        (ShellType::Fish, FISH_COMMAND.to_string()),
+    ]);
+
+    ShellCommandGenerator::new(command, Some(vec!["gh".to_owned(), "git".to_owned()]))
+}

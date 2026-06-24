@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::LazyLock;
 use uuid::Uuid;
 use warpui::elements::{ChildView, Container};
 use warpui::ui_components::components::{Coords, UiComponentStyles};
@@ -49,7 +50,7 @@ pub enum InstallOrigin {
     Deeplink,
 }
 
-static PAGE_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-servers"));
+static PAGE_TITLE_TEXT: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("settings", "mcp-servers").leak());
 #[derive(Debug, Default, Copy, Clone)]
 pub enum MCPServersSettingsPage {
     #[default]
@@ -101,7 +102,7 @@ impl MCPServersSettingsPageView {
         Self {
             page: PageType::new_monolith(
                 MCPServersSettingsWidget::default(),
-                Some(PAGE_TITLE_TEXT.clone()),
+                Some(*PAGE_TITLE_TEXT),
                 true,
             ),
             current_page: MCPServersSettingsPage::default(),

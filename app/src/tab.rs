@@ -229,7 +229,7 @@ impl TabData {
             self.tab_group_menu_items(index, tab_groups),
             self.session_sharing_menu_items(index, ctx),
 
-            self.copy_metadata_menu_items(pane_name_target, ctx),
+            self.copy_metadata_menu_items(pane_name_target.clone(), ctx),
             self.modify_tab_menu_items(index, can_move_left, can_move_right, pane_name_target, ctx),
 
             self.close_tab_menu_items(index, tabs_len, ctx),
@@ -460,10 +460,7 @@ impl TabData {
             menu_items.extend(self.pane_name_menu_items(pane_name_target, ctx));
         }
 
-        // Don't show options that aren't relevant (moving end tabs, closing
-        // other tabs when you don't have any others to close)
-        let not_last_tab = index != tabs_len - 1;
-        if not_last_tab {
+        if can_move_right {
             let move_down_label = crate::tr!("workspace", "menu-move-tab-down");
             let move_right_label = crate::tr!("workspace", "menu-move-tab-right");
             let label = if uses_vertical_tabs {
@@ -479,7 +476,7 @@ impl TabData {
             );
         }
 
-        if index != 0 {
+        if can_move_left {
             let move_up_label = crate::tr!("workspace", "menu-move-tab-up");
             let move_left_label = crate::tr!("workspace", "menu-move-tab-left");
             let label = if uses_vertical_tabs {

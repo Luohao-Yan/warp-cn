@@ -31,7 +31,7 @@ define_settings_group!(BlockListSettings, settings: [
        sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
        private: false,
        toml_path: "general.preserve_input_focus_on_block_selection",
-       description: "Whether to preserve input box focus when selecting a block.",
+       description: "Whether to preserve input box focus when selecting a block.".to_string(),
    }
    show_block_dividers: ShowBlockDividers {
        type: bool,

@@ -1,5 +1,5 @@
 use std::ops::RangeInclusive;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use anyhow::Result;
 use parking_lot::FairMutex;

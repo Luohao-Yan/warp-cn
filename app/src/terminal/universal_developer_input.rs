@@ -2,7 +2,7 @@ use std::borrow::Cow;
 use std::boxed::Box;
 use std::cell::RefCell;
 use std::rc::Rc;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use pathfinder_color::ColorU;
 #[cfg(not(target_family = "wasm"))]

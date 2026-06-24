@@ -1,31 +1,39 @@
-use std::collections::HashSet;
-
 use itertools::{Either, Itertools};
 use warp_editor::editor::NavigationKey;
-use warpui::accessibility::{AccessibilityContent, WarpA11yRole};
-use warpui::elements::{
-    Clipped, ConstrainedBox, Container, CrossAxisAlignment, Flex, ParentElement, Shrinkable, Text,
-};
-use warpui::fonts::{FamilyId, Properties, Style, Weight};
-use warpui::presenter::ChildView;
+use warpui::elements::ConstrainedBox;
+use warpui::FocusContext;
+
+use std::collections::HashSet;
+
+use warpui::fonts::FamilyId;
 use warpui::{
-    Action, AppContext, Element, Entity, FocusContext, ModelContext, ModelHandle, SingletonEntity,
+    accessibility::{AccessibilityContent, WarpA11yRole},
+    elements::{Clipped, Container, CrossAxisAlignment, Flex, ParentElement, Shrinkable, Text},
+    fonts::{Properties, Style, Weight},
+    presenter::ChildView,
+    Action, AppContext, Element, Entity, ModelContext, ModelHandle, SingletonEntity,
     TypedActionView, View, ViewContext, ViewHandle,
 };
 
-use super::mixer::SearchMixerEvent;
-use crate::appearance::Appearance;
-use crate::editor::{
-    AutosuggestionLocation, AutosuggestionType, EditorView, Event as EditorEvent,
-    PlainTextEditorViewAction as EditorAction, PropagateAndNoOpNavigationKeys,
-    SingleLineEditorOptions,
-};
+use crate::editor::AutosuggestionType;
 use crate::search::data_source::{Query, QueryResult};
 use crate::search::mixer::SearchMixer;
-use crate::search::result_renderer::{QueryResultIndex, QueryResultRenderer};
+use crate::search::result_renderer::QueryResultIndex;
+use crate::search::result_renderer::QueryResultRenderer;
 use crate::search::QueryFilter;
+
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
+use crate::{
+    appearance::Appearance,
+    editor::{
+        AutosuggestionLocation, EditorView, Event as EditorEvent,
+        PlainTextEditorViewAction as EditorAction, PropagateAndNoOpNavigationKeys,
+        SingleLineEditorOptions,
+    },
+};
+
+use super::mixer::SearchMixerEvent;
 
 /// Function to create a [`QueryResultRenderer`] from a [`QueryResult`]. Used to specify the styles
 /// and click-action of a a rendered query result.
@@ -68,14 +76,43 @@ impl MoveDirection {
     }
 }
 
+/// Represents the current filter mode/state for the search bar.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum FilterState {
+    /// No filter has been applied, but the user can apply a filter by typing an atom
+    Unfiltered,
+
+    /// A single filter has been selected by and is visible to the user
+    Visible(QueryFilter),
+
+    /// A fixed set of filters has been applied and is not visible to the user
+    Fixed {
+        placeholder_text: String,
+        query_filters: Vec<QueryFilter>,
+    },
+}
+
+impl FilterState {
+    fn zero_state(&self) -> bool {
+        match self {
+            FilterState::Unfiltered => true,
+            FilterState::Visible(_) => false,
+            FilterState::Fixed { .. } => true,
+        }
+    }
+}
+
 /// View state for the search bar.
 pub struct SearchBarState<T: Action + Clone> {
     selected_index: Option<usize>,
-    /// The active query filter, if any.
-    query_filter: Option<QueryFilter>,
+    /// Tracks whether filters are unfiltered, single, or multiple.
+    query_filter: FilterState,
     /// The filter atom text to be rendered in the Search input, representing the currently applied
     /// filter.
     filter_atom_text: Option<&'static str>,
+    /// Whether the search bar is in a state where a zero state should be shown. This is true if
+    /// no search query has been run and no filters have been applied.
+    should_show_zero_state: bool,
     query_result_renderers: Option<Vec<QueryResultRenderer<T>>>,
     /// Ordering of how results should be displayed. Used to determine which search result should
     /// be considered selected when the user presses certain navigation keys such as up/down.
@@ -145,8 +182,9 @@ impl<T: Action + Clone> SearchBarState<T> {
     pub fn new(ordering: SearchResultOrdering) -> Self {
         Self {
             selected_index: None,
-            query_filter: None,
+            query_filter: FilterState::Unfiltered,
             filter_atom_text: None,
+            should_show_zero_state: true,
             query_result_renderers: None,
             ordering,
             max_results: SearchResultLimit::Unbounded,
@@ -204,7 +242,6 @@ impl<T: Action + Clone> SearchBarState<T> {
     pub fn handle_selection_update(
         &mut self,
         selection_update: SelectionUpdate,
-        should_show_zero_state: bool,
         ctx: &mut ModelContext<Self>,
     ) {
         // Even if the zero state should be shown, still update the internal selected index of the
@@ -214,7 +251,7 @@ impl<T: Action + Clone> SearchBarState<T> {
         // 2) We are resilient to any race conditions where selection update may be called before
         // `should_show_zero_state` is actually set to `false`, which would then cause no index to
         // be selected.
-        if should_show_zero_state {
+        if self.should_show_zero_state {
             ctx.emit(SearchBarEvent::SelectionUpdateInZeroState { selection_update });
         }
 
@@ -302,14 +339,23 @@ impl<T: Action + Clone> SearchBarState<T> {
         self.query_result_renderers.as_ref()
     }
 
-    /// Returns the active [`QueryFilter`], if any.
-    pub fn active_query_filter(&self) -> Option<QueryFilter> {
-        self.query_filter
+    /// Returns the active visible [`QueryFilter`] or `None` if either there is no filter set
+    /// or the search bar is in a "fixed filters" state.
+    pub fn active_visible_query_filter(&self) -> Option<QueryFilter> {
+        match self.query_filter {
+            FilterState::Visible(filter) => Some(filter),
+            FilterState::Fixed { .. } => None,
+            FilterState::Unfiltered => None,
+        }
     }
 
     /// Returns the index of currently selected search result.
     pub fn selected_index(&self) -> Option<usize> {
         self.selected_index
+    }
+
+    pub fn should_show_zero_state(&self) -> bool {
+        self.should_show_zero_state
     }
 }
 
@@ -422,7 +468,7 @@ impl<T: Action + Clone> SearchBar<T> {
                 // visible.  In the command search view, they're only visible when the
                 // buffer is empty, so if the user accepts one, immediately re-clear the
                 // buffer (to effectively revert the event).
-                if self.should_show_zero_state(ctx) {
+                if self.state.as_ref(ctx).should_show_zero_state {
                     self.editor_handle.update(ctx, |editor, ctx| {
                         editor.clear_buffer_and_reset_undo_stack(ctx);
                     });
@@ -446,7 +492,11 @@ impl<T: Action + Clone> SearchBar<T> {
                     _ => false,
                 };
 
-                if !self.should_run_query(ctx) {
+                // If the state should show zero state and we are not running
+                // filter query on buffer empty, intercept the enter event.
+                if self.state.as_ref(ctx).should_show_zero_state
+                    && !self.state.as_ref(ctx).run_query_on_buffer_empty
+                {
                     ctx.emit(SearchBarEvent::EnterInZeroState { modified_enter });
                     return;
                 }
@@ -468,7 +518,10 @@ impl<T: Action + Clone> SearchBar<T> {
                 cleared_buffer_len: buffer_len,
             } => self.buffer_cleared(ctx, *buffer_len),
             EditorEvent::BackspaceOnEmptyBuffer => {
-                self.set_query_filter(None, ctx);
+                // Only clear filter on backspace if it's a user-modifiable state
+                if self.filterable(ctx) {
+                    self.set_visible_query_filter(None, ctx);
+                }
             }
             EditorEvent::Navigate(NavigationKey::Tab) => {
                 self.handle_editor_tab(ctx);
@@ -524,7 +577,11 @@ impl<T: Action + Clone> SearchBar<T> {
         self.state.update(ctx, |state, ctx| {
             state.ordering = ordering;
 
-            state.query_filter = query_filter;
+            state.query_filter = if let Some(filter) = query_filter {
+                FilterState::Visible(filter)
+            } else {
+                FilterState::Unfiltered
+            };
 
             ctx.notify();
         });
@@ -543,12 +600,12 @@ impl<T: Action + Clone> SearchBar<T> {
 
         // Reset the query filter state before processing any initial query text,
         // as it may contain a filter atom that should be immediately applied.
-        let filter_and_atom_text = self
-            .state
-            .as_ref(ctx)
-            .query_filter
-            .map(|filter| (filter, filter.filter_atom().primary_text));
-        self.set_query_filter(filter_and_atom_text, ctx);
+        let filter_and_atom_text = match &self.state.as_ref(ctx).query_filter {
+            FilterState::Visible(filter) => Some((*filter, filter.filter_atom().primary_text)),
+            FilterState::Unfiltered => None,
+            FilterState::Fixed { .. } => None,
+        };
+        self.set_visible_query_filter(filter_and_atom_text, ctx);
         self.handle_editor_text_update(ctx);
         ctx.notify();
     }
@@ -563,13 +620,16 @@ impl<T: Action + Clone> SearchBar<T> {
             .editor_handle
             .read(ctx, |editor, ctx| editor.buffer_text(ctx));
 
-        if !buffer_text.is_empty() && self.state.as_ref(ctx).query_filter.is_none() {
+        if self.filterable(ctx) && !buffer_text.is_empty() {
             let registered_filters = self.mixer.as_ref(ctx).registered_filters().collect_vec();
             for filter in registered_filters {
                 if filter.filter_atom().primary_text.starts_with(&buffer_text) {
                     self.editor_handle
                         .update(ctx, |editor, ctx| editor.clear_buffer(ctx));
-                    self.set_query_filter(Some((filter, filter.filter_atom().primary_text)), ctx);
+                    self.set_visible_query_filter(
+                        Some((filter, filter.filter_atom().primary_text)),
+                        ctx,
+                    );
                 }
             }
         }
@@ -588,36 +648,82 @@ impl<T: Action + Clone> SearchBar<T> {
         })
     }
 
-    /// Updates the active filter and re-runs the query if the current search state warrants it.
+    /// Returns true if this search bar is eligible for user-modifiable filters
+    pub fn filterable(&self, ctx: &ViewContext<Self>) -> bool {
+        match self.state.as_ref(ctx).query_filter {
+            FilterState::Unfiltered => true,
+            FilterState::Visible(_) => true,
+            FilterState::Fixed { .. } => false,
+        }
+    }
+
+    /// Sets this search bar to fixed query filter mode - it will not display the filters to the user
+    /// and the user cannot cancel them by hitting backspace
+    pub fn set_fixed_filters(
+        &mut self,
+        label: String,
+        filters: Vec<QueryFilter>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.state.update(ctx, |state, ctx| {
+            state.query_filter = FilterState::Fixed {
+                placeholder_text: label,
+                query_filters: filters,
+            };
+            state.should_show_zero_state = false;
+            ctx.notify();
+        });
+
+        self.update_placeholder_text(ctx);
+    }
+
+    /// Updates the active filter and re-runs the query, since results may be affected by the newly
+    /// active filter.
     ///
-    /// Empty zero-state buffers skip querying unless this search bar has opted into
-    /// `run_query_on_buffer_empty`.
-    pub fn set_query_filter(
+    /// This method also updates UI state including the placeholder text and the show/hide
+    /// zero_state flag.
+    pub fn set_visible_query_filter(
         &mut self,
         filter_and_atom_text: Option<(QueryFilter, &'static str)>,
         ctx: &mut ViewContext<Self>,
     ) {
-        let new_filter = filter_and_atom_text.map(|(filter, _)| filter);
-        let new_filter_atom_text = filter_and_atom_text.map(|(_, atom_text)| atom_text);
-        // NOTE: This event is deferred. When this method starts a query below, handlers
-        // receive it after the async search has already started. Handlers must not reset or
-        // modify the mixer, as doing so would abort the in-flight query without re-running it.
-        ctx.emit(SearchBarEvent::QueryFilterChanged { new_filter });
+        if self.filterable(ctx) {
+            let new_filter = filter_and_atom_text.map(|(filter, _)| filter);
+            let new_filter_atom_text = filter_and_atom_text.map(|(_, atom_text)| atom_text);
+            // NOTE: This event is deferred — handlers receive it after `run_query` (below) has
+            // already started an async search. Handlers must not reset or modify the mixer, as
+            // doing so would abort the in-flight query without re-running it.
+            ctx.emit(SearchBarEvent::QueryFilterChanged { new_filter });
 
-        self.state.update(ctx, |state, ctx| {
-            state.query_filter = new_filter;
-            state.filter_atom_text = new_filter_atom_text;
-            ctx.notify();
-        });
-
-        if self.should_run_query(ctx) {
-            self.run_query_internal(ctx);
+            self.state.update(ctx, |state, ctx| {
+                state.query_filter = if let Some(filter) = new_filter {
+                    FilterState::Visible(filter)
+                } else {
+                    FilterState::Unfiltered
+                };
+                state.filter_atom_text = new_filter_atom_text;
+                ctx.notify();
+            });
         }
+
+        self.run_query(ctx);
 
         // Update the editor placeholder text if necessary.
         self.update_placeholder_text(ctx);
 
+        // Update the placeholder text.
         self.update_filter_autosuggestion_text(ctx);
+
+        // Update the zero state show/hide flag.
+        let current_buffer_text = self
+            .editor_handle
+            .read(ctx, |editor, ctx| editor.buffer_text(ctx));
+
+        self.state.update(ctx, |state, ctx| {
+            state.should_show_zero_state =
+                current_buffer_text.is_empty() && state.query_filter.zero_state();
+            ctx.notify();
+        });
 
         // Make sure the view gets re-rendered.
         ctx.notify();
@@ -625,13 +731,14 @@ impl<T: Action + Clone> SearchBar<T> {
 
     /// Runs a search query using the editor's current contents as the query string with filters
     /// applied.
-    fn run_query_internal(&mut self, ctx: &mut ViewContext<Self>) {
+    pub fn run_query(&mut self, ctx: &mut ViewContext<Self>) {
         let current_editor_text = self
             .editor_handle
             .read(ctx, |editor, ctx| editor.buffer_text(ctx));
         let filters: HashSet<QueryFilter> = match &self.state.as_ref(ctx).query_filter {
-            Some(filter) => HashSet::from_iter([*filter]),
-            None => HashSet::new(),
+            FilterState::Unfiltered => HashSet::new(),
+            FilterState::Visible(filter) => HashSet::from_iter([*filter]),
+            FilterState::Fixed { query_filters, .. } => HashSet::from_iter(query_filters.clone()),
         };
 
         self.mixer.update(ctx, |mixer, ctx| {
@@ -643,12 +750,6 @@ impl<T: Action + Clone> SearchBar<T> {
                 ctx,
             );
         });
-    }
-
-    pub fn run_query(&mut self, ctx: &mut ViewContext<Self>) {
-        if self.should_run_query(ctx) {
-            self.run_query_internal(ctx);
-        }
     }
 
     fn on_mixer_results_changed(&mut self, ctx: &mut ViewContext<Self>) {
@@ -733,20 +834,29 @@ impl<T: Action + Clone> SearchBar<T> {
         let current_buffer_text = self
             .editor_handle
             .read(ctx, |editor, ctx| editor.buffer_text(ctx));
-
-        if self.should_show_zero_state(ctx) {
+        if current_buffer_text.is_empty() && self.state.as_ref(ctx).query_filter.zero_state() {
+            self.state.update(ctx, |state, ctx| {
+                state.should_show_zero_state = true;
+                ctx.notify();
+            });
             self.handle_selection_update(SelectionUpdate::Clear, ctx);
-            if self.should_run_query(ctx) {
-                self.run_query_internal(ctx);
+
+            if self.state.as_ref(ctx).run_query_on_buffer_empty {
+                self.run_query(ctx);
             }
         } else {
-            if self.state.as_ref(ctx).query_filter.is_none() {
+            self.state.update(ctx, |state, ctx| {
+                state.should_show_zero_state = false;
+                ctx.notify();
+            });
+
+            if self.filterable(ctx) {
                 let registered_filters = self.mixer.as_ref(ctx).registered_filters().collect_vec();
                 for filter in registered_filters {
                     if let Some(matched_filter_atom) =
                         filter.filter_atom().query_match(&current_buffer_text)
                     {
-                        self.set_query_filter(Some((filter, matched_filter_atom)), ctx);
+                        self.set_visible_query_filter(Some((filter, matched_filter_atom)), ctx);
                         self.editor_handle.update(ctx, |editor, ctx| {
                             // The 'filter atom text' will be rendered separately (not as text
                             // within the editor), so remove it from the editor contents.
@@ -761,7 +871,7 @@ impl<T: Action + Clone> SearchBar<T> {
                     }
                 }
             }
-            self.run_query_internal(ctx);
+            self.run_query(ctx);
         }
         self.update_placeholder_text(ctx);
         self.update_filter_autosuggestion_text(ctx);
@@ -773,8 +883,8 @@ impl<T: Action + Clone> SearchBar<T> {
         self.editor_handle.update(ctx, |editor, ctx| {
             if editor.is_empty(ctx) {
                 // Set the appropriate placeholder text if the editor buffer is empty.
-                match self.state.as_ref(ctx).query_filter {
-                    Some(filter) => {
+                match &self.state.as_ref(ctx).query_filter {
+                    FilterState::Visible(filter) => {
                         editor.set_placeholder_text(filter.placeholder_text(), ctx);
                     }
                     FilterState::Fixed {
@@ -797,21 +907,11 @@ impl<T: Action + Clone> SearchBar<T> {
         selection_update: SelectionUpdate,
         ctx: &mut ViewContext<Self>,
     ) {
-        let should_show_zero_state = self.should_show_zero_state(ctx);
         self.state.update(ctx, |state, ctx| {
-            state.handle_selection_update(selection_update, should_show_zero_state, ctx);
+            state.handle_selection_update(selection_update, ctx);
         });
 
         self.emit_accessibility_content(ctx);
-    }
-
-    pub fn should_show_zero_state(&self, app: &AppContext) -> bool {
-        self.editor_handle.as_ref(app).is_empty(app)
-            && self.state.as_ref(app).query_filter.is_none()
-    }
-
-    fn should_run_query(&self, app: &AppContext) -> bool {
-        !self.should_show_zero_state(app) || self.state.as_ref(app).run_query_on_buffer_empty
     }
 
     /// Updates the state and visibility of filter atom autosuggestion text in the editor.
@@ -824,8 +924,8 @@ impl<T: Action + Clone> SearchBar<T> {
     /// (completing the 'history:' atom text) as an autosuggestion.
     fn update_filter_autosuggestion_text(&self, ctx: &mut ViewContext<Self>) {
         match self.state.as_ref(ctx).query_filter {
-            Some(_) => {
-                // If there is an active filter, there should never be filter autosuggestion text
+            FilterState::Visible(_) | FilterState::Fixed { .. } => {
+                // If there is an active filter or the filters are fixed, there should never be filter autosuggestion text
                 // (the user has already applied a filter and can't apply another one).
                 if self.editor_handle.as_ref(ctx).active_autosuggestion() {
                     self.editor_handle.update(ctx, |editor, ctx| {
@@ -833,7 +933,7 @@ impl<T: Action + Clone> SearchBar<T> {
                     });
                 }
             }
-            None => {
+            FilterState::Unfiltered => {
                 self.editor_handle.update(ctx, |editor, ctx| {
                     if !editor.buffer_text(ctx).is_empty() {
                         let filters = self.mixer.as_ref(ctx).registered_filters().collect_vec();
@@ -940,6 +1040,6 @@ impl<T: Action + Clone> View for SearchBar<T> {
 #[cfg(feature = "integration_tests")]
 impl<T: Action + Clone> SearchBar<T> {
     pub fn active_query_filter(&self, app: &AppContext) -> Option<QueryFilter> {
-        self.state.as_ref(app).active_query_filter()
+        self.state.as_ref(app).active_visible_query_filter()
     }
 }

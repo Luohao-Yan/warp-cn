@@ -20,7 +20,7 @@ use warpui::{
 use crate::ai::mcp::templatable_installation::{VariableType, VariableValue};
 use crate::ai::mcp::{TemplatableMCPServer, TemplatableMCPServerManager, TemplateVariable};
 use crate::appearance::Appearance;
-use crate::editor::{EditorView, Event as EditorEvent, SingleLineEditorOptions, TextOptions};
+use crate::editor::{EditorView, Event as EditorEvent, SingleLineEditorOptions};
 use crate::settings_view::mcp_servers::style::{
     INSTALLATION_MODAL_BUTTON_GAP, INSTALLATION_MODAL_BUTTON_PADDING,
     INSTALLATION_MODAL_INPUT_VERTICAL_SPACING, INSTALLATION_MODAL_LABEL_VERTICAL_SPACING,
@@ -257,7 +257,7 @@ impl InstallationModalBody {
 
         // Renders MCP title text
         let title = Text::new(
-            crate::tr!("settings", "install-mcp", name = name.as_str()),
+            format!("Install {name}"),
             appearance.ui_font_family(),
             appearance.header_font_size(),
         )
@@ -301,7 +301,7 @@ impl InstallationModalBody {
         // Renders 'ESC' text for closing the modal
         let escape_button = Container::new(
             Text::new_inline(
-                crate::tr!("settings", "esc-key"),
+                "ESC".to_string(),
                 appearance.ui_font_family(),
                 appearance.ui_font_size() * 0.8,
             )
@@ -349,7 +349,7 @@ impl InstallationModalBody {
             )
             .with_margin_bottom(INSTALLATION_MODAL_TITLE_VERTICAL_SPACING)
             .finish()),
-            Err(e) => Err(crate::tr!("settings", "failed-parse-markdown", error = format!("{e:?}"))),
+            Err(e) => Err(format!("Failed to parse markdown: {e:?}")),
         }
     }
 
@@ -423,13 +423,13 @@ impl InstallationModalBody {
         .finish();
 
         let source_text = if is_shared {
-            crate::tr!("settings", "mcp-shared-from-team")
+            "Shared from team"
         } else {
-            crate::tr!("settings", "mcp-from-another-device")
+            "From another device"
         };
 
         let label_text = Text::new_inline(
-            source_text,
+            source_text.to_string(),
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )
@@ -548,7 +548,7 @@ impl View for InstallationModalBody {
                 .finish()
         } else {
             Text::new(
-                crate::tr!("settings", "mcp-no-server-selected"),
+                "No MCP server selected",
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )

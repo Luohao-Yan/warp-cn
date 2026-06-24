@@ -11,8 +11,6 @@ use super::{
     InlineBannerContent, InlineBannerIcon, InlineBannerStyle, InlineBannerTextButton,
     InlineBannerTextButtonVariant,
 };
-use crate::appearance::Appearance;
-use crate::terminal::view::TerminalAction;
 
 const AWS_CLI_INSTALL_DOCS_URL: &str =
     "https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html";

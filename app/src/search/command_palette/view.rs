@@ -1,42 +1,7 @@
-use crate::appearance::Appearance;
-use crate::drive::CloudObjectTypeAndId;
-use crate::search::binding_source::{BindingFilterFn, BindingSource};
-use crate::search::command_palette::mixer::CommandPaletteItemAction;
-use crate::search::command_palette::SelectedItems;
-use std::sync::LazyLock;
-
-static COMMAND_PALETTE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-placeholder").clone());
-static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-no-results").clone());
-use crate::search::result_renderer::QueryResultRenderer;
-use crate::search::search_bar::SelectionUpdate;
-use crate::search::search_bar::{SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering};
-use crate::search::QueryFilter;
-use crate::send_telemetry_from_ctx;
-use crate::server::telemetry::LaunchConfigUiLocation;
-use crate::server::telemetry::TelemetryEvent;
-use crate::settings::CtrlTabBehavior;
-use crate::terminal::keys_settings::KeysSettings;
-use crate::themes::theme::WarpTheme;
-use crate::view_components::DismissibleToast;
-use crate::ToastStack;
-use lazy_static::lazy_static;
-use warp_core::send_telemetry_from_app_ctx;
-use warp_util::path::LineAndColumnArg;
-
-use crate::search::action::search_item::MatchedBinding;
-use itertools::Itertools;
-use warpui::elements::DispatchEventResult;
-use warpui::elements::EventHandler;
-use warpui::event::KeyState;
-use warpui::platform::keyboard::KeyCode;
-use warpui::FocusContext;
-
-use crate::search::command_palette::zero_state::{self, Event as ZeroStateEvent, ZeroState};
-use crate::search::data_source::QueryResult;
-
 use std::collections::HashSet;
 use std::ops::Deref;
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use itertools::Itertools;
 use lazy_static::lazy_static;
@@ -95,6 +60,9 @@ lazy_static! {
         ]
     );
 }
+
+static COMMAND_PALETTE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-placeholder").clone());
+static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-no-results").clone());
 
 /// Position ID for the command palette list.
 const PALETTE_LIST_SAVE_POSITION_ID: &str = "command_palette:list";
@@ -208,7 +176,7 @@ impl warpui::View for View {
         let appearance = Appearance::as_ref(app);
         let theme = appearance.theme();
 
-        let body = if self.search_bar.as_ref(app).should_show_zero_state(app) {
+        let body = if self.search_bar_state.as_ref(app).should_show_zero_state() {
             ChildView::new(&self.zero_state_handle).finish()
         } else {
             self.render_palette_list(theme, app)
@@ -369,7 +337,7 @@ impl View {
     /// Set the active query filter in the search bar to be `filter`.
     pub fn set_active_query_filter(&mut self, filter: QueryFilter, ctx: &mut ViewContext<Self>) {
         self.search_bar.update(ctx, |view, ctx| {
-            view.set_query_filter(Some((filter, filter.filter_atom().primary_text)), ctx)
+            view.set_visible_query_filter(Some((filter, filter.filter_atom().primary_text)), ctx)
         });
         ctx.notify();
     }
@@ -402,7 +370,7 @@ impl View {
 
     /// Returns the active query filters
     pub fn active_query_filter(&self, app: &AppContext) -> Option<QueryFilter> {
-        self.search_bar_state.as_ref(app).active_query_filter()
+        self.search_bar_state.as_ref(app).active_visible_query_filter()
     }
 
     pub fn is_mode_enabled(&self, mode: PaletteMode, app: &AppContext) -> bool {

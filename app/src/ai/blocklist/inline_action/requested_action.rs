@@ -10,6 +10,7 @@
 //! for an example on how that transformation could be made.
 
 use std::borrow::Cow;
+use std::sync::LazyLock;
 
 use lazy_static::lazy_static;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};

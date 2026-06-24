@@ -1,5 +1,3 @@
-use std::fmt::Write;
-
 use itertools::Itertools;
 use settings::ToggleableSetting as _;
 use std::sync::LazyLock;
@@ -529,6 +527,7 @@ impl<'a> QuitWarningDialog<'a> {
         shown
     }
 }
+
 
 /// Callback to disable the quit warning modal.
 fn on_disable_warning_modal(ctx: &mut AppContext) {

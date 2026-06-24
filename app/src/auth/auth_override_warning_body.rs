@@ -19,9 +19,6 @@ use warpui::{
     AppContext, Element, Entity, FocusContext, SingletonEntity, TypedActionView, View, ViewContext,
 };
 
-use crate::appearance::Appearance;
-use crate::modal::MODAL_CORNER_RADIUS;
-use crate::util::color::lighten;
 
 const MODAL_PADDING: f32 = 32.;
 

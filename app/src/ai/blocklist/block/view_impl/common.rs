@@ -8,6 +8,7 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 use std::iter;
 use std::path::Path;
+use std::sync::LazyLock;
 #[cfg(feature = "local_fs")]
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -102,44 +103,44 @@ use crate::workspaces::workspace::CustomerType;
 
 pub const STATUS_ICON_SIZE_DELTA: f32 = 4.;
 pub const STATUS_FOOTER_VERTICAL_PADDING: f32 = 4.;
-pub static WAITING_FOR_USER_INPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-waiting-for-instructions"));
+pub static WAITING_FOR_USER_INPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-waiting-for-instructions"));
 const IMAGE_SOURCE_LINK_LINE_INDEX: usize = 1;
 
-static ERROR_APOLOGY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "error-apology-text"));
-static INTERNAL_WARP_ERROR: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "internal-warp-error"));
+static ERROR_APOLOGY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-error-apology-text"));
+static INTERNAL_WARP_ERROR: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-internal-warp-error"));
 
-pub static LOAD_OUTPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "warping"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "adjusting-tasks"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "generating-fix"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "creating-diff"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "preparing-question"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "generating-plan"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "updating-plan"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "summarizing-conversation"));
+pub static LOAD_OUTPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-warping"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-adjusting-tasks"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-fix"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-creating-diff"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-preparing-question"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-plan"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-updating-plan"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-summarizing-conversation"));
 pub static LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "summarizing-command-output"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "searching-codebase"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "reading-files"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_GREP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "grepping"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "finding-files"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "executing-command"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "writing-command-input"));
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-summarizing-command-output"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-searching-codebase"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-reading-files"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_GREP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-grepping"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-finding-files"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-executing-command"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-writing-command-input"));
 pub static LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "waiting-for-command-exit"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "searching-the-web"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "fetching-pr-comments"));
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-waiting-for-command-exit"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-searching-the-web"));
+pub static LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-fetching-pr-comments"));
 
 #[cfg(feature = "local_fs")]
 pub(crate) type ResolvedBlocklistImageSources = HashMap<String, Option<AssetSource>>;
 
 pub static BLOCKED_ACTION_MESSAGE_FOR_WRITE_TO_LONG_RUNNING_SHELL_COMMAND: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "blocked-write-to-command"));
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-write-to-command"));
 pub static BLOCKED_ACTION_MESSAGE_FOR_READING_FILES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "blocked-reading-files"));
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-reading-files"));
 pub static BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "blocked-searching-codebase"));
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-searching-codebase"));
 pub static BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "blocked-grep-file-glob"));
+    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-grep-file-glob"));
 
 const BLOCKLIST_VISUAL_SECTION_HEIGHT_LINE_MULTIPLIER: f32 = 10.0;
 const BLOCKLIST_MERMAID_MAX_HEIGHT_LINE_MULTIPLIER: f32 = 40.0;
@@ -343,23 +344,21 @@ pub fn render_warping_indicator<V: View>(
             .map(|action| &action.action)
         {
             Some(AIAgentActionType::SearchCodebase(..)) => {
-                LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE.as_str().to_string()
+                LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE.clone()
             }
-            Some(AIAgentActionType::Grep { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_GREP.as_str().to_string()
-            }
+            Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.clone(),
             Some(AIAgentActionType::CallMCPTool { name, .. }) => {
-                crate::tr!("ai", "calling-mcp-tool", name = name.as_str())
+                format!("Calling \"{name}\" MCP tool...")
             }
             Some(AIAgentActionType::ReadMCPResource { name, .. }) => {
-                crate::tr!("ai", "reading-mcp-resource", name = name.as_str())
+                format!("Reading \"{name}\" MCP resource...")
             }
             Some(AIAgentActionType::FileGlob { .. })
             | Some(AIAgentActionType::FileGlobV2 { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB.as_str().to_string()
+                LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB.clone()
             }
             Some(AIAgentActionType::WriteToLongRunningShellCommand { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND.as_str().to_string()
+                LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND.clone()
             }
             action => {
                 let active_block = props.terminal_model.block_list().active_block();
@@ -377,8 +376,8 @@ pub fn render_warping_indicator<V: View>(
                             Some(AIAgentActionType::ReadShellCommandOutput {
                                 delay: Some(ShellCommandDelay::OnCompletion),
                                 ..
-                            }) => LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION.as_str(),
-                            _ => LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND.as_str(),
+                            }) => &LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION,
+                            _ => &LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND,
                         };
                         // Compute "Next check in {time}" for fixed-interval polls. Only
                         // `ReadShellCommandOutput { delay: Duration(_) }` has a meaningful
@@ -405,16 +404,16 @@ pub fn render_warping_indicator<V: View>(
                             } else {
                                 format!("{}m", secs / 60)
                             };
-                            let suffix = format!(" • Next check in {formatted}");
+                            let suffix = format!(" · Next check in {formatted}");
 
                             // Keep the base message constant so the shimmering animation
                             // isn't interrupted every time the countdown ticks. The
                             // suffix is rendered as a separate non-shimmering element,
                             // matching the same pattern used by the summarization timer.
                             non_shimmering_text = Some(suffix);
-                            base.to_string()
+                            base.as_str().to_string()
                         } else {
-                            base.to_string()
+                            base.as_str().to_string()
                         }
                     }
                 } else {
@@ -440,11 +439,9 @@ pub fn render_warping_indicator<V: View>(
 
     if let Some(take_over_button_props) = props.take_over_lrc_control_button {
         has_buttons = true;
-        let take_over_text = crate::tr!("ai", "take-over");
-        let take_over_tooltip = crate::tr!("ai", "take-over-tooltip");
         buttons_row.add_child(render_switch_control_to_user_button(
-            take_over_text,
-            take_over_tooltip,
+            "Take over".to_string(),
+            "Take over control of the command".to_string(),
             take_over_button_props,
             appearance,
         ));
@@ -754,9 +751,9 @@ fn render_hide_responses_button(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let button_text = if should_hide_responses {
-        crate::tr!("ai", "show-responses")
+        "Show responses"
     } else {
-        crate::tr!("ai", "hide-responses")
+        "Hide responses"
     };
     let text = Container::new(
         Text::new(
@@ -770,9 +767,9 @@ fn render_hide_responses_button(
     .finish();
 
     let tooltip_text = if should_hide_responses {
-        crate::tr!("ai", "show-agent-responses")
+        "Show agent responses"
     } else {
-        crate::tr!("ai", "hide-agent-responses")
+        "Hide agent responses"
     };
 
     render_warping_indicator_button(
@@ -790,15 +787,16 @@ fn render_hide_responses_button(
 }
 
 pub fn render_switch_control_to_user_button(
-    text: impl Into<Cow<'static, str>>,
-    tooltip: impl Into<Cow<'static, str>>,
+    text: String,
+    tooltip: String,
     props: ButtonProps,
     appearance: &Appearance,
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
+    let text_static: &'static str = text.leak();
     let text = Container::new(
         Text::new(
-            text,
+            text_static,
             appearance.ui_font_family(),
             get_keybinding_font_size(appearance),
         )
@@ -807,13 +805,12 @@ pub fn render_switch_control_to_user_button(
     )
     .finish();
 
-    let tooltip_cow: Cow<'static, str> = tooltip.into();
     render_warping_indicator_button(
         props.button_handle.clone(),
         appearance,
         text,
         props.keystroke,
-        tooltip_cow.into_owned(),
+        tooltip,
         props.is_active,
         false,
         |ctx| {
@@ -837,7 +834,7 @@ fn render_stop_button(props: ButtonProps, appearance: &Appearance) -> Box<dyn El
         appearance,
         stop_icon,
         props.keystroke,
-        crate::tr!("ai", "stop-agent-task"),
+        "Stop agent task".to_string(),
         props.is_active,
         false,
         |ctx: &mut EventContext<'_>| {
@@ -865,9 +862,9 @@ fn render_queue_next_prompt_button(
     .finish();
 
     let tooltip_text = if props.is_active {
-        crate::tr!("ai", "auto-queue-on")
+        "Auto-queue is on: your next prompt will be queued"
     } else {
-        crate::tr!("ai", "auto-queue-off")
+        "Auto-queue next prompt while agent is responding"
     };
 
     render_warping_indicator_button(
@@ -909,11 +906,11 @@ fn render_auto_approve_button(
     .finish();
 
     let tooltip_text = if props.is_locked {
-        crate::tr!("ai", "fast-forward-always-enabled")
+        "Fast forward is always enabled for cloud agent conversations"
     } else if is_active {
-        crate::tr!("ai", "turn-off-auto-approve")
+        "Turn off auto-approve all agent actions"
     } else {
-        crate::tr!("ai", "auto-approve-all")
+        "Auto-approve all agent actions for this task"
     };
 
     render_warping_indicator_button(
@@ -967,7 +964,7 @@ fn render_force_refresh_inline(
         // Mirror `render_output_status_text` exactly: same `Text` configuration plus
         // the `Container::with_margin_top(1.)` wrapper so this sits on the same
         // baseline as the adjacent `Last seen by agent ...` text.
-        let text = Text::new(format!(" · {}", crate::tr!("ai", "check-now")), font_family, font_size)
+        let text = Text::new(" · Check now".to_string(), font_family, font_size)
             .with_color(color)
             .with_style(Properties::default())
             .with_clip(ClipConfig::end())
@@ -981,7 +978,7 @@ fn render_force_refresh_inline(
         let mut stack = Stack::new().with_child(text_with_margin);
         if state.is_hovered() {
             let tool_tip = ui_builder
-                .tool_tip(crate::tr!("ai", "check-now-tooltip").to_owned())
+                .tool_tip("Ask the agent to check this command now, skipping its timer.".to_owned())
                 .build()
                 .finish();
             stack.add_positioned_overlay_child(
@@ -2182,7 +2179,7 @@ fn render_mermaid_diagram_section<A: Action>(
         .finish();
 
     render_visual_card(
-        crate::tr!("ai", "mermaid-diagram"),
+        "Mermaid diagram".to_string(),
         Icon::Dataflow,
         Container::new(mermaid_canvas)
             .with_background(theme.background())
@@ -3057,7 +3054,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             user_display_message,
         } => {
             if let Some(message) = user_display_message {
-                format!("{ERROR_APOLOGY_TEXT}\n\n{message}")
+                format!("{}\n\n{message}", ERROR_APOLOGY_TEXT.as_str())
             } else {
                 let ai_request_usage_model = AIRequestUsageModel::as_ref(app);
                 let formatted_next_refresh_time = ai_request_usage_model
@@ -3066,30 +3063,27 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
                     .to_string();
 
                 format!(
-                    "{ERROR_APOLOGY_TEXT}\n\nYou've reached your credit limit. Your credit limit resets on {formatted_next_refresh_time}.",
+                    "{}\n\nYou've reached your credit limit. Your credit limit resets on {formatted_next_refresh_time}.",
+                    ERROR_APOLOGY_TEXT.as_str(),
                 )
             }
         }
         RenderableAIError::ServerOverloaded => {
-            crate::tr!("ai", "server-overloaded")
+            "Warp is currently overloaded. Please try again later.".to_string()
         }
         RenderableAIError::InternalWarpError => {
             format!("{}\n\n{}", ERROR_APOLOGY_TEXT.as_str(), INTERNAL_WARP_ERROR.as_str())
         }
-        RenderableAIError::Other {
-            error_message,
-            will_attempt_resume,
-            waiting_for_network,
-        } => {
-            if *will_attempt_resume {
-                if *waiting_for_network {
-                    crate::tr!("ai", "resume-when-network", error_message = error_message.as_str())
-                } else {
-                    crate::tr!("ai", "attempting-resume", error_message = error_message.as_str())
-                }
-            } else {
-                format!("{}\n\n{error_message}", ERROR_APOLOGY_TEXT.as_str())
-            }
+        RenderableAIError::Other { error_message, .. } => {
+            // A still-recovering `Other` error is handled by the early return above; once we
+            // reach here recovery has failed, so surface the error directly.
+            format!("{}\n\n{error_message}", ERROR_APOLOGY_TEXT.as_str())
+        }
+        RenderableAIError::TransientNetworkError { .. } => {
+            // Recovering transient errors are handled by the early return above; once we
+            // reach here recovery has failed. These carry their own complete user-facing
+            // copy (plus debug info), so the apology prefix adds nothing.
+            props.error.to_string()
         }
         RenderableAIError::InvalidApiKey {
             provider,
@@ -3118,7 +3112,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             format!(
                 "{}\n\nAWS credentials expired or missing for {model_name}. \
                  Please refresh your AWS credentials.",
-                ERROR_APOLOGY_TEXT.as_str()
+                ERROR_APOLOGY_TEXT.as_str(),
             )
         }
     };
@@ -3186,7 +3180,7 @@ fn render_invalid_api_key_error(
     .finish();
 
     let alert_text = Text::new(
-        crate::tr!("ai", "invalid-api-key"),
+        "Provided API key is not valid",
         appearance.ui_font_family(),
         14.,
     )
@@ -3195,7 +3189,10 @@ fn render_invalid_api_key_error(
     .finish();
 
     let detail_text = Text::new(
-        crate::tr!("ai", "failed-authenticate-provider", provider = provider, model_name = model_name),
+        format!(
+            "Failed to authenticate with {provider} when using {model_name}. \
+                     Double-check that your API key is correct."
+        ),
         appearance.ui_font_family(),
         14.,
     )
@@ -3206,7 +3203,6 @@ fn render_invalid_api_key_error(
     .with_selectable(false)
     .finish();
 
-    let edit_api_keys_label = crate::tr!("ai_assistant", "ai-edit-api-keys");
     let settings_button = appearance
         .ui_builder()
         .button(
@@ -3225,7 +3221,7 @@ fn render_invalid_api_key_error(
             background: Some(internal_colors::fg_overlay_3(theme).into()),
             ..Default::default()
         })
-        .with_text_label(edit_api_keys_label)
+        .with_text_label("Edit API Keys".to_string())
         .with_cursor(Some(Cursor::PointingHand))
         .build()
         .on_click(move |ctx, _, _| {
@@ -3358,7 +3354,7 @@ pub(crate) fn render_debug_footer<V: View>(
                     warpui::ui_components::button::ButtonVariant::Text,
                     props.submit_issue_button_handle,
                 )
-                .with_centered_text_label(crate::tr!("ai", "send-feedback").to_string())
+                .with_centered_text_label("Send Feedback".to_string())
                 .with_style(submit_button_style)
                 .with_hovered_styles(submit_button_hover_style)
                 .with_clicked_styles(submit_button_hover_style)
@@ -3374,7 +3370,7 @@ pub(crate) fn render_debug_footer<V: View>(
 
     // render the conversation's debug id so screenshots automatically show the debug id
     let debug_text = Text::new(
-        crate::tr!("ai", "debug-information", debug_info = debug_info.as_str()),
+        format!("Debug information: {debug_info}"),
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3418,7 +3414,7 @@ pub(crate) fn render_debug_footer<V: View>(
     })
     .finish();
     let copy_button_with_tooltip = appearance.ui_builder().tool_tip_on_element(
-        crate::tr!("ai", "copy-debug-id").to_string(),
+        "Copy debug ID".to_string(),
         props.debug_copy_button_handle,
         copy_button,
         warpui::elements::ParentAnchor::TopRight,

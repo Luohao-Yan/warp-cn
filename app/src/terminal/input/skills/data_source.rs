@@ -1,5 +1,6 @@
 
 
+use std::sync::LazyLock;
 use ai::skills::{SkillProvider, SkillReference, SkillScope};
 use fuzzy_match::{match_indices_case_insensitive, FuzzyMatchResult};
 use ordered_float::OrderedFloat;
@@ -24,8 +25,6 @@ use crate::search::mixer::DataSourceRunErrorWrapper;
 use crate::search::result_renderer::ItemHighlightState;
 use crate::search::{SearchItem, SyncDataSource};
 use crate::terminal::cli_agent_sessions::{CLIAgentInputState, CLIAgentSessionsModel};
-
-use crate::terminal::input::inline_menu::styles as inline_styles;
 
 static TERMINAL_PROJECT_SKILL: LazyLock<String> =
     LazyLock::new(|| crate::tr!("terminal", "project-skill"));

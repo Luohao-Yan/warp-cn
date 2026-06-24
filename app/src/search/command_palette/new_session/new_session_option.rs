@@ -7,10 +7,7 @@ use crate::server::telemetry::AddTabWithShellSource;
 use crate::terminal::available_shells::AvailableShell;
 use crate::terminal::view::TerminalAction;
 use crate::WorkspaceAction;
-use std::borrow::Cow;
-use std::fmt;
 use std::sync::LazyLock;
-use warpui::Action;
 
 static DIR_DOWN: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-down").clone());
 static DIR_RIGHT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-right").clone());

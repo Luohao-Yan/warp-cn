@@ -1,13 +1,3 @@
-use super::new_session_option::{Direction, NewSessionConfig};
-use super::new_session_option::{NewSessionOption, NewSessionOptionId};
-use super::search_item::SearchItem;
-use crate::search::binding_source::BindingSource;
-use crate::search::command_palette::mixer::CommandPaletteItemAction;
-use crate::search::data_source::{DataSourceSearchError, Query, QueryResult};
-use crate::search::mixer::{DataSourceRunErrorWrapper, SyncDataSource};
-use std::sync::LazyLock;
-use crate::terminal::available_shells::AvailableShells;
-use fuzzy_match::{match_indices_case_insensitive, FuzzyMatchResult};
 use std::collections::HashMap;
 use std::sync::Arc;
 
@@ -211,13 +201,13 @@ impl Entity for NewSessionDataSource {
 
 type SearcherAction = <NewSessionDataSource as SyncDataSource>::Action;
 
-static SEARCHER_BASE_STRINGS: [LazyLock<String>; 6] = [
-    LazyLock::new(|| crate::tr!("search", "new-tab").clone()),
-    LazyLock::new(|| crate::tr!("search", "new-window").clone()),
-    LazyLock::new(|| crate::tr!("search", "split-down").clone()),
-    LazyLock::new(|| crate::tr!("search", "split-right").clone()),
-    LazyLock::new(|| crate::tr!("search", "split-up").clone()),
-    LazyLock::new(|| crate::tr!("search", "split-left").clone()),
+const SEARCHER_BASE_STRINGS: [&str; 6] = [
+    "Create New Tab",
+    "Create New Window",
+    "Split Pane Down",
+    "Split Pane Right",
+    "Split Pane Up",
+    "Split Pane Left",
 ];
 
 trait NewSessionSearcher {
@@ -297,7 +287,7 @@ impl NewSessionSearcher for FuzzyNewSessionSearcher {
             .iter()
             .filter_map(|base| {
                 match_indices_case_insensitive(
-                    base.as_str().to_lowercase().as_str(),
+                    base.to_lowercase().as_str(),
                     query_str.to_lowercase().as_str(),
                 )
                 .map(|result| result.score)
@@ -413,7 +403,7 @@ mod full_text_searcher {
             let mut max_match_searcher = BASE_TEXT_SEARCH_SCHEMA
                 .create_async_searcher(MIN_MEMORY_BUDGET, background_executor.clone());
             let max_match_documents = SEARCHER_BASE_STRINGS.iter().map(|base| BaseTextDocument {
-                base_text: base.as_str().to_owned(),
+                base_text: base.to_string(),
             });
             if max_match_searcher
                 .build_index_async(max_match_documents)

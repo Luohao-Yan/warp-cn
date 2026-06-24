@@ -3,7 +3,7 @@ mod active_session;
 pub(crate) mod auto_handoff;
 pub mod bonus_grant_notification_model;
 #[cfg(target_os = "macos")]
-pub(crate) mod cli_install;
+mod cli_install;
 mod close_session_confirmation_dialog;
 pub(crate) mod cross_window_tab_drag;
 pub mod delete_conversation_confirmation_dialog;
@@ -24,33 +24,34 @@ mod toast_stack;
 pub mod util;
 pub mod view;
 
-use std::sync::LazyLock;
-
 use crate::ai::blocklist::NEW_AGENT_PANE_LABEL;
 use crate::ai::skills::SkillManager;
 use crate::ai::AIRequestUsageModel;
-use crate::channel::{Channel, ChannelState};
+use crate::channel::Channel;
 use crate::code;
 use crate::features::FeatureFlag;
 use crate::modal;
 use crate::notebooks;
 use crate::pane_group::TabBarHoverIndex;
-use crate::server::telemetry::{AgentModeEntrypoint, PaletteSource};
+use crate::server::telemetry::AgentModeEntrypoint;
+use crate::server::telemetry::PaletteSource;
 use crate::settings::AISettings;
 use crate::settings_view::{self, flags, SettingsSection};
-use crate::tab::uses_vertical_tabs;
 use crate::tab_configs;
-use serde::{Deserialize, Serialize};
-use warp_core::context_flag::ContextFlag;
-use warpui::accessibility::AccessibilityVerbosity;
-use warpui::elements::DropTargetData;
-use warpui::keymap::{BindingDescription, EditableBinding, FixedBinding};
-use warpui::AppContext;
 use warpui::SingletonEntity;
+
+use crate::channel::ChannelState;
 
 use crate::util::bindings::{self, cmd_or_ctrl_shift, is_binding_pty_compliant, CustomAction};
 
 use crate::palette::PaletteMode;
+use serde::{Deserialize, Serialize};
+use warp_core::context_flag::ContextFlag;
+use warpui::accessibility::AccessibilityVerbosity;
+use warpui::elements::DropTargetData;
+use warpui::keymap::FixedBinding;
+use warpui::keymap::EditableBinding;
+use warpui::AppContext;
 
 pub use action::{
     AutoCloudHandoffTrigger, CommandSearchOptions, InitContent, RestoreConversationLayout,
@@ -81,7 +82,7 @@ pub fn is_feedback_skill_available(ctx: &AppContext) -> bool {
     AISettings::as_ref(ctx).is_any_ai_enabled(ctx)
         && AIRequestUsageModel::as_ref(ctx).has_any_ai_remaining(ctx)
         && SkillManager::as_ref(ctx)
-            .active_bundled_skill("feedback", ctx)
+            .active_local_bundled_skill("feedback", ctx)
             .is_some()
 }
 
@@ -116,10 +117,8 @@ pub fn init(app: &mut AppContext) {
     view::launch_modal::oz_launch::init(app);
     view::openwarp_launch_modal::init(app);
     view::orchestration_launch_modal::init(app);
-    view::auto_handoff_sleep_modal::init(app);
     view::cloud_agent_capacity_modal::init(app);
     view::codex_modal::init(app);
-    view::free_ai_removal_modal::init(app);
     view::free_tier_limit_hit_modal::init(app);
     view::global_search::view::GlobalSearchView::init(app);
     view::right_panel::RightPanelView::init(app);
@@ -237,36 +236,6 @@ pub fn init(app: &mut AppContext) {
                     "workspace:reset_orchestration_launch_modal_state",
                     crate::tr!("workspace", "debug-reset-orchestration-launch-modal-state"),
                     WorkspaceAction::ResetOrchestrationLaunchModalState,
-                )
-                .with_context_predicate(id!("Workspace")),
-                EditableBinding::new(
-                    "workspace:open_auto_handoff_sleep_modal",
-                    crate::tr!("workspace", "debug-open-auto-handoff-sleep-modal"),
-                    WorkspaceAction::OpenAutoHandoffSleepModal,
-                )
-                .with_context_predicate(id!("Workspace")),
-                EditableBinding::new(
-                    "workspace:reset_auto_handoff_sleep_modal_state",
-                    crate::tr!("workspace", "debug-reset-auto-handoff-sleep-modal-state"),
-                    WorkspaceAction::ResetAutoHandoffSleepModalState,
-                )
-                .with_context_predicate(id!("Workspace")),
-                EditableBinding::new(
-                    "workspace:trigger_auto_handoff_to_cloud",
-                    crate::tr!("workspace", "debug-trigger-auto-handoff-to-cloud"),
-                    WorkspaceAction::TriggerAutoHandoffToCloud,
-                )
-                .with_context_predicate(id!("Workspace")),
-                EditableBinding::new(
-                    "workspace:open_free_ai_removal_modal",
-                    crate::tr!("workspace", "debug-open-free-ai-removal-modal"),
-                    WorkspaceAction::OpenFreeAiRemovalModal,
-                )
-                .with_context_predicate(id!("Workspace")),
-                EditableBinding::new(
-                    "workspace:reset_free_ai_removal_modal_state",
-                    crate::tr!("workspace", "debug-reset-free-ai-removal-modal-state"),
-                    WorkspaceAction::ResetFreeAiRemovalModalState,
                 )
                 .with_context_predicate(id!("Workspace")),
                 EditableBinding::new(
@@ -1128,25 +1097,6 @@ pub fn init(app: &mut AppContext) {
                 "workspace:uninstall_cli",
                 crate::tr!("workspace", "uninstall-oz-cli"),
                 WorkspaceAction::UninstallCLI,
-            )
-            .with_group(bindings::BindingGroup::Settings.as_str())
-            .with_context_predicate(id!("Workspace")),
-        ]);
-    }
-
-    if FeatureFlag::WarpControlCli.is_enabled() {
-        app.register_editable_bindings([
-            EditableBinding::new(
-                "workspace:install_warpctrl",
-                crate::tr!("workspace", "install-warpctrl"),
-                WorkspaceAction::InstallWarpctrl,
-            )
-            .with_group(bindings::BindingGroup::Settings.as_str())
-            .with_context_predicate(id!("Workspace")),
-            EditableBinding::new(
-                "workspace:uninstall_warpctrl",
-                crate::tr!("workspace", "uninstall-warpctrl"),
-                WorkspaceAction::UninstallWarpctrl,
             )
             .with_group(bindings::BindingGroup::Settings.as_str())
             .with_context_predicate(id!("Workspace")),

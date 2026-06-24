@@ -167,7 +167,6 @@ impl Display for IPaneType {
             IPaneType::ExecutionProfileEditor => write!(f, "{}", crate::tr!("workspace", "pane-execution-profile")),
             IPaneType::GetStarted => write!(f, "GetStarted"),
             IPaneType::NetworkLog => write!(f, "{}", crate::tr!("workspace", "network-log-header")),
-            IPaneType::Welcome => write!(f, "{}", crate::tr!("workspace", "welcome-to-warp")),
             IPaneType::DeferredPlaceholder => write!(f, "{}", crate::tr!("workspace", "placeholder")),
             #[cfg(test)]
             IPaneType::Dummy => write!(f, "Dummy"),

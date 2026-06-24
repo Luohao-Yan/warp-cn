@@ -290,6 +290,7 @@ impl VoiceInputToggleKey {
     serde::Serialize,
     serde::Deserialize,
     PartialEq,
+    Eq,
     Copy,
     Clone,
     EnumIter,
@@ -437,7 +438,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "agents.warp_agent.other.orchestration_message_display_mode",
-    description: "Controls how child-agent messages are displayed.",
+    description: "Controls how child-agent messages are displayed.".to_string(),
 );
 
 impl OrchestrationMessageDisplayMode {
@@ -517,7 +518,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "agents.warp_agent.other.default_prompt_submission_mode",
-    description: "Default behavior when submitting a new prompt while the agent is still responding.",
+    description: "Default behavior when submitting a new prompt while the agent is still responding.".to_string(),
     feature_flag: FeatureFlag::QueueSlashCommand,
 );
 
@@ -578,7 +579,7 @@ settings::macros::implement_setting_for_enum!(
     SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "agents.warp_agent.other.long_running_command_submission_mode",
-    description: "What happens when a prompt is submitted while an agent controls an agent-requested long-running command.",
+    description: "What happens when a prompt is submitted while an agent controls an agent-requested long-running command.".to_string(),
     feature_flag: FeatureFlag::QueueSlashCommand,
 );
 
@@ -1154,7 +1155,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "cloud_platform.third_party_api_keys.gemini_enterprise_credentials_enabled",
-        description: "Whether Warp should route eligible requests through your workspace's Gemini Enterprise Google Cloud project.",
+        description: "Whether Warp should route eligible requests through your workspace's Gemini Enterprise Google Cloud project.".to_string(),
     }
     // Whether or not the user wants agent mode requests to use their saved rules.
     memory_enabled: MemoryEnabled {
@@ -1395,7 +1396,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.third_party.submit_on_ctrl_enter",
-        description: "When enabled, the Rich Input editor submits on Ctrl+Enter instead of Enter. Enter inserts a newline.",
+        description: "When enabled, the Rich Input editor submits on Ctrl+Enter instead of Enter. Enter inserts a newline.".to_string(),
     }
 
     // Maps custom toolbar command regex patterns to specific CLI agents.
@@ -1493,7 +1494,7 @@ define_settings_group!(AISettings, settings: [
         private: false,
         toml_path: "agents.warp_agent.other.orchestration_enabled",
         description: crate::tr!("settings", "ai-orchestration-desc"),
-        feature_flag: FeatureFlag::Orchestration,
+        feature_flag: FeatureFlag::RunAgentsTool,
     }
 
 
@@ -1606,7 +1607,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.should_force_disable_cloud_handoff",
-        description: "Whether to force-disable local-to-cloud handoff.",
+        description: "Whether to force-disable local-to-cloud handoff.".to_string(),
     }
 
     should_force_disable_ampersand_handoff: ShouldForceDisableAmpersandHandoff {
@@ -1616,7 +1617,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.should_force_disable_ampersand_handoff",
-        description: "Whether to force-disable the & prefix for cloud handoff compose mode.",
+        description: "Whether to force-disable the & prefix for cloud handoff compose mode.".to_string(),
     }
 
     auto_handoff_on_sleep_enabled: AutoHandoffOnSleepEnabled {
@@ -1626,7 +1627,7 @@ define_settings_group!(AISettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "agents.warp_agent.other.auto_handoff_on_sleep_enabled",
-        description: "Whether Warp automatically hands off local agent conversations to cloud when the computer is about to sleep.",
+        description: "Whether Warp automatically hands off local agent conversations to cloud when the computer is about to sleep.".to_string(),
     }
 
     // This is not a user-visible setting - it's merely a one-time flag to track if the

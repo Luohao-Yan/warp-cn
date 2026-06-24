@@ -12,7 +12,6 @@ use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, SingletonEntity, ViewHandle};
 
 use super::compact_agent_input::CompactAgentInput;
-use crate::context_chips::spacing;
 const NUMBER_BADGE_BORDER_WIDTH: f32 = 1.;
 const NUMBER_BADGE_VERTICAL_PADDING: f32 = 1.;
 

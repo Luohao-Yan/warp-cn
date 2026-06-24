@@ -500,7 +500,7 @@ impl ContextChipKind {
         let text = value.to_string();
         match self {
             Self::ShellGitBranch => crate::tr!("context_chips", "git-prefix", value = text),
-            Self::ShellGitBranch | Self::GitBranchStatus => format!("git:({text})"),
+            Self::GitBranchStatus => format!("git:({text})"),
             Self::GithubPullRequest => github_pr_display_text_from_url(&text).unwrap_or(text),
             Self::KubernetesContext => crate::tr!("context_chips", "k8s-prefix", value = text),
             Self::SvnBranch => crate::tr!("context_chips", "svn-prefix", value = text),

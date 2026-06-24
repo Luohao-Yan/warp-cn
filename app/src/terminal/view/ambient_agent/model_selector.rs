@@ -397,7 +397,6 @@ impl ModelSelector {
                                 .map(|info| info.display_name.clone())
                         })
                 })
-<<<<<<< HEAD
                 .unwrap_or_else(|| DEFAULT_MODEL_LABEL.clone()),
             _ => LLMPreferences::as_ref(ctx)
                 .get_active_base_model(ctx, Some(self.terminal_view_id))

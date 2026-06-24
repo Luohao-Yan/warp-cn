@@ -81,8 +81,14 @@ impl CloudActionConfirmationDialog {
 
     fn title_text(&self) -> String {
         match self.variant {
-            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_TITLE_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::LeaveTeam
+            | CloudActionConfirmationDialogVariant::LeaveTeamReloadCredits => {
+                LEAVE_TEAM_TITLE_TEXT.clone()
+            }
             CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_TITLE_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::RemoveTeamMemberReloadCredits => {
+                "Are you sure you want to remove this member?".to_string()
+            }
             CloudActionConfirmationDialogVariant::None => "".to_string(),
         }
     }
@@ -91,6 +97,12 @@ impl CloudActionConfirmationDialog {
         match self.variant {
             CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_BODY_TEXT.clone(),
             CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_BODY_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::LeaveTeamReloadCredits => {
+                "If you leave this team, you'll lose access to any remaining reload credits tied to it. You'll regain access to any unused, non-expired credits if you rejoin the same team later.".to_string()
+            }
+            CloudActionConfirmationDialogVariant::RemoveTeamMemberReloadCredits => {
+                "This member will lose access to any remaining reload credits tied to this team. If they rejoin later, they'll regain access to any unused, non-expired credits.".to_string()
+            }
             CloudActionConfirmationDialogVariant::None => "".to_string(),
         }
     }

@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use std::ops::Range;
 use std::sync::Arc;
+use std::sync::LazyLock;
 use std::time::Duration;
 
 use async_channel::Sender;
@@ -55,8 +56,6 @@ use crate::terminal::model::session::SessionId;
 use crate::terminal::resizable_data::{ModalType, ResizableData, DEFAULT_UNIVERSAL_SEARCH_WIDTH};
 use crate::terminal::{History, HistoryEvent};
 use crate::workspaces::user_workspaces::UserWorkspaces;
-
-use std::sync::LazyLock;
 
 static DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "command-placeholder"));
 const PANEL_POSITION_ID: &str = "CommandSearchViewPanel";
@@ -401,7 +400,7 @@ impl CommandSearchView {
 
     fn close(&self, ctx: &mut ViewContext<Self>) {
         let query = self.search_bar.as_ref(ctx).query(ctx);
-        let filter = self.search_bar_state.as_ref(ctx).active_query_filter();
+        let filter = self.search_bar_state.as_ref(ctx).active_visible_query_filter();
         ctx.emit(CommandSearchEvent::Close { query, filter });
     }
 
@@ -477,13 +476,13 @@ impl CommandSearchView {
         ctx: &mut ViewContext<Self>,
     ) {
         self.search_bar.update(ctx, |search_bar, ctx| {
-            search_bar.set_query_filter(filter_and_atom_text, ctx);
+            search_bar.set_visible_query_filter(filter_and_atom_text, ctx);
         });
     }
 
     /// Returns the active query filters
     fn active_query_filter(&self, app: &AppContext) -> Option<QueryFilter> {
-        self.search_bar_state.as_ref(app).active_query_filter()
+        self.search_bar_state.as_ref(app).active_visible_query_filter()
     }
 
     /// Emits the `ItemSelected` event containing the passed `CommandSearchEventPayload` and closes
@@ -536,7 +535,7 @@ impl CommandSearchView {
                 TelemetryEvent::CommandSearchResultAccepted {
                     result_index,
                     result_type: (&result_action).into(),
-                    query_filter: self.search_bar_state.as_ref(ctx).active_query_filter(),
+                    query_filter: self.search_bar_state.as_ref(ctx).active_visible_query_filter(),
                     buffer_length: self.search_bar.as_ref(ctx).query(ctx).len(),
                     was_immediately_executed,
                 },
@@ -972,7 +971,7 @@ impl TypedActionView for CommandSearchView {
             AttemptLoginGatedUpgrade => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        crate::tr!("search", "upgrade-ai-usage"),
+                        crate::tr!("search", "upgrade-ai-usage").leak(),
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )
@@ -1005,7 +1004,7 @@ impl View for CommandSearchView {
         let appearance = Appearance::as_ref(app);
         let mixer = self.mixer.as_ref(app);
 
-        let should_show_zero_state = self.search_bar.as_ref(app).should_show_zero_state(app);
+        let should_show_zero_state = self.search_bar_state.as_ref(app).should_show_zero_state();
         let panel_contents_body = if should_show_zero_state {
             ChildView::new(&self.zero_state_handle).finish()
         } else if mixer.is_loading() && mixer.are_results_empty() {

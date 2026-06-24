@@ -161,8 +161,8 @@ impl AgentNotificationsModel {
                         .display_title()
                         .unwrap_or_else(|| crate::tr!("agent_cloud", "completed", name = agent.display_name()));
                     let message = match agent {
-                        CLIAgent::Codex => crate::tr!("ai", "notification-from-codex"),
-                        _ => crate::tr!("ai", "task-completed"),
+                        CLIAgent::Codex => crate::tr!("ai_assistant", "ai-notification-from-codex"),
+                        _ => crate::tr!("ai_assistant", "ai-task-completed"),
                     };
                     let metadata = TerminalViewMetadata::lookup(*terminal_view_id, ctx);
                     self.add_notification(
@@ -189,7 +189,7 @@ impl AgentNotificationsModel {
                         title,
                         message
                             .clone()
-                            .unwrap_or_else(|| crate::tr!("ai", "waiting-for-input")),
+                            .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-waiting-for-input")),
                         NotificationCategory::Request,
                         NotificationSourceAgent::CLI {
                             agent: *agent,
@@ -311,6 +311,14 @@ impl AgentNotificationsModel {
     ) {
         let origin = NotificationOrigin::Conversation(conversation_id);
 
+        // If the conversation view is no longer open, don't create notifications for it
+        // (there's nothing to navigate to when clicking them).
+        if !ActiveAgentViewsModel::as_ref(ctx).is_conversation_open(conversation_id, ctx) {
+            self.pending_artifacts.remove(&conversation_id);
+            self.remove_notification_by_source(origin, ctx);
+            return;
+        }
+
         let ai_history_model = BlocklistAIHistoryModel::as_ref(ctx);
         let conversation = ai_history_model.conversation(&conversation_id);
         let is_child = conversation.is_some_and(|c| c.is_child_agent_conversation());
@@ -342,10 +350,10 @@ impl AgentNotificationsModel {
                 .and_then(|c| c.agent_name())
                 .map(|name| name.to_owned())
                 .or(latest_query)
-                .unwrap_or_else(|| crate::tr!("ai", "child-agent"));
+                .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-child-agent"));
             (child_open || parent_open, nav_terminal_view_id, child_name)
         } else {
-            let title = latest_query.unwrap_or_else(|| crate::tr!("ai", "agent-task"));
+            let title = latest_query.unwrap_or_else(|| crate::tr!("ai_assistant", "ai-agent-task"));
             (
                 active_views.is_conversation_open(conversation_id, ctx),
                 terminal_view_id,
@@ -353,16 +361,13 @@ impl AgentNotificationsModel {
             )
         };
 
-        // If the conversation view is no longer open, don't create notifications for it
-        // (there's nothing to navigate to when clicking them).
-        if !ActiveAgentViewsModel::as_ref(ctx).is_conversation_open(conversation_id, ctx) {
+        if !is_open {
             self.pending_artifacts.remove(&conversation_id);
             self.remove_notification_by_source(origin, ctx);
             return;
         }
 
-        let title = latest_query.unwrap_or_else(|| "Agent task".to_owned());
-        let metadata = TerminalViewMetadata::lookup(terminal_view_id, ctx);
+        let metadata = TerminalViewMetadata::lookup(effective_terminal_view_id, ctx);
         let oz_agent = NotificationSourceAgent::Oz {
             is_ambient: metadata.is_ambient,
         };
@@ -382,39 +387,38 @@ impl AgentNotificationsModel {
                 if QueuedQueryModel::as_ref(ctx).has_autofireable_prompt(conversation_id) {
                     return;
                 }
-                let artifacts = self.flush_pending_artifacts(conversation_id);
                 let message = if is_child {
-                    crate::tr!("ai", "child-agent-completed")
+                    crate::tr!("ai_assistant", "ai-child-agent-completed")
                 } else {
-                    crate::tr!("ai", "task-completed")
+                    crate::tr!("ai_assistant", "ai-task-completed")
                 };
+                let artifacts = self.flush_pending_artifacts(conversation_id);
                 self.add_notification(
                     title,
                     message.to_owned(),
                     NotificationCategory::Complete,
                     oz_agent,
                     origin,
-                    terminal_view_id,
+                    effective_terminal_view_id,
                     artifacts,
                     metadata.branch,
                     ctx,
                 );
             }
             ConversationStatus::Cancelled => {
-                let artifacts = self.flush_pending_artifacts(conversation_id);
                 let message = if is_child {
-                    crate::tr!("ai", "child-agent-cancelled")
+                    crate::tr!("ai_assistant", "ai-child-agent-cancelled")
                 } else {
-                    crate::tr!("ai", "task-cancelled")
+                    crate::tr!("ai_assistant", "ai-task-cancelled")
                 };
-
+                let artifacts = self.flush_pending_artifacts(conversation_id);
                 self.add_notification(
                     title,
                     message.to_owned(),
                     NotificationCategory::Complete,
                     oz_agent,
                     origin,
-                    terminal_view_id,
+                    effective_terminal_view_id,
                     artifacts,
                     metadata.branch,
                     ctx,
@@ -427,27 +431,26 @@ impl AgentNotificationsModel {
                     NotificationCategory::Request,
                     oz_agent,
                     origin,
-                    terminal_view_id,
+                    effective_terminal_view_id,
                     vec![],
                     metadata.branch,
                     ctx,
                 );
             }
             ConversationStatus::Error => {
-                let artifacts = self.flush_pending_artifacts(conversation_id);
                 let message = if is_child {
-                    crate::tr!("ai", "child-agent-error")
+                    crate::tr!("ai_assistant", "ai-child-agent-error")
                 } else {
-                    crate::tr!("ai", "something-went-wrong")
+                    crate::tr!("ai_assistant", "ai-something-went-wrong")
                 };
-
+                let artifacts = self.flush_pending_artifacts(conversation_id);
                 self.add_notification(
                     title,
                     message.to_owned(),
                     NotificationCategory::Error,
                     oz_agent,
                     origin,
-                    terminal_view_id,
+                    effective_terminal_view_id,
                     artifacts,
                     metadata.branch,
                     ctx,

@@ -64,7 +64,7 @@ maybe_define_setting!(UseSshTmuxWrapper, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.ssh.use_ssh_tmux_wrapper",
-    description: "Deprecated: whether to use a tmux-based wrapper for SSH warpification.",
+    description: "Deprecated: whether to use a tmux-based wrapper for SSH warpification.".to_string(),
 });
 
 // When set, the user previously opted into the now-deprecated tmux SSH wrapper and should
@@ -78,7 +78,7 @@ maybe_define_setting!(SshTmuxDeprecationNoticePending, group: WarpifySettings, {
     sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
     private: false,
     toml_path: "warpify.ssh.ssh_tmux_deprecation_notice_pending",
-    description: "Internal: whether to show the one-time tmux SSH deprecation notice.",
+    description: "Internal: whether to show the one-time tmux SSH deprecation notice.".to_string(),
 });
 
 /// Controls how Warp handles the SSH extension (remote server binary) when connecting

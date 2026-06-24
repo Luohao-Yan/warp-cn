@@ -5,6 +5,7 @@
 //! the view; only `RejectRequested` flows back to the parent.
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::sync::LazyLock;
 
 use ai::agent::action::{RunAgentsAgentRunConfig, RunAgentsExecutionMode, RunAgentsRequest};
 use ai::agent::action_result::{RunAgentsAgentOutcomeKind, RunAgentsResult};
@@ -70,14 +71,14 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 use crate::view_components::dropdown::DropdownEvent;
 use crate::view_components::{FilterableDropdownEvent, FilterableDropdownOrientation};
 
-static RUN_AGENTS_CARD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "run-agents-card-title"));
+static RUN_AGENTS_CARD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-agents-card-title"));
 
-static REJECT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "reject-label"));
-static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "accept-label"));
-static ORCHESTRATION_DISABLED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "orchestration-disabled-message"));
-static CONFIGURING_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "configuring-agents"));
-static SPAWN_AGENTS_CANCELLED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "spawn-agents-cancelled"));
-static FAILED_TO_START_ORCHESTRATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "failed-to-start-orchestration"));
+static REJECT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-reject-label"));
+static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-accept-label"));
+static ORCHESTRATION_DISABLED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-orchestration-disabled-message"));
+static CONFIGURING_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-configuring-agents"));
+static SPAWN_AGENTS_CANCELLED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-spawn-agents-cancelled"));
+static FAILED_TO_START_ORCHESTRATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-failed-to-start-orchestration"));
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -328,16 +329,6 @@ impl RunAgentsCardView {
             ctx,
         );
         let position_id_prefix = format!("{action_id:?}");
-        let _edit_button = CompactibleActionButton::new(
-            crate::tr!("common", "edit-label").to_string(),
-            None,
-            ButtonSize::Small,
-            RunAgentsCardViewAction::ToggleEdit,
-            Icon::Pencil,
-            std::sync::Arc::new(NakedTheme),
-            ctx,
-        );
-        // Both primary and chevron click route to Accept.
         let accept_button = CompactibleSplitActionButton::new(
             ACCEPT_LABEL.clone(),
             Some(KeystrokeSource::Fixed(accept_keystroke)),
@@ -728,7 +719,7 @@ impl RunAgentsCardView {
         };
         accept.set_disabled(reason.is_some(), ctx);
         // Tooltip explains why the button is disabled; falls back to "Accept".
-        accept.set_tooltip(reason.or_else(|| Some(crate::tr!("ai", "accept").to_string())), ctx);
+        accept.set_tooltip(reason.or_else(|| Some(crate::tr!("ai_assistant", "ai-accept"))), ctx);
         self.handles.accept_button = Some(accept);
     }
 
@@ -984,7 +975,6 @@ impl View for RunAgentsCardView {
             return Empty::new().finish();
         }
 
-
         // In-flight dispatch: check both spawning snapshot and action
         // status because the event arrives one tick after the status.
         if let Some(snapshot) = &self.spawning {
@@ -1153,9 +1143,6 @@ impl TypedActionView for RunAgentsCardView {
                 self.refresh_accept_button_state(ctx);
                 ctx.notify();
             }
-            RunAgentsCardViewAction::ToggleEdit => {
-                // TODO: implement edit toggle
-            }
         }
     }
 }
@@ -1321,7 +1308,7 @@ fn render_body(state: &RunAgentsEditState, app: &AppContext) -> Box<dyn Element>
 fn render_summary(state: &RunAgentsEditState, appearance: &Appearance) -> Box<dyn Element> {
     let theme = appearance.theme();
     let summary = if state.summary.trim().is_empty() {
-        crate::tr!("ai", "spawn-agents-summary", count = state.agent_run_configs.len())
+        crate::tr!("ai_assistant", "ai-spawn-agents-summary", count = state.agent_run_configs.len() as i64)
     } else {
         state.summary.clone()
     };
@@ -1343,7 +1330,7 @@ fn render_agents_section(state: &RunAgentsEditState, app: &AppContext) -> Box<dy
     let appearance = Appearance::as_ref(app);
     let theme = appearance.theme();
     let label = Text::new(
-        crate::tr!("ai", "agents-count-label", count = state.agent_run_configs.len()),
+        crate::tr!("ai_assistant", "ai-agents-count-label", count = state.agent_run_configs.len() as i64),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 1.,
     )
@@ -1409,7 +1396,7 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
             let body = if reason.is_empty() {
                 ORCHESTRATION_DISABLED_MESSAGE.clone()
             } else {
-                crate::tr!("ai", "orchestration-disabled-with-reason", reason = reason.as_str())
+                crate::tr!("ai_assistant", "ai-orchestration-disabled-with-reason", reason = reason.as_str())
             };
             (body, StatusKind::Cancelled)
         }
@@ -1417,11 +1404,11 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
             let label = if error.is_empty() {
                 FAILED_TO_START_ORCHESTRATION.clone()
             } else {
-                crate::tr!("ai", "failed-to-start-orchestration-with-error", error = error.as_str())
+                crate::tr!("ai_assistant", "ai-failed-to-start-orchestration-with-error", error = error.as_str())
             };
             (label, StatusKind::Failure)
         }
-        RunAgentsResult::Cancelled => (SPAWN_AGENTS_CANCELLED.clone(), StatusKind::Cancelled),
+        RunAgentsResult::Cancelled => ("Spawn agents cancelled".to_string(), StatusKind::Cancelled),
     }
 }
 
@@ -1441,9 +1428,9 @@ fn render_spawning_card(
 ) -> Box<dyn Element> {
     let total = snapshot.agent_count;
     let label = if total == 1 {
-        crate::tr!("ai", "spawning-one-agent")
+        "Spawning 1 agent\u{2026}".to_string()
     } else {
-        crate::tr!("ai", "spawning-agents", total = total)
+        format!("Spawning {total} agents\u{2026}")
     };
     render_status_only_card(label, appearance, StatusKind::Spawning, app)
 }

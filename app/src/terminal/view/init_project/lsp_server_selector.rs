@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use lsp::supported_servers::LSPServerType;
 use warpui::elements::{

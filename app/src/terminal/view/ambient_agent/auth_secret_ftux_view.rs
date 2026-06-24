@@ -741,23 +741,19 @@ impl AuthSecretFtuxView {
 
         let main_text = {
             let description = if self.current_type_info().is_some() {
-                crate::tr!("agent_cloud", "enter-credentials-below")
+                "Enter your credentials below.".to_string()
             } else {
                 let display_name = harness_display::display_name(self.harness);
-                crate::tr!("agent_cloud", "select-api-key-type", display_name = display_name)
+                crate::tr!("agent_cloud", "select-api-key", display_name = display_name)
             };
-            Text::new_inline(
-                description,
-                font_family,
-                DESCRIPTION_FONT_SIZE,
-            )
+            Text::new_inline(description, font_family, DESCRIPTION_FONT_SIZE)
                 .with_color(theme.foreground().into())
                 .soft_wrap(true)
                 .finish()
         };
 
         let privacy_text = Text::new_inline(
-            crate::tr!("agent_cloud", "credentials-encrypted-e2e"),
+            "Your credentials are encrypted end-to-end. ".to_string(),
             font_family,
             TYPE_DESCRIPTION_FONT_SIZE,
         )
@@ -771,7 +767,7 @@ impl AuthSecretFtuxView {
             .map(|info| info.learn_more_url)
             .unwrap_or_else(|| learn_more_url_for_harness(self.harness));
         let learn_more_label =
-            crate::tr!("agent_cloud", "learn-more-auth-for", harness_name = harness_name);
+            format!("Learn more about authentication for {harness_name} in Warp.");
         let learn_more = Hoverable::new(self.learn_more_mouse_state.clone(), move |state| {
             let color = if state.is_hovered() {
                 accent_color
@@ -990,12 +986,12 @@ impl AuthSecretFtuxView {
         row.add_child(Expanded::new(1., Empty::new().finish()).finish());
 
         let (label, action) = if self.creation_state.is_some() {
-            ("Back", AuthSecretFtuxAction::Back)
+            (crate::tr!("common", "cancel-label"), AuthSecretFtuxAction::Back)
         } else {
-            ("Cancel", AuthSecretFtuxAction::Cancel)
+            (crate::tr!("common", "cancel-label"), AuthSecretFtuxAction::Cancel)
         };
         row.add_child(self.render_button(
-            crate::tr!("common", "cancel-label"),
+            label,
             self.back_button_mouse_state.clone(),
             None,
             action,

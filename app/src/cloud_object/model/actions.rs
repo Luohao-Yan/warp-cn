@@ -10,6 +10,18 @@ use crate::server::ids::{HashedSqliteId, ObjectUid};
 
 pub enum ObjectActionsEvent {}
 
+fn action_type_singular(action_type: &ObjectActionType) -> String {
+    match action_type {
+        ObjectActionType::Execute => crate::tr!("cloud_object", "action-run-singular"),
+    }
+}
+
+fn action_type_plural(action_type: &ObjectActionType) -> String {
+    match action_type {
+        ObjectActionType::Execute => crate::tr!("cloud_object", "action-run-plural"),
+    }
+}
+
 #[cfg(not(target_family = "wasm"))]
 pub fn object_action_from_persisted(
     other: crate::persistence::model::PersistedObjectAction,
@@ -50,21 +62,26 @@ pub fn object_action_from_persisted(
             .ok_or(())?;
         let pending = other.pending.ok_or(())?;
 
-impl ObjectActionType {
-    fn singular(&self) -> String {
-        match self {
-            ObjectActionType::Execute => crate::tr!("cloud_object", "action-run-singular"),
+        // The processed_at_timestamp is still None when the action hasn't been synced.
+        let processed_at_timestamp = other
+            .processed_at_timestamp
+            .as_ref()
+            .map(|time| time.and_utc());
+        ObjectActionSubtype::SingleAction {
+            timestamp,
+            data: other.data,
+            pending,
+            processed_at_timestamp,
         }
     };
 
-    fn plural(&self) -> String {
-        match self {
-            ObjectActionType::Execute => crate::tr!("cloud_object", "action-run-plural"),
-        }
-    }
-}
+    // The object_sync_id stored in SQLite is the hashed id that's used to index into the ObjectActions
+    // model.
+    let hashed_object_id = other.hashed_object_id;
+    let action_type = match other.action.as_str() {
         s if s == ObjectActionType::Execute.to_string() => ObjectActionType::Execute,
         _ => return Err(()),
+    };
 
     // NOTE: This is needed since we only store the sqlite hash, but we need the uid (the second part of the hash)
     // to index into CloudModel and store the object actions in memory.
@@ -260,7 +277,7 @@ impl ObjectActions {
         let one_day_ago = Utc::now() - Duration::days(1);
         let in_the_last_day = all_relevant_actions.clone().filter(|a| matches!(a.action_subtype, ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_day_ago)).count();
         if in_the_last_day > 0 {
-            let action_word = if in_the_last_day == 1 { action_type.singular() } else { action_type.plural() };
+            let action_word = if in_the_last_day == 1 { action_type_singular(&action_type) } else { action_type_plural(&action_type) };
             return Some(crate::tr!("cloud_object", "action-summary-day", count = in_the_last_day, action_word = action_word));
         }
 
@@ -268,7 +285,7 @@ impl ObjectActions {
         let one_week_ago = Utc::now() - Duration::days(7);
         let in_the_last_week = all_relevant_actions.clone().filter(|a| matches!(a.action_subtype, ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_week_ago)).count();
         if in_the_last_week > 0 {
-            let action_word = if in_the_last_week == 1 { action_type.singular() } else { action_type.plural() };
+            let action_word = if in_the_last_week == 1 { action_type_singular(&action_type) } else { action_type_plural(&action_type) };
             return Some(crate::tr!("cloud_object", "action-summary-week", count = in_the_last_week, action_word = action_word));
         }
 
@@ -276,28 +293,28 @@ impl ObjectActions {
         let one_month_ago = Utc::now() - Duration::days(30);
         let in_the_last_month = all_relevant_actions.clone().filter(|a| matches!(a.action_subtype, ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_month_ago)).count();
         if in_the_last_month > 0 {
-            let action_word = if in_the_last_month == 1 { action_type.singular() } else { action_type.plural() };
+            let action_word = if in_the_last_month == 1 { action_type_singular(&action_type) } else { action_type_plural(&action_type) };
             return Some(crate::tr!("cloud_object", "action-summary-month", count = in_the_last_month, action_word = action_word));
         }
 
         // Finally, if all else turned up fruitless, return the yearly count.
         let one_year_ago = Utc::now() - Duration::days(365);
-        let in_the_last_year: i64 = all_relevant_actions
+        let in_the_last_year: i32 = all_relevant_actions
             .clone()
             .filter_map(|a| match a.action_subtype {
                 ObjectActionSubtype::SingleAction { timestamp, .. } if timestamp > one_year_ago => {
-                    Some(1_i64)
+                    Some(1)
                 }
                 ObjectActionSubtype::BundledActions {
                     count,
                     oldest_timestamp,
                     ..
-                } if oldest_timestamp > one_year_ago => Some(count as i64),
+                } if oldest_timestamp > one_year_ago => Some(count),
                 _ => None,
             })
             .sum();
 
-        let action_word = if in_the_last_year == 1 { action_type.singular() } else { action_type.plural() };
+        let action_word = if in_the_last_year == 1 { action_type_singular(&action_type) } else { action_type_plural(&action_type) };
         Some(crate::tr!("cloud_object", "action-summary-year", count = in_the_last_year, action_word = action_word))
     }
 

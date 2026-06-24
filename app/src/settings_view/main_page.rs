@@ -74,10 +74,10 @@ static SETTINGS_UPGRADE_TURBO: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "upgrade-turbo"));
 static SETTINGS_UPGRADE_LIGHTSPEED: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "upgrade-lightspeed"));
-static SETTINGS_ACCOUNT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "account"));
-static SETTINGS_VERSION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "version"));
+static SETTINGS_ACCOUNT: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "account").leak());
+static SETTINGS_VERSION: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "version").leak());
 lazy_static! {
     static ref SETTINGS_SYNC_BINDINGS_ADDED: Arc<Mutex<bool>> = Default::default();
 }
@@ -164,45 +164,45 @@ impl MainPageAction {
     }
 }
 
-static SETTINGS_UPGRADE_PLAN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "upgrade-plan"));
-static SETTINGS_GENERATE_STRIPE_LINK: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "generate-stripe-link"));
-static SETTINGS_TOGGLE_SETTINGS_SYNC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "toggle-settings-sync"));
-static SETTINGS_UNKNOWN_REASON: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "unknown-reason"));
-static SETTINGS_UP_TO_DATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "up-to-date"));
-static SETTINGS_CHECK_FOR_UPDATES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "check-for-updates"));
-static SETTINGS_CHECKING_FOR_UPDATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "checking-for-update"));
-static SETTINGS_DOWNLOADING_UPDATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "downloading-update"));
-static SETTINGS_UPDATE_AVAILABLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "update-available"));
-static SETTINGS_RELAUNCH_WARP: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "relaunch-warp"));
-static SETTINGS_UPDATING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "updating"));
-static SETTINGS_INSTALLED_UPDATE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "installed-update"));
-static SETTINGS_UPDATE_CANT_INSTALL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "update-cant-install"));
-static SETTINGS_UPDATE_WARP_MANUALLY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "update-warp-manually"));
-static SETTINGS_UPDATE_CANT_LAUNCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "update-cant-launch"));
+static SETTINGS_UPGRADE_PLAN: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "upgrade-plan").leak());
+static SETTINGS_GENERATE_STRIPE_LINK: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "generate-stripe-link").leak());
+static SETTINGS_TOGGLE_SETTINGS_SYNC: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "toggle-settings-sync").leak());
+static SETTINGS_UNKNOWN_REASON: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "unknown-reason").leak());
+static SETTINGS_UP_TO_DATE: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "up-to-date").leak());
+static SETTINGS_CHECK_FOR_UPDATES: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "check-for-updates").leak());
+static SETTINGS_CHECKING_FOR_UPDATE: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "checking-for-update").leak());
+static SETTINGS_DOWNLOADING_UPDATE: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "downloading-update").leak());
+static SETTINGS_UPDATE_AVAILABLE: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "update-available").leak());
+static SETTINGS_RELAUNCH_WARP: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "relaunch-warp").leak());
+static SETTINGS_UPDATING: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "updating").leak());
+static SETTINGS_INSTALLED_UPDATE: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "installed-update").leak());
+static SETTINGS_UPDATE_CANT_INSTALL: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "update-cant-install").leak());
+static SETTINGS_UPDATE_WARP_MANUALLY: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "update-warp-manually").leak());
+static SETTINGS_UPDATE_CANT_LAUNCH: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("settings", "update-cant-launch").leak());
 
 impl From<&MainPageAction> for LoginGatedFeature {
     fn from(val: &MainPageAction) -> LoginGatedFeature {
         use MainPageAction::*;
         match val {
-            Upgrade { .. } => SETTINGS_UPGRADE_PLAN.clone(),
-            GenerateStripeBillingPortalLink { .. } => SETTINGS_GENERATE_STRIPE_LINK.clone(),
-            ToggleSettingsSync => SETTINGS_TOGGLE_SETTINGS_SYNC.clone(),
-            _ => SETTINGS_UNKNOWN_REASON.clone(),
+            Upgrade { .. } => *SETTINGS_UPGRADE_PLAN,
+            GenerateStripeBillingPortalLink { .. } => *SETTINGS_GENERATE_STRIPE_LINK,
+            ToggleSettingsSync => *SETTINGS_TOGGLE_SETTINGS_SYNC,
+            _ => *SETTINGS_UNKNOWN_REASON,
         }
     }
 }
@@ -354,7 +354,7 @@ impl MainSettingsPageView {
 
         widgets.push(Box::new(LogoutWidget::default()));
 
-        let page = PageType::new_uncategorized(widgets, Some(SETTINGS_ACCOUNT.clone()));
+        let page = PageType::new_uncategorized(widgets, Some(*SETTINGS_ACCOUNT));
 
         MainSettingsPageView { page, auth_state }
     }

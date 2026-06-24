@@ -1,6 +1,7 @@
 use std::default::Default;
 use std::fs;
 use std::fs::remove_file;
+use std::sync::LazyLock;
 
 use warpui::assets::asset_cache::AssetSource;
 use warpui::elements::{

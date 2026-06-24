@@ -59,6 +59,7 @@ use crate::terminal::TerminalModel;
 use crate::ui_components::blended_colors;
 use crate::util::bindings::keybinding_name_to_keystroke;
 use crate::view_components::action_button::{ButtonSize, KeystrokeSource, NakedTheme};
+use std::sync::LazyLock;
 use crate::view_components::compactible_action_button::{
     CompactibleActionButton, RenderCompactibleActionButton, LARGE_SIZE_SWITCH_THRESHOLD,
     MEDIUM_SIZE_SWITCH_THRESHOLD, SMALL_SIZE_SWITCH_THRESHOLD,
@@ -69,21 +70,18 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 pub const REQUESTED_COMMAND_BODY_VERTICAL_PADDING: f32 = 16.;
 
-const REQUESTED_COMMAND_ACCEPT_LABEL: &str = "ai-run";
-
-const LOADING_MESSAGE: &str = "ai-generating-command";
-
 static AI_ALWAYS_ASK_PERMISSION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-always-ask-permission"));
-const COMMAND_WAITING_FOR_USER_MESSAGE: &str = "ai-ok-run-command";
-const MCP_TOOL_WAITING_FOR_USER_MESSAGE: &str = "ai-ok-call-mcp-tool";
-const MONITORING_COMMAND_MESSAGE: &str = "ai-agent-monitoring-command";
-const AGENT_NEEDS_INPUT_MESSAGE: &str = "ai-agent-needs-input";
-const USER_TOOK_CONTROL_COMMAND_MESSAGE: &str = "ai-user-in-control";
-const USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE: &str = "ai-user-stopped-agent";
-const AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE: &str = "ai-user-take-control";
-const AGENT_ERRORED_COMMAND_MESSAGE: &str = "ai-agent-errored";
-pub const VIEWING_COMMAND_DETAIL_MESSAGE: &str = "ai-viewing-command-detail";
-const VIEWING_MCP_TOOL_DETAIL_MESSAGE: &str = "ai-viewing-mcp-tool-detail";
+pub static COMMAND_WAITING_FOR_USER_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-ok-run-command"));
+static MCP_TOOL_WAITING_FOR_USER_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-ok-call-mcp-tool"));
+static MONITORING_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-monitoring-command"));
+static AGENT_NEEDS_INPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-needs-input"));
+static USER_TOOK_CONTROL_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-user-in-control"));
+static USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-user-stopped-agent"));
+static AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-user-take-control"));
+static AGENT_ERRORED_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-errored"));
+pub static VIEWING_COMMAND_DETAIL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-viewing-command-detail"));
+static VIEWING_MCP_TOOL_DETAIL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-viewing-mcp-tool-detail"));
+static LOADING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-command"));
 
 const EDIT_COMMAND_ACTION_NAME: &str = "requested_command:edit";
 
@@ -149,7 +147,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         EDIT_COMMAND_ACTION_NAME,
-        crate::tr!("ai_assistant", "edit-requested-command"),
+        crate::tr!("ai_assistant", "ai-edit-requested-command"),
         RequestedCommandViewAction::OpenEditMode,
     )
     .with_key_binding(cmd_or_ctrl_shift("e"))
@@ -598,8 +596,8 @@ impl RequestedCommandView {
             .unwrap_or_default();
 
             let accept_item = MenuItemFields::new_with_label(
-                REQUESTED_COMMAND_ACCEPT_LABEL,
-                accept_keystroke.as_str(),
+                crate::tr!("ai_assistant", "ai-run"),
+                accept_keystroke,
             )
             .with_on_select_action(RequestedCommandViewAction::Accept)
             .into_item();
@@ -654,7 +652,7 @@ impl RequestedCommandView {
                 citations_padding,
                 app,
             )
-            .map(|citation| (crate::tr!("ai", "copied-from"), citation))
+            .map(|citation| (crate::tr!("ai_assistant", "ai-copied-from"), citation))
         } else {
             // Otherwise, we render all the citations (if any) and mention that the command was derived from them.
             render_citation_chips(
@@ -664,7 +662,7 @@ impl RequestedCommandView {
                 citations_padding,
                 app,
             )
-            .map(|citations| (crate::tr!("ai", "derived-from"), citations))
+            .map(|citations| (crate::tr!("ai_assistant", "ai-derived-from"), citations))
         };
 
         let citations_footer = citations_footer_props.map(|(prefix, suffix)| {
@@ -762,7 +760,7 @@ impl RequestedCommandView {
                 )
                 .with_child(
                     Text::new(
-                        &*AI_ALWAYS_ASK_PERMISSION,
+                        crate::tr!("ai_assistant", "ai-always-ask-permission"),
                         appearance.ui_font_family(),
                         font_size,
                     )
@@ -777,7 +775,7 @@ impl RequestedCommandView {
                             appearance
                                 .ui_builder()
                                 .link(
-                                    crate::tr!("ai_assistant", "ai-manage-command-execution").into(),
+                                    "Manage command execution setting".into(),
                                     None,
                                     Some(Box::new(move |ctx| {
                                         ctx.dispatch_typed_action(
@@ -996,7 +994,7 @@ impl RequestedCommandView {
             .as_ref(app)
             .get_action_status(&self.action_id);
 
-        let mut title: String;
+        let mut title: Cow<'static, str>;
         let mut font_override = None;
         let mut font_color_override = None;
 
@@ -1032,8 +1030,8 @@ impl RequestedCommandView {
             }
             Some(AIActionStatus::Blocked) => {
                 title = match &self.action_type {
-                    RequestedActionViewType::Command => crate::tr!("ai_assistant", COMMAND_WAITING_FOR_USER_MESSAGE),
-                    RequestedActionViewType::McpTool => crate::tr!("ai_assistant", MCP_TOOL_WAITING_FOR_USER_MESSAGE),
+                    RequestedActionViewType::Command => COMMAND_WAITING_FOR_USER_MESSAGE.clone().into(),
+                    RequestedActionViewType::McpTool => MCP_TOOL_WAITING_FOR_USER_MESSAGE.clone().into(),
                 };
             }
             Some(AIActionStatus::RunningAsync) | Some(AIActionStatus::Finished(..))
@@ -1053,27 +1051,27 @@ impl RequestedCommandView {
                                         );
 
                                     if is_errored {
-                                        crate::tr!("ai_assistant", AGENT_ERRORED_COMMAND_MESSAGE)
+                                        AGENT_ERRORED_COMMAND_MESSAGE.clone().into()
                                     } else if *is_blocked {
-                                        crate::tr!("ai_assistant", AGENT_NEEDS_INPUT_MESSAGE)
+                                        AGENT_NEEDS_INPUT_MESSAGE.clone().into()
                                     } else {
-                                        crate::tr!("ai_assistant", MONITORING_COMMAND_MESSAGE)
+                                        MONITORING_COMMAND_MESSAGE.clone().into()
                                     }
                                 }
                                 LongRunningCommandControlState::User { reason } => {
-                                    header_message_for_user_take_over_reason(reason)
+                                    header_message_for_user_take_over_reason(reason).into()
                                 }
                             }
                         } else {
-                            crate::tr!("ai_assistant", VIEWING_COMMAND_DETAIL_MESSAGE)
+                            VIEWING_COMMAND_DETAIL_MESSAGE.clone().into()
                         }
                     }
-                    RequestedActionViewType::McpTool => crate::tr!("ai_assistant", VIEWING_MCP_TOOL_DETAIL_MESSAGE),
+                    RequestedActionViewType::McpTool => VIEWING_MCP_TOOL_DETAIL_MESSAGE.clone().into(),
                 };
             }
             None => {
                 if self.block_model.status(app).is_streaming() {
-                    title = crate::tr!("ai_assistant", LOADING_MESSAGE);
+                    title = LOADING_MESSAGE.clone().into();
 
                     if !self
                         .block_model
@@ -1087,16 +1085,16 @@ impl RequestedCommandView {
                 } else if requested_command_block.is_some_and(|block| block.finished()) {
                     // If a finished command block exists but there's no action status,
                     // treat the same as a finished command (normal text styling).
-                    title = self.get_header_title_text();
+                    title = self.get_header_title_text().into();
                     font_override = Some(appearance.monospace_font_family());
                 } else {
                     // If there is no action status and response is not streaming, it was cancelled
                     // mid-flight.
                     let title_str = self.get_header_title_text();
                     title = if title_str.trim().is_empty() {
-                        crate::tr!("ai_assistant", LOADING_MESSAGE)
+                        LOADING_MESSAGE.clone().into()
                     } else {
-                        title_str
+                        title_str.into()
                     };
                     if self.action_type.is_requested_command() {
                         font_override = Some(appearance.monospace_font_family());
@@ -1108,12 +1106,12 @@ impl RequestedCommandView {
                 }
             }
             _ => {
-                title = self.get_header_title_text();
+                title = self.get_header_title_text().into();
 
                 // Show cancelled command loading message when the command was cancelled during generation,
                 // and then restored with an empty title as a result.
                 if title.is_empty() {
-                    title = crate::tr!("ai_assistant", LOADING_MESSAGE);
+                    title = LOADING_MESSAGE.clone().into();
                     font_color_override = Some(blended_colors::text_disabled(
                         appearance.theme(),
                         appearance.theme().surface_2(),
@@ -1320,10 +1318,10 @@ pub(crate) fn header_message_for_user_take_over_reason(
     reason: &UserTakeOverReason,
 ) -> String {
     match reason {
-        UserTakeOverReason::Manual => crate::tr!("ai_assistant", USER_TOOK_CONTROL_COMMAND_MESSAGE),
-        UserTakeOverReason::Stop => crate::tr!("ai_assistant", USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE),
+        UserTakeOverReason::Manual => USER_TOOK_CONTROL_COMMAND_MESSAGE.clone(),
+        UserTakeOverReason::Stop => USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE.clone(),
         UserTakeOverReason::TransferFromAgent { .. } => {
-            crate::tr!("ai_assistant", AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE)
+            AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE.clone()
         }
     }
 }
@@ -1440,13 +1438,13 @@ impl View for RequestedCommandView {
                 // If we have a result, show the JSON response.
                 let result_text = match result {
                     CallMCPToolResult::Success { result } => serde_json::to_string_pretty(result)
-                        .unwrap_or_else(|_| crate::tr!("ai", "error-formatting-json")),
+                        .unwrap_or_else(|_| "Error formatting JSON".to_string()),
                     CallMCPToolResult::Error(error) => {
-                        crate::tr!("ai", "mcp-error", error = error.to_string())
+                        format!("Error: {error}")
                     }
-                    CallMCPToolResult::Cancelled => crate::tr!("ai", "tool-call-cancelled"),
+                    CallMCPToolResult::Cancelled => "Tool call was cancelled".to_string(),
                 };
-                crate::tr!("ai", "mcp-response", command = command_text, result = result_text.as_str())
+                format!("{command_text}\n\nResponse: {result_text}")
             } else if self.is_header_expanded {
                 command_text.to_string()
             } else {

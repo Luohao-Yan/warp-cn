@@ -121,7 +121,7 @@ pub enum LoginSlideEvent {
 }
 
 /// How the user arrived at the login slide. Controls which step is shown first
-/// and how crate::tr!("common", "back-label") is routed when the user backs out of the privacy-settings step.
+/// and how "Back" is routed when the user backs out of the privacy-settings step.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum LoginSlideSource {
     /// Reached via the normal onboarding flow (e.g. agent intention requires an account).
@@ -307,8 +307,7 @@ impl LoginSlideView {
                 },
                 ctx,
             );
-            let placeholder = crate::tr!("auth", "token-placeholder");
-            editor.set_placeholder_text(&placeholder, ctx);
+            editor.set_placeholder_text(&crate::tr!("auth", "token-placeholder"), ctx);
             editor
         });
 
@@ -534,7 +533,7 @@ impl LoginSlideView {
                 crate::tr!("auth", "connect-ai-description"),
             ),
             LoginPurpose::ThirdParty => (
-                crate::tr!("auth", "create-an-account"),
+                crate::tr!("auth", "signup-title"),
                 crate::tr!("auth", "connect-ai-description"),
             ),
         };
@@ -599,7 +598,7 @@ impl LoginSlideView {
             .with_child(
                 ui_builder
                     .link(
-                        crate::tr!("auth", "privacy-settings-slide").into(),
+                        crate::tr!("auth", "privacy-settings").into(),
                         None,
                         Some(Box::new(|ctx| {
                             ctx.dispatch_typed_action(LoginSlideAction::ShowPrivacySettings);
@@ -655,7 +654,7 @@ impl LoginSlideView {
         let skip_label = match self.login_purpose() {
             LoginPurpose::WarpDrive => crate::tr!("auth", "disable-warp-drive"),
             LoginPurpose::WarpAgent => crate::tr!("auth", "disable-ai-features"),
-            LoginPurpose::ThirdParty => crate::tr!("auth", "skip-for-now"),
+            LoginPurpose::ThirdParty => crate::tr!("auth", "skip-button"),
         };
         let skip_button = self.skip_button.render(
             appearance,
@@ -721,8 +720,9 @@ impl LoginSlideView {
             ..Default::default()
         };
 
+        let title_text = crate::tr!("auth", "sign-in-on-browser");
         let title = FormattedTextElement::from_str(
-            crate::tr!("auth", "sign-in-on-browser"),
+            title_text,
             appearance.ui_font_family(),
             36.,
         )
@@ -880,8 +880,9 @@ impl LoginSlideView {
     ) -> Vec<Box<dyn Element>> {
         let theme = appearance.theme();
 
+        let privacy_text = crate::tr!("auth", "privacy-settings-slide");
         let title =
-            FormattedTextElement::from_str(crate::tr!("auth", "privacy-settings-slide"), appearance.ui_font_family(), 36.)
+            FormattedTextElement::from_str(privacy_text, appearance.ui_font_family(), 36.)
                 .with_color(internal_colors::text_main(
                     theme,
                     theme.background().into_solid(),
@@ -944,28 +945,28 @@ impl LoginSlideView {
 
     fn render_skip_dialog(&self, appearance: &Appearance) -> Box<dyn Element> {
         let (title, body, features, cancel_label): (
-            String,
-            String,
+            &'static str,
+            &'static str,
             &'static [&'static str],
-            String,
+            &'static str,
         ) = match self.login_purpose() {
             LoginPurpose::WarpDrive => (
-                crate::tr!("auth", "sure-disable-warp-drive"),
-                crate::tr!("auth", "warp-drive-benefits"),
+                Box::leak(crate::tr!("auth", "sure-disable-warp-drive").into_boxed_str()),
+                Box::leak(crate::tr!("auth", "warp-drive-benefits").into_boxed_str()),
                 WARP_DRIVE_FEATURES,
-                crate::tr!("auth", "enable-warp-drive"),
+                Box::leak(crate::tr!("auth", "enable-warp-drive").into_boxed_str()),
             ),
             LoginPurpose::WarpAgent => (
-                crate::tr!("auth", "sure-disable-ai-features"),
-                crate::tr!("auth", "ai-benefits"),
+                Box::leak(crate::tr!("auth", "sure-disable-ai-features").into_boxed_str()),
+                Box::leak(crate::tr!("auth", "ai-benefits").into_boxed_str()),
                 AI_FEATURES,
-                crate::tr!("auth", "enable-ai-features"),
+                Box::leak(crate::tr!("auth", "enable-ai-features").into_boxed_str()),
             ),
             LoginPurpose::ThirdParty => (
-                crate::tr!("auth", "sure-skip-login"),
-                crate::tr!("auth", "ai-benefits"),
+                Box::leak(crate::tr!("auth", "skip-login-confirm").into_boxed_str()),
+                Box::leak(crate::tr!("auth", "ai-benefits").into_boxed_str()),
                 AI_FEATURES,
-                crate::tr!("auth", "create-an-account"),
+                Box::leak(crate::tr!("auth", "signup-title").into_boxed_str()),
             ),
         };
 

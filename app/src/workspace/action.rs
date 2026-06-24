@@ -833,13 +833,14 @@ impl From<&WorkspaceAction> for LoginGatedFeature {
     fn from(val: &WorkspaceAction) -> LoginGatedFeature {
         use WorkspaceAction::*;
         match val {
-            ImportToTeamDrive => crate::tr!("workspace", "importing-to-team-drive"),
-            CreateTeamNotebook => crate::tr!("workspace", "creating-team-notebook"),
-            CreateTeamWorkflow => crate::tr!("workspace", "creating-team-workflow"),
-            CreateTeamFolder => crate::tr!("workspace", "creating-team-folder"),
-            CreateTeamEnvVarCollection => crate::tr!("workspace", "creating-team-env-var-collection"),
-            CreateTeamAIPrompt => crate::tr!("workspace", "creating-team-prompt"),
-            OpenShareSessionModal(_) => crate::tr!("workspace", "sharing-session"), _ => crate::tr!("common", "unknown-label"),
+            ImportToTeamDrive => crate::tr!("workspace", "importing-to-team-drive").leak(),
+            CreateTeamNotebook => crate::tr!("workspace", "creating-team-notebook").leak(),
+            CreateTeamWorkflow => crate::tr!("workspace", "creating-team-workflow").leak(),
+            CreateTeamFolder => crate::tr!("workspace", "creating-team-folder").leak(),
+            CreateTeamEnvVarCollection => crate::tr!("workspace", "creating-team-env-var-collection").leak(),
+            CreateTeamAIPrompt => crate::tr!("workspace", "creating-team-prompt").leak(),
+            OpenShareSessionModal(_) => crate::tr!("workspace", "sharing-session").leak(),
+            _ => crate::tr!("common", "unknown-label").leak(),
         }
     }
 }

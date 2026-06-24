@@ -1,5 +1,5 @@
 use std::ops::Deref;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use lazy_static::lazy_static;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
@@ -38,8 +38,8 @@ use crate::{safe_info, send_telemetry_from_ctx};
 
 const HEADER_FONT_SIZE: f32 = 18.;
 const HEADER_MARGIN_BOTTOM: f32 = 32.;
-static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-friend"));
-static ANONYMOUS_USER_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-signup-prompt"));
+static HEADER_TEXT: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("settings", "invite-friend").leak());
+static ANONYMOUS_USER_HEADER_TEXT: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("settings", "referral-signup-prompt").leak());
 
 const INVITE_FIELD_LABEL_BOTTOM_MARGIN: f32 = 8.;
 
@@ -222,7 +222,7 @@ impl ReferralsPageView {
             me.handle_editor_event(event, ctx);
         });
 
-        let page = PageType::new_monolith(ReferralsWidget::default(), Some(HEADER_TEXT.clone()), true);
+        let page = PageType::new_monolith(ReferralsWidget::default(), Some(*HEADER_TEXT), true);
         Self {
             page,
             referrals_client,
@@ -668,7 +668,7 @@ impl ReferralsWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .span(&*ANONYMOUS_USER_HEADER_TEXT)
+                        .span(*ANONYMOUS_USER_HEADER_TEXT)
                         .with_style(UiComponentStyles {
                             font_size: Some(HEADER_FONT_SIZE),
                             ..Default::default()

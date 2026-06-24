@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::MouseStateHandle;
 use warpui::ui_components::components::UiComponent;

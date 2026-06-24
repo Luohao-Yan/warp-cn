@@ -1,6 +1,5 @@
 use crate::code::buffer_location::LocalOrRemotePath;
 use crate::code_review::comments::CommentId;
-use std::path::PathBuf;
 use std::sync::LazyLock;
 
 static INVALID_FILE_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-invalid-file-name"));

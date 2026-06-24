@@ -231,21 +231,18 @@ impl GlobalSearch {
                     multiline,
                     spawner,
                 )
-                .await
-            },
-            move |_, result, ctx| match result {
-                Ok(total_match_count) => {
-                    ctx.emit(GlobalSearchEvent::Completed {
-                        search_id,
-                        total_match_count,
-                    });
-                }
-                Err(err) => {
-                    log::error!("GlobalSearch: warp_ripgrep CLI search failed or aborted: {err}");
-                    ctx.emit(GlobalSearchEvent::Failed {
-                        search_id,
-                        error: crate::tr!("workspace", "global-search-failed"),
-                    });
+                .await;
+                match result {
+                    Ok(match_count) => Some(SourceResult {
+                        match_count,
+                        capped: false,
+                    }),
+                    Err(err) => {
+                        log::error!(
+                            "GlobalSearch: warp_ripgrep CLI search failed or aborted: {err}"
+                        );
+                        None
+                    }
                 }
             },
             ctx,
@@ -392,7 +389,7 @@ impl GlobalSearch {
         if active.completed_sources == 0 {
             ctx.emit(GlobalSearchEvent::Failed {
                 search_id,
-                error: "Global search failed.".to_string(),
+                error: crate::tr!("workspace", "global-search-failed"),
             });
         } else {
             ctx.emit(GlobalSearchEvent::Completed {

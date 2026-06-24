@@ -4,7 +4,6 @@ use serde::Serialize;
 use std::rc::Rc;
 
 use pathfinder_geometry::vector::vec2f;
-use serde::Serialize;
 use warp_core::channel::ChannelState;
 use warp_core::features::FeatureFlag;
 use warp_core::ui::theme::color::internal_colors::{neutral_2, neutral_3};

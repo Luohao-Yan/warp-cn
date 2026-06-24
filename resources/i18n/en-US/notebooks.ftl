@@ -97,9 +97,7 @@ notebooks-move-to-space = Move to {$space_name}
 
 ## -- File notebook view ---------------------------------------------------------
 
-notebooks-could-not-read = Could not read {$file_name}
 notebooks-try-again = Try again
-notebooks-loading-file = Loading {$file_name}...
 notebooks-missing-source-file = Missing source file
 notebooks-refresh-file = Refresh file
 notebooks-open-in-editor = Open in editor
@@ -252,7 +250,6 @@ notebooks-toggle-task-list-a11y = Toggle task list
 
 ## -- File notebook strings ------------------------------------------------------
 
-notebooks-command-from = Command from {$location_name}
 notebooks-move-to-space-prefix = Move to {""}
 
 ## -- Notebook additional bindings --

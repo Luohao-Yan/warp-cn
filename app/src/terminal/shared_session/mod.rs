@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use byte_unit::Byte;
 use instant::Duration;
 use serde::{Deserialize, Serialize};

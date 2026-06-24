@@ -926,16 +926,17 @@ impl BlocklistAIStatusBar {
         let error_color = theme.ansi_fg_red();
 
         if let Some(auth_url) = ambient_agent_model.github_auth_url() {
+            let default_error = crate::tr!("ai_assistant", "ai-missing-github-auth");
             let error_message = ambient_agent_model
                 .github_auth_error_message()
-                .unwrap_or(&crate::tr!("ai", "missing-github-auth"));
+                .unwrap_or(&default_error);
             return Some(render_wrapping_standard_message_bar(
                 CoreIcon::Triangle,
                 error_color,
                 error_color,
                 vec![
                     FormattedTextFragment::plain_text(format!("{error_message} ")),
-                    FormattedTextFragment::hyperlink(crate::tr!("ai", "authenticate-github"), auth_url.to_owned()),
+                    FormattedTextFragment::hyperlink(crate::tr!("ai_assistant", "ai-authenticate-github"), auth_url.to_owned()),
                 ],
                 app,
             ));
@@ -948,7 +949,7 @@ impl BlocklistAIStatusBar {
                 color,
                 color,
                 vec![FormattedTextFragment::plain_text(
-                    crate::tr!("ai", "cloud-agent-cancelled"),
+                    crate::tr!("ai_assistant", "ai-cloud-agent-cancelled"),
                 )],
                 app,
             ));
@@ -1070,9 +1071,9 @@ fn render_fallback_explanation<V: View>(
         .map(|info| info.base_model_name.as_str());
     let text = match primary_name {
         Some(primary) => {
-            crate::tr!("ai", "primary-model-failed-with-name", primary = primary)
+            crate::tr!("ai_assistant", "ai-primary-model-failed-with-name", primary = primary)
         }
-        None => crate::tr!("ai", "primary-model-failed"),
+        None => crate::tr!("ai_assistant", "ai-primary-model-failed"),
     };
     let appearance = Appearance::as_ref(app);
     Text::new_inline(
@@ -1125,8 +1126,8 @@ fn resolve_fallback_warping_message<V: View>(
         return None;
     }
     Some(match display_name.as_deref() {
-        Some(name) => crate::tr!("ai", "warping-with-model", name = name),
-        None => crate::tr!("ai", "warping-with-another-model"),
+        Some(name) => crate::tr!("ai_assistant", "ai-warping-with-model", name = name),
+        None => crate::tr!("ai_assistant", "ai-warping-with-another-model"),
     })
 }
 
@@ -1164,7 +1165,7 @@ impl View for BlocklistAIStatusBar {
                     WarpingIndicatorProps {
                         icon: None,
                         warping_indicator_text: MaybeShimmeringText::Shimmering {
-                            text: crate::tr!("ai", "setting-up-env").into(),
+                            text: crate::tr!("ai_assistant", "ai-setting-up-env").into(),
                             shimmering_text_handle: self.shimmering_text_handle.clone(),
                         },
                         non_shimmering_text: None,
@@ -1187,8 +1188,6 @@ impl View for BlocklistAIStatusBar {
                     .current_message()
                     .is_none()
             {
-                let exit_text = crate::tr!("ai", "exit");
-                let exit_tooltip = crate::tr!("ai", "exit-agent-input");
                 render_warping_indicator_base(
                     WarpingIndicatorProps {
                         icon: Some(icons::gray_clock_icon(appearance).finish()),
@@ -1198,8 +1197,8 @@ impl View for BlocklistAIStatusBar {
                         non_shimmering_text: None,
                         non_shimmering_suffix: None,
                         buttons: Some(render_switch_control_to_user_button(
-                            exit_text,
-                            exit_tooltip,
+                            crate::tr!("ai_assistant", "ai-exit"),
+                            crate::tr!("ai_assistant", "ai-exit-agent-input"),
                             ButtonProps {
                                 button_handle: &self.state_handles.take_over_button,
                                 keystroke: self.set_terminal_input_keystroke.as_ref(),

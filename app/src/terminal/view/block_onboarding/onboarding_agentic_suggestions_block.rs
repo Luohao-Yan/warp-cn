@@ -1,5 +1,4 @@
 use std::sync::LazyLock;
-
 use markdown_parser::weight::CustomWeight;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use regex::Regex;
@@ -9,7 +8,7 @@ use warp_core::ui::theme::color::internal_colors;
 use warpui::elements::{
     Border, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Flex,
     FormattedTextElement, Hoverable, MainAxisAlignment, MainAxisSize, MouseStateHandle,
-    ParentElement, Radius, Shrinkable, Text, Wrap,
+    ParentElement, Radius, Text, Wrap,
 };
 use warpui::keymap::Keystroke;
 use warpui::platform::Cursor;

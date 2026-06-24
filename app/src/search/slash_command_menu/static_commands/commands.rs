@@ -139,7 +139,7 @@ pub static RENAME_TAB: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand 
 
 pub static RENAME_CONVERSATION: LazyLock<StaticCommand> = LazyLock::new(|| StaticCommand {
     name: "/rename-conversation",
-    description: "Rename the current conversation",
+    description: "Rename the current conversation".to_string(),
     icon_path: "bundled/svg/pencil-line.svg",
     availability: Availability::AGENT_VIEW
         | Availability::ACTIVE_CONVERSATION

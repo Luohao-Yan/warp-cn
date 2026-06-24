@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::path::Path;
 #[cfg(feature = "local_fs")]
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 #[cfg(feature = "local_fs")]
 #[cfg(not(target_family = "wasm"))]

@@ -11,6 +11,7 @@ use warp_core::ui::theme::AnsiColorIdentifier;
     serde::Serialize,
     serde::Deserialize,
     PartialEq,
+    Eq,
     Copy,
     Clone,
     schemars::JsonSchema,
@@ -508,7 +509,7 @@ define_settings_group!(TabSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "appearance.vertical_tabs.hide_title_bar_search_bar",
-        description: "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts.",
+        description: "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts.".to_string(),
     },
     use_latest_user_prompt_as_conversation_title_in_tab_names: UseLatestUserPromptAsConversationTitleInTabNames {
         type: bool,

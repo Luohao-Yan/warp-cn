@@ -161,7 +161,7 @@ impl FirstTimeCloudAgentSetupView {
                 format!("{} ", crate::tr!("agent_cloud", "description-text")),
             ),
             FormattedTextFragment::hyperlink(
-                &crate::tr!("agent_cloud", "visit-docs"),
+                crate::tr!("agent_cloud", "visit-docs"),
                 "https://docs.warp.dev/agent-platform/cloud-agents/overview",
             ),
         ];

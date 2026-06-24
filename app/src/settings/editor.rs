@@ -110,7 +110,7 @@ impl CodeEditorLineNumberMode {
     }
 }
 
-#[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub enum TabBehavior {
     #[default]
     Completions,
@@ -233,7 +233,7 @@ define_settings_group!(AppEditorSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "text_editing.code_editor_line_number_mode",
-        description: "How line numbers are displayed in code editors.",
+        description: "How line numbers are displayed in code editors.".to_string(),
     },
     autocomplete_symbols: AutocompleteSymbols {
         type: bool,

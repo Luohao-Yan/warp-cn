@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use parking_lot::RwLock;
 use warp_core::features::FeatureFlag;

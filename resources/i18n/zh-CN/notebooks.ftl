@@ -97,9 +97,7 @@ notebooks-move-to-space = 移至 {$space_name}
 
 ## -- File notebook view ---------------------------------------------------------
 
-notebooks-could-not-read = 无法读取 {$file_name}
 notebooks-try-again = 重试
-notebooks-loading-file = 正在加载 {$file_name}...
 notebooks-missing-source-file = 缺少源文件
 notebooks-refresh-file = 刷新文件
 notebooks-open-in-editor = 在编辑器中打开
@@ -252,7 +250,6 @@ notebooks-toggle-task-list-a11y = 切换任务列表
 
 ## -- File notebook strings ------------------------------------------------------
 
-notebooks-command-from = 来自 {$location_name} 的命令
 notebooks-move-to-space-prefix = 移至 {""}
 
 ## -- 笔记本附加绑定 --

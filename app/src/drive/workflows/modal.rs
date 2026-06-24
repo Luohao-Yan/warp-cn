@@ -1,10 +1,7 @@
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use std::collections::HashMap;
-use std::collections::HashSet;
 use std::sync::LazyLock;
-use std::{cmp::Ordering, sync::Arc};
 
 use itertools::Itertools;
 use pathfinder_geometry::vector::vec2f;

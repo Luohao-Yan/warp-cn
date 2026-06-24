@@ -1,4 +1,5 @@
 use pathfinder_geometry::vector::vec2f;
+use std::borrow::Cow;
 use warp_core::ui::appearance::Appearance;
 use warp_editor::editor::NavigationKey;
 use warpui::elements::{
@@ -13,10 +14,12 @@ use warpui::{
     AppContext, Element, Entity, FocusContext, SingletonEntity, TypedActionView, View, ViewContext,
     ViewHandle,
 };
+
 use crate::ai::agent::SuggestedRule;
 use crate::ai::facts::{AIFact, AIMemory, CloudAIFactModel};
 use crate::cloud_object::model::generic_string_model::GenericStringObjectId;
 use crate::cloud_object::model::persistence::{CloudModel, CloudModelEvent};
+use std::sync::LazyLock;
 use crate::cloud_object::Owner;
 use crate::drive::CloudObjectTypeAndId;
 use crate::editor::{
@@ -35,6 +38,7 @@ use crate::ui_components::blended_colors;
 use crate::view_components::action_button::{ActionButton, PrimaryTheme};
 use crate::workspaces::user_workspaces::UserWorkspaces;
 
+static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-suggested-rule-header"));
 const MAX_EDITOR_HEIGHT: f32 = 240.;
 
 pub fn init(app: &mut AppContext) {
@@ -92,7 +96,7 @@ impl SuggestedRuleModal {
 
         let view_handle = view.clone();
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(crate::tr!("ai_assistant", "ai-suggested-rule-header")), view, ctx)
+            Modal::new(Some(HEADER_TEXT.clone()), view, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(510.),
                     background: Some(background.into()),

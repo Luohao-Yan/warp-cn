@@ -82,7 +82,7 @@ pub enum AuthManagerEvent {
     },
 }
 
-pub type LoginGatedFeature = String;
+pub type LoginGatedFeature = &'static str;
 
 type URLConstructorCallback = Box<dyn FnOnce(Option<&str>) -> String>;
 

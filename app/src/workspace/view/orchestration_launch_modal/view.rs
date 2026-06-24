@@ -72,7 +72,7 @@ fn feature_items() -> Vec<FeatureItem> {
         badge: None,
     },
     FeatureItem {
-        icon: Icon::Atom02,
+        icon: Icon::Atom,
         title: crate::tr!("workspace", "multi-agent-orchestration"),
         description: crate::tr!("workspace", "multi-agent-orchestration-desc"),
         badge: None,

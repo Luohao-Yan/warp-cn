@@ -26,7 +26,7 @@ static SETTINGS_ADVANCED_LABEL: LazyLock<String> =
 static SETTINGS_DIRECTORY_PATH_PLACEHOLDER: LazyLock<String> =
     LazyLock::new(|| crate::tr!("settings", "directory-path-placeholder"));
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 #[allow(clippy::enum_variant_names)]
 pub enum WorkingDirectoryAction {
     /// Sets the mode that should be used for all new sessions, independent of

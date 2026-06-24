@@ -12,6 +12,7 @@ use warpui::{AppContext, Element, SingletonEntity};
 use super::common::render_scrollable_collapsible_content;
 use super::output::{action_icon, Props};
 use super::WithContentItemSpacing;
+use std::sync::LazyLock;
 use crate::ai::agent::conversation::{
     AIConversation, AIConversationId, ConversationStatus, StatusColorStyle,
 };
@@ -42,13 +43,7 @@ use crate::terminal::view::TerminalAction;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 
-use super::common::render_scrollable_collapsible_content;
-use std::sync::LazyLock;
-
-use super::output::{action_icon, Props};
-use super::WithContentItemSpacing;
-
-static GENERATING_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "generating-title"));
+static GENERATING_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-title"));
 const ORCHESTRATION_COLLAPSED_MAX_HEIGHT: f32 = 200.;
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct OrchestrationParticipant {
@@ -62,16 +57,18 @@ struct OrchestrationParticipant {
 impl OrchestrationParticipant {
     fn orchestrator() -> Self {
         Self {
-            display_name: crate::tr!("ai", "orchestrator"),
+            display_name: crate::tr!("ai_assistant", "ai-orchestrator"),
             avatar: OrchestrationAvatar::Orchestrator,
             conversation_id: None,
         }
     }
 
     fn unknown_child() -> Self {
+        let name = crate::tr!("ai_assistant", "ai-unknown-agent");
         Self {
-            display_name: crate::tr!("ai_assistant", "ai-unknown-agent"),
-            avatar: OrchestrationAvatar::agent(crate::tr!("ai_assistant", "ai-unknown-agent")),
+            display_name: name.clone(),
+            avatar: OrchestrationAvatar::agent(name),
+            conversation_id: None,
         }
     }
 

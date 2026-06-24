@@ -1,6 +1,6 @@
 //! AI Assistant has since been renamed to "Warp AI" in the product.
 use std::collections::HashSet;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use itertools::Itertools;
 use lazy_static::lazy_static;

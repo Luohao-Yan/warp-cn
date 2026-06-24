@@ -7,6 +7,7 @@
 //! from field-change events to their own action enum.
 
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 use ai::agent::action::RunAgentsExecutionMode;
 use ai::agent::orchestration_config::{OrchestrationConfig, OrchestrationExecutionMode};
@@ -33,7 +34,7 @@ use crate::ai::auth_secret_types::auth_secret_types_for_harness;
 use crate::ai::blocklist::inline_action::host_picker::HostPicker;
 use crate::ai::cloud_agent_settings::CloudAgentSettings;
 use crate::ai::cloud_environments::CloudAmbientAgentEnvironment;
-use crate::ai::connected_self_hosted_workers::{ConnectedSelfHostedWorkersModel, WARP_WORKER_HOST};
+use crate::ai::connected_self_hosted_workers::ConnectedSelfHostedWorkersModel;
 use crate::ai::execution_profiles::model_menu_items::available_model_menu_items;
 use crate::ai::harness_availability::{AuthSecretFetchState, HarnessAvailabilityModel};
 use crate::ai::harness_display;
@@ -61,7 +62,7 @@ const DEFAULT_HOST_ENV_VAR: &str = "WARP_CLOUD_MODE_DEFAULT_HOST";
 // ── Shared constants ────────────────────────────────────────────────
 
 pub const ORCHESTRATION_WARP_WORKER_HOST: &str = "warp";
-pub static ORCHESTRATION_ENV_NONE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "orchestration-env-none-label"));
+pub static ORCHESTRATION_ENV_NONE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-orchestration-env-none-label"));
 
 pub const ORCHESTRATION_PICKER_HEIGHT: f32 = 36.;
 pub const ORCHESTRATION_PICKER_BORDER_WIDTH: f32 = 1.;
@@ -69,18 +70,28 @@ pub const ORCHESTRATION_PICKER_FONT_SIZE: f32 = 14.;
 pub const ORCHESTRATION_PICKER_RADIUS: f32 = 4.;
 pub const ORCHESTRATION_PICKER_MAX_WIDTH: f32 = 205.;
 
-static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "default-model-label"));
+static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-default-model-label"));
 
-static AGENT_LOCATION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-location-label"));
-static LOCAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "local-label"));
-static CLOUD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "cloud-label"));
-static AGENT_HARNESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-harness-label"));
-static HOST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "host-label"));
-static ENVIRONMENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "environment-label"));
-static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "base-model-label"));
-static OPENCODE_CLOUD_DISABLED_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "opencode-cloud-disabled-reason"));
-static RECOMMEND_SELECT_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "recommend-select-env"));
-static RECOMMEND_CREATE_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "recommend-create-env"));
+static AGENT_LOCATION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-location-label"));
+static LOCAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-local-label"));
+static CLOUD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cloud-label"));
+static AGENT_HARNESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-harness-label"));
+static HOST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-host-label"));
+static ENVIRONMENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-environment-label"));
+static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-base-model-label"));
+static OPENCODE_CLOUD_DISABLED_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-opencode-cloud-disabled-reason"));
+static RECOMMEND_SELECT_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recommend-select-env"));
+static RECOMMEND_CREATE_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recommend-create-env"));
+
+const ORCHESTRATION_SEGMENTED_CONTROL_PADDING: f32 = 4.;
+const ORCHESTRATION_SEGMENT_VERTICAL_PADDING: f32 = 4.;
+
+/// Label shown in the auth secret picker when no secret is selected
+/// (the child agent will inherit credentials from its environment).
+const AUTH_SECRET_INHERIT_LABEL: &str = "Skip (advanced)";
+/// Label for the auth secret column.
+pub const AUTH_SECRET_COLUMN_LABEL: &str = "API key";
+const AUTH_SECRET_CREATE_NEW_LABEL: &str = "New API key…";
 
 // ── Action trait ────────────────────────────────────────────────────
 
@@ -254,10 +265,11 @@ impl OrchestrationEditState {
 
     /// Returns `Some(reason)` if Accept / Apply must be disabled.
     /// Hard blocks: OpenCode + Cloud, and product-disabled local harnesses.
-    pub fn accept_disabled_reason(&self) -> Option<&'static str> {
+    pub fn accept_disabled_reason(&self) -> Option<String> {
         match &self.execution_mode {
             RunAgentsExecutionMode::Local => Harness::parse_local_child_harness(&self.harness_type)
-                .and_then(local_harness_product_disabled_message),
+                .and_then(local_harness_product_disabled_message)
+                .map(|s| s.to_string()),
             RunAgentsExecutionMode::Remote { .. }
                 if self.harness_type.eq_ignore_ascii_case("opencode") =>
             {
@@ -573,7 +585,7 @@ pub fn populate_model_picker_for_harness<A: OrchestrationControlAction, V: View>
                                 .find(|m| m.id == initial_model_id)
                                 .map(|m| m.display_name.clone())
                         })
-                        .or_else(|| Some(DEFAULT_MODEL_LABEL.clone()))
+                        .or_else(|| Some(DEFAULT_MODEL_LABEL.to_string()))
                 };
                 dropdown.set_rich_items(items, ctx_dropdown);
                 if let Some(name) = &selected_display_name {
@@ -587,7 +599,7 @@ pub fn populate_model_picker_for_harness<A: OrchestrationControlAction, V: View>
 /// Creates a "Default model" menu item that emits an empty model_id.
 fn default_model_menu_item<A: OrchestrationControlAction>() -> MenuItem<DropdownAction> {
     MenuItem::Item(
-        MenuItemFields::new(DEFAULT_MODEL_LABEL).with_on_select_action(
+        MenuItemFields::new(DEFAULT_MODEL_LABEL.as_str()).with_on_select_action(
             DropdownAction::select_action_and_close(A::model_changed(String::new())),
         ),
     )
@@ -726,10 +738,11 @@ pub fn populate_harness_picker<A: OrchestrationControlAction, V: View>(
                 ));
             } else {
                 fields = fields.with_disabled(true);
+                let disabled_admin = crate::tr!("ai_assistant", "ai-disabled-by-admin");
                 let tooltip = match local_setup_state {
-                    Some(LocalHarnessSetupState::MissingHarness { tooltip }) => tooltip,
-                    Some(LocalHarnessSetupState::ProductDisabled { message }) => message,
-                    Some(LocalHarnessSetupState::Ready) | None => crate::tr!("ai", "disabled-by-admin"),
+                    Some(LocalHarnessSetupState::MissingHarness { tooltip }) => tooltip.to_string(),
+                    Some(LocalHarnessSetupState::ProductDisabled { message }) => message.to_string(),
+                    Some(LocalHarnessSetupState::Ready) | None => disabled_admin,
                 };
                 fields = fields.with_tooltip(tooltip);
             }
@@ -790,7 +803,7 @@ pub fn create_environment_picker<A: OrchestrationControlAction, V: View>(
         let mut items: Vec<MenuItem<DropdownAction>> = Vec::new();
         let mut selected_name: Option<String> = None;
         items.push(MenuItem::Item(
-            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL).with_on_select_action(
+            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL.as_str()).with_on_select_action(
                 DropdownAction::select_action_and_close(A::environment_changed(String::new())),
             ),
         ));
@@ -835,12 +848,12 @@ pub fn populate_environment_picker<A: OrchestrationControlAction, V: View>(
         let mut items: Vec<MenuItem<DropdownAction>> = Vec::new();
         let mut selected_name: Option<String> = None;
         items.push(MenuItem::Item(
-            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL).with_on_select_action(
+            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL.as_str()).with_on_select_action(
                 DropdownAction::select_action_and_close(A::environment_changed(String::new())),
             ),
         ));
         if initial_env.is_empty() {
-            selected_name = Some(ORCHESTRATION_ENV_NONE_LABEL.to_string());
+            selected_name = Some(ORCHESTRATION_ENV_NONE_LABEL.clone());
         }
         for (env_id, env_name) in &sorted_envs {
             if env_id == &initial_env {
@@ -893,7 +906,7 @@ fn render_new_environment_footer<A: OrchestrationControlAction>(
                         .finish(),
                 )
                 .with_child(
-                    Text::new_inline(&crate::tr!("ai", "new-environment"), font_family, font_size)
+                    Text::new_inline(crate::tr!("ai_assistant", "ai-new-environment"), font_family, font_size)
                         .with_color(text_color.into())
                         .finish(),
                 )
@@ -1176,7 +1189,7 @@ pub fn accept_disabled_reason_with_auth(
         }
     }
     if auth_secret_selection_required(state, ctx) {
-        return Some(crate::tr!("ai", "select-api-key-harness").to_string());
+        return Some(crate::tr!("ai_assistant", "ai-select-api-key-harness"));
     }
     None
 }
@@ -1242,7 +1255,7 @@ pub fn populate_auth_secret_picker_for_harness<A: OrchestrationControlAction, V:
             }
             AuthSecretFetchState::Failed(_) => {
                 items.push(MenuItem::Item(
-                    MenuItemFields::new(&crate::tr!("ai", "unable-load-secrets")).with_disabled(true),
+                    MenuItemFields::new("Unable to load secrets").with_disabled(true),
                 ));
             }
         }
@@ -1957,7 +1970,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_harness_picker {
             add(
                 &mut column,
-                crate::tr!("ai", "agent-harness"),
+                AGENT_HARNESS_LABEL.as_str(),
                 handles
                     .harness_picker
                     .as_ref()
@@ -2016,7 +2029,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_harness_picker {
             add_picker(
                 &mut row,
-                crate::tr!("ai", "agent-harness"),
+                AGENT_HARNESS_LABEL.as_str(),
                 handles
                     .harness_picker
                     .as_ref()
@@ -2124,8 +2137,8 @@ pub fn empty_env_recommendation_message(
     }
     let env_count = CloudAmbientAgentEnvironment::get_all(app).len();
     Some(if env_count > 0 {
-        RECOMMEND_SELECT_ENV.clone()
+        "We recommend selecting an environment for cloud agents.".to_string()
     } else {
-        RECOMMEND_CREATE_ENV.clone()
+        "We recommend creating an environment for cloud agents.".to_string()
     })
 }

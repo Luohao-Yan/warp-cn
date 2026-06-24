@@ -2,8 +2,8 @@
 //! then on confirm runs `run_commit` and optionally chains `run_push` /
 //! `create_pr` per the selected intent.
 
-use std::sync::LazyLock;
 use std::path::Path;
+use std::sync::LazyLock;
 
 use warp_core::send_telemetry_from_ctx;
 use warp_core::ui::appearance::Appearance;
@@ -43,9 +43,19 @@ pub enum CommitSubAction {
 const EDITOR_FONT_SIZE: f32 = 12.;
 const EDITOR_MIN_HEIGHT: f32 = 72.;
 
-static CODE_REVIEW_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "changes"));
-static CODE_REVIEW_INCLUDE_UNSTAGED: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "include-unstaged"));
-static CODE_REVIEW_COMMIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "commit-message"));
+static FALLBACK_PLACEHOLDER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("code_editor", "review-type-commit-message"));
+static GENERATING_PLACEHOLDER_TEXT: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("code_editor", "review-generating-commit-message"));
+static LOADING_LABEL: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("code_editor", "review-committing").leak() as &'static str);
+
+static CODE_REVIEW_CHANGES: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("code_review", "changes").leak() as &'static str);
+static CODE_REVIEW_INCLUDE_UNSTAGED: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("code_review", "include-unstaged").leak() as &'static str);
+static CODE_REVIEW_COMMIT_MESSAGE: LazyLock<&'static str> =
+    LazyLock::new(|| crate::tr!("code_review", "commit-message").leak() as &'static str);
 
 pub struct CommitState {
     pub(super) intent: CommitChainMode,
@@ -58,7 +68,7 @@ pub struct CommitState {
     pub(super) message_editor: ViewHandle<EditorView>,
     commit_button: ViewHandle<ActionButton>,
     commit_and_push_button: ViewHandle<ActionButton>,
-    /// `None` when creating a PR doesn't make sense for this branch —
+    /// `None` when creating a PR doesn't make sense for this branch --
     /// either a PR already exists or we're on the repo's main branch.
     /// The intent is hidden entirely in either case; an existing PR is
     /// still reachable via the git operations menu in the header.
@@ -75,21 +85,21 @@ pub(super) fn new_state(
     // something else via the segmented intent selector inside the dialog.
     let intent = CommitChainMode::CommitOnly;
     // `CommitAndPush` always runs `git push --set-upstream`, so it works
-    // whether or not the branch already has an upstream — but the label
+    // whether or not the branch already has an upstream -- but the label
     // and icon flip to communicate the user-visible difference.
     let (push_label, push_icon) = if has_upstream {
-        (crate::tr!("code_editor", "review-commit-and-push"), Icon::ArrowUp)
+        (crate::tr!("code_editor", "review-commit-and-push").leak() as &'static str, Icon::ArrowUp)
     } else {
-        (crate::tr!("code_editor", "review-commit-and-publish"), Icon::UploadCloud)
+        (crate::tr!("code_editor", "review-commit-and-publish").leak() as &'static str, Icon::UploadCloud)
     };
     // If AI autogen is on, the dialog opens with "Generating…" and a
     // background request fills the editor when it resolves. Otherwise, we
     // land on the manual-type prompt immediately.
     let ai_autogen_enabled = should_send_git_ops_ai_request(ctx);
     let initial_placeholder = if ai_autogen_enabled {
-        crate::tr!("code_editor", "review-generating-commit-message")
+        GENERATING_PLACEHOLDER_TEXT.clone()
     } else {
-        crate::tr!("code_editor", "review-type-commit-message")
+        FALLBACK_PLACEHOLDER_TEXT.clone()
     };
     let message_editor = ctx.add_typed_action_view(|ctx| {
         let appearance = Appearance::as_ref(ctx);
@@ -108,7 +118,7 @@ pub(super) fn new_state(
         };
 
         let mut editor = EditorView::new(options, ctx);
-        editor.set_placeholder_text(initial_placeholder, ctx);
+        editor.set_placeholder_text(&*initial_placeholder, ctx);
         editor
     });
 
@@ -117,8 +127,8 @@ pub(super) fn new_state(
     });
 
     let commit_button = ctx.add_typed_action_view(|_ctx| {
-        static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "review-commit"));
-        ActionButton::new(&*LABEL, SecondaryTheme)
+        static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-commit").leak() as &'static str);
+        ActionButton::new(*LABEL, SecondaryTheme)
             .with_size(ButtonSize::XSmall)
             .with_height(32.)
             .with_icon(Icon::GitCommit)
@@ -142,8 +152,8 @@ pub(super) fn new_state(
 
     let commit_and_create_pr_button = if allow_create_pr {
         Some(ctx.add_typed_action_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "review-commit-and-create-pr"));
-            ActionButton::new(&*LABEL, SecondaryTheme)
+            static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-commit-and-create-pr").leak() as &'static str);
+            ActionButton::new(*LABEL, SecondaryTheme)
                 .with_size(ButtonSize::XSmall)
                 .with_height(32.)
                 .with_icon(Icon::Github)
@@ -207,14 +217,14 @@ pub(super) fn is_ready_to_confirm(state: &CommitState, app: &AppContext) -> bool
     has_committable_changes(state) && commit_message(state, app).is_some()
 }
 
-/// Whether there's at least one change to commit — the guard that keeps
+/// Whether there's at least one change to commit -- the guard that keeps
 /// Confirm disabled when there's nothing to commit.
 ///
 /// Gates on `file_changes`, which already reflects the active "include
 /// unstaged" scope: local re-reads the working tree on toggle, while remote
 /// shows the full synced set (it can't re-scope client-side). The daemon-side
-/// `run_commit` is the authoritative backstop that rejects an empty commit —
-/// e.g. "exclude unstaged" with nothing staged — surfacing it as an error
+/// `run_commit` is the authoritative backstop that rejects an empty commit --
+/// e.g. "exclude unstaged" with nothing staged -- surfacing it as an error
 /// toast rather than a phantom success.
 fn has_committable_changes(state: &CommitState) -> bool {
     !state.file_changes.is_empty()
@@ -223,15 +233,57 @@ fn has_committable_changes(state: &CommitState) -> bool {
 /// Returns a tooltip to show on the disabled Confirm button when the
 /// user needs to take action, or `None` when no tooltip is needed.
 pub(super) fn confirm_tooltip(state: &CommitState, app: &AppContext) -> Option<String> {
-    if !state.file_changes.is_empty() && commit_message(state, app).is_none() {
-Some(crate::tr!("code_review", "commit-placeholder"))
-    } else {
-        None
+    // Only nudge for a missing message; an empty Changes box is self-evident,
+    // and gating a tooltip on it would also flash during the open-time load.
+    if has_committable_changes(state) && commit_message(state, app).is_none() {
+        return Some(crate::tr!("code_review", "commit-placeholder"));
+    }
+    None
+}
+
+/// Populates the commit message editor from an AI-generated message. Shared
+/// by both backends, whose open-time autogen arrives via the
+/// `CommitMessageGenerated` model event, so both behave identically: on
+/// success, fill the editor unless the user already typed; on failure, swap
+/// to the manual-type placeholder (no toast -- the empty editor tells the
+/// story and the failure isn't retryable).
+pub(super) fn apply_generated_commit_message(
+    me: &mut GitDialog,
+    result: Result<String, String>,
+    ctx: &mut ViewContext<GitDialog>,
+) {
+    let editor_handle = match me.mode() {
+        GitDialogMode::Commit(state) => state.message_editor.clone(),
+        _ => return,
+    };
+    match result {
+        Ok(generated) => {
+            let user_typed = !editor_handle.as_ref(ctx).buffer_text(ctx).trim().is_empty();
+            editor_handle.update(ctx, |editor, ctx| {
+                // Swap "Generating…" for the manual-type prompt so it
+                // shows if the user later clears the generated draft.
+                editor.set_placeholder_text(&*FALLBACK_PLACEHOLDER_TEXT, ctx);
+                // User input wins -- don't clobber their text.
+                if !user_typed {
+                    editor.system_reset_buffer_text(generated.trim(), ctx);
+                }
+            });
+            me.refresh_confirm_enabled(ctx);
+            ctx.notify();
+        }
+        Err(err) => {
+            log::warn!("Failed to autogenerate commit message: {err}");
+            editor_handle.update(ctx, |editor, ctx| {
+                editor.set_placeholder_text(&*FALLBACK_PLACEHOLDER_TEXT, ctx);
+            });
+            me.refresh_confirm_enabled(ctx);
+            ctx.notify();
+        }
     }
 }
 
 /// Kicks off AI commit-message autogen request.
-/// The model runs the generation (local in-process, remote on the daemon) and  
+/// The model runs the generation (local in-process, remote on the daemon) and
 /// the result returns via `DiffStateModelEvent::CommitMessageGenerated`, applied by `apply_generated_commit_message`.
 pub(super) fn maybe_start_commit_message_autogen(me: &GitDialog, ctx: &mut ViewContext<GitDialog>) {
     if !should_send_git_ops_ai_request(ctx) {
@@ -250,57 +302,26 @@ pub(super) fn maybe_start_commit_message_autogen(me: &GitDialog, ctx: &mut ViewC
     });
 }
 
-    ctx.spawn(
-        async move {
-            let diff = get_diff_for_commit_message(&repo_path, include_unstaged).await?;
-            let generated = code_review_ai
-                .generate_code_review_content(GenerateCodeReviewContentRequest {
-                    output_type: OutputType::CommitMessage,
-                    diff,
-                    branch_name,
-                    commit_messages: Vec::new(),
-                })
-                .await?
-                .content;
-            if generated.trim().is_empty() {
-                anyhow::bail!("AI returned an empty commit message");
-            }
-            anyhow::Ok(generated)
-        },
-        |me, result, ctx| {
-            let editor_handle = match &me.mode {
-                GitDialogMode::Commit(state) => state.message_editor.clone(),
-                _ => return,
-            };
-            match result {
-                Ok(generated) => {
-                    let user_typed = !editor_handle.as_ref(ctx).buffer_text(ctx).trim().is_empty();
-                    editor_handle.update(ctx, |editor, ctx| {
-                        // Swap "Generating\u{2026}" for the manual-type
-                        // prompt so it shows if the user later clears the
-                        // generated draft.
-                        let fallback = crate::tr!("code_editor", "review-type-commit-message");
-                        editor.set_placeholder_text(&fallback, ctx);
-                        // User input wins — don't clobber their text.
-                        if !user_typed {
-                            editor.system_reset_buffer_text(generated.trim(), ctx);
-                        }
-                    });
-                    me.refresh_confirm_enabled(ctx);
-                    ctx.notify();
-                }
-                Err(err) => {
-                    log::warn!("Failed to autogenerate commit message: {err}");
-                    editor_handle.update(ctx, |editor, ctx| {
-                        let fallback = crate::tr!("code_editor", "review-type-commit-message");
-                        editor.set_placeholder_text(&fallback, ctx);
-                    });
-                    me.refresh_confirm_enabled(ctx);
-                    ctx.notify();
-                }
-            }
-        },
-    );
+/// Sources the commit Changes box from synced metadata (`against_head.files`).
+/// Remote repos can't read the working tree, so the list comes from metadata
+/// instead of `get_file_change_entries`. No-op for local repos, which load it
+/// from the working tree in `new_state` (and re-scope it on the unstaged
+/// toggle). Safe to call on open and on every metadata refresh.
+pub(super) fn refresh_remote_file_changes(me: &mut GitDialog, ctx: &mut ViewContext<GitDialog>) {
+    if !me.repo_location().is_remote() {
+        return;
+    }
+    let entries = me.diff_state_model().read(ctx, |model, ctx| {
+        model.uncommitted_file_entries(ctx).to_vec()
+    });
+    {
+        let GitDialogMode::Commit(state) = me.mode_mut() else {
+            return;
+        };
+        state.file_changes = entries;
+    }
+    me.refresh_confirm_enabled(ctx);
+    ctx.notify();
 }
 
 pub(super) fn handle_sub_action(
@@ -362,7 +383,7 @@ pub(super) fn start_confirm(me: &mut GitDialog, ctx: &mut ViewContext<GitDialog>
     // user has it enabled (ignored for commit-only / commit-and-push).
     let autogenerate_pr_content = should_send_git_ops_ai_request(ctx);
 
-    me.set_loading(crate::tr!("code_editor", "review-committing"), ctx);
+    me.set_loading(*LOADING_LABEL, ctx);
 
     // Lock the commit message editor while the async op is in flight.
     message_editor.update(ctx, |editor, ctx| {
@@ -402,48 +423,23 @@ pub(super) fn finish_commit_chain(
         Ok(Some(pr)) => show_pr_created_toast(pr, ctx),
         Ok(None) => {
             let msg = if matches!(intent, CommitChainMode::CommitOnly) {
-                "Changes successfully committed."
+                crate::tr!("code_editor", "review-changes-successfully-committed")
             } else {
-                "Changes committed and pushed."
+                crate::tr!("code_editor", "review-changes-committed-and-pushed")
             };
-            anyhow::Ok(outcome)
-        },
-        move |_me, result, ctx| {
-            let operation = match intent {
-                CommitIntent::CommitOnly => GitOperationKind::CommitOnly,
-                CommitIntent::CommitAndPush => GitOperationKind::CommitAndPush,
-                CommitIntent::CommitAndCreatePr => GitOperationKind::CommitAndCreatePr,
-            };
-            let (status, error) = match &result {
-                Ok(_) => (GitDialogStatus::Succeeded, None),
-                Err(err) => (GitDialogStatus::Failed, Some(err.to_string())),
-            };
-            match result {
-                Ok(CommitOutcome::Committed) => {
-                    show_toast(crate::tr!("code_editor", "review-changes-successfully-committed"), ctx);
-                }
-                Ok(CommitOutcome::Pushed) => {
-                    show_toast(crate::tr!("code_editor", "review-changes-committed-and-pushed"), ctx);
-                }
-                Ok(CommitOutcome::PrCreated(pr)) => {
-                    show_pr_created_toast(&pr, ctx);
-                }
-                Err(err) => {
-                    log::error!("Commit failed: {err}");
-                    show_toast(user_facing_git_error(&err.to_string()), ctx);
-                }
-            }
-            send_telemetry_from_ctx!(
-                CodeReviewTelemetryEvent::GitDialogCompleted {
-                    operation,
-                    status,
-                    error,
-                },
-                ctx
-            );
-            // Success or failure, the dialog is done and the parent should
-            // close it and refresh.
-            ctx.emit(GitDialogEvent::Completed);
+            show_toast(&msg, ctx);
+        }
+        Err(err) => {
+            log::error!("Commit failed: {err}");
+            show_toast(user_facing_git_error(err), ctx);
+        }
+    }
+    send_telemetry_from_ctx!(
+        CodeReviewTelemetryEvent::GitDialogCompleted {
+            is_local: Some(!me.repo_location().is_remote()),
+            operation,
+            status,
+            error,
         },
         ctx
     );
@@ -552,7 +548,7 @@ fn render_changes_section(state: &CommitState, appearance: &Appearance) -> Box<d
     let sub_color = theme.sub_text_color(theme.surface_1()).into_solid();
 
     let changes_label = Text::new(
-        &*CODE_REVIEW_CHANGES,
+        *CODE_REVIEW_CHANGES,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -560,7 +556,7 @@ fn render_changes_section(state: &CommitState, appearance: &Appearance) -> Box<d
     .finish();
 
     let include_label = Text::new(
-        &*CODE_REVIEW_INCLUDE_UNSTAGED,
+        *CODE_REVIEW_INCLUDE_UNSTAGED,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -614,7 +610,7 @@ fn render_message_editor(
     app: &AppContext,
 ) -> Box<dyn Element> {
     let label = Text::new(
-        &*CODE_REVIEW_COMMIT_MESSAGE,
+        *CODE_REVIEW_COMMIT_MESSAGE,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

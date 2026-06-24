@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::sync::LazyLock;
 
 use itertools::Itertools;
-use std::sync::LazyLock;
-use std::{collections::HashMap, rc::Rc};
 use strum::IntoEnumIterator;
 use strum_macros::{EnumIter, IntoStaticStr};
 use warp_core::ui::appearance::Appearance;

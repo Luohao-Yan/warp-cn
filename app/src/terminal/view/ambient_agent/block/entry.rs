@@ -26,6 +26,8 @@ use crate::terminal::view::ambient_agent::AmbientAgentViewModel;
 use crate::terminal::{BlockListSettings, TerminalManager, TerminalView};
 use crate::ui_components::agent_icon::terminal_view_agent_icon_variant;
 use crate::ui_components::blended_colors;
+
+const DEFAULT_CLOUD_AGENT_TITLE: &str = "New cloud agent";
 use crate::ui_components::icon_with_status::{render_icon_with_status, IconWithStatusVariant};
 
 #[derive(Default)]
@@ -159,7 +161,6 @@ impl AmbientAgentEntryBlock {
 
         ai_context_model
             .selected_conversation(app)
-<<<<<<< HEAD
             .and_then(|conversation| conversation.title())
             .and_then(|title| Self::meaningful_title(&title))
             .or_else(|| self.title_from_task_data(app))

@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use settings::Setting as _;
 use warpui::keymap::FixedBinding;
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};

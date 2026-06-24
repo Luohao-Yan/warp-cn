@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
 
 use ai::api_keys::{ApiKeyManager, ApiKeyManagerEvent};
 use itertools::Itertools;
@@ -14,7 +15,6 @@ use warpui::fonts::Properties;
 use warpui::platform::Cursor;
 use warpui::ui_components::slider::SliderStateHandle;
 use warpui::ui_components::switch::SwitchStateHandle;
-
 use warpui::{
     AppContext, Element, Entity, ModelHandle, SingletonEntity, TypedActionView, View, ViewContext,
     ViewHandle,
@@ -141,6 +141,7 @@ pub mod manager;
 pub use manager::*;
 
 pub static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-profile-editor"));
+static SELECT_MCP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-select-mcp-servers"));
 
 #[derive(Debug, Clone)]
 pub enum ExecutionProfileEditorViewEvent {
@@ -285,6 +286,7 @@ impl ExecutionProfileEditorView {
         let agent_decides_label = crate::tr!("ai_assistant", "ai-agent-decides");
         let always_allow_label = crate::tr!("ai_assistant", "ai-always-allow");
         let always_ask_label = crate::tr!("ai_assistant", "ai-always-ask");
+
         let apply_code_diffs_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = Dropdown::new(ctx);
             dropdown.set_items(
@@ -369,7 +371,6 @@ impl ExecutionProfileEditorView {
             dropdown
         });
 
-        let ask_on_first_write_label = crate::tr!("ai_assistant", "ai-ask-on-first-write");
         let write_to_pty_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = Dropdown::new(ctx);
             dropdown.set_items(
@@ -387,7 +388,7 @@ impl ExecutionProfileEditorView {
                         },
                     ),
                     DropdownItem::new(
-                        ask_on_first_write_label.clone(),
+                        crate::tr!("ai_assistant", "ai-ask-on-first-write"),
                         ExecutionProfileEditorViewAction::SetWriteToPty {
                             permission: WriteToPtyPermission::AskOnFirstWrite,
                         },
@@ -426,13 +427,12 @@ impl ExecutionProfileEditorView {
             dropdown
         });
 
-        let never_label = crate::tr!("ai_assistant", "ai-never");
         let computer_use_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = Dropdown::new(ctx);
             dropdown.set_items(
                 vec![
                     DropdownItem::new(
-                        never_label.clone(),
+                        crate::tr!("ai_assistant", "ai-never"),
                         ExecutionProfileEditorViewAction::SetComputerUse {
                             permission: super::ComputerUsePermission::Never,
                         },
@@ -455,20 +455,18 @@ impl ExecutionProfileEditorView {
             dropdown
         });
 
-        let never_ask_label = crate::tr!("ai_assistant", "ai-never-ask");
-        let ask_unless_auto_approve_label = crate::tr!("ai_assistant", "ai-ask-unless-auto-approve");
         let ask_user_question_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = Dropdown::new(ctx);
             dropdown.set_items(
                 vec![
                     DropdownItem::new(
-                        never_ask_label.clone(),
+                        crate::tr!("ai_assistant", "ai-never-ask"),
                         ExecutionProfileEditorViewAction::SetAskUserQuestion {
                             permission: super::AskUserQuestionPermission::Never,
                         },
                     ),
                     DropdownItem::new(
-                        ask_unless_auto_approve_label.clone(),
+                        crate::tr!("ai_assistant", "ai-ask-unless-auto-approve"),
                         ExecutionProfileEditorViewAction::SetAskUserQuestion {
                             permission: super::AskUserQuestionPermission::AskExceptInAutoApprove,
                         },
@@ -490,19 +488,19 @@ impl ExecutionProfileEditorView {
             dropdown.set_items(
                 vec![
                     DropdownItem::new(
-                        crate::tr!("ai", "never"),
+                        crate::tr!("ai_assistant", "ai-never"),
                         ExecutionProfileEditorViewAction::SetRunAgents {
                             permission: RunAgentsPermission::NeverAllow,
                         },
                     ),
                     DropdownItem::new(
-                        crate::tr!("ai", "always-allow"),
+                        always_allow_label.clone(),
                         ExecutionProfileEditorViewAction::SetRunAgents {
                             permission: RunAgentsPermission::AlwaysAllow,
                         },
                     ),
                     DropdownItem::new(
-                        crate::tr!("ai", "always-ask"),
+                        always_ask_label.clone(),
                         ExecutionProfileEditorViewAction::SetRunAgents {
                             permission: RunAgentsPermission::AlwaysAsk,
                         },
@@ -512,6 +510,7 @@ impl ExecutionProfileEditorView {
             );
             dropdown
         });
+
         let mcp_allowlist_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = FilterableDropdown::new(ctx);
             dropdown.set_menu_header_to_static(&*SELECT_MCP_LABEL);

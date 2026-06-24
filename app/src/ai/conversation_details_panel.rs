@@ -2,7 +2,7 @@
 
 use std::collections::HashMap;
 use std::str::FromStr;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use chrono::{DateTime, Duration, Local};
 use instant::Instant;
@@ -79,9 +79,9 @@ const HARNESS_CIRCLE_SIZE: f32 = 16.0;
 const HARNESS_ICON_IN_CIRCLE: f32 = 9.0;
 const LABEL_VALUE_GAP: f32 = 4.0;
 const SECTION_HEADER_GAP: f32 = 8.0;
-const RUN_METADATA_ACCESS_DENIED_TITLE: &str = crate::tr!("ai", "run-metadata-unavailable");
-const RUN_METADATA_ACCESS_DENIED_DESCRIPTION: &str =
-    crate::tr!("ai", "shared-session-metadata-note");
+static RUN_METADATA_ACCESS_DENIED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "run-metadata-unavailable"));
+static RUN_METADATA_ACCESS_DENIED_DESCRIPTION: LazyLock<String> =
+    LazyLock::new(|| crate::tr!("ai", "shared-session-metadata-note"));
 
 /// Panel rendering mode.
 #[derive(Debug, Clone, PartialEq)]
@@ -1160,7 +1160,7 @@ impl ConversationDetailsPanel {
                     .finish();
 
             let title = Text::new(
-                RUN_METADATA_ACCESS_DENIED_TITLE,
+                &*RUN_METADATA_ACCESS_DENIED_TITLE,
                 appearance.ui_font_family(),
                 ui_font_size,
             )
@@ -1169,7 +1169,7 @@ impl ConversationDetailsPanel {
             .with_selectable(true)
             .finish();
             let description = Text::new(
-                RUN_METADATA_ACCESS_DENIED_DESCRIPTION,
+                &*RUN_METADATA_ACCESS_DENIED_DESCRIPTION,
                 appearance.ui_font_family(),
                 ui_font_size - 1.,
             )

@@ -67,7 +67,7 @@ define_settings_group!(CodeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.show_hidden_files",
-        description: "Whether hidden files (dotfiles) are shown in the project explorer.",
+        description: "Whether hidden files (dotfiles) are shown in the project explorer.".to_string(),
     },
     // Controls whether the language server reformats the file on save.
     format_on_save: FormatOnSave {
@@ -77,6 +77,6 @@ define_settings_group!(CodeSettings, settings: [
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: false,
         toml_path: "code.editor.format_on_save",
-        description: "Whether the language server automatically formats the file on save. Other LSP features (hover, go-to-definition, references, diagnostics) are unaffected.",
+        description: "Whether the language server automatically formats the file on save. Other LSP features (hover, go-to-definition, references, diagnostics) are unaffected.".to_string(),
     },
 ]);

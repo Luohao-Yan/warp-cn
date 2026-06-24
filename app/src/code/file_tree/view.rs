@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::ops::Range;
 use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use editing::sort_entries_for_file_tree;
 use itertools::Itertools;
@@ -18,13 +18,6 @@ use warp_core::features::FeatureFlag;
 use warp_core::ui::theme::color::internal_colors;
 use warp_core::ui::theme::Fill;
 use warp_core::{send_telemetry_from_ctx, HostId};
-use repo_metadata::FileTreeEntry;
-use repo_metadata::RepoMetadataModel;
-use std::collections::{HashMap, HashSet};
-use std::ops::Range;
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
-use std::sync::LazyLock;
 use warp_util::path::LineAndColumnArg;
 use warp_util::standardized_path::StandardizedPath;
 use warpui::clipboard::ClipboardContent;
@@ -58,6 +51,8 @@ use crate::terminal::input::InputDropTargetData;
 use crate::terminal::view::{TerminalDropTargetData, TerminalView};
 use crate::ui_components::icons::Icon;
 use crate::ui_components::item_highlight::{ImageOrIcon, ItemHighlightState};
+use crate::view_components::DismissibleToast;
+use crate::workspace::ToastStack;
 #[cfg(feature = "local_fs")]
 use crate::util::file::external_editor::EditorSettings;
 use crate::util::openable_file_type::{
@@ -70,6 +65,8 @@ use crate::util::openable_file_type::{
 
 mod editing;
 mod render;
+
+use crate::settings::{CodeSettings, CodeSettingsChangedEvent};
 
 pub static REMOTE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-remote"));
 pub static DISABLED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-disabled"));
@@ -1442,6 +1439,14 @@ impl FileTreeView {
                 .update(ctx, |model: &mut RepoMetadataModel, ctx| {
                     model.load_directory(&backing_root, &dir_path, ctx)
                 });
+        if matches!(
+            load_result,
+            Err(repo_metadata::RepoMetadataError::BuildTree(
+                repo_metadata::BuildTreeError::ExceededMaxFileLimit,
+            ))
+        ) {
+            Self::show_exceeded_file_limit_toast(ctx);
+        }
         if let Err(error) = load_result {
             log::warn!("Failed to load directory {dir_path}: {error}");
         }
@@ -1575,6 +1580,14 @@ impl FileTreeView {
                 .update(ctx, |model: &mut RepoMetadataModel, ctx| {
                     model.index_lazy_loaded_path(path, ctx)
                 });
+            if matches!(
+                index_result,
+                Err(repo_metadata::RepoMetadataError::BuildTree(
+                    repo_metadata::BuildTreeError::ExceededMaxFileLimit,
+                ))
+            ) {
+                Self::show_exceeded_file_limit_toast(ctx);
+            }
             if let Err(error) = &index_result {
                 log::warn!("Failed to index lazy-loaded path {path}: {error}");
             }
@@ -2361,34 +2374,34 @@ impl FileTreeView {
                     let path_local = item.path().to_local_path_lossy();
                     if !is_file_content_binary(&path_local) {
                         let open_in_pane = crate::tr!("code", "open-in-new-pane");
-                        let open_in_tab = crate::tr!("code", "open-in-new-tab");
-                        items.extend([
-                            MenuItemFields::new(&open_in_pane)
-                                .with_on_select_action(FileTreeAction::OpenInNewPane {
-                                    id: id.clone(),
-                                })
-                                .into_item(),
-                            MenuItemFields::new(&open_in_tab)
-                                .with_on_select_action(FileTreeAction::OpenInNewTab {
-                                    id: id.clone(),
-                                })
-                                .into_item(),
-                        ]);
-                    } else {
-                        let open_file = crate::tr!("code", "open-file");
-                        items.push(
-                            MenuItemFields::new(&open_file)
-                                .with_on_select_action(FileTreeAction::ItemClicked {
-                                    id: id.clone(),
-                                })
-                                .into_item(),
-                        );
-                    }
+                    let open_in_tab = crate::tr!("code", "open-in-new-tab");
+                    items.extend([
+                        MenuItemFields::new(open_in_pane)
+                            .with_on_select_action(FileTreeAction::OpenInNewPane {
+                                id: id.clone(),
+                            })
+                            .into_item(),
+                        MenuItemFields::new(open_in_tab)
+                            .with_on_select_action(FileTreeAction::OpenInNewTab {
+                                id: id.clone(),
+                            })
+                            .into_item(),
+                    ]);
+                } else {
+                    let open_file = crate::tr!("code", "open-file");
+                    items.push(
+                        MenuItemFields::new(open_file)
+                            .with_on_select_action(FileTreeAction::ItemClicked {
+                                id: id.clone(),
+                            })
+                            .into_item(),
+                    );
+                }
                 }
                 FileTreeItem::DirectoryHeader { .. } => {
                     let new_file = crate::tr!("code", "new-file");
                     items.push(
-                        MenuItemFields::new(&new_file)
+                        MenuItemFields::new(new_file)
                             .with_on_select_action(FileTreeAction::NewFileBelowDirectory {
                                 id: id.clone(),
                             })
@@ -2398,7 +2411,7 @@ impl FileTreeView {
                     if self.has_terminal_session {
                         let cd_to_dir = crate::tr!("code", "cd-to-directory");
                         items.push(
-                            MenuItemFields::new(&cd_to_dir)
+                            MenuItemFields::new(cd_to_dir)
                                 .with_on_select_action(FileTreeAction::CDToDirectory {
                                     id: id.clone(),
                                 })
@@ -2407,7 +2420,7 @@ impl FileTreeView {
                     }
                     let open_in_tab2 = crate::tr!("code", "open-in-new-tab");
                     items.push(
-                        MenuItemFields::new(&open_in_tab2)
+                        MenuItemFields::new(open_in_tab2)
                             .with_on_select_action(FileTreeAction::OpenInNewTab { id: id.clone() })
                             .into_item(),
                     );
@@ -2422,7 +2435,7 @@ impl FileTreeView {
                 crate::tr!("code", "reveal-in-file-manager")
             };
             items.push(
-                MenuItemFields::new(&open_text)
+                MenuItemFields::new(open_text)
                     .with_on_select_action(FileTreeAction::OpenInFinder { id: id.clone() })
                     .into_item(),
             );
@@ -2433,7 +2446,7 @@ impl FileTreeView {
             if !is_repo_root_dir {
                 let rename_label = crate::tr!("common", "rename-label");
                 items.push(
-                    MenuItemFields::new(&rename_label)
+                    MenuItemFields::new(rename_label)
                         .with_on_select_action(FileTreeAction::Rename { id: id.clone() })
                         .into_item(),
                 );
@@ -2451,7 +2464,7 @@ impl FileTreeView {
             }
             let attach_label = crate::tr!("code", "attach-as-context");
             items.push(
-                MenuItemFields::new(&attach_label)
+                MenuItemFields::new(attach_label)
                     .with_on_select_action(FileTreeAction::AttachAsContext { id: id.clone() })
                     .into_item(),
             );
@@ -2969,13 +2982,13 @@ impl View for FileTreeView {
 
     #[cfg(not(feature = "local_fs"))]
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
-        self.render_error_state(REMOTE_TEXT.clone(), app)
+        self.render_error_state(REMOTE_TEXT.to_string(), app)
     }
 
     #[cfg(feature = "local_fs")]
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         if matches!(self.enablement, CodingPanelEnablementState::Disabled) {
-            return self.render_error_state(DISABLED_TEXT.clone(), app);
+            return self.render_error_state(DISABLED_TEXT.to_string(), app);
         }
 
         if matches!(
@@ -2996,7 +3009,7 @@ impl View for FileTreeView {
                 return if has_remote_server {
                     self.render_loading_state(app)
                 } else {
-                    self.render_error_state(REMOTE_TEXT.clone(), app)
+                    self.render_error_state(REMOTE_TEXT.to_string(), app)
                 };
             }
 
@@ -3004,7 +3017,7 @@ impl View for FileTreeView {
                 self.enablement,
                 CodingPanelEnablementState::UnsupportedSession
             ) {
-                return self.render_error_state(WSL_TEXT.clone(), app);
+                return self.render_error_state(WSL_TEXT.to_string(), app);
             }
 
             return self.render_loading_state(app);

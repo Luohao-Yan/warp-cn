@@ -4,42 +4,14 @@
 //! with expandable per-file stats. On confirm, spawns `create_pr` and shows
 //! a toast with a clickable "Open PR" link.
 
-use std::path::Path;
-use std::sync::LazyLock;
-
-use warp_core::ui::appearance::Appearance;
-use warpui::{
-    elements::{
-        ClippedScrollStateHandle, Container, Element, Flex, MouseStateHandle, ParentElement, Text,
-    },
-    SingletonEntity, ViewContext,
-};
-
-use crate::{
-    ai::generate_code_review_content::api::{GenerateCodeReviewContentRequest, OutputType},
-    code_review::{
-        git_dialog::{
-            interactive_path_future, render_branch_section, render_file_changes_box,
-            should_send_git_ops_ai_request, show_toast, user_facing_git_error, GitDialog,
-            GitDialogAction, GitDialogEvent, GitDialogMode,
-        },
-        telemetry_event::{CodeReviewTelemetryEvent, GitDialogStatus, GitOperationKind},
-    },
-    server::server_api::{ai::AIClient, ServerApiProvider},
-    ui_components::icons::Icon,
-    util::git::{
-        create_pr, get_branch_commit_messages, get_branch_diff_entries, get_diff_for_pr,
-        FileChangeEntry, PrInfo,
-    },
-    view_components::{DismissibleToast, ToastLink},
-    workspace::ToastStack,
-};
 use warp_core::send_telemetry_from_ctx;
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::{
     ClippedScrollStateHandle, Container, Element, Flex, MouseStateHandle, ParentElement, Text,
 };
 use warpui::{SingletonEntity, ViewContext};
+
+use std::sync::LazyLock;
 
 use crate::code_review::git_dialog::{
     render_branch_section, render_file_changes_box, should_send_git_ops_ai_request, show_toast,
@@ -53,7 +25,7 @@ use crate::util::git::{FileChangeEntry, PrInfo};
 use crate::view_components::{DismissibleToast, ToastLink};
 use crate::workspace::ToastStack;
 
-static CODE_REVIEW_PR_CHANGES: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "changes"));
+static CODE_REVIEW_PR_CHANGES: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_review", "changes").leak() as &'static str);
 
 /// PR-mode sub-actions, dispatched wrapped in `GitDialogAction::Pr`.
 #[derive(Clone, Debug, PartialEq)]
@@ -69,8 +41,9 @@ pub struct PrState {
     changes_scroll_state: ClippedScrollStateHandle,
 }
 
-pub(super) fn confirm_label_for() -> String {
-    crate::tr!("code_editor", "review-create-pull-request")
+pub(super) fn confirm_label_for() -> &'static str {
+    static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-create-pull-request").leak());
+    *LABEL
 }
 
 pub(super) fn confirm_icon_for() -> Icon {
@@ -229,7 +202,7 @@ fn render_changes_section(state: &PrState, appearance: &Appearance) -> Box<dyn E
     let main_color = theme.main_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        &*CODE_REVIEW_PR_CHANGES,
+        *CODE_REVIEW_PR_CHANGES,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

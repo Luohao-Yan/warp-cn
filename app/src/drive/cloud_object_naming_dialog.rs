@@ -1,7 +1,8 @@
+use std::sync::LazyLock;
 use warpui::elements::{
     Border, Clipped, Container, CornerRadius, Dismiss, Empty, Flex, MainAxisSize, MouseStateHandle,
     ParentElement, Radius, Shrinkable, Text,
-use std::sync::LazyLock;
+};
 use warpui::fonts::Weight;
 use warpui::platform::Cursor;
 use warpui::presenter::ChildView;

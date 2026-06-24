@@ -30,7 +30,7 @@ use crate::code_review::telemetry_event::{
 use crate::ui_components::icons::Icon;
 use crate::util::git::Commit;
 
-static CODE_REVIEW_INCLUDED_COMMITS: LazyLock<String> = LazyLock::new(|| crate::tr!("code_review", "included-commits"));
+static CODE_REVIEW_INCLUDED_COMMITS: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_review", "included-commits").leak() as &'static str);
 
 /// Push-specific sub-actions, dispatched wrapped in `GitDialogAction::Push`.
 #[derive(Clone, Debug, PartialEq)]
@@ -60,11 +60,13 @@ pub(super) fn new_state(publish: bool, commits: Vec<Commit>) -> PushState {
     }
 }
 
-pub(super) fn confirm_label(publish: bool) -> String {
+pub(super) fn confirm_label(publish: bool) -> &'static str {
+    static PUBLISH: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-publish-branch").leak());
+    static PUSH: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-push-changes").leak());
     if publish {
-        crate::tr!("code_editor", "review-publish-branch")
+        *PUBLISH
     } else {
-        crate::tr!("code_editor", "review-push-changes")
+        *PUSH
     }
 }
 
@@ -130,38 +132,27 @@ pub(super) fn finish_push(
     match result {
         Ok(_) => {
             let toast_msg = if publish {
-                "Branch successfully published."
+                crate::tr!("code_editor", "review-branch-published")
             } else {
-                "Changes successfully pushed."
+                crate::tr!("code_editor", "review-changes-pushed")
             };
-            match result {
-                Ok(_) => {
-                    let toast_msg = if publish {
-                        crate::tr!("code_editor", "review-branch-published")
-                    } else {
-                        crate::tr!("code_editor", "review-changes-pushed")
-                    };
-                    show_toast(toast_msg, ctx);
-                }
-                Err(e) => {
-                    log::error!("Push failed: {e}");
-                    show_toast(user_facing_git_error(&e.to_string()), ctx);
-                }
-            }
-            send_telemetry_from_ctx!(
-                CodeReviewTelemetryEvent::GitDialogCompleted {
-                    operation: if publish {
-                        GitOperationKind::Publish
-                    } else {
-                        GitOperationKind::Push
-                    },
-                    status,
-                    error,
-                },
-                ctx
-            );
-            let _ = me;
-            ctx.emit(GitDialogEvent::Completed);
+            show_toast(toast_msg, ctx);
+        }
+        Err(e) => {
+            log::error!("Push failed: {e}");
+            show_toast(user_facing_git_error(&e.to_string()), ctx);
+        }
+    }
+    send_telemetry_from_ctx!(
+        CodeReviewTelemetryEvent::GitDialogCompleted {
+            is_local: Some(!me.repo_location().is_remote()),
+            operation: if publish {
+                GitOperationKind::Publish
+            } else {
+                GitOperationKind::Push
+            },
+            status,
+            error,
         },
         ctx
     );
@@ -192,7 +183,7 @@ fn render_commits_section(state: &PushState, appearance: &Appearance) -> Box<dyn
     let sub_color = theme.sub_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        &*CODE_REVIEW_INCLUDED_COMMITS,
+        *CODE_REVIEW_INCLUDED_COMMITS,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -314,23 +305,7 @@ fn render_commits_section(state: &PushState, appearance: &Appearance) -> Box<dyn
         commit_col.add_child(clickable_summary);
 
         if is_expanded {
-            if let Some(files) = state.commit_files.get(&commit.hash) {
-                commit_col.add_child(render_file_list(files, appearance));
-            } else {
-                let loading = Container::new(
-                    Text::new(
-                        crate::tr!("common", "loading-label"),
-                        appearance.ui_font_family(),
-                        appearance.ui_font_size(),
-                    )
-                    .with_color(sub_color)
-                    .finish(),
-                )
-                .with_padding_left(12.)
-                .with_padding_bottom(6.)
-                .finish();
-                commit_col.add_child(loading);
-            }
+            commit_col.add_child(render_file_list(&commit.files, appearance));
         }
 
         let bordered_commit = Container::new(commit_col.finish())

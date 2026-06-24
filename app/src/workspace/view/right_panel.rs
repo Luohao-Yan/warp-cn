@@ -1,5 +1,5 @@
 use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use dunce::canonicalize;
 use itertools::Itertools;
@@ -355,7 +355,6 @@ impl CodeReviewState {
                 .available_repos
                 .iter()
                 .map(|repo_path| {
-                    let display_name = self
                     let display_name = self
                         .get_repo_display_name(repo_path, ctx)
                         .unwrap_or_else(|| crate::tr!("workspace", "unknown"));

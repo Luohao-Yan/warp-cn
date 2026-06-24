@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::color::internal_colors;
 use warp_editor::editor::NavigationKey;

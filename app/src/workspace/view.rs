@@ -37,6 +37,7 @@ use std::path::{Path, PathBuf};
 #[cfg(target_os = "macos")]
 use std::process;
 use std::sync::{mpsc, Arc, Mutex};
+use std::sync::LazyLock;
 use std::time::Duration;
 #[cfg(target_os = "macos")]
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -6364,39 +6365,7 @@ impl Workspace {
     }
 
     fn send_feedback(&mut self, ctx: &mut ViewContext<Self>) {
-        // When AI is available (enabled, with remaining requests) and the feedback skill is
-        // bundled on this channel, open a new agent pane and prime the input with `/feedback `
-        // so the user can describe their feedback in their own words before submitting. The
-        // skill is only invoked when they hit enter. Otherwise fall back to the form URL so
-        // logged-out, credit-exhausted, AI-disabled, and stable-channel users still have a
-        // way to send feedback.
-        if !crate::workspace::is_feedback_skill_available(ctx) {
-            ctx.open_url(&links::feedback_form_url());
-            return;
-        }
-
-        self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
-            pane_group.add_terminal_pane_in_agent_mode(Some("/feedback "), None, ctx);
-            if let Some(terminal_view) = pane_group.focused_session_view(ctx) {
-                terminal_view.update(ctx, |terminal_view, terminal_view_ctx| {
-                    terminal_view
-                        .input()
-                        .update(terminal_view_ctx, |input, input_ctx| {
-                            input.editor().update(input_ctx, |editor, editor_ctx| {
-                                // Show a muted placeholder after the primed prefix so the user
-                                // knows they can describe their feedback before submitting. The
-                                // placeholder auto-hides as soon as they start typing and is
-                                // cleared on submit alongside any other placeholder text.
-                                editor.set_placeholder_text_with_prefix(
-                                    "/feedback ",
-                                    crate::tr!("workspace", "feedback-placeholder"),
-                                    editor_ctx,
-                                );
-                            });
-                        });
-                });
-            }
-        });
+        ctx.open_url(&links::feedback_form_url());
     }
 
     #[cfg(not(target_family = "wasm"))]
@@ -6617,8 +6586,22 @@ impl Workspace {
             );
         }
 
-        let reopen_label = crate::tr!("workspace", "reopen-closed-session");
+        // 7. Separator + New tab group entry. Gated on the Grouped Tabs flag.
+        // TODO(johnturcoo) add group actions.
+        if FeatureFlag::GroupedTabs.is_enabled() {
+            menu_items.push(MenuItem::Separator);
+            menu_items.push(
+                MenuItemFields::new("New tab group")
+                    .with_on_select_action(WorkspaceAction::SelectNewSessionMenuItem(
+                        NewSessionMenuItem::CreateNewTabGroup,
+                    ))
+                    .with_icon(icons::Icon::LayersThree01)
+                    .into_item(),
+            );
+        }
+
         menu_items.push(MenuItem::Separator);
+        let reopen_label = crate::tr!("workspace", "reopen-closed-session");
         menu_items.push(
             MenuItemFields::new(&reopen_label)
                 .with_on_select_action(WorkspaceAction::ReopenClosedSession)
@@ -7656,14 +7639,11 @@ impl Workspace {
                                 .into_item(),
                         )
                     },
-                    AutoupdateStage::UnableToUpdateToNewVersion { .. } => {
-                        let update_manually_label = crate::tr!("workspace", "update-warp-manually");
-                        menu_items.push(
-                            MenuItemFields::new(&update_manually_label)
-                                .with_on_select_action(WorkspaceAction::DownloadNewVersion)
-                                .into_item(),
-                        )
-                    },
+                    AutoupdateStage::UnableToUpdateToNewVersion { .. } => menu_items.push(
+                        MenuItemFields::new(&crate::tr!("workspace", "update-warp-manually"))
+                            .with_on_select_action(WorkspaceAction::DownloadNewVersion)
+                            .into_item(),
+                    ),
                     AutoupdateStage::NoUpdateAvailable
                     | AutoupdateStage::CheckingForUpdate
                     | AutoupdateStage::DownloadingUpdate
@@ -8727,30 +8707,18 @@ impl Workspace {
 
     /// Show an ephemeral success toast or persistent failure toast for a CLI command operation.
     #[cfg(target_os = "macos")]
-    fn install_cli(&mut self, ctx: &mut ViewContext<Self>) {
-        ctx.spawn(async { cli_install::install_cli() }, |view, result, ctx| {
-            match result {
-                Ok(_) => {
-                    let command_name = ChannelState::channel().cli_command_name();
-                    let message = crate::tr!("workspace", "successfully-installed-cli", command_name = command_name.clone());
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::success(message)
-                            .with_link(
-                                ToastLink::new(crate::tr!("common", "learn-more-label").clone()).with_href(
-                                    "https://docs.warp.dev/reference/cli".to_string(),
-                                ),
-                            );
-                        toast_stack.add_ephemeral_toast(toast, ctx);
-                    });
-                }
-                Err(error) => {
-                    let error_message = crate::tr!("workspace", "failed-to-install-cli", error = error.to_string());
-                    log::error!("{error_message}");
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::error(error_message);
-                        toast_stack.add_persistent_toast(toast, ctx);
-                    });
-                }
+    fn handle_cli_command_result(
+        &mut self,
+        result: Result<()>,
+        success_toast: DismissibleToast<WorkspaceAction>,
+        failure_message: &str,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match result {
+            Ok(()) => {
+                self.toast_stack.update(ctx, |toast_stack, ctx| {
+                    toast_stack.add_ephemeral_toast(success_toast, ctx);
+                });
             }
             Err(error) => {
                 let error_message = format!("{failure_message}: {error}");
@@ -8768,9 +8736,9 @@ impl Workspace {
     fn install_oz(&mut self, ctx: &mut ViewContext<Self>) {
         ctx.spawn(async { cli_install::install_oz() }, |view, result, ctx| {
             let command_name = ChannelState::channel().cli_command_name();
-            let message = format!("Successfully installed the Oz CLI! You can now run '{command_name}' from the command line.");
+            let message = crate::tr!("workspace", "successfully-installed-cli", command_name = command_name.clone());
             let toast = DismissibleToast::success(message).with_link(
-                ToastLink::new("Learn more".to_string())
+                ToastLink::new(crate::tr!("common", "learn-more-label").clone())
                     .with_href("https://docs.warp.dev/reference/cli".to_string()),
             );
             view.handle_cli_command_result(result, toast, "Failed to install Oz command", ctx);
@@ -8781,23 +8749,55 @@ impl Workspace {
     #[cfg(target_os = "macos")]
     fn uninstall_oz(&mut self, ctx: &mut ViewContext<Self>) {
         ctx.spawn(
-            async { cli_install::uninstall_cli() },
-            |view, result, ctx| match result {
-                Ok(_) => {
-                    let message = crate::tr!("workspace", "successfully-uninstalled-cli");
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::success(message);
-                        toast_stack.add_ephemeral_toast(toast, ctx);
-                    });
-                }
-                Err(error) => {
-                    let error_message = crate::tr!("workspace", "failed-to-uninstall-cli", error = error.to_string());
-                    log::error!("{error_message}");
-                    view.toast_stack.update(ctx, |toast_stack, ctx| {
-                        let toast = DismissibleToast::error(error_message);
-                        toast_stack.add_persistent_toast(toast, ctx);
-                    });
-                }
+            async { cli_install::uninstall_oz() },
+            |view, result, ctx| {
+                let toast = DismissibleToast::success(
+                    crate::tr!("workspace", "successfully-uninstalled-cli"),
+                );
+                view.handle_cli_command_result(
+                    result,
+                    toast,
+                    "Failed to uninstall Oz command",
+                    ctx,
+                );
+            },
+        );
+    }
+
+    /// Install the Warp Control CLI by creating a symlink in /usr/local/bin
+    #[cfg(target_os = "macos")]
+    fn install_warpctrl(&mut self, ctx: &mut ViewContext<Self>) {
+        ctx.spawn(
+            async { cli_install::install_warpctrl() },
+            |view, result, ctx| {
+                let command_name = ChannelState::channel().warpctrl_command_name();
+                let message = crate::tr!("workspace", "successfully-installed-cli", command_name = command_name.clone());
+                let toast = DismissibleToast::success(message);
+                view.handle_cli_command_result(
+                    result,
+                    toast,
+                    "Failed to install Warp Control command",
+                    ctx,
+                );
+            },
+        );
+    }
+
+    /// Uninstall the Warp Control CLI by removing the symlink from /usr/local/bin
+    #[cfg(target_os = "macos")]
+    fn uninstall_warpctrl(&mut self, ctx: &mut ViewContext<Self>) {
+        ctx.spawn(
+            async { cli_install::uninstall_warpctrl() },
+            |view, result, ctx| {
+                let toast = DismissibleToast::success(
+                    crate::tr!("workspace", "successfully-uninstalled-cli"),
+                );
+                view.handle_cli_command_result(
+                    result,
+                    toast,
+                    "Failed to uninstall Warp Control command",
+                    ctx,
+                );
             },
         );
     }
@@ -9405,9 +9405,8 @@ impl Workspace {
                         new_version.last_prominent_update.as_deref(),
                     ) =>
                 {
-                    let update_manually_label = crate::tr!("workspace", "update-warp-manually");
                     items.push(
-                        MenuItemFields::new(&update_manually_label)
+                        MenuItemFields::new(&crate::tr!("workspace", "update-warp-manually"))
                             .with_on_select_action(WorkspaceAction::DownloadNewVersion)
                             .with_override_text_color(appearance.theme().ansi_fg_red())
                             .into_item(),
@@ -10240,47 +10239,41 @@ impl Workspace {
             return;
         };
 
-        // Check what the hovered item is by reading its action.
-        let hovered_action = self.new_session_dropdown_menu.read(ctx, |menu, _| {
+        // Check what the hovered item is by reading its label.
+        let hovered_label = self.new_session_dropdown_menu.read(ctx, |menu, _| {
             menu.items().get(hovered_index).and_then(|item| match item {
-                MenuItem::Item(fields) => fields.on_select_action().cloned(),
+                MenuItem::Item(fields) => Some(fields.label().to_string()),
                 _ => None,
             })
         });
 
-        let is_submenu_parent = self.new_session_dropdown_menu.read(ctx, |menu, _| {
-            menu.items().get(hovered_index).is_some_and(|item| matches!(item, MenuItem::Item(fields) if fields.on_select_action().is_none()))
-        });
-
-        // Check if this is the "New worktree config" submenu parent (identified by being a submenu with no action and having the Dataflow02 icon)
-        let is_worktree_config_submenu = is_submenu_parent && self.new_session_dropdown_menu.read(ctx, |menu, _| {
-            menu.items().get(hovered_index).is_some_and(|item| matches!(item, MenuItem::Item(fields) if fields.icon() == Some(icons::Icon::Dataflow02)))
-        });
-
         // Separator or non-labeled item — hide sidecar.
-        let Some(action) = hovered_action else {
-            if !is_worktree_config_submenu {
-                if self.show_new_session_sidecar {
-                    self.show_new_session_sidecar = false;
-                    self.new_session_dropdown_menu.update(ctx, |menu, _| {
-                        menu.set_safe_zone_target(None);
-                        menu.set_submenu_being_shown_for_item_index(None);
-                    });
-                    ctx.notify();
-                }
-                return;
+        let Some(label) = hovered_label else {
+            if self.show_new_session_sidecar {
+                self.show_new_session_sidecar = false;
+                self.new_session_dropdown_menu.update(ctx, |menu, _| {
+                    menu.set_safe_zone_target(None);
+                    menu.set_submenu_being_shown_for_item_index(None);
+                });
+                ctx.notify();
             }
-            // Submenu parent (New worktree config) — show worktree sidecar.
-            self.configure_worktree_new_session_sidecar(
-                hovered_index,
-                true,
-                ctx,
-            );
             return;
         };
 
-        match action {
-            WorkspaceAction::SelectNewSessionMenuItem(NewSessionMenuItem::CreateNewTabConfig) => {
+        match label.as_str() {
+            "New worktree config" => {
+                self.tab_config_action_sidecar_item = None;
+                let auto_select_first_repo = self.new_session_dropdown_menu.read(ctx, |menu, _| {
+                    menu.last_selection_source() != Some(MenuSelectionSource::Pointer)
+                });
+                self.configure_worktree_new_session_sidecar(
+                    hovered_index,
+                    auto_select_first_repo,
+                    ctx,
+                );
+            }
+            // Items that don't get any sidecar.
+            "New tab config" => {
                 self.tab_config_action_sidecar_item = None;
                 if self.show_new_session_sidecar {
                     self.show_new_session_sidecar = false;
@@ -10293,16 +10286,9 @@ impl Workspace {
             }
             // All other actionable items get the action sidecar.
             _ => {
-                // Read the label from the hovered item for the sidecar name
-                let hovered_label = self.new_session_dropdown_menu.read(ctx, |menu, _| {
-                    menu.items().get(hovered_index).and_then(|item| match item {
-                        MenuItem::Item(fields) => Some(fields.label().to_string()),
-                        _ => None,
-                    })
-                }).unwrap_or_default();
                 self.show_new_session_sidecar = false;
                 self.worktree_sidecar_active = false;
-                self.configure_action_sidecar_for_hovered_item(&hovered_label, hovered_index, ctx);
+                self.configure_action_sidecar_for_hovered_item(&label, hovered_index, ctx);
             }
         }
 
@@ -13204,27 +13190,42 @@ impl Workspace {
                 .map(|t| t.as_str().to_string());
             let title_for_fork = source_conversation.title();
 
-            let forked_conversation = match fork_result {
-                Ok(forked_conversation) => forked_conversation,
-                Err(e) => {
-                    log::error!("Conversation forking failed. {e}.");
-                    WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                        let toast =
-                            DismissibleToast::error(crate::tr!("workspace", "conversation-forking-failed"));
-                        toast_stack.add_ephemeral_toast(toast, window_id, ctx);
-                    });
-                    return;
-                }
-            };
-
-            // Handle forking into the current pane
-            if destination.is_current_pane() {
-                if let Some(terminal_view) = workspace.active_session_view(ctx) {
-                    let forked_conversation_id = forked_conversation.id();
-                    terminal_view.update(ctx, move |terminal_view, ctx| {
-                        terminal_view.restore_conversation_after_view_creation(
-                            RestoredAIConversation::new(forked_conversation.clone()),
-                            true,
+            // Skip the server-side fork when forking from a specific exchange.
+            // The server's ForkConversation copies the entire GCS conversation
+            // data, which includes exchanges after the fork point. This creates
+            // a mismatch with the locally-truncated fork and causes TaskNotFound
+            // errors during cloud-to-cloud handoff replay.
+            let should_server_fork =
+                cloud_storage_enabled && fork_from_exchange.is_none();
+            if let Some(source_token) = source_server_token.filter(|_| should_server_fork) {
+                let ai_client = ServerApiProvider::as_ref(ctx).get_ai_client();
+                ctx.spawn(
+                    async move {
+                        ai_client
+                            .fork_conversation(source_token, title_for_fork)
+                            .await
+                    },
+                    move |workspace, result, ctx| {
+                        let server_forked_id = match result {
+                            Ok(response) => Some(response.forked_conversation_id),
+                            Err(err) => {
+                                log::warn!("Server-side fork failed, proceeding with local-only fork: {err:#}");
+                                None
+                            }
+                        };
+                        workspace.create_local_fork(
+                            source_conversation,
+                            conversation_id,
+                            fork_from_exchange,
+                            summarize_after_fork,
+                            summarization_prompt,
+                            initial_prompt,
+                            initial_attachments,
+                            destination,
+                            has_initial_query,
+                            source_terminal_view_id,
+                            server_forked_id,
+                            window_id,
                             ctx,
                         );
                     },
@@ -13296,7 +13297,7 @@ impl Workspace {
             Err(e) => {
                 log::error!("Conversation forking failed. {e}.");
                 WorkspaceToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::error("Conversation forking failed.".to_owned());
+                    let toast = DismissibleToast::error(crate::tr!("workspace", "conversation-forking-failed"));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
                 return;
@@ -13934,17 +13935,871 @@ impl Workspace {
         ctx.notify();
     }
 
-    fn open_recent_repos_and_convos_palette(&mut self, ctx: &mut ViewContext<Self>) {
+    fn open_conversations_palette(&mut self, ctx: &mut ViewContext<Self>) {
         self.palette.update(ctx, |view, ctx| {
             view.reset(ctx);
-            view.set_fixed_query_filters(
-                crate::tr!("workspace", "search-recent-repos-and-conversations"),
-                vec![QueryFilter::HistoricalConversations, QueryFilter::Repos],
+            view.set_active_query_filter(QueryFilter::Conversations, ctx);
+            view.set_initial_selection_offset(0, ctx);
+        });
+        ctx.notify();
+    }
+
+    fn open_ctrl_tab_palette(
+        &mut self,
+        query_filter: QueryFilter,
+        shift_pressed_initially: bool,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        let offset = if shift_pressed_initially { -1 } else { 1 };
+
+        self.ctrl_tab_palette.update(ctx, |view, ctx| {
+            view.reset(ctx);
+        });
+
+        let mixer = self
+            .ctrl_tab_palette
+            .as_ref(ctx)
+            .search_bar
+            .as_ref(ctx)
+            .mixer()
+            .clone();
+        let data_source_store = self.ctrl_tab_palette.as_ref(ctx).data_source_store.clone();
+
+        match query_filter {
+            QueryFilter::Tabs => {
+                let window_id = ctx.window_id();
+                let tabs = self.tab_navigation_data(window_id, ctx.as_ref());
+                data_source_store.update(ctx, |store, ctx| {
+                    store.reset_ctrl_tab_mixer(mixer, tabs, ctx);
+                });
+            }
+            QueryFilter::Sessions => {
+                data_source_store.update(ctx, |store, ctx| {
+                    store.restore_ctrl_tab_session_mixer(mixer, ctx);
+                });
+            }
+            _ => {}
+        }
+
+        self.ctrl_tab_palette.update(ctx, |view, ctx| {
+            match query_filter {
+                QueryFilter::Tabs => {
+                    // Set offset BEFORE filter: the tabs query is synchronous, so results
+                    // arrive during set_active_query_filter. The offset must already be
+                    // stored so on_mixer_results_changed picks it up.
+                    view.set_initial_selection_offset(offset, ctx);
+                    view.set_active_query_filter(query_filter, ctx);
+                }
+                _ => {
+                    // Sessions (and other async sources): set filter first, then offset.
+                    // The existing post-open select_next_item handles initial selection.
+                    view.set_active_query_filter(query_filter, ctx);
+                    view.set_initial_selection_offset(offset, ctx);
+                }
+            }
+        });
+
+        ctx.notify();
+    }
+
+    fn open_warp_drive_palette(&mut self, ctx: &mut ViewContext<Self>) {
+        self.palette.update(ctx, |view, ctx| {
+            view.reset(ctx);
+            view.set_active_query_filter(QueryFilter::Drive, ctx);
+            ctx.focus(&self.palette);
+        });
+        ctx.notify();
+    }
+
+    fn set_navigation_palette_session_source(
+        &mut self,
+        source: PaletteSource,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        let active_pane_id = self
+            .active_tab_pane_group()
+            .as_ref(ctx)
+            .focused_pane_id(ctx);
+        let active_tab_id = self
+            .tabs
+            .get(self.active_tab_index)
+            .map(|tab| tab.pane_group.id());
+        let active_window_id = ctx.window_id();
+
+        let active_palette_handle = if matches!(source, PaletteSource::CtrlTab { .. }) {
+            &self.ctrl_tab_palette
+        } else {
+            &self.palette
+        };
+        active_palette_handle.update(ctx, |view, ctx| {
+            // Set the session source when the active_tab_id is Some.
+            if let Some(active_tab_id) = active_tab_id {
+                view.set_session_source(
+                    SessionSource::Set {
+                        active_pane_id,
+                        active_tab_id,
+                        active_window_id,
+                    },
+                    ctx,
+                );
+                ctx.notify();
+            }
+            ctx.notify();
+        });
+    }
+
+    fn set_palette_sources(&mut self, source: PaletteSource, ctx: &mut ViewContext<Self>) {
+        self.set_command_palette_binding_source(source, ctx);
+        self.set_navigation_palette_session_source(source, ctx);
+    }
+
+    fn open_launch_config_palette(&mut self, ctx: &mut ViewContext<Self>) {
+        self.palette.update(ctx, |view, ctx| {
+            view.reset(ctx);
+            view.set_active_query_filter(QueryFilter::LaunchConfigurations, ctx);
+        });
+    }
+
+    fn close_palette(
+        &mut self,
+        focus_active_tab: bool,
+        accepted_action_type: Option<&'static str>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.current_workspace_state.is_palette_open = false;
+        self.current_workspace_state.is_ctrl_tab_palette_open = false;
+        self.tab_bar_pinned_by_popup = false;
+        self.sync_window_button_visibility(ctx);
+        if focus_active_tab
+            // If the user did not do any action on the command palette (eg. closed via shortcut or clicking away)
+            // we always force the focus back onto the terminal input
+            // Otherwise we check if any other views are open before moving focus back to terminal input
+            && (accepted_action_type.is_none()
+                || !self
+                    .current_workspace_state
+                    .is_any_non_terminal_view_open(ctx))
+        {
+            self.focus_active_tab(ctx);
+        }
+        ctx.notify();
+    }
+
+    /// Close all overlays in this workspace and the active pane group.
+    fn close_all_overlays(&mut self, ctx: &mut ViewContext<Self>) {
+        self.current_workspace_state.close_all_modals();
+        self.close_tab_bar_overflow_menu(ctx);
+        self.close_all_chip_menus(ctx);
+
+        self.active_tab_pane_group()
+            .update(ctx, |pane_group, ctx| pane_group.close_overlays(ctx));
+    }
+
+    /// Close all chip menus across all inputs to prevent overlapping with modals.
+    /// This is a defensive measure to ensure chip menus don't stay open when focus-stealing modals appear.
+    fn close_all_chip_menus(&mut self, ctx: &mut ViewContext<Self>) {
+        if let Some(active_input_handle) = self.get_active_input_view_handle(ctx) {
+            active_input_handle.update(ctx, |input, ctx| {
+                input.prompt_render_helper.prompt_view().update(
+                    ctx,
+                    |prompt_display, prompt_ctx| {
+                        prompt_display.close_all_chip_menus(prompt_ctx);
+                    },
+                );
+            });
+        }
+    }
+
+    fn open_require_login_modal(&mut self, variant: AuthViewVariant, ctx: &mut ViewContext<Self>) {
+        self.require_login_modal.update(ctx, |modal, ctx| {
+            modal.set_variant(ctx, variant);
+        });
+
+        self.close_all_overlays(ctx);
+        self.current_workspace_state.is_require_login_modal_open = true;
+        ctx.focus(&self.require_login_modal);
+        ctx.notify();
+    }
+
+    fn open_auth_override_warning_modal(
+        &mut self,
+        auth_payload: AuthRedirectPayload,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.close_all_overlays(ctx);
+        self.auth_override_warning_modal.update(ctx, |modal, _| {
+            modal.set_interrupted_auth_payload(auth_payload);
+        });
+        self.current_workspace_state.is_auth_override_modal_open = true;
+        ctx.focus(&self.auth_override_warning_modal);
+        ctx.notify();
+    }
+
+    fn open_palette(
+        &mut self,
+        mode: PaletteMode,
+        source: PaletteSource,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.close_all_overlays(ctx);
+
+        // Set the shared session viewer state before opening the palette
+        // so it can determine which data sources to include (e.g., exclude Files in shared sessions)
+        let is_shared_session_viewer = self.is_shared_session_viewer_focused(ctx);
+        let active_palette = if matches!(source, PaletteSource::CtrlTab { .. }) {
+            &self.ctrl_tab_palette
+        } else {
+            &self.palette
+        };
+        active_palette.update(ctx, |palette, ctx| {
+            palette.set_is_shared_session_viewer(is_shared_session_viewer, ctx);
+        });
+
+        if matches!(source, PaletteSource::TitleBarSearchBar) {
+            self.tab_bar_pinned_by_popup = true;
+        }
+        if matches!(source, PaletteSource::CtrlTab { .. }) {
+            self.current_workspace_state.is_ctrl_tab_palette_open = true;
+        } else {
+            self.current_workspace_state.is_palette_open = true;
+        }
+        match mode {
+            PaletteMode::Command => self.open_command_palette(ctx),
+            PaletteMode::Navigation => match source {
+                PaletteSource::CtrlTab {
+                    shift_pressed_initially,
+                } => {
+                    let filter = match *KeysSettings::as_ref(ctx).ctrl_tab_behavior {
+                        CtrlTabBehavior::CycleMostRecentTab => QueryFilter::Tabs,
+                        _ => QueryFilter::Sessions,
+                    };
+                    self.open_ctrl_tab_palette(filter, shift_pressed_initially, ctx);
+                }
+                _ => self.open_navigation_palette(ctx),
+            },
+            PaletteMode::LaunchConfig => self.open_launch_config_palette(ctx),
+            PaletteMode::WarpDrive => self.open_warp_drive_palette(ctx),
+            PaletteMode::Files => self.open_files_palette(ctx),
+            PaletteMode::Conversations => self.open_conversations_palette(ctx),
+        }
+
+        ctx.focus(&self.palette);
+
+        send_telemetry_from_ctx!(TelemetryEvent::PaletteSearchOpened { mode, source }, ctx);
+
+        ctx.notify();
+    }
+
+    /// Implements the WorkspaceAction::OpenPalette. This method makes sure the palette is open and
+    /// has up-to-date sources. Use this if you don't want toggle semantics.
+    fn open_palette_action(
+        &mut self,
+        palette_mode: PaletteMode,
+        source: PaletteSource,
+        with_content: Option<&str>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        // ensure the palette sources are up-to-date, e.g. maybe there is already a navigation
+        // palette open and then new sessions were opened after that
+        self.set_palette_sources(source, ctx);
+        self.open_palette(palette_mode, source, ctx);
+        if let Some(text) = with_content {
+            self.palette.update(ctx, |palette, ctx| {
+                palette.insert_query_text(text, ctx);
+            });
+        }
+    }
+
+    pub fn is_palette_mode_enabled(&self, palette_mode: PaletteMode, app: &AppContext) -> bool {
+        self.palette.as_ref(app).is_mode_enabled(palette_mode, app)
+    }
+
+    /// Toggle the open / closed state of the palette (so that hitting shortcut a second time
+    /// will close the palette)
+    fn toggle_palette(
+        &mut self,
+        palette_mode: PaletteMode,
+        source: PaletteSource,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        // If the invite modal is open, don't show the palette since it won't be visible anyway
+        if !self
+            .current_workspace_state
+            .is_any_non_palette_modal_open(ctx)
+        {
+            let is_palette_mode_already_open =
+                self.palette.as_ref(ctx).is_mode_enabled(palette_mode, ctx)
+                    && ((matches!(source, PaletteSource::CtrlTab { .. })
+                        && self.current_workspace_state.is_ctrl_tab_palette_open)
+                        || self.current_workspace_state.is_palette_open);
+            if is_palette_mode_already_open {
+                self.close_palette(true, None, ctx);
+            } else {
+                self.set_palette_sources(source, ctx);
+                self.open_palette(palette_mode, source, ctx);
+            }
+        }
+    }
+
+    fn handle_palette_event(&mut self, event: &CommandPaletteEvent, ctx: &mut ViewContext<Self>) {
+        match event {
+            CommandPaletteEvent::Close {
+                accepted_action_type,
+            } => self.close_palette(true, *accepted_action_type, ctx),
+            CommandPaletteEvent::ExecuteWorkflow { id } => {
+                let Some(workflow) = CloudModel::as_ref(ctx).get_workflow(id) else {
+                    log::warn!("Tried to execute workflow for id {id:?} but it does not exist");
+                    return;
+                };
+
+                self.run_cloud_workflow_in_active_input(
+                    workflow.clone(),
+                    WorkflowSelectionSource::CommandPalette,
+                    TerminalSessionFallbackBehavior::default(),
+                    ctx,
+                );
+            }
+            CommandPaletteEvent::InvokeEnvironmentVariables { id } => {
+                let Some(env_var_collection) = CloudModel::as_ref(ctx).get_env_var_collection(id)
+                else {
+                    log::warn!("Tried to execute EVC for id {id:?} but it does not exist");
+                    return;
+                };
+
+                self.invoke_environment_variables(env_var_collection.clone(), false, ctx);
+            }
+            CommandPaletteEvent::OpenNotebook { id } => self.open_notebook(
+                &NotebookSource::Existing(*id),
+                &OpenWarpDriveObjectSettings::default(),
+                ctx,
+                true,
+            ),
+            CommandPaletteEvent::ViewInWarpDrive { id } => {
+                self.view_in_and_focus_warp_drive(WarpDriveItemId::Object(*id), ctx);
+            }
+            #[allow(unused_variables)]
+            CommandPaletteEvent::OpenFile {
+                path,
+                line_and_column_arg,
+            } => {
+                #[cfg(feature = "local_fs")]
+                {
+                    // Build a LocalOrRemotePath for the file. For remote sessions
+                    // the host_id comes from the active working directory.
+                    let location = {
+                        let window_id = ctx.window_id();
+                        ActiveSession::as_ref(ctx)
+                            .working_directory(window_id)
+                            .and_then(|wd| match wd {
+                                LocalOrRemotePath::Remote(remote) => {
+                                    let std_path =
+                                        warp_util::standardized_path::StandardizedPath::try_new(
+                                            path,
+                                        )
+                                        .ok()?;
+                                    Some(LocalOrRemotePath::Remote(
+                                        warp_util::remote_path::RemotePath::new(
+                                            remote.host_id.clone(),
+                                            std_path,
+                                        ),
+                                    ))
+                                }
+                                LocalOrRemotePath::Local(_) => None,
+                            })
+                            .unwrap_or_else(|| LocalOrRemotePath::Local(PathBuf::from(path)))
+                    };
+
+                    let code_source = CodeSource::CommandPalette { location };
+
+                    self.open_code(
+                        code_source,
+                        *EditorSettings::as_ref(ctx).open_file_layout.value(),
+                        *line_and_column_arg,
+                        false, // preview
+                        &[],
+                        ctx,
+                    );
+                }
+            }
+            CommandPaletteEvent::OpenDirectory { path } => {
+                let active_terminal_view = self
+                    .active_tab_pane_group()
+                    .as_ref(ctx)
+                    .active_session_view(ctx);
+
+                if let Some(terminal_view) = active_terminal_view {
+                    terminal_view.update(ctx, |terminal_view, ctx| {
+                        terminal_view.open_repo_folder(path.to_string(), false, ctx);
+                    });
+                }
+            }
+        }
+    }
+
+    /// This function is used when we set a selected object, which is an object open in an active pane.
+    /// We do not want to focus Warp Drive, instead we want to focus the editor of the open object.
+    fn view_in_warp_drive(&mut self, item_id: WarpDriveItemId, ctx: &mut ViewContext<Self>) {
+        self.open_left_panel(ctx);
+        self.left_panel_view.update(ctx, |left_panel, ctx| {
+            left_panel.handle_action(&LeftPanelAction::WarpDrive, ctx);
+        });
+
+        if let WarpDriveItemId::Object(object_id) = item_id {
+            CloudModel::handle(ctx).update(ctx, |model, ctx| {
+                model.force_expand_object_and_ancestors_cloud_id(object_id, ctx);
+            });
+        }
+        self.update_warp_drive_view(ctx, |warp_drive, ctx| {
+            warp_drive.scroll_item_into_view(item_id, ctx);
+            warp_drive.expand_section_for_drive_item_id(item_id, ctx);
+            warp_drive.initialize_drive_section_states(ctx);
+        });
+    }
+
+    /// This function is used when we want to view an item in Warp Drive AND focus Warp Drive.
+    pub fn view_in_and_focus_warp_drive(
+        &mut self,
+        item_id: WarpDriveItemId,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.view_in_warp_drive(item_id, ctx);
+
+        self.update_warp_drive_view(ctx, |warp_drive, ctx| {
+            warp_drive.reset_and_open_to_main_index(ctx);
+            warp_drive.set_focused_item(item_id, ctx);
+        });
+        ctx.notify();
+    }
+
+    /// Updates the left panel's warp drive view.
+    fn update_warp_drive_view<F>(&mut self, ctx: &mut ViewContext<Self>, update_fn: F)
+    where
+        F: FnOnce(&mut DrivePanel, &mut ViewContext<DrivePanel>),
+    {
+        self.left_panel_view.update(ctx, |left_panel, ctx| {
+            left_panel.warp_drive_view().update(ctx, |warp_drive, ctx| {
+                update_fn(warp_drive, ctx);
+            });
+        });
+    }
+
+    /// View an object in Warp Drive and open its sharing settings.
+    fn open_object_sharing_settings(
+        &mut self,
+        object_id: CloudObjectTypeAndId,
+        invitee_email: Option<String>,
+        source: SharingDialogSource,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.view_in_warp_drive(WarpDriveItemId::Object(object_id), ctx);
+        self.update_warp_drive_view(ctx, |warp_drive, ctx| {
+            warp_drive.reset_and_open_to_main_index(ctx);
+            warp_drive.open_object_sharing_settings(object_id, invitee_email, source, ctx);
+        });
+
+        ctx.notify();
+    }
+
+    fn move_to_drive_space(
+        &mut self,
+        cloud_object_type_and_id: CloudObjectTypeAndId,
+        space: Space,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        self.update_warp_drive_view(ctx, |warp_drive, ctx| {
+            warp_drive.move_object_to_team_owner(cloud_object_type_and_id, space, ctx);
+        });
+    }
+
+    fn set_focused_index(&mut self, index: Option<usize>, ctx: &mut ViewContext<Self>) {
+        self.update_warp_drive_view(ctx, |warp_drive, ctx| {
+            warp_drive.set_focused_index(index, ctx);
+        });
+        ctx.notify();
+    }
+
+    fn handle_changelog_event(&mut self, event: &ChangelogEvent, ctx: &mut ViewContext<Self>) {
+        // For certain contexts, like shared sessions, we do not want to force open the side panel
+        // or display the reward modal.
+        if !ContextFlag::ForceSidePanelOpen.is_enabled() {
+            return;
+        }
+        // Don't show changelog if user has disabled it in settings.
+        let show_changelog_setting = *ChangelogSettings::as_ref(ctx).show_changelog_after_update;
+
+        let mut request_type = None;
+        let should_show_changelog = match event {
+            ChangelogEvent::ChangelogRequestFailed {
+                request_type: ChangelogRequestType::UserAction,
+            }
+            | ChangelogEvent::ChangelogRequestComplete {
+                request_type: ChangelogRequestType::UserAction,
+                ..
+            } => {
+                request_type = Some(ChangelogRequestType::UserAction);
+                true
+            }
+            ChangelogEvent::ChangelogRequestComplete {
+                request_type: ChangelogRequestType::WindowLaunch,
+                ..
+            } => match ChannelState::app_version() {
+                Some(version) => {
+                    let opening_warp_drive_on_start_up = OPENING_WARP_DRIVE_ON_START_UP
+                        .lock()
+                        .expect("Should be able to access OPENING_WARP_DRIVE_ON_START_UP");
+
+                    request_type = Some(ChangelogRequestType::WindowLaunch);
+                    // Do not show changelog on quake mode window or if it has already been shown
+                    // or if we are opening Warp Drive on start up
+                    quake_mode_window_id() != Some(ctx.window_id())
+                        && !Settings::has_changelog_been_shown(version, ctx)
+                        && !*opening_warp_drive_on_start_up
+                }
+                None => false,
+            },
+            ChangelogEvent::ChangelogRequestFailed {
+                request_type: ChangelogRequestType::WindowLaunch,
+            } => false,
+            ChangelogEvent::ImageRequestComplete => false,
+        } && show_changelog_setting;
+
+        match (
+            should_show_changelog,
+            request_type,
+            self.reward_modal_pending,
+        ) {
+            (true, Some(ChangelogRequestType::WindowLaunch), _) => {
+                if let Some(version) = ChannelState::app_version() {
+                    Settings::mark_changelog_shown(version, ctx);
+                    if FeatureFlag::AvatarInTabBar.is_enabled() {
+                        self.update_toast_stack.update(ctx, |stack, ctx| {
+                            // Get keybinding for view changelog action
+                            let keystroke = ctx
+                                .editable_bindings()
+                                .find(|binding| binding.name == "workspace:view_changelog")
+                                .and_then(|binding| trigger_to_keystroke(binding.trigger));
+
+                            let mut link = ToastLink::new(crate::tr!("workspace", "view-changelog"))
+                                .with_onclick_action(WorkspaceAction::ViewLatestChangelog);
+                            if let Some(keystroke) = keystroke {
+                                link = link.with_keystroke(keystroke);
+                            }
+
+                            let toast = DismissibleToast::default(crate::tr!("workspace", "toast-warp-updated"))
+                                .with_link(link);
+
+                            stack.add_ephemeral_toast(toast, ctx);
+                        });
+                    } else {
+                        // If resource center isn't already open and Warp AI isn't open, then open resource center
+                        if !self.current_workspace_state.is_resource_center_open
+                            && !self.current_workspace_state.is_ai_assistant_panel_open
+                        {
+                            self.open_resource_center_main_page(ctx);
+                            self.update_resource_center_action_target(ctx);
+                            ctx.notify();
+                        }
+                    }
+                }
+            }
+            (_, Some(ChangelogRequestType::UserAction), _) => {
+                if !self.current_workspace_state.is_resource_center_open
+                    && !self.current_workspace_state.is_ai_assistant_panel_open
+                {
+                    self.open_resource_center_main_page(ctx);
+                    self.update_resource_center_action_target(ctx);
+                    ctx.notify();
+                }
+            }
+            (false, _, Some(kind)) => {
+                // We shouldn't show the changelog modal, but we have a pending reward modal, so we
+                // should show that now that we know the changelog won't be shown
+                self.show_reward_modal(kind, ctx);
+            }
+            _ => {}
+        }
+    }
+
+    fn manual_check_for_update(&self, ctx: &mut ViewContext<Self>) {
+        AutoupdateState::handle(ctx).update(ctx, |autoupdate_state, ctx| {
+            autoupdate_state.manually_check_for_update(ctx);
+        });
+    }
+
+    pub fn is_theme_creator_modal_open(&self) -> bool {
+        self.current_workspace_state.is_theme_creator_modal_open
+    }
+
+    pub fn is_theme_deletion_modal_open(&self) -> bool {
+        self.current_workspace_state.is_theme_deletion_modal_open
+    }
+
+    pub fn is_palette_open(&self) -> bool {
+        self.current_workspace_state.is_palette_open
+            || self.current_workspace_state.is_ctrl_tab_palette_open
+    }
+
+    pub fn is_workflow_modal_open(&self) -> bool {
+        self.current_workspace_state.is_workflow_modal_open
+    }
+
+    pub fn is_warp_drive_open(&self) -> bool {
+        self.current_workspace_state.is_warp_drive_open
+    }
+
+    pub fn is_left_panel_open(&self, ctx: &AppContext) -> bool {
+        self.active_tab_pane_group().as_ref(ctx).left_panel_open
+    }
+
+    fn is_readonly_shared_session_active(&self, ctx: &mut ViewContext<Self>) -> bool {
+        let active_terminal_view = self
+            .active_tab_pane_group()
+            .as_ref(ctx)
+            .active_session_view(ctx);
+
+        active_terminal_view.is_some_and(|view| {
+            view.as_ref(ctx)
+                .model
+                .lock()
+                .shared_session_status()
+                .is_reader()
+        })
+    }
+
+    fn handle_settings_pane_event(
+        &mut self,
+        event: &SettingsViewEvent,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match event {
+            SettingsViewEvent::CheckForUpdate => {
+                self.manual_check_for_update(ctx);
+            }
+            SettingsViewEvent::LaunchNetworkLogging => {
+                self.open_network_log_pane(ctx);
+            }
+            SettingsViewEvent::OpenWarpDrive => {
+                self.close_all_overlays(ctx);
+                self.open_or_toggle_warp_drive(
+                    false, /* toggle */
+                    false, /* explicit_user_action */
+                    ctx,
+                );
+                ctx.notify();
+            }
+            SettingsViewEvent::SignupAnonymousUser => {
+                self.initiate_user_signup(AnonymousUserSignupEntrypoint::SignUpButton, ctx);
+            }
+            SettingsViewEvent::Pane(_) | SettingsViewEvent::StartResize => {}
+            SettingsViewEvent::ShowToast { message, flavor } => {
+                self.toast_stack.update(ctx, |toast_stack, ctx| {
+                    toast_stack
+                        .add_ephemeral_toast(DismissibleToast::new(message.clone(), *flavor), ctx);
+                });
+            }
+            SettingsViewEvent::OpenAIFactCollection => {
+                self.open_ai_fact_collection_pane(Some(Direction::Right), None, ctx);
+                send_telemetry_from_ctx!(
+                    TelemetryEvent::KnowledgePaneOpened {
+                        entrypoint: KnowledgePaneEntrypoint::Settings,
+                    },
+                    ctx
+                );
+            }
+            SettingsViewEvent::OpenMCPServerCollection => {
+                self.show_settings_with_section(Some(SettingsSection::MCPServers), ctx);
+
+                send_telemetry_from_ctx!(
+                    TelemetryEvent::MCPServerCollectionPaneOpened {
+                        entrypoint: MCPServerCollectionPaneEntrypoint::Settings,
+                    },
+                    ctx
+                );
+            }
+            SettingsViewEvent::OpenExecutionProfileEditor(profile_id) => {
+                self.open_execution_profile_editor_pane(None, *profile_id, ctx);
+            }
+            SettingsViewEvent::OpenLspLogs { log_path } => {
+                self.open_lsp_logs(log_path, ctx);
+            }
+            SettingsViewEvent::OpenProjectRulesPane { rule_paths } => {
+                #[cfg(feature = "local_fs")]
+                if let Some((first, rest)) = rule_paths.split_first() {
+                    self.open_code(
+                        CodeSource::ProjectRules {
+                            location: LocalOrRemotePath::Local(first.clone()),
+                        },
+                        EditorLayout::SplitPane,
+                        None,
+                        false,
+                        rest,
+                        ctx,
+                    );
+                }
+                #[cfg(not(feature = "local_fs"))]
+                let _ = rule_paths;
+            }
+        }
+    }
+
+    fn refresh_working_directories_for_pane_group(
+        &mut self,
+        pane_group: &ViewHandle<PaneGroup>,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        let pane_group_id = pane_group.id();
+        let terminal_cwds: Vec<(EntityId, LocalOrRemotePath)> = pane_group
+            .as_ref(ctx)
+            .terminal_view_working_directories(ctx)
+            .filter_map(|(id, cwd)| cwd.map(|c| (id, c)))
+            .collect();
+        let code_paths: Vec<(EntityId, LocalOrRemotePath)> = pane_group
+            .as_ref(ctx)
+            .code_view_paths(ctx)
+            .filter_map(|(id, cwd)| cwd.map(|c| (id, c)))
+            .collect();
+        let code_diff_paths: Vec<(EntityId, LocalOrRemotePath)> = pane_group
+            .as_ref(ctx)
+            .code_diff_view_paths(ctx)
+            .filter_map(|(id, cwd)| cwd.map(|c| (id, c)))
+            .collect();
+        let notebook_paths: Vec<(EntityId, LocalOrRemotePath)> = pane_group
+            .as_ref(ctx)
+            .file_notebook_paths(ctx)
+            .filter_map(|(id, path)| path.map(|p| (id, p)))
+            .collect();
+        let local_paths: Vec<(EntityId, LocalOrRemotePath)> = code_paths
+            .into_iter()
+            .chain(notebook_paths)
+            .chain(code_diff_paths)
+            .collect();
+
+        // Get the focused terminal ID to prioritize it in the repo_to_terminal map
+        let focused_terminal_id = pane_group
+            .as_ref(ctx)
+            .active_session_view(ctx)
+            .map(|terminal_view| terminal_view.id());
+
+        self.working_directories_model.update(ctx, |model, ctx| {
+            model.refresh_working_directories_for_pane_group(
+                pane_group_id,
+                terminal_cwds,
+                local_paths,
+                focused_terminal_id,
                 ctx,
             );
         });
     }
 
+    /// Opens the in-app network log pane as a right-split of the active pane
+    /// group. If a pane already exists for the current window, refreshes its
+    /// snapshot from the in-memory model and focuses it instead of opening
+    /// another one.
+    pub(crate) fn open_network_log_pane(&mut self, ctx: &mut ViewContext<Self>) {
+        let manager = NetworkLogPaneManager::handle(ctx);
+
+        if let Some(locator) = manager.as_ref(ctx).find_pane(ctx.window_id()) {
+            // Pane is already open: refresh its snapshot so any items
+            // captured since the last open are reflected, then focus it.
+            if let Some(tab) = self
+                .tabs
+                .iter()
+                .find(|tab| tab.pane_group.id() == locator.pane_group_id)
+            {
+                let pane_group = tab.pane_group.clone();
+                let network_log_view = pane_group.read(ctx, |pane_group, ctx| {
+                    pane_group
+                        .downcast_pane_by_id::<NetworkLogPane>(locator.pane_id)
+                        .map(|pane| pane.network_log_view(ctx))
+                });
+                if let Some(network_log_view) = network_log_view {
+                    network_log_view.update(ctx, |view, ctx| view.reload_snapshot(ctx));
+                }
+            }
+            self.focus_pane(locator, ctx);
+            return;
+        }
+
+        let pane = NetworkLogPane::new(ctx);
+        self.active_tab_pane_group().update(ctx, |pane_group, ctx| {
+            pane_group.add_pane_with_direction(
+                Direction::Right,
+                pane,
+                true, /* focus_new_pane */
+                ctx,
+            );
+        });
+    }
+
+    fn show_handoff_environment_creation_modal(&mut self, ctx: &mut ViewContext<Self>) {
+        // Capture the initiating source view now, before async creation begins.
+        // If we waited until the Created callback, the user may have switched panes.
+        #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
+        let source_view = self
+            .active_tab_pane_group()
+            .as_ref(ctx)
+            .active_session_view(ctx);
+
+        let modal = ctx.add_typed_action_view(HandoffEnvironmentCreationModal::new);
+        ctx.subscribe_to_view(&modal, move |me, _, event, ctx| match event {
+            HandoffEnvironmentCreationModalEvent::Created { env_id } => {
+                let env_id = *env_id;
+                me.handoff_environment_creation_modal = None;
+                #[cfg(all(feature = "local_fs", not(target_family = "wasm")))]
+                {
+                    if let Some(source_view) = source_view.as_ref() {
+                        let (launch, entry_point) = source_view.update(ctx, |view, ctx| {
+                            let input = view.input().clone();
+                            input.update(ctx, |input, ctx| {
+                                let prompt = input
+                                    .editor()
+                                    .as_ref(ctx)
+                                    .buffer_text(ctx)
+                                    .trim()
+                                    .to_owned();
+                                let attachments = input.collect_cloud_launch_attachments(ctx);
+                                let entry_point = input.handoff_entry_point(ctx);
+                                input.exit_cloud_handoff_compose_and_clear(ctx);
+                                let launch = if prompt.is_empty() {
+                                    None
+                                } else {
+                                    Some(PendingCloudLaunch {
+                                        prompt,
+                                        attachments,
+                                    })
+                                };
+                                (launch, entry_point)
+                            })
+                        });
+                        ctx.dispatch_typed_action_deferred(
+                            WorkspaceAction::OpenLocalToCloudHandoffPane {
+                                launch,
+                                environment_id: Some(env_id),
+                                entry_point,
+                            },
+                        );
+                    }
+                }
+                #[cfg(not(all(feature = "local_fs", not(target_family = "wasm"))))]
+                {
+                    let _ = env_id;
+                }
+            }
+            HandoffEnvironmentCreationModalEvent::Cancelled => {
+                me.handoff_environment_creation_modal = None;
+                me.focus_active_tab(ctx);
+            }
+            HandoffEnvironmentCreationModalEvent::CreationFailed { error_message } => {
+                me.handoff_environment_creation_modal = None;
+                me.toast_stack.update(ctx, |toast_stack, ctx| {
+                    toast_stack.add_ephemeral_toast(
+                        DismissibleToast::error(format!(
+                            "Failed to create environment: {error_message}"
+                        )),
+                        ctx,
+                    );
+                });
+                me.focus_active_tab(ctx);
+            }
         });
         modal.update(ctx, |modal, ctx| modal.show(ctx));
         ctx.focus(&modal);
@@ -16542,7 +17397,7 @@ impl Workspace {
         {
             AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                 auth_manager.attempt_login_gated_feature(
-                    crate::tr!("workspace", "run-agent-mode-workflow"),
+                    "Run Agent Mode Workflow",
                     AuthViewVariant::RequireLoginCloseable,
                     ctx,
                 )
@@ -20692,7 +21547,7 @@ impl Workspace {
             description: crate::tr!("workspace", "sign-in-again"),
             secondary_button: None,
             button: Some(WorkspaceBannerButtonDetails {
-                text: crate::tr!("workspace", "sign-in"),
+                text: crate::tr!("workspace", "sign-in").into(),
                 action: WorkspaceAction::Reauth,
                 variant: BannerButtonVariant::Outlined,
                 icon: None,
@@ -23614,7 +24469,7 @@ impl TypedActionView for Workspace {
             AttemptLoginGatedAIUpgrade => {
                 AuthManager::handle(ctx).update(ctx, |auth_manager, ctx| {
                     auth_manager.attempt_login_gated_feature(
-                        crate::tr!("workspace", "upgrade-ai-usage"),
+                        "Upgrade AI Usage",
                         AuthViewVariant::RequireLoginCloseable,
                         ctx,
                     )

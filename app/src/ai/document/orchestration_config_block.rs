@@ -3,6 +3,7 @@
 //! toggle, Cloud/Local picker, and run-wide config dropdowns.
 
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 use ai::agent::action::RunAgentsExecutionMode;
 use ai::agent::orchestration_config::OrchestrationConfigStatus;
@@ -105,9 +106,9 @@ fn render_pill_toggle(is_on: bool, theme: &WarpTheme) -> Box<dyn Element> {
     .finish()
 }
 
-static CONFIG_BLOCK_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "use-orchestration"));
-static CONFIG_BLOCK_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "orchestration-description"));
-static BASE_MODEL_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "base-model-helper"));
+static CONFIG_BLOCK_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-use-orchestration"));
+static CONFIG_BLOCK_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-orchestration-description"));
+static BASE_MODEL_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-base-model-helper"));
 static AI_VIEW_DETAILS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-details"));
 
 // ── Action type ─────────────────────────────────────────────────────
@@ -606,7 +607,7 @@ impl View for OrchestrationConfigBlockView {
 
         // Header row: "Use orchestration" + pill toggle switch
         let header_label = Text::new(
-            CONFIG_BLOCK_HEADER.to_string(),
+            CONFIG_BLOCK_HEADER.clone(),
             appearance.ui_font_family(),
             16.,
         )
@@ -634,7 +635,7 @@ impl View for OrchestrationConfigBlockView {
 
         // Description
         let description = Text::new(
-            CONFIG_BLOCK_DESCRIPTION.to_string(),
+            CONFIG_BLOCK_DESCRIPTION.clone(),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -722,7 +723,7 @@ impl View for OrchestrationConfigBlockView {
 
                 // Helper text
                 let helper = Text::new(
-                    BASE_MODEL_HELPER.to_string(),
+                    BASE_MODEL_HELPER.clone(),
                     appearance.ui_font_family(),
                     appearance.monospace_font_size() - 1.,
                 )

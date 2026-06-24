@@ -65,13 +65,13 @@ pub struct TimingInfo {
 }
 
 /// Typed actions dispatched by widgets inside [`ConversationUsageView`]. The
-/// view uses a single typed action surface for the crate::tr!("ai", "view-details") /
-/// crate::tr!("ai", "hide-details") toggle and the "Show N more" affordance so each row's
+/// view uses a single typed action surface for the "View details" /
+/// "Hide details" toggle and the "Show N more" affordance so each row's
 /// click handler can dispatch through the regular action pipeline without
 /// borrowing the view directly.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ConversationUsageViewAction {
-    /// Flip the crate::tr!("ai", "view-details") / crate::tr!("ai", "hide-details") toggle.
+    /// Flip the "View details" / "Hide details" toggle.
     ToggleDetailsExpanded,
     /// Reveal the truncated rows beyond the first 5 in the per-agent
     /// breakdown.
@@ -93,7 +93,7 @@ pub struct ConversationUsageView {
     /// `parent_conversation_id` so descendant updates always read fresh
     /// values.
     parent_conversation_id: Option<AIConversationId>,
-    /// Local UI state: whether the crate::tr!("ai", "view-details") toggle is currently
+    /// Local UI state: whether the "View details" toggle is currently
     /// expanded. Resets to `false` whenever the footer is rebuilt — the
     /// rich-content view backing this struct is dropped and recreated on
     /// every collapse / reopen cycle, satisfying PRODUCT invariant 6.
@@ -102,7 +102,7 @@ pub struct ConversationUsageView {
     /// rows beyond the first 5. Resets on view rebuild for the same reason
     /// as `details_expanded`.
     show_all_clicked: bool,
-    /// Per-row mouse states for the crate::tr!("ai", "view-details") / crate::tr!("ai", "hide-details") link
+    /// Per-row mouse states for the "View details" / "Hide details" link
     /// and the "Show N more" link. Stored on the view so hover/click state
     /// survives across renders.
     details_toggle_mouse_state: MouseStateHandle,
@@ -289,7 +289,7 @@ impl ConversationUsageView {
 
         // Usage summary
         labels.push(render_section_header(
-            crate::tr!("ai", "usage-summary-header"),
+            crate::tr!("ai_assistant", "ai-usage-summary-header"),
             appearance,
         ));
         values.push(render_section_header("".to_string(), appearance));
@@ -307,7 +307,7 @@ impl ConversationUsageView {
         {
             let last_block_credits = self.usage_info.credits_spent_for_last_block.unwrap();
             labels.push(render_label_text(
-                &crate::tr!("ai", "credits-spent-last-response"),
+                &crate::tr!("ai_assistant", "ai-credits-spent-last-response"),
                 appearance,
             ));
             values.push(render_value_text(
@@ -315,20 +315,30 @@ impl ConversationUsageView {
                 appearance,
             ));
 
-            labels.push(render_label_text(&crate::tr!("ai", "credits-spent-total"), appearance));
-            values.push(render_value_text(
-                format_credits(self.usage_info.credits_spent),
+            labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-credits-spent-total"), appearance));
+            values.push(self.render_total_credits_value_row(
+                total_credits_value,
+                rollup.as_ref(),
                 appearance,
             ));
         } else {
-            labels.push(render_label_text(&crate::tr!("ai", "credits-spent"), appearance));
-            values.push(render_value_text(
-                format_credits(self.usage_info.credits_spent),
+            labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-credits-spent"), appearance));
+            values.push(self.render_total_credits_value_row(
+                total_credits_value,
+                rollup.as_ref(),
                 appearance,
             ));
         }
 
-        labels.push(render_label_text(&crate::tr!("ai", "tool-calls"), appearance));
+        // Per-agent breakdown rows render immediately beneath the
+        // "Credits spent (total)" row so they read as a drill-down of
+        // that value, not as a separate section appended at the bottom
+        // of the card. The rows are pushed into the same two-column
+        // label/value layout as the rest of the usage summary; the
+        // existing flex spacing handles indentation.
+        self.append_per_agent_rows(&mut labels, &mut values, rollup.as_ref(), appearance);
+
+        labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-tool-calls"), appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.tool_calls, "call"),
             appearance,
@@ -350,7 +360,7 @@ impl ConversationUsageView {
 
             let label_text = if category == PRIMARY_AGENT_CATEGORY && entries_by_category.len() == 1
             {
-                crate::tr!("ai", "models-label").to_string()
+                crate::tr!("ai_assistant", "ai-models-label").to_string()
             } else {
                 format!("Models ({})", token_usage_category_display_name(&category))
             };
@@ -363,7 +373,7 @@ impl ConversationUsageView {
                     .ui_builder()
                     .info_button_with_tooltip(
                         font_size * 0.85,
-                        &crate::tr!("ai", "change-model-settings"),
+                        &crate::tr!("ai_assistant", "ai-change-model-settings"),
                         self.full_terminal_use_tooltip_mouse_state.clone(),
                     )
                     .finish();
@@ -426,7 +436,7 @@ impl ConversationUsageView {
             );
         }
 
-        labels.push(render_label_text(&crate::tr!("ai", "context-window-used"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-context-window-used"), appearance));
         let context_usage_str =
             format!("{}%", (self.usage_info.context_window_usage * 100.).round());
         let context_window_element = Flex::row()
@@ -464,18 +474,18 @@ impl ConversationUsageView {
 
         // Tool call summary
         labels.push(render_section_header(
-            crate::tr!("ai", "tool-call-summary-header"),
+            crate::tr!("ai_assistant", "ai-tool-call-summary-header"),
             appearance,
         ));
         values.push(render_section_header("".to_string(), appearance));
 
-        labels.push(render_label_text(&crate::tr!("ai", "files-changed"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-files-changed"), appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.files_changed, "file"),
             appearance,
         ));
 
-        labels.push(render_label_text(&crate::tr!("ai", "diffs-applied"), appearance));
+        labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-diffs-applied"), appearance));
         let diffs_element = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
@@ -512,7 +522,7 @@ impl ConversationUsageView {
             .finish();
         values.push(diffs_element);
 
-        labels.push(render_label_text(&crate::tr!("ai", "commands-executed"), appearance));
+        labels.push(render_label_text("Commands executed", appearance));
         values.push(render_value_text(
             format_value_text(self.usage_info.commands_executed, "command"),
             appearance,
@@ -539,12 +549,12 @@ impl ConversationUsageView {
 
                     // Section header
                     labels.push(render_section_header(
-                        crate::tr!("ai", "last-response-time-header"),
+                        "LAST RESPONSE TIME".to_string(),
                         appearance,
                     ));
                     values.push(render_section_header("".to_string(), appearance));
 
-                    labels.push(render_label_text(&crate::tr!("ai", "time-to-first-token"), appearance));
+                    labels.push(render_label_text("Time to first token", appearance));
                     values.push(render_value_text(
                         format!(
                             "{:.1} seconds",
@@ -553,7 +563,7 @@ impl ConversationUsageView {
                         appearance,
                     ));
 
-                    labels.push(render_label_text(&crate::tr!("ai", "total-agent-response-time"), appearance));
+                    labels.push(render_label_text("Total agent response time", appearance));
                     values.push(render_value_text(
                         format!(
                             "{:.1} seconds",
@@ -565,7 +575,7 @@ impl ConversationUsageView {
                     if let Some(wall_ms) = timing.wall_to_wall_response_time_ms {
                         if wall_ms != 0 {
                             labels.push(render_label_text(
-                                &crate::tr!("ai", "total-time-including-tools"),
+                                "Total time (including tool calls)",
                                 appearance,
                             ));
                             values.push(render_value_text(
@@ -672,9 +682,9 @@ impl ConversationUsageView {
         let link_color = theme.ansi_fg_blue();
         let icon_size = font_size;
         let (label, icon) = if self.details_expanded {
-            (crate::tr!("ai", "hide-details"), Icon::ChevronUp)
+            (crate::tr!("terminal", "tooltip-hide-details"), Icon::ChevronUp)
         } else {
-            (crate::tr!("ai", "view-details"), Icon::ChevronDown)
+            (crate::tr!("ai_assistant", "ai-view-details"), Icon::ChevronDown)
         };
         Hoverable::new(
             self.details_toggle_mouse_state.clone(),
@@ -772,7 +782,7 @@ impl ConversationUsageView {
     /// per-agent rows when the breakdown has more entries than the
     /// truncation cap. Clicking the link replaces the truncated list with
     /// the full list on the next render (PRODUCT invariant 5f). Uses the
-    /// same hyperlink-blue color as the crate::tr!("ai", "view-details") toggle so the
+    /// same hyperlink-blue color as the "View details" toggle so the
     /// affordances visually match.
     fn render_show_more_link(
         &self,

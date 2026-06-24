@@ -91,7 +91,7 @@ fn build_menu_items_adds_connected_hosts_before_recent_and_dedups_known_hosts() 
 fn build_menu_items_warp_entry_dispatches_select_known_warp() {
     let items = build_menu_items(None, None, &[]);
     match item_action(&items[0]) {
-        DropdownAction::SelectActionAndClose(action) => {
+        DropdownAction::select_action_and_close(action) => {
             let action = action
                 .as_any()
                 .downcast_ref::<InternalAction>()
@@ -112,7 +112,7 @@ fn build_menu_items_custom_entry_dispatches_enter_custom_mode() {
     let items = build_menu_items(None, None, &[]);
     let custom = items.last().expect("custom entry is always last");
     match item_action(custom) {
-        DropdownAction::SelectActionAndClose(action) => {
+        DropdownAction::select_action_and_close(action) => {
             assert_eq!(
                 action.as_any().downcast_ref::<InternalAction>(),
                 Some(&InternalAction::EnterCustomMode)

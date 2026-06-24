@@ -1356,7 +1356,7 @@ impl AppearanceSettingsPageView {
     }
 
     fn build_page(ctx: &mut ViewContext<Self>) -> PageType<Self> {
-        let mut categories = vec![Category::new(SETTINGS_THEMES.clone(),
+        let mut categories = vec![Category::new(SETTINGS_THEMES.clone().leak(),
             vec![
                 Box::new(CreateCustomThemeWidget::default()),
                 Box::new(ThemeSelectWidget::default()),
@@ -1364,7 +1364,7 @@ impl AppearanceSettingsPageView {
         )];
 
         if AppIconSettings::as_ref(ctx).is_supported_on_current_platform() {
-            categories.push(Category::new(SETTINGS_ICON.clone(),
+            categories.push(Category::new(SETTINGS_ICON.clone().leak(),
                 vec![Box::new(CustomAppIconWidget::default())],
             ));
         }
@@ -1408,7 +1408,7 @@ impl AppearanceSettingsPageView {
         }
 
         if !window_settings_widgets.is_empty() {
-            categories.push(Category::new(SETTINGS_WINDOW.clone(), window_settings_widgets));
+            categories.push(Category::new(SETTINGS_WINDOW.clone().leak(), window_settings_widgets));
         }
 
         // Create the Input category with all widgets
@@ -1420,10 +1420,10 @@ impl AppearanceSettingsPageView {
             Box::new(InputModeWidget::default()),
         ];
 
-        categories.push(Category::new(SETTINGS_INPUT.clone(), category_widgets));
+        categories.push(Category::new(SETTINGS_INPUT.clone().leak(), category_widgets));
 
         categories.push(Category::new(
-            crate::tr!("settings", "appearance-panes"),
+            crate::tr!("settings", "appearance-panes").leak(),
             vec![
                 Box::new(DimInactivePanesWidget::default()),
                 Box::new(FocusFollowsMouseWidget::default()),
@@ -1437,7 +1437,7 @@ impl AppearanceSettingsPageView {
         if FeatureFlag::MinimalistUI.is_enabled() {
             block_settings_widgets.push(Box::new(ShowBlockDividersWidget::default()));
         }
-        categories.push(Category::new(SETTINGS_BLOCKS.clone(), block_settings_widgets));
+        categories.push(Category::new(SETTINGS_BLOCKS.clone().leak(), block_settings_widgets));
 
         let font_settings = FontSettings::as_ref(ctx);
         let mut text_settings_widgets: Vec<Box<dyn SettingsWidget<View = Self>>> = vec![
@@ -1466,10 +1466,10 @@ impl AppearanceSettingsPageView {
             text_settings_widgets.push(Box::new(LigaturesWidget::default()));
         }
 
-        categories.push(Category::new(SETTINGS_TEXT.clone(), text_settings_widgets));
+        categories.push(Category::new(SETTINGS_TEXT.clone().leak(), text_settings_widgets));
 
         categories.push(Category::new(
-            crate::tr!("settings", "appearance-cursor"),
+            crate::tr!("settings", "appearance-cursor").leak(),
             vec![
                 Box::new(CursorTypeWidget::default()),
                 Box::new(BlinkingCursorWidget::default()),
@@ -1518,10 +1518,10 @@ impl AppearanceSettingsPageView {
             tab_settings_widgets.push(Box::new(DirectoryTabColorsWidget { add_picker }));
         }
 
-        categories.push(Category::new(SETTINGS_TABS.clone(), tab_settings_widgets));
+        categories.push(Category::new(SETTINGS_TABS.clone().leak(), tab_settings_widgets));
 
         categories.push(Category::new(
-            crate::tr!("settings", "appearance-fullscreen-apps"),
+            crate::tr!("settings", "appearance-fullscreen-apps").leak(),
             vec![Box::new(AltScreenPaddingWidget::default())],
         ));
 

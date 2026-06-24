@@ -2355,6 +2355,14 @@ impl GlobalSearchView {
             app,
         )
     }
+    fn render_remote_loading_state(&self, app: &AppContext) -> Box<dyn Element> {
+        self.render_zero_state(
+            Icon::Loading,
+            "Connecting to remote session",
+            "Global search will be available once the connection is ready.",
+            app,
+        )
+    }
 
     fn render_unsupported_session_state(&self, app: &AppContext) -> Box<dyn Element> {
         self.render_zero_state(

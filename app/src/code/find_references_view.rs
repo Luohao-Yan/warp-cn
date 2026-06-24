@@ -5,7 +5,7 @@
 
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::{collections::HashMap, path::PathBuf, sync::LazyLock};
+use std::sync::LazyLock;
 
 use lsp::ReferenceLocation;
 use pathfinder_geometry::vector::Vector2F;
@@ -31,7 +31,6 @@ use warpui::{
 };
 
 use crate::search::result_renderer::ItemHighlightState;
-use warpui::ui_components::components::UiComponent;
 
 static CODE_LOADING: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "loading"));
 
@@ -40,7 +39,6 @@ use super::{
     global_buffer_model::GlobalBufferModel,
 };
 use crate::editor::InteractionState;
-use crate::search::result_renderer::ItemHighlightState;
 
 /// Maximum height for the find references card.
 pub const FIND_REFERENCES_CARD_MAX_HEIGHT: f32 = 300.;

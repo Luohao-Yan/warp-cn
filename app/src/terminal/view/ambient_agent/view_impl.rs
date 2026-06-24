@@ -908,7 +908,6 @@ impl TerminalView {
             )
         } else {
             // Show loading screen - determine the message based on progress state
-<<<<<<< HEAD
             let message = progress.setup_status_text();
 
             render_cloud_mode_loading_screen(

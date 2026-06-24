@@ -1455,7 +1455,7 @@ impl AskUserQuestionView {
         let dropdown = self.speedbump_dropdown.as_ref()?;
         let allow_label = crate::tr!("ai_assistant", "ai-allow-agent-ask-questions");
         let row = render_autonomy_dropdown_setting_speedbump_footer(
-            &allow_label,
+            allow_label,
             dropdown,
             settings_link_handle,
             app,
