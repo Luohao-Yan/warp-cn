@@ -370,7 +370,7 @@ impl View for AgentMessageBar {
             Some(FigmaMcpStatus::NotInstalled) => {
                 message.items.push(figma_chip(
                     self.mouse_states.figma_install_button.clone(),
-                    "Get Figma MCP".to_string(),
+                    crate::tr!("ai_assistant", "ai-bar-get-figma").to_string(),
                     Some(InputAction::FigmaAddButtonClicked),
                 ));
             }
@@ -385,7 +385,7 @@ impl View for AgentMessageBar {
                 message.items.push(
                     figma_chip(
                         self.mouse_states.figma_enable_button.clone(),
-                        "Enabling...".to_string(),
+                        crate::tr!("ai_assistant", "ai-bar-enabling").to_string(),
                         None,
                     )
                     .with_is_disabled(true),
@@ -511,7 +511,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
             items.push(MessageItem::clickable(
                 vec![
                     MessageItem::keystroke(resume_keystroke),
-                    MessageItem::text("to resume conversation"),
+                    MessageItem::text(crate::tr!("ai_assistant", "ai-bar-to-resume")),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(TerminalAction::ResumeConversation);
@@ -540,7 +540,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                         background_color: bg_color_override_for_shortcuts_and_commands,
                     },
                     MessageItem::Text {
-                        content: "for help".into(),
+                        content: crate::tr!("ai_assistant", "ai-bar-for-help").into(),
                         color: color_override_for_shortcuts_and_commands,
                     },
                 ],
@@ -564,7 +564,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                         background_color: bg_color_override_for_shortcuts_and_commands,
                     },
                     MessageItem::Text {
-                        content: "for commands".into(),
+                        content: crate::tr!("ai_assistant", "ai-bar-for-commands").into(),
                         color: color_override_for_shortcuts_and_commands,
                     },
                 ],
@@ -594,7 +594,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                             background_color: bg_color_override_for_shortcuts_and_commands,
                         },
                         MessageItem::Text {
-                            content: "send task to the cloud".into(),
+                            content: crate::tr!("ai_assistant", "ai-bar-send-to-cloud").into(),
                             color: color_override_for_shortcuts_and_commands,
                         },
                     ],
@@ -621,7 +621,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                 items.push(MessageItem::clickable(
                     vec![
                         MessageItem::keystroke(conversations_keystroke),
-                        MessageItem::text("open conversation"),
+                        MessageItem::text(crate::tr!("ai_assistant", "ai-bar-open-conversation")),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(InputAction::ToggleConversationsMenu);
@@ -645,7 +645,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
             items.push(MessageItem::clickable(
                 vec![
                     MessageItem::keystroke(code_review_keystroke),
-                    MessageItem::text("for code review"),
+                    MessageItem::text(crate::tr!("ai_assistant", "ai-bar-for-code-review")),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(WorkspaceAction::ToggleRightPanel);
@@ -671,11 +671,11 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
                         Keystroke::parse("cmdorctrl-alt-p").expect("keystroke should parse"),
                     ),
                     MessageItem::text(if is_plan_for_this_conversation_open {
-                        "to hide plan"
+                        crate::tr!("ai_assistant", "ai-bar-to-hide-plan")
                     } else if plan_count > 1 {
-                        "to view plans"
+                        crate::tr!("ai_assistant", "ai-bar-to-view-plans")
                     } else {
-                        "to view plan"
+                        crate::tr!("ai_assistant", "ai-bar-to-view-plan")
                     }),
                 ],
                 |ctx| {
@@ -695,7 +695,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ZeroStateMessageProducer {
             items.push(MessageItem::clickable(
                 vec![
                     MessageItem::keystroke(fork_keystroke),
-                    MessageItem::text("to fork and continue"),
+                    MessageItem::text(crate::tr!("ai_assistant", "ai-bar-to-fork")),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(
@@ -808,9 +808,9 @@ impl MessageProvider<AgentMessageArgs<'_>> for ForkSlashCommandMessageProducer {
         // pane with Cmd/Ctrl+Enter.
         let primary_to_new_pane = command_name == commands::FORK.name || is_continue_locally;
         let (primary_label, secondary_label) = if primary_to_new_pane {
-            (" new pane", " new tab")
+            (format!(" {}", crate::tr!("ai_assistant", "ai-bar-new-pane")), format!(" {}", crate::tr!("ai_assistant", "ai-bar-new-tab")))
         } else {
-            (" current pane", " new pane")
+            (format!(" {}", crate::tr!("ai_assistant", "ai-bar-current-pane")), format!(" {}", crate::tr!("ai_assistant", "ai-bar-new-pane")))
         };
 
         Some(Message::new(vec![
@@ -839,7 +839,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for HideShortcutsMessageProducer {
                     key: "?".to_owned(),
                     ..Default::default()
                 }),
-                MessageItem::text("to hide help"),
+                MessageItem::text(crate::tr!("ai_assistant", "ai-bar-to-hide-help")),
             ],
             |ctx| {
                 ctx.dispatch_typed_action(InputAction::ToggleAgentViewShortcuts);
@@ -871,12 +871,12 @@ impl MessageProvider<AgentMessageArgs<'_>> for AutodetectedBashModeMessageProduc
 
         let message = match keybinding_name_to_keystroke(SET_INPUT_MODE_AGENT_ACTION_NAME, app) {
             Some(keystroke) => Message::new(vec![
-                MessageItem::text("autodetected shell command, "),
+                MessageItem::text(format!("{}, ", crate::tr!("ai_assistant", "ai-bar-autodetected-shell"))),
                 MessageItem::keystroke(keystroke),
-                MessageItem::text(" to override"),
+                MessageItem::text(crate::tr!("ai_assistant", "ai-bar-to-override")),
             ])
             .with_text_color(appearance.theme().ansi_fg_blue()),
-            None => Message::from_text("autodetected shell command"),
+            None => Message::from_text(crate::tr!("ai_assistant", "ai-bar-autodetected-shell")),
         };
 
         Some(message)
@@ -924,7 +924,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitCloudHandoffModeMessageProduc
                 background_color: None,
             },
             MessageItem::Text {
-                content: "to hand off to cloud".into(),
+                content: crate::tr!("ai_assistant", "ai-bar-to-hand-off").into(),
                 color: Some(active_color),
             },
             MessageItem::Keystroke {
@@ -936,7 +936,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitCloudHandoffModeMessageProduc
                 background_color: dismiss_key_bg,
             },
             MessageItem::Text {
-                content: "to dismiss".into(),
+                content: crate::tr!("ai_assistant", "ai-bar-to-dismiss-hint").into(),
                 color: Some(dismiss_text_color),
             },
         ]))
@@ -968,7 +968,7 @@ impl MessageProvider<AgentMessageArgs<'_>> for ExitBashModeMessageProducer {
                     color: None,
                     background_color: None,
                 },
-                MessageItem::text("to exit shell mode"),
+                MessageItem::text(crate::tr!("ai_assistant", "ai-bar-to-exit-shell")),
             ])
             .with_text_color(text_color),
         )

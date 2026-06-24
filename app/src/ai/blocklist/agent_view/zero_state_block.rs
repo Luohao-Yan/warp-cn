@@ -46,10 +46,12 @@ use crate::terminal::{self, prompt, TerminalModel};
 use crate::util::time_format::format_approx_duration_from_now_utc;
 
 const CLOUD_AGENT_DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
+static AI_INIT_CALLOUT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-init-callout"));
+static AI_VIEW_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-changelog"));
+
 static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-oz-updates-header"));
 static AI_RUN_IN_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-in-cloud-env"));
 static AI_RECENT_ACTIVITY: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recent-activity"));
-static AI_VIEW_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-changelog"));
 
 // The maximum number of Oz updates from the changelog rendered in-line in the 'What's new in Oz section'.
 const MAX_OZ_UPDATE_COUNT: usize = 4;
@@ -415,7 +417,7 @@ impl View for AgentViewZeroStateBlock {
                 format_session_location(session, self.current_working_directory.as_deref())
             });
             if let Some(location_label) = location_label {
-                local_description += &format!(" in `{location_label}`");
+                local_description += &crate::tr!("ai_assistant", "ai-in-location", location = location_label);
             }
 
             HeaderProps {
@@ -787,7 +789,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                             key: "escape".to_owned(),
                             ..Default::default()
                         }),
-                        MessageItem::text("go back to terminal"),
+                        MessageItem::text(crate::tr!("ai_assistant", "ai-esc-go-back-to-terminal")),
                     ],
                     |ctx| {
                         ctx.dispatch_typed_action(TerminalAction::ExitAgentView);
@@ -813,7 +815,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                 ..Default::default()
             }),
             MessageItem::text(
-                "to index this codebase and generate an AGENTS.md for optimal performance",
+                AI_INIT_CALLOUT.as_str(),
             ),
         ])
         .with_text_color(main_text_color);
@@ -1116,7 +1118,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                                 .with_child(
                                     Container::new(
                                         Text::new(
-                                            "View changelog",
+                                            AI_VIEW_CHANGELOG.as_str(),
                                             appearance.ui_font_family(),
                                             appearance.monospace_font_size() - 2.,
                                         )

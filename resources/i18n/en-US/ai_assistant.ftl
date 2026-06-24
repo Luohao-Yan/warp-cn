@@ -503,17 +503,6 @@ ai-assistant-ai-global-scope-tab = Global
 ai-assistant-ai-project-based-scope-tab = Project based
 ai-assistant-ai-rule-name-placeholder = e.g. Rust rules
 ai-assistant-ai-rule-description-placeholder = e.g. Never use unwrap in Rust
-ai-assistant-ai-refine = Refine
-ai-assistant-ai-dismiss = Dismiss
-ai-assistant-ai-accept-and-continue = Accept and continue with agent
-ai-assistant-ai-iterate-with-agent = Iterate with agent
-ai-assistant-ai-file-new = { $file_name } (new)
-ai-assistant-ai-file-deleted = { $file_name } (deleted)
-ai-assistant-ai-failed-revert = Failed to revert changes to { $file_name }
-ai-assistant-ai-file-suffix = file
-ai-assistant-ai-renamed-suffix = (renamed)
-ai-assistant-ai-deleted-file-suffix = (deleted file)
-
 ## -- Agent tip strings --
 
 ai-assistant-ai-tip-label = Tip:
@@ -599,7 +588,6 @@ ai-assistant-ai-search-files-match = Search for files that match
 ai-assistant-ai-finding-files-match = Finding files that match
 ai-assistant-ai-cancelled-search-files = Cancelled search for files that match the following patterns in { $path }
 ai-assistant-ai-find-files-match = Find files that match the following patterns in { $path }
-ai-assistant-ai-finding-files-match = Finding files that match the following patterns in { $path }
 ai-assistant-ai-comment-addressed = Comment addressed: "{ $content }"
 ai-assistant-ai-ok-read-mcp-resource = OK if I read this MCP resource?
 ai-assistant-ai-upload-artifact = Upload artifact: { $file_path }
@@ -614,7 +602,6 @@ ai-assistant-ai-suggestions = Suggestions:
 ai-assistant-ai-good-response = Good response
 ai-assistant-ai-bad-response = Bad response
 ai-assistant-ai-continue-conversation = Continue conversation
-ai-assistant-ai-fork-conversation = Fork conversation
 ai-assistant-ai-show-credit-usage = Show credit usage details
 ai-assistant-ai-debug-output = Debug output
 ai-assistant-ai-listing-messages = Listing messages
@@ -719,8 +706,6 @@ ai-assistant-minutes = { $count } minutes
 
 ## -- Primary keys for migrated UI strings --
 
-ai-assistant-ai-cancel-summarization = Cancel summarization
-ai-assistant-ai-continue-summarization = Continue summarization
 ai-assistant-ai-attach-as-agent-context = Attach as agent context
 ai-assistant-ai-new-agent-pane = New Agent Pane
 ai-assistant-ai-follow-up-with-existing-conversation = Follow up with existing conversation
@@ -809,8 +794,6 @@ ai-assistant-ai-ai-cancel = { ai-cancel }
 ai-assistant-ai-ai-run = { ai-run }
 ## -- Double-prefix aliases for blocklist agent view and orchestration strings --
 
-ai-assistant-ai-one-update = { $count }
-ai-assistant-ai-update-count = { $count }
 ## -- Double-prefix aliases for static prompt suggestion strings --
 
 ## -- AI block loading and status message strings --
@@ -846,8 +829,6 @@ ai-assistant-ai-agent-waiting-on-instructions = Agent is waiting on instructions
 ai-assistant-ai-agent-waiting-for-command-exit = Agent is waiting for command to exit
 ai-assistant-ai-agent-blocked = Agent needs your permission to continue
 ai-assistant-ai-agent-in-control = Agent is in control
-ai-assistant-ai-user-in-control = User is in control
-
 ## -- Orchestration controls strings --
 
 ai-assistant-ai-edit-agent-toolbelt = Edit agent toolbelt
@@ -860,7 +841,6 @@ ai-assistant-ai-local-label = Local
 ai-assistant-ai-cloud-label = Cloud
 ai-assistant-ai-agent-harness-label = Agent harness
 ai-assistant-ai-host-label = Host
-ai-assistant-ai-environment-label = Environment
 ai-assistant-ai-base-model-label = Base model
 ai-assistant-ai-opencode-cloud-disabled-reason = OpenCode is not supported on Cloud yet. Switch to Local or pick a different harness.
 ai-assistant-ai-recommend-select-env = We recommend selecting an environment for cloud agents.
@@ -1027,8 +1007,6 @@ ai-assistant-copied-to-clipboard = Copied to clipboard
 
 ai-assistant-ai-conversation-fallback-title = Conversation
 ai-assistant-ai-cloud-agent-run = Cloud agent run
-ai-assistant-ai-copied-branch-name = Copied branch name
-ai-assistant-ai-agent-label = Agent
 ai-assistant-ai-harness-label = Harness
 ai-assistant-ai-open-in-oz = Open in Oz
 ai-assistant-ai-open-in-github = Open in GitHub
@@ -1044,8 +1022,6 @@ ai-assistant-ai-conversation-id-label = Conversation ID
 ai-assistant-ai-run-id-label = Run ID
 ai-assistant-ai-credits-used = Credits used
 ai-assistant-ai-run-time = Run time
-ai-assistant-ai-created-on = Created on
-
 ## -- Double-prefix aliases for agent management notification strings --
 
 ## -- Double-prefix aliases for conversation details panel strings --
@@ -1073,7 +1049,6 @@ ai-assistant-ai-check-now = Check now
 ai-assistant-ai-check-now-tooltip = Ask the agent to check this command now, skipping its timer.
 ai-assistant-ai-mermaid-diagram = Mermaid diagram
 ai-assistant-ai-server-overloaded = Warp is currently overloaded. Please try again later.
-ai-assistant-ai-invalid-api-key = Provided API key is not valid
 ai-assistant-ai-failed-authenticate-provider = Failed to authenticate with { $provider } when using { $model_name }. Double-check that your API key is correct.
 ai-assistant-ai-credit-limit-reached = You've reached your credit limit. Your credit limit resets on { $date }.
 ai-assistant-ai-send-feedback = Send Feedback
@@ -1091,7 +1066,6 @@ ai-assistant-ai-task-blocked = Task blocked
 ai-assistant-ai-not-started = Not started
 ai-assistant-ai-auth-failed = Authentication failed
 ai-assistant-ai-tasks-label = Tasks
-ai-assistant-ai-generate-tests = Generate tests
 ai-assistant-ai-orchestrator = Orchestrator
 ai-assistant-ai-out-of-credits-upgrade = Out of credits. Upgrade your Warp plan to continue running cloud agents.
 ai-assistant-ai-server-overloaded-short = Warp is temporarily overloaded. Please try again shortly.
@@ -1126,7 +1100,6 @@ ai-assistant-ai-ai-primary-model-failed-with-name = { ai-assistant-ai-primary-mo
 ai-assistant-ai-ai-primary-model-failed = { ai-assistant-ai-primary-model-failed }
 ai-assistant-ai-ai-warping-with-model = { ai-assistant-ai-warping-with-model }
 ai-assistant-ai-ai-warping-with-another-model = { ai-assistant-ai-warping-with-another-model }
-ai-assistant-ai-default-profile-name = Default
 ai-assistant-ai-agent-mode-eval-profile-name = Agent Mode Eval
 ai-assistant-ai-default-cli-profile-name = Default (CLI)
 ai-assistant-ai-ai-default-profile-name = { ai-assistant-ai-default-profile-name }
@@ -1177,7 +1150,6 @@ ai-assistant-ai-environment-not-found = Environment '{$id}' not found. Verify th
 ai-assistant-ai-environment-setup-failed-msg = Environment setup failed: {$msg}. Check your repository URLs and setup commands.
 ai-assistant-ai-invalid-working-directory = Working directory '{$path}' does not exist or is not a directory. Verify the path in your environment configuration.
 ai-assistant-ai-task-cancelled-msg = Task cancelled.
-ai-assistant-ai-agent-blocked = The agent got stuck waiting for user confirmation on the action: {$blocked_action}
 ai-assistant-ai-team-metadata-timeout = Timed out refreshing team metadata. Please check your network connection and try again.
 ai-assistant-ai-skill-resolution-failed = Skill resolution failed: {$msg}
 ai-assistant-ai-config-build-failed = Failed to build agent configuration: {$err}
@@ -1204,7 +1176,267 @@ ai-assistant-ai-take-control-btn = Take control
 
 ## -- Double-prefix aliases for migrated UI strings --
 
-ai-assistant-ai-invalid-credentials = { $cli } login.
-ai-assistant-ai-one-credit = { $count } credit
-ai-assistant-ai-credits = { $count } credits
-ai-assistant-ai-credits-decimal = { $count } credits
+## -- Missing keys added for i18n migration --
+
+ai-assistant-ai-delete-agent = Delete agent
+ai-assistant-ai-derived-from = Derived from
+ai-assistant-ai-disabled-by-admin = Disabled by admin
+ai-assistant-ai-fast-forward-locked-tooltip = Fast forward is locked for this conversation
+ai-assistant-ai-new-environment = New environment
+ai-assistant-ai-select-api-key-harness = Select an API key for this environment
+ai-assistant-ai-start-remote-control-login-required-tooltip = Login required to start remote control
+ai-assistant-cancel-summarization = Cancel
+ai-assistant-continue-summarization = Continue
+ai-assistant-invalid-api-key = Invalid API key
+
+## -- Missing keys added for i18n completeness --
+
+ai-assistant-credits = credits
+ai-assistant-credits-decimal = { $credits } credits
+ai-assistant-one-credit = 1 credit
+ai-assistant-invalid-credentials = Invalid credentials
+
+## -- Missing ai-* keys for tr!("ai", ...) calls --------------------------------
+
+### Error Classification (from app/src/ai/agent_sdk/driver/error_classification.rs)
+
+ai-internal-error-retry = Internal error. Please retry.
+ai-terminal-session-failed = Terminal session failed: { $error }
+ai-share-session-internal-error = Share session internal error
+ai-share-session-failed = Share session failed: { $reason }
+ai-share-session-disabled = Share session is disabled
+ai-share-session-timeout = Share session timed out
+ai-share-session-interrupted = Share session was interrupted
+ai-warp-drive-sync-failed = Warp Drive sync failed
+ai-auth-required = Authentication required. Log in via '{ $bin } login', provide an API key via '--api-key', or set the WARP_API_KEY environment variable.
+ai-cloud-provider-setup-failed = Cloud provider setup failed: { $err }
+ai-mcp-server-not-found = MCP server not found: { $uuid }
+ai-mcp-startup-failed = MCP server startup failed for { $uid }: { $message }
+ai-mcp-json-parse-error = MCP JSON parse error: { $msg }
+ai-mcp-missing-variables = MCP missing variables
+ai-profile-not-found = Profile not found: { $name }
+ai-workflow-not-found = Workflow not found: { $id }
+ai-environment-not-found = Environment not found: { $id }
+ai-environment-setup-failed-msg = Environment setup failed: { $msg }
+ai-invalid-working-directory = Invalid working directory: { $path }
+ai-task-cancelled-msg = Task was cancelled
+ai-agent-blocked = Agent is blocked: { $blocked_action }
+ai-team-metadata-timeout = Team metadata request timed out
+ai-skill-resolution-failed = Skill resolution failed: { $msg }
+ai-config-build-failed = Config build failed: { $err }
+ai-prompt-resolution-failed = Prompt resolution failed: { $err }
+ai-secrets-fetch-failed = Failed to fetch secrets: { $err }
+ai-aws-bedrock-credentials-failed = AWS Bedrock credentials failed: { $msg }
+ai-conversation-load-failed = Conversation load failed: { $msg }
+ai-conversation-harness-mismatch = Conversation { $conversation_id } was produced by the { $expected } harness, but --harness { $got } was requested. Re-run with --harness { $expected } (or omit --harness to match) to continue this conversation.
+ai-task-harness-mismatch = Task { $task_id } was created with the { $expected } harness, but --harness { $got } was requested. Re-run with --harness { $expected } (or omit --harness to match) to continue this task.
+ai-conversation-resume-state-missing = Conversation { $conversation_id } has no stored transcript for the { $harness } harness. The prior run may have crashed before saving any state.
+ai-harness-command-failed = Harness command failed with exit code { $exit_code }
+ai-harness-setup-failed = Harness '{ $harness }' setup failed: { $reason }
+ai-harness-config-setup-failed = Harness '{ $harness }' config setup failed: { $error }
+
+### Agent Status/Control (from app/src/ai/blocklist/agent_view/inline_agent_view_header.rs)
+
+ai-agent-prompt-to-interact = Prompt to interact with the agent
+ai-agent-waiting-on-instructions = Waiting for instructions
+ai-agent-waiting-for-command-exit = Waiting for command to exit
+ai-agent-in-control = Agent is in control
+ai-user-in-control = User is in control
+
+### Billing/Credits/Alerts (from app/src/ai/blocklist/prompt/prompt_alert.rs)
+
+ai-add-credits-text = Add Credits
+ai-anonymous-user-request-limit-action-text = Sign up for free
+ai-anonymous-user-request-limit-hard-gate-primary-text = Sign up for free to continue using AI
+ai-compare-plans-text = Compare Plans
+ai-contact-support-text = Contact Support
+ai-delinquent-due-to-payment-issue-action-text = Update Payment
+ai-delinquent-due-to-payment-issue-primary-text = Your subscription has a payment issue
+ai-enable-analytics-action-text = Enable Analytics
+ai-monthly-overages-spend-limit-reached-action-text = Increase spend limit
+ai-no-connection-primary-text = No internet connection
+ai-non-admin-ask-admin-to-enable-overages-text = Ask your admin to enable overages
+ai-non-admin-ask-admin-to-increase-overages-text = Ask your admin to increase overages
+ai-non-admin-contact-admin-text = Contact your admin
+ai-out-of-requests-primary-text = Out of AI requests
+ai-overages-toggleable-but-not-enabled-action-text = Enable overages
+ai-telemetry-disabled-primary-text = Enable telemetry to use AI
+ai-upgrade-text = Upgrade
+ai-upgrade-to-build-action-text = Upgrade to Build
+ai-upgrade-to-build-text = Upgrade to Build
+ai-use-your-own-api-keys-text = Use your own API keys
+
+### Toolbar/Input (from app/src/ai/blocklist/agent_view/agent_input_footer/toolbar_item.rs)
+
+ai-context-chip = Context
+ai-model-selector = Model
+ai-autodetection = Auto-detection
+ai-voice-input = Voice
+ai-attach-file = Attach file
+ai-context-usage = Context usage
+ai-file-explorer = File explorer
+ai-rich-input = Rich input
+ai-share-session = Share session
+ai-fast-forward = Fast forward
+ai-handoff-to-cloud = Hand off to cloud
+
+### Editor/Chip (from app/src/ai/blocklist/agent_view/agent_input_footer/editor.rs)
+
+ai-available-chips = Available chips
+ai-edit-agent-toolbelt = Edit agent toolbelt
+ai-edit-cli-agent-toolbelt = Edit CLI agent toolbelt
+
+### Other Agent Feature Keys
+
+ai-address-comments = Address comments
+ai-auth-failed = Authentication failed
+ai-blocked-transfer-control = Blocked: transfer control
+ai-cloud-agent-failed = Cloud agent failed
+ai-cloud-agent-run = Cloud agent run
+ai-cloud-followup-no-session = No cloud session available for follow-up
+ai-cloud-followup-not-started = Cloud follow-up not started
+ai-copied-branch-name = Copied branch name
+ai-created-on = Created on
+ai-credits-used = Credits used
+ai-default-profile = Default profile
+ai-directory-label = Directory
+ai-enable-figma-mcp = Enable Figma MCP
+ai-env-details = Environment details
+ai-env-id-label = Environment ID
+ai-env-image-label = Environment image
+ai-env-name = Environment name: { $name }
+ai-env-setup-commands = Setup commands
+ai-feature-name = AI Assistant
+ai-generate-tests = Generate tests
+ai-harness-label = Harness
+ai-how-do-i-fix = How do I fix this?
+ai-initial-query = Initial query
+ai-learn-more = Learn more
+ai-open-in-different-pane = Open in different pane
+ai-open-in-github = Open in GitHub
+ai-open-in-oz = Open in Oz
+ai-open-plan = Open plan
+ai-open-pull-request = Open pull request
+ai-out-of-credits-upgrade = Out of credits, upgrade
+ai-prompt-label = Prompt
+ai-run-id-label = Run ID
+ai-run-metadata-unavailable = Run metadata unavailable
+ai-run-time = Run time
+ai-server-overloaded-short = Server overloaded
+ai-shared-session-metadata-note = Shared session metadata note
+ai-show-examples = Show examples
+ai-starting-shell = Starting shell
+ai-task-blocked = Task blocked
+ai-tasks-label = Tasks
+ai-agent-label = Agent
+ai-agent-unaware-plan-edits = Agent is unaware of plan edits
+ai-view-plan = View plan
+ai-view-status = View status
+ai-view-todo-list = View todo list
+ai-zero-state-git-prompt = Git prompt
+ai-zero-state-script-prompt = Script prompt
+ai-ask-text = Ask
+ai-artifacts-label = Artifacts
+ai-conversation-fallback-title = Conversation
+ai-conversation-id-label = Conversation ID
+
+### Tip Carousel (from app/src/ai/agent_tips.rs)
+
+ai-tip-label = Tip
+ai-tip-slash-commands = Use / to see slash commands
+ai-tip-toggle-nl-detection = Toggle natural language detection
+ai-tip-plan = Create a plan before executing
+ai-tip-command-palette = Open command palette with Cmd+Shift+P
+ai-tip-store-workflows = Save workflows to Warp Drive
+ai-tip-redirect-agent = Redirect the agent mid-task
+ai-tip-at-context = Use @ to add context
+ai-tip-attach-block = Attach a block for context
+ai-tip-init-repo = Initialize repo for better context
+ai-tip-agent-profiles = Switch agent profiles with /
+ai-tip-fork-conversation = Fork a conversation to explore ideas
+ai-tip-copy-output = Copy output with one click
+ai-tip-drag-image = Drag and drop an image
+ai-tip-interactive-tools = Interact with tool results
+ai-tip-code-review = Start a code review
+ai-tip-add-mcp = Add MCP servers for more tools
+ai-tip-open-mcp = Open MCP settings
+ai-tip-create-environment = Create a custom environment
+ai-tip-add-prompt = Add prompts to Warp Drive
+ai-tip-add-rule = Add rules to Warp Drive
+ai-tip-fork = Fork this conversation
+ai-tip-open-code-review = Open code review
+ai-tip-new = Start a new conversation
+ai-tip-compact = Compact the conversation
+ai-tip-usage = View AI usage
+ai-tip-oz-command = Use Oz to fix issues
+ai-tip-selected-text-context = Select text for context
+ai-tip-agents-md = Configure agents with .agents.md
+ai-tip-paste-url = Paste a URL for context
+ai-tip-warpify-ssh = Warpify your SSH sessions
+ai-tip-switch-profiles = Switch agent profiles
+ai-tip-init-warp-md = Initialize .warp.md for context
+ai-tip-auto-approve = Auto-approve safe commands
+ai-tip-handoff = Hand off tasks to the cloud agent
+ai-tip-cancel-task = Cancel a running task
+ai-enable-desktop-notifications = Enable desktop notifications
+ai-tip-voice-input = Use voice input
+
+### Codebase Indexing (from app/src/ai/blocklist/codebase_index_speedbump_banner.rs)
+
+ai-index-codebase-question = Index codebase for better context?
+ai-index-codebase-text = Indexing your codebase allows the agent to better understand your project
+ai-index-codebase-button = Index codebase
+ai-allow-automatic-indexing = Allow automatic indexing
+ai-indexing-codebase = Indexing codebase...
+
+## Agent message bar and shortcuts
+ai-assistant-ai-bar-for-help = for help
+ai-assistant-ai-bar-for-commands = for commands
+ai-assistant-ai-bar-send-to-cloud = send task to the cloud
+ai-assistant-ai-bar-open-conversation = open conversation
+ai-assistant-ai-esc-go-back-to-terminal = go back to terminal
+
+## Agent message bar contextual hints
+ai-assistant-ai-bar-to-resume = to resume conversation
+ai-assistant-ai-bar-for-code-review = for code review
+ai-assistant-ai-bar-to-hide-plan = to hide plan
+ai-assistant-ai-bar-to-view-plans = to view plans
+ai-assistant-ai-bar-to-view-plan = to view plan
+ai-assistant-ai-bar-to-fork = to fork and continue
+ai-assistant-ai-bar-new-pane = new pane
+ai-assistant-ai-bar-new-tab = new tab
+ai-assistant-ai-bar-current-pane = current pane
+ai-assistant-ai-bar-to-hide-help = to hide help
+ai-assistant-ai-bar-autodetected-shell = autodetected shell command
+ai-assistant-ai-bar-to-override = to override
+ai-assistant-ai-bar-to-hand-off = to hand off to cloud
+ai-assistant-ai-bar-to-dismiss-hint = to dismiss
+ai-assistant-ai-bar-to-exit-shell = to exit shell mode
+ai-assistant-ai-bar-get-figma = Get Figma MCP
+ai-assistant-ai-bar-enabling = Enabling...
+ai-assistant-ai-hand-off-to-cloud-full-tooltip = Hand off to cloud (or type &)
+ai-assistant-ai-enable-agent-notifications = Enable { $agent } notifications
+ai-assistant-ai-no-plugin-manager = No plugin manager available
+ai-assistant-ai-could-not-install-plugin = Could not automatically install plugin. Please click the chip again for manual installation steps.
+ai-assistant-ai-remote-control-label = /remote-control
+
+## Agent shortcuts view
+ai-assistant-ai-shortcut-input-shell = input shell command
+ai-assistant-ai-shortcut-for-slash-commands = for slash commands
+ai-assistant-ai-shortcut-for-file-paths = for file paths and attaching other context
+ai-assistant-ai-shortcut-open-code-review = open code review
+ai-assistant-ai-shortcut-toggle-conversation-list = toggle conversation list
+ai-assistant-ai-shortcut-search-conversations = search and continue conversations
+ai-assistant-ai-shortcut-start-new-conversation = start a new conversation
+ai-assistant-ai-shortcut-toggle-auto-accept = toggle auto-accept
+ai-assistant-ai-shortcut-pause-agent = pause agent
+ai-assistant-ai-installing-plugin = Installing Warp plugin...
+ai-assistant-ai-failed-install-plugin = Failed to install Warp plugin
+ai-assistant-ai-updating-plugin = Updating Warp plugin...
+ai-assistant-ai-failed-update-plugin = Failed to update Warp plugin
+ai-assistant-ai-voice-mic-error = Failed to start voice input (you may need to enable Microphone access)
+ai-assistant-ai-init-callout = to index this codebase and generate an AGENTS.md for optimal performance
+ai-assistant-ai-view-changelog = View changelog
+ai-assistant-ai-in-location = in `{ $location }`
+ai-assistant-ai-again-stop-exit = again to stop and exit
+ai-assistant-ai-again-exit = again to exit

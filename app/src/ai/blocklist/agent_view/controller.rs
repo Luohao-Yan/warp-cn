@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 use std::time::Duration;
 
 use instant::Instant;
@@ -57,6 +57,9 @@ impl AgentViewDisplayMode {
         matches!(self, AgentViewDisplayMode::FullScreen)
     }
 }
+
+static AGAIN_STOP_EXIT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-again-stop-exit"));
+static AGAIN_EXIT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-again-exit"));
 
 /// Shared timeout for all "press again to confirm" UX in and around agent view.
 ///
@@ -1030,9 +1033,9 @@ fn exit_confirmation_message(
                 ..Default::default()
             },
             if should_stop_and_exit {
-                "again to stop and exit"
+                AGAIN_STOP_EXIT.as_str()
             } else {
-                "again to exit"
+                AGAIN_EXIT.as_str()
             },
         ),
         ExitConfirmationTrigger::CtrlC => (
@@ -1041,7 +1044,7 @@ fn exit_confirmation_message(
                 ctrl: true,
                 ..Default::default()
             },
-            "again to exit",
+            AGAIN_EXIT.as_str(),
         ),
     };
 
