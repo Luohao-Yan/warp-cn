@@ -1679,13 +1679,14 @@ impl AISettings {
     }
 
     pub fn is_any_ai_enabled(&self, app: &AppContext) -> bool {
-        // Disable AI for anonymous and logged-out users.
+        // When agent_no_auth is enabled, allow AI for anonymous/logged-out users.
         let is_anonymous_or_logged_out = AuthStateProvider::as_ref(app)
             .get()
             .is_anonymous_or_logged_out();
 
         *self.is_any_ai_enabled
-            && !is_anonymous_or_logged_out
+            && (!is_anonymous_or_logged_out
+                || crate::ai::local_agent::local_mode_config::is_agent_no_auth())
             && !self.is_ai_disabled_due_to_remote_session_org_policy(app)
     }
 
@@ -1695,9 +1696,16 @@ impl AISettings {
             // Terminal and TabConfig don't require AI.
             DefaultSessionMode::Terminal | DefaultSessionMode::TabConfig => mode,
             // Agent and CloudAgent require AI to be enabled.
+            // CloudAgent additionally requires login (server needs auth);
+            // when not logged in, fall back to local Agent mode.
             DefaultSessionMode::Agent | DefaultSessionMode::CloudAgent => {
                 if self.is_any_ai_enabled(app) {
-                    mode
+                    let is_logged_in = AuthStateProvider::as_ref(app).get().is_logged_in();
+                    if mode == DefaultSessionMode::CloudAgent && !is_logged_in {
+                        DefaultSessionMode::Agent
+                    } else {
+                        mode
+                    }
                 } else {
                     DefaultSessionMode::Terminal
                 }

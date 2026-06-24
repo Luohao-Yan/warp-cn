@@ -7803,7 +7803,10 @@ impl Workspace {
             if self.should_show_agent_onboarding(ctx) {
                 // If the user is anonymous, we shouldn't trigger agent onboarding.
                 // It will not display anyway, and we don't want to mark the user as onboarded.
-                if self.auth_state.is_anonymous_or_logged_out() {
+                // However, when agent_no_auth is enabled, allow onboarding for anonymous users.
+                if self.auth_state.is_anonymous_or_logged_out()
+                    && !crate::ai::local_agent::local_mode_config::is_agent_no_auth()
+                {
                     return false;
                 }
                 self.trigger_agent_onboarding(ctx);

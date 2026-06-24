@@ -25,7 +25,7 @@ use warpui::clipboard::ClipboardContent;
 use warpui::elements::{
     Border, ChildAnchor, OffsetPositioning, ParentAnchor, ParentElement, ParentOffsetBounds, Stack,
 };
-use warpui::keymap::{EditableBinding, FixedBinding, Keystroke};
+use warpui::keymap::{BindingDescription, EditableBinding, FixedBinding, Keystroke};
 use warpui::platform::{WindowBounds, WindowStyle};
 use warpui::presenter::ChildView;
 use warpui::rendering::OnGPUDeviceSelected;
@@ -463,7 +463,7 @@ pub fn init(app: &mut AppContext) {
         // Debug binding for onboarding state
         EditableBinding::new(
             "root_view:enter_onboarding_state",
-            "[Debug] Enter Onboarding State",
+            BindingDescription::new_preserve_case(crate::tr!("common", "debug-enter-onboarding-state")),
             RootViewAction::DebugEnterOnboardingState,
         )
         .with_group(bindings::BindingGroup::Settings.as_str())
@@ -2152,11 +2152,15 @@ impl RootView {
                 let is_logged_in = AuthStateProvider::as_ref(ctx).get().is_logged_in();
                 // If the user isn't logged in, only require login if the applied
                 // settings need an account (AI or Warp Drive enabled).
+                // When agent_no_auth is enabled, AI features don't require login
+                // (only local agent is available without login; cloud agent is handled
+                // by default_session_mode fallback). Warp Drive always requires login.
                 let ai_enabled = selected_settings.is_ai_enabled();
                 let warp_drive_enabled = selected_settings.is_warp_drive_enabled();
+                let ai_requires_login = ai_enabled && !crate::ai::local_agent::local_mode_config::is_agent_no_auth();
                 // With old onboarding, we ask user to log in before onboarding, so don't do it after onboarding completes.
                 let requires_login = !is_logged_in
-                    && (ai_enabled || warp_drive_enabled)
+                    && (ai_requires_login || warp_drive_enabled)
                     && FeatureFlag::OpenWarpNewSettingsModes.is_enabled();
 
                 if requires_login {
@@ -2352,12 +2356,13 @@ impl RootView {
                         name,
                         url,
                         api_key,
+                        api_format,
                         models,
                     } => {
-                        let (name, url, api_key, models) =
-                            (name.clone(), url.clone(), api_key.clone(), models.clone());
+                        let (name, url, api_key, api_format, models) =
+                            (name.clone(), url.clone(), api_key.clone(), *api_format, models.clone());
                         ApiKeyManager::handle(ctx).update(ctx, |manager, ctx| {
-                            manager.add_custom_endpoint(name, url, api_key, models, ctx);
+                            manager.add_custom_endpoint(name, url, api_key, api_format, models, ctx);
                         });
                         me.add_custom_endpoint_modal = None;
                         me.focus(ctx);
@@ -2368,17 +2373,19 @@ impl RootView {
                         name,
                         url,
                         api_key,
+                        api_format,
                         models,
                     } => {
-                        let (index, name, url, api_key, models) = (
+                        let (index, name, url, api_key, api_format, models) = (
                             *index,
                             name.clone(),
                             url.clone(),
                             api_key.clone(),
+                            *api_format,
                             models.clone(),
                         );
                         ApiKeyManager::handle(ctx).update(ctx, |manager, ctx| {
-                            manager.save_custom_endpoint(index, name, url, api_key, models, ctx);
+                            manager.save_custom_endpoint(index, name, url, api_key, api_format, models, ctx);
                         });
                         me.add_custom_endpoint_modal = None;
                         me.focus(ctx);

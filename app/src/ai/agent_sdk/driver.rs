@@ -656,7 +656,12 @@ impl AgentDriver {
 
         // If we're not logged in, the root view will go to an auth screen, and all subsequent steps will fail.
         // This should be impossible, since we enforce login before reaching this point.
-        if !AuthStateProvider::as_ref(ctx).get().is_logged_in() {
+        // In local mode, we skip this check since local providers don't require Warp auth.
+        // Cloud agent ALWAYS requires login — agent_no_auth only bypasses UI visibility,
+        // not server-side authentication which is fundamentally required.
+        if !crate::ai::local_agent::local_mode_config::is_local_mode_enabled()
+            && !AuthStateProvider::as_ref(ctx).get().is_logged_in()
+        {
             return Err(AgentDriverError::NotLoggedIn);
         }
 

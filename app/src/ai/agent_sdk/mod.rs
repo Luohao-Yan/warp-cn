@@ -623,29 +623,35 @@ impl AgentDriverRunner {
             .await;
 
         // Ensure we've synced team state before starting the driver.
-        setup_events
-            .record_result(
-                SetupStep::TeamMetadataRefresh,
-                Self::refresh_team_metadata(&foreground),
-            )
-            .await?;
+        // In local mode, we skip this since the local agent doesn't depend on server-side team metadata.
+        if !crate::ai::local_agent::local_mode_config::is_local_mode_enabled() {
+            setup_events
+                .record_result(
+                    SetupStep::TeamMetadataRefresh,
+                    Self::refresh_team_metadata(&foreground),
+                )
+                .await?;
+        }
 
         // Wait for Warp Drive to sync before building the task config, since
         // prompt resolution (SavedPrompt -> workflow lookup) and environment
         // resolution (CloudAmbientAgentEnvironment lookup) depend on it.
-        setup_events
-            .record_result(SetupStep::WarpDriveSync, async {
-                if foreground
-                    .spawn(|_, ctx| common::refresh_warp_drive(ctx))
-                    .await?
-                    .await
-                    .is_err()
-                {
-                    return Err(AgentDriverError::WarpDriveSyncFailed);
-                }
-                Ok(())
-            })
-            .await?;
+        // In local mode, we skip this since the local agent doesn't depend on Warp Drive.
+        if !crate::ai::local_agent::local_mode_config::is_local_mode_enabled() {
+            setup_events
+                .record_result(SetupStep::WarpDriveSync, async {
+                    if foreground
+                        .spawn(|_, ctx| common::refresh_warp_drive(ctx))
+                        .await?
+                        .await
+                        .is_err()
+                    {
+                        return Err(AgentDriverError::WarpDriveSyncFailed);
+                    }
+                    Ok(())
+                })
+                .await?;
+        }
 
         // Set up and run the driver, reporting any errors back to the server.
         let result: Result<(), AgentDriverError> = async {
@@ -1460,7 +1466,9 @@ impl AgentDriverRunner {
 fn command_requires_auth(command: &CliCommand) -> bool {
     match command {
         CliCommand::Agent(agent_cmd) => match agent_cmd {
-            AgentCommand::Run { .. } => true,
+            // Agent::Run only skips auth when local mode is on (local providers don't need Warp auth).
+            // Cloud dispatch fundamentally requires login regardless of agent_no_auth.
+            AgentCommand::Run { .. } => !crate::ai::local_agent::local_mode_config::is_local_mode_enabled(),
             AgentCommand::RunCloud { .. } => true,
             AgentCommand::Profile(sub) => match sub {
                 AgentProfileCommand::List => true,
