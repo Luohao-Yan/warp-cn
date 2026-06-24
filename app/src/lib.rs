@@ -145,7 +145,7 @@ pub use ai::agent::{todos::AIAgentTodoList, AIAgentActionResultType, FileEdit, T
 use ai::agent_conversations_model::AgentConversationsModel;
 use ai::agent_management::AgentNotificationsModel;
 use ai::ambient_agents::scheduled::ScheduledAgentManager;
-use ai::blocklist::{BlocklistAIHistoryModel, BlocklistAIPermissions};
+use ai::blocklist::{BlocklistAIHistoryModel, BlocklistAIPermissions, QueuedQueryModel};
 use ai::execution_profiles::editor::ExecutionProfileEditorManager;
 use ai::execution_profiles::profiles::AIExecutionProfilesModel;
 use ai::metadata_project_rules::read_project_rule_contents;
@@ -155,6 +155,7 @@ use auth::{auth_manager::AuthManager, auth_state::AuthState};
 use code::editor_management::CodeManager;
 use code::opened_files::OpenedFilesModel;
 use code_review::GlobalCodeReviewModel;
+use code_review::git_repo_model::GitRepoModels;
 use quit_warning::UnsavedStateSummary;
 use server::network_log_pane_manager::NetworkLogPaneManager;
 use server::network_logging::NetworkLogModel;
@@ -201,6 +202,7 @@ use workflows::manager::WorkflowManager;
 use crate::ai::ambient_agents::github_auth_notifier::GitHubAuthNotifier;
 use crate::ai::document::ai_document_model::AIDocumentModel;
 use crate::ai::facts::manager::AIFactManager;
+use crate::ai::connected_self_hosted_workers::ConnectedSelfHostedWorkersModel;
 use crate::ai::harness_availability::HarnessAvailabilityModel;
 use crate::ai::llms::LLMPreferences;
 use crate::ai::mcp::MCPGalleryManager;
@@ -227,14 +229,17 @@ use crate::notebooks::manager::NotebookManager;
 use crate::notebooks::CloudNotebook;
 use crate::palette::PaletteMode;
 use crate::persistence::PersistenceWriter;
+use crate::persistence::model::AgentConversationData;
 use crate::projects::ProjectManagementModel;
 use crate::server::cloud_objects::{listener::Listener, update_manager::UpdateManager};
 use crate::server::experiments::ServerExperiments;
+use crate::server::iap::IapManager;
 use crate::server::sync_queue::{QueueItem, SyncQueue};
 use crate::session_management::{RunningSessionSummary, SessionNavigationData};
 use crate::settings::cloud_preferences_syncer::initialize_cloud_preferences_syncer;
+use crate::ai::agent::conversation::AIConversationId;
 use crate::settings::manager::SettingsManager;
-use crate::settings::{AccessibilitySettings, ScrollSettings, SelectionSettings};
+use crate::settings::{AISettings, AccessibilitySettings, ScrollSettings, SelectionSettings};
 use crate::settings_view::keybindings::KeybindingChangedNotifier;
 use crate::settings_view::DisplayCount;
 use crate::suggestions::ignored_suggestions_model::IgnoredSuggestionsModel;
@@ -298,7 +303,7 @@ use crate::terminal::CustomSecretRegexUpdater;
 use crate::util::bindings::is_binding_cross_platform;
 use crate::workspace::{PaneViewLocator, Workspace, WorkspaceAction};
 use crate::workspaces::update_manager::TeamUpdateManager;
-use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::workspaces::user_workspaces::{UserWorkspaces, UserWorkspacesEvent};
 use warp_logging::LogDestination;
 
 // Re-export the send_telemetry_from_ctx macro at the crate root level
@@ -1408,6 +1413,8 @@ pub(crate) fn initialize_app(
 
     ctx.add_singleton_model(remote_server::manager::RemoteServerManager::new);
     #[cfg(not(target_family = "wasm"))]
+    ctx.add_singleton_model(remote_server::codebase_index_model::RemoteCodebaseIndexModel::new);
+    #[cfg(not(target_family = "wasm"))]
     remote_server::wire_auth_token_rotation(ctx);
 
     log::info!(
@@ -1560,6 +1567,8 @@ pub(crate) fn initialize_app(
 
     // GitStatusUpdateModel removed upstream
 
+    ctx.add_singleton_model(|_| GitRepoModels::new());
+
     ctx.add_singleton_model(|ctx| {
         ProjectManagementModel::new(persisted_projects, persistence_writer.sender(), ctx)
     });
@@ -1708,10 +1717,35 @@ pub(crate) fn initialize_app(
         )
     });
 
+    // Seed the orchestration pin set from persisted conversation data
+    // before the conversations vec is consumed by the singletons below.
+    let initial_pinned_conversations: HashSet<AIConversationId> = multi_agent_conversations
+        .iter()
+        .filter_map(|conv| {
+            let data =
+                serde_json::from_str::<AgentConversationData>(&conv.conversation.conversation_data)
+                    .ok()?;
+            if !data.pinned {
+                return None;
+            }
+            AIConversationId::try_from(conv.conversation.conversation_id.clone()).ok()
+        })
+        .collect();
     {
         let conversations = &multi_agent_conversations;
         ctx.add_singleton_model(move |_| BlocklistAIHistoryModel::new(ai_queries, conversations));
     }
+    // Per-conversation queued prompts. Registered after the history model
+    // since it subscribes to history events for cleanup.
+    ctx.add_singleton_model(QueuedQueryModel::new);
+    // Cross-pane UI state for the orchestration pill bar. Registered
+    // after the history model since it subscribes to history events.
+    ctx.add_singleton_model(move |ctx| {
+        ai::blocklist::agent_view::orchestration_pill_bar_model::OrchestrationPillBarModel::new(
+            initial_pinned_conversations,
+            ctx,
+        )
+    });
     ctx.add_singleton_model(move |_| RestoredAgentConversations::new(multi_agent_conversations));
     ctx.add_singleton_model(|_| CLIAgentSessionsModel::new());
     // ActiveAgentViewsModel is used to track active agent conversations and notify listeners when they change.
@@ -1836,6 +1870,11 @@ pub(crate) fn initialize_app(
         ctx.add_singleton_model(system::SystemInfo::new);
     }
 
+    // `IapManager` drives gcloud-based IAP token refresh for staging builds.
+    // Registered on all targets (including wasm) so consumers can read the
+    // singleton without panicking. On wasm `iap_state` is always `None`.
+    ctx.add_singleton_model(move |ctx| IapManager::new(iap_state.clone(), ctx));
+
     // Add a singleton model that holds the current prompt configuration.
     ctx.add_singleton_model(Prompt::new);
 
@@ -1862,10 +1901,40 @@ pub(crate) fn initialize_app(
 
     ctx.add_singleton_model(LLMPreferences::new);
     ctx.add_singleton_model(HarnessAvailabilityModel::new);
+    ctx.add_singleton_model(ConnectedSelfHostedWorkersModel::new);
 
-    ctx.add_singleton_model(|ctx| {
+    let tip_model_handle = ctx.add_singleton_model(|ctx| {
         ai::agent_tips::AITipModel::<ai::AgentTip>::new_for_agent_tips(ctx)
     });
+    {
+        // Rebuild the tip pool when AI settings change so tips whose applicability
+        // depends on AI settings appear/disappear without waiting for the next cooldown cycle.
+        let tip_model_handle_for_ai = tip_model_handle.clone();
+        ctx.subscribe_to_model(&AISettings::handle(ctx), move |_, _, ctx| {
+            tip_model_handle_for_ai.update(ctx, |model, ctx| {
+                model.revalidate_tips(ctx);
+            });
+        });
+        // Also revalidate when workspace/team data changes (e.g. voice toggled at
+        // the org level). Billing metadata — including `warp_ai_policy.is_voice_enabled`
+        // — lives inside the team data, so `TeamsChanged` covers all policy updates.
+        let tip_model_handle_for_teams = tip_model_handle.clone();
+        ctx.subscribe_to_model(&UserWorkspaces::handle(ctx), move |_, event, ctx| {
+            if matches!(event, UserWorkspacesEvent::TeamsChanged) {
+                tip_model_handle_for_teams.update(ctx, |model, ctx| {
+                    model.revalidate_tips(ctx);
+                });
+            }
+        });
+        // Revalidate when any keybinding changes so tips with `<keybinding>`
+        // placeholders are hidden/shown when the referenced binding is cleared
+        // or reassigned.
+        ctx.subscribe_to_model(&KeybindingChangedNotifier::handle(ctx), move |_, _, ctx| {
+            tip_model_handle.update(ctx, |model, ctx| {
+                model.revalidate_tips(ctx);
+            });
+        });
+    }
 
     timer.mark_interval_end("SINGLETON_MODELS_REGISTERED");
 
@@ -1904,6 +1973,14 @@ pub(crate) fn initialize_app(
             ctx,
         )
     });
+    // Index global rules (e.g. ~/.agents/AGENTS.md) on a background task so
+    // they are available to subsequent agent queries.
+    ProjectContextModel::handle(ctx).update(ctx, |me, ctx| me.index_global_rules(ctx));
+    #[cfg(all(not(target_family = "wasm"), feature = "local_fs"))]
+    {
+        ctx.add_singleton_model(ai::remote_agent_context::RemoteAgentContext::new);
+    }
+
     ctx.add_singleton_model(|ctx| {
         PersistedWorkspace::new(
             persisted_workspaces,
