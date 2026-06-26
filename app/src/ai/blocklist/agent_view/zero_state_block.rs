@@ -2,8 +2,6 @@ use std::borrow::Cow;
 use std::cmp::Reverse;
 use std::path::Path;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use itertools::Itertools as _;
 use markdown_parser::{parse_markdown, FormattedText, FormattedTextFragment, FormattedTextLine};
 use parking_lot::FairMutex;
@@ -44,14 +42,15 @@ use crate::terminal::view::ambient_agent::{AmbientAgentViewModel, AmbientAgentVi
 use crate::terminal::view::TerminalAction;
 use crate::terminal::{self, prompt, TerminalModel};
 use crate::util::time_format::format_approx_duration_from_now_utc;
+use crate::static_tr;
 
 const CLOUD_AGENT_DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
-static AI_INIT_CALLOUT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-init-callout"));
-static AI_VIEW_CHANGELOG: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-changelog"));
+static_tr!(AI_INIT_CALLOUT, "ai_assistant", "ai-init-callout");
+static_tr!(AI_VIEW_CHANGELOG, "ai_assistant", "ai-view-changelog");
 
-static OZ_UPDATES_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-oz-updates-header"));
-static AI_RUN_IN_CLOUD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-in-cloud-env"));
-static AI_RECENT_ACTIVITY: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recent-activity"));
+static_tr!(OZ_UPDATES_SECTION_HEADER, "ai_assistant", "ai-oz-updates-header");
+static_tr!(AI_RUN_IN_CLOUD, "ai_assistant", "ai-run-in-cloud-env");
+static_tr!(AI_RECENT_ACTIVITY, "ai_assistant", "ai-recent-activity");
 
 // The maximum number of Oz updates from the changelog rendered in-line in the 'What's new in Oz section'.
 const MAX_OZ_UPDATE_COUNT: usize = 4;
@@ -648,7 +647,7 @@ fn render_title_and_description(props: HeaderProps, app: &AppContext) -> Vec<Box
             items.push(
                 Container::new(
                     Text::new(
-                        &*AI_RUN_IN_CLOUD,
+                        AI_RUN_IN_CLOUD.get(),
                         appearance.ui_font_family(),
                         appearance.monospace_font_size(),
                     )
@@ -815,7 +814,7 @@ fn render_body(props: ZeroStateBodyProps<'_>, app: &AppContext) -> Vec<Box<dyn E
                 ..Default::default()
             }),
             MessageItem::text(
-                AI_INIT_CALLOUT.as_str(),
+                AI_INIT_CALLOUT.get(),
             ),
         ])
         .with_text_color(main_text_color);
@@ -886,7 +885,7 @@ fn render_recent_conversations_section(
         .with_child(
             Container::new(
                 Text::new(
-                    &*AI_RECENT_ACTIVITY,
+                    AI_RECENT_ACTIVITY.get(),
                     appearance.ui_font_family(),
                     header_font_size,
                 )
@@ -1057,7 +1056,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                         .with_child(
                             Container::new(
                                 Text::new(
-                                    OZ_UPDATES_SECTION_HEADER.clone(),
+                                    OZ_UPDATES_SECTION_HEADER.get(),
                                     appearance.ui_font_family(),
                                     appearance.monospace_font_size() - 2.,
                                 )
@@ -1118,7 +1117,7 @@ fn render_oz_updates(props: OzUpdatesProps<'_>, app: &AppContext) -> Option<Box<
                                 .with_child(
                                     Container::new(
                                         Text::new(
-                                            AI_VIEW_CHANGELOG.as_str(),
+                                            AI_VIEW_CHANGELOG.get(),
                                             appearance.ui_font_family(),
                                             appearance.monospace_font_size() - 2.,
                                         )
@@ -1251,7 +1250,6 @@ pub fn render_ambient_credits_banner(credits: i32, app: &AppContext) -> Box<dyn 
 
 mod styles {
     use warp_core::ui::appearance::Appearance;
-
     pub const CONTAINER_VERTICAL_PADDING: f32 = 16.;
     pub const TITLE_MARGIN_BOTTOM: f32 = 8.;
     pub const SECTION_HEADER_MARGIN_BOTTOM: f32 = 8.;

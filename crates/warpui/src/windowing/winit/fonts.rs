@@ -292,12 +292,14 @@ impl Default for TextLayoutSystem {
 
 impl TextLayoutSystem {
     pub fn new() -> Self {
+        let locale = std::env::var("WARP_LANG")
+            .ok()
+            .or_else(|| detect_locale())
+            .unwrap_or_else(|| "en".to_owned());
         Self {
             families: Default::default(),
             font_store: RwLock::new(cosmic_text::FontSystem::new_with_locale_and_db(
-                // Locale is needed for font fallback. For now, we hardcode this to "en" to match
-                // our mac implementation https://github.com/warpdotdev/warp-internal/blob/bf33d651a9fcece70df8eac35f89b0393ca5189a/ui/src/platform/mac/fonts.rs#L383.
-                "en".into(),
+                locale,
                 Default::default(),
             )),
             font_id_map: Default::default(),
@@ -1258,6 +1260,16 @@ impl GlyphIdExt for owned_ttf_parser::GlyphId {
     fn from_glyph_id(glyph_id: GlyphId) -> Self {
         Self(glyph_id as u16)
     }
+}
+
+fn detect_locale() -> Option<String> {
+    if let Some(locale) = sys_locale::get_locale() {
+        let normalized = locale.replace('_', "-");
+        if !normalized.is_empty() && normalized.len() >= 2 {
+            return Some(normalized);
+        }
+    }
+    None
 }
 
 #[cfg(test)]

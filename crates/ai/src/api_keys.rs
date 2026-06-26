@@ -39,12 +39,41 @@ pub struct ApiKeys {
     pub custom_endpoints: Vec<CustomEndpoint>,
 }
 
+/// API wire format used by a custom endpoint.
+///
+/// Determines how request bodies are constructed and which headers are
+/// injected (e.g. `x-api-key` + `anthropic-version` for Anthropic vs.
+/// `Authorization: Bearer` for OpenAI-compatible endpoints).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ApiFormat {
+    /// OpenAI-compatible Chat Completions API (default).
+    #[default]
+    OpenAi,
+    /// Anthropic Messages API.
+    Anthropic,
+}
+
+impl ApiFormat {
+    pub fn display_name(&self) -> &'static str {
+        match self {
+            ApiFormat::OpenAi => "OpenAI Compatible",
+            ApiFormat::Anthropic => "Anthropic Compatible",
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 #[serde(default)]
 pub struct CustomEndpoint {
     pub name: String,
     pub url: String,
     pub api_key: String,
+    /// API wire format for this endpoint. Defaults to OpenAI Compatible for
+    /// backward compatibility with existing serialised entries that lack this
+    /// field.
+    #[serde(default)]
+    pub api_format: ApiFormat,
     pub models: Vec<CustomEndpointModel>,
 }
 
@@ -269,6 +298,7 @@ impl ApiKeyManager {
         name: String,
         url: String,
         api_key: String,
+        api_format: ApiFormat,
         models: Vec<(String, Option<String>, Option<String>)>,
         ctx: &mut ModelContext<Self>,
     ) {
@@ -276,6 +306,7 @@ impl ApiKeyManager {
             name,
             url,
             api_key,
+            api_format,
             models: models
                 .into_iter()
                 .map(|(name, alias, config_key)| CustomEndpointModel {
@@ -297,6 +328,7 @@ impl ApiKeyManager {
         name: String,
         url: String,
         api_key: String,
+        api_format: ApiFormat,
         models: Vec<(String, Option<String>, Option<String>)>,
         ctx: &mut ModelContext<Self>,
     ) {
@@ -307,6 +339,7 @@ impl ApiKeyManager {
             name,
             url,
             api_key,
+            api_format,
             models: models
                 .into_iter()
                 .map(|(name, alias, config_key)| CustomEndpointModel {

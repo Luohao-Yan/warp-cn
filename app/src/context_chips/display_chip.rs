@@ -1669,7 +1669,7 @@ impl DisplayChip {
                     let tool_tip = appearance
                         .ui_builder()
                         .tool_tip_with_sublabel(
-                            CODE_REVIEW_TOOLTIP_TEXT.clone(),
+                            CODE_REVIEW_TOOLTIP_TEXT.get().to_owned(),
                             code_review_keybinding.clone(),
                         )
                         .build()

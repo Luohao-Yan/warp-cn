@@ -48,8 +48,6 @@ use crate::{
     },
 };
 
-use std::sync::LazyLock;
-
 use core::default::Default;
 use email_address::EmailAddress;
 use itertools::Itertools;
@@ -62,6 +60,7 @@ use std::sync::Arc;
 use std::{cmp::Ordering, collections::HashSet};
 use warp_core::ui::theme::color::internal_colors;
 use warpui::FocusContext;
+use crate::static_tr;
 
 use warpui::{
     clipboard::ClipboardContent,
@@ -87,18 +86,18 @@ use warpui::{
 
 const TEAM_MEMBERS_HEADER_POSITION_ID: &str = "team_settings:team_members_header";
 // Styling for team create page
-static TEAM_NAME_EDITOR_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "team-name-placeholder"));
+static_tr!(TEAM_NAME_EDITOR_PLACEHOLDER_TEXT, "settings", "team-name-placeholder");
 const CREATE_TEAM_BUTTON_LEFT_PADDING: f32 = 10.;
-static CREATE_TEAM_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "team-create-description"));
+static_tr!(CREATE_TEAM_DESCRIPTION, "settings", "team-create-description");
 
 // Styling for team management page
-static LEAVE_TEAM_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "leave-team"));
-static DELETE_TEAM_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-team"));
-static CREATE_TEAM_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "create"));
-static APPROVE_DOMAINS_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "domains-placeholder"));
-static EMAILS_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "emails-placeholder"));
-static APPROVE_DOMAINS_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "set"));
-static SEND_EMAIL_INVITES_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite"));
+static_tr!(LEAVE_TEAM_BUTTON_LABEL, "settings", "leave-team");
+static_tr!(DELETE_TEAM_BUTTON_LABEL, "settings", "delete-team");
+static_tr!(CREATE_TEAM_BUTTON_LABEL, "settings", "create");
+static_tr!(APPROVE_DOMAINS_PLACEHOLDER, "settings", "domains-placeholder");
+static_tr!(EMAILS_PLACEHOLDER, "settings", "emails-placeholder");
+static_tr!(APPROVE_DOMAINS_BUTTON_LABEL, "settings", "set");
+static_tr!(SEND_EMAIL_INVITES_BUTTON_LABEL, "settings", "invite");
 const BUTTON_WIDTH: f32 = 82.;
 const BUTTON_HEIGHT: f32 = 40.;
 const COPY_LINK_LEFT_PADDING: f32 = 7.;
@@ -112,98 +111,98 @@ const COMPARE_PLANS_BUTTON_WIDTH: f32 = 120.;
 const SUBSECTION_HEADER_FONT_SIZE: f32 = 18.;
 
 const INVITE_LINK_PREFIX: &str = "/team/";
-static INVALID_DOMAINS_INSTRUCTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invalid-domains"));
+static_tr!(INVALID_DOMAINS_INSTRUCTIONS, "settings", "invalid-domains");
 
-static INVITE_LINK_TOGGLE_INSTRUCTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-link-instructions"));
-static INVITE_LINK_DOMAIN_RESTRICTIONS_INSTRUCTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "domain-restrictions-instructions"));
+static_tr!(INVITE_LINK_TOGGLE_INSTRUCTIONS, "settings", "invite-link-instructions");
+static_tr!(INVITE_LINK_DOMAIN_RESTRICTIONS_INSTRUCTIONS, "settings", "domain-restrictions-instructions");
 
-static INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-expiry-instructions"));
-static INVALID_EMAILS_INSTRUCTIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invalid-emails"));
+static_tr!(INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS, "settings", "email-expiry-instructions");
+static_tr!(INVALID_EMAILS_INSTRUCTIONS, "settings", "invalid-emails");
 
-static OFFLINE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "you-are-offline"));
+static_tr!(OFFLINE_TEXT, "settings", "you-are-offline");
 
-static LIMIT_HIT_ADMIN_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "limit-hit-admin"));
-static LIMIT_HIT_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "limit-hit-admin-no-upgrade"));
-static LIMIT_HIT_NON_ADMIN_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "limit-hit-non-admin"));
+static_tr!(LIMIT_HIT_ADMIN_TEXT, "settings", "limit-hit-admin");
+static_tr!(LIMIT_HIT_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT, "settings", "limit-hit-admin-no-upgrade");
+static_tr!(LIMIT_HIT_NON_ADMIN_TEXT, "settings", "limit-hit-non-admin");
 
-static DELINQUENT_ADMIN_NON_SELF_SERVE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delinquent-admin-non-self-serve"));
-static DELINQUENT_NON_ADMIN_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delinquent-non-admin"));
-static DELINQUENT_ADMIN_SELF_SERVE_LINE_1_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delinquent-admin-self-serve-line1"));
-static DELINQUENT_ADMIN_SELF_SERVE_LINE_2_PREFIX_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delinquent-admin-prefix"));
-static DELINQUENT_ADMIN_SELF_SERVE_LINE_2_LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delinquent-admin-link"));
-static DELINQUENT_ADMIN_SELF_SERVE_LINE_2_SUFFIX_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delinquent-admin-suffix"));
+static_tr!(DELINQUENT_ADMIN_NON_SELF_SERVE_TEXT, "settings", "delinquent-admin-non-self-serve");
+static_tr!(DELINQUENT_NON_ADMIN_TEXT, "settings", "delinquent-non-admin");
+static_tr!(DELINQUENT_ADMIN_SELF_SERVE_LINE_1_TEXT, "settings", "delinquent-admin-self-serve-line1");
+static_tr!(DELINQUENT_ADMIN_SELF_SERVE_LINE_2_PREFIX_TEXT, "settings", "delinquent-admin-prefix");
+static_tr!(DELINQUENT_ADMIN_SELF_SERVE_LINE_2_LINK_TEXT, "settings", "delinquent-admin-link");
+static_tr!(DELINQUENT_ADMIN_SELF_SERVE_LINE_2_SUFFIX_TEXT, "settings", "delinquent-admin-suffix");
 
-static TEAM_LIMIT_EXCEEDED_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "team-limit-exceeded-admin-no-upgrade"));
-static TEAM_LIMIT_EXCEEDED_NON_ADMIN_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "team-limit-exceeded-non-admin"));
-static TEAM_LIMIT_EXCEEDED_ADMIN_UPGRADEABLE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "team-limit-exceeded-admin-upgrade"));
+static_tr!(TEAM_LIMIT_EXCEEDED_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT, "settings", "team-limit-exceeded-admin-no-upgrade");
+static_tr!(TEAM_LIMIT_EXCEEDED_NON_ADMIN_TEXT, "settings", "team-limit-exceeded-non-admin");
+static_tr!(TEAM_LIMIT_EXCEEDED_ADMIN_UPGRADEABLE, "settings", "team-limit-exceeded-admin-upgrade");
 
 const MAX_CHIP_WIDTH: f32 = 280.;
 
-static TOAST_FAILED_SEND_INVITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-send-invite"));
-static TOAST_TOGGLED_INVITE_LINKS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "toggled-invite-links"));
-static TOAST_FAILED_TOGGLE_INVITE_LINKS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-toggle-invite-links"));
-static TOAST_RESET_INVITE_LINKS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "reset-invite-links"));
-static TOAST_FAILED_RESET_INVITE_LINKS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-reset-invite-links"));
-static TOAST_DELETED_INVITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "deleted-invite"));
-static TOAST_FAILED_DELETE_INVITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-delete-invite"));
-static TOAST_FAILED_ADD_DOMAIN_RESTRICTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-add-domain-restriction"));
-static TOAST_FAILED_DELETE_DOMAIN_RESTRICTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-delete-domain-restriction"));
-static TOAST_FAILED_GENERATE_UPGRADE_LINK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-generate-upgrade-link"));
-static TOAST_FAILED_GENERATE_BILLING_LINK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-generate-billing-link"));
-static TOAST_TOGGLED_TEAM_DISCOVERABILITY: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "toggled-team-discoverability"));
-static TOAST_FAILED_TOGGLE_TEAM_DISCOVERABILITY: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-toggle-team-discoverability"));
-static TOAST_FAILED_JOIN_TEAM: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-join-team"));
-static TOAST_TRANSFERRED_OWNERSHIP: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "transferred-team-ownership"));
-static TOAST_FAILED_TRANSFER_OWNERSHIP: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-transfer-team-ownership"));
-static TOAST_UPDATED_MEMBER_ROLE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "updated-team-member-role"));
-static TOAST_FAILED_UPDATE_MEMBER_ROLE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-update-team-member-role"));
-static TOAST_ERROR_LEAVING_TEAM: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "error-leaving-team"));
-static TOAST_LEFT_TEAM: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "successfully-left-team"));
-static TOAST_RENAMED_TEAM: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "successfully-renamed-team"));
-static TOAST_FAILED_RENAME_TEAM: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-rename-team"));
-static TOAST_LINK_COPIED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "link-copied-to-clipboard"));
-static TOAST_INVALID_DOMAINS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invalid-domains-toast"));
-static TOAST_DOMAIN_RESTRICTIONS_ADDED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "domain-restrictions-added"));
-static TOAST_INVALID_EMAILS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invalid-emails-toast"));
-static TOAST_INVITE_ON_THE_WAY: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-on-the-way"));
-static TOAST_FAILED_LOAD_INVITE_LINK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "failed-load-invite-link"));
-static TOAST_CANCEL_INVITE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "cancel-invite"));
-static TOAST_TRANSFER_OWNERSHIP: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "transfer-ownership"));
-static TOAST_REMOVE_FROM_TEAM: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "remove-from-team"));
-static TOAST_DEMOTE_FROM_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "demote-from-admin"));
-static TOAST_PROMOTE_TO_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "promote-to-admin"));
-static TOAST_REMOVE_DOMAIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "remove-domain"));
+static_tr!(TOAST_FAILED_SEND_INVITE, "settings", "failed-send-invite");
+static_tr!(TOAST_TOGGLED_INVITE_LINKS, "settings", "toggled-invite-links");
+static_tr!(TOAST_FAILED_TOGGLE_INVITE_LINKS, "settings", "failed-toggle-invite-links");
+static_tr!(TOAST_RESET_INVITE_LINKS, "settings", "reset-invite-links");
+static_tr!(TOAST_FAILED_RESET_INVITE_LINKS, "settings", "failed-reset-invite-links");
+static_tr!(TOAST_DELETED_INVITE, "settings", "deleted-invite");
+static_tr!(TOAST_FAILED_DELETE_INVITE, "settings", "failed-delete-invite");
+static_tr!(TOAST_FAILED_ADD_DOMAIN_RESTRICTION, "settings", "failed-add-domain-restriction");
+static_tr!(TOAST_FAILED_DELETE_DOMAIN_RESTRICTION, "settings", "failed-delete-domain-restriction");
+static_tr!(TOAST_FAILED_GENERATE_UPGRADE_LINK, "settings", "failed-generate-upgrade-link");
+static_tr!(TOAST_FAILED_GENERATE_BILLING_LINK, "settings", "failed-generate-billing-link");
+static_tr!(TOAST_TOGGLED_TEAM_DISCOVERABILITY, "settings", "toggled-team-discoverability");
+static_tr!(TOAST_FAILED_TOGGLE_TEAM_DISCOVERABILITY, "settings", "failed-toggle-team-discoverability");
+static_tr!(TOAST_FAILED_JOIN_TEAM, "settings", "failed-join-team");
+static_tr!(TOAST_TRANSFERRED_OWNERSHIP, "settings", "transferred-team-ownership");
+static_tr!(TOAST_FAILED_TRANSFER_OWNERSHIP, "settings", "failed-transfer-team-ownership");
+static_tr!(TOAST_UPDATED_MEMBER_ROLE, "settings", "updated-team-member-role");
+static_tr!(TOAST_FAILED_UPDATE_MEMBER_ROLE, "settings", "failed-update-team-member-role");
+static_tr!(TOAST_ERROR_LEAVING_TEAM, "settings", "error-leaving-team");
+static_tr!(TOAST_LEFT_TEAM, "settings", "successfully-left-team");
+static_tr!(TOAST_RENAMED_TEAM, "settings", "successfully-renamed-team");
+static_tr!(TOAST_FAILED_RENAME_TEAM, "settings", "failed-rename-team");
+static_tr!(TOAST_LINK_COPIED, "settings", "link-copied-to-clipboard");
+static_tr!(TOAST_INVALID_DOMAINS, "settings", "invalid-domains-toast");
+static_tr!(TOAST_DOMAIN_RESTRICTIONS_ADDED, "settings", "domain-restrictions-added");
+static_tr!(TOAST_INVALID_EMAILS, "settings", "invalid-emails-toast");
+static_tr!(TOAST_INVITE_ON_THE_WAY, "settings", "invite-on-the-way");
+static_tr!(TOAST_FAILED_LOAD_INVITE_LINK, "settings", "failed-load-invite-link");
+static_tr!(TOAST_CANCEL_INVITE, "settings", "cancel-invite");
+static_tr!(TOAST_TRANSFER_OWNERSHIP, "settings", "transfer-ownership");
+static_tr!(TOAST_REMOVE_FROM_TEAM, "settings", "remove-from-team");
+static_tr!(TOAST_DEMOTE_FROM_ADMIN, "settings", "demote-from-admin");
+static_tr!(TOAST_PROMOTE_TO_ADMIN, "settings", "promote-to-admin");
+static_tr!(TOAST_REMOVE_DOMAIN, "settings", "remove-domain");
 
-static TOAST_ALLOW_DISCOVER_SAME: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "allow-discover-same-domain"));
-static TOAST_MAKE_DISCOVERABLE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "make-team-discoverable"));
-static TOAST_JOIN_TEAM_AND_COLLAB: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "join-team-and-collaborate"));
-static TOAST_OR_JOIN_EXISTING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "or-join-existing-team"));
-static TOAST_RESET_LINKS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "reset-links"));
-static TOAST_INVITE_BY_LINK: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-by-link"));
-static TOAST_INVITE_BY_EMAIL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "invite-by-email"));
-static TOAST_RESTRICT_BY_DOMAIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "restrict-by-domain"));
-static TOAST_TEAM_MEMBERS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "team-members"));
-static TOAST_FREE_PLAN_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "free-plan-usage-limits"));
-static TOAST_PLAN_USAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "plan-usage-limits"));
-static TOAST_SHARED_NOTEBOOKS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "shared-notebooks"));
-static TOAST_SHARED_WORKFLOWS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "shared-workflows"));
-static TOAST_MANAGE_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "manage-plan"));
-static TOAST_COMPARE_PLANS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "compare-plans"));
-static TOAST_CONTACT_SUPPORT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "contact-support-btn"));
-static TOAST_MANAGE_BILLING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "manage-billing"));
-static TOAST_OPEN_ADMIN_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "open-admin-panel"));
-static TOAST_UPGRADE_TO_BUILD: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "upgrade-to-build"));
-static TOAST_UPGRADE_TO_TURBO: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "upgrade-to-turbo-plan"));
-static TOAST_UPGRADE_TO_LIGHTSPEED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "upgrade-to-lightspeed-plan"));
-static TOAST_JOIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "join"));
-static TOAST_CONTACT_ADMIN_ACCESS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "contact-admin-to-request-access"));
-static TOAST_PAST_DUE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "past-due"));
-static TOAST_UNPAID: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "unpaid"));
-static TOAST_EXPIRED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "expired"));
-static TOAST_PENDING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "pending"));
-static TOAST_OWNER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "owner"));
-static TOAST_ADMIN: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "admin"));
-static TOAST_TEAMMATE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "teammate"));
+static_tr!(TOAST_ALLOW_DISCOVER_SAME, "settings", "allow-discover-same-domain");
+static_tr!(TOAST_MAKE_DISCOVERABLE, "settings", "make-team-discoverable");
+static_tr!(TOAST_JOIN_TEAM_AND_COLLAB, "settings", "join-team-and-collaborate");
+static_tr!(TOAST_OR_JOIN_EXISTING, "settings", "or-join-existing-team");
+static_tr!(TOAST_RESET_LINKS, "settings", "reset-links");
+static_tr!(TOAST_INVITE_BY_LINK, "settings", "invite-by-link");
+static_tr!(TOAST_INVITE_BY_EMAIL, "settings", "invite-by-email");
+static_tr!(TOAST_RESTRICT_BY_DOMAIN, "settings", "restrict-by-domain");
+static_tr!(TOAST_TEAM_MEMBERS, "settings", "team-members");
+static_tr!(TOAST_FREE_PLAN_USAGE, "settings", "free-plan-usage-limits");
+static_tr!(TOAST_PLAN_USAGE, "settings", "plan-usage-limits");
+static_tr!(TOAST_SHARED_NOTEBOOKS, "settings", "shared-notebooks");
+static_tr!(TOAST_SHARED_WORKFLOWS, "settings", "shared-workflows");
+static_tr!(TOAST_MANAGE_PLAN, "settings", "manage-plan");
+static_tr!(TOAST_COMPARE_PLANS, "settings", "compare-plans");
+static_tr!(TOAST_CONTACT_SUPPORT, "settings", "contact-support-btn");
+static_tr!(TOAST_MANAGE_BILLING, "settings", "manage-billing");
+static_tr!(TOAST_OPEN_ADMIN_PANEL, "settings", "open-admin-panel");
+static_tr!(TOAST_UPGRADE_TO_BUILD, "settings", "upgrade-to-build");
+static_tr!(TOAST_UPGRADE_TO_TURBO, "settings", "upgrade-to-turbo-plan");
+static_tr!(TOAST_UPGRADE_TO_LIGHTSPEED, "settings", "upgrade-to-lightspeed-plan");
+static_tr!(TOAST_JOIN, "settings", "join");
+static_tr!(TOAST_CONTACT_ADMIN_ACCESS, "settings", "contact-admin-to-request-access");
+static_tr!(TOAST_PAST_DUE, "settings", "past-due");
+static_tr!(TOAST_UNPAID, "settings", "unpaid");
+static_tr!(TOAST_EXPIRED, "settings", "expired");
+static_tr!(TOAST_PENDING, "settings", "pending");
+static_tr!(TOAST_OWNER, "settings", "owner");
+static_tr!(TOAST_ADMIN, "settings", "admin");
+static_tr!(TOAST_TEAMMATE, "settings", "teammate");
 
 lazy_static! {
     static ref DOMAIN_NAME_REGEX: Regex =
@@ -392,8 +391,8 @@ pub enum TeamsInviteOption {
     Email,
 }
 
-static LINK_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "link"));
-static EMAIL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email"));
+static_tr!(LINK_LABEL, "settings", "link");
+static_tr!(EMAIL_LABEL, "settings", "email");
 
 impl std::fmt::Display for TeamsInviteOption {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -401,8 +400,8 @@ impl std::fmt::Display for TeamsInviteOption {
             f,
             "{}",
             match self {
-                TeamsInviteOption::Link => LINK_LABEL.as_str(),
-                TeamsInviteOption::Email => EMAIL_LABEL.as_str(),
+                TeamsInviteOption::Link => LINK_LABEL.get(),
+                TeamsInviteOption::Email => EMAIL_LABEL.get(),
             },
         )
     }
@@ -738,7 +737,7 @@ impl TeamsPageView {
         let font_size = appearance.ui_font_size();
         let create_team_editor = Self::editor(
             |me, event, ctx| me.handle_editor_event(event, ctx),
-            &*TEAM_NAME_EDITOR_PLACEHOLDER_TEXT,
+            TEAM_NAME_EDITOR_PLACEHOLDER_TEXT.get(),
             font_size,
             ctx,
         );
@@ -746,7 +745,7 @@ impl TeamsPageView {
         let approve_domains_block_editor = ctx.add_typed_action_view(|ctx| {
             WordBlockEditorView::new(
                 ctx,
-                &*APPROVE_DOMAINS_PLACEHOLDER,
+                APPROVE_DOMAINS_PLACEHOLDER.get(),
                 font_size,
                 vec![',', ' '],
                 MAX_CHIP_WIDTH,
@@ -760,7 +759,7 @@ impl TeamsPageView {
         let email_invites_block_editor = ctx.add_typed_action_view(|ctx| {
             WordBlockEditorView::new(
                 ctx,
-                &*EMAILS_PLACEHOLDER,
+                EMAILS_PLACEHOLDER.get(),
                 font_size,
                 vec![',', ' '],
                 MAX_CHIP_WIDTH,
@@ -796,7 +795,7 @@ impl TeamsPageView {
             .to_string();
         let rename_team_editor = ctx.add_typed_action_view(|ctx| {
             let mut input = ClickableTextInput::new(team_name, ctx);
-            input.set_placeholder_text(TEAM_NAME_EDITOR_PLACEHOLDER_TEXT.as_str(), ctx);
+            input.set_placeholder_text(TEAM_NAME_EDITOR_PLACEHOLDER_TEXT.get(), ctx);
             input
         });
         ctx.subscribe_to_view(&rename_team_editor, |me, _, event, ctx| {
@@ -940,7 +939,7 @@ impl TeamsPageView {
             }
             UserWorkspacesEvent::EmailInviteRejected(err) => {
                 self.update_team_members_state(ctx);
-                self.show_error(TOAST_FAILED_SEND_INVITE.as_str(), Some(err), ctx)
+                self.show_error(TOAST_FAILED_SEND_INVITE.get(), Some(err), ctx)
             }
             UserWorkspacesEvent::TeamsChanged => {
                 self.update_team_members_state(ctx);
@@ -953,25 +952,25 @@ impl TeamsPageView {
                 ctx.emit(TeamsPageViewEvent::TeamsChanged);
             }
             UserWorkspacesEvent::ToggleInviteLinksSuccess => {
-                self.show_success(TOAST_TOGGLED_INVITE_LINKS.as_str(), ctx);
+                self.show_success(TOAST_TOGGLED_INVITE_LINKS.get(), ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::ToggleInviteLinksRejected(err) => {
-                self.show_error(TOAST_FAILED_TOGGLE_INVITE_LINKS.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_TOGGLE_INVITE_LINKS.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::ResetInviteLinks => {
-                self.show_success(TOAST_RESET_INVITE_LINKS.as_str(), ctx);
+                self.show_success(TOAST_RESET_INVITE_LINKS.get(), ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::ResetInviteLinksRejected(err) => {
-                self.show_error(TOAST_FAILED_RESET_INVITE_LINKS.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_RESET_INVITE_LINKS.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::DeleteTeamInvite => {
                 self.update_team_members_state(ctx);
-                self.show_success(TOAST_DELETED_INVITE.as_str(), ctx);
+                self.show_success(TOAST_DELETED_INVITE.get(), ctx);
             }
             UserWorkspacesEvent::DeleteTeamInviteRejected(err) => {
-                self.show_error(TOAST_FAILED_DELETE_INVITE.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_DELETE_INVITE.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::AddDomainRestrictionsSuccess => {
                 self.approve_domains_block_editor
@@ -981,19 +980,19 @@ impl TeamsPageView {
                 self.update_approved_domains_state(ctx);
             }
             UserWorkspacesEvent::AddDomainRestrictionsRejected(err) => {
-                self.show_error(TOAST_FAILED_ADD_DOMAIN_RESTRICTION.as_str(), Some(err), ctx)
+                self.show_error(TOAST_FAILED_ADD_DOMAIN_RESTRICTION.get(), Some(err), ctx)
             }
             UserWorkspacesEvent::DeleteDomainRestrictionSuccess => {
                 self.update_approved_domains_state(ctx);
             }
             UserWorkspacesEvent::DeleteDomainRestrictionRejected(err) => {
-                self.show_error(TOAST_FAILED_DELETE_DOMAIN_RESTRICTION.as_str(), Some(err), ctx)
+                self.show_error(TOAST_FAILED_DELETE_DOMAIN_RESTRICTION.get(), Some(err), ctx)
             }
             UserWorkspacesEvent::GenerateUpgradeLink(upgrade_link) => {
                 ctx.open_url(upgrade_link);
             }
             UserWorkspacesEvent::GenerateUpgradeLinkRejected(err) => self.show_error(
-                TOAST_FAILED_GENERATE_UPGRADE_LINK.as_str(),
+                TOAST_FAILED_GENERATE_UPGRADE_LINK.get(),
                 Some(err),
                 ctx,
             ),
@@ -1001,16 +1000,16 @@ impl TeamsPageView {
                 ctx.open_url(billing_session_link);
             }
             UserWorkspacesEvent::GenerateStripeBillingPortalLinkRejected(err) => self.show_error(
-                TOAST_FAILED_GENERATE_BILLING_LINK.as_str(),
+                TOAST_FAILED_GENERATE_BILLING_LINK.get(),
                 Some(err),
                 ctx,
             ),
             UserWorkspacesEvent::ToggleTeamDiscoverabilitySuccess => {
-                self.show_success(TOAST_TOGGLED_TEAM_DISCOVERABILITY.as_str(), ctx);
+                self.show_success(TOAST_TOGGLED_TEAM_DISCOVERABILITY.get(), ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::ToggleTeamDiscoverabilityRejected(err) => {
-                self.show_error(TOAST_FAILED_TOGGLE_TEAM_DISCOVERABILITY.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_TOGGLE_TEAM_DISCOVERABILITY.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::JoinTeamWithTeamDiscoverySuccess => {
                 // Force refresh of Warp Drive objects after joining a team
@@ -1029,7 +1028,7 @@ impl TeamsPageView {
                 ctx.notify();
             }
             UserWorkspacesEvent::JoinTeamWithTeamDiscoveryRejected(err) => {
-                self.show_error(TOAST_FAILED_JOIN_TEAM.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_JOIN_TEAM.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::FetchDiscoverableTeamsSuccess(teams) => {
                 self.discoverable_teams_states = teams
@@ -1043,18 +1042,18 @@ impl TeamsPageView {
                 log::error!("Failed to fetch discoverable teams: {e:?}");
             }
             UserWorkspacesEvent::TransferTeamOwnershipSuccess => {
-                self.show_success(TOAST_TRANSFERRED_OWNERSHIP.as_str(), ctx);
+                self.show_success(TOAST_TRANSFERRED_OWNERSHIP.get(), ctx);
                 ctx.notify();
             }
             UserWorkspacesEvent::TransferTeamOwnershipRejected(err) => {
-                self.show_error(TOAST_FAILED_TRANSFER_OWNERSHIP.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_TRANSFER_OWNERSHIP.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::SetTeamMemberRoleSuccess => {
                 self.update_team_members_state(ctx);
-                self.show_success(TOAST_UPDATED_MEMBER_ROLE.as_str(), ctx);
+                self.show_success(TOAST_UPDATED_MEMBER_ROLE.get(), ctx);
             }
             UserWorkspacesEvent::SetTeamMemberRoleRejected(err) => {
-                self.show_error(TOAST_FAILED_UPDATE_MEMBER_ROLE.as_str(), Some(err), ctx);
+                self.show_error(TOAST_FAILED_UPDATE_MEMBER_ROLE.get(), Some(err), ctx);
             }
             UserWorkspacesEvent::UpdateWorkspaceSettingsSuccess => {
                 // as of right now, this is only emitted on the billing & usage page
@@ -1105,18 +1104,18 @@ impl TeamsPageView {
     ) {
         match event {
             TeamUpdateManagerEvent::LeaveError => {
-                let error = TOAST_ERROR_LEAVING_TEAM.as_str().to_string();
+                let error = TOAST_ERROR_LEAVING_TEAM.get().to_string();
                 self.show_error(error, None, ctx);
             }
             TeamUpdateManagerEvent::LeaveSuccess => {
-                self.show_success(TOAST_LEFT_TEAM.as_str(), ctx);
+                self.show_success(TOAST_LEFT_TEAM.get(), ctx);
                 ctx.notify();
             }
             TeamUpdateManagerEvent::RenameTeamSuccess => {
-                self.show_success(TOAST_RENAMED_TEAM.as_str(), ctx)
+                self.show_success(TOAST_RENAMED_TEAM.get(), ctx)
             }
             TeamUpdateManagerEvent::RenameTeamError => {
-                self.show_error(TOAST_FAILED_RENAME_TEAM.as_str(), None, ctx)
+                self.show_error(TOAST_FAILED_RENAME_TEAM.get(), None, ctx)
             }
         }
     }
@@ -1388,7 +1387,7 @@ impl TeamsPageView {
     fn copy_invite_link(&mut self, link: &str, ctx: &mut ViewContext<Self>) {
         ctx.clipboard()
             .write(ClipboardContent::plain_text(link.to_string()));
-        self.show_toast(TOAST_LINK_COPIED.as_str(), ToastFlavor::Default, ctx);
+        self.show_toast(TOAST_LINK_COPIED.get(), ToastFlavor::Default, ctx);
     }
 
     fn remove_user_from_team(
@@ -1453,7 +1452,7 @@ impl TeamsPageView {
         // Verify no invalid domains before continuing
         let invalid_domains = editor.get_list_of_invalid_words(ctx);
         if !invalid_domains.is_empty() {
-            let error = TOAST_INVALID_DOMAINS.as_str().to_string();
+            let error = TOAST_INVALID_DOMAINS.get().to_string();
             self.show_error(error, None, ctx);
             return;
         }
@@ -1472,7 +1471,7 @@ impl TeamsPageView {
             .into_iter()
             .collect();
 
-        self.show_success(TOAST_DOMAIN_RESTRICTIONS_ADDED.as_str(), ctx);
+        self.show_success(TOAST_DOMAIN_RESTRICTIONS_ADDED.get(), ctx);
         self.user_workspaces
             .update(ctx, move |user_workspaces, ctx| {
                 user_workspaces.add_invite_link_domain_restrictions(team_uid, unique_domains, ctx);
@@ -1497,7 +1496,7 @@ impl TeamsPageView {
         // Verify no invalid emails before continuing
         let invalid_emails = editor.get_list_of_invalid_words(ctx);
         if !invalid_emails.is_empty() {
-            let error = TOAST_INVALID_EMAILS.as_str().to_string();
+            let error = TOAST_INVALID_EMAILS.get().to_string();
             self.show_error(error, None, ctx);
             return;
         }
@@ -1517,7 +1516,7 @@ impl TeamsPageView {
             .collect();
 
         let message = if unique_emails.len() == 1 {
-            TOAST_INVITE_ON_THE_WAY.as_str().to_string()
+            TOAST_INVITE_ON_THE_WAY.get().to_string()
         } else {
             crate::tr!("settings", "invites-on-the-way", count = unique_emails.len())
         };
@@ -1658,7 +1657,7 @@ impl TeamsPageView {
             let actions = if current_user_has_admin_permissions {
                 vec![ItemAction {
                     icon: Icon::X,
-                    label: TOAST_CANCEL_INVITE.as_str().to_string(),
+                    label: TOAST_CANCEL_INVITE.get().to_string(),
                     action: TeamsPageAction::DeletePendingEmailInvitation {
                         team_uid: team.uid,
                         invitee_email: email_invite.invitee_email.clone(),
@@ -1695,7 +1694,7 @@ impl TeamsPageView {
                 if current_user_has_owner_permissions && !team_member_has_owner_permissions {
                     actions.push(ItemAction {
                         icon: Icon::Users,
-                        label: TOAST_TRANSFER_OWNERSHIP.as_str().to_string(),
+                        label: TOAST_TRANSFER_OWNERSHIP.get().to_string(),
                         action: TeamsPageAction::ShowTransferOwnershipModal {
                             new_owner_email: member.email.clone(),
                             new_owner_uid: member.uid,
@@ -1712,7 +1711,7 @@ impl TeamsPageView {
                     if team_member_has_admin_permissions {
                         actions.push(ItemAction {
                             icon: Icon::ArrowDown,
-                            label: TOAST_DEMOTE_FROM_ADMIN.as_str().to_string(),
+                            label: TOAST_DEMOTE_FROM_ADMIN.get().to_string(),
                             action: TeamsPageAction::SetTeamMemberRole {
                                 team_uid: team.uid,
                                 user_uid: member.uid,
@@ -1722,7 +1721,7 @@ impl TeamsPageView {
                     } else {
                         actions.push(ItemAction {
                             icon: Icon::ArrowUp,
-                            label: TOAST_PROMOTE_TO_ADMIN.as_str().to_string(),
+                            label: TOAST_PROMOTE_TO_ADMIN.get().to_string(),
                             action: TeamsPageAction::SetTeamMemberRole {
                                 team_uid: team.uid,
                                 user_uid: member.uid,
@@ -1736,7 +1735,7 @@ impl TeamsPageView {
                 if current_user_has_admin_permissions && !team_member_has_owner_permissions {
                     actions.push(ItemAction {
                         icon: Icon::X,
-                        label: TOAST_REMOVE_FROM_TEAM.as_str().to_string(),
+                        label: TOAST_REMOVE_FROM_TEAM.get().to_string(),
                         action: TeamsPageAction::RemoveUserFromTeam {
                             user_uid: member.uid,
                             team_uid: team.uid,
@@ -1867,7 +1866,7 @@ impl TeamsWidget {
         .finish();
 
         let member_pricing_header =
-            Container::new(self.render_subsection_header(TOAST_TEAM_MEMBERS.as_str().to_owned(), appearance))
+            Container::new(self.render_subsection_header(TOAST_TEAM_MEMBERS.get().to_owned(), appearance))
                 .with_margin_bottom(8.)
                 .finish();
 
@@ -2077,7 +2076,7 @@ impl TeamsWidget {
                 left_side.add_child(
                     Container::new(self.render_delinquency_badge(
                         appearance,
-                        TOAST_PAST_DUE.as_str().into(),
+                        TOAST_PAST_DUE.get().into(),
                         themes::theme::Fill::from(*PAST_DUE_BADGE_COLOR).into(),
                     ))
                     .with_margin_left(8.)
@@ -2088,7 +2087,7 @@ impl TeamsWidget {
                 left_side.add_child(
                     Container::new(self.render_delinquency_badge(
                         appearance,
-                        TOAST_UNPAID.as_str().into(),
+                        TOAST_UNPAID.get().into(),
                         themes::theme::Fill::from(*UNPAID_BADGE_COLOR).into(),
                     ))
                     .with_margin_left(8.)
@@ -2120,7 +2119,7 @@ impl TeamsWidget {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    TOAST_CONTACT_SUPPORT.as_str(),
+                    TOAST_CONTACT_SUPPORT.get(),
                     Icon::Phone.to_warpui_icon(appearance.theme().accent()),
                     MainAxisSize::Min,
                     MainAxisAlignment::Center,
@@ -2149,7 +2148,7 @@ impl TeamsWidget {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    TOAST_MANAGE_BILLING.as_str(),
+                    TOAST_MANAGE_BILLING.get(),
                     Icon::CoinsStacked.to_warpui_icon(appearance.theme().accent()),
                     MainAxisSize::Min,
                     MainAxisAlignment::Center,
@@ -2180,7 +2179,7 @@ impl TeamsWidget {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::IconFirst,
-                    TOAST_OPEN_ADMIN_PANEL.as_str(),
+                    TOAST_OPEN_ADMIN_PANEL.get(),
                     Icon::Users.to_warpui_icon(appearance.theme().accent()),
                     MainAxisSize::Min,
                     MainAxisAlignment::Center,
@@ -2214,12 +2213,12 @@ impl TeamsWidget {
             // If the team is upgradeable to self-serve tier, show them the upgrade link.
             if team.billing_metadata.can_upgrade_to_higher_tier_plan() {
                 let description = if team.billing_metadata.can_upgrade_to_build_plan() {
-                    TOAST_UPGRADE_TO_BUILD.as_str()
+                    TOAST_UPGRADE_TO_BUILD.get()
                 } else {
                     match team.billing_metadata.customer_type {
-                        CustomerType::Prosumer => TOAST_UPGRADE_TO_TURBO.as_str(),
-                        CustomerType::Turbo => TOAST_UPGRADE_TO_LIGHTSPEED.as_str(),
-                        _ => TOAST_COMPARE_PLANS.as_str(),
+                        CustomerType::Prosumer => TOAST_UPGRADE_TO_TURBO.get(),
+                        CustomerType::Turbo => TOAST_UPGRADE_TO_LIGHTSPEED.get(),
+                        _ => TOAST_COMPARE_PLANS.get(),
                     }
                 };
                 billing_links.add_child(
@@ -2260,8 +2259,8 @@ impl TeamsWidget {
     ) -> Box<dyn Element> {
         let mut section = Flex::column();
         let sub_header_text = match team.billing_metadata.customer_type {
-            CustomerType::Free => TOAST_FREE_PLAN_USAGE.as_str(),
-            _ => TOAST_PLAN_USAGE.as_str(),
+            CustomerType::Free => TOAST_FREE_PLAN_USAGE.get(),
+            _ => TOAST_PLAN_USAGE.get(),
         };
         section.add_child(self.render_subsection_header(sub_header_text.into(), appearance));
 
@@ -2272,7 +2271,7 @@ impl TeamsWidget {
             if !policy.is_unlimited {
                 let mut shared_notebooks_column = Flex::column();
                 shared_notebooks_column.add_child(
-                    self.render_plan_usage_header(TOAST_SHARED_NOTEBOOKS.as_str().into(), appearance),
+                    self.render_plan_usage_header(TOAST_SHARED_NOTEBOOKS.get().into(), appearance),
                 );
                 let num_shared_notebooks = cloud_model
                     .active_notebooks_in_space(Space::Team { team_uid: team.uid }, app)
@@ -2297,7 +2296,7 @@ impl TeamsWidget {
             if !policy.is_unlimited {
                 let mut shared_workflows_column = Flex::column();
                 shared_workflows_column.add_child(
-                    self.render_plan_usage_header(TOAST_SHARED_WORKFLOWS.as_str().into(), appearance),
+                    self.render_plan_usage_header(TOAST_SHARED_WORKFLOWS.get().into(), appearance),
                 );
                 let num_shared_workflows = cloud_model
                     .active_workflows_in_space(Space::Team { team_uid: team.uid }, app)
@@ -2393,7 +2392,7 @@ impl TeamsWidget {
 
         // 1) "Invite by Link" subsection header
         invite_by_link_header_row
-            .add_child(self.render_subsection_header(TOAST_INVITE_BY_LINK.as_str().to_owned(), appearance));
+            .add_child(self.render_subsection_header(TOAST_INVITE_BY_LINK.get().to_owned(), appearance));
 
         // 1.1) Toggle to the right of header only renders if user is admin
         if has_admin_permissions {
@@ -2420,7 +2419,7 @@ impl TeamsWidget {
         if has_admin_permissions {
             section.add_child(
                 Container::new(self.render_sub_text(
-                    INVITE_LINK_TOGGLE_INSTRUCTIONS.as_str().into(),
+                    INVITE_LINK_TOGGLE_INSTRUCTIONS.get().into(),
                     appearance,
                     Some(Coords::uniform(0.).right(48.)),
                 ))
@@ -2442,7 +2441,7 @@ impl TeamsWidget {
                         appearance
                             .ui_builder()
                             .link(
-                                TOAST_RESET_LINKS.as_str().into(),
+                                TOAST_RESET_LINKS.get().into(),
                                 None,
                                 Some(Box::new(move |ctx| {
                                     ctx.dispatch_typed_action(TeamsPageAction::ResetInviteLinks {
@@ -2489,7 +2488,7 @@ impl TeamsWidget {
 
         // "Invite by Email" subsection header
         section.add_child(
-            Container::new(self.render_subsection_header(TOAST_INVITE_BY_EMAIL.as_str().to_owned(), appearance))
+            Container::new(self.render_subsection_header(TOAST_INVITE_BY_EMAIL.get().to_owned(), appearance))
                 .with_padding_top(CONTENT_SEPARATION_PADDING)
                 .with_padding_bottom(8.)
                 .finish(),
@@ -2508,7 +2507,7 @@ impl TeamsWidget {
                     // Instruction text for invite by email expiry
                     section.add_child(
                         Container::new(self.render_sub_text(
-                            INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS.as_str().into(),
+                            INVITE_BY_EMAIL_EXPIRY_INSTRUCTIONS.get().into(),
                             appearance,
                             Some(Coords::uniform(0.).right(48.)),
                         ))
@@ -2544,7 +2543,7 @@ impl TeamsWidget {
                     {
                         section.add_child(
                             Container::new(self.render_error_sub_text(
-                                INVALID_EMAILS_INSTRUCTIONS.as_str().into(),
+                                INVALID_EMAILS_INSTRUCTIONS.get().into(),
                                 appearance,
                             ))
                             .with_padding_top(8.)
@@ -2564,9 +2563,9 @@ impl TeamsWidget {
                             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween);
 
                         let text = if has_admin_permissions {
-                            LIMIT_HIT_ADMIN_TEXT.as_str()
+                            LIMIT_HIT_ADMIN_TEXT.get()
                         } else {
-                            LIMIT_HIT_NON_ADMIN_TEXT.as_str()
+                            LIMIT_HIT_NON_ADMIN_TEXT.get()
                         };
 
                         limit_hit_text_and_upgrade_button.add_child(
@@ -2583,7 +2582,7 @@ impl TeamsWidget {
 
                         limit_hit_text_and_upgrade_button.add_child(
                             self.render_compare_plans_button(
-                                TOAST_COMPARE_PLANS.as_str(),
+                                TOAST_COMPARE_PLANS.get(),
                                 self.mouse_state_handles
                                     .invite_by_email_upgrade_button
                                     .clone(),
@@ -2604,9 +2603,9 @@ impl TeamsWidget {
                         // In that case show message to contact their admin/support with no
                         // button to `/upgrade`.
                         let text = if has_admin_permissions {
-                            LIMIT_HIT_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT.as_str()
+                            LIMIT_HIT_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT.get()
                         } else {
-                            LIMIT_HIT_NON_ADMIN_TEXT.as_str()
+                            LIMIT_HIT_NON_ADMIN_TEXT.get()
                         };
                         self.render_sub_text(
                             text.into(),
@@ -2633,14 +2632,14 @@ impl TeamsWidget {
                         let mut limit_exceeded_with_upgrade_text = Flex::column();
 
                         limit_exceeded_with_upgrade_text.add_child(self.render_sub_text(
-                            DELINQUENT_ADMIN_SELF_SERVE_LINE_1_TEXT.as_str().into(),
+                            DELINQUENT_ADMIN_SELF_SERVE_LINE_1_TEXT.get().into(),
                             appearance,
                             None,
                         ));
 
                         let mut manage_billing_link_line = Flex::row();
                         manage_billing_link_line.add_child(self.render_sub_text(
-                            DELINQUENT_ADMIN_SELF_SERVE_LINE_2_PREFIX_TEXT.as_str().into(),
+                            DELINQUENT_ADMIN_SELF_SERVE_LINE_2_PREFIX_TEXT.get().into(),
                             appearance,
                             None,
                         ));
@@ -2648,7 +2647,7 @@ impl TeamsWidget {
                             appearance
                                 .ui_builder()
                                 .link(
-                                    DELINQUENT_ADMIN_SELF_SERVE_LINE_2_LINK_TEXT.as_str().into(),
+                                    DELINQUENT_ADMIN_SELF_SERVE_LINE_2_LINK_TEXT.get().into(),
                                     None,
                                     Some(Box::new(move |ctx| {
                                         ctx.dispatch_typed_action(
@@ -2666,7 +2665,7 @@ impl TeamsWidget {
                                 .finish(),
                         );
                         manage_billing_link_line.add_child(self.render_sub_text(
-                            DELINQUENT_ADMIN_SELF_SERVE_LINE_2_SUFFIX_TEXT.as_str().into(),
+                            DELINQUENT_ADMIN_SELF_SERVE_LINE_2_SUFFIX_TEXT.get().into(),
                             appearance,
                             None,
                         ));
@@ -2680,7 +2679,7 @@ impl TeamsWidget {
                         // delinquent enterprise customer). In that case show message to
                         // contact support instead.
                         self.render_sub_text(
-                            DELINQUENT_ADMIN_NON_SELF_SERVE_TEXT.as_str().into(),
+                            DELINQUENT_ADMIN_NON_SELF_SERVE_TEXT.get().into(),
                             appearance,
                             Some(Coords::uniform(0.).right(48.)),
                         )
@@ -2689,7 +2688,7 @@ impl TeamsWidget {
                     // If user is not admin, show them a message that asks them to contact
                     // their admin to fix their billing instead.
                     self.render_sub_text(
-                        DELINQUENT_NON_ADMIN_TEXT.as_str().into(),
+                        DELINQUENT_NON_ADMIN_TEXT.get().into(),
                         appearance,
                         Some(Coords::uniform(0.).right(48.)),
                     )
@@ -2713,9 +2712,9 @@ impl TeamsWidget {
                         .with_main_axis_alignment(MainAxisAlignment::SpaceBetween);
 
                     let text = if has_admin_permissions {
-                        TEAM_LIMIT_EXCEEDED_ADMIN_UPGRADEABLE.as_str()
+                        TEAM_LIMIT_EXCEEDED_ADMIN_UPGRADEABLE.get()
                     } else {
-                        TEAM_LIMIT_EXCEEDED_NON_ADMIN_TEXT.as_str()
+                        TEAM_LIMIT_EXCEEDED_NON_ADMIN_TEXT.get()
                     };
 
                     limit_exceeded_text_and_upgrade_button.add_child(
@@ -2732,7 +2731,7 @@ impl TeamsWidget {
 
                     limit_exceeded_text_and_upgrade_button.add_child(
                         self.render_compare_plans_button(
-                            TOAST_COMPARE_PLANS.as_str(),
+                            TOAST_COMPARE_PLANS.get(),
                             self.mouse_state_handles
                                 .invite_by_email_upgrade_button
                                 .clone(),
@@ -2753,9 +2752,9 @@ impl TeamsWidget {
                     // In that case show message to contact their admin/support with no
                     // button to `/upgrade`.
                     let text = if has_admin_permissions {
-                        TEAM_LIMIT_EXCEEDED_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT.as_str()
+                        TEAM_LIMIT_EXCEEDED_ADMIN_NOT_AUTO_UPGRADEABLE_TEXT.get()
                     } else {
-                        TEAM_LIMIT_EXCEEDED_NON_ADMIN_TEXT.as_str()
+                        TEAM_LIMIT_EXCEEDED_NON_ADMIN_TEXT.get()
                     };
                     self.render_sub_text(
                         text.into(),
@@ -2790,7 +2789,7 @@ impl TeamsWidget {
         section.add_child(
             SavePosition::new(
                 Container::new(
-                    self.render_subsection_header(TOAST_TEAM_MEMBERS.as_str().to_owned(), appearance),
+                    self.render_subsection_header(TOAST_TEAM_MEMBERS.get().to_owned(), appearance),
                 )
                 .with_padding_bottom(16.)
                 .finish(),
@@ -2822,7 +2821,7 @@ impl TeamsWidget {
 
         // 1) "Restrict by domain" header
         section.add_child(
-            Container::new(self.render_sub_header(TOAST_RESTRICT_BY_DOMAIN.as_str().to_owned(), appearance))
+            Container::new(self.render_sub_header(TOAST_RESTRICT_BY_DOMAIN.get().to_owned(), appearance))
                 .with_padding_top(16.)
                 .finish(),
         );
@@ -2831,7 +2830,7 @@ impl TeamsWidget {
         if has_admin_permissions {
             section.add_child(
                 Container::new(self.render_sub_text(
-                    INVITE_LINK_DOMAIN_RESTRICTIONS_INSTRUCTIONS.as_str().into(),
+                    INVITE_LINK_DOMAIN_RESTRICTIONS_INSTRUCTIONS.get().into(),
                     appearance,
                     Some(Coords::uniform(0.).right(48.)),
                 ))
@@ -2868,7 +2867,7 @@ impl TeamsWidget {
             {
                 section.add_child(
                     Container::new(
-                        self.render_error_sub_text(INVALID_DOMAINS_INSTRUCTIONS.as_str().into(), appearance),
+                        self.render_error_sub_text(INVALID_DOMAINS_INSTRUCTIONS.get().into(), appearance),
                     )
                     .with_padding_top(8.)
                     .finish(),
@@ -2884,7 +2883,7 @@ impl TeamsWidget {
                 let actions = if has_admin_permissions {
                     vec![ItemAction {
                         icon: Icon::X,
-                        label: TOAST_REMOVE_DOMAIN.as_str().to_string(),
+                        label: TOAST_REMOVE_DOMAIN.get().to_string(),
                         action: TeamsPageAction::DeleteDomainRestriction {
                             domain_uid: domain_restriction.uid,
                             team_uid: team.uid,
@@ -2933,7 +2932,7 @@ impl TeamsWidget {
             (None, ButtonVariant::Basic)
         };
         Container::new(self.render_button(
-            APPROVE_DOMAINS_BUTTON_LABEL.as_str(),
+            APPROVE_DOMAINS_BUTTON_LABEL.get(),
             variant,
             self.mouse_state_handles.approve_domains_button.clone(),
             action,
@@ -2960,7 +2959,7 @@ impl TeamsWidget {
             (None, ButtonVariant::Basic)
         };
         Container::new(self.render_button(
-            SEND_EMAIL_INVITES_BUTTON_LABEL.as_str(),
+            SEND_EMAIL_INVITES_BUTTON_LABEL.get(),
             variant,
             self.mouse_state_handles.send_email_invites_button.clone(),
             action,
@@ -3001,7 +3000,7 @@ impl TeamsWidget {
             .with_main_axis_size(MainAxisSize::Max)
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween);
         discoverable_header_row.add_child(
-            Container::new(self.render_sub_header(TOAST_MAKE_DISCOVERABLE.as_str().to_owned(), appearance))
+            Container::new(self.render_sub_header(TOAST_MAKE_DISCOVERABLE.get().to_owned(), appearance))
                 .with_padding_top(CONTENT_SEPARATION_PADDING)
                 .finish(),
         );
@@ -3059,12 +3058,12 @@ impl TeamsWidget {
 
         let (label, action) = if is_team_owner {
             (
-                &*DELETE_TEAM_BUTTON_LABEL,
+                DELETE_TEAM_BUTTON_LABEL.get(),
                 TeamsPageAction::ShowDeleteTeamConfirmationDialog,
             )
         } else {
             (
-                &*LEAVE_TEAM_BUTTON_LABEL,
+                LEAVE_TEAM_BUTTON_LABEL.get(),
                 TeamsPageAction::ShowLeaveTeamConfirmationDialog,
             )
         };
@@ -3143,7 +3142,7 @@ impl TeamsWidget {
             let link = appearance
                 .ui_builder()
                 .link(
-                    TOAST_MANAGE_PLAN.as_str().into(),
+                    TOAST_MANAGE_PLAN.get().into(),
                     None,
                     Some(Box::new(move |ctx| {
                         ctx.dispatch_typed_action(
@@ -3241,7 +3240,7 @@ impl TeamsWidget {
                         pending_and_close_row.add_child(
                             self.render_state_chip(
                                 appearance,
-                                TOAST_EXPIRED.as_str().into(),
+                                TOAST_EXPIRED.get().into(),
                                 appearance.theme().ui_error_color(),
                                 themes::theme::Fill::from(appearance.theme().ui_error_color())
                                     .with_opacity(30)
@@ -3255,7 +3254,7 @@ impl TeamsWidget {
                         pending_and_close_row.add_child(
                             self.render_state_chip(
                                 appearance,
-                                TOAST_PENDING.as_str().into(),
+                                TOAST_PENDING.get().into(),
                                 *EMAIL_INVITE_PENDING_COLOR,
                                 themes::theme::Fill::from(*EMAIL_INVITE_PENDING_COLOR)
                                     .with_opacity(30)
@@ -3268,7 +3267,7 @@ impl TeamsWidget {
                     ItemState::Owner => {
                         pending_and_close_row.add_child(self.render_state_chip(
                             appearance,
-                            TOAST_OWNER.as_str().into(),
+                            TOAST_OWNER.get().into(),
                             appearance.theme().accent().into(),
                             appearance.theme().accent().with_opacity(30).into(),
                             appearance.ui_font_size() - 1.,
@@ -3279,7 +3278,7 @@ impl TeamsWidget {
                         pending_and_close_row.add_child(
                             self.render_state_chip(
                                 appearance,
-                                TOAST_ADMIN.as_str().into(),
+                                TOAST_ADMIN.get().into(),
                                 appearance
                                     .theme()
                                     .background()
@@ -3435,7 +3434,7 @@ impl TeamsWidget {
                 );
                 (link, true)
             }
-            None => (TOAST_FAILED_LOAD_INVITE_LINK.as_str().to_string(), false),
+            None => (TOAST_FAILED_LOAD_INVITE_LINK.get().to_string(), false),
         };
         let theme = appearance.theme();
 
@@ -3717,7 +3716,7 @@ impl TeamsWidget {
         );
         page.add_child(
             Container::new(
-                self.render_description(CREATE_TEAM_DESCRIPTION.as_str().to_string(), appearance),
+                self.render_description(CREATE_TEAM_DESCRIPTION.get().to_string(), appearance),
             )
             .with_padding_top(6.)
             .finish(),
@@ -3742,7 +3741,7 @@ impl TeamsWidget {
             let checkbox_row_text = if let Some(domain) = view.auth_state.user_email_domain() {
                 crate::tr!("settings", "allow-discover-domain", domain = domain.as_str())
             } else {
-                TOAST_ALLOW_DISCOVER_SAME.as_str().to_string()
+                TOAST_ALLOW_DISCOVER_SAME.get().to_string()
             };
             let checkbox_row = Container::new(
                 Flex::row()
@@ -3772,7 +3771,7 @@ impl TeamsWidget {
             page.add_child(render_separator(appearance));
             page.add_child(self.render_sub_header_with_subtext_color(
                 appearance,
-                TOAST_OR_JOIN_EXISTING.as_str().to_string(),
+                TOAST_OR_JOIN_EXISTING.get().to_string(),
             ));
 
             // Team discovery
@@ -3850,7 +3849,7 @@ impl TeamsWidget {
 
         // Number of teammates
         let teammate_string = if team_state.team.num_members == 1 {
-            TOAST_TEAMMATE.clone()
+            TOAST_TEAMMATE.get().to_owned()
         } else {
             crate::tr!("settings", "teammates", count = team_state.team.num_members)
         };
@@ -3860,7 +3859,7 @@ impl TeamsWidget {
         single_team.add_child(
             Container::new(
                 self.render_sub_text(
-                    TOAST_JOIN_TEAM_AND_COLLAB.as_str().to_string(),
+                    TOAST_JOIN_TEAM_AND_COLLAB.get().to_string(),
                     appearance,
                     None,
                 ),
@@ -3986,7 +3985,7 @@ impl TeamsWidget {
                 ButtonVariant::Accent,
                 self.mouse_state_handles.create_team_button.clone(),
             )
-            .with_centered_text_label(CREATE_TEAM_BUTTON_LABEL.as_str().to_owned())
+            .with_centered_text_label(CREATE_TEAM_BUTTON_LABEL.get().to_owned())
             .with_style(UiComponentStyles {
                 font_color: Some(
                     appearance
@@ -4035,7 +4034,7 @@ impl TeamsWidget {
     ) -> Box<dyn Element> {
         if team_state.team.team_accepting_invites {
             self.render_button(
-                TOAST_JOIN.as_str(),
+                TOAST_JOIN.get(),
                 ButtonVariant::Accent,
                 team_state.mouse_state_handle.clone(),
                 Some(TeamsPageAction::JoinTeamWithTeamDiscovery {
@@ -4065,7 +4064,7 @@ impl TeamsWidget {
                     font_size: Some(14.),
                     ..Default::default()
                 })
-                .with_centered_text_label(TOAST_CONTACT_ADMIN_ACCESS.as_str().to_string())
+                .with_centered_text_label(TOAST_CONTACT_ADMIN_ACCESS.get().to_string())
                 .disabled()
                 .build()
                 .finish()
@@ -4110,7 +4109,7 @@ impl SettingsWidget for TeamsWidget {
         } else {
             appearance
                 .ui_builder()
-                .span(OFFLINE_TEXT.as_str().to_string())
+                .span(OFFLINE_TEXT.get().to_string())
                 .build()
                 .finish()
         };

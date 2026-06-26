@@ -1,5 +1,4 @@
 use std::sync::Arc;
-use std::sync::LazyLock;
 use std::time::Duration;
 
 use chrono::Local;
@@ -48,6 +47,7 @@ use crate::ui_components::buttons::icon_button;
 use crate::util::bindings::{cmd_or_ctrl_shift, CustomAction};
 use crate::workspace::{ActiveSession, TAB_BAR_HEIGHT};
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 
 const INFO_ICON_SVG_PATH: &str = "bundled/svg/info.svg";
 pub const HEXAGON_ALERT_SVG_PATH: &str = "bundled/svg/alert-hexagon.svg";
@@ -69,15 +69,15 @@ const BODY_FONT_SIZE: f32 = 13.;
 const TITLE_FONT_SIZE: f32 = 16.;
 const ZERO_STATE_HELP_TEXT_FONT_SIZE: f32 = 12.;
 
-static ZERO_STATE_HELP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "zero-state-help-text"));
-static SCRIPT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "zero-state-script-prompt"));
-static GIT_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "zero-state-git-prompt"));
-static FILES_ZERO_STATE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "zero-state-files-prompt"));
+static_tr!(ZERO_STATE_HELP_TEXT, "ai_assistant", "zero-state-help-text");
+static_tr!(SCRIPT_ZERO_STATE_PROMPT, "ai", "zero-state-script-prompt");
+static_tr!(GIT_ZERO_STATE_PROMPT, "ai", "zero-state-git-prompt");
+static_tr!(FILES_ZERO_STATE_PROMPT, "ai_assistant", "zero-state-files-prompt");
 
 // The placeholder texts are prepended with a space to give them cushion from the cursor.
-static INIT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "init-placeholder-text"));
-static FOLLOWUP_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "followup-placeholder-text"));
-static RESTART_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "restart-button-text"));
+static_tr!(INIT_PLACEHOLDER_TEXT, "ai_assistant", "init-placeholder-text");
+static_tr!(FOLLOWUP_PLACEHOLDER_TEXT, "ai_assistant", "followup-placeholder-text");
+static_tr!(RESTART_BUTTON_TEXT, "ai_assistant", "restart-button-text");
 
 const ASK_AI_BLOCK_INPUT_LIMIT: usize = 100;
 
@@ -197,7 +197,7 @@ impl AIAssistantPanelView {
             })
         };
         editor.update(ctx, |editor, ctx| {
-            editor.set_placeholder_text(&*INIT_PLACEHOLDER_TEXT, ctx)
+            editor.set_placeholder_text(INIT_PLACEHOLDER_TEXT.get(), ctx)
         });
         ctx.subscribe_to_view(&editor, |me, _, event, ctx| {
             me.handle_editor_event(event, ctx);
@@ -564,7 +564,7 @@ impl AIAssistantPanelView {
             RequestsEvent::RequestFinished { .. } => {
                 self.editor.update(ctx, |editor, ctx| {
                     editor.clear_buffer_and_reset_undo_stack(ctx);
-                    editor.set_placeholder_text(&*FOLLOWUP_PLACEHOLDER_TEXT, ctx);
+                    editor.set_placeholder_text(FOLLOWUP_PLACEHOLDER_TEXT.get(), ctx);
                 });
                 self.transcript_view.update(ctx, |transcript_view, ctx| {
                     transcript_view.scroll_to_bottom_of_transcript(ctx);
@@ -632,7 +632,7 @@ impl AIAssistantPanelView {
         }
 
         self.editor.update(ctx, |editor, ctx| {
-            editor.set_placeholder_text(&*INIT_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(INIT_PLACEHOLDER_TEXT.get(), ctx);
         });
 
         self.requests_model.update(ctx, |requests_model, ctx| {
@@ -715,7 +715,7 @@ impl AIAssistantPanelView {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .wrappable_text(AI_ASSISTANT_FEATURE_NAME.clone(), false)
+                        .wrappable_text(AI_ASSISTANT_FEATURE_NAME.get(), false)
                         .with_style(UiComponentStyles {
                             font_family_id: Some(appearance.ui_font_family()),
                             font_size: Some(TITLE_FONT_SIZE),
@@ -824,7 +824,7 @@ impl AIAssistantPanelView {
                 Some(hover_style),
                 Some(hover_style),
             )
-            .with_text_label(RESTART_BUTTON_TEXT.to_owned())
+            .with_text_label(RESTART_BUTTON_TEXT.get().to_owned())
             .build()
             .on_click(move |ctx, _, _| ctx.dispatch_typed_action(AIAssistantAction::ResetContext))
             .with_cursor(Cursor::PointingHand)
@@ -904,7 +904,7 @@ impl AIAssistantPanelView {
             )
             .with_child(
                 Container::new(
-                    Text::new_inline(&*ASK_AI_ASSISTANT_TEXT, appearance.ui_font_family(), 14.)
+                    Text::new_inline(ASK_AI_ASSISTANT_TEXT.get(), appearance.ui_font_family(), 14.)
                         .with_color(sub_text_color)
                         .finish(),
                 )
@@ -919,7 +919,7 @@ impl AIAssistantPanelView {
                     self.mouse_state_handles.git_zero_state_prompt.clone(),
                     Some(300.),
                     None,
-                    &*GIT_ZERO_STATE_PROMPT,
+                    GIT_ZERO_STATE_PROMPT.get(),
                 ))
                 .with_margin_top(20.)
                 .with_margin_bottom(10.)
@@ -929,7 +929,7 @@ impl AIAssistantPanelView {
                     self.mouse_state_handles.files_zero_state_prompt.clone(),
                     Some(300.),
                     None,
-                    &*FILES_ZERO_STATE_PROMPT,
+                    FILES_ZERO_STATE_PROMPT.get(),
                 ))
                 .with_margin_bottom(10.)
                 .finish(),
@@ -938,7 +938,7 @@ impl AIAssistantPanelView {
                     self.mouse_state_handles.script_zero_state_prompt.clone(),
                     Some(300.),
                     None,
-                    &*SCRIPT_ZERO_STATE_PROMPT,
+                    SCRIPT_ZERO_STATE_PROMPT.get(),
                 ))
                 .finish(),
             ]);
@@ -1018,7 +1018,6 @@ impl TypedActionView for AIAssistantPanelView {
 
     fn handle_action(&mut self, action: &AIAssistantAction, ctx: &mut ViewContext<Self>) {
         use AIAssistantAction::*;
-
         match action {
             ResetContext => {
                 self.reset_context(ctx);

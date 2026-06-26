@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::MouseStateHandle;
 use warpui::ui_components::components::UiComponent;
@@ -7,9 +6,8 @@ use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View
 use crate::server::ids::ApiKeyUid;
 use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon;
-
-static FAILED_DELETE_KEY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "failed-delete-key"));
+use crate::static_tr;
+static_tr!(FAILED_DELETE_KEY, "settings", "failed-delete-key");
 
 #[derive(PartialEq, Eq)]
 enum RequestState {
@@ -78,7 +76,7 @@ impl ExpireApiKeyButton {
                 | Err(_) => {
                     me.request_state = RequestState::Idle;
                     ctx.emit(ExpireApiKeyButtonEvent::ExpireApiKeyFailed {
-                        message: FAILED_DELETE_KEY.clone(),
+                        message: FAILED_DELETE_KEY.get().to_owned(),
                     });
                     ctx.notify();
                 }

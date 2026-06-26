@@ -8,7 +8,6 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 use std::iter;
 use std::path::Path;
-use std::sync::LazyLock;
 #[cfg(feature = "local_fs")]
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -100,47 +99,42 @@ use crate::util::link_detection::{add_link_detection_mouse_interactions, Detecte
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::CustomerType;
+use crate::static_tr;
 
 pub const STATUS_ICON_SIZE_DELTA: f32 = 4.;
 pub const STATUS_FOOTER_VERTICAL_PADDING: f32 = 4.;
-pub static WAITING_FOR_USER_INPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-waiting-for-instructions"));
+static_tr!(pub WAITING_FOR_USER_INPUT_MESSAGE, "ai_assistant", "ai-agent-waiting-for-instructions");
 const IMAGE_SOURCE_LINK_LINE_INDEX: usize = 1;
 
-static ERROR_APOLOGY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-error-apology-text"));
-static INTERNAL_WARP_ERROR: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-internal-warp-error"));
+static_tr!(ERROR_APOLOGY_TEXT, "ai_assistant", "ai-error-apology-text");
+static_tr!(INTERNAL_WARP_ERROR, "ai_assistant", "ai-internal-warp-error");
 
-pub static LOAD_OUTPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-warping"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-adjusting-tasks"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-fix"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-creating-diff"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-preparing-question"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-plan"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-updating-plan"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-summarizing-conversation"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-summarizing-command-output"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-searching-codebase"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_READING_FILES: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-reading-files"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_GREP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-grepping"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-finding-files"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-executing-command"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-writing-command-input"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-waiting-for-command-exit"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-searching-the-web"));
-pub static LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-fetching-pr-comments"));
+static_tr!(pub LOAD_OUTPUT_MESSAGE, "ai_assistant", "ai-warping");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING, "ai_assistant", "ai-adjusting-tasks");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN, "ai_assistant", "ai-generating-fix");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF, "ai_assistant", "ai-creating-diff");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION, "ai_assistant", "ai-preparing-question");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN, "ai_assistant", "ai-generating-plan");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN, "ai_assistant", "ai-updating-plan");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION, "ai_assistant", "ai-summarizing-conversation");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT, "ai_assistant", "ai-summarizing-command-output");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE, "ai_assistant", "ai-searching-codebase");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_READING_FILES, "ai_assistant", "ai-reading-files");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_GREP, "ai_assistant", "ai-grepping");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB, "ai_assistant", "ai-finding-files");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND, "ai_assistant", "ai-executing-command");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND, "ai_assistant", "ai-writing-command-input");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION, "ai_assistant", "ai-waiting-for-command-exit");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH, "ai_assistant", "ai-searching-the-web");
+static_tr!(pub LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS, "ai_assistant", "ai-fetching-pr-comments");
 
 #[cfg(feature = "local_fs")]
 pub(crate) type ResolvedBlocklistImageSources = HashMap<String, Option<AssetSource>>;
 
-pub static BLOCKED_ACTION_MESSAGE_FOR_WRITE_TO_LONG_RUNNING_SHELL_COMMAND: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-write-to-command"));
-pub static BLOCKED_ACTION_MESSAGE_FOR_READING_FILES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-reading-files"));
-pub static BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-searching-codebase"));
-pub static BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-grep-file-glob"));
+static_tr!(pub BLOCKED_ACTION_MESSAGE_FOR_WRITE_TO_LONG_RUNNING_SHELL_COMMAND, "ai_assistant", "ai-blocked-write-to-command");
+static_tr!(pub BLOCKED_ACTION_MESSAGE_FOR_READING_FILES, "ai_assistant", "ai-blocked-reading-files");
+static_tr!(pub BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE, "ai_assistant", "ai-blocked-searching-codebase");
+static_tr!(pub BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB, "ai_assistant", "ai-blocked-grep-file-glob");
 
 const BLOCKLIST_VISUAL_SECTION_HEIGHT_LINE_MULTIPLIER: f32 = 10.0;
 const BLOCKLIST_MERMAID_MAX_HEIGHT_LINE_MULTIPLIER: f32 = 40.0;
@@ -293,10 +287,10 @@ pub fn render_warping_indicator<V: View>(
         // Choose the appropriate message based on summarization type
         let base_message = match summarization_type {
             SummarizationType::ConversationSummary => {
-                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION.as_str()
+                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_CONVERSATION.get()
             }
             SummarizationType::ToolCallResultSummary => {
-                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT.as_str()
+                LOAD_OUTPUT_MESSAGE_FOR_SUMMARIZING_TOOL_CALL_RESULT.get()
             }
         };
 
@@ -317,26 +311,26 @@ pub fn render_warping_indicator<V: View>(
             base_message.to_string()
         }
     } else if props.model.contains_update_document_action(app) {
-        LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_UPDATING_PLAN.get().to_string()
     } else if props.model.contains_create_document_action(app) {
-        LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_GENERATING_PLAN.get().to_string()
     } else if props.model.request_type(app).is_passive_code_diff() {
-        LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_PASSIVE_CODE_GEN.get().to_string()
     } else if is_last_message_requesting_file_edits {
-        LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_CREATING_DIFF.get().to_string()
     } else if is_last_message_asking_user_question {
-        LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_PREPARING_QUESTION.get().to_string()
     } else if is_searching_web {
-        LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_WEB_SEARCH.get().to_string()
     } else if is_fetching_review_comments {
-        LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_FETCHING_REVIEW_COMMENTS.get().to_string()
     } else if is_interrupt_query_for_same_conversation
         && output_to_render
             .as_ref()
             .is_none_or(|output| output.get().messages.is_empty())
     {
         // Only "Adjusting..." if nothing from the current exchange has streamed yet.
-        LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING.as_str().to_string()
+        LOAD_OUTPUT_MESSAGE_FOR_ADJUSTING.get().to_string()
     } else {
         match props
             .action_model
@@ -344,9 +338,9 @@ pub fn render_warping_indicator<V: View>(
             .map(|action| &action.action)
         {
             Some(AIAgentActionType::SearchCodebase(..)) => {
-                LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE.clone()
+                LOAD_OUTPUT_MESSAGE_FOR_SEARCH_CODEBASE.get().to_owned()
             }
-            Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.clone(),
+            Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.get().to_owned(),
             Some(AIAgentActionType::CallMCPTool { name, .. }) => {
                 format!("Calling \"{name}\" MCP tool...")
             }
@@ -355,10 +349,10 @@ pub fn render_warping_indicator<V: View>(
             }
             Some(AIAgentActionType::FileGlob { .. })
             | Some(AIAgentActionType::FileGlobV2 { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB.clone()
+                LOAD_OUTPUT_MESSAGE_FOR_FILE_GLOB.get().to_owned()
             }
             Some(AIAgentActionType::WriteToLongRunningShellCommand { .. }) => {
-                LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND.clone()
+                LOAD_OUTPUT_MESSAGE_FOR_WRITING_TO_COMMAND.get().to_owned()
             }
             action => {
                 let active_block = props.terminal_model.block_list().active_block();
@@ -368,7 +362,7 @@ pub fn render_warping_indicator<V: View>(
                 {
                     if action.is_none() {
                         should_render_waiting_icon = true;
-                        WAITING_FOR_USER_INPUT_MESSAGE.as_str().to_string()
+                        WAITING_FOR_USER_INPUT_MESSAGE.get().to_string()
                     } else {
                         // Choose the base message depending on whether the agent is waiting
                         // for the command to exit or polling at a fixed interval.
@@ -376,8 +370,8 @@ pub fn render_warping_indicator<V: View>(
                             Some(AIAgentActionType::ReadShellCommandOutput {
                                 delay: Some(ShellCommandDelay::OnCompletion),
                                 ..
-                            }) => &LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION,
-                            _ => &LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND,
+                            }) => LOAD_OUTPUT_MESSAGE_FOR_WAITING_FOR_COMMAND_COMPLETION.get(),
+                            _ => LOAD_OUTPUT_MESSAGE_FOR_RUNNING_COMMAND.get(),
                         };
                         // Compute "Next check in {time}" for fixed-interval polls. Only
                         // `ReadShellCommandOutput { delay: Duration(_) }` has a meaningful
@@ -411,9 +405,9 @@ pub fn render_warping_indicator<V: View>(
                             // suffix is rendered as a separate non-shimmering element,
                             // matching the same pattern used by the summarization timer.
                             non_shimmering_text = Some(suffix);
-                            base.as_str().to_string()
+                            base.to_owned()
                         } else {
-                            base.as_str().to_string()
+                            base.to_owned()
                         }
                     }
                 } else {
@@ -3004,7 +2998,6 @@ pub(crate) fn resolve_absolute_file_path(
     use warp_util::path::CleanPathResult;
 
     use crate::util::file::{absolute_path_if_valid, ShellPathType};
-
     let clean_path = CleanPathResult::with_line_and_column_number(&path.to_string_lossy());
 
     // First, we check if the raw file path is a valid absolute path.
@@ -3054,7 +3047,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             user_display_message,
         } => {
             if let Some(message) = user_display_message {
-                format!("{}\n\n{message}", ERROR_APOLOGY_TEXT.as_str())
+                format!("{}\n\n{message}", ERROR_APOLOGY_TEXT.get())
             } else {
                 let ai_request_usage_model = AIRequestUsageModel::as_ref(app);
                 let formatted_next_refresh_time = ai_request_usage_model
@@ -3064,7 +3057,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
 
                 format!(
                     "{}\n\nYou've reached your credit limit. Your credit limit resets on {formatted_next_refresh_time}.",
-                    ERROR_APOLOGY_TEXT.as_str(),
+                    ERROR_APOLOGY_TEXT.get(),
                 )
             }
         }
@@ -3072,12 +3065,12 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             "Warp is currently overloaded. Please try again later.".to_string()
         }
         RenderableAIError::InternalWarpError => {
-            format!("{}\n\n{}", ERROR_APOLOGY_TEXT.as_str(), INTERNAL_WARP_ERROR.as_str())
+            format!("{}\n\n{}", ERROR_APOLOGY_TEXT.get(), INTERNAL_WARP_ERROR.get())
         }
         RenderableAIError::Other { error_message, .. } => {
             // A still-recovering `Other` error is handled by the early return above; once we
             // reach here recovery has failed, so surface the error directly.
-            format!("{}\n\n{error_message}", ERROR_APOLOGY_TEXT.as_str())
+            format!("{}\n\n{error_message}", ERROR_APOLOGY_TEXT.get())
         }
         RenderableAIError::TransientNetworkError { .. } => {
             // Recovering transient errors are handled by the early return above; once we
@@ -3112,7 +3105,7 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             format!(
                 "{}\n\nAWS credentials expired or missing for {model_name}. \
                  Please refresh your AWS credentials.",
-                ERROR_APOLOGY_TEXT.as_str(),
+                ERROR_APOLOGY_TEXT.get(),
             )
         }
     };

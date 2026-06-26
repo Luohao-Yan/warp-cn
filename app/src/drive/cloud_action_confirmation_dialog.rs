@@ -4,19 +4,17 @@ use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
-use std::sync::LazyLock;
-
 use crate::appearance::Appearance;
 use crate::ui_components::blended_colors;
 use crate::ui_components::dialog::{dialog_styles, Dialog};
-
-static CANCEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "cancel"));
-static DELETE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "confirm-delete-team"));
-static LEAVE_TEAM_TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "confirm-leave-team"));
-static DELETE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "delete-team-description"));
-static LEAVE_TEAM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "leave-team-description"));
-static DELETE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "yes-delete"));
-static LEAVE_TEAM_CONFIRM_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "yes-leave"));
+use crate::static_tr;
+static_tr!(CANCEL_TEXT, "drive", "cancel");
+static_tr!(DELETE_TEAM_TITLE_TEXT, "drive", "confirm-delete-team");
+static_tr!(LEAVE_TEAM_TITLE_TEXT, "drive", "confirm-leave-team");
+static_tr!(DELETE_TEAM_BODY_TEXT, "drive", "delete-team-description");
+static_tr!(LEAVE_TEAM_BODY_TEXT, "drive", "leave-team-description");
+static_tr!(DELETE_TEAM_CONFIRM_TEXT, "drive", "yes-delete");
+static_tr!(LEAVE_TEAM_CONFIRM_TEXT, "drive", "yes-leave");
 
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
@@ -83,9 +81,9 @@ impl CloudActionConfirmationDialog {
         match self.variant {
             CloudActionConfirmationDialogVariant::LeaveTeam
             | CloudActionConfirmationDialogVariant::LeaveTeamReloadCredits => {
-                LEAVE_TEAM_TITLE_TEXT.clone()
+                LEAVE_TEAM_TITLE_TEXT.get().to_owned()
             }
-            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_TITLE_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_TITLE_TEXT.get().to_owned(),
             CloudActionConfirmationDialogVariant::RemoveTeamMemberReloadCredits => {
                 "Are you sure you want to remove this member?".to_string()
             }
@@ -95,8 +93,8 @@ impl CloudActionConfirmationDialog {
 
     fn body_text(&self) -> String {
         match self.variant {
-            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_BODY_TEXT.clone(),
-            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_BODY_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_BODY_TEXT.get().to_owned(),
+            CloudActionConfirmationDialogVariant::DeleteTeam => DELETE_TEAM_BODY_TEXT.get().to_owned(),
             CloudActionConfirmationDialogVariant::LeaveTeamReloadCredits => {
                 "If you leave this team, you'll lose access to any remaining reload credits tied to it. You'll regain access to any unused, non-expired credits if you rejoin the same team later.".to_string()
             }
@@ -109,9 +107,9 @@ impl CloudActionConfirmationDialog {
 
     fn confirm_button_text(&self) -> String {
         match self.variant {
-            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_CONFIRM_TEXT.clone(),
+            CloudActionConfirmationDialogVariant::LeaveTeam => LEAVE_TEAM_CONFIRM_TEXT.get().to_owned(),
             CloudActionConfirmationDialogVariant::DeleteTeam => {
-                DELETE_TEAM_CONFIRM_TEXT.clone()
+                DELETE_TEAM_CONFIRM_TEXT.get().to_owned()
             }
             CloudActionConfirmationDialogVariant::LeaveTeamReloadCredits => {
                 LEAVE_TEAM_RELOAD_CREDITS_CONFIRM_TEXT.to_string()
@@ -175,7 +173,7 @@ impl View for CloudActionConfirmationDialog {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(CANCEL_TEXT.clone().into())
+            .with_text_label(CANCEL_TEXT.get().to_owned())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {

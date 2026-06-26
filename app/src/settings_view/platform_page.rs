@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use std::sync::LazyLock;
-
 use chrono::{DateTime, Utc};
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use warp_core::features::FeatureFlag;
@@ -38,7 +36,7 @@ use crate::search_bar::SearchBar;
 use crate::server::ids::ApiKeyUid;
 use crate::ui_components::icons::Icon;
 use crate::util::time_format::format_approx_duration_from_now_utc;
-
+use crate::static_tr;
 const MODAL_WIDTH: f32 = 460.;
 const MODAL_HEIGHT: f32 = 320.;
 const API_KEY_DOCS_URL: &str = "https://docs.warp.dev/reference/cli/api-keys";
@@ -58,14 +56,10 @@ const SETTINGS_SECTION_BORDER_WIDTH: f32 = 1.;
 const SETTINGS_PAGE_HORIZONTAL_PADDING: f32 = 56.;
 const SETTINGS_PAGE_MAX_CONTENT_WIDTH: f32 = 800.;
 
-static NEW_API_KEY_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "new-api-key-title"));
-static API_KEY_DELETED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "api-key-deleted"));
-static SETTINGS_NO_API_KEYS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "no-api-keys"));
-static SETTINGS_CREATE_KEY_DESC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "create-key-desc"));
+static_tr!(NEW_API_KEY_TITLE, "settings", "new-api-key-title");
+static_tr!(API_KEY_DELETED, "settings", "api-key-deleted");
+static_tr!(SETTINGS_NO_API_KEYS, "settings", "no-api-keys");
+static_tr!(SETTINGS_CREATE_KEY_DESC, "settings", "create-key-desc");
 const API_KEY_SEARCH_BAR_MAX_WIDTH: f32 = 640.;
 fn settings_sidebar_width_for_platform_page() -> f32 {
     if FeatureFlag::SettingsFile.is_enabled() {
@@ -196,7 +190,7 @@ impl PlatformPageView {
         });
 
         let create_api_key_modal_view = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(NEW_API_KEY_TITLE.clone()), create_api_key_body, ctx)
+            Modal::new(Some(NEW_API_KEY_TITLE.get().to_owned()), create_api_key_body, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(MODAL_WIDTH),
                     height: Some(MODAL_HEIGHT),
@@ -330,7 +324,7 @@ impl PlatformPageView {
                 let window_id = ctx.window_id();
                 crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     let toast = crate::view_components::DismissibleToast::success(
-                        API_KEY_DELETED.clone(),
+                        API_KEY_DELETED.get().to_owned(),
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -867,7 +861,7 @@ impl PlatformPageWidget {
                     .with_child(
                         Container::new(
                             Text::new(
-                                &*SETTINGS_NO_API_KEYS,
+                                SETTINGS_NO_API_KEYS.get(),
                                 appearance.ui_font_family(),
                                 SUBHEADER_FONT_SIZE,
                             )
@@ -881,7 +875,7 @@ impl PlatformPageWidget {
                     .with_child(
                         Container::new(
                             Text::new(
-                                &*SETTINGS_CREATE_KEY_DESC,
+                                SETTINGS_CREATE_KEY_DESC.get(),
                                 appearance.ui_font_family(),
                                 CONTENT_FONT_SIZE,
                             )

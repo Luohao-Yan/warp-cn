@@ -1,6 +1,4 @@
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use ai::agent::action::{AIAgentActionType, ShellCommandDelay};
 use parking_lot::FairMutex;
 use warp_core::ui::appearance::Appearance;
@@ -19,13 +17,13 @@ use crate::terminal::model::session::Sessions;
 use crate::terminal::TerminalModel;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
-
-static AGENT_PROMPT_TO_INTERACT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-prompt-to-interact"));
-static AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-waiting-on-instructions"));
-static AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-waiting-for-command-exit"));
-static AGENT_BLOCKED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-blocked"));
-static AGENT_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "agent-in-control"));
-static USER_IN_CONTROL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "user-in-control"));
+use crate::static_tr;
+static_tr!(AGENT_PROMPT_TO_INTERACT_MESSAGE, "ai", "agent-prompt-to-interact");
+static_tr!(AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE, "ai", "agent-waiting-on-instructions");
+static_tr!(AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE, "ai", "agent-waiting-for-command-exit");
+static_tr!(AGENT_BLOCKED_MESSAGE, "ai", "agent-blocked");
+static_tr!(AGENT_IN_CONTROL_MESSAGE, "ai", "agent-in-control");
+static_tr!(USER_IN_CONTROL_MESSAGE, "ai", "user-in-control");
 
 /// A header rendered as rich content above the active block when Agent View is in inline mode.
 pub struct InlineAgentViewHeader {
@@ -124,9 +122,9 @@ impl View for InlineAgentViewHeader {
                 blended_colors::text_main(appearance.theme(), header_background).into(),
             );
             let message = if let Some(command) = top_level_command.as_deref() {
-                format!("{} `{command}`", AGENT_PROMPT_TO_INTERACT_MESSAGE.as_str())
+                format!("{} `{command}`", AGENT_PROMPT_TO_INTERACT_MESSAGE.get())
             } else {
-                format!("{} the running command", AGENT_PROMPT_TO_INTERACT_MESSAGE.as_str())
+                format!("{} the running command", AGENT_PROMPT_TO_INTERACT_MESSAGE.get())
             };
             return HeaderConfig::new(message, app)
                 .with_icon(icon)
@@ -149,15 +147,15 @@ impl View for InlineAgentViewHeader {
         let is_waiting_on_instructions =
             action.is_none() && !is_streaming && is_agent_in_control && !is_action_blocked;
         let message = if is_user_in_control {
-            USER_IN_CONTROL_MESSAGE.to_owned()
+            USER_IN_CONTROL_MESSAGE.get()
         } else if is_action_blocked {
-            AGENT_BLOCKED_MESSAGE.to_owned()
+            AGENT_BLOCKED_MESSAGE.get()
         } else if is_waiting_for_command_to_exit {
-            AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE.to_owned()
+            AGENT_WAITING_FOR_COMMAND_TO_EXIT_MESSAGE.get()
         } else if is_waiting_on_instructions {
-            AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE.to_owned()
+            AGENT_WAITING_ON_INSTRUCTIONS_MESSAGE.get()
         } else {
-            AGENT_IN_CONTROL_MESSAGE.to_owned()
+            AGENT_IN_CONTROL_MESSAGE.get()
         };
 
         let icon = if is_user_in_control || is_waiting_on_instructions {

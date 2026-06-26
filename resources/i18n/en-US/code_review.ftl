@@ -90,8 +90,6 @@ code-review-repo-initialized-with-file = Repo is initialized with a { $file_name
 
 ## -- Diff selector / branch list --
 
-code-review-uncommitted-changes = Uncommitted changes
-
 ## -- Diff content messages --
 
 code-review-diff-too-large = Diff is too large to render
@@ -145,3 +143,55 @@ code-review-commit-placeholder = Enter a commit message
 
 ## -- Double-prefix aliases --
 
+## -- Git dialog / action button strings (migrated from legacy JSON) --
+
+code-review-add-diff-set-context = Add diff set as context
+code-review-approve = Approve
+code-review-authentication-failed = Authentication failed. Check your Git credentials.
+code-review-branch-published = Branch successfully published.
+code-review-cancel = Cancel
+code-review-changes-committed-and-pushed = Changes committed and pushed.
+code-review-changes-pushed = Changes successfully pushed.
+code-review-changes-successfully-committed = Changes successfully committed.
+code-review-close = Close review
+code-review-commit-and-create-pr = Commit and create PR
+code-review-commit-and-publish = Commit and publish
+code-review-commit-and-push = Commit and push
+code-review-commit-your-changes = Commit your changes
+code-review-committing = Committing…
+code-review-confirm = Confirm
+code-review-copy-text = Copy text
+code-review-create-pull-request = Create pull request
+code-review-creating = Creating…
+code-review-discard-all = Discard all
+code-review-edit = Edit
+code-review-enter-commit-message = Enter a commit message
+code-review-generating-message = Generating commit message…
+code-review-gh-cli-not-authenticated = GitHub CLI not authenticated. Run `gh auth login`.
+code-review-gh-cli-not-installed = GitHub CLI (gh) not installed. See https://cli.github.com/
+code-review-git-identity-not-configured = Git identity not configured. Set user.name and user.email.
+code-review-git-operation-failed = Git operation failed.
+code-review-initialize-codebase = Initialize codebase
+code-review-initialize-codebase-tooltip = Enables codebase indexing and WARP.md
+code-review-network-error = Network error. Check your connection.
+code-review-no-remote-configured = No remote configured for this branch.
+code-review-open = Open review
+code-review-open-pr = Open PR
+code-review-open-repository = Open repository
+code-review-open-repository-tooltip = Navigate to a repo and initialize it for coding
+code-review-pr-created = PR successfully created.
+code-review-publish-branch = Publish branch
+code-review-publishing = Publishing…
+code-review-push-changes = Push changes
+code-review-pushing = Pushing…
+code-review-remote-has-new-changes = Remote has new changes — pull before pushing.
+code-review-remote-repository-not-found = Remote repository not found.
+code-review-remove = Remove
+code-review-request-changes = Request changes
+code-review-send-to-agent = Send to Agent
+code-review-type-commit-message = Type a commit message
+code-review-view-in-github = View in GitHub
+
+## -- Keybinding descriptions --------------------------------------------------
+
+code-review-toggle-file-navigation-in-code-review = Toggle file navigation in code review

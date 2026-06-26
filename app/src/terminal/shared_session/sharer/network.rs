@@ -7,7 +7,6 @@
 )]
 
 use std::collections::HashMap;
-use std::sync::LazyLock;
 use std::pin::pin;
 use std::sync::Arc;
 use std::time::Duration;
@@ -57,7 +56,7 @@ use crate::terminal::TerminalModel;
 use crate::throttle::throttle;
 #[cfg(not(any(test, feature = "integration_tests")))]
 use crate::{report_error, server::telemetry::telemetry_context};
-
+use crate::static_tr;
 /// The amount of time we will wait to batch consecutive PTY read events before sending an event to the server
 const PTY_READS_BATCH_THRESHOLD: Duration = Duration::from_millis(50);
 #[cfg_attr(any(test, feature = "integration_tests"), allow(dead_code))]
@@ -1696,7 +1695,7 @@ impl Network {
     }
 }
 
-static NO_QUOTA_REMAINING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sharing-usage-exceeded"));
+static_tr!(NO_QUOTA_REMAINING_MESSAGE, "terminal", "sharing-usage-exceeded");
 
 fn session_terminated_reason_diagnostic_label(reason: &SessionTerminatedReason) -> &'static str {
     match reason {
@@ -1714,7 +1713,7 @@ pub fn session_terminated_reason_string(
     match reason {
         SessionTerminatedReason::NoUserQuotaRemaining {} => {
             // TODO: we should pass down the next refresh time to tell the user.
-            NO_QUOTA_REMAINING_MESSAGE.clone()
+            NO_QUOTA_REMAINING_MESSAGE.get().to_owned()
         }
         SessionTerminatedReason::ExceededSizeLimit => {
             let max_bytes = max_session_size.get_appropriate_unit(UnitType::Decimal);
@@ -1737,7 +1736,7 @@ pub fn failed_to_initialize_session_user_error(reason: &FailedToInitializeSessio
         }
         FailedToInitializeSessionReason::NoUserQuotaRemaining { .. } => {
             // TODO: we should pass down the next refresh time to tell the user.
-            NO_QUOTA_REMAINING_MESSAGE.as_str()
+            NO_QUOTA_REMAINING_MESSAGE.get()
         }
         FailedToInitializeSessionReason::UserNotFound => "You must be logged in to share sessions.",
     }

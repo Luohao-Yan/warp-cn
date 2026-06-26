@@ -254,12 +254,7 @@ notebooks-move-to-space-prefix = 移至 {""}
 
 ## -- 笔记本附加绑定 --
 
-notebooks-increase-font-size = 增大笔记本字体大小
-notebooks-decrease-font-size = 减小笔记本字体大小
 notebooks-reset-font-size = 重置笔记本字体大小
-notebooks-focus-terminal-input-from-notebook = 从笔记本聚焦终端输入
-notebooks-focus-terminal-input-from-file = 从文件聚焦终端输入
-notebooks-reload-file = 重新加载文件
 notebooks-link-copied = 链接已复制
 
 ## -- 已迁移 UI 字符串的主键 --
@@ -273,14 +268,8 @@ notebooks-copy-notebook-contents-to-personal-tooltip = 复制笔记本内容到�
 
 ## -- 附加笔记本字符串 --
 
-notebooks-conflict-resolution-message = 此笔记本无法保存，因为您编辑时其他人也进行了更改。请复制您的工作并刷新。
-notebooks-refresh-notebook = 刷新笔记本
 notebooks-remove-link-a11y = 移除链接
 notebooks-convert-to-block-a11y = 转换为 { $block_label }
-notebooks-enable-regex-search-a11y = 启用正则表达式搜索
-notebooks-disable-regex-search-a11y = 禁用正则表达式搜索
-notebooks-enable-case-sensitive-search-a11y = 启用区分大小写搜索
-notebooks-disable-case-sensitive-search-a11y = 禁用区分大小写搜索
 notebooks-focus-next-match-a11y = 聚焦下一个匹配项
 notebooks-focus-previous-match-a11y = 聚焦上一个匹配项
 notebooks-close-find-bar-a11y = 关闭查找栏
@@ -294,14 +283,8 @@ notebooks-command-from = 来自 { $location_name } 的命令
 notebooks-could-not-read = 无法读取 { $name }
 notebooks-loading-file = 正在加载 { $name }…
 notebooks-editor-is-editing = { $editor } 正在编辑
-notebooks-pasting-a11y = 正在粘贴：{ $content }
-notebooks-copy-link-a11y = 复制链接
-notebooks-open-link-a11y = 打开链接：{ $url }
-notebooks-secondary-click-a11y = 右键点击 { $url }
 notebooks-modifier-click-a11y = [{ $modifier } 点击]
-notebooks-insert-block-a11y = 插入 { $block } 块
 notebooks-change-lang-a11y = 将代码块语言更改为 { $language }
-notebooks-copy-code-block-a11y = 复制代码块
 notebooks-open-embed-search-a11y = 打开嵌入对象搜索菜单
 
 ## -- 额外文件笔记本和编辑器字符串的双前缀别名 --------------------------------------

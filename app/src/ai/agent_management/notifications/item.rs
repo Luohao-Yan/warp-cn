@@ -1,18 +1,16 @@
-use std::sync::LazyLock;
-
 use enum_iterator::Sequence;
 use instant::Instant;
 use uuid::Uuid;
 use warpui::EntityId;
 
-static NOTIF_FILTER_ALL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notif-filter-all"));
-static NOTIF_FILTER_UNREAD: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notif-filter-unread"));
-static NOTIF_FILTER_ERRORS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notif-filter-errors"));
+static_tr!(NOTIF_FILTER_ALL, "ai_assistant", "ai-notif-filter-all");
+static_tr!(NOTIF_FILTER_UNREAD, "ai_assistant", "ai-notif-filter-unread");
+static_tr!(NOTIF_FILTER_ERRORS, "ai_assistant", "ai-notif-filter-errors");
 
 use crate::ai::agent::conversation::AIConversationId;
 use crate::ai::artifacts::Artifact;
 use crate::terminal::CLIAgent;
-
+use crate::static_tr;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct NotificationId(Uuid);
 
@@ -41,9 +39,9 @@ pub enum NotificationFilter {
 impl NotificationFilter {
     pub(crate) fn label(&self) -> &'static str {
         match self {
-            NotificationFilter::All => &*NOTIF_FILTER_ALL,
-            NotificationFilter::Unread => &*NOTIF_FILTER_UNREAD,
-            NotificationFilter::Errors => &*NOTIF_FILTER_ERRORS,
+            NotificationFilter::All => NOTIF_FILTER_ALL.get(),
+            NotificationFilter::Unread => NOTIF_FILTER_UNREAD.get(),
+            NotificationFilter::Errors => NOTIF_FILTER_ERRORS.get(),
         }
     }
 }

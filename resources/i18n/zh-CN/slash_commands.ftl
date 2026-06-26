@@ -94,3 +94,7 @@ slash-commands-slash-command-file-not-found = 未找到文件：{ $path }
 slash-commands-slash-command-no-conversation-export = 没有活跃的对话可导出
 
 ## -- Double-prefix aliases --------------------------------------------------
+
+## -- 为 i18n 完整性补充的缺失键 --
+
+slash-commands-slash-command-desc = 搜索命令和工作流

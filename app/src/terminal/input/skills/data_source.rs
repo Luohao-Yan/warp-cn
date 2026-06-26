@@ -1,6 +1,5 @@
 
 
-use std::sync::LazyLock;
 use ai::skills::{SkillProvider, SkillReference, SkillScope};
 use fuzzy_match::{match_indices_case_insensitive, FuzzyMatchResult};
 use ordered_float::OrderedFloat;
@@ -26,8 +25,7 @@ use crate::search::result_renderer::ItemHighlightState;
 use crate::search::{SearchItem, SyncDataSource};
 use crate::terminal::cli_agent_sessions::{CLIAgentInputState, CLIAgentSessionsModel};
 
-static TERMINAL_PROJECT_SKILL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "project-skill"));
+static_tr!(TERMINAL_PROJECT_SKILL, "terminal", "project-skill");
 
 use crate::terminal::input::inline_menu::{
     default_navigation_message_items, styles as inline_styles, InlineMenuAction,
@@ -35,7 +33,7 @@ use crate::terminal::input::inline_menu::{
 };
 use crate::terminal::input::message_bar::{Message, MessageItem};
 use crate::terminal::model::session::active_session::{ActiveSession, ActiveSessionEvent};
-
+use crate::static_tr;
 #[derive(Clone, Debug)]
 pub struct AcceptSkill {
     pub skill_name: String,
@@ -355,7 +353,7 @@ impl SearchItem for SkillSearchItem {
             let badge_text_color =
                 inline_styles::disabled_text_color(theme, background_color.into());
             let badge_text = Text::new_inline(
-                &*TERMINAL_PROJECT_SKILL,
+                TERMINAL_PROJECT_SKILL.get(),
                 appearance.ui_font_family(),
                 badge_font_size,
             )

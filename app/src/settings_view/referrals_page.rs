@@ -1,7 +1,5 @@
 use std::ops::Deref;
-use std::sync::{Arc, LazyLock};
-
-use lazy_static::lazy_static;
+use std::sync::Arc;use lazy_static::lazy_static;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::Vector2F;
@@ -35,33 +33,33 @@ use crate::server::telemetry::TelemetryEvent;
 use crate::ui_components::blended_colors;
 use crate::view_components::ToastFlavor;
 use crate::{safe_info, send_telemetry_from_ctx};
-
+use crate::static_tr;
 const HEADER_FONT_SIZE: f32 = 18.;
 const HEADER_MARGIN_BOTTOM: f32 = 32.;
-static HEADER_TEXT: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("settings", "invite-friend").leak());
-static ANONYMOUS_USER_HEADER_TEXT: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("settings", "referral-signup-prompt").leak());
+static_tr!(HEADER_TEXT, "settings", "invite-friend");
+static_tr!(ANONYMOUS_USER_HEADER_TEXT, "settings", "referral-signup-prompt");
 
 const INVITE_FIELD_LABEL_BOTTOM_MARGIN: f32 = 8.;
 
 const LINK_BOTTOM_MARGIN: f32 = 12.;
 const LINK_TEXT_PADDING: f32 = 10.;
 const LINK_CORNER_RADIUS: Radius = Radius::Pixels(4.);
-static LINK_ERROR_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-load-error"));
+static_tr!(LINK_ERROR_TEXT, "settings", "referral-load-error");
 
 const BUTTON_WIDTH: f32 = 98.;
 const BUTTON_HEIGHT: f32 = 36.;
 const BUTTON_LEFT_MARGIN: f32 = 8.;
 const BUTTON_FONT_SIZE: f32 = 12.;
-static LINK_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "copy-link"));
-static EMAIL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "send"));
-static EMAIL_BUTTON_SENDING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "sending"));
-static LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "loading"));
+static_tr!(LINK_BUTTON_TEXT, "settings", "copy-link");
+static_tr!(EMAIL_BUTTON_TEXT, "settings", "send");
+static_tr!(EMAIL_BUTTON_SENDING_TEXT, "settings", "sending");
+static_tr!(LOADING_TEXT, "settings", "loading");
 
-static LINK_COPIED_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "link-copied"));
-static EMAIL_SUCCESS_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-sent-success"));
-static EMAIL_FAILURE_TOAST: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-sent-failure"));
+static_tr!(LINK_COPIED_TOAST, "settings", "link-copied");
+static_tr!(EMAIL_SUCCESS_TOAST, "settings", "email-sent-success");
+static_tr!(EMAIL_FAILURE_TOAST, "settings", "email-sent-failure");
 
-static REWARD_INTRO: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-reward-intro"));
+static_tr!(REWARD_INTRO, "settings", "referral-reward-intro");
 const REWARD_INTRO_FONT_SIZE: f32 = 14.;
 const REWARD_SECTION_VERTICAL_SPACING: f32 = 24.;
 
@@ -83,8 +81,8 @@ const METER_TOP_MARGIN: f32 = 16.;
 const METER_RIGHT_MARGIN: f32 = 12.;
 
 const CLAIMED_REFERRALS_LABEL_HORIZONTAL_SPACING: f32 = 4.;
-static CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-singular"));
-static CLAIMED_REFERRALS_COUNT_LABEL_PLURAL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-plural"));
+static_tr!(CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR, "settings", "referral-singular");
+static_tr!(CLAIMED_REFERRALS_COUNT_LABEL_PLURAL, "settings", "referral-plural");
 const CLAIMED_REFERRALS_LABEL_WIDTH: f32 = 52.;
 const CLAIMED_REFERRALS_LABEL_FONT_SIZE: f32 = 14.;
 const CLAIMED_REFERRALS_COUNT_FONT_SIZE: f32 = 48.;
@@ -92,14 +90,14 @@ const CLAIMED_REFERRAL_COUNT_LEFT_MARGIN: f32 = 40.;
 
 const CLAIMED_REFERRAL_CLIP: usize = 999;
 
-static TERMS_LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-terms"));
+static_tr!(TERMS_LINK_TEXT, "settings", "referral-terms");
 const TERMS_URL: &str =
     "https://docs.warp.dev/support-and-community/community/refer-a-friend#referral-program-terms-and-conditions";
-static TERMS_CONTACT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "referral-contact"));
+static_tr!(TERMS_CONTACT_TEXT, "settings", "referral-contact");
 
-static LINK_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "link-label"));
-static EMAIL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "email-label"));
-static SIGN_UP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "sign-up"));
+static_tr!(LINK_LABEL, "settings", "link-label");
+static_tr!(EMAIL_LABEL, "settings", "email-label");
+static_tr!(SIGN_UP_LABEL, "settings", "sign-up");
 
 enum ApiState {
     Loading,
@@ -222,7 +220,7 @@ impl ReferralsPageView {
             me.handle_editor_event(event, ctx);
         });
 
-        let page = PageType::new_monolith(ReferralsWidget::default(), Some(*HEADER_TEXT), true);
+        let page = PageType::new_monolith(ReferralsWidget::default(), Some(HEADER_TEXT.get()), true);
         Self {
             page,
             referrals_client,
@@ -286,7 +284,7 @@ impl ReferralsPageView {
                 ctx.clipboard()
                     .write(ClipboardContent::plain_text(referral_info.url.to_string()));
                 ctx.emit(ReferralsPageEvent::ShowToast {
-                    message: LINK_COPIED_TOAST.clone(),
+                    message: LINK_COPIED_TOAST.get().to_owned(),
                     flavor: ToastFlavor::Default,
                 });
             }
@@ -339,14 +337,14 @@ impl ReferralsPageView {
                     full: ("Successfully sent invites to: {:?}", successful)
                 );
                 ctx.emit(ReferralsPageEvent::ShowToast {
-                    message: EMAIL_SUCCESS_TOAST.clone(),
+                    message: EMAIL_SUCCESS_TOAST.get().to_owned(),
                     flavor: ToastFlavor::Success,
                 });
             }
             Err(err) => {
                 log::error!("Error sending referral emails: {err}");
                 ctx.emit(ReferralsPageEvent::ShowToast {
-                    message: EMAIL_FAILURE_TOAST.clone(),
+                    message: EMAIL_FAILURE_TOAST.get().to_owned(),
                     flavor: ToastFlavor::Error,
                 });
             }
@@ -525,8 +523,8 @@ impl ReferralsWidget {
     ) -> Box<dyn Element> {
         let (link_text, button_enabled) = match &view.api_state {
             ApiState::Ready { referral_info, .. } => (referral_info.url.clone(), true),
-            ApiState::Loading => (LOADING_TEXT.clone(), false),
-            ApiState::Failed => (LINK_ERROR_TEXT.clone(), false),
+            ApiState::Loading => (LOADING_TEXT.get().to_owned(), false),
+            ApiState::Failed => (LINK_ERROR_TEXT.get().to_owned(), false),
         };
         let theme = appearance.theme();
 
@@ -562,7 +560,7 @@ impl ReferralsWidget {
                 )
                 .with_child(self.render_button(
                     button_enabled,
-                    &*LINK_BUTTON_TEXT,
+                    LINK_BUTTON_TEXT.get(),
                     self.copy_link_mouse_state.clone(),
                     |ctx, _, _| ctx.dispatch_typed_action(ReferralsPageAction::CopyLink),
                     appearance,
@@ -583,12 +581,12 @@ impl ReferralsWidget {
             ApiState::Ready {
                 email_state: SendEmailState::Idle,
                 ..
-            } => (&*EMAIL_BUTTON_TEXT, true),
+            } => (EMAIL_BUTTON_TEXT.get(), true),
             ApiState::Ready {
                 email_state: SendEmailState::Sending,
                 ..
-            } => (&*EMAIL_BUTTON_SENDING_TEXT, false),
-            _ => (&*EMAIL_BUTTON_TEXT, false),
+            } => (EMAIL_BUTTON_SENDING_TEXT.get(), false),
+            _ => (EMAIL_BUTTON_TEXT.get(), false),
         };
 
         Flex::row()
@@ -625,12 +623,12 @@ impl ReferralsWidget {
     ) -> Box<dyn Element> {
         Flex::column()
             .with_child(
-                Container::new(self.render_label(&*LINK_LABEL, appearance))
+                Container::new(self.render_label(LINK_LABEL.get(), appearance))
                     .with_padding_top(PAGE_PADDING)
                     .finish(),
             )
             .with_child(self.render_link_row(view, appearance))
-            .with_child(self.render_label(&*EMAIL_LABEL, appearance))
+            .with_child(self.render_label(EMAIL_LABEL.get(), appearance))
             .with_child(self.render_email_row(view, appearance))
             .finish()
     }
@@ -656,7 +654,7 @@ impl ReferralsWidget {
                 self.sign_up_button_mouse_state.clone(),
             )
             .with_style(button_styles)
-            .with_text_label(SIGN_UP_LABEL.clone())
+            .with_text_label(SIGN_UP_LABEL.get().to_owned())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(ReferralsPageAction::SignupAnonymousUser);
@@ -668,7 +666,7 @@ impl ReferralsWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .span(*ANONYMOUS_USER_HEADER_TEXT)
+                        .span(ANONYMOUS_USER_HEADER_TEXT.get())
                         .with_style(UiComponentStyles {
                             font_size: Some(HEADER_FONT_SIZE),
                             ..Default::default()
@@ -740,7 +738,7 @@ impl ReferralsWidget {
             Container::new(
                 appearance
                     .ui_builder()
-                    .span(&*REWARD_INTRO)
+                    .span(REWARD_INTRO.get())
                     .with_style(UiComponentStyles {
                         font_size: Some(REWARD_INTRO_FONT_SIZE),
                         ..Default::default()
@@ -780,8 +778,8 @@ impl ReferralsWidget {
                     FormattedTextElement::new(
                         FormattedText::new([FormattedTextLine::Line(vec![
                             FormattedTextFragment::plain_text("*"),
-                            FormattedTextFragment::hyperlink(&*TERMS_LINK_TEXT, TERMS_URL),
-                            FormattedTextFragment::plain_text(&*TERMS_CONTACT_TEXT),
+                            FormattedTextFragment::hyperlink(TERMS_LINK_TEXT.get(), TERMS_URL),
+                            FormattedTextFragment::plain_text(TERMS_CONTACT_TEXT.get()),
                         ])]),
                         12.,
                         appearance.ui_font_family(),
@@ -1063,8 +1061,8 @@ impl ReferralsWidget {
         };
 
         let current_referrals_label = match claimed_count {
-            1 => &*CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR,
-            _ => &*CLAIMED_REFERRALS_COUNT_LABEL_PLURAL,
+            1 => CLAIMED_REFERRALS_COUNT_LABEL_SINGULAR.get(),
+            _ => CLAIMED_REFERRALS_COUNT_LABEL_PLURAL.get(),
         };
 
         Some(

@@ -19,8 +19,6 @@ use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
-use std::sync::LazyLock;
-
 use crate::ai::{AIRequestUsageModel, AIRequestUsageModelEvent};
 use crate::auth::AuthStateProvider;
 use crate::pricing::{PricingInfoModel, PricingInfoModelEvent};
@@ -28,22 +26,22 @@ use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::TelemetryEvent;
+use crate::static_tr;
 
 const BUTTON_DIAMETER: f32 = 20.;
 const MODAL_HEIGHT: f32 = 440.;
 const LEFT_PANEL_WIDTH: f32 = 360.;
 const RIGHT_PANEL_WIDTH: f32 = 360.;
 
-static OUT_OF_CREDITS_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "you-are-out-of-credits"));
-static UPGRADE_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "to-continue-using-ai-upgrade"));
-static BUILD_PLAN_INCLUDES_FALLBACK: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "build-plan-includes"));
-static EXTENDED_CREDITS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "extended-credits-per-month"));
-static ACCESS_FRONTIER_MODELS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "access-frontier-models"));
-static EXTENDED_CLOUD_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "extended-cloud-agents"));
+static_tr!(OUT_OF_CREDITS_TITLE, "workspace", "you-are-out-of-credits");
+static_tr!(UPGRADE_PROMPT, "workspace", "to-continue-using-ai-upgrade");
+static_tr!(BUILD_PLAN_INCLUDES_FALLBACK, "workspace", "build-plan-includes");
+static_tr!(EXTENDED_CREDITS, "workspace", "extended-credits-per-month");
+static_tr!(ACCESS_FRONTIER_MODELS, "workspace", "access-frontier-models");
+static_tr!(EXTENDED_CLOUD_AGENTS, "workspace", "extended-cloud-agents");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         FreeTierLimitHitModalAction::Close,
@@ -156,7 +154,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 FormattedTextElement::from_str(
-                                    OUT_OF_CREDITS_TITLE.clone(),
+                                    OUT_OF_CREDITS_TITLE.get(),
                                     appearance.ui_font_family(),
                                     24.,
                                 )
@@ -173,7 +171,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 FormattedTextElement::from_str(
-                                    UPGRADE_PROMPT.clone(),
+                                    UPGRADE_PROMPT.get(),
                                     appearance.ui_font_family(),
                                     14.,
                                 )
@@ -192,7 +190,7 @@ impl FreeTierLimitHitModal {
                                     let price = plan.monthly_plan_price_per_month_usd_cents / 100;
                                     crate::tr!("workspace", "build-plan-price-includes", price = format!("{}", price))
                                 } else {
-                                    BUILD_PLAN_INCLUDES_FALLBACK.clone()
+                                    BUILD_PLAN_INCLUDES_FALLBACK.get().to_owned()
                                 };
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
                                     FormattedTextFragment::plain_text(benefits_text),
@@ -216,7 +214,7 @@ impl FreeTierLimitHitModal {
                                     let limit = plan.request_limit.unwrap_or(1500);
                                     crate::tr!("workspace", "credits-per-month", credits = limit.separate_with_commas())
                                 } else {
-                                    EXTENDED_CREDITS.clone()
+                                    EXTENDED_CREDITS.get().to_owned()
                                 };
                                 Self::render_checklist_item_dynamic(credits_text, appearance, theme)
                             })
@@ -226,7 +224,7 @@ impl FreeTierLimitHitModal {
                         .with_child(
                             Container::new(
                                 Self::render_checklist_item_dynamic(
-                                    ACCESS_FRONTIER_MODELS.clone(),
+                                    ACCESS_FRONTIER_MODELS.get().to_owned(),
                                     appearance,
                                     theme,
                                 )
@@ -295,7 +293,7 @@ impl FreeTierLimitHitModal {
                             Container::new({
                                 let formatted_text = FormattedText::new([FormattedTextLine::Line(vec![
                                     FormattedTextFragment::hyperlink(
-                                        EXTENDED_CLOUD_AGENTS.clone(),
+                                        EXTENDED_CLOUD_AGENTS.get(),
                                         "https://www.warp.dev/oz".to_string(),
                                     ),
                                 ])]);

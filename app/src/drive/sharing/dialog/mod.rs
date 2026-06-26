@@ -1,6 +1,4 @@
 use std::borrow::Cow;
-use std::sync::LazyLock;
-
 use email_address::EmailAddress;
 use inheritance::{InheritanceDetails, InheritanceState};
 use itertools::Itertools;
@@ -62,6 +60,7 @@ use crate::word_block_editor::{
 use crate::workspace::{ToastStack, WorkspaceAction};
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::{send_telemetry_from_ctx, TelemetryEvent};
+use crate::static_tr;
 
 fn translated_access_level_label(level: &SharingAccessLevel) -> String {
     match level {
@@ -87,7 +86,7 @@ const QR_VISUAL_SIZE: f32 = 160.;
 const QR_ICON_BUTTON_SIZE: f32 = 32.;
 const QR_EXPORT_SIZE: u32 = 1024;
 
-static NO_ACCESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "sharing-no-access"));
+static_tr!(NO_ACCESS_LABEL, "drive", "sharing-no-access");
 
 #[derive(Default)]
 struct UiStateHandles {
@@ -225,7 +224,6 @@ pub enum SharingDialogAction {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         SharingDialogAction::Close,
@@ -1865,14 +1863,14 @@ impl SharingDialog {
             return None;
         }
 
-        static PREFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "sharing-must-have-full"));
-        static SUFFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "sharing-access-suffix"));
-        let access_level_start = PREFIX.chars().count();
+        static_tr!(PREFIX, "drive", "sharing-must-have-full");
+        static_tr!(SUFFIX, "drive", "sharing-access-suffix");
+        let access_level_start = PREFIX.get().chars().count();
         let access_level_end = access_level_start + access_level.name().chars().count();
 
         let text = appearance
             .ui_builder()
-            .wrappable_text(format!("{}{}{}", *PREFIX, access_level.name(), *SUFFIX), true)
+            .wrappable_text(format!("{}{}{}", PREFIX.get(), access_level.name(), SUFFIX.get()), true)
             .with_style(UiComponentStyles {
                 font_color: Some(style::label_text(appearance)),
                 ..Default::default()
@@ -1982,7 +1980,7 @@ impl SharingDialog {
 
         let menu_button_label = match self.link_sharing_state.access_level {
             Some(access_level) => translated_access_level_label(&access_level),
-            None => NO_ACCESS_LABEL.as_str().to_owned(),
+            None => NO_ACCESS_LABEL.get().to_owned(),
         };
         let mut menu_button = appearance
             .ui_builder()
@@ -2163,7 +2161,7 @@ impl SharingDialog {
         let menu_button = {
             let label = match self.team_sharing_state.access_level {
                 Some(access_level) => translated_access_level_label(&access_level),
-                None => NO_ACCESS_LABEL.as_str().to_owned(),
+                None => NO_ACCESS_LABEL.get().to_owned(),
             };
             let button = appearance
                 .ui_builder()

@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use settings::Setting as _;
 use warp_editor::editor::NavigationKey;
@@ -45,9 +43,10 @@ use crate::util::traffic_lights::{traffic_light_data, TrafficLightData, TrafficL
 use crate::window_settings::WindowSettings;
 use crate::workspace::PANEL_HEADER_HEIGHT;
 use crate::{report_if_error, send_telemetry_from_ctx};
+use crate::static_tr;
 
 // All units in px
-static THEME_CHOOSER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "themes-title"));
+static_tr!(THEME_CHOOSER_TITLE, "common", "themes-title");
 const CLOSE_BUTTON_MARGIN_RIGHT: f32 = 6.;
 const TITLE_FONT_SIZE: f32 = 16.;
 const TITLE_MARGIN: f32 = 12.;
@@ -638,7 +637,7 @@ impl ThemeChooser {
                     Align::new(
                         appearance
                             .ui_builder()
-                            .span(THEME_CHOOSER_TITLE.clone())
+                            .span(THEME_CHOOSER_TITLE.get())
                             .with_style(UiComponentStyles {
                                 font_family_id: Some(appearance.ui_font_family()),
                                 font_size: Some(TITLE_FONT_SIZE),
@@ -821,7 +820,6 @@ impl TypedActionView for ThemeChooser {
 
     fn handle_action(&mut self, action: &ThemeChooserAction, ctx: &mut ViewContext<Self>) {
         use ThemeChooserAction::*;
-
         match action {
             Up => self.up(ctx),
             Down => self.down(ctx),

@@ -95,3 +95,7 @@ slash-commands-slash-command-file-not-found = File not found: { $path }
 slash-commands-slash-command-no-conversation-export = No active conversation to export
 
 ## -- Double-prefix aliases --------------------------------------------------
+
+## -- Missing keys added for i18n completeness --
+
+slash-commands-slash-command-desc = Search commands and workflows

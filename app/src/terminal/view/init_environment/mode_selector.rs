@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 
@@ -17,6 +15,7 @@ use warpui::keymap::{FixedBinding, Keystroke};
 use warpui::platform::Cursor;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
+use crate::static_tr;
 
 
 // Figma node 6583:23542
@@ -78,7 +77,6 @@ pub struct EnvironmentSetupModeSelector {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings(vec![
         FixedBinding::new(
             "escape",
@@ -129,12 +127,11 @@ impl EnvironmentSetupModeSelector {
     }
 
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
-        static TERMINAL_CHOOSE_SETUP: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("terminal", "choose-setup-env"));
+        static_tr!(TERMINAL_CHOOSE_SETUP, "terminal", "choose-setup-env");
         let theme = appearance.theme();
 
         let title = Text::new(
-            &*TERMINAL_CHOOSE_SETUP,
+            TERMINAL_CHOOSE_SETUP.get(),
             appearance.ui_font_family(),
             TITLE_FONT_SIZE,
         )

@@ -12,7 +12,6 @@ use warpui::{AppContext, Element, SingletonEntity};
 use super::common::render_scrollable_collapsible_content;
 use super::output::{action_icon, Props};
 use super::WithContentItemSpacing;
-use std::sync::LazyLock;
 use crate::ai::agent::conversation::{
     AIConversation, AIConversationId, ConversationStatus, StatusColorStyle,
 };
@@ -42,8 +41,8 @@ use crate::appearance::Appearance;
 use crate::terminal::view::TerminalAction;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
-
-static GENERATING_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-title"));
+use crate::static_tr;
+static_tr!(GENERATING_TITLE_PLACEHOLDER, "ai_assistant", "ai-generating-title");
 const ORCHESTRATION_COLLAPSED_MAX_HEIGHT: f32 = 200.;
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct OrchestrationParticipant {

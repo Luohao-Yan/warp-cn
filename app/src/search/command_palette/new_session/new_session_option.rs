@@ -7,12 +7,11 @@ use crate::server::telemetry::AddTabWithShellSource;
 use crate::terminal::available_shells::AvailableShell;
 use crate::terminal::view::TerminalAction;
 use crate::WorkspaceAction;
-use std::sync::LazyLock;
-
-static DIR_DOWN: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-down").clone());
-static DIR_RIGHT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-right").clone());
-static DIR_UP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-up").clone());
-static DIR_LEFT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "dir-left").clone());
+use crate::static_tr;
+static_tr!(DIR_DOWN, "search", "dir-down");
+static_tr!(DIR_RIGHT, "search", "dir-right");
+static_tr!(DIR_UP, "search", "dir-up");
+static_tr!(DIR_LEFT, "search", "dir-left");
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct NewSessionOptionId(pub(crate) String);
@@ -37,10 +36,10 @@ impl fmt::Display for Direction {
             f,
             "{}",
             match self {
-                Direction::Down => DIR_DOWN.as_str(),
-                Direction::Right => DIR_RIGHT.as_str(),
-                Direction::Up => DIR_UP.as_str(),
-                Direction::Left => DIR_LEFT.as_str(),
+                Direction::Down => DIR_DOWN.get(),
+                Direction::Right => DIR_RIGHT.get(),
+                Direction::Up => DIR_UP.get(),
+                Direction::Left => DIR_LEFT.get(),
             }
         )
     }

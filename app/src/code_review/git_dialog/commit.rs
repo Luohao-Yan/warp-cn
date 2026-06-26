@@ -3,7 +3,6 @@
 //! `create_pr` per the selected intent.
 
 use std::path::Path;
-use std::sync::LazyLock;
 
 use warp_core::send_telemetry_from_ctx;
 use warp_core::ui::appearance::Appearance;
@@ -31,7 +30,7 @@ use crate::editor::{
 use crate::ui_components::icons::Icon;
 use crate::util::git::{get_file_change_entries, FileChangeEntry, PrInfo};
 use crate::view_components::action_button::{ActionButton, ButtonSize, SecondaryTheme};
-
+use crate::static_tr;
 /// Commit-specific sub-actions, dispatched wrapped in `GitDialogAction::Commit`.
 #[derive(Clone, Debug, PartialEq)]
 pub enum CommitSubAction {
@@ -43,19 +42,13 @@ pub enum CommitSubAction {
 const EDITOR_FONT_SIZE: f32 = 12.;
 const EDITOR_MIN_HEIGHT: f32 = 72.;
 
-static FALLBACK_PLACEHOLDER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("code_editor", "review-type-commit-message"));
-static GENERATING_PLACEHOLDER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("code_editor", "review-generating-commit-message"));
-static LOADING_LABEL: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("code_editor", "review-committing").leak() as &'static str);
+static_tr!(FALLBACK_PLACEHOLDER_TEXT, "code_editor", "review-type-commit-message");
+static_tr!(GENERATING_PLACEHOLDER_TEXT, "code_editor", "review-generating-commit-message");
+static_tr!(LOADING_LABEL, "code_editor", "review-committing");
 
-static CODE_REVIEW_CHANGES: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("code_review", "changes").leak() as &'static str);
-static CODE_REVIEW_INCLUDE_UNSTAGED: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("code_review", "include-unstaged").leak() as &'static str);
-static CODE_REVIEW_COMMIT_MESSAGE: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("code_review", "commit-message").leak() as &'static str);
+static_tr!(CODE_REVIEW_CHANGES, "code_review", "changes");
+static_tr!(CODE_REVIEW_INCLUDE_UNSTAGED, "code_review", "include-unstaged");
+static_tr!(CODE_REVIEW_COMMIT_MESSAGE, "code_review", "commit-message");
 
 pub struct CommitState {
     pub(super) intent: CommitChainMode,
@@ -88,18 +81,20 @@ pub(super) fn new_state(
     // whether or not the branch already has an upstream -- but the label
     // and icon flip to communicate the user-visible difference.
     let (push_label, push_icon) = if has_upstream {
-        (crate::tr!("code_editor", "review-commit-and-push").leak() as &'static str, Icon::ArrowUp)
+        static_tr!(PUSH_LABEL, "code_editor", "review-commit-and-push");
+        (PUSH_LABEL.get(), Icon::ArrowUp)
     } else {
-        (crate::tr!("code_editor", "review-commit-and-publish").leak() as &'static str, Icon::UploadCloud)
+        static_tr!(PUBLISH_LABEL, "code_editor", "review-commit-and-publish");
+        (PUBLISH_LABEL.get(), Icon::UploadCloud)
     };
     // If AI autogen is on, the dialog opens with "Generating…" and a
     // background request fills the editor when it resolves. Otherwise, we
     // land on the manual-type prompt immediately.
     let ai_autogen_enabled = should_send_git_ops_ai_request(ctx);
     let initial_placeholder = if ai_autogen_enabled {
-        GENERATING_PLACEHOLDER_TEXT.clone()
+        GENERATING_PLACEHOLDER_TEXT.get()
     } else {
-        FALLBACK_PLACEHOLDER_TEXT.clone()
+        FALLBACK_PLACEHOLDER_TEXT.get()
     };
     let message_editor = ctx.add_typed_action_view(|ctx| {
         let appearance = Appearance::as_ref(ctx);
@@ -127,8 +122,8 @@ pub(super) fn new_state(
     });
 
     let commit_button = ctx.add_typed_action_view(|_ctx| {
-        static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-commit").leak() as &'static str);
-        ActionButton::new(*LABEL, SecondaryTheme)
+        static_tr!(COMMIT_LABEL, "code_editor", "review-commit");
+        ActionButton::new(COMMIT_LABEL.get().to_owned(), SecondaryTheme)
             .with_size(ButtonSize::XSmall)
             .with_height(32.)
             .with_icon(Icon::GitCommit)
@@ -152,8 +147,8 @@ pub(super) fn new_state(
 
     let commit_and_create_pr_button = if allow_create_pr {
         Some(ctx.add_typed_action_view(|_ctx| {
-            static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-commit-and-create-pr").leak() as &'static str);
-            ActionButton::new(*LABEL, SecondaryTheme)
+            static_tr!(CREATE_PR_LABEL, "code_editor", "review-commit-and-create-pr");
+            ActionButton::new(CREATE_PR_LABEL.get().to_owned(), SecondaryTheme)
                 .with_size(ButtonSize::XSmall)
                 .with_height(32.)
                 .with_icon(Icon::Github)
@@ -262,7 +257,7 @@ pub(super) fn apply_generated_commit_message(
             editor_handle.update(ctx, |editor, ctx| {
                 // Swap "Generating…" for the manual-type prompt so it
                 // shows if the user later clears the generated draft.
-                editor.set_placeholder_text(&*FALLBACK_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(FALLBACK_PLACEHOLDER_TEXT.get(), ctx);
                 // User input wins -- don't clobber their text.
                 if !user_typed {
                     editor.system_reset_buffer_text(generated.trim(), ctx);
@@ -274,7 +269,7 @@ pub(super) fn apply_generated_commit_message(
         Err(err) => {
             log::warn!("Failed to autogenerate commit message: {err}");
             editor_handle.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(&*FALLBACK_PLACEHOLDER_TEXT, ctx);
+                editor.set_placeholder_text(FALLBACK_PLACEHOLDER_TEXT.get(), ctx);
             });
             me.refresh_confirm_enabled(ctx);
             ctx.notify();
@@ -383,7 +378,7 @@ pub(super) fn start_confirm(me: &mut GitDialog, ctx: &mut ViewContext<GitDialog>
     // user has it enabled (ignored for commit-only / commit-and-push).
     let autogenerate_pr_content = should_send_git_ops_ai_request(ctx);
 
-    me.set_loading(*LOADING_LABEL, ctx);
+    me.set_loading(LOADING_LABEL.get(), ctx);
 
     // Lock the commit message editor while the async op is in flight.
     message_editor.update(ctx, |editor, ctx| {
@@ -548,7 +543,7 @@ fn render_changes_section(state: &CommitState, appearance: &Appearance) -> Box<d
     let sub_color = theme.sub_text_color(theme.surface_1()).into_solid();
 
     let changes_label = Text::new(
-        *CODE_REVIEW_CHANGES,
+        CODE_REVIEW_CHANGES.get(),
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -556,7 +551,7 @@ fn render_changes_section(state: &CommitState, appearance: &Appearance) -> Box<d
     .finish();
 
     let include_label = Text::new(
-        *CODE_REVIEW_INCLUDE_UNSTAGED,
+        CODE_REVIEW_INCLUDE_UNSTAGED.get(),
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -610,7 +605,7 @@ fn render_message_editor(
     app: &AppContext,
 ) -> Box<dyn Element> {
     let label = Text::new(
-        *CODE_REVIEW_COMMIT_MESSAGE,
+        CODE_REVIEW_COMMIT_MESSAGE.get(),
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

@@ -427,6 +427,7 @@ ai-assistant-ai-interact-with-running-commands = Interact with running commands
 ai-assistant-ai-computer-use = Computer use
 ai-assistant-ai-ask-questions = Ask questions
 ai-assistant-ai-call-mcp-servers = Call MCP servers
+ai-assistant-ai-run-orchestrated-agents = Run orchestrated agents
 ai-assistant-ai-workspace-override-tooltip = This option is enforced by your organization's settings and cannot be customized.
 ai-assistant-ai-directory-allowlist = Directory allowlist
 ai-assistant-ai-directory-allowlist-desc = Give the agent file access to certain directories.

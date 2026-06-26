@@ -18,10 +18,9 @@ use crate::themes::theme_creator_body::{
 };
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
+use crate::static_tr;
 
-use std::sync::LazyLock;
-
-static THEME_CREATOR_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "create-theme-from-image"));
+static_tr!(THEME_CREATOR_MODAL_HEADER, "settings", "create-theme-from-image");
 
 pub struct ThemeCreatorModal {
     theme_creator_modal: ViewHandle<Modal<ThemeCreatorBody>>,
@@ -40,7 +39,6 @@ pub enum ThemeCreatorModalEvent {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         ThemeCreatorModalAction::Cancel,
@@ -61,7 +59,7 @@ impl ThemeCreatorModal {
 
         let theme_creator_modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(
-                Some(THEME_CREATOR_MODAL_HEADER.clone()),
+                Some(THEME_CREATOR_MODAL_HEADER.get().to_owned()),
                 theme_creator_body,
                 ctx,
             )

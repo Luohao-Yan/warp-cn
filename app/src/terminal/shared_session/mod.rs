@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use byte_unit::Byte;
 use instant::Duration;
 use serde::{Deserialize, Serialize};
@@ -15,6 +14,7 @@ use super::{GridType, TerminalModel};
 use crate::channel::{Channel, ChannelState};
 use crate::editor::{InteractionState, ReplicaId};
 use crate::features::FeatureFlag;
+use crate::static_tr;
 
 pub mod ai_agent;
 pub mod manager;
@@ -36,7 +36,7 @@ pub mod viewer;
 pub use tests::MAX_BYTES_SHAREABLE;
 
 /// The toast copy when copying a shared session link.
-pub static COPY_LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sharing-link-copied"));
+static_tr!(pub COPY_LINK_TEXT, "terminal", "sharing-link-copied");
 
 /// Throttle period for selection updates. We throttle instead of debounce because we want
 /// to send selections even when it updates fast, so it appears live.
@@ -290,7 +290,6 @@ pub fn max_session_size(ctx: &AppContext) -> Byte {
     use warpui::SingletonEntity;
 
     use crate::workspaces::user_workspaces::UserWorkspaces;
-
     UserWorkspaces::as_ref(ctx)
         .current_team()
         .and_then(|team| team.billing_metadata.tier.session_sharing_policy)

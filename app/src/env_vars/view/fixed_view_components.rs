@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::Vector2F;
 use warp_core::features::FeatureFlag;
@@ -19,17 +17,17 @@ use crate::ui_components::breadcrumb::BreadcrumbState;
 use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon;
 use crate::{AppContext, Appearance, SingletonEntity};
-
+use crate::static_tr;
 const VARIABLE_DIVIDER_HEIGHT: f32 = 2.;
 const SECTION_FONT_SIZE: f32 = 16.;
 const BUTTON_HEIGHT: f32 = 32.;
 
-static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "save-label"));
-static VARIABLES_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "variables-label"));
-static TRASH_BANNER_DELETED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "trash-banner-deleted"));
-static TRASH_BANNER_MOVED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "trash-banner-moved"));
-static RESTORE_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "restore-tooltip"));
-static LOAD_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "load-label"));
+static_tr!(SAVE_BUTTON_TEXT, "common", "save-label");
+static_tr!(VARIABLES_LABEL_TEXT, "env_vars", "variables-label");
+static_tr!(TRASH_BANNER_DELETED_TEXT, "env_vars", "trash-banner-deleted");
+static_tr!(TRASH_BANNER_MOVED_TEXT, "env_vars", "trash-banner-moved");
+static_tr!(RESTORE_TOOLTIP_TEXT, "env_vars", "restore-tooltip");
+static_tr!(LOAD_BUTTON_TEXT, "env_vars", "load-label");
 
 /// This file contains components that fixed in the view,
 /// i.e. the trash banner, breadcrumbs, and variables section header
@@ -63,9 +61,9 @@ impl EnvVarCollectionView {
         let mut stack = Stack::new();
 
         let text = if deleted {
-            TRASH_BANNER_DELETED_TEXT.as_str()
+            TRASH_BANNER_DELETED_TEXT.get()
         } else {
-            TRASH_BANNER_MOVED_TEXT.as_str()
+            TRASH_BANNER_MOVED_TEXT.get()
         };
         stack.add_child(
             Align::new(
@@ -120,7 +118,7 @@ impl EnvVarCollectionView {
                             .with_tooltip(move || {
                                 ui_builder
                                     .tool_tip(
-                                        RESTORE_TOOLTIP_TEXT.clone(),
+                                        RESTORE_TOOLTIP_TEXT.get().to_owned(),
                                     )
                                     .build()
                                     .finish()
@@ -168,7 +166,7 @@ impl EnvVarCollectionView {
                 2.,
                 appearance
                     .ui_builder()
-                    .span(VARIABLES_LABEL_TEXT.clone())
+                    .span(VARIABLES_LABEL_TEXT.get())
                     .with_style(UiComponentStyles {
                         font_size: Some(SECTION_FONT_SIZE),
                         ..Default::default()
@@ -247,7 +245,7 @@ impl EnvVarCollectionView {
             .with_text_and_icon_label(
                 TextAndIcon::new(
                     TextAndIconAlignment::TextFirst,
-                    LOAD_BUTTON_TEXT.clone(),
+                    LOAD_BUTTON_TEXT.get(),
                     Icon::TerminalInput.to_warpui_icon(appearance.theme().active_ui_text_color()),
                     MainAxisSize::Min,
                     MainAxisAlignment::SpaceBetween,
@@ -300,7 +298,7 @@ impl EnvVarCollectionView {
                 font_size: Some(14.),
                 ..Default::default()
             })
-            .with_centered_text_label(SAVE_BUTTON_TEXT.clone());
+            .with_centered_text_label(SAVE_BUTTON_TEXT.get().to_owned());
 
         if is_save_disabled {
             button = button.disabled();

@@ -11,7 +11,6 @@ use warpui::elements::{
 };
 use warpui::{SingletonEntity, ViewContext};
 
-use std::sync::LazyLock;
 
 use crate::code_review::git_dialog::{
     render_branch_section, render_file_changes_box, should_send_git_ops_ai_request, show_toast,
@@ -24,8 +23,8 @@ use crate::ui_components::icons::Icon;
 use crate::util::git::{FileChangeEntry, PrInfo};
 use crate::view_components::{DismissibleToast, ToastLink};
 use crate::workspace::ToastStack;
-
-static CODE_REVIEW_PR_CHANGES: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_review", "changes").leak() as &'static str);
+use crate::static_tr;
+static_tr!(CODE_REVIEW_PR_CHANGES, "code_review", "changes");
 
 /// PR-mode sub-actions, dispatched wrapped in `GitDialogAction::Pr`.
 #[derive(Clone, Debug, PartialEq)]
@@ -42,8 +41,8 @@ pub struct PrState {
 }
 
 pub(super) fn confirm_label_for() -> &'static str {
-    static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-create-pull-request").leak());
-    *LABEL
+    static_tr!(PR_CONFIRM_LABEL, "code_editor", "review-create-pull-request");
+    PR_CONFIRM_LABEL.get()
 }
 
 pub(super) fn confirm_icon_for() -> Icon {
@@ -202,7 +201,7 @@ fn render_changes_section(state: &PrState, appearance: &Appearance) -> Box<dyn E
     let main_color = theme.main_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        *CODE_REVIEW_PR_CHANGES,
+        CODE_REVIEW_PR_CHANGES.get(),
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use serde::{Deserialize, Serialize};
 use settings::Setting as _;
 use warpui::{AppContext, SingletonEntity};
@@ -9,7 +7,7 @@ use crate::features::FeatureFlag;
 use crate::settings::AISettings;
 use crate::ui_components::icons::Icon;
 use crate::workspace::tab_settings::TabSettings;
-
+use crate::static_tr;
 /// A configurable item in the vertical tabs header toolbar.
 ///
 /// Each variant represents a panel toggle button that can be placed on either
@@ -35,20 +33,20 @@ pub enum HeaderToolbarItemKind {
     NotificationsMailbox,
 }
 
-static TOOLBAR_TABS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-tabs-panel").clone());
-static TOOLBAR_TOOLS_PANEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-tools-panel").clone());
-static TOOLBAR_AGENT_MANAGEMENT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-agent-management").clone());
-static TOOLBAR_CODE_REVIEW: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-code-review").clone());
-static TOOLBAR_NOTIFICATIONS: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-notifications").clone());
+static_tr!(TOOLBAR_TABS_PANEL, "workspace", "toolbar-tabs-panel");
+static_tr!(TOOLBAR_TOOLS_PANEL, "workspace", "toolbar-tools-panel");
+static_tr!(TOOLBAR_AGENT_MANAGEMENT, "workspace", "toolbar-agent-management");
+static_tr!(TOOLBAR_CODE_REVIEW, "workspace", "toolbar-code-review");
+static_tr!(TOOLBAR_NOTIFICATIONS, "workspace", "toolbar-notifications");
 
 impl HeaderToolbarItemKind {
     pub fn display_label(&self) -> &str {
         match self {
-            Self::TabsPanel => &TOOLBAR_TABS_PANEL,
-            Self::ToolsPanel => &TOOLBAR_TOOLS_PANEL,
-            Self::AgentManagement => &TOOLBAR_AGENT_MANAGEMENT,
-            Self::CodeReview => &TOOLBAR_CODE_REVIEW,
-            Self::NotificationsMailbox => &TOOLBAR_NOTIFICATIONS,
+            Self::TabsPanel => TOOLBAR_TABS_PANEL.get(),
+            Self::ToolsPanel => TOOLBAR_TOOLS_PANEL.get(),
+            Self::AgentManagement => TOOLBAR_AGENT_MANAGEMENT.get(),
+            Self::CodeReview => TOOLBAR_CODE_REVIEW.get(),
+            Self::NotificationsMailbox => TOOLBAR_NOTIFICATIONS.get(),
         }
     }
 

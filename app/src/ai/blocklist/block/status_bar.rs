@@ -806,7 +806,7 @@ impl BlocklistAIStatusBar {
         );
         let default_warping_text = fallback_warping_text
             .as_deref()
-            .unwrap_or(LOAD_OUTPUT_MESSAGE.as_str())
+            .unwrap_or(LOAD_OUTPUT_MESSAGE.get())
             .to_owned();
         let secondary_element = if fallback_warping_text.is_some() {
             Some(render_fallback_explanation(model.as_ref(), app))
@@ -1192,7 +1192,7 @@ impl View for BlocklistAIStatusBar {
                     WarpingIndicatorProps {
                         icon: Some(icons::gray_clock_icon(appearance).finish()),
                         warping_indicator_text: MaybeShimmeringText::Static(
-                            WAITING_FOR_USER_INPUT_MESSAGE.clone().into(),
+                            WAITING_FOR_USER_INPUT_MESSAGE.get().into(),
                         ),
                         non_shimmering_text: None,
                         non_shimmering_suffix: None,

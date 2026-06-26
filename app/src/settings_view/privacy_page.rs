@@ -1,7 +1,6 @@
 use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
-use std::sync::LazyLock;
 use std::time::Duration;
 
 use pathfinder_geometry::vector::vec2f;
@@ -58,89 +57,45 @@ use crate::workspaces::workspace::{
     AdminEnablementSetting, CustomerType, UgcCollectionEnablementSetting,
 };
 use crate::{report_if_error, send_telemetry_from_ctx};
-
+use crate::static_tr;
 const FONT_SIZE: f32 = 12.;
 
-static SAFE_MODE_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "secret-redaction"));
-static SAFE_MODE_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "secret-redaction-description")
-});
+static_tr!(SAFE_MODE_TITLE, "settings", "secret-redaction");
+static_tr!(SAFE_MODE_DESCRIPTION, "settings", "secret-redaction-description");
 
-static USER_SECRET_REGEX_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "custom-secret-redaction"));
-static USER_SECRET_REGEX_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "custom-secret-redaction-description")
-});
-static TELEMETRY_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "help-improve-warp"));
-static TELEMETRY_DESCRIPTION_OLD: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "telemetry-description-old")
-});
-static TELEMETRY_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "telemetry-description")
-});
-static TELEMETRY_FREE_TIER_NOTE: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "telemetry-free-tier-note")
-});
-static DATA_MANAGEMENT_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "manage-your-data"));
-static DATA_MANAGEMENT_DESCRIPTION: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "manage-your-data-description")
-});
-static DATA_MANAGEMENT_LINK_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "visit-data-management-page"));
-static PRIVACY_POLICY_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "privacy-policy"));
-static PRIVACY_POLICY_LINK_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "read-privacy-policy"));
-static SETTINGS_PERSONAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "personal"));
-static SETTINGS_ENTERPRISE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "enterprise"));
-static SETTINGS_ENTERPRISE_CANNOT_MODIFY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "enterprise-cannot-modify"));
-static SETTINGS_NO_ENTERPRISE_REGEXES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "no-enterprise-regexes"));
-static SETTINGS_RECOMMENDED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "recommended"));
-static SETTINGS_ADD_ALL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "add-all"));
-static SETTINGS_ADD_REGEX: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "add-regex-btn"));
-static SETTINGS_ENABLED_BY_ORG: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "enabled-by-org"));
-static SETTINGS_SECRET_VISUAL_REDACTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "secret-visual-redaction-mode"));
-static SETTINGS_SECRET_VISUAL_REDACTION_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "secret-visual-redaction-description")
-});
-static SETTINGS_MANAGED_BY_ORG: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "managed-by-org"));
-static SETTINGS_SEND_CRASH_REPORTS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "send-crash-reports"));
-static SETTINGS_CRASH_REPORTS_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "crash-reports-description")
-});
-static SETTINGS_CLOUD_CONVERSATIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "store-ai-conversations-cloud"));
-static SETTINGS_CLOUD_CONVERSATIONS_ON_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "cloud-conversations-on-description")
-});
-static SETTINGS_CLOUD_CONVERSATIONS_OFF_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "cloud-conversations-off-description")
-});
-static SETTINGS_NETWORK_LOG_CONSOLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "network-log-console"));
-static SETTINGS_NETWORK_LOG_DESC: LazyLock<String> = LazyLock::new(|| {
-    crate::tr!("settings", "network-log-description")
-});
-static SETTINGS_VIEW_NETWORK_LOG: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "view-network-logging"));
-static SETTINGS_READ_MORE_DATA: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "read-more-data-usage"));
-static SETTINGS_ZDR: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "zdr"));
+static_tr!(USER_SECRET_REGEX_TITLE, "settings", "custom-secret-redaction");
+static_tr!(USER_SECRET_REGEX_DESCRIPTION, "settings", "custom-secret-redaction-description");
+static_tr!(TELEMETRY_TITLE, "settings", "help-improve-warp");
+static_tr!(TELEMETRY_DESCRIPTION_OLD, "settings", "telemetry-description-old");
+static_tr!(TELEMETRY_DESCRIPTION, "settings", "telemetry-description");
+static_tr!(TELEMETRY_FREE_TIER_NOTE, "settings", "telemetry-free-tier-note");
+static_tr!(DATA_MANAGEMENT_TITLE, "settings", "manage-your-data");
+static_tr!(DATA_MANAGEMENT_DESCRIPTION, "settings", "manage-your-data-description");
+static_tr!(DATA_MANAGEMENT_LINK_TEXT, "settings", "visit-data-management-page");
+static_tr!(PRIVACY_POLICY_TITLE, "settings", "privacy-policy");
+static_tr!(PRIVACY_POLICY_LINK_TEXT, "settings", "read-privacy-policy");
+static_tr!(SETTINGS_PERSONAL, "settings", "personal");
+static_tr!(SETTINGS_ENTERPRISE, "settings", "enterprise");
+static_tr!(SETTINGS_ENTERPRISE_CANNOT_MODIFY, "settings", "enterprise-cannot-modify");
+static_tr!(SETTINGS_NO_ENTERPRISE_REGEXES, "settings", "no-enterprise-regexes");
+static_tr!(SETTINGS_RECOMMENDED, "settings", "recommended");
+static_tr!(SETTINGS_ADD_ALL, "settings", "add-all");
+static_tr!(SETTINGS_ADD_REGEX, "settings", "add-regex-btn");
+static_tr!(SETTINGS_ENABLED_BY_ORG, "settings", "enabled-by-org");
+static_tr!(SETTINGS_SECRET_VISUAL_REDACTION, "settings", "secret-visual-redaction-mode");
+static_tr!(SETTINGS_SECRET_VISUAL_REDACTION_DESC, "settings", "secret-visual-redaction-description");
+static_tr!(SETTINGS_MANAGED_BY_ORG, "settings", "managed-by-org");
+static_tr!(SETTINGS_SEND_CRASH_REPORTS, "settings", "send-crash-reports");
+static_tr!(SETTINGS_CRASH_REPORTS_DESC, "settings", "crash-reports-description");
+static_tr!(SETTINGS_CLOUD_CONVERSATIONS, "settings", "store-ai-conversations-cloud");
+static_tr!(SETTINGS_CLOUD_CONVERSATIONS_ON_DESC, "settings", "cloud-conversations-on-description");
+static_tr!(SETTINGS_CLOUD_CONVERSATIONS_OFF_DESC, "settings", "cloud-conversations-off-description");
+static_tr!(SETTINGS_NETWORK_LOG_CONSOLE, "settings", "network-log-console");
+static_tr!(SETTINGS_NETWORK_LOG_DESC, "settings", "network-log-description");
+static_tr!(SETTINGS_VIEW_NETWORK_LOG, "settings", "view-network-logging");
+static_tr!(SETTINGS_READ_MORE_DATA, "settings", "read-more-data-usage");
+static_tr!(SETTINGS_ZDR, "settings", "zdr");
+static_tr!(PRIVACY_PAGE_TITLE, "settings", "privacy");
 
 
 const TELEMETRY_DOCS_URL: &str =
@@ -288,7 +243,7 @@ impl PrivacyPageView {
         }
         widgets.push(Box::new(DataManagementWidget::default()));
         widgets.push(Box::new(PrivacyPolicyWidget::default()));
-        PageType::new_uncategorized(widgets, Some(crate::tr!("settings", "privacy").leak()))
+        PageType::new_uncategorized(widgets, Some(PRIVACY_PAGE_TITLE.get()))
     }
 
     fn update_button_states(
@@ -812,7 +767,7 @@ impl SecretRedactionWidget {
             .count();
 
         let personal_tab = self.render_tab(
-            SETTINGS_PERSONAL.clone(),
+            SETTINGS_PERSONAL.get().to_owned(),
             personal_count,
             SecretRedactionTab::Personal,
             active_tab == SecretRedactionTab::Personal,
@@ -823,7 +778,7 @@ impl SecretRedactionWidget {
         let is_enterprise_tab_active = active_tab == SecretRedactionTab::Enterprise;
 
         let enterprise_tab = self.render_tab(
-            SETTINGS_ENTERPRISE.clone(),
+            SETTINGS_ENTERPRISE.get().to_owned(),
             enterprise_count,
             SecretRedactionTab::Enterprise,
             is_enterprise_tab_active,
@@ -839,7 +794,7 @@ impl SecretRedactionWidget {
         if is_enterprise_tab_active {
             row.add_child(Shrinkable::new(1., Empty::new().finish()).finish());
             row.add_child(self.render_info(
-                SETTINGS_ENTERPRISE_CANNOT_MODIFY.clone(),
+                SETTINGS_ENTERPRISE_CANNOT_MODIFY.get().to_owned(),
                 appearance,
             ));
         }
@@ -958,7 +913,7 @@ impl SecretRedactionWidget {
 
         if enterprise_regex_list.is_empty() {
             return ui_builder
-                .paragraph(SETTINGS_NO_ENTERPRISE_REGEXES.clone())
+                .paragraph(SETTINGS_NO_ENTERPRISE_REGEXES.get())
                 .with_style(UiComponentStyles {
                     font_color: Some(description_text_color),
                     ..Default::default()
@@ -1058,7 +1013,7 @@ impl SecretRedactionWidget {
                         .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
                         .with_cross_axis_alignment(CrossAxisAlignment::Center)
                         .with_child(
-                            self.render_section_title(SETTINGS_RECOMMENDED.clone(), appearance),
+                            self.render_section_title(SETTINGS_RECOMMENDED.get().to_owned(), appearance),
                         )
                         .with_child(
                             Container::new(
@@ -1068,7 +1023,7 @@ impl SecretRedactionWidget {
                                         self.add_all_button_mouse_state.clone(),
                                     )
                                     .with_text_and_icon_label(Self::add_button(
-                                        SETTINGS_ADD_ALL.clone(), appearance,
+                                        SETTINGS_ADD_ALL.get(), appearance,
                                     ))
                                     .with_style(Self::add_button_style())
                                     .build()
@@ -1226,7 +1181,7 @@ impl SettingsWidget for SecretRedactionWidget {
                 .with_child(
                     Shrinkable::new(
                         1.0,
-                        render_sub_header(appearance, &*SAFE_MODE_TITLE, Some(local_only_icon_state)),
+                        render_sub_header(appearance, SAFE_MODE_TITLE.get(), Some(local_only_icon_state)),
                     )
                     .finish(),
                 )
@@ -1234,7 +1189,7 @@ impl SettingsWidget for SecretRedactionWidget {
                     Container::new({
                         if is_enterprise_enabled {
                             self.render_info(
-                                SETTINGS_ENABLED_BY_ORG.clone(),
+                                SETTINGS_ENABLED_BY_ORG.get().to_owned(),
                                 appearance,
                             )
                         } else {
@@ -1261,7 +1216,7 @@ impl SettingsWidget for SecretRedactionWidget {
             .with_child(secret_redaction_title_row)
             .with_child(
                 ui_builder
-                    .paragraph(SAFE_MODE_DESCRIPTION.clone())
+                    .paragraph(SAFE_MODE_DESCRIPTION.get())
                     .with_style(UiComponentStyles {
                         font_color: Some(description_text_color),
                         font_size: Some(FONT_SIZE + 1.), // One size up from current 12px to 13px
@@ -1287,7 +1242,7 @@ impl SettingsWidget for SecretRedactionWidget {
 
             // Create the label with local-only icon if needed
             let label_with_icon = super::settings_page::render_dropdown_item_label(
-                SETTINGS_SECRET_VISUAL_REDACTION.clone(),
+                SETTINGS_SECRET_VISUAL_REDACTION.get().to_owned(),
                 None,
                 local_only_icon_state,
                 None,
@@ -1301,7 +1256,7 @@ impl SettingsWidget for SecretRedactionWidget {
                     Container::new(
                         ui_builder
                             .paragraph(
-                                SETTINGS_SECRET_VISUAL_REDACTION_DESC.clone(),
+                                SETTINGS_SECRET_VISUAL_REDACTION_DESC.get(),
                             )
                             .with_style(UiComponentStyles {
                                 font_color: Some(description_text_color),
@@ -1350,11 +1305,11 @@ impl SettingsWidget for SecretRedactionWidget {
                             1.,
                             Flex::column()
                                 .with_child(self.render_section_title(
-                                    USER_SECRET_REGEX_TITLE.clone(),
+                                    USER_SECRET_REGEX_TITLE.get().to_owned(),
                                     appearance,
                                 ))
                                 .with_child(self.render_description(
-                                    USER_SECRET_REGEX_DESCRIPTION.clone(),
+                                    USER_SECRET_REGEX_DESCRIPTION.get().to_owned(),
                                     appearance,
                                     if privacy_settings.user_secret_regex_list.iter().count() > 0 {
                                         10.
@@ -1372,7 +1327,7 @@ impl SettingsWidget for SecretRedactionWidget {
                                 ButtonVariant::Secondary,
                                 self.add_regex_button_mouse_state.clone(),
                             )
-                            .with_text_and_icon_label(Self::add_button(SETTINGS_ADD_REGEX.clone(), appearance))
+                            .with_text_and_icon_label(Self::add_button(SETTINGS_ADD_REGEX.get(), appearance))
                             .with_style(Self::add_button_style())
                             .build()
                             .on_click(move |ctx, _, _| {
@@ -1437,7 +1392,7 @@ impl AppAnalyticsWidget {
             let background_color = appearance.theme().accent();
 
             let badge = Container::new(
-                Text::new_inline(SETTINGS_ZDR.clone(), appearance.ui_font_family(), CONTENT_FONT_SIZE - 2.)
+                Text::new_inline(SETTINGS_ZDR.get(), appearance.ui_font_family(), CONTENT_FONT_SIZE - 2.)
                     .with_color(theme.active_ui_text_color().into())
                     .finish(),
             )
@@ -1506,9 +1461,9 @@ impl SettingsWidget for AppAnalyticsWidget {
             .is_some_and(|w| w.billing_metadata.customer_type == CustomerType::Enterprise);
         // Keep the old description for enterprise users because we do not collect block input/output for them.
         let description = if is_enterprise {
-            &*TELEMETRY_DESCRIPTION_OLD
+            TELEMETRY_DESCRIPTION_OLD.get()
         } else {
-            &*TELEMETRY_DESCRIPTION
+            TELEMETRY_DESCRIPTION.get()
         };
 
         let org_setting = UserWorkspaces::handle(app)
@@ -1527,7 +1482,7 @@ impl SettingsWidget for AppAnalyticsWidget {
             Flex::row()
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_child(render_body_item_label::<PrivacyPageAction>(
-                    TELEMETRY_TITLE.clone().into(),
+                    TELEMETRY_TITLE.get().into(),
                     None,
                     None,
                     LocalOnlyIconState::Hidden,
@@ -1538,7 +1493,7 @@ impl SettingsWidget for AppAnalyticsWidget {
                 .finish()
         } else {
             render_body_item_label::<PrivacyPageAction>(
-                TELEMETRY_TITLE.clone(),
+                TELEMETRY_TITLE.get().to_owned(),
                 None,
                 None,
                 LocalOnlyIconState::Hidden,
@@ -1560,7 +1515,7 @@ impl SettingsWidget for AppAnalyticsWidget {
         } else {
             switch
                 .with_tooltip(TooltipConfig {
-                    text: SETTINGS_MANAGED_BY_ORG.clone(),
+                    text: SETTINGS_MANAGED_BY_ORG.get().to_owned(),
                     styles: ui_builder.default_tool_tip_styles(),
                 })
                 .disable()
@@ -1597,7 +1552,7 @@ impl SettingsWidget for AppAnalyticsWidget {
             Align::new(
                 ui_builder
                     .link(
-                        SETTINGS_READ_MORE_DATA.clone().into(),
+                        SETTINGS_READ_MORE_DATA.get().into(),
                         Some(TELEMETRY_DOCS_URL.into()),
                         None,
                         self.docs_link_mouse_state.clone(),
@@ -1647,7 +1602,7 @@ impl SettingsWidget for CrashReportsWidget {
         let privacy_settings = PrivacySettings::as_ref(app);
         Flex::column()
             .with_child(render_body_item::<PrivacyPageAction>(
-                SETTINGS_SEND_CRASH_REPORTS.clone().into(),
+                SETTINGS_SEND_CRASH_REPORTS.get().into(),
                 None,
                 // Crash report state is always synced to cloud, so no need to show local only icon.
                 LocalOnlyIconState::Hidden,
@@ -1666,7 +1621,7 @@ impl SettingsWidget for CrashReportsWidget {
             .with_child(
                 ui_builder
                     .paragraph(
-                        SETTINGS_CRASH_REPORTS_DESC.clone(),
+                        SETTINGS_CRASH_REPORTS_DESC.get(),
                     )
                     .with_style(UiComponentStyles {
                         font_color: Some(
@@ -1750,7 +1705,7 @@ impl SettingsWidget for CloudConversationStorageWidget {
         } else {
             switch
                 .with_tooltip(TooltipConfig {
-                    text: SETTINGS_MANAGED_BY_ORG.clone(),
+                    text: SETTINGS_MANAGED_BY_ORG.get().to_owned(),
                     styles: ui_builder.default_tool_tip_styles(),
                 })
                 .disable()
@@ -1760,7 +1715,7 @@ impl SettingsWidget for CloudConversationStorageWidget {
 
         Flex::column()
             .with_child(render_body_item::<PrivacyPageAction>(
-                SETTINGS_CLOUD_CONVERSATIONS.clone().into(),
+                SETTINGS_CLOUD_CONVERSATIONS.get().into(),
                 None,
                 LocalOnlyIconState::Hidden,
                 toggle_state,
@@ -1772,9 +1727,9 @@ impl SettingsWidget for CloudConversationStorageWidget {
                 ui_builder
                     .paragraph(
                         if is_checked {
-                            SETTINGS_CLOUD_CONVERSATIONS_ON_DESC.clone()
+                            SETTINGS_CLOUD_CONVERSATIONS_ON_DESC.get()
                         } else {
-                            SETTINGS_CLOUD_CONVERSATIONS_OFF_DESC.clone()
+                            SETTINGS_CLOUD_CONVERSATIONS_OFF_DESC.get()
                         },
                     )
                     .with_style(UiComponentStyles {
@@ -1819,7 +1774,7 @@ impl SettingsWidget for NetworkLogWidget {
         let ui_builder = appearance.ui_builder();
         Flex::column()
             .with_child(render_body_item::<PrivacyPageAction>(
-                SETTINGS_NETWORK_LOG_CONSOLE.clone().into(),
+                SETTINGS_NETWORK_LOG_CONSOLE.get().into(),
                 None,
                 // Not rendering a setting, so no need to show local only icon state.
                 LocalOnlyIconState::Hidden,
@@ -1831,7 +1786,7 @@ impl SettingsWidget for NetworkLogWidget {
             .with_child(
                 ui_builder
                     .paragraph(
-                        SETTINGS_NETWORK_LOG_DESC.clone(),
+                        SETTINGS_NETWORK_LOG_DESC.get(),
                     )
                     .with_style(UiComponentStyles {
                         font_color: Some(
@@ -1854,7 +1809,7 @@ impl SettingsWidget for NetworkLogWidget {
                 Align::new(
                     ui_builder
                         .link(
-                            SETTINGS_VIEW_NETWORK_LOG.clone(),
+                            SETTINGS_VIEW_NETWORK_LOG.get().to_owned(),
                             None,
                             Some(Box::new(|ctx| {
                                 ctx.dispatch_typed_action(PrivacyPageAction::LaunchNetworkLogging);
@@ -1894,7 +1849,7 @@ impl SettingsWidget for DataManagementWidget {
         let ui_builder = appearance.ui_builder();
         Flex::column()
             .with_child(render_body_item::<PrivacyPageAction>(
-                DATA_MANAGEMENT_TITLE.clone().into(),
+                DATA_MANAGEMENT_TITLE.get().into(),
                 None,
                 // Not rendering a setting, so no need to show local only icon state.
                 LocalOnlyIconState::Hidden,
@@ -1905,7 +1860,7 @@ impl SettingsWidget for DataManagementWidget {
             ))
             .with_child(
                 ui_builder
-                    .paragraph(DATA_MANAGEMENT_DESCRIPTION.clone())
+                    .paragraph(DATA_MANAGEMENT_DESCRIPTION.get())
                     .with_style(UiComponentStyles {
                         font_color: Some(
                             appearance
@@ -1928,7 +1883,7 @@ impl SettingsWidget for DataManagementWidget {
                     appearance
                         .ui_builder()
                         .link(
-                            DATA_MANAGEMENT_LINK_TEXT.clone().into(),
+                            DATA_MANAGEMENT_LINK_TEXT.get().into(),
                             None,
                             Some(Box::new(|ctx| {
                                 ctx.dispatch_typed_action(
@@ -1969,7 +1924,7 @@ impl SettingsWidget for PrivacyPolicyWidget {
     ) -> Box<dyn Element> {
         Flex::column()
             .with_child(render_body_item::<PrivacyPageAction>(
-                PRIVACY_POLICY_TITLE.clone().into(),
+                PRIVACY_POLICY_TITLE.get().into(),
                 None,
                 // Not rendering a setting, so no need to show local only icon state.
                 LocalOnlyIconState::Hidden,
@@ -1983,7 +1938,7 @@ impl SettingsWidget for PrivacyPolicyWidget {
                     appearance
                         .ui_builder()
                         .link(
-                            PRIVACY_POLICY_LINK_TEXT.clone().into(),
+                            PRIVACY_POLICY_LINK_TEXT.get().into(),
                             Some(PRIVACY_POLICY_URL.into()),
                             None,
                             self.link_mouse_state.clone(),

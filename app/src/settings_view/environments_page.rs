@@ -79,14 +79,12 @@ use {
     warp_graphql::queries::user_github_info::UserGithubInfoResult,
 };
 
-use std::sync::LazyLock;
-
-static PAGE_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "environments-title"));
-static PAGE_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "environments-description"));
-static PERSONAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "personal"));
-static ENVIRONMENTS_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "environments-title"));
-static SHARE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "share-tooltip"));
-static EDIT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "edit-tooltip"));
+static_tr!(PAGE_TITLE, "settings", "environments-title");
+static_tr!(PAGE_DESCRIPTION, "settings", "environments-description");
+static_tr!(PERSONAL_LABEL, "settings", "personal");
+static_tr!(ENVIRONMENTS_HEADER, "settings", "environments-title");
+static_tr!(SHARE_TOOLTIP, "settings", "share-tooltip");
+static_tr!(EDIT_TOOLTIP, "settings", "edit-tooltip");
 
 const CARD_BORDER_WIDTH: f32 = 1.;
 const CARD_PADDING: f32 = 16.;
@@ -1071,7 +1069,7 @@ impl EnvironmentsPageWidget {
 
         // Page title + description
         let title = Text::new(
-            PAGE_TITLE.as_str(),
+            PAGE_TITLE.get(),
             appearance.ui_font_family(),
             appearance.ui_font_size() * 1.5,
         )
@@ -1081,7 +1079,7 @@ impl EnvironmentsPageWidget {
 
         let description = appearance
             .ui_builder()
-            .paragraph(PAGE_DESCRIPTION.as_str())
+            .paragraph(PAGE_DESCRIPTION.get())
             .with_style(UiComponentStyles {
                 font_color: Some(appearance.theme().nonactive_ui_text_color().into()),
                 font_size: Some(CONTENT_FONT_SIZE),
@@ -1311,7 +1309,7 @@ impl EnvironmentsPageWidget {
         const HEADER_TO_LIST_SPACING: f32 = 8.;
 
         let header = match list_scope {
-            EnvironmentListScope::Personal => Self::render_overline_header(PERSONAL_LABEL.as_str(), appearance),
+            EnvironmentListScope::Personal => Self::render_overline_header(PERSONAL_LABEL.get(), appearance),
             EnvironmentListScope::Team => {
                 let shared_by_text = UserWorkspaces::as_ref(app)
                     .current_team()
@@ -1935,7 +1933,7 @@ impl EnvironmentsPageWidget {
                     )
                     .with_tooltip(move || {
                         share_ui_builder
-                            .tool_tip(SHARE_TOOLTIP.clone())
+                            .tool_tip(SHARE_TOOLTIP.get().to_owned())
                             .build()
                             .finish()
                     })
@@ -1971,7 +1969,7 @@ impl EnvironmentsPageWidget {
             if is_card_hovered {
                 edit_button = edit_button.with_tooltip(move || {
                     edit_ui_builder
-                        .tool_tip(EDIT_TOOLTIP.clone())
+                        .tool_tip(EDIT_TOOLTIP.get().to_owned())
                         .build()
                         .finish()
                 });
@@ -2041,7 +2039,7 @@ impl SettingsPageMeta for EnvironmentsPageView {
 use crate::pane_group::focus_state::PaneFocusHandle;
 use crate::pane_group::pane::view::{HeaderContent, HeaderRenderContext};
 use crate::pane_group::pane::BackingView;
-
+use crate::static_tr;
 impl BackingView for EnvironmentsPageView {
     type PaneHeaderOverflowMenuAction = EnvironmentsPageAction;
     type CustomAction = ();
@@ -2070,7 +2068,7 @@ impl BackingView for EnvironmentsPageView {
         _ctx: &HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> HeaderContent {
-        HeaderContent::simple(ENVIRONMENTS_HEADER.as_str())
+        HeaderContent::simple(ENVIRONMENTS_HEADER.get())
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, _ctx: &mut ViewContext<Self>) {

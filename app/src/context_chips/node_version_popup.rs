@@ -1,5 +1,4 @@
 use pathfinder_color::ColorU;
-use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::Fill;
 use warpui::elements::{
@@ -18,6 +17,7 @@ use crate::menu::{self, Event as MenuEvent, Menu, MenuItemFields};
 use crate::terminal::model_events::{ModelEvent, ModelEventDispatcher};
 use crate::ui_components::{blended_colors, icons};
 use crate::view_components::action_button::{ActionButton, SecondaryTheme};
+use crate::static_tr;
 
 const MENU_WIDTH: f32 = 300.0;
 const MENU_MAX_HEIGHT: f32 = 260.0;
@@ -48,9 +48,9 @@ pub enum NodeVersionPopupEvent {
     SelectVersion { version: String },
 }
 
-static INSTALL_NVM_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "install-nvm"));
-static NVM_INSTALL_NODE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "nvm-install-node"));
-static INSTALLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "installed-label"));
+static_tr!(INSTALL_NVM_LABEL, "common", "install-nvm");
+static_tr!(NVM_INSTALL_NODE_LABEL, "common", "nvm-install-node");
+static_tr!(INSTALLED_LABEL, "common", "installed-label");
 
 struct Styles {
     ui_font_family: FamilyId,
@@ -78,14 +78,14 @@ impl NodeVersionPopupView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let install_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(&*INSTALL_NVM_LABEL, SecondaryTheme)
+            ActionButton::new(INSTALL_NVM_LABEL.get(), SecondaryTheme)
                 .with_icon(icons::Icon::Terminal)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NodeVersionPopupAction::InstallNvm);
                 })
         });
         let install_latest_node_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(&*NVM_INSTALL_NODE_LABEL, SecondaryTheme)
+            ActionButton::new(NVM_INSTALL_NODE_LABEL.get(), SecondaryTheme)
                 .with_icon(icons::Icon::Terminal)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NodeVersionPopupAction::InstallLatestNodeVersion);
@@ -287,7 +287,7 @@ impl NodeVersionPopupView {
 
         col.add_child(
             Container::new(
-                Text::new(&*INSTALLED_LABEL, styles.ui_font_family, styles.detail_font_size)
+                Text::new(INSTALLED_LABEL.get(), styles.ui_font_family, styles.detail_font_size)
                     .with_style(Properties::default())
                     .with_color(styles.secondary_text_color)
                     .finish(),
@@ -521,7 +521,6 @@ fn detect_nvm_installed() -> bool {
 fn list_nvm_versions() -> Vec<String> {
     use std::env;
     use std::path::Path;
-
     let mut out: Vec<String> = Vec::new();
 
     #[cfg(windows)]

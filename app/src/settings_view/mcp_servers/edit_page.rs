@@ -1,9 +1,7 @@
 use std::collections::HashMap;
 use std::path::Path;
 #[cfg(feature = "local_fs")]
-use std::sync::{Arc, LazyLock};
-
-#[cfg(feature = "local_fs")]
+use std::sync::Arc;#[cfg(feature = "local_fs")]
 #[cfg(not(target_family = "wasm"))]
 use diesel::SqliteConnection;
 #[cfg(feature = "local_fs")]
@@ -54,7 +52,7 @@ use crate::view_components::action_button::{
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
 use crate::GlobalResourceHandlesProvider;
-
+use crate::static_tr;
 const DEFAULT_JSON_TEXT: &str = r#"{
     "": {
         "serverUrl": ""
@@ -62,7 +60,7 @@ const DEFAULT_JSON_TEXT: &str = r#"{
 }
 "#;
 
-static SETTINGS_JSON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "json-label"));
+static_tr!(SETTINGS_JSON_LABEL, "settings", "json-label");
 
 #[derive(Debug, Clone)]
 pub enum MCPServersEditPageViewEvent {
@@ -137,15 +135,15 @@ impl MCPServersEditPageView {
         });
 
         let reinstall_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "edit-variables"));
-            ActionButton::new(&*LABEL, PrimaryTheme).on_click(|ctx| {
+            static_tr!(LABEL, "settings", "edit-variables");
+            ActionButton::new(LABEL.get(), PrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(MCPServersEditPageViewAction::Reinstall);
             })
         });
 
         let delete_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-mcp"));
-            ActionButton::new(&*LABEL, DangerSecondaryTheme)
+            static_tr!(LABEL, "settings", "delete-mcp");
+            ActionButton::new(LABEL.get(), DangerSecondaryTheme)
                 .with_icon(Icon::Trash)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(MCPServersEditPageViewAction::Delete);
@@ -153,8 +151,8 @@ impl MCPServersEditPageView {
         });
 
         let unshare_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "remove-from-team"));
-            ActionButton::new(&*LABEL, DangerNakedTheme)
+            static_tr!(LABEL, "settings", "remove-from-team");
+            ActionButton::new(LABEL.get(), DangerNakedTheme)
                 .with_icon(Icon::MinusCircle)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(MCPServersEditPageViewAction::Unshare);
@@ -186,8 +184,8 @@ impl MCPServersEditPageView {
         });
 
         let editing_disabled_banner = ctx.add_typed_action_view(|_| {
-            static MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "mcp-editing-disabled"));
-            Banner::new_without_close(BannerTextContent::plain_text(MSG.clone()))
+            static_tr!(MSG, "settings", "mcp-editing-disabled");
+            Banner::new_without_close(BannerTextContent::plain_text(MSG.get()))
                 .with_icon(Icon::Warning)
         });
 
@@ -483,7 +481,7 @@ impl MCPServersEditPageView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
                 .with_child(
                     Container::new(
-                        Container::new(Text::new(&*SETTINGS_JSON_LABEL, ui_font_family, font_size).finish())
+                        Container::new(Text::new(SETTINGS_JSON_LABEL.get(), ui_font_family, font_size).finish())
                             .with_vertical_padding(10.)
                             .with_horizontal_padding(16.)
                             .finish(),

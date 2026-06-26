@@ -1,5 +1,4 @@
 #[cfg_attr(target_family = "wasm", allow(unused_imports))]
-use std::sync::LazyLock;
 use std::{
     path::{Path, PathBuf},
     time::Duration,
@@ -42,7 +41,7 @@ use crate::view_components::action_button::{
 };
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
-
+use crate::static_tr;
 const DIALOG_WIDTH: f32 = 600.;
 const AVAILABLE_LIST_MAX_HEIGHT: f32 = 260.;
 
@@ -94,8 +93,8 @@ pub struct AgentAssistedEnvironmentModal {
 impl AgentAssistedEnvironmentModal {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let add_repo_button = ctx.add_typed_action_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "add-repo"));
-            ActionButton::new(&*LABEL, SecondaryTheme)
+            static_tr!(LABEL, "settings", "add-repo");
+            ActionButton::new(LABEL.get(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(
@@ -111,8 +110,8 @@ impl AgentAssistedEnvironmentModal {
         });
 
         let create_button = ctx.add_typed_action_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "create-environment"));
-            ActionButton::new(&*LABEL, PrimaryTheme).on_click(|ctx| {
+            static_tr!(LABEL, "settings", "create-environment");
+            ActionButton::new(LABEL.get(), PrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(AgentAssistedEnvironmentModalAction::Confirm);
             })
         });
@@ -589,10 +588,10 @@ impl AgentAssistedEnvironmentModal {
 
         ctx.open_file_picker(
             move |paths_result, ctx| {
-                static NO_DIR_SELECTED: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "no-directory-selected"));
+                static_tr!(NO_DIR_SELECTED, "settings", "no-directory-selected");
                 let result = paths_result.and_then(|paths| {
                     paths.into_iter().next().map(PathBuf::from).ok_or_else(|| {
-                        FilePickerError::DialogFailed(NO_DIR_SELECTED.clone())
+                        FilePickerError::DialogFailed(NO_DIR_SELECTED.get().to_owned())
                     })
                 });
 

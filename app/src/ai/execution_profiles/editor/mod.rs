@@ -1,6 +1,4 @@
 use std::path::{Path, PathBuf};
-use std::sync::LazyLock;
-
 use ai::api_keys::{ApiKeyManager, ApiKeyManagerEvent};
 use itertools::Itertools;
 use regex::Regex;
@@ -49,6 +47,7 @@ use crate::view_components::{
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspacesEvent;
 use crate::{Appearance, TemplatableMCPServerManager, UserWorkspaces};
+use crate::static_tr;
 
 const MODEL_MENU_WIDTH: f32 = 250.;
 
@@ -72,11 +71,12 @@ fn render_upgrade_footer(
     .with_height(16.)
     .finish();
 
-    static FULL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-upgrade-footer"));
+    static_tr!(FULL_LABEL, "ai_assistant", "ai-upgrade-footer");
     let upgrade_link = crate::tr!("ai_assistant", "ai-upgrade-link");
-    let upgrade_start = FULL_LABEL.len() - upgrade_link.len();
+    let full_text = FULL_LABEL.get();
+    let upgrade_start = full_text.len() - upgrade_link.len();
     let info_text = Text::new(
-        &*FULL_LABEL,
+        full_text,
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -85,15 +85,15 @@ fn render_upgrade_footer(
         Highlight::new()
             .with_properties(Properties::default())
             .with_foreground_color(internal_colors::accent_fg(theme).into()),
-        (upgrade_start..FULL_LABEL.len()).collect(),
+        (upgrade_start..full_text.len()).collect(),
     )
     .with_hoverable_char_range(
-        upgrade_start..FULL_LABEL.len(),
+        upgrade_start..full_text.len(),
         upgrade_mouse_state,
         Some(Cursor::PointingHand),
         |_is_hovered, _ctx, _app| {},
     )
-    .with_clickable_char_range(upgrade_start..FULL_LABEL.len(), move |_modifiers, ctx, _app| {
+    .with_clickable_char_range(upgrade_start..full_text.len(), move |_modifiers, ctx, _app| {
         ctx.dispatch_typed_action(WorkspaceAction::ShowUpgrade);
     })
     .finish();
@@ -140,8 +140,8 @@ struct TooltipMouseStateHandles {
 pub mod manager;
 pub use manager::*;
 
-pub static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-profile-editor"));
-static SELECT_MCP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-select-mcp-servers"));
+static_tr!(pub HEADER_TEXT, "ai_assistant", "ai-profile-editor");
+static_tr!(SELECT_MCP_LABEL, "ai_assistant", "ai-select-mcp-servers");
 
 #[derive(Debug, Clone)]
 pub enum ExecutionProfileEditorViewEvent {
@@ -281,7 +281,7 @@ pub struct ExecutionProfileEditorView {
 
 impl ExecutionProfileEditorView {
     pub fn new(profile_id: ClientProfileId, ctx: &mut ViewContext<Self>) -> Self {
-        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(&*HEADER_TEXT));
+        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(HEADER_TEXT.get()));
 
         let agent_decides_label = crate::tr!("ai_assistant", "ai-agent-decides");
         let always_allow_label = crate::tr!("ai_assistant", "ai-always-allow");
@@ -513,13 +513,13 @@ impl ExecutionProfileEditorView {
 
         let mcp_allowlist_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = FilterableDropdown::new(ctx);
-            dropdown.set_menu_header_to_static(&*SELECT_MCP_LABEL);
+            dropdown.set_menu_header_to_static(SELECT_MCP_LABEL.get());
             dropdown
         });
 
         let mcp_denylist_dropdown = ctx.add_typed_action_view(|ctx| {
             let mut dropdown = FilterableDropdown::new(ctx);
-            dropdown.set_menu_header_to_static(&*SELECT_MCP_LABEL);
+            dropdown.set_menu_header_to_static(SELECT_MCP_LABEL.get());
             dropdown
         });
 
@@ -645,9 +645,9 @@ impl ExecutionProfileEditorView {
 
         Self::update_profile_name_editor(&profile_name_editor, &profile_data, ctx);
 
-        static DELETE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-delete-profile"));
+        static_tr!(DELETE_LABEL, "ai_assistant", "ai-delete-profile");
         let delete_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new(&*DELETE_LABEL, DangerSecondaryTheme)
+            ActionButton::new(DELETE_LABEL.get(), DangerSecondaryTheme)
                 .with_icon(Icon::Trash)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ExecutionProfileEditorViewAction::DeleteProfile);
@@ -1519,7 +1519,6 @@ impl View for ExecutionProfileEditorView {
     fn render(&self, app: &AppContext) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
         use ui_helpers::*;
-
         let permissions = BlocklistAIPermissions::as_ref(app);
         let profile_data = permissions.permissions_profile_for_id(app, self.profile_id);
 
@@ -1794,7 +1793,7 @@ impl BackingView for ExecutionProfileEditorView {
         _app: &AppContext,
     ) -> view::HeaderContent {
         view::HeaderContent::Standard(view::StandardHeader {
-            title: HEADER_TEXT.clone().into(),
+            title: HEADER_TEXT.get().into(),
             title_secondary: None,
             title_style: None,
             title_clip_config: warpui::text_layout::ClipConfig::start(),

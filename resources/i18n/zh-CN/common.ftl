@@ -79,6 +79,8 @@ common-status-failed = 失败
 common-status-claimed = 已认领
 common-status-queued = 排队中
 common-status-pending = 待处理
+common-status-reconnecting = 重新连接中
+common-status-waiting = 等待中
 
 ## -- 占位文本 -------------------------------------------------------------
 
@@ -163,7 +165,7 @@ common-menu-help = 帮助
 
 common-menu-new-window = 新建窗口
 common-menu-new-terminal-tab = 新建终端标签页
-common-menu-new-agent-tab = 新建代理标签页
+common-menu-new-agent-tab = 新建智能体标签页
 common-menu-preferences = 偏好设置
 common-menu-privacy-policy = 隐私政策...
 common-menu-debug = 调试
@@ -331,3 +333,7 @@ common-theme-dark = 深色
 common-new-tab-label = 新标签页
 common-uri-new-tab-created = 新标签页已创建
 common-uri-new-tab-description = 前往 Warp 查看您的新标签页。
+
+## -- 快捷键描述（调试） -----------------------------------------------------
+
+common-debug-enter-onboarding-state = [调试] 进入引导状态

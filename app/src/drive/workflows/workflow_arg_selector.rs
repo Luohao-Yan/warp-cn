@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 use std::rc::Rc;
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use strum::IntoEnumIterator;
 use strum_macros::{EnumIter, IntoStaticStr};
@@ -34,8 +32,8 @@ use crate::server::ids::SyncId;
 use crate::ui_components::buttons::{highlight, icon_button};
 use crate::ui_components::icons::{self, Icon};
 use crate::workflows::workflow::ArgumentType;
-
-static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "default-value-placeholder"));
+use crate::static_tr;
+static_tr!(ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT, "workflows", "default-value-placeholder");
 const ARGUMENT_EDITOR_FONT_SIZE: f32 = 14.;
 const DROPDOWN_PADDING: f32 = 8.;
 const DROPDOWN_BORDER_RADIUS: f32 = 6.;

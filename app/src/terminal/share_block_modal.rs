@@ -1,7 +1,5 @@
 use std::ops::RangeInclusive;
-use std::sync::{Arc, LazyLock};
-
-use anyhow::Result;
+use std::sync::Arc;use anyhow::Result;
 use parking_lot::FairMutex;
 use pathfinder_geometry::rect::RectF;
 use pathfinder_geometry::vector::{vec2f, Vector2F};
@@ -59,6 +57,7 @@ use crate::util::bindings::CustomAction;
 use crate::view_components::ToastFlavor;
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 
 
 
@@ -68,7 +67,7 @@ const INNER_MARGIN: f32 = 20.;
 const MODAL_WIDTH: f32 = 862.;
 const BLOCK_TITLE_INPUT_WIDTH: f32 = 800.;
 
-static BLOCK_TITLE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-title-optional"));
+static_tr!(BLOCK_TITLE_PLACEHOLDER, "terminal", "share-title-optional");
 
 // TODO(vorporeal): This is 12 in the specs, but I think our 14pt font is a bit
 // taller than 14pt?
@@ -90,8 +89,8 @@ fn output_option() -> (String, DisplaySetting) {
 }
 
 /// This default title is helpful for screen readers.
-static DEFAULT_EMBED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-embed-label"));
-static BLOCK_CREATION_FAILED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-error"));
+static_tr!(DEFAULT_EMBED_TITLE, "terminal", "share-embed-label");
+static_tr!(BLOCK_CREATION_FAILED_MESSAGE, "terminal", "share-error");
 
 #[derive(PartialEq)]
 enum ShareRequestState {
@@ -203,7 +202,7 @@ impl ShareBlockModal {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(BLOCK_TITLE_PLACEHOLDER.as_str(), ctx);
+            editor.set_placeholder_text(BLOCK_TITLE_PLACEHOLDER.get(), ctx);
             editor
         });
         ctx.subscribe_to_view(&block_title_editor, move |me, _, event, ctx| {
@@ -1100,7 +1099,6 @@ impl TypedActionView for ShareBlockModal {
 
     fn handle_action(&mut self, action: &ShareBlockModalAction, ctx: &mut ViewContext<Self>) {
         use ShareBlockModalAction::*;
-
         match action {
             Close => self.close(ctx),
             GenerateSharedBlock(share_type) => self.save_block(*share_type, ctx),

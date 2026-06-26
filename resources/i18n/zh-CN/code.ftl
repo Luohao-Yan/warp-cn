@@ -39,13 +39,13 @@ code-start-all-stopped-servers = 启动所有已停止的服务器
 code-stop-all-servers = 停止所有服务器
 code-restart-all-servers = 重启所有服务器
 code-enable-ai-tab-config-skill = 启用 AI 标签页配置技能
-code-open-agent-input-tab-config-skill = 打开代理输入标签页配置技能
+code-open-agent-input-tab-config-skill = 打开智能体输入标签页配置技能
 code-language-server-unavailable-codebase = 此代码库的语言服务器不可用
 code-language-support-not-enabled = 语言支持未启用
 code-language-support-unavailable = 语言支持不可用
 code-language-support-unavailable-file-type = 此文件类型的语言支持不可用
 
-code-open-agent-input-tab-config = 打开代理输入，使用 /update-tab-config 技能
+code-open-agent-input-tab-config = 打开智能体输入，使用 /update-tab-config 技能
 code-enable-ai-tab-config = 启用 AI 以使用 /update-tab-config 技能
 code-lang-support-unavailable-file = 此文件类型的语言支持不可用
 code-lang-support-not-enabled = { $name } 的语言支持当前未启用
@@ -201,13 +201,21 @@ code-go-to-line = 跳转到行
 
 ## -- 代码视图附加绑定 --
 
-code-save-file-as = 另存文件
-code-close-all-tabs = 关闭所有标签页
-code-close-saved-tabs = 关闭已保存的标签页
 code-file-saved-toast = 文件已保存。
 
 code-loading = 加载中...
 code-cycle-suggestions = 切换建议
+
+## -- 查找栏无障碍字符串 ------------------------------------------------
+
+code-find-bar-description = 查找栏
+code-find-field-focused = 查找字段已聚焦
+code-find-no-results = 无结果
+code-find-use-enter-navigate = 按 Enter 键导航结果
+code-find-replace-field-focused = 替换字段已聚焦
+code-find-replace-continue = 按 Enter 键继续替换
+code-find-replace-last = 这是最后一个匹配项
+code-preserve-case-tooltip = 保留大小写
 
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
@@ -221,4 +229,10 @@ code-server-error = { $name }：错误
 code-server-error-detail = { $name }：{ $error }
 
 ## -- 查找引用和页脚字符串的双前缀别名 ---------------------------------------------
+
+## -- 为 i18n 完整性补充的缺失键 --
+
+code-find-bar-with-matches = { $current } / { $total }
+code-find-replace-success = 已替换 { $count } 处
+code-find-result-of = /
 

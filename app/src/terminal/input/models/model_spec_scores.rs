@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::theme::color::internal_colors;
@@ -16,22 +14,17 @@ use warpui::{AppContext, Element, SingletonEntity as _};
 use crate::ai::llms::LLMSpec;
 use crate::appearance::Appearance;
 use crate::terminal::input::inline_menu::styles as inline_styles;
-
+use crate::static_tr;
 const CORNER_RADIUS: f32 = 4.0;
 const ROW_SPACING: f32 = 12.0;
 
-pub static MODEL_SPECS_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "model-specs-title"));
-pub static MODEL_SPECS_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "model-specs-description"));
+static_tr!(pub MODEL_SPECS_TITLE, "terminal", "model-specs-title");
+static_tr!(pub MODEL_SPECS_DESCRIPTION, "terminal", "model-specs-description");
 
-pub static REASONING_LEVEL_TITLE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "reasoning-level-title"));
-pub static REASONING_LEVEL_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "reasoning-level-description"));
+static_tr!(pub REASONING_LEVEL_TITLE, "terminal", "reasoning-level-title");
+static_tr!(pub REASONING_LEVEL_DESCRIPTION, "terminal", "reasoning-level-description");
 
-static TERMINAL_BILLED_TO_API: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "billed-to-api"));
+static_tr!(TERMINAL_BILLED_TO_API, "terminal", "billed-to-api");
 
 pub enum CostRow {
     Bar {

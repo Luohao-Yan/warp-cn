@@ -1,7 +1,5 @@
 use std::fs;
 use std::io::{self, IsTerminal as _, Read};
-use std::sync::LazyLock;
-
 use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
 use comfy_table::Cell;
@@ -27,9 +25,9 @@ use crate::auth::UserUid;
 use crate::cloud_object::Owner;
 use crate::server::ids::ServerId;
 use crate::util::time_format::format_approx_duration_from_now_utc;
-
-static AI_AWS_REGION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-aws-region-label"));
-static AI_AWS_ACCESS_KEY_ID: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-aws-access-key-id-label"));
+use crate::static_tr;
+static_tr!(AI_AWS_REGION, "ai_assistant", "ai-aws-region-label");
+static_tr!(AI_AWS_ACCESS_KEY_ID, "ai_assistant", "ai-aws-access-key-id-label");
 
 #[derive(Serialize)]
 struct SecretInfo {
@@ -706,7 +704,7 @@ fn read_bedrock_secret_value(
                     "Bedrock secrets require --bedrock-api-key and --region in non-interactive mode"
                 ));
             }
-            let result = inquire::Text::new(&*AI_AWS_REGION).prompt();
+            let result = inquire::Text::new(AI_AWS_REGION.get()).prompt();
             match result {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
@@ -744,7 +742,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match inquire::Text::new(&*AI_AWS_ACCESS_KEY_ID).prompt() {
+            match inquire::Text::new(AI_AWS_ACCESS_KEY_ID.get()).prompt() {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
                 Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
@@ -810,7 +808,7 @@ fn read_bedrock_access_key_secret_value(
             if !io::stdin().is_terminal() {
                 return Err(anyhow::anyhow!(NON_INTERACTIVE_REQUIRED_MSG));
             }
-            match inquire::Text::new(&*AI_AWS_REGION).prompt() {
+            match inquire::Text::new(AI_AWS_REGION.get()).prompt() {
                 Ok(value) if !value.is_empty() => value,
                 Ok(_) => return Ok(None),
                 Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {

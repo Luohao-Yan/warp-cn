@@ -37,7 +37,6 @@ use std::path::{Path, PathBuf};
 #[cfg(target_os = "macos")]
 use std::process;
 use std::sync::{mpsc, Arc, Mutex};
-use std::sync::LazyLock;
 use std::time::Duration;
 #[cfg(target_os = "macos")]
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -519,6 +518,7 @@ use crate::workspace::view::right_panel::{RightPanelEvent, RightPanelView};
 use crate::workspace::{ForkFromExchange, ForkedConversationDestination};
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::AdminEnablementSetting;
+use crate::static_tr;
 use crate::{
     autoupdate, report_if_error, send_telemetry_from_ctx, settings, AgentNotificationsModel,
     BlocklistAIHistoryModel, GlobalResourceHandles, TelemetryEvent,
@@ -556,7 +556,7 @@ const TAB_BAR_PILL_WIDTH: f32 = 100.;
 const PILL_FONT_SIZE: f32 = 12.;
 // We use the word "Warp" in the Update Ready button to make it obvious that the terminal is Warp.
 // This can lead to free advertising when users screen-share Warp when an update is available.
-static UPDATE_READY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "update-warp"));
+static_tr!(UPDATE_READY_TEXT, "workspace", "update-warp");
 
 const TAB_BAR_OVERFLOW_MENU_WIDTH: f32 = 300.;
 
@@ -583,9 +583,9 @@ const ELLIPSE_SVG_PATH: &str = "bundled/svg/ellipse.svg";
 
 const AI_ASSISTANT_BUTTON_ID: &str = "workspace_view:ai_assistant_button";
 
-static VERSION_DEPRECATION_BANNER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "app-outdated"));
+static_tr!(VERSION_DEPRECATION_BANNER_TEXT, "workspace", "app-outdated");
 
-static VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "features-may-not-work"));
+static_tr!(VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT, "workspace", "features-may-not-work");
 
 const ASK_AI_ASSISTANT_KEYBINDING_NAME: &str = "workspace:toggle_ai_assistant";
 const TOGGLE_RESOURCE_CENTER_KEYBINDING_NAME: &str = "workspace:toggle_resource_center";
@@ -605,7 +605,7 @@ const NEW_SESSION_SIDECAR_SEARCH_BOX_HORIZONTAL_PADDING: f32 = 12.;
 const NEW_SESSION_SIDECAR_SEARCH_BOX_VERTICAL_PADDING: f32 = 6.;
 const NEW_SESSION_SIDECAR_FOOTER_HORIZONTAL_PADDING: f32 = 16.;
 const NEW_SESSION_SIDECAR_FOOTER_VERTICAL_PADDING: f32 = 8.;
-static SESSION_CONFIG_TAB_CONFIG_CHIP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "tab-config-chip"));
+static_tr!(SESSION_CONFIG_TAB_CONFIG_CHIP_TEXT, "workspace", "tab-config-chip");
 const SESSION_CONFIG_TAB_CONFIG_CHIP_WIDTH: f32 = 206.;
 const SHOW_SETTINGS_KEYBINDING_NAME: &str = "workspace:show_settings";
 pub const TOGGLE_COMMAND_PALETTE_KEYBINDING_NAME: &str = "workspace:toggle_command_palette";
@@ -668,7 +668,7 @@ const AUTO_CLOUD_HANDOFF_PROMPT: &str =
     "Continue this local Warp Agent task in the cloud from the current conversation state.";
 
 /// The default display name used for the user if they have no associated display name.
-pub static DEFAULT_USER_DISPLAY_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "default-user-display-name"));
+static_tr!(pub DEFAULT_USER_DISPLAY_NAME, "workspace", "default-user-display-name");
 
 lazy_static! {
     static ref OPENING_WARP_DRIVE_ON_START_UP: Arc<Mutex<bool>> = Arc::new(Mutex::new(false));
@@ -2529,7 +2529,7 @@ impl Workspace {
         .finish();
 
         let text = Text::new_inline(
-            SESSION_CONFIG_TAB_CONFIG_CHIP_TEXT.to_string(),
+            SESSION_CONFIG_TAB_CONFIG_CHIP_TEXT.get(),
             appearance.ui_font_family(),
             12.,
         )
@@ -19255,7 +19255,7 @@ impl Workspace {
                 .finish(),
             )
             .with_child(
-                Text::new_inline(&*AI_ASSISTANT_FEATURE_NAME, appearance.ui_font_family(), 14.)
+                Text::new_inline(AI_ASSISTANT_FEATURE_NAME.get(), appearance.ui_font_family(), 14.)
                     .with_style(Properties {
                         weight: warpui::fonts::Weight::Bold,
                         ..Default::default()
@@ -20904,7 +20904,7 @@ impl Workspace {
         let display_name = self
             .auth_state
             .username_for_display()
-            .unwrap_or(DEFAULT_USER_DISPLAY_NAME.to_owned());
+            .unwrap_or(DEFAULT_USER_DISPLAY_NAME.get().to_owned());
 
         let avatar_content = if self.auth_state.is_anonymous_or_logged_out() {
             AvatarContent::Icon(icons::Icon::Gear)
@@ -21186,7 +21186,7 @@ impl Workspace {
         let (icon, action, label) = (
             icons::Icon::AiAssistant,
             WorkspaceAction::ClickedAIAssistantIcon,
-            AI_ASSISTANT_FEATURE_NAME.clone(),
+            AI_ASSISTANT_FEATURE_NAME.get().to_owned(),
         );
 
         Align::new(
@@ -21312,7 +21312,7 @@ impl Workspace {
                     Flex::row()
                         .with_child(
                             Text::new_inline(
-                                &*UPDATE_READY_TEXT,
+                                UPDATE_READY_TEXT.get(),
                                 appearance.ui_font_family(),
                                 PILL_FONT_SIZE,
                             )
@@ -21567,7 +21567,7 @@ impl Workspace {
                 {
                     let description =
                         if is_incoming_version_past_current(new_version.soft_cutoff.as_deref()) {
-                            VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT.to_owned()
+                            VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT.get().to_owned()
                         } else {
                             crate::tr!("workspace", "unable-to-update")
                         };
@@ -21592,7 +21592,7 @@ impl Workspace {
                 {
                     let description =
                         if is_incoming_version_past_current(new_version.soft_cutoff.as_deref()) {
-                            VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT.to_owned()
+                            VERSION_DEPRECATION_WITHOUT_PERMISSIONS_BANNER_TEXT.get().to_owned()
                         } else {
                             crate::tr!("workspace", "unable-to-launch")
                         };
@@ -21619,7 +21619,7 @@ impl Workspace {
                             banner_type: WorkspaceBanner::VersionDeprecated,
                             severity: BannerSeverity::Error,
                             heading: None,
-                            description: VERSION_DEPRECATION_BANNER_TEXT.to_string(),
+                            description: VERSION_DEPRECATION_BANNER_TEXT.get().to_owned(),
                             secondary_button: None,
                             button: Some(WorkspaceBannerButtonDetails {
                                 text: crate::tr!("workspace", "update-now"),
@@ -28286,7 +28286,6 @@ fn render_cross_window_ghost_chip(
     app: &AppContext,
 ) -> Box<dyn Element> {
     use warpui::elements::DropShadow;
-
     let theme = appearance.theme();
 
     // Render the dragged tab using the same code path the source layout

@@ -6,11 +6,9 @@ use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View
 
 use super::style::{self, MODAL_PADDING};
 use crate::appearance::Appearance;
-
-use std::sync::LazyLock;
-
-static SESSION_BUILD_FREE_PLAN_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "shared-session-denied-subheader"));
-static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "view-plans"));
+use crate::static_tr;
+static_tr!(SESSION_BUILD_FREE_PLAN_SUBHEADER, "terminal", "shared-session-denied-subheader");
+static_tr!(VIEW_PLANS_TEXT, "terminal", "view-plans");
 
 pub struct DeniedBody {
     button_mouse_state: MouseStateHandle,
@@ -46,7 +44,7 @@ impl View for DeniedBody {
         let appearance = Appearance::as_ref(app);
 
         let mut col = Flex::column();
-        let subheader = &*SESSION_BUILD_FREE_PLAN_SUBHEADER;
+        let subheader = SESSION_BUILD_FREE_PLAN_SUBHEADER.get();
 
         let text = appearance
             .ui_builder()
@@ -58,7 +56,7 @@ impl View for DeniedBody {
         let button = appearance
             .ui_builder()
             .button(ButtonVariant::Accent, self.button_mouse_state.clone())
-            .with_centered_text_label(VIEW_PLANS_TEXT.clone())
+            .with_centered_text_label(VIEW_PLANS_TEXT.get().to_owned())
             .with_style(style::button_styles())
             .build()
             .with_cursor(Cursor::PointingHand)

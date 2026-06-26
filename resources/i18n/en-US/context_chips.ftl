@@ -40,8 +40,6 @@ context-chips-k8s-prefix = ⎈ { $value }
 
 ## -- Git diff stats display ----------------------------------------------------
 
-context-chips-git-diff-stats = { $files } • +{ $added } -{ $removed }
-
 ## -- Copy menu -----------------------------------------------------------------
 
 context-chips-copy-chip = Copy { $title }

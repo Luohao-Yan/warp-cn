@@ -1,6 +1,4 @@
 //! This module contains common utilities for rendering Blocklist AI UI.
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::appearance::Appearance;
@@ -17,17 +15,16 @@ use warpui::{AppContext, Element, EntityId, EventContext, SingletonEntity};
 
 use crate::themes::theme::{AnsiColorIdentifier, Fill, WarpTheme};
 use crate::ui_components::icons::Icon;
-
+use crate::static_tr;
 const PROVIDER_BUTTON_ICON_SIZE: f32 = 14.;
 const PROVIDER_BUTTON_ICON_TEXT_GAP: f32 = 8.;
 
 /// Text to use as a label throughout the app for user interactions that will attach selected
 /// block(s) or text selections to a new AI query.
-pub static ATTACH_AS_AGENT_MODE_CONTEXT_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-attach-as-agent-context"));
+static_tr!(pub ATTACH_AS_AGENT_MODE_CONTEXT_TEXT, "ai_assistant", "ai-attach-as-agent-context");
 
 /// Label we use for the the command palette action to create a new local Oz agent pane.
-pub static NEW_AGENT_PANE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-new-agent-pane"));
+static_tr!(pub NEW_AGENT_PANE_LABEL, "ai_assistant", "ai-new-agent-pane");
 
 /// Claude/Anthropic brand color (official brand orange #D97757).
 /// Reference: https://github.com/anthropics/skills/blob/main/skills/brand-guidelines/SKILL.md

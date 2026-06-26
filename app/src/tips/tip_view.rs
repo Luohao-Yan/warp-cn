@@ -1,5 +1,4 @@
 use pathfinder_geometry::vector::vec2f;
-use std::sync::LazyLock;
 use warpui::elements::{
     Align, Border, ChildAnchor, ClippedScrollStateHandle, ClippedScrollable, ConstrainedBox,
     Container, CornerRadius, CrossAxisAlignment, DispatchEventResult, Element, EventHandler, Flex,
@@ -21,6 +20,7 @@ use crate::appearance::Appearance;
 use crate::resource_center::{Tip, TipAction, TipsCompleted};
 use crate::themes::theme::{Blend, Fill};
 use crate::util::bindings::trigger_to_keystroke;
+use crate::static_tr;
 
 const CHECK_MARK_WIDTH: f32 = 20.;
 const TIP_VIEW_WIDTH: f32 = 250.;
@@ -32,7 +32,7 @@ const SCROLLABLE_AREA_HEIGHT: f32 = 390.;
 const SKIP_BUTTON_HEIGHT: f32 = 40.;
 const MODAL_WIDTH: f32 = 250.;
 
-static COMPLETE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "complete-label"));
+static_tr!(COMPLETE_LABEL, "common", "complete-label");
 
 #[derive(Clone)]
 struct TipItem {
@@ -94,7 +94,6 @@ pub enum TipsAction {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings(vec![FixedBinding::new(
         "escape",
         TipsAction::Close,
@@ -450,7 +449,7 @@ impl TipsView {
             .finish();
 
         let title = ui_builder
-            .span(&*COMPLETE_LABEL)
+            .span(COMPLETE_LABEL.get())
             .with_style(UiComponentStyles {
                 font_weight: Some(Weight::Bold),
                 // Set to white here as the background has 85% black overlay.

@@ -98,7 +98,7 @@ fn resolve_i18n_path() -> String {
     };
 
     // Resolve relative paths against CWD.
-    if base_path.starts_with('/') {
+    if std::path::Path::new(&base_path).is_absolute() {
         base_path
     } else {
         match std::env::current_dir() {
@@ -155,8 +155,15 @@ pub fn init_from_settings(app: &warpui::AppContext) {
 }
 
 fn detect_system_locale() -> Option<String> {
-    // Check $LANG (macOS/Linux standard).
-    // e.g. "en_US.UTF-8" → "en-US"
+    // Use sys-locale for cross-platform detection (Windows, macOS, Linux).
+    if let Some(locale) = sys_locale::get_locale() {
+        let normalized = locale.replace('_', "-");
+        if !normalized.is_empty() && normalized.len() >= 2 {
+            return Some(normalized);
+        }
+    }
+
+    // Fallback: check $LANG (macOS/Linux).
     if let Ok(lang) = std::env::var("LANG") {
         let normalized = lang
             .split('.')
@@ -165,24 +172,6 @@ fn detect_system_locale() -> Option<String> {
             .replace('_', "-");
         if !normalized.is_empty() && normalized.len() >= 2 {
             return Some(normalized);
-        }
-    }
-
-    // macOS: read AppleLocale from system defaults.
-    #[cfg(target_os = "macos")]
-    {
-        if let Ok(output) = std::process::Command::new("defaults")
-            .args(["read", "-g", "AppleLocale"])
-            .output()
-        {
-            if output.status.success() {
-                let locale = String::from_utf8_lossy(&output.stdout)
-                    .trim()
-                    .to_owned();
-                if !locale.is_empty() {
-                    return Some(locale);
-                }
-            }
         }
     }
 

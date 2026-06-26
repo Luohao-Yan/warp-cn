@@ -1,11 +1,10 @@
 use std::fmt::Display;
 use std::str::FromStr;
-use std::sync::LazyLock;
-
 use serde::{Deserialize, Serialize};
 use uuid::{NonNilUuid, Uuid};
 
 use crate::ai::agent::conversation::{AIConversation, ConversationStatus};
+use crate::static_tr;
 use crate::ai::agent::{
     AIAgentOutputStatus, CancellationReason, FinishedAIAgentOutput, RenderableAIError,
 };
@@ -21,8 +20,8 @@ pub use task::{
     cancel_task_silently, cancel_task_with_toast, AgentConfigSnapshot, AgentSource,
     AmbientAgentLiveSessionState, AmbientAgentTask, AmbientAgentTaskState, TaskStatusMessage,
 };
-pub static OUT_OF_CREDITS_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "out-of-credits-upgrade"));
-pub static SERVER_OVERLOADED_TASK_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "server-overloaded-short"));
+static_tr!(pub OUT_OF_CREDITS_TASK_FAILURE_MESSAGE, "ai", "out-of-credits-upgrade");
+static_tr!(pub SERVER_OVERLOADED_TASK_FAILURE_MESSAGE, "ai", "server-overloaded-short");
 
 #[derive(Debug, thiserror::Error)]
 #[error("Invalid task ID: {0}")]

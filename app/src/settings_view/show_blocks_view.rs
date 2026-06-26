@@ -16,25 +16,17 @@ use crate::{
 use anyhow::Result;
 use chrono::{DateTime, FixedOffset, Local};
 use pathfinder_geometry::vector::vec2f;
-use std::sync::{Arc, LazyLock};
+use std::sync::Arc;
 use warp_core::ui::theme::color::internal_colors;
 
-static SETTINGS_NO_SHARED_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "no-shared-blocks"));
-static SETTINGS_GETTING_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "getting-blocks"));
-static SETTINGS_FAILED_LOAD_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "failed-load-blocks"));
-static SETTINGS_UNSHARE_BLOCK: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "unshare-block"));
-static SETTINGS_UNSHARE_BLOCK_CONFIRMATION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "unshare-block-confirmation"));
-static SETTINGS_LINK_COPIED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "link-copied"));
-static SETTINGS_BLOCK_UNSUCCESS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "block-successfully-unshared"));
-static SETTINGS_BLOCK_UNSHARE_FAILED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "failed-to-unshare-block"));
+static_tr!(SETTINGS_NO_SHARED_BLOCKS, "settings", "no-shared-blocks");
+static_tr!(SETTINGS_GETTING_BLOCKS, "settings", "getting-blocks");
+static_tr!(SETTINGS_FAILED_LOAD_BLOCKS, "settings", "failed-load-blocks");
+static_tr!(SETTINGS_UNSHARE_BLOCK, "settings", "unshare-block");
+static_tr!(SETTINGS_UNSHARE_BLOCK_CONFIRMATION, "settings", "unshare-block-confirmation");
+static_tr!(SETTINGS_LINK_COPIED, "settings", "link-copied");
+static_tr!(SETTINGS_BLOCK_UNSUCCESS, "settings", "block-successfully-unshared");
+static_tr!(SETTINGS_BLOCK_UNSHARE_FAILED, "settings", "failed-to-unshare-block");
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{
@@ -49,14 +41,13 @@ use warpui::{
 };
 use warpui::{color::ColorU, elements::Radius};
 use warpui::{elements::ScrollbarWidth, fonts::Weight};
+use crate::static_tr;
 use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 
 const SCROLLBAR_WIDTH: ScrollbarWidth = ScrollbarWidth::Auto;
 
-static UNSHARE_BLOCK_CONFIRMATION_DIALOG_TEXT: LazyLock<String> =
-    LazyLock::new(|| SETTINGS_UNSHARE_BLOCK_CONFIRMATION.clone());
 
 #[derive(Clone, Debug)]
 struct UserOwnedBlock {
@@ -325,14 +316,14 @@ impl GetBlocksForUserRequestState {
         let ui_builder = appearance.ui_builder();
         match self {
             GetBlocksForUserRequestState::NotStarted => pad(ui_builder
-                .label(&*SETTINGS_NO_SHARED_BLOCKS)
+                .label(SETTINGS_NO_SHARED_BLOCKS.get())
                 .build()
                 .finish()),
             GetBlocksForUserRequestState::InFlight => {
-                pad(ui_builder.label(&*SETTINGS_GETTING_BLOCKS).build().finish())
+                pad(ui_builder.label(SETTINGS_GETTING_BLOCKS.get()).build().finish())
             }
             GetBlocksForUserRequestState::Failed => pad(ui_builder
-                .label(&*SETTINGS_FAILED_LOAD_BLOCKS)
+                .label(SETTINGS_FAILED_LOAD_BLOCKS.get())
                 .build()
                 .finish()),
             GetBlocksForUserRequestState::Done(user_blocks) => {
@@ -385,7 +376,7 @@ impl GetBlocksForUserRequestState {
                     .finish()
                 } else {
                     pad(ui_builder
-                        .label(&*SETTINGS_NO_SHARED_BLOCKS)
+                        .label(SETTINGS_NO_SHARED_BLOCKS.get())
                         .build()
                         .finish())
                 }
@@ -514,7 +505,7 @@ impl ShowBlocksView {
         ctx.clipboard()
             .write(ClipboardContent::plain_text(block_url.to_string()));
         ctx.emit(ShowBlocksEvent::ShowToast {
-            message: SETTINGS_LINK_COPIED.clone(),
+            message: SETTINGS_LINK_COPIED.get().to_owned(),
             flavor: ToastFlavor::Default,
         })
     }
@@ -573,14 +564,14 @@ impl ShowBlocksView {
             match request_result {
                 Ok(_) => {
                     ctx.emit(ShowBlocksEvent::ShowToast {
-                        message: SETTINGS_BLOCK_UNSUCCESS.clone(),
+                        message: SETTINGS_BLOCK_UNSUCCESS.get().to_owned(),
                         flavor: ToastFlavor::Success,
                     });
                     user_block.unshare_request_status = UnshareBlockRequestState::Done;
                 }
                 Err(_) => {
                     ctx.emit(ShowBlocksEvent::ShowToast {
-                        message: SETTINGS_BLOCK_UNSHARE_FAILED.clone(),
+                        message: SETTINGS_BLOCK_UNSHARE_FAILED.get().to_owned(),
                         flavor: ToastFlavor::Error,
                     });
                     user_block.unshare_request_status = UnshareBlockRequestState::Failed;
@@ -680,7 +671,7 @@ impl ShowBlocksWidget {
                     .with_child(
                         Align::new(
                             ui_builder
-                                .label(&*SETTINGS_UNSHARE_BLOCK)
+                                .label(SETTINGS_UNSHARE_BLOCK.get())
                                 .with_style(UiComponentStyles {
                                     font_size: Some(appearance.header_font_size()),
                                     ..Default::default()
@@ -694,7 +685,7 @@ impl ShowBlocksWidget {
                     .with_child(
                         Container::new(
                             ui_builder
-                                .paragraph(&*UNSHARE_BLOCK_CONFIRMATION_DIALOG_TEXT)
+                                .paragraph(SETTINGS_UNSHARE_BLOCK_CONFIRMATION.get())
                                 .with_style(UiComponentStyles {
                                     font_size: Some(appearance.ui_font_size() * 1.16),
                                     ..Default::default()

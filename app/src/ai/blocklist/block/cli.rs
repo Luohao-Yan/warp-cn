@@ -2,7 +2,6 @@ use std::cmp::Ordering;
 use std::path::Path;
 use std::rc::Rc;
 use std::sync::Arc;
-use std::sync::LazyLock;
 use std::time::Duration;
 
 use lazy_static::lazy_static;
@@ -97,6 +96,7 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 use crate::view_components::DismissibleToast;
 use crate::workspace::WorkspaceAction;
 use crate::{send_telemetry_from_ctx, BlocklistAIHistoryModel, ToastStack};
+use crate::static_tr;
 
 const MENU_WIDTH: f32 = 200.0;
 const MAX_HEIGHT: f32 = 320.0;
@@ -129,16 +129,15 @@ lazy_static! {
 const HAS_PENDING_CLI_ACTION_CONTEXT_KEY: &str = "HasPendingCLIAgentAction";
 const HAS_PENDING_NON_TRANSFER_CONTROL_ACTION_CONTEXT_KEY: &str =
     "HasPendingNonTransferControlCLIAgentAction";
-static BLOCKED_ACTION_MESSAGE_FOR_TRANSFER_CONTROL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "blocked-transfer-control"));
-static AI_ALLOW: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-allow-btn"));
-static AI_REFINE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-refine-btn"));
-static AI_TAKE_OVER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-take-over-btn"));
-static AI_TAKE_CONTROL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-take-control-btn"));
+static_tr!(BLOCKED_ACTION_MESSAGE_FOR_TRANSFER_CONTROL, "ai", "blocked-transfer-control");
+static_tr!(AI_ALLOW, "ai_assistant", "ai-allow-btn");
+static_tr!(AI_REFINE, "ai_assistant", "ai-refine-btn");
+static_tr!(AI_TAKE_OVER, "ai_assistant", "ai-take-over-btn");
+static_tr!(AI_TAKE_CONTROL, "ai_assistant", "ai-take-control-btn");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
     use warpui::keymap::FixedBinding;
-
     app.register_fixed_bindings([
         FixedBinding::new(
             ACCEPT_KEYSTROKE.normalized(),
@@ -247,7 +246,7 @@ impl CLISubagentView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let allow_button = CompactibleSplitActionButton::new(
-            (*AI_ALLOW).clone(),
+            AI_ALLOW.get().to_owned(),
             Some(KeystrokeSource::Fixed(ACCEPT_KEYSTROKE.clone())),
             ButtonSize::Small,
             CLISubagentAction::ExecuteBlockedAction,
@@ -259,7 +258,7 @@ impl CLISubagentView {
         );
 
         let reject_button = CompactibleActionButton::new(
-            (*AI_REFINE).clone(),
+            AI_REFINE.get().to_owned(),
             Some(KeystrokeSource::Fixed(REJECT_KEYSTROKE.clone())),
             ButtonSize::Small,
             CLISubagentAction::RejectBlockedAction {
@@ -271,7 +270,7 @@ impl CLISubagentView {
         );
 
         let take_over_button = CompactibleActionButton::new(
-            (*AI_TAKE_OVER).clone(),
+            AI_TAKE_OVER.get().to_owned(),
             Some(KeystrokeSource::Binding(
                 SET_INPUT_MODE_TERMINAL_ACTION_NAME,
             )),
@@ -284,7 +283,7 @@ impl CLISubagentView {
             ctx,
         );
         let transfer_control_button = CompactibleActionButton::new(
-            (*AI_TAKE_CONTROL).clone(),
+            AI_TAKE_CONTROL.get().to_owned(),
             Some(KeystrokeSource::Binding(
                 SET_INPUT_MODE_TERMINAL_ACTION_NAME,
             )),

@@ -53,7 +53,6 @@ pub mod use_agent_footer;
 mod zero_state_block;
 
 use std::any::Any;
-use std::sync::LazyLock;
 use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::hash_map::Entry;
@@ -536,6 +535,7 @@ use crate::workspace::{
 };
 use crate::workspaces::user_workspaces::{UserWorkspaces, UserWorkspacesEvent};
 use crate::workspaces::workspace::CustomerType;
+use crate::static_tr;
 use crate::{
     report_if_error, safe_error, safe_warn, send_telemetry_from_ctx, send_telemetry_on_executor,
     send_telemetry_sync_from_ctx, AIAgentActionResultType, AIRequestUsageModel,
@@ -690,10 +690,10 @@ const MOVE_LINE_END_BINDING_NAME: &str = "editor_view:move_to_line_end";
 
 const DEFAULT_AI_BLOCK_HEIGHT: f32 = 96.;
 
-pub static DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "what-happened-here"));
-static TERMINAL_DID_YOU_INTEND: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "did-you-intend"));
-static TERMINAL_TO_MOVE_CURSOR: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "to-move-cursor"));
-static TERMINAL_SLOW_BOOTSTRAP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "slow-bootstrap-msg"));
+static_tr!(pub DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT, "terminal", "what-happened-here");
+static_tr!(TERMINAL_DID_YOU_INTEND, "terminal", "did-you-intend");
+static_tr!(TERMINAL_TO_MOVE_CURSOR, "terminal", "to-move-cursor");
+static_tr!(TERMINAL_SLOW_BOOTSTRAP, "terminal", "slow-bootstrap-msg");
 
 const WARP_MD_PATH: &str = "WARP.md";
 
@@ -3866,7 +3866,7 @@ impl TerminalView {
         let slow_bootstrap_banner = ctx.add_typed_action_view(|_| {
             Banner::<TerminalAction>::new_with_buttons(
                 BannerTextContent::formatted_text(vec![
-                    FormattedTextFragment::plain_text(TERMINAL_SLOW_BOOTSTRAP.as_str()),
+                    FormattedTextFragment::plain_text(TERMINAL_SLOW_BOOTSTRAP.get()),
                     FormattedTextFragment::hyperlink(crate::tr!("terminal", "more-info-link"), KNOWN_ISSUES_URL),
                 ]),
                 vec![BannerTextButton::new(
@@ -3921,11 +3921,11 @@ impl TerminalView {
         let emacs_bindings_banner = ctx.add_typed_action_view(|_| {
             Banner::new_with_buttons(
                 BannerTextContent::formatted_text(vec![
-                    FormattedTextFragment::plain_text(TERMINAL_DID_YOU_INTEND.as_str()),
+                    FormattedTextFragment::plain_text(TERMINAL_DID_YOU_INTEND.get()),
                     FormattedTextFragment::inline_code("ctrl-a"),
                     FormattedTextFragment::plain_text("/"),
                     FormattedTextFragment::inline_code("ctrl-e"),
-                    FormattedTextFragment::plain_text(TERMINAL_TO_MOVE_CURSOR.as_str()),
+                    FormattedTextFragment::plain_text(TERMINAL_TO_MOVE_CURSOR.get()),
                 ]),
                 // Here, we use DismissalType::Temporary and DismissalType::Permanent variants
                 // as stand-ins for changing bindings vs. leaving them as-is.
@@ -16614,9 +16614,9 @@ impl TerminalView {
                     fields.extend([
                         MenuItem::Separator,
                         MenuItemFields::new(if FeatureFlag::AgentMode.is_enabled() {
-                            ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.clone()
+                            ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.get()
                         } else {
-                            ASK_AI_ASSISTANT_TEXT.clone()
+                            ASK_AI_ASSISTANT_TEXT.get()
                         })
                         .with_on_select_action(TerminalAction::ContextMenu(
                             ContextMenuAction::AskAI(if FeatureFlag::AgentMode.is_enabled() {
@@ -16771,7 +16771,7 @@ impl TerminalView {
                         if self.is_input_box_visible(&model, ctx) {
                             items.extend([
                                 MenuItem::Separator,
-                                MenuItemFields::new(ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.clone())
+                                MenuItemFields::new(ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.get())
                                     .with_on_select_action(TerminalAction::ContextMenu(
                                         ContextMenuAction::AskAI(AskAISource::SelectedBlocks),
                                     ))
@@ -17640,9 +17640,9 @@ impl TerminalView {
                 menu_items.extend([
                     MenuItem::Separator,
                     MenuItemFields::new(if FeatureFlag::AgentMode.is_enabled() {
-                        ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.clone()
+                        ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.get()
                     } else {
-                        ASK_AI_ASSISTANT_TEXT.clone()
+                        ASK_AI_ASSISTANT_TEXT.get()
                     })
                     .with_on_select_action(TerminalAction::ContextMenu(ContextMenuAction::AskAI(
                         AskAISource::SelectedTerminalText,
@@ -19416,11 +19416,11 @@ impl TerminalView {
 
             AskAIType::FromBlock { block_index, .. } => {
                 context_block_indices.insert(*block_index);
-                (None, Some(DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT.clone()))
+                (None, Some(DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT.get().to_owned()))
             }
             AskAIType::FromBlocks { block_indices } => {
                 context_block_indices.extend(block_indices);
-                (None, Some(DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT.clone()))
+                (None, Some(DEFAULT_ASK_AI_AUTOSUGGESTION_TEXT.get().to_owned()))
             }
 
             AskAIType::FromAICommandSearch { query } => {
@@ -25902,15 +25902,15 @@ impl TypedActionView for TerminalView {
             }
             FocusInputAndClearSelection => {
                 Custom(AccessibilityContent::new(
-                    INPUT_A11Y_LABEL.clone(),
+                    INPUT_A11Y_LABEL.get(),
                     // TODO (a11y) use bindings from user settings
-                    INPUT_A11Y_HELPER.clone(),
+                    INPUT_A11Y_HELPER.get(),
                     WarpA11yRole::TextareaRole,
                 ))
             }
             KeyDown(key) => {
                 let label = if key.eq("\x1b") {
-                    INPUT_A11Y_LABEL.clone()
+                    INPUT_A11Y_LABEL.get().to_owned()
                 } else {
                     key.clone()
                 };

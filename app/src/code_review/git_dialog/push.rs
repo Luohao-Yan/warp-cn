@@ -29,8 +29,8 @@ use crate::code_review::telemetry_event::{
 };
 use crate::ui_components::icons::Icon;
 use crate::util::git::Commit;
-
-static CODE_REVIEW_INCLUDED_COMMITS: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_review", "included-commits").leak() as &'static str);
+use crate::static_tr;
+static_tr!(CODE_REVIEW_INCLUDED_COMMITS, "code_review", "included-commits");
 
 /// Push-specific sub-actions, dispatched wrapped in `GitDialogAction::Push`.
 #[derive(Clone, Debug, PartialEq)]
@@ -183,7 +183,7 @@ fn render_commits_section(state: &PushState, appearance: &Appearance) -> Box<dyn
     let sub_color = theme.sub_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        *CODE_REVIEW_INCLUDED_COMMITS,
+        CODE_REVIEW_INCLUDED_COMMITS.get(),
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )

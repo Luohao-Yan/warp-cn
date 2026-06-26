@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use warpui::elements::{
     Align, Border, ChildView, Clipped, Container, CornerRadius, CrossAxisAlignment, Expanded, Flex,
     MouseStateHandle, Padding, ParentElement, Radius, Text,
@@ -13,14 +11,12 @@ use warpui::{
 
 use crate::editor::{EditorView, Event as EditorEvent, SingleLineEditorOptions, TextOptions};
 use crate::Appearance;
-
+use crate::static_tr;
 const MAXIMUM_SPENDING_LIMIT_CENTS: u32 = 999999999;
 
-static OVERAGE_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "50-placeholder"));
+static_tr!(OVERAGE_PLACEHOLDER, "settings", "50-placeholder");
 
-static SETTINGS_OVERAGE_LIMIT_DESC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "overage-limit-desc"));
+static_tr!(SETTINGS_OVERAGE_LIMIT_DESC, "settings", "overage-limit-desc");
 
 pub struct SpendingLimitModal {
     amount_editor: ViewHandle<EditorView>,
@@ -62,7 +58,7 @@ impl SpendingLimitModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text(&*OVERAGE_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(OVERAGE_PLACEHOLDER.get(), ctx);
             editor
         });
         ctx.subscribe_to_view(&amount_editor, |me, _, event, ctx| {
@@ -204,7 +200,7 @@ impl View for SpendingLimitModal {
         let theme = appearance.theme();
 
         let description_text = Text::new(
-            &*SETTINGS_OVERAGE_LIMIT_DESC,
+            SETTINGS_OVERAGE_LIMIT_DESC.get(),
             appearance.ui_font_family(),
             14.,
         )

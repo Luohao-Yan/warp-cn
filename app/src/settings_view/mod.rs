@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::str::FromStr;
-use std::sync::LazyLock;
 use about_page::AboutPageView;
 use ai_page::{AISettingsPageAction, AISettingsPageEvent, AISettingsPageView, AISubpage};
 use appearance_page::{AppearancePageAction, AppearanceSettingsPageView};
@@ -71,10 +70,8 @@ use crate::view_components::ToastFlavor;
 use crate::workspace::WorkspaceAction;
 use crate::{GlobalResourceHandlesProvider, TelemetryEvent};
 
-static SETTINGS_NO_MATCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "no-match"));
-static SETTINGS_NO_MATCH_HINT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "no-match-hint"));
+static_tr!(SETTINGS_NO_MATCH, "settings", "no-match");
+static_tr!(SETTINGS_NO_MATCH_HINT, "settings", "no-match-hint");
 
 mod about_page;
 mod admin_actions;
@@ -285,6 +282,7 @@ pub enum SettingsSection {
 use std::fmt::{self, Display};
 
 use crate::util::bindings::custom_tag_to_keystroke;
+use crate::static_tr;
 
 impl Display for SettingsSection {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -714,10 +712,10 @@ pub struct SettingActionPairDescriptions {
 }
 
 impl SettingActionPairDescriptions {
-    pub fn new(enable: &str, disable: &str) -> Self {
+    pub fn new<E: Into<String>, D: Into<String>>(enable: E, disable: D) -> Self {
         Self {
-            enable: enable.to_owned(),
-            disable: disable.to_owned(),
+            enable: enable.into(),
+            disable: disable.into(),
         }
     }
 }
@@ -779,18 +777,18 @@ impl<T: Action + Clone> ToggleSettingActionPair<T> {
     /// `context_boolean_flag` is will be in the context tree when the action
     /// is in the enabled state,
     /// and absent when the action is in the disabled state.
-    pub fn new(
-        description_suffix: &str,
+    pub fn new<S: AsRef<str>>(
+        description_suffix: S,
         toggle_action: T,
         context_prefix: &ContextPredicate,
         context_boolean_flag: &'static str,
     ) -> Self {
         use warpui::keymap::macros::id;
-
+        let desc = description_suffix.as_ref();
         ToggleSettingActionPair {
             descriptions: SettingActionPairDescriptions {
-                enable: crate::tr!("settings", "enable-feature", description = description_suffix),
-                disable: crate::tr!("settings", "disable-feature", description = description_suffix),
+                enable: crate::tr!("settings", "enable-feature", description = desc),
+                disable: crate::tr!("settings", "disable-feature", description = desc),
             },
             contexts: SettingActionPairContexts {
                 enable_predicate: context_prefix.to_owned() & !id!(context_boolean_flag),
@@ -2388,7 +2386,7 @@ impl SettingsView {
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_children([
                         Text::new(
-                            &*SETTINGS_NO_MATCH,
+                            SETTINGS_NO_MATCH.get(),
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )
@@ -2396,7 +2394,7 @@ impl SettingsView {
                         .with_color(theme.sub_text_color(theme.background()).into_solid())
                         .finish(),
                         Text::new(
-                            &*SETTINGS_NO_MATCH_HINT,
+                            SETTINGS_NO_MATCH_HINT.get(),
                             appearance.ui_font_family(),
                             appearance.ui_font_size(),
                         )

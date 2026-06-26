@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use settings::Setting as _;
 use warpui::keymap::FixedBinding;
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
@@ -13,13 +12,13 @@ use crate::workspace::tab_settings::{
     HeaderToolbarChipSelection, TabSettings, TabSettingsChangedEvent,
 };
 use crate::{report_if_error, Appearance};
+use crate::static_tr;
 
-static MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "edit-toolbar").clone());
-static AVAILABLE_ITEMS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "toolbar-available-items").clone());
+static_tr!(MODAL_TITLE, "workspace", "edit-toolbar");
+static_tr!(AVAILABLE_ITEMS_LABEL, "workspace", "toolbar-available-items");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         HeaderToolbarEditorAction::Cancel,
@@ -247,7 +246,7 @@ impl View for HeaderToolbarInlineEditor {
         render_chip_editor_sections(
             &self.chip_configurator,
             ChipEditorSectionsConfig {
-                available_section_label: &AVAILABLE_ITEMS_LABEL,
+                available_section_label: AVAILABLE_ITEMS_LABEL.get(),
                 is_at_defaults: is_toolbar_editor_at_defaults(&self.chip_configurator),
                 reset_action: HeaderToolbarInlineEditorAction::ResetDefault,
                 activate_action: HeaderToolbarInlineEditorAction::Activate,
@@ -341,8 +340,8 @@ impl View for HeaderToolbarEditorModal {
         render_chip_editor_modal(
             &self.chip_configurator,
             ChipEditorModalConfig {
-                title: &*MODAL_TITLE,
-                available_section_label: &AVAILABLE_ITEMS_LABEL,
+                title: MODAL_TITLE.get(),
+                available_section_label: AVAILABLE_ITEMS_LABEL.get(),
                 is_at_defaults: self.is_at_defaults(),
                 is_dirty: self.is_dirty,
                 cancel_action: HeaderToolbarEditorAction::Cancel,

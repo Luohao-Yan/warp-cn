@@ -1,6 +1,4 @@
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use warpui::elements::{
     Border, ChildView, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Element,
     Fill as ElementFill, Flex, MainAxisAlignment, MainAxisSize, MouseStateHandle, Padding,
@@ -32,11 +30,9 @@ use crate::editor::{EditorView, Event as EditorEvent, SingleLineEditorOptions};
 use crate::modal::ModalAction;
 use crate::tab_configs::branch_picker::BranchPicker;
 use crate::tab_configs::repo_picker::{RepoPicker, RepoPickerEvent};
-
-static TAB_NEW_WORKTREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "new-worktree"));
-static TAB_AUTOGENERATE_BRANCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "autogenerate-branch-name"));
+use crate::static_tr;
+static_tr!(TAB_NEW_WORKTREE, "workspace", "new-worktree");
+static_tr!(TAB_AUTOGENERATE_BRANCH, "workspace", "autogenerate-branch-name");
 
 /// Gap between sections in the modal body (repo picker, branch picker, checkbox).
 const SECTION_GAP: f32 = 16.;
@@ -330,7 +326,7 @@ impl View for NewWorktreeModal {
         // ── Header (custom — Modal wrapper has no title) ────────────────
         let header = {
             let title = Text::new_inline(
-                &*TAB_NEW_WORKTREE,
+                TAB_NEW_WORKTREE.get(),
                 appearance.ui_font_family(),
                 HEADER_TITLE_FONT_SIZE,
             )
@@ -469,7 +465,7 @@ impl View for NewWorktreeModal {
             .with_child(checkbox_element)
             .with_child(
                 Text::new_inline(
-                    &*TAB_AUTOGENERATE_BRANCH,
+                    TAB_AUTOGENERATE_BRANCH.get(),
                     appearance.ui_font_family(),
                     appearance.ui_font_size(),
                 )

@@ -8,7 +8,6 @@ use itertools::Itertools;
 use pathfinder_color::ColorU;
 use std::borrow::Cow;
 use pathfinder_geometry::vector::vec2f;
-use std::sync::LazyLock;
 use string_offset::CharOffset;
 use syntax_highlightable::SyntaxHighlightable;
 use url::Url;
@@ -99,6 +98,7 @@ use crate::workflows::workflow::{Argument, Workflow};
 use crate::workflows::CloudWorkflow;
 use crate::workspace::{ToastStack, WorkspaceAction};
 use crate::{send_telemetry_from_ctx, FeatureFlag, UserWorkspaces};
+use crate::static_tr;
 
 mod alias_argument_selector;
 mod alias_bar;
@@ -132,10 +132,10 @@ const WORKFLOW_PARAMETER_HIGHLIGHT_COLOR: u32 = 0x42C0FA4D;
 const MAX_ELEMENT_WIDTH: f32 = 800.;
 
 const SCROLLBAR_WIDTH: ScrollbarWidth = ScrollbarWidth::Auto;
-static TITLE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "title-placeholder"));
-static DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "description-placeholder"));
-static COMMAND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "command-placeholder"));
-static AGENT_MODE_QUERY_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "agent-mode-query-placeholder"));
+static_tr!(TITLE_PLACEHOLDER_TEXT, "workflows", "title-placeholder");
+static_tr!(DESCRIPTION_PLACEHOLDER_TEXT, "workflows", "description-placeholder");
+static_tr!(COMMAND_PLACEHOLDER_TEXT, "workflows", "command-placeholder");
+static_tr!(AGENT_MODE_QUERY_PLACEHOLDER_TEXT, "workflows", "agent-mode-query-placeholder");
 const DESCRIPTION_MARGIN_TOP: f32 = 10.;
 
 const CORE_HORIZONATAL_MARGIN: f32 = 24.;
@@ -157,21 +157,21 @@ const HORIZONTAL_TEXT_INPUT_PADDING: f32 = 10.;
 
 const EDITOR_FONT_SIZE: f32 = 14.;
 
-static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "create-label"));
-static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "update-label"));
-static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
+static_tr!(CREATE_BUTTON_TEXT, "common", "create-label");
+static_tr!(SAVE_BUTTON_TEXT, "common", "update-label");
+static_tr!(CANCEL_BUTTON_TEXT, "common", "cancel-label");
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BUTTON_HEIGHT: f32 = 32.;
 
 const AI_ASSIST_BUTTON_SIZE: f32 = 92.;
-static AI_ASSIST_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "autofill"));
-static AI_ASSIST_LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "loading"));
+static_tr!(AI_ASSIST_BUTTON_TEXT, "workflows", "autofill");
+static_tr!(AI_ASSIST_LOADING_TEXT, "workflows", "loading");
 
-static ALIAS_HELP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "alias-help"));
+static_tr!(ALIAS_HELP_TEXT, "workflows", "alias-help");
 
-static RUN_ON_DESKTOP_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "run-in-warp"));
+static_tr!(RUN_ON_DESKTOP_BUTTON_TEXT, "workflows", "run-in-warp");
 const RUN_ON_DESKTOP_BUTTON_WIDTH: f32 = 108.;
 
 const DIALOG_WIDTH: f32 = 460.;
@@ -356,7 +356,7 @@ impl WorkflowView {
             ctx,
             Some(header_font_size),
             Some(ui_font_family),
-            Some(&*TITLE_PLACEHOLDER_TEXT),
+            Some(TITLE_PLACEHOLDER_TEXT.get()),
             false,
             true,
             true,
@@ -366,7 +366,7 @@ impl WorkflowView {
             ctx,
             Some(EDITOR_FONT_SIZE),
             Some(ui_font_family),
-            Some(&*DESCRIPTION_PLACEHOLDER_TEXT),
+            Some(DESCRIPTION_PLACEHOLDER_TEXT.get()),
             false,
             false,
             true,
@@ -376,7 +376,7 @@ impl WorkflowView {
             ctx,
             Some(EDITOR_FONT_SIZE),
             Some(monospace_font_family),
-            Some(&*COMMAND_PLACEHOLDER_TEXT),
+            Some(COMMAND_PLACEHOLDER_TEXT.get()),
             true,
             false,
             true,
@@ -386,7 +386,7 @@ impl WorkflowView {
             ctx,
             Some(EDITOR_FONT_SIZE),
             Some(monospace_font_family),
-            Some(&*COMMAND_PLACEHOLDER_TEXT),
+            Some(COMMAND_PLACEHOLDER_TEXT.get()),
             true,
             false,
             true,
@@ -486,7 +486,7 @@ impl WorkflowView {
         self.is_for_agent_mode = is_for_agent_mode;
         if is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.get(), ctx);
                 editor.set_font_family(Appearance::as_ref(ctx).ui_font_family(), ctx);
             });
         }
@@ -509,7 +509,7 @@ impl WorkflowView {
 
         if is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.get(), ctx);
             });
         }
 
@@ -710,7 +710,7 @@ impl WorkflowView {
         self.is_for_agent_mode = workflow.model().data.is_agent_mode_workflow();
         if self.is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.get(), ctx);
                 editor.set_font_family(Appearance::as_ref(ctx).ui_font_family(), ctx);
             });
         }
@@ -802,7 +802,7 @@ impl WorkflowView {
 
         if self.is_for_agent_mode {
             self.content_editor.update(ctx, |editor, ctx| {
-                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.clone(), ctx);
+                editor.set_placeholder_text(AGENT_MODE_QUERY_PLACEHOLDER_TEXT.get(), ctx);
             });
         } else {
             self.content_editor_highlight_model
@@ -2371,8 +2371,8 @@ impl WorkflowView {
         let mut save_button = self.build_footer_button(
             ButtonVariant::Accent,
             match self.workflow_view_mode {
-                WorkflowViewMode::Create => CREATE_BUTTON_TEXT.clone(),
-                WorkflowViewMode::Edit | WorkflowViewMode::View => SAVE_BUTTON_TEXT.clone(),
+                WorkflowViewMode::Create => CREATE_BUTTON_TEXT.get().to_owned(),
+                WorkflowViewMode::Edit | WorkflowViewMode::View => SAVE_BUTTON_TEXT.get().to_owned(),
             },
             None,
             self.ui_state_handles.save_workflow_state.clone(),
@@ -2391,7 +2391,7 @@ impl WorkflowView {
 
         let mut cancel_button = self.build_footer_button(
             ButtonVariant::Secondary,
-            CANCEL_BUTTON_TEXT.clone(),
+            CANCEL_BUTTON_TEXT.get().to_owned(),
             None,
             self.ui_state_handles.cancel_mouse_state.clone(),
             appearance,
@@ -2416,8 +2416,8 @@ impl WorkflowView {
         let mut button_row = Flex::row();
 
         let label_and_icon = match self.ai_metadata_assist_state {
-            AiAssistState::PreRequest => Some((AI_ASSIST_BUTTON_TEXT.as_str(), Icon::AiAssistant)),
-            AiAssistState::RequestInFlight => Some((AI_ASSIST_LOADING_TEXT.as_str(), Icon::Refresh)),
+            AiAssistState::PreRequest => Some((AI_ASSIST_BUTTON_TEXT.get(), Icon::AiAssistant)),
+            AiAssistState::RequestInFlight => Some((AI_ASSIST_LOADING_TEXT.get(), Icon::Refresh)),
             AiAssistState::Generated => None,
         };
 

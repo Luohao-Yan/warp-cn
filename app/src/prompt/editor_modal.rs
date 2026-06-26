@@ -31,6 +31,7 @@ use crate::terminal::session_settings::SessionSettings;
 use crate::terminal::SizeInfo;
 use crate::view_components::{Dropdown, DropdownItem};
 use crate::{report_if_error, send_telemetry_from_ctx, Appearance};
+use crate::static_tr;
 
 const MODAL_WIDTH: f32 = 700.;
 const BORDER_WIDTH: f32 = 1.;
@@ -51,16 +52,13 @@ const DROPDOWN_WIDTH: f32 = 72.;
 const MODAL_CONTENT_FONT_SIZE: f32 = 14.;
 const CHECKBOX_SIZE: f32 = 16.;
 
-use std::sync::LazyLock;
-
-static MODAL_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "edit-prompt"));
-static WARP_PROMPT_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "warp-terminal-prompt"));
-static SHELL_PROMPT_SECTION_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "shell-prompt-ps1"));
-static RESTORE_DEFAULT_BUTTON: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "restore-default"));
+static_tr!(MODAL_TITLE, "terminal", "edit-prompt");
+static_tr!(WARP_PROMPT_SECTION_HEADER, "terminal", "warp-terminal-prompt");
+static_tr!(SHELL_PROMPT_SECTION_HEADER, "terminal", "shell-prompt-ps1");
+static_tr!(RESTORE_DEFAULT_BUTTON, "terminal", "restore-default");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         EditorModalAction::Cancel,
@@ -481,7 +479,7 @@ impl EditorModal {
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
         appearance
             .ui_builder()
-            .span(MODAL_TITLE.clone())
+            .span(MODAL_TITLE.get())
             .with_style(UiComponentStyles {
                 font_size: Some(MODAL_TITLE_FONT_SIZE),
                 font_weight: Some(warpui::fonts::Weight::Bold),
@@ -572,7 +570,7 @@ impl EditorModal {
             |_state| {
                 appearance
                     .ui_builder()
-                    .span(RESTORE_DEFAULT_BUTTON.clone())
+                    .span(RESTORE_DEFAULT_BUTTON.get())
                     .with_style(UiComponentStyles {
                         font_size: Some(MODAL_CONTENT_FONT_SIZE),
                         ..Default::default()
@@ -672,7 +670,7 @@ impl EditorModal {
             .with_child(
                 appearance
                     .ui_builder()
-                    .span(WARP_PROMPT_SECTION_HEADER.clone())
+                    .span(WARP_PROMPT_SECTION_HEADER.get())
                     .with_style(UiComponentStyles {
                         font_size: Some(MODAL_CONTENT_FONT_SIZE),
                         font_weight: Some(warpui::fonts::Weight::Semibold),
@@ -721,7 +719,7 @@ impl EditorModal {
 
         let header = appearance
             .ui_builder()
-            .span(SHELL_PROMPT_SECTION_HEADER.clone())
+            .span(SHELL_PROMPT_SECTION_HEADER.get())
             .with_style(UiComponentStyles {
                 font_size: Some(MODAL_CONTENT_FONT_SIZE),
                 font_weight: Some(warpui::fonts::Weight::Semibold),

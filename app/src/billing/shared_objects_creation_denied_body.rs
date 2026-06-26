@@ -2,7 +2,6 @@ use crate::appearance::Appearance;
 use crate::drive::DriveObjectType;
 use crate::ui_components::blended_colors;
 use crate::workspaces::workspace::{BillingMetadata, CustomerType};
-use std::sync::LazyLock;
 use warpui::elements::{
     Container, CornerRadius, CrossAxisAlignment, Flex, MainAxisSize, MouseStateHandle,
     ParentElement, Radius, Shrinkable, Text,
@@ -12,21 +11,20 @@ use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
-
-
+use crate::static_tr;
 const BUTTON_PADDING: f32 = 12.;
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 
-static DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "delinquent-admin-subheader"));
-static DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "delinquent-admin-enterprise-subheader"));
-static DEFAULT_DELINQUENT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "delinquent-subheader"));
-static DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "admin-prosumer-subheader"));
-static DEFAULT_PROSUMER_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "prosumer-subheader"));
-static DEFAULT_ADMIN_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "admin-subheader"));
-static DEFAULT_MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "default-subheader"));
-static VIEW_PLANS_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "compare-plans"));
-static MANAGE_BILLING_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "manage-billing"));
+static_tr!(DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER, "billing", "delinquent-admin-subheader");
+static_tr!(DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER, "billing", "delinquent-admin-enterprise-subheader");
+static_tr!(DEFAULT_DELINQUENT_MODAL_SUBHEADER, "billing", "delinquent-subheader");
+static_tr!(DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER, "billing", "admin-prosumer-subheader");
+static_tr!(DEFAULT_PROSUMER_MODAL_SUBHEADER, "billing", "prosumer-subheader");
+static_tr!(DEFAULT_ADMIN_MODAL_SUBHEADER, "billing", "admin-subheader");
+static_tr!(DEFAULT_MODAL_SUBHEADER, "billing", "default-subheader");
+static_tr!(VIEW_PLANS_TEXT, "billing", "compare-plans");
+static_tr!(MANAGE_BILLING_BUTTON_TEXT, "billing", "manage-billing");
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -120,18 +118,18 @@ impl View for SharedObjectsCreationDeniedBody {
             ) {
                 (true, true, _) => {
                     if is_stripe_paid_plan {
-                        DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER.clone()
+                        DEFAULT_DELINQUENT_ADMIN_MODAL_SUBHEADER.get().to_owned()
                     } else {
-                        DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER.clone()
+                        DEFAULT_DELINQUENT_ADMIN_ENTERPRISE_MODAL_SUBHEADER.get().to_owned()
                     }
                 }
-                (true, false, _) => DEFAULT_DELINQUENT_MODAL_SUBHEADER.clone(),
+                (true, false, _) => DEFAULT_DELINQUENT_MODAL_SUBHEADER.get().to_owned(),
                 (false, true, CustomerType::Prosumer) => {
-                    DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER.clone()
+                    DEFAULT_ADMIN_PROSUMER_MODAL_SUBHEADER.get().to_owned()
                 }
-                (false, false, CustomerType::Prosumer) => DEFAULT_PROSUMER_MODAL_SUBHEADER.clone(),
-                (false, true, _) => DEFAULT_ADMIN_MODAL_SUBHEADER.clone(),
-                (false, false, _) => DEFAULT_MODAL_SUBHEADER.clone(),
+                (false, false, CustomerType::Prosumer) => DEFAULT_PROSUMER_MODAL_SUBHEADER.get().to_owned(),
+                (false, true, _) => DEFAULT_ADMIN_MODAL_SUBHEADER.get().to_owned(),
+                (false, false, _) => DEFAULT_MODAL_SUBHEADER.get().to_owned(),
             },
         };
 
@@ -168,7 +166,7 @@ impl View for SharedObjectsCreationDeniedBody {
                                 0.5,
                                 self.render_button(
                                     appearance,
-                                    MANAGE_BILLING_BUTTON_TEXT.clone(),
+                                    MANAGE_BILLING_BUTTON_TEXT.get().to_owned(),
                                     self.button_mouse_states.button_mouse_state.clone(),
                                     SharedObjectsCreationDeniedBodyAction::ManageBilling,
                                 ),
@@ -190,7 +188,7 @@ impl View for SharedObjectsCreationDeniedBody {
                                 0.5,
                                 self.render_button(
                                     appearance,
-                                    VIEW_PLANS_TEXT.clone(),
+                                    VIEW_PLANS_TEXT.get().to_owned(),
                                     self.button_mouse_states.button_mouse_state.clone(),
                                     SharedObjectsCreationDeniedBodyAction::Upgrade,
                                 ),

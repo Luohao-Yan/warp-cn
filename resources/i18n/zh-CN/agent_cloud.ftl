@@ -48,7 +48,7 @@ agent-cloud-running-agent = 正在运行 { $cli_name }...
 
 agent-cloud-loading-cloud-agent-runs = 正在加载云端 Agent 运行
 
-## -- 代理状态字符串 -------------------------------------------------------
+## -- 智能体状态字符串 -------------------------------------------------------
 
 agent-cloud-completed = { $name } 已完成
 agent-cloud-needs-attention = { $name } 需要关注
@@ -56,7 +56,7 @@ agent-cloud-filter-with-count = { $label } ({ $count })
 
 ## -- Double-prefix aliases --
 
-## -- 代理状态字符串双前缀别名 -----------------------------------------------
+## -- 智能体状态字符串双前缀别名 -----------------------------------------------
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
 

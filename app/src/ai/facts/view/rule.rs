@@ -1,7 +1,5 @@
 use std::fmt::Debug;
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use ai::project_context::model::{ProjectContextModel, ProjectContextModelEvent};
 use markdown_parser::weight::CustomWeight;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
@@ -45,33 +43,22 @@ use crate::view_components::action_button::{ActionButton, NakedTheme};
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
+static_tr!(pub HEADER_TEXT, "ai_assistant", "ai-rules-header");
+static_tr!(pub DESCRIPTION_TEXT, "ai_assistant", "ai-rules-description");
 
-pub static HEADER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rules-header"));
-pub static DESCRIPTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rules-description"));
+static_tr!(pub SEARCH_PLACEHOLDER_TEXT, "ai_assistant", "ai-search-rules");
+static_tr!(pub ZERO_STATE_TEXT, "ai_assistant", "ai-zero-state-text");
+static_tr!(pub ZERO_STATE_TEXT_PROJECT, "ai_assistant", "ai-zero-state-project-text");
 
-pub static SEARCH_PLACEHOLDER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-search-rules"));
-pub static ZERO_STATE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-zero-state-text"));
-pub static ZERO_STATE_TEXT_PROJECT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-zero-state-project-text"));
+static_tr!(pub SETTINGS_AI_LABEL, "ai_assistant", "ai-settings-ai");
 
-pub static SETTINGS_AI_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-settings-ai"));
+static_tr!(pub DISABLED_BANNER_TEXT, "ai_assistant", "ai-disabled-banner-text");
+static_tr!(pub DISABLED_BANNER_LINK_TEXT, "ai_assistant", "ai-disabled-banner-link-text");
+static_tr!(pub DISABLED_BANNER_TEXT_2, "ai_assistant", "ai-disabled-banner-text-2");
 
-pub static DISABLED_BANNER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-disabled-banner-text"));
-pub static DISABLED_BANNER_LINK_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-disabled-banner-link-text"));
-pub static DISABLED_BANNER_TEXT_2: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-disabled-banner-text-2"));
-
-pub static GLOBAL_SCOPE_TAB: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-global-scope-tab"));
-pub static PROJECT_BASED_SCOPE_TAB: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-project-based-scope-tab"));
+static_tr!(pub GLOBAL_SCOPE_TAB, "ai_assistant", "ai-global-scope-tab");
+static_tr!(pub PROJECT_BASED_SCOPE_TAB, "ai_assistant", "ai-project-based-scope-tab");
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RuleScope {
@@ -302,7 +289,7 @@ impl RuleView {
 
         search_editor.update(ctx, |editor, ctx| {
             editor.clear_buffer_and_reset_undo_stack(ctx);
-            editor.set_placeholder_text(&*SEARCH_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(SEARCH_PLACEHOLDER_TEXT.get(), ctx);
         });
         let search_bar = ctx.add_typed_action_view(|_| SearchBar::new(search_editor.clone()));
 
@@ -496,7 +483,7 @@ impl RuleView {
             .with_child(
                 appearance
                     .ui_builder()
-                    .wrappable_text(HEADER_TEXT.as_str(), true)
+                    .wrappable_text(HEADER_TEXT.get(), true)
                     .with_style(style::header_text())
                     .build()
                     .finish(),
@@ -508,7 +495,7 @@ impl RuleView {
         Container::new(
             appearance
                 .ui_builder()
-                .wrappable_text(DESCRIPTION_TEXT.as_str(), true)
+                .wrappable_text(DESCRIPTION_TEXT.get(), true)
                 .with_style(style::description_text(appearance))
                 .build()
                 .finish(),
@@ -519,7 +506,7 @@ impl RuleView {
 
     fn render_scope_tabs(&self, appearance: &Appearance) -> Box<dyn Element> {
         let global_tab = Container::new(self.render_scope_tab(
-            GLOBAL_SCOPE_TAB.as_str(),
+            GLOBAL_SCOPE_TAB.get(),
             RuleScope::Global,
             appearance,
             self.global_tab_mouse_state.clone(),
@@ -527,7 +514,7 @@ impl RuleView {
         .with_padding_right(4.)
         .finish();
         let project_tab = self.render_scope_tab(
-            PROJECT_BASED_SCOPE_TAB.as_str(),
+            PROJECT_BASED_SCOPE_TAB.get(),
             RuleScope::ProjectBased,
             appearance,
             self.project_tab_mouse_state.clone(),
@@ -615,14 +602,14 @@ impl RuleView {
     }
 
     fn render_disabled_banner(&self, appearance: &Appearance) -> Box<dyn Element> {
-        let mut link = FormattedTextFragment::hyperlink(DISABLED_BANNER_LINK_TEXT.as_str(), SETTINGS_AI_LABEL.as_str());
+        let mut link = FormattedTextFragment::hyperlink(DISABLED_BANNER_LINK_TEXT.get(), SETTINGS_AI_LABEL.get());
         link.styles.weight = Some(CustomWeight::Bold);
 
         let formatted_text = FormattedTextElement::new(
             FormattedText::new([FormattedTextLine::Line(vec![
-                FormattedTextFragment::bold(DISABLED_BANNER_TEXT.as_str()),
+                FormattedTextFragment::bold(DISABLED_BANNER_TEXT.get()),
                 link,
-                FormattedTextFragment::bold(DISABLED_BANNER_TEXT_2.as_str()),
+                FormattedTextFragment::bold(DISABLED_BANNER_TEXT_2.get()),
             ])]),
             style::SUBTEXT_FONT_SIZE,
             appearance.ui_font_family(),
@@ -902,8 +889,8 @@ impl RuleView {
 
     fn render_zero_state(&self, appearance: &Appearance) -> Box<dyn Element> {
         let text = match self.current_scope {
-            RuleScope::Global => ZERO_STATE_TEXT.as_str(),
-            RuleScope::ProjectBased => ZERO_STATE_TEXT_PROJECT.as_str(),
+            RuleScope::Global => ZERO_STATE_TEXT.get(),
+            RuleScope::ProjectBased => ZERO_STATE_TEXT_PROJECT.get(),
         };
 
         let centered_text = appearance

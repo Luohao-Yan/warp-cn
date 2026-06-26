@@ -5,11 +5,9 @@ use crate::code_review::diff_state::DiffMode;
 use crate::search::ai_context_menu::mixer::AIContextMenuSearchableAction;
 use crate::search::data_source::{Query, QueryResult};
 use crate::search::mixer::{DataSourceRunErrorWrapper, SyncDataSource};
-use std::sync::LazyLock;
-
-
-static UNCOMMITTED_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "diff-uncommitted"));
-static MAIN_BRANCH_CHANGES_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "diff-vs-main"));
+use crate::static_tr;
+static_tr!(UNCOMMITTED_CHANGES_NAME, "search", "diff-uncommitted");
+static_tr!(MAIN_BRANCH_CHANGES_NAME, "search", "diff-vs-main");
 
 pub struct DiffSetDataSource;
 
@@ -27,7 +25,7 @@ impl SyncDataSource for DiffSetDataSource {
 
         // Add uncommitted changes option
         if let Some(match_result) =
-            fuzzy_match::match_indices_case_insensitive(UNCOMMITTED_CHANGES_NAME.as_str(), query_text)
+            fuzzy_match::match_indices_case_insensitive(UNCOMMITTED_CHANGES_NAME.get(), query_text)
         {
             results.push(
                 DiffSetSearchItem {
@@ -40,7 +38,7 @@ impl SyncDataSource for DiffSetDataSource {
 
         // Add main branch comparison option
         if let Some(match_result) =
-            fuzzy_match::match_indices_case_insensitive(MAIN_BRANCH_CHANGES_NAME.as_str(), query_text)
+            fuzzy_match::match_indices_case_insensitive(MAIN_BRANCH_CHANGES_NAME.get(), query_text)
         {
             results.push(
                 DiffSetSearchItem {

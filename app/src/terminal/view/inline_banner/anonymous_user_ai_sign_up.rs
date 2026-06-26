@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use warpui::elements::{
     Container, CornerRadius, CrossAxisAlignment, Flex, Icon, MainAxisAlignment, MainAxisSize,
     MouseStateHandle, ParentElement, Radius, Shrinkable, Text,
@@ -16,10 +14,10 @@ use crate::appearance::Appearance;
 use crate::terminal::view::{InlineBannerId, TerminalAction};
 use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon as UiIcon;
-
-static TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "login-for-ai"));
-static CONTENT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ai-features-unavailable"));
-static SIGN_UP_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sign-up"));
+use crate::static_tr;
+static_tr!(TITLE, "terminal", "login-for-ai");
+static_tr!(CONTENT, "terminal", "ai-features-unavailable");
+static_tr!(SIGN_UP_BUTTON_TEXT, "terminal", "sign-up");
 
 // Layout constants for three-column banner
 const ICON_SIZE_OFFSET: f32 = 3.0;
@@ -52,9 +50,9 @@ impl AnonymousUserAISignUpBannerState {
     pub fn render(&self, appearance: &Appearance) -> Box<dyn Element> {
         render_three_column_inline_banner(
             appearance,
-            &*TITLE,
-            &*CONTENT,
-            &*SIGN_UP_BUTTON_TEXT,
+            TITLE.get(),
+            CONTENT.get(),
+            SIGN_UP_BUTTON_TEXT.get(),
             self.sign_up_button_mouse_state.clone(),
             self.close_button_mouse_state.clone(),
         )

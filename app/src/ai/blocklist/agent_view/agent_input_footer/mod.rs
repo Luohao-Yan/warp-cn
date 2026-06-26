@@ -8,7 +8,6 @@ use std::env;
 #[cfg(not(target_family = "wasm"))]
 use std::path::PathBuf;
 use std::sync::Arc;
-use std::sync::LazyLock;
 #[cfg(not(target_family = "wasm"))]
 use std::time::Duration;
 
@@ -116,48 +115,48 @@ use crate::workspace::ToastStack;
 #[cfg(not(target_family = "wasm"))]
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 
-static ENABLE_NLD_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-enable-nld-tooltip"));
-static DISABLE_NLD_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-disable-nld-tooltip"));
+static_tr!(ENABLE_NLD_TOOLTIP, "ai_assistant", "ai-enable-nld-tooltip");
+static_tr!(DISABLE_NLD_TOOLTIP, "ai_assistant", "ai-disable-nld-tooltip");
 
-static VOICE_INPUT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-voice-input-tooltip"));
-static ATTACH_FILE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-attach-file-tooltip"));
+static_tr!(VOICE_INPUT_TOOLTIP, "ai_assistant", "ai-voice-input-tooltip");
+static_tr!(ATTACH_FILE_TOOLTIP, "ai_assistant", "ai-attach-file-tooltip");
 
-static FAST_FORWARD_ON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-fast-forward-on-tooltip"));
-static FAST_FORWARD_OFF_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-fast-forward-off-tooltip"));
-static FAST_FORWARD_LOCKED_TOOLTIP: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-fast-forward-locked-tooltip"));
+static_tr!(FAST_FORWARD_ON_TOOLTIP, "ai_assistant", "ai-fast-forward-on-tooltip");
+static_tr!(FAST_FORWARD_OFF_TOOLTIP, "ai_assistant", "ai-fast-forward-off-tooltip");
+static_tr!(FAST_FORWARD_LOCKED_TOOLTIP, "ai_assistant", "ai-fast-forward-locked-tooltip");
 
-static HANDOFF_TO_CLOUD_FULL_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-hand-off-to-cloud-full-tooltip"));
-static FILE_EXPLORER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-file-explorer-label"));
-static FILE_EXPLORER_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-file-explorer-tooltip"));
-static RICH_INPUT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-rich-input-label"));
-static RICH_INPUT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-rich-input-tooltip"));
-static HIDE_RICH_INPUT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-hide-rich-input-label"));
-static HIDE_RICH_INPUT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-hide-rich-input-tooltip"));
-static OPEN_CODING_AGENT_SETTINGS_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-open-coding-agent-settings-tooltip"));
-static ENABLE_NOTIFICATIONS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-enable-notifications-label"));
-static INSTALL_PLUGIN_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-install-plugin-tooltip"));
-static NOTIFICATIONS_SETUP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notifications-setup-instructions-label"));
-static NOTIFICATIONS_SETUP_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-notifications-setup-instructions-tooltip"));
-static UPDATE_PLUGIN_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-update-plugin-tooltip"));
-static PLUGIN_UPDATE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-plugin-update-instructions-label"));
-static PLUGIN_UPDATE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-plugin-update-instructions-tooltip"));
-static DISMISS_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-dismiss-tooltip"));
-static STOP_SHARING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-stop-sharing-label"));
-static STOP_SHARING_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-stop-sharing-tooltip"));
-static CONTEXT_WINDOW_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-context-window-usage-tooltip"));
-static REMOTE_CONTROL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-remote-control-label"));
-static NO_PLUGIN_MANAGER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-no-plugin-manager"));
-static COULD_NOT_INSTALL_PLUGIN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-could-not-install-plugin"));
-static INSTALLING_PLUGIN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-installing-plugin"));
-static FAILED_INSTALL_PLUGIN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-failed-install-plugin"));
-static UPDATING_PLUGIN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-updating-plugin"));
-static FAILED_UPDATE_PLUGIN: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-failed-update-plugin"));
-static VOICE_MIC_ERROR: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-voice-mic-error"));
+static_tr!(HANDOFF_TO_CLOUD_FULL_TOOLTIP, "ai_assistant", "ai-hand-off-to-cloud-full-tooltip");
+static_tr!(FILE_EXPLORER_LABEL, "ai_assistant", "ai-file-explorer-label");
+static_tr!(FILE_EXPLORER_TOOLTIP, "ai_assistant", "ai-file-explorer-tooltip");
+static_tr!(RICH_INPUT_LABEL, "ai_assistant", "ai-rich-input-label");
+static_tr!(RICH_INPUT_TOOLTIP, "ai_assistant", "ai-rich-input-tooltip");
+static_tr!(HIDE_RICH_INPUT_LABEL, "ai_assistant", "ai-hide-rich-input-label");
+static_tr!(HIDE_RICH_INPUT_TOOLTIP, "ai_assistant", "ai-hide-rich-input-tooltip");
+static_tr!(OPEN_CODING_AGENT_SETTINGS_TOOLTIP, "ai_assistant", "ai-open-coding-agent-settings-tooltip");
+static_tr!(ENABLE_NOTIFICATIONS_LABEL, "ai_assistant", "ai-enable-notifications-label");
+static_tr!(INSTALL_PLUGIN_TOOLTIP, "ai_assistant", "ai-install-plugin-tooltip");
+static_tr!(NOTIFICATIONS_SETUP_LABEL, "ai_assistant", "ai-notifications-setup-instructions-label");
+static_tr!(NOTIFICATIONS_SETUP_TOOLTIP, "ai_assistant", "ai-notifications-setup-instructions-tooltip");
+static_tr!(UPDATE_PLUGIN_TOOLTIP, "ai_assistant", "ai-update-plugin-tooltip");
+static_tr!(PLUGIN_UPDATE_LABEL, "ai_assistant", "ai-plugin-update-instructions-label");
+static_tr!(PLUGIN_UPDATE_TOOLTIP, "ai_assistant", "ai-plugin-update-instructions-tooltip");
+static_tr!(DISMISS_TOOLTIP, "ai_assistant", "ai-dismiss-tooltip");
+static_tr!(STOP_SHARING_LABEL, "ai_assistant", "ai-stop-sharing-label");
+static_tr!(STOP_SHARING_TOOLTIP, "ai_assistant", "ai-stop-sharing-tooltip");
+static_tr!(CONTEXT_WINDOW_TOOLTIP, "ai_assistant", "ai-context-window-usage-tooltip");
+static_tr!(REMOTE_CONTROL_LABEL, "ai_assistant", "ai-remote-control-label");
+static_tr!(NO_PLUGIN_MANAGER, "ai_assistant", "ai-no-plugin-manager");
+static_tr!(COULD_NOT_INSTALL_PLUGIN, "ai_assistant", "ai-could-not-install-plugin");
+static_tr!(INSTALLING_PLUGIN, "ai_assistant", "ai-installing-plugin");
+static_tr!(FAILED_INSTALL_PLUGIN, "ai_assistant", "ai-failed-install-plugin");
+static_tr!(UPDATING_PLUGIN, "ai_assistant", "ai-updating-plugin");
+static_tr!(FAILED_UPDATE_PLUGIN, "ai_assistant", "ai-failed-update-plugin");
+static_tr!(VOICE_MIC_ERROR, "ai_assistant", "ai-voice-mic-error");
 
-static START_REMOTE_CONTROL_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-start-remote-control-tooltip"));
-static START_REMOTE_CONTROL_LOGIN_REQUIRED_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-start-remote-control-login-required-tooltip"));
+static_tr!(START_REMOTE_CONTROL_TOOLTIP, "ai_assistant", "ai-start-remote-control-tooltip");
+static_tr!(START_REMOTE_CONTROL_LOGIN_REQUIRED_TOOLTIP, "ai_assistant", "ai-start-remote-control-login-required-tooltip");
 
 const CLOUD_MODE_V2_FOOTER_GAP: f32 = 4.;
 
@@ -310,9 +309,9 @@ impl AgentInputFooter {
             button.set_active(is_nld_enabled, ctx);
             button.set_tooltip(
                 Some(if is_nld_enabled {
-                    DISABLE_NLD_TOOLTIP.as_str()
+                    DISABLE_NLD_TOOLTIP.get()
                 } else {
-                    ENABLE_NLD_TOOLTIP.as_str()
+                    ENABLE_NLD_TOOLTIP.get()
                 }),
                 ctx,
             );
@@ -327,9 +326,9 @@ impl AgentInputFooter {
                 button.set_active(is_nld_enabled, ctx);
                 button.set_tooltip(
                     Some(if is_nld_enabled {
-                        DISABLE_NLD_TOOLTIP.as_str()
+                        DISABLE_NLD_TOOLTIP.get()
                     } else {
-                        ENABLE_NLD_TOOLTIP.as_str()
+                        ENABLE_NLD_TOOLTIP.get()
                     }),
                     ctx,
                 );
@@ -339,7 +338,7 @@ impl AgentInputFooter {
         let mic_button = ctx.add_typed_action_view(|_ctx| {
             let button = ActionButton::new("", ActiveMicButtonTheme)
                 .with_icon(Icon::Microphone)
-                .with_tooltip(VOICE_INPUT_TOOLTIP.as_str())
+                .with_tooltip(VOICE_INPUT_TOOLTIP.get())
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left);
             #[cfg(feature = "voice_input")]
@@ -375,7 +374,7 @@ impl AgentInputFooter {
         let file_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::Plus)
-                .with_tooltip(ATTACH_FILE_TOOLTIP.as_str())
+                .with_tooltip(ATTACH_FILE_TOOLTIP.get())
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -389,7 +388,7 @@ impl AgentInputFooter {
         let fast_forward_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", FastForwardButtonTheme)
                 .with_icon(Icon::FastForward)
-                .with_tooltip(FAST_FORWARD_OFF_TOOLTIP.as_str())
+                .with_tooltip(FAST_FORWARD_OFF_TOOLTIP.get())
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_disabled_theme(FastForwardLockedTheme)
@@ -404,7 +403,7 @@ impl AgentInputFooter {
         let handoff_to_cloud_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::UploadCloud)
-                .with_tooltip(HANDOFF_TO_CLOUD_FULL_TOOLTIP.as_str())
+                .with_tooltip(HANDOFF_TO_CLOUD_FULL_TOOLTIP.get())
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -415,9 +414,9 @@ impl AgentInputFooter {
         // CLI agent-specific buttons (only rendered when a CLI agent session is active).
         let cli_button_size = ButtonSize::AgentInputButton;
         let file_explorer_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new(FILE_EXPLORER_LABEL.as_str(), AgentInputButtonTheme)
+            ActionButton::new(FILE_EXPLORER_LABEL.get(), AgentInputButtonTheme)
                 .with_icon(Icon::FileCopy)
-                .with_tooltip(FILE_EXPLORER_TOOLTIP.as_str())
+                .with_tooltip(FILE_EXPLORER_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_keybinding(
@@ -430,9 +429,9 @@ impl AgentInputFooter {
                 })
         });
         let rich_input_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new(RICH_INPUT_LABEL.as_str(), AgentInputButtonTheme)
+            ActionButton::new(RICH_INPUT_LABEL.get(), AgentInputButtonTheme)
                 .with_icon(Icon::TextInput)
-                .with_tooltip(RICH_INPUT_TOOLTIP.as_str())
+                .with_tooltip(RICH_INPUT_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_keybinding(
@@ -447,7 +446,7 @@ impl AgentInputFooter {
         let settings_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::Settings)
-                .with_tooltip(OPEN_CODING_AGENT_SETTINGS_TOOLTIP.as_str())
+                .with_tooltip(OPEN_CODING_AGENT_SETTINGS_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -456,9 +455,9 @@ impl AgentInputFooter {
         });
 
         let install_plugin_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(ENABLE_NOTIFICATIONS_LABEL.as_str(), InstallPluginButtonTheme)
+            ActionButton::new(ENABLE_NOTIFICATIONS_LABEL.get(), InstallPluginButtonTheme)
                 .with_icon(Icon::Download)
-                .with_tooltip(INSTALL_PLUGIN_TOOLTIP.as_str())
+                .with_tooltip(INSTALL_PLUGIN_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -468,9 +467,9 @@ impl AgentInputFooter {
         });
 
         let plugin_instructions_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(NOTIFICATIONS_SETUP_LABEL.as_str(), InstallPluginButtonTheme)
+            ActionButton::new(NOTIFICATIONS_SETUP_LABEL.get(), InstallPluginButtonTheme)
                 .with_icon(Icon::Info)
-                .with_tooltip(NOTIFICATIONS_SETUP_TOOLTIP.as_str())
+                .with_tooltip(NOTIFICATIONS_SETUP_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -482,9 +481,9 @@ impl AgentInputFooter {
         });
 
         let update_plugin_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(PLUGIN_UPDATE_LABEL.as_str(), InstallPluginButtonTheme)
+            ActionButton::new(PLUGIN_UPDATE_LABEL.get(), InstallPluginButtonTheme)
                 .with_icon(Icon::Download)
-                .with_tooltip(UPDATE_PLUGIN_TOOLTIP.as_str())
+                .with_tooltip(UPDATE_PLUGIN_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -494,9 +493,9 @@ impl AgentInputFooter {
         });
 
         let update_instructions_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(PLUGIN_UPDATE_LABEL.as_str(), InstallPluginButtonTheme)
+            ActionButton::new(PLUGIN_UPDATE_LABEL.get(), InstallPluginButtonTheme)
                 .with_icon(Icon::Info)
-                .with_tooltip(PLUGIN_UPDATE_TOOLTIP.as_str())
+                .with_tooltip(PLUGIN_UPDATE_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Right)
@@ -511,7 +510,7 @@ impl AgentInputFooter {
             ActionButton::new("", InstallPluginButtonTheme)
                 .with_icon(Icon::X)
                 .with_size(cli_button_size)
-                .with_tooltip(DISMISS_TOOLTIP.as_str())
+                .with_tooltip(DISMISS_TOOLTIP.get())
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .with_adjoined_side(AdjoinedSide::Left)
                 .on_click(|ctx| {
@@ -584,8 +583,8 @@ impl AgentInputFooter {
                 let is_open = matches!(new_input_state, CLIAgentInputState::Open { .. });
                 me.rich_input_button.update(ctx, |button, ctx| {
                     if is_open {
-                        button.set_label(HIDE_RICH_INPUT_LABEL.as_str(), ctx);
-                        button.set_tooltip(Some(HIDE_RICH_INPUT_TOOLTIP.as_str()), ctx);
+                        button.set_label(HIDE_RICH_INPUT_LABEL.get(), ctx);
+                        button.set_tooltip(Some(HIDE_RICH_INPUT_TOOLTIP.get()), ctx);
                         button.set_keybinding(
                             Some(KeystrokeSource::Binding(
                                 OPEN_CLI_AGENT_RICH_INPUT_KEYBINDING,
@@ -593,8 +592,8 @@ impl AgentInputFooter {
                             ctx,
                         );
                     } else {
-                        button.set_label(RICH_INPUT_LABEL.as_str(), ctx);
-                        button.set_tooltip(Some(RICH_INPUT_TOOLTIP.as_str()), ctx);
+                        button.set_label(RICH_INPUT_LABEL.get(), ctx);
+                        button.set_tooltip(Some(RICH_INPUT_TOOLTIP.get()), ctx);
                         button.set_keybinding(
                             Some(KeystrokeSource::Binding(
                                 OPEN_CLI_AGENT_RICH_INPUT_KEYBINDING,
@@ -608,9 +607,9 @@ impl AgentInputFooter {
         );
 
         let start_remote_control_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(REMOTE_CONTROL_LABEL.as_str(), RemoteControlButtonTheme)
+            ActionButton::new(REMOTE_CONTROL_LABEL.get(), RemoteControlButtonTheme)
                 .with_icon(Icon::Phone01)
-                .with_tooltip(START_REMOTE_CONTROL_TOOLTIP.as_str())
+                .with_tooltip(START_REMOTE_CONTROL_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -619,10 +618,10 @@ impl AgentInputFooter {
         });
 
         let stop_remote_control_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(STOP_SHARING_LABEL.as_str(), RemoteControlButtonTheme)
+            ActionButton::new(STOP_SHARING_LABEL.get(), RemoteControlButtonTheme)
                 .with_icon(Icon::StopFilled)
                 .with_icon_ansi_color(AnsiColorIdentifier::Red)
-                .with_tooltip(STOP_SHARING_TOOLTIP.as_str())
+                .with_tooltip(STOP_SHARING_TOOLTIP.get())
                 .with_size(cli_button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
@@ -633,7 +632,7 @@ impl AgentInputFooter {
         let context_window_button = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", AgentInputButtonTheme)
                 .with_icon(Icon::ConversationContext0)
-                .with_tooltip(CONTEXT_WINDOW_TOOLTIP.as_str())
+                .with_tooltip(CONTEXT_WINDOW_TOOLTIP.get())
                 .with_size(button_size)
                 .with_tooltip_alignment(TooltipAlignment::Left)
         });
@@ -1229,7 +1228,7 @@ impl AgentInputFooter {
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             toast_stack.add_ephemeral_toast(
                 DismissibleToast::error(
-                    COULD_NOT_INSTALL_PLUGIN.to_owned(),
+                    COULD_NOT_INSTALL_PLUGIN.get().to_owned(),
                 ),
                 window_id,
                 ctx,
@@ -1322,7 +1321,7 @@ impl AgentInputFooter {
                 else {
                     return Err((
                         PluginInstallError {
-                            message: NO_PLUGIN_MANAGER.to_owned(),
+                            message: NO_PLUGIN_MANAGER.get().to_owned(),
                             log: String::new(),
                         },
                         None,
@@ -1406,8 +1405,8 @@ impl AgentInputFooter {
             .map(|m| m.install_success_message())
             .unwrap_or_else(|| crate::tr!("terminal", "plugin-installed-restart"));
         self.handle_plugin_operation(
-            INSTALLING_PLUGIN.as_str(),
-            FAILED_INSTALL_PLUGIN.as_str(),
+            INSTALLING_PLUGIN.get(),
+            FAILED_INSTALL_PLUGIN.get(),
             &success_msg,
             PluginChipTelemetryKind::Install,
             |manager| async move { manager.install().await },
@@ -1423,8 +1422,8 @@ impl AgentInputFooter {
             .map(|m| m.update_success_message())
             .unwrap_or_else(|| crate::tr!("terminal", "plugin-updated-restart"));
         self.handle_plugin_operation(
-            UPDATING_PLUGIN.as_str(),
-            FAILED_UPDATE_PLUGIN.as_str(),
+            UPDATING_PLUGIN.get(),
+            FAILED_UPDATE_PLUGIN.get(),
             &success_msg,
             PluginChipTelemetryKind::Update,
             |manager| async move { manager.update().await },
@@ -1859,7 +1858,6 @@ impl AgentInputFooter {
         ctx: &mut ViewContext<Self>,
     ) {
         use crate::editor::VoiceTranscriber;
-
         match result {
             VoiceSessionResult::Audio {
                 wav_base64,
@@ -1958,7 +1956,7 @@ impl AgentInputFooter {
     fn show_cli_microphone_access_toast(&self, ctx: &mut ViewContext<Self>) {
         let window_id = ctx.window_id();
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::error(VOICE_MIC_ERROR.to_owned());
+            let toast = DismissibleToast::error(VOICE_MIC_ERROR.get());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
     }
@@ -2002,11 +2000,11 @@ impl AgentInputFooter {
             Icon::FastForward
         };
         let tooltip = if is_force_enabled {
-            FAST_FORWARD_LOCKED_TOOLTIP.as_str()
+            FAST_FORWARD_LOCKED_TOOLTIP.get()
         } else if is_active {
-            FAST_FORWARD_ON_TOOLTIP.as_str()
+            FAST_FORWARD_ON_TOOLTIP.get()
         } else {
-            FAST_FORWARD_OFF_TOOLTIP.as_str()
+            FAST_FORWARD_OFF_TOOLTIP.get()
         };
 
         self.fast_forward_button.update(ctx, |button, ctx| {
@@ -2025,9 +2023,9 @@ impl AgentInputFooter {
             .get()
             .is_anonymous_or_logged_out();
         let tooltip = if login_required {
-            START_REMOTE_CONTROL_LOGIN_REQUIRED_TOOLTIP.as_str()
+            START_REMOTE_CONTROL_LOGIN_REQUIRED_TOOLTIP.get()
         } else {
-            START_REMOTE_CONTROL_TOOLTIP.as_str()
+            START_REMOTE_CONTROL_TOOLTIP.get()
         };
         self.start_remote_control_button.update(ctx, |button, ctx| {
             button.set_disabled(login_required, ctx);

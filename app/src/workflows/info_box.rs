@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 use std::ops::Range;
-use std::sync::LazyLock;
-
 use string_offset::CharOffset;
 use warp_core::features::FeatureFlag;
 use warp_core::settings::Setting;
@@ -45,7 +43,7 @@ use crate::util::color::coloru_with_opacity;
 use crate::view_components::FilterableDropdownOrientation;
 use crate::workflows::WorkflowType;
 use crate::workspace::WorkspaceAction;
-
+use crate::static_tr;
 const INFO_BOX_PADDING: f32 = 20.;
 const ARGUMENT_PADDING: f32 = 10.;
 const KEYBOARD_SHORTCUT_PADDING: f32 = 15.;
@@ -61,8 +59,8 @@ const ENV_VAR_HORIZONTAL_MARGIN: f32 = 20.;
 const ENV_VAR_RIGHT_ELEMENT_VERTICAL_MARGIN: f32 = 5.;
 const ENV_VAR_SPAN_VERTICAL_MARGIN: f32 = 15.;
 const ENV_VAR_BUTTON_HEIGHT: f32 = 30.;
-static ENV_VAR_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "environment-variables"));
-static NEW_ENV_VAR_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "new-environment-variables"));
+static_tr!(ENV_VAR_SPAN, "workflows", "environment-variables");
+static_tr!(NEW_ENV_VAR_BUTTON_LABEL, "workflows", "new-environment-variables");
 
 /// Scale factor the title should be from the user's current font size.
 const TITLE_FONT_SIZE_SCALE_FACTOR: f32 = 1.12;
@@ -572,7 +570,7 @@ impl WorkflowsMoreInfoView {
             Align::new(
                 appearance
                     .ui_builder()
-                    .span(ENV_VAR_SPAN.clone())
+                    .span(ENV_VAR_SPAN.get())
                     .with_style(UiComponentStyles {
                         font_size: Some(ENV_VAR_SPAN_FONT_SIZE),
                         ..Default::default()
@@ -599,7 +597,7 @@ impl WorkflowsMoreInfoView {
                             ButtonVariant::Secondary,
                             self.button_mouse_states.add_env_var_collection.clone(),
                         )
-                        .with_centered_text_label(NEW_ENV_VAR_BUTTON_LABEL.clone())
+                        .with_centered_text_label(NEW_ENV_VAR_BUTTON_LABEL.get().to_owned())
                         .build()
                         .on_click(|ctx, _, _| {
                             // Create envvars in personal drive for max extensibility (can be moved

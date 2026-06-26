@@ -472,9 +472,9 @@ impl SearchItem for ModelSearchItem {
         let theme = appearance.theme();
 
         let (title, description) = if self.reasoning_level.is_some() {
-            (&*REASONING_LEVEL_TITLE, &*REASONING_LEVEL_DESCRIPTION)
+            (REASONING_LEVEL_TITLE.get(), REASONING_LEVEL_DESCRIPTION.get())
         } else {
-            (&*MODEL_SPECS_TITLE, &*MODEL_SPECS_DESCRIPTION)
+            (MODEL_SPECS_TITLE.get(), MODEL_SPECS_DESCRIPTION.get())
         };
         let header = render_model_spec_header(title, description, app);
 

@@ -1,8 +1,6 @@
 //! SearchItem implementation for rewind menu items.
 //! Renders two lines: query text and code changes summary.
 
-use std::sync::LazyLock;
-
 use fuzzy_match::FuzzyMatchResult;
 use ordered_float::OrderedFloat;
 use warp_core::ui::color::coloru_with_opacity;
@@ -21,14 +19,13 @@ use crate::appearance::Appearance;
 use crate::code::editor::{add_color, remove_color};
 use crate::search::{ItemHighlightState, SearchItem};
 
-static TERMINAL_NO_CODE_RESTORED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "no-code-restored"));
+static_tr!(TERMINAL_NO_CODE_RESTORED, "terminal", "no-code-restored");
 use crate::terminal::input::inline_menu::styles::{
     font_size, icon_color, item_background, menu_background_color, primary_text_color, ICON_MARGIN,
     ITEM_CORNER_RADIUS, ITEM_HORIZONTAL_PADDING,
 };
 use crate::terminal::input::rewind::data_source::{FileChangesInfo, SelectRewindPoint};
-
+use crate::static_tr;
 const ICON_PADDING: f32 = 4.;
 
 /// Search item for rendering a rewind point in the rewind menu.
@@ -146,7 +143,7 @@ impl SearchItem for RewindSearchItem {
         let changes_element: Box<dyn Element> = if self.is_current {
             // "Current" item shows "No code to be restored"
             Text::new_inline(
-                &*TERMINAL_NO_CODE_RESTORED,
+                TERMINAL_NO_CODE_RESTORED.get(),
                 appearance.ui_font_family(),
                 secondary_font_size,
             )
@@ -179,7 +176,7 @@ impl SearchItem for RewindSearchItem {
             row.finish()
         } else {
             Text::new_inline(
-                &*TERMINAL_NO_CODE_RESTORED,
+                TERMINAL_NO_CODE_RESTORED.get(),
                 appearance.ui_font_family(),
                 secondary_font_size,
             )

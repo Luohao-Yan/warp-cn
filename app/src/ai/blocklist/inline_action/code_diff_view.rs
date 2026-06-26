@@ -2,8 +2,7 @@ use std::collections::HashMap;
 use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
-use std::sync::{Arc, LazyLock};
-use std::time::Duration;
+use std::sync::Arc;use std::time::Duration;
 
 use ai::diff_validation::{
     fuzzy_match_diffs, fuzzy_match_v4a_diffs, parse_line_numbers, DiffDelta, DiffType, ParsedDiff,
@@ -100,30 +99,31 @@ use crate::view_components::compactible_split_action_button::CompactibleSplitAct
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
 use crate::{cmd_or_ctrl_shift, send_telemetry_from_ctx, TelemetryEvent};
+use crate::static_tr;
 
-pub static REQUESTED_EDIT_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cancel"));
-pub static REQUESTED_EDIT_REFINE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-refine"));
-pub static REQUESTED_EDIT_ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-accept"));
-pub static REQUESTED_EDIT_ACCEPT_AND_AUTOEXECUTE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-auto-approve"));
-pub static REQUESTED_EDIT_EDIT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-edit-command"));
-pub static REQUESTED_EDIT_MINIMIZE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-done"));
-pub static SUGGESTED_EDIT_ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-accept"));
-pub static SUGGESTED_EDIT_ACCEPT_AND_CONTINUE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-accept-and-continue"));
-pub static SUGGESTED_EDIT_ITERATE_WITH_AGENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-iterate-with-agent"));
-pub static SUGGESTED_EDIT_DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-dismiss"));
-pub static EDIT_CODE_DIFF_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-edit-code-diff"));
-pub static REVIEW_CHANGES_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-review-changes-tooltip"));
-pub static EXPAND_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-expand-tooltip"));
-pub static COLLAPSE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-collapse-tooltip"));
-pub static OPEN_CONFIG_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-open-config"));
-pub static NO_FILE_NAME_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-no-file-name"));
-pub static FILE_RENAMED_NO_CHANGES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-file-renamed-no-changes"));
-pub static MANAGE_BANNER_SETTINGS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-manage-banner-settings"));
-pub static SETTINGS_AI_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-settings-ai"));
-pub static REQUESTED_EDIT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-requested-edit"));
-pub static FILE_FALLBACK_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-file-suffix"));
-pub static RENAMED_SUFFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-renamed-suffix"));
-pub static DELETED_FILE_SUFFIX: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-deleted-file-suffix"));
+static_tr!(pub REQUESTED_EDIT_CANCEL_LABEL, "ai_assistant", "ai-cancel");
+static_tr!(pub REQUESTED_EDIT_REFINE_LABEL, "ai_assistant", "ai-refine");
+static_tr!(pub REQUESTED_EDIT_ACCEPT_LABEL, "ai_assistant", "ai-accept");
+static_tr!(pub REQUESTED_EDIT_ACCEPT_AND_AUTOEXECUTE_LABEL, "ai_assistant", "ai-auto-approve");
+static_tr!(pub REQUESTED_EDIT_EDIT_LABEL, "ai_assistant", "ai-edit-command");
+static_tr!(pub REQUESTED_EDIT_MINIMIZE_LABEL, "ai_assistant", "ai-done");
+static_tr!(pub SUGGESTED_EDIT_ACCEPT_LABEL, "ai_assistant", "ai-accept");
+static_tr!(pub SUGGESTED_EDIT_ACCEPT_AND_CONTINUE_LABEL, "ai_assistant", "ai-accept-and-continue");
+static_tr!(pub SUGGESTED_EDIT_ITERATE_WITH_AGENT_LABEL, "ai_assistant", "ai-iterate-with-agent");
+static_tr!(pub SUGGESTED_EDIT_DISMISS_LABEL, "ai_assistant", "ai-dismiss");
+static_tr!(pub EDIT_CODE_DIFF_LABEL, "ai_assistant", "ai-edit-code-diff");
+static_tr!(pub REVIEW_CHANGES_TOOLTIP, "ai_assistant", "ai-review-changes-tooltip");
+static_tr!(pub EXPAND_TOOLTIP, "ai_assistant", "ai-expand-tooltip");
+static_tr!(pub COLLAPSE_TOOLTIP, "ai_assistant", "ai-collapse-tooltip");
+static_tr!(pub OPEN_CONFIG_LABEL, "ai_assistant", "ai-open-config");
+static_tr!(pub NO_FILE_NAME_LABEL, "ai_assistant", "ai-no-file-name");
+static_tr!(pub FILE_RENAMED_NO_CHANGES_LABEL, "ai_assistant", "ai-file-renamed-no-changes");
+static_tr!(pub MANAGE_BANNER_SETTINGS_LABEL, "ai_assistant", "ai-manage-banner-settings");
+static_tr!(pub SETTINGS_AI_LABEL, "ai_assistant", "ai-settings-ai");
+static_tr!(pub REQUESTED_EDIT_TITLE, "ai_assistant", "ai-requested-edit");
+static_tr!(pub FILE_FALLBACK_LABEL, "ai_assistant", "ai-file-suffix");
+static_tr!(pub RENAMED_SUFFIX, "ai_assistant", "ai-renamed-suffix");
+static_tr!(pub DELETED_FILE_SUFFIX, "ai_assistant", "ai-deleted-file-suffix");
 const MAX_EDITOR_HEIGHT: f32 = 500.;
 const INLINE_EDITOR_HEIGHT: f32 = 94.;
 const INLINE_EDITOR_HEIGHT_EXPANDED: f32 = 400.;
@@ -157,7 +157,6 @@ lazy_static! {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([
         FixedBinding::new(
             "ctrl-c",
@@ -203,7 +202,7 @@ pub fn init(app: &mut AppContext) {
 
     app.register_editable_bindings([EditableBinding::new(
         EDIT_REQUESTED_EDIT_NAME,
-        EDIT_CODE_DIFF_LABEL.as_str(),
+        EDIT_CODE_DIFF_LABEL.get(),
         CodeDiffViewAction::Edit,
     )
     .with_context_predicate(id!(CodeDiffView::ui_name()) & !id!(DISPATCHED_REQUESTED_EDIT_EXPANDED))
@@ -522,7 +521,7 @@ impl CodeDiffView {
             self.accept_split_button_menu.update(ctx, |menu, ctx| {
                 menu.set_items(
                     vec![MenuItemFields::new_multiline(
-                        SUGGESTED_EDIT_ACCEPT_AND_CONTINUE_LABEL.as_str(),
+                        SUGGESTED_EDIT_ACCEPT_AND_CONTINUE_LABEL.get(),
                         2,
                     )
                     .with_on_select_action(
@@ -544,14 +543,14 @@ impl CodeDiffView {
             .unwrap_or_default();
 
             let accept_item = MenuItemFields::new_with_label(
-                REQUESTED_EDIT_ACCEPT_LABEL.as_str(),
+                REQUESTED_EDIT_ACCEPT_LABEL.get(),
                 accept_keystroke.as_str(),
             )
             .with_on_select_action(CodeDiffViewAction::TryAccept)
             .into_item();
 
             let auto_item = MenuItemFields::new_with_label(
-                REQUESTED_EDIT_ACCEPT_AND_AUTOEXECUTE_LABEL.as_str(),
+                REQUESTED_EDIT_ACCEPT_AND_AUTOEXECUTE_LABEL.get(),
                 auto_keystroke.as_str(),
             )
             .with_on_select_action(CodeDiffViewAction::AcceptAndAutoExecute)
@@ -797,9 +796,9 @@ impl CodeDiffView {
             .collect();
 
         let cancel_button_label = if is_passive {
-            SUGGESTED_EDIT_DISMISS_LABEL.as_str()
+            SUGGESTED_EDIT_DISMISS_LABEL.get()
         } else {
-            REQUESTED_EDIT_REFINE_LABEL.as_str()
+            REQUESTED_EDIT_REFINE_LABEL.get()
         };
         let cancel_button = CompactibleActionButton::new(
             cancel_button_label.to_string(),
@@ -881,7 +880,7 @@ impl CodeDiffView {
         let code_review_button = ctx.add_typed_action_view(|ctx| {
             ActionButton::new("", NakedTheme)
                 .with_icon(Icon::Diff)
-                .with_tooltip(REVIEW_CHANGES_TOOLTIP.as_str())
+                .with_tooltip(REVIEW_CHANGES_TOOLTIP.get())
                 .with_width(icon_size(ctx))
                 .with_height(icon_size(ctx))
                 .on_click(|ctx| {
@@ -893,7 +892,7 @@ impl CodeDiffView {
         let expansion_button_collapsed = ctx.add_typed_action_view(|ctx| {
             ActionButton::new("", NakedTheme)
                 .with_icon(Icon::ChevronRight)
-                .with_tooltip(EXPAND_TOOLTIP.as_str())
+                .with_tooltip(EXPAND_TOOLTIP.get())
                 .with_width(icon_size(ctx))
                 .with_height(icon_size(ctx))
                 .on_click(|ctx| {
@@ -904,7 +903,7 @@ impl CodeDiffView {
         let expansion_button_expanded = ctx.add_typed_action_view(|ctx| {
             ActionButton::new("", NakedTheme)
                 .with_icon(Icon::ChevronDown)
-                .with_tooltip(COLLAPSE_TOOLTIP.as_str())
+                .with_tooltip(COLLAPSE_TOOLTIP.get())
                 .with_width(icon_size(ctx))
                 .with_height(icon_size(ctx))
                 .on_click(|ctx| {
@@ -1667,7 +1666,7 @@ impl CodeDiffView {
                 fg_overlay_6(appearance.theme())
             };
             let mcp_config_button = render_provider_icon_button(
-                OPEN_CONFIG_LABEL.as_str(),
+                OPEN_CONFIG_LABEL.get(),
                 mcp_button_handle.clone(),
                 appearance,
                 icon,
@@ -2003,7 +2002,7 @@ impl CodeDiffView {
         if Self::is_rename_without_changes(diff_type) {
             let placeholder = Container::new(
                 Text::new(
-                    FILE_RENAMED_NO_CHANGES_LABEL.as_str(),
+                    FILE_RENAMED_NO_CHANGES_LABEL.get(),
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )
@@ -2184,9 +2183,9 @@ impl CodeDiffView {
 
         if self.display_mode.is_embedded() {
             let label = if self.is_passive {
-                SUGGESTED_EDIT_DISMISS_LABEL.as_str()
+                SUGGESTED_EDIT_DISMISS_LABEL.get()
             } else {
-                REQUESTED_EDIT_CANCEL_LABEL.as_str()
+                REQUESTED_EDIT_CANCEL_LABEL.get()
             };
             self.cancel_button.set_label(label.to_string(), ctx);
         }
@@ -2565,8 +2564,8 @@ impl CodeDiffView {
         let formatted_text = FormattedTextElement::new(
             FormattedText::new([FormattedTextLine::Line(vec![
                 FormattedTextFragment::hyperlink(
-                    MANAGE_BANNER_SETTINGS_LABEL.as_str(),
-                    SETTINGS_AI_LABEL.as_str(),
+                    MANAGE_BANNER_SETTINGS_LABEL.get(),
+                    SETTINGS_AI_LABEL.get(),
                 ),
             ])]),
             font_size,

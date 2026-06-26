@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::sync::LazyLock;
 use uuid::Uuid;
 use warpui::elements::{ChildView, Container};
 use warpui::ui_components::components::{Coords, UiComponentStyles};
@@ -31,7 +30,7 @@ use crate::settings_view::settings_page::{MatchData, PageType, SettingsPageMeta,
 use crate::settings_view::SettingsSection;
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
-
+use crate::static_tr;
 /// Describes where an MCP install request originated.
 ///
 /// Used to decide whether an install request is allowed to bypass the
@@ -50,7 +49,7 @@ pub enum InstallOrigin {
     Deeplink,
 }
 
-static PAGE_TITLE_TEXT: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("settings", "mcp-servers").leak());
+static_tr!(PAGE_TITLE_TEXT, "settings", "mcp-servers");
 #[derive(Debug, Default, Copy, Clone)]
 pub enum MCPServersSettingsPage {
     #[default]
@@ -102,7 +101,7 @@ impl MCPServersSettingsPageView {
         Self {
             page: PageType::new_monolith(
                 MCPServersSettingsWidget::default(),
-                Some(*PAGE_TITLE_TEXT),
+                Some(PAGE_TITLE_TEXT.get()),
                 true,
             ),
             current_page: MCPServersSettingsPage::default(),

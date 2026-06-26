@@ -152,6 +152,7 @@ memmap2 = "0.9.3"
 owned_ttf_parser = "0.25.0"
 resvg.workspace = true
 serde.workspace = true
+sys-locale = "0.3"
 version-compare.workspace = true
 winit.workspace = true
 wgpu.workspace = true
@@ -207,12 +208,14 @@ windows = { workspace = true, features = [
     "Win32_Graphics_DirectWrite",
     "Win32_Graphics_Gdi",
     "Win32_UI_Shell",
+    "Win32_UI_Shell_Common",
     "Win32_UI_WindowsAndMessaging",
     "Win32_Networking",
     "Win32_System_Com",
     "Win32_Networking_NetworkListManager",
     "Win32_System_DataExchange",
     "Win32_System_Memory",
+    "Win32_System_SystemServices",
 ] }
 windows-core.workspace = true
 windows-version = "0.1.2"

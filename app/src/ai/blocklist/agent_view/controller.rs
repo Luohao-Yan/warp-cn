@@ -1,5 +1,4 @@
-use std::sync::{Arc, LazyLock};
-use std::time::Duration;
+use std::sync::Arc;use std::time::Duration;
 
 use instant::Instant;
 use parking_lot::FairMutex;
@@ -18,6 +17,7 @@ use crate::terminal::input::slash_commands::SlashCommandTrigger;
 use crate::terminal::TerminalModel;
 use crate::util::bindings::keybinding_name_to_keystroke;
 use crate::BlocklistAIHistoryModel;
+use crate::static_tr;
 
 /// Error returned when entering the agent view fails.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
@@ -58,8 +58,8 @@ impl AgentViewDisplayMode {
     }
 }
 
-static AGAIN_STOP_EXIT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-again-stop-exit"));
-static AGAIN_EXIT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-again-exit"));
+static_tr!(AGAIN_STOP_EXIT, "ai_assistant", "ai-again-stop-exit");
+static_tr!(AGAIN_EXIT, "ai_assistant", "ai-again-exit");
 
 /// Shared timeout for all "press again to confirm" UX in and around agent view.
 ///
@@ -1023,7 +1023,6 @@ fn exit_confirmation_message(
     use warpui::SingletonEntity;
 
     use crate::terminal::input::message_bar::{Message, MessageItem};
-
     let appearance = Appearance::handle(app).as_ref(app);
 
     let (keystroke, text) = match trigger {
@@ -1033,9 +1032,9 @@ fn exit_confirmation_message(
                 ..Default::default()
             },
             if should_stop_and_exit {
-                AGAIN_STOP_EXIT.as_str()
+                AGAIN_STOP_EXIT.get()
             } else {
-                AGAIN_EXIT.as_str()
+                AGAIN_EXIT.get()
             },
         ),
         ExitConfirmationTrigger::CtrlC => (
@@ -1044,7 +1043,7 @@ fn exit_confirmation_message(
                 ctrl: true,
                 ..Default::default()
             },
-            AGAIN_EXIT.as_str(),
+            AGAIN_EXIT.get(),
         ),
     };
 

@@ -38,10 +38,9 @@ use crate::search::mixer::{
     AsyncDataSource, BoxFuture, DataSourceRunError, DataSourceRunErrorWrapper,
 };
 #[cfg(not(target_family = "wasm"))]
-use std::sync::LazyLock;
 #[cfg(not(target_family = "wasm"))]
 use crate::workspace::ActiveSession;
-
+use crate::static_tr;
 const MAX_RESULTS: usize = 200;
 
 /// Represents a single code symbol within a file
@@ -231,7 +230,7 @@ impl CodeSymbolCache {
 }
 
 #[cfg(not(target_family = "wasm"))]
-static CODE_SEARCH_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "code-search-failed").clone());
+static_tr!(CODE_SEARCH_FAILED, "search", "code-search-failed");
 
 #[cfg(not(target_family = "wasm"))]
 #[derive(Debug)]
@@ -240,7 +239,7 @@ struct CodeSearchError;
 #[cfg(not(target_family = "wasm"))]
 impl DataSourceRunError for CodeSearchError {
     fn user_facing_error(&self) -> String {
-        CODE_SEARCH_FAILED.clone()
+        CODE_SEARCH_FAILED.get().to_owned()
     }
 
     fn telemetry_payload(&self) -> serde_json::Value {

@@ -1,7 +1,5 @@
 use std::any::Any;
-use std::sync::{Arc, LazyLock};
-
-use async_trait::async_trait;
+use std::sync::Arc;use async_trait::async_trait;
 use itertools::Itertools;
 use ordered_float::OrderedFloat;
 use serde_json::json;
@@ -28,9 +26,10 @@ use crate::themes::theme::Blend;
 use crate::ui_components::icons::Icon as UIIcon;
 use crate::util::color::{ContrastingColor, MinimumAllowedContrast};
 use crate::workflows::{AIWorkflowOrigin, WorkflowSource, WorkflowType};
+use crate::static_tr;
 
-static OPEN_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "ai-suggest").clone());
-static TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "ai-translate").clone());
+static_tr!(OPEN_WARP_AI_ITEM_BODY_TEXT, "search", "ai-suggest");
+static_tr!(TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT, "search", "ai-translate");
 
 #[derive(Clone, Debug)]
 pub enum WarpAISearchItem {
@@ -44,8 +43,8 @@ pub enum WarpAISearchItem {
 impl WarpAISearchItem {
     fn item_body_text(&self) -> &'static str {
         match self {
-            WarpAISearchItem::Translate => &*TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT,
-            WarpAISearchItem::Open => &*OPEN_WARP_AI_ITEM_BODY_TEXT,
+            WarpAISearchItem::Translate => TRANSLATE_WITH_WARP_AI_ITEM_BODY_TEXT.get(),
+            WarpAISearchItem::Open => OPEN_WARP_AI_ITEM_BODY_TEXT.get(),
         }
     }
 }
@@ -253,7 +252,6 @@ impl DataSourceRunError for GenerateCommandsFromNaturalLanguageError {
 
 mod styles {
     use crate::appearance::Appearance;
-
     /// Returns the icon size to be used for the 'sparkle' icon in the AI command search result.
     /// The icon appeaars smaller than its size would indicate, so make a bit larger than icons
     /// used for other search result types.

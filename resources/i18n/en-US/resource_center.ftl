@@ -70,3 +70,8 @@ resource-center-sign-up-benefits = Sign up for free to increase your storage lim
 ## -- Double-prefix alias for sign up benefits string --------------------------------
 
 ## -- Double-prefix aliases for migrated UI strings --
+
+## -- Drive import strings --
+
+resource-center-choose-files = Choose files...
+resource-center-preparing = Preparing...

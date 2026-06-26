@@ -241,13 +241,6 @@ search-file-open-file = Press Enter to open this file
 search-create-file-display = Create { $file_name }…
 search-create-file-a11y-label = Create file: { $file_name }
 search-create-file-a11y-help = Press Enter to create { $file_name } in the current directory
-search-diff-uncommitted = Uncommitted changes
-search-diff-vs-main = Changes vs. main branch
-search-diff-vs-branch = Changes vs. { $branch }
-search-diff-uncommitted-desc = All uncommitted changes in the working directory
-search-diff-vs-main-desc = All changes compared to the main branch
-search-diff-vs-branch-desc = All changes compared to { $branch }
-
 ## -- Category display names for AI Context Menu ---
 
 search-category-files = Files and folders

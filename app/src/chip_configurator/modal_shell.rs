@@ -5,8 +5,6 @@
 //! Modal consumers wrap those sections in a title, cancel/save buttons, and blur
 //! overlay, while settings consumers can render the sections inline.
 
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::theme::Fill;
 use warpui::elements::{
@@ -21,7 +19,7 @@ use warpui::{Action, Element};
 
 use super::{ChipConfigurator, ChipConfiguratorAction};
 use crate::Appearance;
-
+use crate::static_tr;
 const MODAL_WIDTH: f32 = 700.;
 const BORDER_WIDTH: f32 = 1.;
 const MODAL_TITLE_FONT_SIZE: f32 = 16.;
@@ -31,9 +29,9 @@ const PRIMARY_BUTTON_HEIGHT: f32 = 40.;
 const SECTION_UNIFORM_PADDING: f32 = 16.;
 const MARGIN_BETWEEN_MODAL_SECTIONS: f32 = 16.;
 const MODAL_CONTENT_FONT_SIZE: f32 = 14.;
-static RESTORE_DEFAULT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "restore-default"));
-static LEFT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "left-side"));
-static RIGHT_SIDE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("chip_configurator", "right-side"));
+static_tr!(RESTORE_DEFAULT_LABEL, "chip_configurator", "restore-default");
+static_tr!(LEFT_SIDE_LABEL, "chip_configurator", "left-side");
+static_tr!(RIGHT_SIDE_LABEL, "chip_configurator", "right-side");
 
 /// Mouse state handles for interactive controls in chip editor sections and modals.
 #[derive(Default)]
@@ -150,7 +148,7 @@ fn render_restore_default_button<A: Action + Clone + Copy + 'static>(
     let button = Hoverable::new(mouse_handle.clone(), |_state| {
         appearance
             .ui_builder()
-            .span(RESTORE_DEFAULT_LABEL.clone())
+            .span(RESTORE_DEFAULT_LABEL.get())
             .with_style(UiComponentStyles {
                 font_size: Some(MODAL_CONTENT_FONT_SIZE),
                 ..Default::default()
@@ -209,7 +207,7 @@ pub fn render_chip_editor_sections<A: Action + Clone + Copy + 'static>(
     );
 
     let left_section = Flex::column()
-        .with_child(render_section_label(LEFT_SIDE_LABEL.as_str(), appearance))
+        .with_child(render_section_label(LEFT_SIDE_LABEL.get(), appearance))
         .with_child(
             Container::new(chip_configurator.render_left_drop_zone(
                 config.activate_action,
@@ -222,7 +220,7 @@ pub fn render_chip_editor_sections<A: Action + Clone + Copy + 'static>(
         .finish();
 
     let right_section = Flex::column()
-        .with_child(render_section_label(RIGHT_SIDE_LABEL.as_str(), appearance))
+        .with_child(render_section_label(RIGHT_SIDE_LABEL.get(), appearance))
         .with_child(
             Container::new(chip_configurator.render_right_drop_zone(
                 config.activate_action,

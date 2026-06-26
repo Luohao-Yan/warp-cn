@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use crate::default_terminal::DefaultTerminal;
 use crate::gpu_state::{GPUState, GPUStateEvent};
 use crate::terminal::input::OPEN_COMPLETIONS_KEYBINDING_NAME;
@@ -110,6 +108,7 @@ use warpui::keymap::{ContextPredicate, FixedBinding, Keystroke};
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::ui_components::switch::SwitchStateHandle;
+use crate::static_tr;
 use warpui::{
     Action, AppContext, DisplayIdx, Entity, EventContext, ModelHandle, SingletonEntity, Tracked,
     TypedActionView, View, ViewContext, ViewHandle, WindowId,
@@ -117,15 +116,11 @@ use warpui::{
 
 cfg_if::cfg_if! {
     if #[cfg(target_os = "macos")] {
-        static EXTRA_META_KEYS_LEFT_TEXT: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("settings", "features-left-option-meta"));
-        static EXTRA_META_KEYS_RIGHT_TEXT: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("settings", "features-right-option-meta"));
+        static_tr!(EXTRA_META_KEYS_LEFT_TEXT, "settings", "features-left-option-meta");
+        static_tr!(EXTRA_META_KEYS_RIGHT_TEXT, "settings", "features-right-option-meta");
     } else {
-        static EXTRA_META_KEYS_LEFT_TEXT: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("settings", "features-left-alt-meta"));
-        static EXTRA_META_KEYS_RIGHT_TEXT: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("settings", "features-right-alt-meta"));
+        static_tr!(EXTRA_META_KEYS_LEFT_TEXT, "settings", "features-left-alt-meta");
+        static_tr!(EXTRA_META_KEYS_RIGHT_TEXT, "settings", "features-right-alt-meta");
     }
 }
 
@@ -181,7 +176,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
             flags::RESTORE_SESSION_CONTEXT_FLAG,
         ),
         ToggleSettingActionPair::new(
-            &*EXTRA_META_KEYS_LEFT_TEXT,
+            EXTRA_META_KEYS_LEFT_TEXT.get(),
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleLeftMetaKey,
             )),
@@ -194,7 +189,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
                 .is_supported_on_current_platform(),
         ),
         ToggleSettingActionPair::new(
-            &*EXTRA_META_KEYS_RIGHT_TEXT,
+            EXTRA_META_KEYS_RIGHT_TEXT.get(),
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::ToggleRightMetaKey,
             )),
@@ -555,7 +550,7 @@ pub fn init_actions_from_parent_view<T: Action + Clone>(
 
     if DefaultTerminal::can_warp_become_default() {
         app.register_fixed_bindings([FixedBinding::empty(
-            &*FEATURES_MAKE_DEFAULT,
+            FEATURES_MAKE_DEFAULT.get(),
             builder(SettingsAction::FeaturesPageToggle(
                 FeaturesPageAction::MakeWarpDefaultTerminal,
             )),
@@ -664,66 +659,37 @@ lazy_static! {
 }
 
 // i18n statics for category titles
-static SETTINGS_GENERAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "general"));
-static SETTINGS_SESSION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "session"));
-static SETTINGS_KEYS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "keys"));
-static SETTINGS_TEXT_EDITING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "text-editing"));
-static SETTINGS_TERMINAL_INPUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "terminal-input"));
-static SETTINGS_TERMINAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "terminal"));
-static SETTINGS_NOTIFICATIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "notifications"));
-static SETTINGS_SYSTEM: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "system"));
+static_tr!(SETTINGS_GENERAL, "settings", "general");
+static_tr!(SETTINGS_SESSION, "settings", "session");
+static_tr!(SETTINGS_KEYS, "settings", "keys");
+static_tr!(SETTINGS_TEXT_EDITING, "settings", "text-editing");
+static_tr!(SETTINGS_TERMINAL_INPUT, "settings", "terminal-input");
+static_tr!(SETTINGS_TERMINAL, "settings", "terminal");
+static_tr!(SETTINGS_NOTIFICATIONS, "settings", "notifications");
+static_tr!(SETTINGS_SYSTEM, "settings", "system");
 
 // i18n statics for features page strings used in closures needing 'static
-static FEATURES_LONGER_THAN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-longer-than"));
-static FEATURES_SECONDS_TO_COMPLETE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-seconds-to-complete"));
-static FEATURES_KEYBINDING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-keybinding"));
-static FEATURES_PRESS_NEW_SHORTCUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-press-new-shortcut"));
-static FEATURES_CHANGE_KEYBINDING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-change-keybinding"));
-static FEATURES_ALLOWED_VALUES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-allowed-values"));
-static FEATURES_DEFAULT_TERMINAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-default-terminal"));
-static FEATURES_MAKE_DEFAULT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-make-default"));
-static FEATURES_TOAST_VISIBLE_FOR: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-toast-visible-for"));
-static FEATURES_SECONDS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-seconds"));
-static FEATURES_CHARACTERS_WORD: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-characters-word"));
-static FEATURES_CHANGES_NEW_WINDOWS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-changes-new-windows"));
-static FEATURES_ACCEPT_AUTOSUGGESTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-accept-autosuggestion"));
-static FEATURES_OPEN_COMPLETIONS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-open-completions"));
-static DISPLAY_LANGUAGE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "display-language"));
-static NOTIFY_AGENT_COMPLETE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "notify-agent-complete"));
-static NOTIFY_AGENT_ATTENTION_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "notify-agent-attention"));
-static NEW_TAB_PLACEMENT_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "new-tab-placement"));
-static PREFERRED_GRAPHICS_BACKEND_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "preferred-graphics-backend"));
-static FEATURES_GLOBAL_HOTKEY_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-global-hotkey"));
-static FEATURES_CTRL_TAB_BEHAVIOR_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "features-ctrl-tab-behavior"));
+static_tr!(FEATURES_LONGER_THAN, "settings", "features-longer-than");
+static_tr!(FEATURES_SECONDS_TO_COMPLETE, "settings", "features-seconds-to-complete");
+static_tr!(FEATURES_KEYBINDING, "settings", "features-keybinding");
+static_tr!(FEATURES_PRESS_NEW_SHORTCUT, "settings", "features-press-new-shortcut");
+static_tr!(FEATURES_CHANGE_KEYBINDING, "settings", "features-change-keybinding");
+static_tr!(FEATURES_ALLOWED_VALUES, "settings", "features-allowed-values");
+static_tr!(FEATURES_DEFAULT_TERMINAL, "settings", "features-default-terminal");
+static_tr!(FEATURES_MAKE_DEFAULT, "settings", "features-make-default");
+static_tr!(FEATURES_TOAST_VISIBLE_FOR, "settings", "features-toast-visible-for");
+static_tr!(FEATURES_SECONDS, "settings", "features-seconds");
+static_tr!(FEATURES_CHARACTERS_WORD, "settings", "features-characters-word");
+static_tr!(FEATURES_CHANGES_NEW_WINDOWS, "settings", "features-changes-new-windows");
+static_tr!(FEATURES_ACCEPT_AUTOSUGGESTION, "settings", "features-accept-autosuggestion");
+static_tr!(FEATURES_OPEN_COMPLETIONS, "settings", "features-open-completions");
+static_tr!(DISPLAY_LANGUAGE_LABEL, "settings", "display-language");
+static_tr!(NOTIFY_AGENT_COMPLETE_LABEL, "settings", "notify-agent-complete");
+static_tr!(NOTIFY_AGENT_ATTENTION_LABEL, "settings", "notify-agent-attention");
+static_tr!(NEW_TAB_PLACEMENT_LABEL, "settings", "new-tab-placement");
+static_tr!(PREFERRED_GRAPHICS_BACKEND_LABEL, "settings", "preferred-graphics-backend");
+static_tr!(FEATURES_GLOBAL_HOTKEY_LABEL, "settings", "features-global-hotkey");
+static_tr!(FEATURES_CTRL_TAB_BEHAVIOR_LABEL, "settings", "features-ctrl-tab-behavior");
 
 /// Used for styling notification settings
 const NOTIFICATION_CHECKBOX_MARGIN_RIGHT: f32 = 5.;
@@ -2834,18 +2800,18 @@ impl FeaturesPageView {
         }
 
         let categories = vec![
-            Category::new(SETTINGS_GENERAL.clone().leak(), general_widgets),
-            Category::new(SETTINGS_SESSION.clone().leak(), session_widgets),
-            Category::new(SETTINGS_KEYS.clone().leak(), keys_widgets),
-            Category::new(SETTINGS_TEXT_EDITING.clone().leak(), text_editing_widgets),
-            Category::new(SETTINGS_TERMINAL_INPUT.clone().leak(), editor_widgets),
-            Category::new(SETTINGS_TERMINAL.clone().leak(), terminal_widgets),
-            Category::new(SETTINGS_NOTIFICATIONS.clone().leak(), notifications_widgets),
+            Category::new(SETTINGS_GENERAL.get(), general_widgets),
+            Category::new(SETTINGS_SESSION.get(), session_widgets),
+            Category::new(SETTINGS_KEYS.get(), keys_widgets),
+            Category::new(SETTINGS_TEXT_EDITING.get(), text_editing_widgets),
+            Category::new(SETTINGS_TERMINAL_INPUT.get(), editor_widgets),
+            Category::new(SETTINGS_TERMINAL.get(), terminal_widgets),
+            Category::new(SETTINGS_NOTIFICATIONS.get(), notifications_widgets),
             Category::new(
                 crate::tr!("settings", "features-workflows").leak(),
                 vec![Box::new(WorkflowsInCommandSearch::default())],
             ),
-            Category::new(SETTINGS_SYSTEM.clone().leak(), system_widgets),
+            Category::new(SETTINGS_SYSTEM.get(), system_widgets),
         ];
 
         PageType::new_categorized(categories, None)
@@ -3807,7 +3773,7 @@ impl FeaturesPageView {
                 Container::new(
                     Align::new(
                         Text::new_inline(
-                            &*FEATURES_LONGER_THAN,
+                            FEATURES_LONGER_THAN.get(),
                             appearance.ui_font_family(),
                             font_size,
                         )
@@ -3843,7 +3809,7 @@ impl FeaturesPageView {
                 Container::new(
                     Align::new(
                         Text::new_inline(
-                            &*FEATURES_SECONDS_TO_COMPLETE,
+                            FEATURES_SECONDS_TO_COMPLETE.get(),
                             appearance.ui_font_family(),
                             font_size,
                         )
@@ -3925,7 +3891,7 @@ impl FeaturesPageView {
                     Shrinkable::new(
                         2.,
                         Align::new(
-                            Text::new_inline(&*FEATURES_KEYBINDING, appearance.ui_font_family(), 13.)
+                            Text::new_inline(FEATURES_KEYBINDING.get(), appearance.ui_font_family(), 13.)
                                 .with_color(appearance.theme().active_ui_text_color().into())
                                 .finish(),
                         )
@@ -4037,7 +4003,7 @@ impl FeaturesPageView {
                                 2.,
                                 Align::new(
                                     Text::new_inline(
-                                        &*FEATURES_PRESS_NEW_SHORTCUT,
+                                        FEATURES_PRESS_NEW_SHORTCUT.get(),
                                         appearance.ui_font_family(),
                                         13.,
                                     )
@@ -4088,7 +4054,7 @@ impl FeaturesPageView {
                 }
 
                 Container::new(
-                    Text::new_inline(&*FEATURES_CHANGE_KEYBINDING, appearance.ui_font_family(), 12.)
+                    Text::new_inline(FEATURES_CHANGE_KEYBINDING.get(), appearance.ui_font_family(), 12.)
                         .with_color(button_color)
                         .finish(),
                 )
@@ -4567,10 +4533,9 @@ impl SettingsWidget for LanguageWidget {
         app: &AppContext,
     ) -> Box<dyn Element> {
         use crate::terminal::general_settings::Language as LanguageSetting;
-
         render_dropdown_item(
             appearance,
-            &*DISPLAY_LANGUAGE_LABEL,
+            DISPLAY_LANGUAGE_LABEL.get(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -4849,7 +4814,7 @@ impl SettingsWidget for MouseScrollMultiplierWidget {
                 } else {
                     appearance
                         .ui_builder()
-                        .wrappable_text(&*FEATURES_ALLOWED_VALUES, true)
+                        .wrappable_text(FEATURES_ALLOWED_VALUES.get(), true)
                         .with_style(UiComponentStyles {
                             font_color: Some(themes::theme::Fill::error().into_solid()),
                             ..Default::default()
@@ -4957,7 +4922,7 @@ impl SettingsWidget for DefaultTerminalWidget {
         let default_terminal = DefaultTerminal::as_ref(app);
         if default_terminal.is_warp_default() {
             ui_builder
-                .wrappable_text(&*FEATURES_DEFAULT_TERMINAL, true)
+                .wrappable_text(FEATURES_DEFAULT_TERMINAL.get(), true)
                 .with_style(UiComponentStyles {
                     font_color: Some(appearance.theme().disabled_ui_text_color().into()),
                     margin: Some(Coords::default().bottom(16.)),
@@ -4968,7 +4933,7 @@ impl SettingsWidget for DefaultTerminalWidget {
         } else {
             ui_builder
                 .link(
-                    FEATURES_MAKE_DEFAULT.clone(),
+                    FEATURES_MAKE_DEFAULT.get().to_owned(),
                     None,
                     Some(Box::new(|ctx| {
                         ctx.dispatch_typed_action(FeaturesPageAction::MakeWarpDefaultTerminal);
@@ -5163,7 +5128,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                     session_settings
                         .notifications
                         .is_agent_task_completed_enabled,
-                    &*NOTIFY_AGENT_COMPLETE_LABEL,
+                    NOTIFY_AGENT_COMPLETE_LABEL.get(),
                     FeaturesPageAction::ToggleAgentTaskCompletedNotifications,
                     view.button_mouse_states
                         .agent_task_completed_notifications_checkbox
@@ -5176,7 +5141,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                 ),
                 view.render_notification_toggle(
                     session_settings.notifications.is_needs_attention_enabled,
-                    &*NOTIFY_AGENT_ATTENTION_LABEL,
+                    NOTIFY_AGENT_ATTENTION_LABEL.get(),
                     FeaturesPageAction::ToggleNeedsAttentionNotifications,
                     view.button_mouse_states
                         .agent_needs_attention_notifications_checkbox
@@ -5242,7 +5207,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                     .with_cross_axis_alignment(CrossAxisAlignment::Center)
                     .with_child(
                         Text::new_inline(
-                            &*FEATURES_TOAST_VISIBLE_FOR,
+                            FEATURES_TOAST_VISIBLE_FOR.get(),
                             appearance.ui_font_family(),
                             font_size,
                         )
@@ -5271,7 +5236,7 @@ impl SettingsWidget for DesktopNotificationsWidget {
                         .finish(),
                     )
                     .with_child(
-                        Text::new_inline(&*FEATURES_SECONDS, appearance.ui_font_family(), font_size)
+                        Text::new_inline(FEATURES_SECONDS.get(), appearance.ui_font_family(), font_size)
                             .with_color(font_color.into())
                             .finish(),
                     )
@@ -5457,7 +5422,7 @@ impl SettingsWidget for ExtraMetaKeysWidget {
             .borrow_mut();
         Flex::column()
             .with_child(render_body_item::<FeaturesPageAction>(
-                (&*EXTRA_META_KEYS_LEFT_TEXT).into(),
+                (EXTRA_META_KEYS_LEFT_TEXT.get()).into(),
                 None,
                 LocalOnlyIconState::for_setting(
                     crate::terminal::keys_settings::ExtraMetaKeys::storage_key(),
@@ -5478,7 +5443,7 @@ impl SettingsWidget for ExtraMetaKeysWidget {
                 None,
             ))
             .with_child(render_body_item::<FeaturesPageAction>(
-                (&*EXTRA_META_KEYS_RIGHT_TEXT).into(),
+                (EXTRA_META_KEYS_RIGHT_TEXT.get()).into(),
                 None,
                 LocalOnlyIconState::for_setting(
                     crate::terminal::keys_settings::ExtraMetaKeys::storage_key(),
@@ -5558,7 +5523,7 @@ impl SettingsWidget for GlobalHotkeyWidget {
                 || {
                     render_dropdown_item(
                         appearance,
-                        &*FEATURES_GLOBAL_HOTKEY_LABEL,
+                        FEATURES_GLOBAL_HOTKEY_LABEL.get(),
                         None,
                         None,
                         LocalOnlyIconState::for_setting(
@@ -6449,8 +6414,8 @@ Some(crate::tr!("settings", "features-completions-unbound"))
             TabBehavior::UserDefined => None,
         };
         let other_keybinding_name = match *view.tab_behavior {
-            TabBehavior::Completions => Some(&*FEATURES_ACCEPT_AUTOSUGGESTION),
-            TabBehavior::Autosuggestions => Some(&*FEATURES_OPEN_COMPLETIONS),
+            TabBehavior::Completions => Some(FEATURES_ACCEPT_AUTOSUGGESTION.get()),
+            TabBehavior::Autosuggestions => Some(FEATURES_OPEN_COMPLETIONS.get()),
             TabBehavior::UserDefined => None,
         };
 
@@ -6563,7 +6528,7 @@ impl SettingsWidget for CtrlTabBehaviorWidget {
             || {
                 render_dropdown_item(
                     appearance,
-                    &*FEATURES_CTRL_TAB_BEHAVIOR_LABEL,
+                    FEATURES_CTRL_TAB_BEHAVIOR_LABEL.get(),
                     None,
                     None,
                     LocalOnlyIconState::for_setting(
@@ -6810,7 +6775,7 @@ impl SmartSelectWidget {
         Flex::column()
             .with_child(
                 ui_builder
-                    .label(FEATURES_CHARACTERS_WORD.clone())
+                    .label(FEATURES_CHARACTERS_WORD.get())
                     .with_style(UiComponentStyles {
                         margin: Some(Coords {
                             top: 10.0,
@@ -7033,7 +6998,7 @@ impl SettingsWidget for NewTabPlacementWidget {
     ) -> Box<dyn Element> {
         render_dropdown_item(
             appearance,
-            &*NEW_TAB_PLACEMENT_LABEL,
+            NEW_TAB_PLACEMENT_LABEL.get(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -7261,7 +7226,7 @@ impl SettingsWidget for GPUWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .wrappable_text(&*FEATURES_CHANGES_NEW_WINDOWS, true)
+                        .wrappable_text(FEATURES_CHANGES_NEW_WINDOWS.get(), true)
                         .with_style(UiComponentStyles {
                             font_color: Some(theme.sub_text_color(theme.background()).into_solid()),
                             ..Default::default()
@@ -7376,7 +7341,7 @@ impl SettingsWidget for GraphicsBackendWidget {
         let theme = appearance.theme();
         let dropdown = render_dropdown_item(
             appearance,
-            &*PREFERRED_GRAPHICS_BACKEND_LABEL,
+            PREFERRED_GRAPHICS_BACKEND_LABEL.get(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -7411,7 +7376,7 @@ impl SettingsWidget for GraphicsBackendWidget {
                 Container::new(
                     appearance
                         .ui_builder()
-                        .wrappable_text(&*FEATURES_CHANGES_NEW_WINDOWS, true)
+                        .wrappable_text(FEATURES_CHANGES_NEW_WINDOWS.get(), true)
                         .with_style(UiComponentStyles {
                             font_color: Some(theme.sub_text_color(theme.background()).into_solid()),
                             ..Default::default()

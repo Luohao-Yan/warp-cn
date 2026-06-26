@@ -15,7 +15,7 @@ use warpui::{Element, ViewHandle};
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::ActionButton;
-
+use crate::static_tr;
 const BANNER_WIDTH: f32 = 420.;
 const HERO_HEIGHT: f32 = 92.;
 const HERO_IMAGE_PATH: &str = "async/png/onboarding/hoa_welcome_banner.png";
@@ -54,7 +54,7 @@ static FEATURE_ITEMS: &[&FeatureItem] = &[
     &FEATURE_ITEM_NATIVE_REVIEW,
 ];
 
-static WELCOME_BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "welcome-banner-title").clone());
+static_tr!(WELCOME_BANNER_TITLE, "workspace", "welcome-banner-title");
 
 pub fn render_welcome_banner(
     close_button: &ViewHandle<ActionButton>,
@@ -114,7 +114,7 @@ pub fn render_welcome_banner(
 
     // Title
     let title = Text::new(
-        WELCOME_BANNER_TITLE.clone(),
+        WELCOME_BANNER_TITLE.get(),
         appearance.ui_font_family(),
         20.,
     )

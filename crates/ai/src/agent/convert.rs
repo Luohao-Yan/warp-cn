@@ -9,6 +9,8 @@ pub enum ConvertToAPITypeError {
     Unimplemented(String),
     #[error("Encountered error converting types for MultiAgentApi request: {0:?}")]
     Other(#[from] anyhow::Error),
+    #[error("Local agent error: {0}")]
+    LocalAgentError(String),
 }
 
 /// Unexpected errors when trying to convert an [`api::message::ToolCall`] to an [`AIAgentAction`].

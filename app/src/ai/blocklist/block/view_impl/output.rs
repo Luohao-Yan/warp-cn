@@ -8,8 +8,6 @@ use std::collections::HashMap;
 use std::path::{Component, Path};
 use std::rc::Rc;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use ai::agent::action::{
     RequestComputerUseRequest, SuggestPromptRequest, UploadArtifactRequest, UseComputerRequest,
 };
@@ -125,8 +123,9 @@ use crate::view_components::compactible_action_button::{
 };
 use crate::workspace::WorkspaceAction;
 use crate::{AIAgentTodoList, FeatureFlag};
+use crate::static_tr;
 
-static BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-blocked-upload-artifact"));
+static_tr!(BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT, "ai_assistant", "ai-blocked-upload-artifact");
 
 /// Data required to render the AI block output component.
 #[derive(Copy, Clone)]
@@ -1452,7 +1451,7 @@ fn render_search_codebase(
                 )
                 .with_header(blocked_action_header(
                     id.clone(),
-                    BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE.as_str(),
+                    BLOCKED_ACTION_MESSAGE_FOR_SEARCHING_CODEBASE.get(),
                     buttons.run_button.clone(),
                     buttons.cancel_button.clone(),
                     props.action_model,
@@ -1820,7 +1819,7 @@ fn render_read_files(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 id.clone(),
-                BLOCKED_ACTION_MESSAGE_FOR_READING_FILES.as_str(),
+                BLOCKED_ACTION_MESSAGE_FOR_READING_FILES.get(),
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2585,7 +2584,7 @@ fn render_file_retrieval_tool(
         config = config
             .with_header(blocked_action_header(
                 action_id.clone(),
-                BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB.as_str(),
+                BLOCKED_ACTION_MESSAGE_FOR_GREP_OR_FILE_GLOB.get(),
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -2788,7 +2787,7 @@ fn render_upload_artifact(
         renderable_action = renderable_action
             .with_header(blocked_action_header(
                 action_id.clone(),
-                BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT.as_str(),
+                BLOCKED_ACTION_MESSAGE_FOR_UPLOADING_ARTIFACT.get(),
                 buttons.run_button.clone(),
                 buttons.cancel_button.clone(),
                 props.action_model,
@@ -3861,7 +3860,6 @@ enum ConversationSearchPhase {
 
 fn conversation_search_phase(task: &crate::ai::agent::task::Task) -> ConversationSearchPhase {
     use crate::ai::agent::{AIAgentActionType, AIAgentOutputMessageType};
-
     let mut current_phase = ConversationSearchPhase::ListingMessages;
 
     for exchange in task.exchanges() {

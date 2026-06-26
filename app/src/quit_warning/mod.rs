@@ -1,6 +1,5 @@
 use itertools::Itertools;
 use settings::ToggleableSetting as _;
-use std::sync::LazyLock;
 use warpui::modals::{AlertDialogWithCallbacks, AppModalCallback, ModalButton};
 use warpui::{AppContext, EntityId, SingletonEntity, ViewContext, WeakViewHandle, WindowId};
 
@@ -11,7 +10,7 @@ use crate::session_management::{RunningSessionSummary, SessionNavigationData};
 use crate::terminal::general_settings::GeneralSettings;
 use crate::workspace::Workspace;
 use crate::{report_if_error, send_telemetry_from_app_ctx, TelemetryEvent};
-
+use crate::static_tr;
 /// Scope of what's being quit/closed.
 #[derive(Clone)]
 enum QuitScope<'a> {
@@ -395,31 +394,18 @@ impl<'a> QuitWarningDialog<'a> {
     }
 
     pub fn build(self) -> AlertDialogWithCallbacks<AppModalCallback> {
-        static YES_CLOSE: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-yes-close"));
-        static YES_QUIT: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-yes-quit"));
-        static SAVE_BUTTON: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-save-button"));
-        static DONT_SAVE_BUTTON: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-dont-save-button"));
-        static SHOW_PROCESSES: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-show-processes"));
-        static CANCEL_LABEL: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("common", "cancel-label"));
-        static CLOSE_PANE: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-close-pane"));
-        static CLOSE_TAB: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-close-tab"));
-        static CLOSE_TABS: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-close-tabs"));
-        static CLOSE_WINDOW: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-close-window"));
-        static QUIT_WARP: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-warp"));
-        static SAVE_CHANGES: LazyLock<String> =
-            LazyLock::new(|| crate::tr!("workspace", "quit-save-changes"));
-
+        static_tr!(YES_CLOSE, "workspace", "quit-yes-close");
+        static_tr!(YES_QUIT, "workspace", "quit-yes-quit");
+        static_tr!(SAVE_BUTTON, "workspace", "quit-save-button");
+        static_tr!(DONT_SAVE_BUTTON, "workspace", "quit-dont-save-button");
+        static_tr!(SHOW_PROCESSES, "workspace", "quit-show-processes");
+        static_tr!(CANCEL_LABEL, "common", "cancel-label");
+        static_tr!(CLOSE_PANE, "workspace", "quit-close-pane");
+        static_tr!(CLOSE_TAB, "workspace", "quit-close-tab");
+        static_tr!(CLOSE_TABS, "workspace", "quit-close-tabs");
+        static_tr!(CLOSE_WINDOW, "workspace", "quit-close-window");
+        static_tr!(QUIT_WARP, "workspace", "quit-warp");
+        static_tr!(SAVE_CHANGES, "workspace", "quit-save-changes");
         let QuitWarningDialog {
             state,
             on_confirm,
@@ -432,28 +418,28 @@ impl<'a> QuitWarningDialog<'a> {
         let mut buttons = Vec::new();
 
         if let Some(callback) = on_confirm {
-            let confirm_title = match state.scope {
+            let confirm_title: String = match state.scope {
                 QuitScope::Window(_) | QuitScope::Tabs(_) | QuitScope::Pane { .. } => {
-                    YES_CLOSE.as_str()
+                    YES_CLOSE.get().to_owned()
                 }
-                QuitScope::App => YES_QUIT.as_str(),
-                _ => "",
+                QuitScope::App => YES_QUIT.get().to_owned(),
+                _ => String::new(),
             };
-            buttons.push(ModalButton::for_app(confirm_title.to_string(), callback));
+            buttons.push(ModalButton::for_app(confirm_title, callback));
         }
 
         if let Some(callback) = on_save_changes {
-            buttons.push(ModalButton::for_app(SAVE_BUTTON.to_string(), callback));
+            buttons.push(ModalButton::for_app(SAVE_BUTTON.get(), callback));
         }
 
         if let Some(callback) = on_discard_changes {
-            buttons.push(ModalButton::for_app(DONT_SAVE_BUTTON.to_string(), callback));
+            buttons.push(ModalButton::for_app(DONT_SAVE_BUTTON.get(), callback));
         }
 
         if let Some(callback) = on_show_processes {
             if state.total_long_running_commands > 0 {
                 buttons.push(ModalButton::for_app(
-                    SHOW_PROCESSES.to_string(),
+                    SHOW_PROCESSES.get(),
                     move |app| {
                         callback(app);
                     },
@@ -462,20 +448,20 @@ impl<'a> QuitWarningDialog<'a> {
         }
 
         if let Some(callback) = on_cancel {
-            buttons.push(ModalButton::for_app(CANCEL_LABEL.to_string(), callback));
+            buttons.push(ModalButton::for_app(CANCEL_LABEL.get(), callback));
         }
 
-        let title: &str = match &state.scope {
-            QuitScope::Pane { .. } => CLOSE_PANE.as_str(),
-            QuitScope::Tabs(tabs) if tabs.len() == 1 => CLOSE_TAB.as_str(),
-            QuitScope::Tabs(_) => CLOSE_TABS.as_str(),
-            QuitScope::Window(_) => CLOSE_WINDOW.as_str(),
-            QuitScope::App => QUIT_WARP.as_str(),
-            QuitScope::EditorTab { .. } => SAVE_CHANGES.as_str(),
+        let title: String = match &state.scope {
+            QuitScope::Pane { .. } => CLOSE_PANE.get().to_owned(),
+            QuitScope::Tabs(tabs) if tabs.len() == 1 => CLOSE_TAB.get().to_owned(),
+            QuitScope::Tabs(_) => CLOSE_TABS.get().to_owned(),
+            QuitScope::Window(_) => CLOSE_WINDOW.get().to_owned(),
+            QuitScope::App => QUIT_WARP.get().to_owned(),
+            QuitScope::EditorTab { .. } => SAVE_CHANGES.get().to_owned(),
         };
 
         AlertDialogWithCallbacks::for_app(
-            title,
+            &title,
             state.warning_text(),
             buttons,
             on_disable_warning_modal,

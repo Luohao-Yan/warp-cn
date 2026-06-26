@@ -11,10 +11,11 @@ use warpui::{AppContext, Element, SingletonEntity as _};
 use crate::ai::execution_profiles::profiles::ClientProfileId;
 use crate::appearance::Appearance;
 use crate::search::{ItemHighlightState, SearchItem};
+use crate::static_tr;
 use crate::terminal::input::inline_menu::styles as inline_styles;
 use crate::terminal::input::profiles::data_source::SelectProfileMenuItem;
 
-const MANAGE_PROFILES_LABEL: &str = "Manage profiles";
+static_tr!(MANAGE_PROFILES_LABEL, "terminal", "manage-profiles");
 
 #[derive(Debug, Clone)]
 enum ProfileSearchItemKind {
@@ -108,7 +109,7 @@ impl SearchItem for ProfileSearchItem {
                 is_selected,
                 ..
             } => (profile_name.clone(), *is_selected),
-            ProfileSearchItemKind::ManageProfiles => (MANAGE_PROFILES_LABEL.to_owned(), false),
+            ProfileSearchItemKind::ManageProfiles => (MANAGE_PROFILES_LABEL.get().to_owned(), false),
         };
 
         let mut label = Text::new_inline(label_text, appearance.ui_font_family(), font_size)

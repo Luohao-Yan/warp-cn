@@ -1,8 +1,6 @@
 use std::collections::HashSet;
 use std::ops::Deref;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use warp_core::send_telemetry_from_app_ctx;
@@ -49,7 +47,7 @@ use crate::themes::theme::WarpTheme;
 use crate::view_components::DismissibleToast;
 use crate::workspace::{active_terminal_in_window, ForkedConversationDestination, WorkspaceAction};
 use crate::{send_telemetry_from_ctx, ToastStack};
-
+use crate::static_tr;
 lazy_static! {
     /// Set of hardcoded action names that we want to show in the command palette zero state.
     static ref SUGGESTED_ACTIONS: HashSet<&'static str> = HashSet::from_iter(
@@ -61,8 +59,8 @@ lazy_static! {
     );
 }
 
-static COMMAND_PALETTE_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-placeholder").clone());
-static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "palette-no-results").clone());
+static_tr!(COMMAND_PALETTE_PLACEHOLDER, "search", "palette-placeholder");
+static_tr!(NO_RESULTS_LABEL, "search", "palette-no-results");
 
 /// Position ID for the command palette list.
 const PALETTE_LIST_SAVE_POSITION_ID: &str = "command_palette:list";
@@ -283,7 +281,7 @@ impl View {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                COMMAND_PALETTE_PLACEHOLDER.clone(),
+                COMMAND_PALETTE_PLACEHOLDER.get(),
                 Self::create_query_result_renderer,
                 ctx,
             )
@@ -295,7 +293,7 @@ impl View {
         });
 
         let placeholder_element = QueryResultRenderer::new(
-            MatchedBinding::placeholder(NO_RESULTS_LABEL.clone()).into(),
+            MatchedBinding::placeholder(NO_RESULTS_LABEL.get().to_owned()).into(),
             "command_palette:no_results".into(),
             |_, _, _| {},
             *styles::QUERY_RESULT_RENDERER_STYLES,

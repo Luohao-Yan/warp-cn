@@ -103,15 +103,13 @@ use crate::workspace::{PaneViewLocator, Workspace, WorkspaceAction, WorkspaceReg
 use crate::workspaces::team_tester::TeamTesterStatus;
 use crate::workspaces::update_manager::TeamUpdateManager;
 use crate::workspaces::user_workspaces::{UserWorkspaces, UserWorkspacesEvent};
+use crate::static_tr;
 use crate::{
     report_if_error, send_telemetry_from_app_ctx, send_telemetry_from_ctx, ChannelState,
     GlobalResourceHandles, GlobalResourceHandlesProvider, UpdateQuakeModeEventArg,
 };
 
-use std::sync::LazyLock;
-
-
-static WINDOW_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "app-title"));
+static_tr!(WINDOW_TITLE, "common", "app-title");
 
 lazy_static! {
     static ref FALLBACK_WINDOW_SIZE: Vector2F = vec2f(800.0, 600.0);
@@ -612,7 +610,7 @@ pub fn create_transferred_window(
         AddWindowOptions {
             window_style,
             window_bounds,
-            title: Some(WINDOW_TITLE.clone()),
+            title: Some(WINDOW_TITLE.get().to_owned()),
             background_blur_radius_pixels: Some(*window_settings.background_blur_radius),
             background_blur_texture: *window_settings.background_blur_texture,
             on_gpu_driver_selected: on_gpu_driver_selected_callback(),

@@ -62,6 +62,7 @@ pub use crate::terminal::CLIAgent;
 use crate::terminal::TerminalModel;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
+use crate::static_tr;
 use crate::view_components::action_button::{
     ActionButton, ActionButtonTheme, ButtonSize, KeystrokeSource, TooltipAlignment,
 };
@@ -142,10 +143,10 @@ fn rich_input_submit_strategy(agent: CLIAgent) -> RichInputSubmitStrategy {
 
 static USE_AGENT_KEYSTROKE: LazyLock<Keystroke> =
     LazyLock::new(|| Keystroke::parse(cmd_or_ctrl_shift("enter")).expect("valid keystroke"));
-static TERMINAL_USE_AGENT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "use-agent-btn"));
-static TERMINAL_GIVE_CONTROL_BACK: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "give-control-back-btn"));
-static TERMINAL_ASK_AGENT_ASSIST: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-agent-assist-tooltip"));
-static TERMINAL_ASK_AGENT_RESUME: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-agent-resume-tooltip"));
+static_tr!(TERMINAL_USE_AGENT, "terminal", "use-agent-btn");
+static_tr!(TERMINAL_GIVE_CONTROL_BACK, "terminal", "give-control-back-btn");
+static_tr!(TERMINAL_ASK_AGENT_ASSIST, "terminal", "ask-agent-assist-tooltip");
+static_tr!(TERMINAL_ASK_AGENT_RESUME, "terminal", "ask-agent-resume-tooltip");
 
 impl TerminalView {
     pub(super) fn register_subscriptions_for_use_agent_footer(
@@ -1071,13 +1072,13 @@ impl UseAgentToolbar {
 
         let button = ctx.add_typed_action_view(|ctx| {
             ActionButton::new(
-                &*TERMINAL_USE_AGENT,
+                TERMINAL_USE_AGENT.get(),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .with_icon(Icon::Oz)
             .with_keybinding(KeystrokeSource::Fixed(USE_AGENT_KEYSTROKE.clone()), ctx)
             .with_size(button_size)
-            .with_tooltip(&*TERMINAL_ASK_AGENT_ASSIST)
+            .with_tooltip(TERMINAL_ASK_AGENT_ASSIST.get())
             .with_tooltip_alignment(TooltipAlignment::Left)
             .on_click(|ctx| {
                 ctx.dispatch_typed_action(TerminalAction::SetInputModeAgent);
@@ -1085,13 +1086,13 @@ impl UseAgentToolbar {
         });
         let give_control_back_button = ctx.add_typed_action_view(|ctx| {
             ActionButton::new(
-                &*TERMINAL_GIVE_CONTROL_BACK,
+                TERMINAL_GIVE_CONTROL_BACK.get(),
                 AgentFooterButtonTheme::new(Some(terminal_model.clone())),
             )
             .with_icon(Icon::Oz)
             .with_keybinding(KeystrokeSource::Fixed(USE_AGENT_KEYSTROKE.clone()), ctx)
             .with_size(button_size)
-            .with_tooltip(&*TERMINAL_ASK_AGENT_RESUME)
+            .with_tooltip(TERMINAL_ASK_AGENT_RESUME.get())
             .with_tooltip_alignment(TooltipAlignment::Left)
             .on_click(|ctx| {
                 ctx.dispatch_typed_action(TerminalAction::SetInputModeAgent);

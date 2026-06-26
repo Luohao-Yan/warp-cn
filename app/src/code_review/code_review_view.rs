@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use std::collections::{HashMap, HashSet};
 use std::mem;
 use std::ops::Range;
@@ -266,10 +265,10 @@ const CODE_REVIEW_EDITOR_LINE_HEIGHT_RATIO: f32 = 1.4;
 /// Extra scroll buffer (in pixels) added when scrolling to a line that has a comment editor below it.
 const COMMENT_EDITOR_SCROLL_BUFFER: f32 = 200.0;
 
-pub static CODE_REVIEW_TOOLTIP_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "review-tooltip"));
-static REMOTE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "review-remote"));
-static DISABLED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "review-disabled"));
-static WSL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "review-wsl"));
+static_tr!(pub CODE_REVIEW_TOOLTIP_TEXT, "code", "review-tooltip");
+static_tr!(REMOTE_TEXT, "code", "review-remote");
+static_tr!(DISABLED_TEXT, "code", "review-disabled");
+static_tr!(WSL_TEXT, "code", "review-wsl");
 
 pub fn get_discard_button_disabled_tooltip(git_operation_blocked: bool) -> String {
     if git_operation_blocked {
@@ -3983,21 +3982,21 @@ impl CodeReviewView {
         appearance: &Appearance,
         open_repo_button: Option<Box<dyn Element>>,
     ) -> Box<dyn Element> {
-        Self::render_no_repo_found_state(appearance, REMOTE_TEXT.clone(), open_repo_button)
+        Self::render_no_repo_found_state(appearance, REMOTE_TEXT.get().to_owned(), open_repo_button)
     }
 
     pub fn render_wsl_state(
         appearance: &Appearance,
         open_repo_button: Option<Box<dyn Element>>,
     ) -> Box<dyn Element> {
-        Self::render_no_repo_found_state(appearance, WSL_TEXT.clone(), open_repo_button)
+        Self::render_no_repo_found_state(appearance, WSL_TEXT.get().to_owned(), open_repo_button)
     }
 
     pub fn render_not_repo_state(
         appearance: &Appearance,
         open_repo_button: Option<Box<dyn Element>>,
     ) -> Box<dyn Element> {
-        Self::render_no_repo_found_state(appearance, DISABLED_TEXT.clone(), open_repo_button)
+        Self::render_no_repo_found_state(appearance, DISABLED_TEXT.get().to_owned(), open_repo_button)
     }
 
     fn render_loaded_state(
@@ -7681,7 +7680,7 @@ impl ShowCommentEditorProvider for ShowCommentEditor {
 #[path = "scroll_preservation.rs"]
 mod scroll_preservation;
 use scroll_preservation::RelocatableScrollContext;
-
+use crate::static_tr;
 #[cfg(feature = "integration_tests")]
 #[path = "code_review_view_integration.rs"]
 mod code_review_view_integration;

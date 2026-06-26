@@ -13,12 +13,11 @@ use crate::search::command_palette::conversations::search_item::{
 };
 use crate::search::command_palette::mixer::CommandPaletteItemAction;
 use crate::search::command_palette::separator_search_item::SeparatorSearchItem;
-use std::sync::LazyLock;
 use crate::search::data_source::{DataSourceSearchError, Query, QueryResult};
 use crate::search::mixer::DataSourceRunErrorWrapper;
 use crate::search::SyncDataSource;
 use crate::workspace::Workspace;
-
+use crate::static_tr;
 /// Sections for grouping conversations in the command palette.
 #[derive(Debug, PartialEq, Eq, Hash)]
 enum ConversationSection {
@@ -27,16 +26,16 @@ enum ConversationSection {
     Past,
 }
 
-static CONVERSATION_SECTION_ACTIVE_PANE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-active-pane").clone());
-static CONVERSATION_SECTION_OTHER_ACTIVE: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-other-active").clone());
-static CONVERSATION_SECTION_PAST: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "section-past").clone());
+static_tr!(CONVERSATION_SECTION_ACTIVE_PANE, "search", "section-active-pane");
+static_tr!(CONVERSATION_SECTION_OTHER_ACTIVE, "search", "section-other-active");
+static_tr!(CONVERSATION_SECTION_PAST, "search", "section-past");
 
 impl ConversationSection {
     fn title(&self) -> &str {
         match self {
-            ConversationSection::ActivePane => &CONVERSATION_SECTION_ACTIVE_PANE,
-            ConversationSection::OtherActive => &CONVERSATION_SECTION_OTHER_ACTIVE,
-            ConversationSection::Past => &CONVERSATION_SECTION_PAST,
+            ConversationSection::ActivePane => CONVERSATION_SECTION_ACTIVE_PANE.get(),
+            ConversationSection::OtherActive => CONVERSATION_SECTION_OTHER_ACTIVE.get(),
+            ConversationSection::Past => CONVERSATION_SECTION_PAST.get(),
         }
     }
 

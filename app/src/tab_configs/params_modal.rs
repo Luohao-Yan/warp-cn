@@ -1,9 +1,6 @@
 
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
-
 use warp_core::ui::theme::color::internal_colors;
 use warp_core::ui::Icon;
 use warp_editor::editor::NavigationKey;
@@ -32,6 +29,7 @@ use crate::modal::ModalAction;
 use crate::tab_configs::branch_picker::BranchPicker;
 use crate::tab_configs::repo_picker::{RepoPicker, RepoPickerEvent};
 use crate::tab_configs::{PickerStyle, TabConfig, TabConfigParam, TabConfigParamType};
+use crate::static_tr;
 use crate::view_components::action_button::{
     ActionButton, DisabledTheme, KeystrokeSource, NakedTheme, PrimaryTheme,
 };
@@ -155,9 +153,9 @@ impl TabConfigParamsModal {
                 ctx.dispatch_typed_action(TabConfigParamsModalAction::Cancel);
             })
         });
-        static OPEN_TAB_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "open-tab"));
+        static_tr!(OPEN_TAB_LABEL, "common", "open-tab");
         let submit_button = ctx.add_typed_action_view(|ctx| {
-            ActionButton::new(&*OPEN_TAB_LABEL, PrimaryTheme)
+            ActionButton::new(OPEN_TAB_LABEL.get(), PrimaryTheme)
                 .with_keybinding(
                     KeystrokeSource::Fixed(Keystroke::parse("enter").unwrap_or_default()),
                     ctx,
@@ -167,7 +165,7 @@ impl TabConfigParamsModal {
                 })
         });
         let submit_button_disabled =
-            ctx.add_typed_action_view(|_| ActionButton::new(&*OPEN_TAB_LABEL, DisabledTheme));
+            ctx.add_typed_action_view(|_| ActionButton::new(OPEN_TAB_LABEL.get(), DisabledTheme));
         Self {
             param_fields: Vec::new(),
             pending_config: None,

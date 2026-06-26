@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use warp_core::ui::appearance::Appearance;
 use warp_editor::editor::NavigationKey;
 use warpui::elements::{
@@ -14,6 +12,7 @@ use warpui::{
 };
 
 use super::EnvVarSecretCommand;
+use crate::static_tr;
 use crate::editor::{
     EditorOptions, EditorView, Event, PropagateAndNoOpNavigationKeys, SingleLineEditorOptions,
     TextOptions,
@@ -29,11 +28,11 @@ const CONTAINER_PADDING: f32 = 25.;
 const ELEMENT_SPACING: f32 = 10.;
 const EDITOR_DIVIDE: f32 = 6.;
 
-static SECRET_SPAN: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "secret-command"));
-static SAVE_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "save-label"));
-static CANCEL_BUTTON_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
-static NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "name-label"));
-static COMMAND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "command-placeholder"));
+static_tr!(SECRET_SPAN, "env_vars", "secret-command");
+static_tr!(SAVE_BUTTON_LABEL, "common", "save-label");
+static_tr!(CANCEL_BUTTON_LABEL, "common", "cancel-label");
+static_tr!(NAME_PLACEHOLDER_TEXT, "common", "name-label");
+static_tr!(COMMAND_PLACEHOLDER_TEXT, "env_vars", "command-placeholder");
 
 #[derive(Debug, Clone)]
 pub enum EnvVarCommandDialogAction {
@@ -72,7 +71,7 @@ impl EnvVarCommandDialog {
                 };
 
                 let mut editor = EditorView::single_line(options, ctx);
-                editor.set_placeholder_text(NAME_PLACEHOLDER_TEXT.clone(), ctx);
+                editor.set_placeholder_text(NAME_PLACEHOLDER_TEXT.get(), ctx);
                 editor
             })
         };
@@ -100,7 +99,7 @@ impl EnvVarCommandDialog {
                 };
 
                 let mut editor = EditorView::new(options, ctx);
-                editor.set_placeholder_text(COMMAND_PLACEHOLDER_TEXT.clone(), ctx);
+                editor.set_placeholder_text(COMMAND_PLACEHOLDER_TEXT.get(), ctx);
                 editor
             })
         };
@@ -256,7 +255,7 @@ impl EnvVarCommandDialog {
         Container::new(
             appearance
                 .ui_builder()
-                .span(SECRET_SPAN.clone())
+                .span(SECRET_SPAN.get())
                 .with_style(UiComponentStyles {
                     font_size: Some(SPAN_FONT_SIZE),
                     ..Default::default()
@@ -308,7 +307,7 @@ impl View for EnvVarCommandDialog {
                                                     .cancel_button_mouse_state_handle
                                                     .clone(),
                                                 EnvVarCommandDialogAction::Close,
-                                                &CANCEL_BUTTON_LABEL,
+                                                CANCEL_BUTTON_LABEL.get(),
                                                 false,
                                                 app,
                                             ),
@@ -327,7 +326,7 @@ impl View for EnvVarCommandDialog {
                                                 .save_button_mouse_state_handle
                                                 .clone(),
                                             EnvVarCommandDialogAction::SaveCommand,
-                                            &SAVE_BUTTON_LABEL,
+                                            SAVE_BUTTON_LABEL.get(),
                                             true,
                                             app,
                                         ),

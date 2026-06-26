@@ -22,8 +22,6 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use ai::agent::action::{AskUserQuestionItem, InsertReviewComment, RunAgentsRequest};
 use base64::Engine as _;
 use chrono::Duration;
@@ -202,6 +200,7 @@ use crate::view_components::DismissibleToast;
 use crate::workspace::{ForkAIConversationParams, ForkedConversationDestination, WorkspaceAction};
 use crate::workspaces::user_profiles::{UserProfileWithUID, UserProfiles};
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 use crate::{
     report_error, report_if_error, send_telemetry_from_ctx, AIAgentTodoList, Appearance, FileEdit,
     LLMPreferences, PrivacySettings, ToastStack,
@@ -293,7 +292,6 @@ fn user_avatar_info_for_ai_block(
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([
         FixedBinding::new(
             "enter",
@@ -610,9 +608,9 @@ impl ImportedCommentElementState {
         });
 
         let action_id_for_open_button = action_id.clone();
-        static OPEN_IN_CR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-open-in-code-review"));
+        static_tr!(OPEN_IN_CR_LABEL, "ai_assistant", "ai-open-in-code-review");
         let open_in_code_review_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*OPEN_IN_CR_LABEL, SecondaryTheme)
+            ActionButton::new(OPEN_IN_CR_LABEL.get(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(move |ctx| {
                     ctx.dispatch_typed_action(AIBlockAction::OpenImportedCommentInCodeReview {
@@ -1235,9 +1233,9 @@ impl AIBlock {
             }
         });
 
-        static MANAGE_RULES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-manage-rules"));
+        static_tr!(MANAGE_RULES_LABEL, "ai_assistant", "ai-manage-rules");
         let manage_rules_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*MANAGE_RULES_LABEL, NakedTheme)
+            ActionButton::new(MANAGE_RULES_LABEL.get(), NakedTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(AIBlockAction::OpenAIFactCollection))
         });
 
@@ -1367,9 +1365,9 @@ impl AIBlock {
             }
         });
 
-        static REVIEW_CHANGES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-review-changes"));
+        static_tr!(REVIEW_CHANGES_LABEL, "ai_assistant", "ai-review-changes");
         let review_changes_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*REVIEW_CHANGES_LABEL, SecondaryTheme)
+            ActionButton::new(REVIEW_CHANGES_LABEL.get(), SecondaryTheme)
                 .with_icon(Icon::Diff)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -1377,18 +1375,18 @@ impl AIBlock {
                 })
         });
 
-        static OPEN_ALL_CR_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-open-all-in-code-review"));
+        static_tr!(OPEN_ALL_CR_LABEL, "ai_assistant", "ai-open-all-in-code-review");
         let open_all_comments_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*OPEN_ALL_CR_LABEL, SecondaryTheme)
+            ActionButton::new(OPEN_ALL_CR_LABEL.get(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AIBlockAction::OpenAllImportedCommentsInCodeReview);
                 })
         });
 
-        static DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-dismiss-suggestion"));
+        static_tr!(DISMISS_LABEL, "ai_assistant", "ai-dismiss-suggestion");
         let dismiss_suggestion_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*DISMISS_LABEL, SuggestionDismissButtonTheme)
+            ActionButton::new(DISMISS_LABEL.get(), SuggestionDismissButtonTheme)
                 .with_icon(Icon::X)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -1396,9 +1394,9 @@ impl AIBlock {
                 })
         });
 
-        static DONT_SHOW_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-dont-show-again"));
+        static_tr!(DONT_SHOW_LABEL, "ai_assistant", "ai-dont-show-again");
         let disable_rule_suggestions_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*DONT_SHOW_LABEL, SuggestionDismissButtonTheme)
+            ActionButton::new(DONT_SHOW_LABEL.get(), SuggestionDismissButtonTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AIBlockAction::DisableRuleSuggestions);
@@ -1408,10 +1406,10 @@ impl AIBlock {
         let ai_block_view_id = ctx.view_id();
         let exchange_id = client_ids.client_exchange_id;
         let conversation_id = client_ids.conversation_id;
-        static REWIND_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-rewind"));
+        static_tr!(REWIND_LABEL, "ai_assistant", "ai-rewind");
         let rewind_tooltip = crate::tr!("ai_assistant", "ai-rewind-tooltip");
         let rewind_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*REWIND_LABEL, RewindButtonTheme)
+            ActionButton::new(REWIND_LABEL.get(), RewindButtonTheme)
                 .with_size(ButtonSize::XSmall)
                 .with_tooltip(&rewind_tooltip)
                 .on_click(move |ctx| {

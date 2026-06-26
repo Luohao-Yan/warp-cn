@@ -1,8 +1,6 @@
 //! Overlay menu for the code review diff selector: pinned search input and
 //! a filtered list of label-only rows with a left check slot.
 use std::cmp;
-use std::sync::LazyLock;
-
 use fuzzy_match::{match_indices_case_insensitive, FuzzyMatchResult};
 use warp_core::ui::theme::Fill;
 use warp_editor::editor::NavigationKey;
@@ -28,7 +26,7 @@ use crate::editor::{
     EditorOptions, EditorView, Event as EditorEvent, PropagateAndNoOpNavigationKeys, TextOptions,
 };
 use crate::ui_components::icons::Icon;
-
+use crate::static_tr;
 const MENU_WIDTH: f32 = 280.;
 const MENU_MAX_LIST_HEIGHT: f32 = 200.;
 const MENU_CORNER_RADIUS: f32 = 6.;
@@ -279,10 +277,10 @@ impl CodeReviewDiffMenu {
 
     fn render_empty_state(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
-        static NO_MATCHES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "no-matches"));
+        static_tr!(NO_MATCHES_TEXT, "code_editor", "no-matches");
         Container::new(
             Text::new(
-                &*NO_MATCHES_TEXT,
+                NO_MATCHES_TEXT.get(),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )

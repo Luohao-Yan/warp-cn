@@ -1,4 +1,4 @@
-use std::sync::LazyLock;
+use crate::static_tr;
 use warpui::{
     elements::{ChildView, Container, Dismiss, Empty},
     ui_components::components::UiComponent,
@@ -42,8 +42,8 @@ impl DeleteEnvironmentConfirmationDialog {
         });
 
         let confirm_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-environment"));
-            ActionButton::new(&*LABEL, DangerPrimaryTheme).on_click(|ctx| {
+            static_tr!(LABEL, "settings", "delete-environment");
+            ActionButton::new(LABEL.get(), DangerPrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteEnvironmentConfirmationDialogAction::Confirm);
             })
         });

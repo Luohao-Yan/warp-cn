@@ -3,8 +3,6 @@
 //! toggle, Cloud/Local picker, and run-wide config dropdowns.
 
 use std::collections::HashMap;
-use std::sync::LazyLock;
-
 use ai::agent::action::RunAgentsExecutionMode;
 use ai::agent::orchestration_config::OrchestrationConfigStatus;
 use pathfinder_color::ColorU;
@@ -49,7 +47,7 @@ use crate::appearance::Appearance;
 use crate::ui_components::blended_colors;
 use crate::workspace::WorkspaceAction;
 use crate::BlocklistAIHistoryModel;
-
+use crate::static_tr;
 /// True when the mode is remote and `environment_id` is non-empty.
 fn env_presence(execution_mode: &RunAgentsExecutionMode) -> bool {
     matches!(
@@ -106,10 +104,10 @@ fn render_pill_toggle(is_on: bool, theme: &WarpTheme) -> Box<dyn Element> {
     .finish()
 }
 
-static CONFIG_BLOCK_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-use-orchestration"));
-static CONFIG_BLOCK_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-orchestration-description"));
-static BASE_MODEL_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-base-model-helper"));
-static AI_VIEW_DETAILS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-details"));
+static_tr!(CONFIG_BLOCK_HEADER, "ai_assistant", "ai-use-orchestration");
+static_tr!(CONFIG_BLOCK_DESCRIPTION, "ai_assistant", "ai-orchestration-description");
+static_tr!(BASE_MODEL_HELPER, "ai_assistant", "ai-base-model-helper");
+static_tr!(AI_VIEW_DETAILS, "ai_assistant", "ai-view-details");
 
 // ── Action type ─────────────────────────────────────────────────────
 
@@ -607,7 +605,7 @@ impl View for OrchestrationConfigBlockView {
 
         // Header row: "Use orchestration" + pill toggle switch
         let header_label = Text::new(
-            CONFIG_BLOCK_HEADER.clone(),
+            CONFIG_BLOCK_HEADER.get(),
             appearance.ui_font_family(),
             16.,
         )
@@ -635,7 +633,7 @@ impl View for OrchestrationConfigBlockView {
 
         // Description
         let description = Text::new(
-            CONFIG_BLOCK_DESCRIPTION.clone(),
+            CONFIG_BLOCK_DESCRIPTION.get(),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -663,7 +661,7 @@ impl View for OrchestrationConfigBlockView {
             };
             let disabled_text_color = blended_colors::text_disabled(theme, theme.background());
             let details_text = Text::new(
-                AI_VIEW_DETAILS.clone(),
+                AI_VIEW_DETAILS.get(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size() + 1.,
             )
@@ -723,7 +721,7 @@ impl View for OrchestrationConfigBlockView {
 
                 // Helper text
                 let helper = Text::new(
-                    BASE_MODEL_HELPER.clone(),
+                    BASE_MODEL_HELPER.get(),
                     appearance.ui_font_family(),
                     appearance.monospace_font_size() - 1.,
                 )

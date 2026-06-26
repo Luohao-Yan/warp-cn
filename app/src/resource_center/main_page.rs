@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use warpui::elements::{
     Align, ClippedScrollStateHandle, ClippedScrollable, Container, CornerRadius, Element, Empty,
@@ -36,11 +34,12 @@ use crate::server::telemetry::TelemetryEvent;
 use crate::settings::Settings;
 use crate::themes::theme::{Blend, Fill as FillTheme};
 use crate::workspace::WorkspaceAction;
+use crate::static_tr;
 
 const SEND_SVG_PATH: &str = "bundled/svg/send.svg";
 
-static INVITE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "invite-a-friend-to-warp"));
-static MARK_READ_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "mark-all-as-read"));
+static_tr!(INVITE_LABEL, "common", "invite-a-friend-to-warp");
+static_tr!(MARK_READ_LABEL, "common", "mark-all-as-read");
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -395,7 +394,7 @@ impl ResourceCenterMainView {
                 .with_text_and_icon_label(
                     TextAndIcon::new(
                         TextAndIconAlignment::IconFirst,
-                        &*INVITE_LABEL,
+                        INVITE_LABEL.get(),
                         Icon::new(SEND_SVG_PATH, appearance.theme().accent()),
                         MainAxisSize::Max,
                         MainAxisAlignment::Center,
@@ -434,7 +433,7 @@ impl ResourceCenterMainView {
 
                     appearance
                         .ui_builder()
-                        .wrappable_text(&*MARK_READ_LABEL, false)
+                        .wrappable_text(MARK_READ_LABEL.get(), false)
                         .with_style(style)
                         .build()
                         .finish()

@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use warpui::elements::{
     ConstrainedBox, Container, CrossAxisAlignment, Flex, MainAxisAlignment, MainAxisSize,
     MouseStateHandle, ParentElement, Shrinkable, Text,
@@ -15,13 +14,10 @@ use crate::ui_components::icons::Icon;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::UgcCollectionEnablementSetting;
 use crate::{Appearance, FeatureFlag, WorkspaceAction};
-
-pub static TITLE_EXISTING_USERS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-telemetry-title-existing"));
-pub static TITLE_NEW_USERS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-telemetry-title-new"));
-pub static DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-telemetry-description"));
+use crate::static_tr;
+static_tr!(pub TITLE_EXISTING_USERS, "ai_assistant", "ai-telemetry-title-existing");
+static_tr!(pub TITLE_NEW_USERS, "ai_assistant", "ai-telemetry-title-new");
+static_tr!(pub DESCRIPTION, "ai_assistant", "ai-telemetry-description");
 const PRIVACY_URL: &str = "https://warp.dev/privacy";
 
 #[derive(Default, Debug, Clone)]
@@ -54,9 +50,9 @@ impl View for TelemetryBanner {
         let ui_builder = appearance.ui_builder();
 
         let title = if self.is_onboarded {
-            TITLE_EXISTING_USERS.as_str()
+            TITLE_EXISTING_USERS.get()
         } else {
-            TITLE_NEW_USERS.as_str()
+            TITLE_NEW_USERS.get()
         };
 
         let left = Flex::row()
@@ -86,7 +82,7 @@ impl View for TelemetryBanner {
                                 .finish(),
                         )
                         .with_child(
-                            Text::new(DESCRIPTION.as_str(), ui_builder.ui_font_family(), 12.)
+                            Text::new(DESCRIPTION.get(), ui_builder.ui_font_family(), 12.)
                                 .with_color(theme.nonactive_ui_text_color().into_solid())
                                 .soft_wrap(true)
                                 .finish(),

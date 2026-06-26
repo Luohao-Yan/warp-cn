@@ -1,5 +1,4 @@
 use regex::Regex;
-use std::sync::LazyLock;
 use warp_editor::editor::NavigationKey;
 use warpui::elements::{
     ChildView, Container, CrossAxisAlignment, Empty, Expanded, Flex, MainAxisSize,
@@ -17,19 +16,13 @@ use crate::editor::{
     TextOptions,
 };
 use crate::modal::{Modal, ModalViewState};
-
-static SETTINGS_REGEX_NAME_OPTIONAL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "regex-name-optional"));
-static SETTINGS_REGEX_PATTERN: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "regex-pattern"));
-static SETTINGS_ADD_REGEX: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "add-regex"));
-static SETTINGS_INVALID_REGEX: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "invalid-regex"));
-static SETTINGS_NAME_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "name-placeholder"));
-static SETTINGS_PATTERN_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "pattern-placeholder"));
+use crate::static_tr;
+static_tr!(SETTINGS_REGEX_NAME_OPTIONAL, "settings", "regex-name-optional");
+static_tr!(SETTINGS_REGEX_PATTERN, "settings", "regex-pattern");
+static_tr!(SETTINGS_ADD_REGEX, "settings", "add-regex");
+static_tr!(SETTINGS_INVALID_REGEX, "settings", "invalid-regex");
+static_tr!(SETTINGS_NAME_PLACEHOLDER, "settings", "name-placeholder");
+static_tr!(SETTINGS_PATTERN_PLACEHOLDER, "settings", "pattern-placeholder");
 
 const LABEL_FONT_SIZE: f32 = 12.;
 
@@ -66,7 +59,7 @@ impl AddRegexModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text(&*SETTINGS_NAME_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(SETTINGS_NAME_PLACEHOLDER.get(), ctx);
             editor
         });
 
@@ -81,7 +74,7 @@ impl AddRegexModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text(&*SETTINGS_PATTERN_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(SETTINGS_PATTERN_PLACEHOLDER.get(), ctx);
             editor
         });
 
@@ -205,7 +198,7 @@ impl View for AddRegexModal {
         let is_submit_enabled = !pattern_text.trim().is_empty() && is_valid_regex;
 
         let name_label = Text::new(
-            SETTINGS_REGEX_NAME_OPTIONAL.clone(),
+            SETTINGS_REGEX_NAME_OPTIONAL.get(),
             appearance.ui_font_family(),
             LABEL_FONT_SIZE,
         )
@@ -213,7 +206,7 @@ impl View for AddRegexModal {
         .finish();
 
         let regex_label = Text::new(
-            SETTINGS_REGEX_PATTERN.clone(),
+            SETTINGS_REGEX_PATTERN.get(),
             appearance.ui_font_family(),
             LABEL_FONT_SIZE,
         )
@@ -232,7 +225,7 @@ impl View for AddRegexModal {
                 ButtonVariant::Accent,
                 self.submit_button_mouse_state.clone(),
             )
-            .with_text_label(SETTINGS_ADD_REGEX.clone())
+            .with_text_label(SETTINGS_ADD_REGEX.get().to_owned())
             .with_style(button_style);
 
         if !is_submit_enabled {
@@ -247,7 +240,7 @@ impl View for AddRegexModal {
                     1.,
                     Container::new(if !is_valid_regex && !pattern_text.trim().is_empty() {
                         Text::new(
-                            SETTINGS_INVALID_REGEX.clone(),
+                            SETTINGS_INVALID_REGEX.get(),
                             appearance.ui_font_family(),
                             LABEL_FONT_SIZE,
                         )

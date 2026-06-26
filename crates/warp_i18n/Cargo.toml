@@ -19,6 +19,9 @@ serde.workspace = true
 # Logging
 log.workspace = true
 
+# Cache invalidation for language switching
+parking_lot.workspace = true
+
 [dev-dependencies]
 walkdir.workspace = true
 fluent-bundle = "0.15"

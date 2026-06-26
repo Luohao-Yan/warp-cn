@@ -1,6 +1,4 @@
 use std::fmt::Debug;
-use std::sync::LazyLock;
-
 use fuzzy_match::FuzzyMatchResult;
 use ordered_float::OrderedFloat;
 use warpui::elements::{
@@ -15,8 +13,8 @@ use crate::search::ai_context_menu::mixer::AIContextMenuSearchableAction;
 use crate::search::ai_context_menu::{safe_truncate, styles};
 use crate::search::item::SearchItem;
 use crate::search::result_renderer::ItemHighlightState;
-
-static RULE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "rule-label").clone());
+use crate::static_tr;
+static_tr!(RULE_LABEL, "search", "rule-label");
 
 const MAX_COMBINED_LENGTH: usize = 55;
 
@@ -173,7 +171,7 @@ impl SearchItem for RuleSearchItem {
             if !name.is_empty() {
                 name.clone()
             } else {
-                RULE_LABEL.clone()
+                RULE_LABEL.get().to_owned()
             }
         } else {
             "Rule".to_string()

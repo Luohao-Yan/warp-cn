@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::{
@@ -16,7 +14,7 @@ use crate::drive::CloudObjectTypeAndId;
 use crate::terminal::view::telemetry::SharingDialogSource;
 use crate::ui_components::icons::Icon;
 use crate::workspace::WorkspaceAction;
-
+use crate::static_tr;
 /// A rich onboarding block that prompts the user to share a newly-created personal Warp Drive
 /// object.
 pub struct OnboardingDriveSharingBlock {
@@ -46,9 +44,9 @@ impl Entity for OnboardingDriveSharingBlock {
     type Event = ();
 }
 
-static TITLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "sharing-in-warp-drive"));
-static BODY_TEXT_P1: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "drive-sharing-body-1"));
-static BODY_TEXT_P2: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "drive-sharing-body-2"));
+static_tr!(TITLE_TEXT, "terminal", "sharing-in-warp-drive");
+static_tr!(BODY_TEXT_P1, "terminal", "drive-sharing-body-1");
+static_tr!(BODY_TEXT_P2, "terminal", "drive-sharing-body-2");
 
 const BLOCK_PADDING: f32 = 16.;
 const BUTTON_WIDTH: f32 = 100.;
@@ -66,7 +64,7 @@ impl View for OnboardingDriveSharingBlock {
         let font_size = appearance.monospace_font_size();
 
         let header = Container::new(
-            Text::new(TITLE_TEXT.as_str(), font_family, font_size)
+            Text::new(TITLE_TEXT.get(), font_family, font_size)
                 .with_color(appearance.theme().accent().into_solid())
                 .with_style(Properties::default().weight(Weight::Bold))
                 .finish(),
@@ -76,7 +74,7 @@ impl View for OnboardingDriveSharingBlock {
 
         let mut content = Flex::column().with_child(header);
 
-        for paragraph in [&*BODY_TEXT_P1, &*BODY_TEXT_P2] {
+        for paragraph in [BODY_TEXT_P1.get(), BODY_TEXT_P2.get()] {
             content.add_child(
                 appearance
                     .ui_builder()

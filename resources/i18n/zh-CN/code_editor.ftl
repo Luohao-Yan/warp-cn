@@ -79,7 +79,7 @@ code-editor-code-review-copy-text = 复制文本
 code-editor-code-review-edit = 编辑
 code-editor-code-review-view-in-github = 在 GitHub 中查看
 code-editor-code-review-remove = 移除
-code-editor-code-review-send-to-agent = 发送给代理
+code-editor-code-review-send-to-agent = 发送给智能体
 
 ## -- 代码审查附加字符串 -------------------------------------------------------
 
@@ -210,7 +210,6 @@ code-editor-code-find-replace-last = 已成功替换最后一个匹配项。
 
 ## -- 评论编辑器字符串 --
 code-editor-code-review-update-button = 更新
-code-editor-code-review-comment = 评论
 code-editor-code-comment-imported-from-github = 从 GitHub 导入的评论
 
 ## -- 新 code_editor 字符串的双前缀别名 --

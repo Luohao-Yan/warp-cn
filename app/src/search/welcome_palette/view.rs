@@ -2,8 +2,6 @@ use std::collections::HashSet;
 use std::ops::Deref as _;
 use std::path::PathBuf;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use chrono::Utc;
 use itertools::Itertools as _;
 use pathfinder_geometry::vector::vec2f;
@@ -53,9 +51,9 @@ use crate::themes::theme::WarpTheme;
 use crate::ui_components::icons::Icon;
 use crate::workflows::{WorkflowSelectionSource, WorkflowSource, WorkflowType};
 use crate::workspace::WorkspaceAction;
-
-static WELCOME_PLACEHOLDER: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "welcome-placeholder").clone());
-static NO_RESULTS: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "no-results").clone());
+use crate::static_tr;
+static_tr!(WELCOME_PLACEHOLDER, "search", "welcome-placeholder");
+static_tr!(NO_RESULTS, "search", "no-results");
 
 /// Position ID for the command palette list.
 const PALETTE_LIST_SAVE_POSITION_ID: &str = "welcome_palette:list";
@@ -272,7 +270,7 @@ impl WelcomePalette {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                WELCOME_PLACEHOLDER.clone(),
+                WELCOME_PLACEHOLDER.get(),
                 Self::create_query_result_renderer,
                 ctx,
             )
@@ -289,7 +287,7 @@ impl WelcomePalette {
         });
 
         let placeholder_element = QueryResultRenderer::new(
-            MatchedBinding::placeholder(NO_RESULTS.clone()).into(),
+            MatchedBinding::placeholder(NO_RESULTS.get()).into(),
             "welcome_palette:no_results".into(),
             |_, _, _| {},
             *styles::QUERY_RESULT_RENDERER_STYLES,

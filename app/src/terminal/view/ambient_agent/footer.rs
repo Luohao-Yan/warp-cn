@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::{
@@ -10,10 +8,10 @@ use warpui::fonts::{Properties, Weight};
 use warpui::Element;
 
 use crate::ui_components::blended_colors;
-
-static CLOUD_AGENT_STARTING: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "starting-up"));
-static INTERACT_SOON: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "interact-soon"));
-static AGENT_FAILED: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-failed"));
+use crate::static_tr;
+static_tr!(CLOUD_AGENT_STARTING, "agent_cloud", "starting-up");
+static_tr!(INTERACT_SOON, "agent_cloud", "interact-soon");
+static_tr!(AGENT_FAILED, "agent_cloud", "agent-failed");
 
 const CONTENT_SPACING: f32 = 4.;
 const HORIZONTAL_PADDING: f32 = 12.;
@@ -87,8 +85,8 @@ pub fn render_loading_footer(appearance: &Appearance) -> Box<dyn Element> {
     let border_color = blended_colors::neutral_4(theme);
 
     build_centered_footer(
-        CLOUD_AGENT_STARTING.clone(),
-        INTERACT_SOON.clone(),
+        CLOUD_AGENT_STARTING.get().to_owned(),
+        INTERACT_SOON.get().to_owned(),
         header_color,
         body_color,
         background,
@@ -110,7 +108,7 @@ pub fn render_error_footer(error_message: &str, appearance: &Appearance) -> Box<
     let border_color = theme.ui_error_color();
 
     build_centered_footer(
-        AGENT_FAILED.clone(),
+        AGENT_FAILED.get().to_owned(),
         error_message.to_string(),
         header_color,
         body_color,

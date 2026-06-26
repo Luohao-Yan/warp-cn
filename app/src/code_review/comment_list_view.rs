@@ -205,7 +205,7 @@ impl CommentListView {
 
         let comments_button = ctx.add_view(|_| {
             static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "review-comment-count", count = 1i64));
-            ActionButton::new(&*LABEL, CustomSecondaryActionTheme)
+            ActionButton::new(LABEL.clone(), CustomSecondaryActionTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(CommentListAction::ToggleCollapsed);

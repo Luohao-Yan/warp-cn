@@ -20,9 +20,8 @@ use crate::themes::theme::Fill;
 use crate::ui_components::icons::Icon;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::CustomerType;
-use std::sync::LazyLock;
-
-static DEFAULT_LIMIT_REACHED_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("billing", "shared-object-limit-reached"));
+use crate::static_tr;
+static_tr!(DEFAULT_LIMIT_REACHED_MODAL_HEADER, "billing", "shared-object-limit-reached");
 
 pub struct SharedObjectsCreationDeniedModal {
     shared_objects_creation_denied_modal: ViewHandle<Modal<SharedObjectsCreationDeniedBody>>,
@@ -41,7 +40,6 @@ pub enum SharedObjectsCreationDeniedModalEvent {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         SharedObjectsCreationDeniedModalAction::Close,
@@ -66,7 +64,7 @@ impl SharedObjectsCreationDeniedModal {
 
         let shared_objects_creation_denied_modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(
-                Some(DEFAULT_LIMIT_REACHED_MODAL_HEADER.clone()),
+                Some(DEFAULT_LIMIT_REACHED_MODAL_HEADER.get().to_owned()),
                 shared_objects_creation_denied_body,
                 ctx,
             )

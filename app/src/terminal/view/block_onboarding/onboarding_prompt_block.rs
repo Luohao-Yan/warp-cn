@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use settings::Setting as _;
 use warpui::elements::{
@@ -23,7 +21,7 @@ use crate::terminal::session_settings::SessionSettings;
 use crate::terminal::view::block_onboarding::util;
 use crate::terminal::SizeInfo;
 use crate::{report_if_error, send_telemetry_from_ctx};
-
+use crate::static_tr;
 const CONFIRM_MARGIN_TOP: f32 = 16.;
 
 pub struct OnboardingPromptBlock {
@@ -63,16 +61,16 @@ impl OnboardingPromptBlock {
         let font_color = current_theme.main_text_color(current_theme.background());
 
         // Copy - https://docs.google.com/document/d/1zttBLI5Mw07kUupvrMQoC5aTwTXSHIUOIFFnxZ8GQEU/edit
-        static LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "prompt-setup-text-1"));
-        static LINE_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "prompt-setup-text-2"));
-        static LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "learn-more-label"));
+        static_tr!(LINE_ONE, "onboarding", "prompt-setup-text-1");
+        static_tr!(LINE_TWO, "onboarding", "prompt-setup-text-2");
+        static_tr!(LINK_TEXT, "common", "learn-more-label");
         const LINK_DESTINATION: &str =
             "https://docs.warp.dev/terminal/appearance/prompt#custom-prompt-compatibility-table";
 
         Flex::column()
             .with_children([
                 Container::new(
-                    Text::new(&*LINE_ONE, font_family, font_size)
+                    Text::new(LINE_ONE.get(), font_family, font_size)
                         .with_color(font_color.into_solid())
                         .finish(),
                 )
@@ -81,8 +79,8 @@ impl OnboardingPromptBlock {
                 Container::new(
                     FormattedTextElement::new(
                         FormattedText::new([FormattedTextLine::Line(vec![
-                            FormattedTextFragment::plain_text(&*LINE_TWO),
-                            FormattedTextFragment::hyperlink(LINK_TEXT.clone(), LINK_DESTINATION),
+                            FormattedTextFragment::plain_text(LINE_TWO.get()),
+                            FormattedTextFragment::hyperlink(LINK_TEXT.get(), LINK_DESTINATION),
                         ])]),
                         font_size,
                         font_family,
@@ -236,10 +234,10 @@ impl OnboardingPromptBlock {
     fn render_existing_prompt_button_interior(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Pixel values pulled from Figma mocks
         // https://www.figma.com/file/y888viqzWBoMpFTxQqkQEN/Activation?node-id=568:1595&mode=dev
-        static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "shell-prompt-ps1"));
-        static NO_PS1_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "no-existing-prompt"));
-        static CORRECTION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "look-incorrect"));
-        static LINK_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "let-us-know"));
+        static_tr!(HEADER_TEXT, "onboarding", "shell-prompt-ps1");
+        static_tr!(NO_PS1_TEXT, "onboarding", "no-existing-prompt");
+        static_tr!(CORRECTION_TEXT, "onboarding", "look-incorrect");
+        static_tr!(LINK_TEXT, "onboarding", "let-us-know");
         const LINK_DESTINATION: &str = "https://github.com/warpdotdev/Warp/issues/new?assignees=&labels=Bug&projects=&template=01_bug_report.yml";
 
         const HEADER_MARGIN_LEFT: f32 = 4.;
@@ -264,7 +262,7 @@ impl OnboardingPromptBlock {
                 .with_corner_radius(CornerRadius::with_all(Radius::Pixels(CORNER_RADIUS_PIXELS)))
                 .finish()
         } else {
-            Text::new_inline(NO_PS1_TEXT.clone(), font_family, font_size)
+            Text::new_inline(NO_PS1_TEXT.get(), font_family, font_size)
                 .with_color(font_color.into_solid())
                 .finish()
         };
@@ -278,7 +276,7 @@ impl OnboardingPromptBlock {
         Flex::column()
             .with_child(
                 Container::new(
-                    Text::new_inline(HEADER_TEXT.clone(), font_family, font_size)
+                    Text::new_inline(HEADER_TEXT.get(), font_family, font_size)
                         .with_color(font_color.into_solid())
                         .finish(),
                 )
@@ -292,7 +290,7 @@ impl OnboardingPromptBlock {
                     Align::new(
                         Flex::row()
                             .with_children([
-                                Text::new_inline(CORRECTION_TEXT.clone(), font_family, font_size)
+                                Text::new_inline(CORRECTION_TEXT.get(), font_family, font_size)
                                     .with_color(
                                         font_color.with_opacity(CORRECTION_OPACITY).into_solid(),
                                     )
@@ -300,7 +298,7 @@ impl OnboardingPromptBlock {
                                 appearance
                                     .ui_builder()
                                     .link(
-                                        LINK_TEXT.clone(),
+                                        LINK_TEXT.get().to_owned(),
                                         Some(LINK_DESTINATION.to_string()),
                                         None,
                                         self.mouse_state_handle_look_incorrect.clone(),
@@ -325,8 +323,8 @@ impl OnboardingPromptBlock {
     fn render_warp_prompt_button_interior(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Pixel values pulled from Figma mocks
         // https://www.figma.com/file/y888viqzWBoMpFTxQqkQEN/Activation?node-id=568:1595&mode=dev
-        static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "warp-prompt"));
-        static CUSTOMIZABLE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "customizable-appearance"));
+        static_tr!(HEADER_TEXT, "onboarding", "warp-prompt");
+        static_tr!(CUSTOMIZABLE_TEXT, "terminal", "customizable-appearance");
         const HEADER_MARGIN_LEFT: f32 = 4.;
         const SECTION_MARGIN_TOP: f32 = 8.;
         const OUTER_CORNER_RADIUS: f32 = 4.;
@@ -377,7 +375,7 @@ impl OnboardingPromptBlock {
         Flex::column()
             .with_child(
                 Container::new(
-                    Text::new_inline(HEADER_TEXT.clone(), font_family, appearance.ui_font_size())
+                    Text::new_inline(HEADER_TEXT.get(), font_family, appearance.ui_font_size())
                         .with_color(font_color.into_solid())
                         .finish(),
                 )
@@ -390,7 +388,7 @@ impl OnboardingPromptBlock {
                     1.,
                     Align::new(
                         Text::new_inline(
-                            &*CUSTOMIZABLE_TEXT,
+                            CUSTOMIZABLE_TEXT.get(),
                             font_family,
                             ui_font_size,
                         )

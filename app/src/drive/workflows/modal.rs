@@ -1,8 +1,6 @@
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use pathfinder_geometry::vector::vec2f;
 use string_offset::CharOffset;
@@ -58,7 +56,7 @@ use crate::ui_components::icons::{self, Icon, ICON_DIMENSIONS};
 use crate::ui_components::menu_button::{icon_button_with_context_menu, MenuDirection};
 use crate::workflows::workflow::{Argument, Workflow};
 use crate::workflows::CloudWorkflow;
-
+use crate::static_tr;
 const BREADCRUMBS_VERTICAL_MARGIN: f32 = 6.;
 const MODAL_WIDTH: f32 = 900.;
 const MODAL_VERTICAL_PADDING: f32 = 20.;
@@ -84,19 +82,19 @@ const DIALOG_WIDTH: f32 = 460.;
 const AI_ASSIST_BUTTON_SIZE: f32 = 96.;
 const SCROLLBAR_WIDTH: ScrollbarWidth = ScrollbarWidth::Auto;
 
-static TITLE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-untitled"));
-static DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-description-placeholder"));
-static COMMAND_EDITOR_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-command-placeholder"));
-static ARGUMENT_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-new-argument"));
-static ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-argument-description"));
-static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-argument-default"));
-static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-save"));
-static AI_ASSIST_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-autofill"));
-static AI_ASSIST_LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-loading"));
+static_tr!(TITLE_PLACEHOLDER_TEXT, "drive", "workflow-untitled");
+static_tr!(DESCRIPTION_PLACEHOLDER_TEXT, "drive", "workflow-description-placeholder");
+static_tr!(COMMAND_EDITOR_PLACEHOLDER_TEXT, "drive", "workflow-command-placeholder");
+static_tr!(ARGUMENT_BUTTON_TEXT, "drive", "workflow-new-argument");
+static_tr!(ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT, "drive", "workflow-argument-description");
+static_tr!(ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT, "drive", "workflow-argument-default");
+static_tr!(SAVE_BUTTON_TEXT, "drive", "workflow-save");
+static_tr!(AI_ASSIST_BUTTON_TEXT, "drive", "workflow-autofill");
+static_tr!(AI_ASSIST_LOADING_TEXT, "drive", "workflow-loading");
 static DEFAULT_ARGUMENT_PREFIX: &str = "argument";
-static UNSAVED_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-unsaved"));
-static KEEP_EDITING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-keep-editing"));
-static DISCARD_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("drive", "workflow-discard"));
+static_tr!(UNSAVED_CHANGES_TEXT, "drive", "workflow-unsaved");
+static_tr!(KEEP_EDITING_TEXT, "drive", "workflow-keep-editing");
+static_tr!(DISCARD_CHANGES_TEXT, "drive", "workflow-discard");
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -217,7 +215,7 @@ impl WorkflowModal {
             ctx,
             Some(header_font_size),
             Some(ui_font_family),
-            Some(&TITLE_PLACEHOLDER_TEXT),
+            Some(TITLE_PLACEHOLDER_TEXT.get()),
             false, /* vim_keybindings */
             true,  /* single_line */
         );
@@ -230,7 +228,7 @@ impl WorkflowModal {
             ctx,
             Some(DESCRIPTION_FONT_SIZE),
             Some(ui_font_family),
-            Some(&DESCRIPTION_PLACEHOLDER_TEXT),
+            Some(DESCRIPTION_PLACEHOLDER_TEXT.get()),
             false, /* vim_keybindings */
             false, /* single_line */
         );
@@ -243,7 +241,7 @@ impl WorkflowModal {
             ctx,
             Some(CONTENT_EDITOR_FONT_SIZE),
             None,
-            Some(&COMMAND_EDITOR_PLACEHOLDER_TEXT),
+            Some(COMMAND_EDITOR_PLACEHOLDER_TEXT.get()),
             true,  /* vim_keybindings */
             false, /* single_line */
         );
@@ -1198,7 +1196,7 @@ impl WorkflowModal {
                                 ctx,
                                 Some(ARGUMENT_EDITOR_FONT_SIZE),
                                 Some(ui_font_family),
-                                Some(&ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT),
+                                Some(ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT.get()),
                                 false, /* vim_keybindings */
                                 false,
                             );
@@ -1214,7 +1212,7 @@ impl WorkflowModal {
                                 ctx,
                                 Some(ARGUMENT_EDITOR_FONT_SIZE),
                                 Some(ui_font_family),
-                                Some(&ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT),
+                                Some(ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT.get()),
                                 false, /* vim_keybindings */
                                 false,
                             );
@@ -1641,7 +1639,7 @@ impl WorkflowModal {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(ARGUMENT_BUTTON_TEXT.as_str().into());
+            .with_text_label(ARGUMENT_BUTTON_TEXT.get().into());
 
         if self.is_new_argument_button_disabled() {
             new_argument_button = new_argument_button.disabled();
@@ -1657,7 +1655,7 @@ impl WorkflowModal {
                 Some(primary_hovered_and_clicked_styles),
                 Some(primary_disabled_styles),
             )
-            .with_text_label(SAVE_BUTTON_TEXT.as_str().into());
+            .with_text_label(SAVE_BUTTON_TEXT.get().into());
 
         if self.is_save_workflow_button_disabled() {
             save_button = save_button.disabled();
@@ -1687,8 +1685,8 @@ impl WorkflowModal {
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween);
 
         let label_and_icon = match self.ai_metadata_assist_state {
-            AiAssistState::PreRequest => Some((AI_ASSIST_BUTTON_TEXT.as_str(), Icon::AiAssistant)),
-            AiAssistState::RequestInFlight => Some((AI_ASSIST_LOADING_TEXT.as_str(), Icon::Refresh)),
+            AiAssistState::PreRequest => Some((AI_ASSIST_BUTTON_TEXT.get(), Icon::AiAssistant)),
+            AiAssistState::RequestInFlight => Some((AI_ASSIST_LOADING_TEXT.get(), Icon::Refresh)),
             AiAssistState::Generated => None,
         };
 
@@ -1770,7 +1768,7 @@ impl WorkflowModal {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(KEEP_EDITING_TEXT.as_str().into())
+            .with_text_label(KEEP_EDITING_TEXT.get().into())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| {
@@ -1790,7 +1788,7 @@ impl WorkflowModal {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_text_label(DISCARD_CHANGES_TEXT.as_str().into())
+            .with_text_label(DISCARD_CHANGES_TEXT.get().into())
             .build()
             .with_cursor(Cursor::PointingHand)
             .on_click(move |ctx, _, _| ctx.dispatch_typed_action(WorkflowModalAction::ForceClose))
@@ -1798,7 +1796,7 @@ impl WorkflowModal {
 
         Container::new(
             Dialog::new(
-                UNSAVED_CHANGES_TEXT.as_str().to_string(),
+                UNSAVED_CHANGES_TEXT.get().to_string(),
                 None,
                 dialog_styles(appearance),
             )

@@ -28,17 +28,16 @@ use crate::notebooks::link::{NotebookLinks, SessionSource};
 use crate::settings::FontSettings;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
+use crate::static_tr;
 use crate::view_components::action_button::{
     ActionButton, ButtonSize, DangerNakedTheme, KeystrokeSource, NakedTheme, PrimaryTheme,
 };
-use std::sync::LazyLock;
-
 /// Default width of the comment editor, in pixels.
 pub(crate) const DEFAULT_COMMENT_MAX_WIDTH: f32 = 750.0;
 
-static UPDATE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "code-review-update-button"));
-static COMMENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "code-review-comment"));
-static GITHUB_IMPORT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("code_editor", "code-comment-imported-from-github"));
+static_tr!(UPDATE_LABEL, "code_editor", "code-review-update-button");
+static_tr!(COMMENT_LABEL, "code_editor", "code-review-comment");
+static_tr!(GITHUB_IMPORT_LABEL, "code_editor", "code-comment-imported-from-github");
 
 #[derive(Debug)]
 pub enum CommentEditorEvent {
@@ -281,7 +280,7 @@ impl CommentEditor {
         self.is_imported_comment = origin.is_imported_from_github();
 
         self.save_button.update(ctx, |button, ctx| {
-            button.set_label(UPDATE_LABEL.clone(), ctx);
+            button.set_label(UPDATE_LABEL.get(), ctx);
         });
         ctx.notify();
 
@@ -300,7 +299,7 @@ impl CommentEditor {
         self.is_imported_comment = false;
 
         self.save_button.update(ctx, |button, ctx| {
-            button.set_label(COMMENT_LABEL.clone(), ctx);
+            button.set_label(COMMENT_LABEL.get(), ctx);
         });
         ctx.notify();
 
@@ -336,7 +335,7 @@ impl CommentEditor {
             .finish();
 
         let label = Text::new(
-            GITHUB_IMPORT_LABEL.clone(),
+            GITHUB_IMPORT_LABEL.get(),
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )

@@ -1,8 +1,6 @@
 #[cfg(not(target_family = "wasm"))]
 use std::collections::HashMap;
 
-use std::sync::LazyLock;
-
 use instant::{Duration, Instant};
 use log::debug;
 use url::Url;
@@ -52,23 +50,17 @@ use crate::view_components::{
 };
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::ChannelState;
+use crate::static_tr;
 
 const SUBMIT_BUTTON_FOCUSED: &str = "SubmitButtonFocused";
 
-static SETTINGS_CREATE_ENV: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "create-environment"));
-static SETTINGS_LOADING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "loading-label"));
-static SETTINGS_LAUNCH_AGENT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "launch-agent"));
-static SETTINGS_CREATE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "create-label"));
-static SETTINGS_SAVE_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "save-label"));
-static SETTINGS_DELETE_ENV: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "delete-environment"));
-static SETTINGS_RETRY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "retry-label"));
+static_tr!(SETTINGS_CREATE_ENV, "settings", "create-environment");
+static_tr!(SETTINGS_LOADING, "common", "loading-label");
+static_tr!(SETTINGS_LAUNCH_AGENT, "settings", "launch-agent");
+static_tr!(SETTINGS_CREATE_LABEL, "common", "create-label");
+static_tr!(SETTINGS_SAVE_LABEL, "common", "save-label");
+static_tr!(SETTINGS_DELETE_ENV, "settings", "delete-environment");
+static_tr!(SETTINGS_RETRY, "common", "retry-label");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -487,8 +479,8 @@ impl UpdateEnvironmentForm {
         });
 
         let delete_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-environment"));
-            ActionButton::new(&*LABEL, DangerSecondaryTheme)
+            static_tr!(LABEL, "settings", "delete-environment");
+            ActionButton::new(LABEL.get(), DangerSecondaryTheme)
                 .with_icon(Icon::Trash)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(UpdateEnvironmentFormAction::Delete);
@@ -849,9 +841,9 @@ impl UpdateEnvironmentForm {
 
     fn update_submit_button_label(&mut self, ctx: &mut ViewContext<Self>) {
         let button_text = match (&self.mode, self.show_header) {
-            (EnvironmentFormMode::Create, true) => &*SETTINGS_CREATE_LABEL,
-            (EnvironmentFormMode::Create, false) => &*SETTINGS_CREATE_ENV,
-            (EnvironmentFormMode::Edit { .. }, true) => &*SETTINGS_SAVE_LABEL,
+            (EnvironmentFormMode::Create, true) => SETTINGS_CREATE_LABEL.get(),
+            (EnvironmentFormMode::Create, false) => SETTINGS_CREATE_ENV.get(),
+            (EnvironmentFormMode::Edit { .. }, true) => SETTINGS_SAVE_LABEL.get(),
             (EnvironmentFormMode::Edit { .. }, false) => "Save environment",
         };
         self.submit_button.update(ctx, |button, ctx| {
@@ -885,7 +877,7 @@ impl UpdateEnvironmentForm {
                 self.remove_setup_command_mouse_states.clear();
                 // Update button text for Create mode
                 self.submit_button.update(ctx, |button, ctx| {
-                    button.set_label(&*SETTINGS_CREATE_LABEL, ctx);
+                    button.set_label(SETTINGS_CREATE_LABEL.get(), ctx);
                 });
             }
             EnvironmentFormInitArgs::Edit {
@@ -926,7 +918,7 @@ impl UpdateEnvironmentForm {
                     .collect();
                 // Update button text for Edit mode
                 self.submit_button.update(ctx, |button, ctx| {
-                    button.set_label(&*SETTINGS_SAVE_LABEL, ctx);
+                    button.set_label(SETTINGS_SAVE_LABEL.get(), ctx);
                 });
             }
         }
@@ -1749,7 +1741,7 @@ impl UpdateEnvironmentForm {
 
     fn render_header(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let (title, button_handle) = match &self.mode {
-            EnvironmentFormMode::Create => (SETTINGS_CREATE_ENV.as_str(), &self.submit_button),
+            EnvironmentFormMode::Create => (SETTINGS_CREATE_ENV.get(), &self.submit_button),
             EnvironmentFormMode::Edit { .. } => ("Edit environment", &self.submit_button),
         };
 
@@ -2040,7 +2032,7 @@ impl UpdateEnvironmentForm {
                     .with_child(
                         Container::new(
                             Text::new(
-                                &*SETTINGS_LOADING,
+                                SETTINGS_LOADING.get(),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )
@@ -2243,7 +2235,7 @@ impl UpdateEnvironmentForm {
                             )
                             .with_child(
                                 Text::new(
-                                    &*SETTINGS_RETRY,
+                                    SETTINGS_RETRY.get(),
                                     appearance.ui_font_family(),
                                     appearance.ui_font_size(),
                                 )

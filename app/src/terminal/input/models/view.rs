@@ -33,7 +33,7 @@ use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, ActionButtonTheme, ButtonSize};
 use crate::view_components::alert::{Alert, AlertConfig};
 use crate::workspace::WorkspaceAction;
-
+use crate::static_tr;
 struct ManageDefaultsTheme;
 
 impl ActionButtonTheme for ManageDefaultsTheme {
@@ -147,8 +147,8 @@ impl InlineModelSelectorView {
 
         let menu_view = if FeatureFlag::InlineMenuHeaders.is_enabled() {
             let manage_defaults_button = ctx.add_view(|_| {
-                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "manage-defaults"));
-                ActionButton::new(&*LABEL, ManageDefaultsTheme)
+                static_tr!(LABEL, "terminal", "manage-defaults");
+                ActionButton::new(LABEL.get(), ManageDefaultsTheme)
                     .with_icon(Icon::Settings)
                     .with_size(ButtonSize::Small)
                     .on_click(|ctx| {

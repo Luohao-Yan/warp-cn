@@ -1,6 +1,4 @@
-use std::sync::{Arc, LazyLock};
-
-use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
+use std::sync::Arc;use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng as _};
 use warp_core::settings::ToggleableSetting;
@@ -31,9 +29,9 @@ use crate::view_components::compactible_action_button::{
     render_compact_and_regular_button_rows, CompactibleActionButton, MEDIUM_SIZE_SWITCH_THRESHOLD,
 };
 use crate::{send_telemetry_from_ctx, TelemetryEvent};
-
-static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "generate-tests"));
-static CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "dismiss-label"));
+use crate::static_tr;
+static_tr!(ACCEPT_LABEL, "ai", "generate-tests");
+static_tr!(CANCEL_LABEL, "common", "dismiss-label");
 
 #[derive(Debug, Clone)]
 pub enum SuggestedUnitTestsEvent {
@@ -82,7 +80,7 @@ impl SuggestedUnitTestsView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let accept_button = CompactibleActionButton::new(
-            ACCEPT_LABEL.clone(),
+            ACCEPT_LABEL.get().to_owned(),
             Some(KeystrokeSource::Binding(
                 ACCEPT_PROMPT_SUGGESTION_KEYBINDING,
             )),
@@ -94,7 +92,7 @@ impl SuggestedUnitTestsView {
         );
 
         let cancel_button = CompactibleActionButton::new(
-            CANCEL_LABEL.clone(),
+            CANCEL_LABEL.get().to_owned(),
             Some(KeystrokeSource::Fixed(
                 REJECT_PROMPT_SUGGESTION_KEYSTROKE.clone(),
             )),

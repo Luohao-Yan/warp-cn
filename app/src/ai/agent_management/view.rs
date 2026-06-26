@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use fuzzy_match::match_indices_case_insensitive;
 use lazy_static::lazy_static;
 use pathfinder_color::ColorU;
@@ -92,6 +90,7 @@ use crate::workspace::{
 };
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::{send_telemetry_from_ctx, AgentModeEntrypoint};
+use crate::static_tr;
 
 lazy_static! {
     static ref HASHER: SipHasher = SipHasher::new_with_keys(0, 0);
@@ -114,11 +113,10 @@ const BUTTON_SIZE: f32 = 20.;
 const CARD_AGENT_ICON_SIZE: f32 = 24.;
 const CREATOR_AVATAR_FONT_SIZE: f32 = 10.;
 
-static SESSION_EXPIRED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-session-expired-text"));
+static_tr!(SESSION_EXPIRED_TEXT, "ai_assistant", "ai-session-expired-text");
 
 pub fn init(app: &mut AppContext) {
     use crate::util::bindings::cmd_or_ctrl_shift;
-
     app.register_fixed_bindings([FixedBinding::new(
         cmd_or_ctrl_shift("f"),
         AgentManagementViewAction::FocusSearch,
@@ -223,9 +221,9 @@ impl AgentManagementView {
         let list_state = Self::construct_fresh_list_state(ctx.handle());
 
         let all_filter_button = ctx.add_typed_action_view(|_ctx| {
-            static ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-all"));
+            static_tr!(ALL_LABEL, "ai_assistant", "ai-all");
             let all_tooltip = crate::tr!("ai_assistant", "ai-all-tooltip");
-            ActionButton::new(&*ALL_LABEL, NakedTheme)
+            ActionButton::new(ALL_LABEL.get(), NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_tooltip(&all_tooltip)
                 .on_click(|ctx| {
@@ -236,9 +234,9 @@ impl AgentManagementView {
         });
 
         let personal_filter_button = ctx.add_typed_action_view(|_ctx| {
-            static PERSONAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-personal"));
+            static_tr!(PERSONAL_LABEL, "ai_assistant", "ai-personal");
             let personal_tooltip = crate::tr!("ai_assistant", "ai-personal-tooltip");
-            ActionButton::new(&*PERSONAL_LABEL, NakedTheme)
+            ActionButton::new(PERSONAL_LABEL.get(), NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_tooltip(&personal_tooltip)
                 .on_click(|ctx| {
@@ -260,8 +258,8 @@ impl AgentManagementView {
         );
 
         let view_agents_button = ctx.add_typed_action_view(|_ctx| {
-            static VIEW_AGENTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-view-agents"));
-            ActionButton::new(&*VIEW_AGENTS_LABEL, NakedTheme)
+            static_tr!(VIEW_AGENTS_LABEL, "ai_assistant", "ai-view-agents");
+            ActionButton::new(VIEW_AGENTS_LABEL.get(), NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_icon(Icon::ArrowLeft)
                 .on_click(|ctx| {
@@ -279,8 +277,8 @@ impl AgentManagementView {
         let creator_dropdown = ctx.add_typed_action_view(Self::create_creator_dropdown);
 
         let no_filter_results_button = ctx.add_typed_action_view(move |_ctx| {
-            static CLEAR_FILTERS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-clear-filters"));
-            ActionButton::new(&*CLEAR_FILTERS_LABEL, SecondaryTheme)
+            static_tr!(CLEAR_FILTERS_LABEL, "ai_assistant", "ai-clear-filters");
+            ActionButton::new(CLEAR_FILTERS_LABEL.get(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(move |ctx| {
                     ctx.dispatch_typed_action(AgentManagementViewAction::ClearFilters)
@@ -288,8 +286,8 @@ impl AgentManagementView {
         });
 
         let clear_all_filters_button = ctx.add_typed_action_view(move |_ctx| {
-            static CLEAR_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-clear-all"));
-            ActionButton::new(&*CLEAR_ALL_LABEL, NakedTheme)
+            static_tr!(CLEAR_ALL_LABEL, "ai_assistant", "ai-clear-all");
+            ActionButton::new(CLEAR_ALL_LABEL.get(), NakedTheme)
                 .with_icon(Icon::X)
                 .with_size(ButtonSize::Small)
                 .on_click(move |ctx| {

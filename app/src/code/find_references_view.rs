@@ -5,8 +5,6 @@
 
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use lsp::ReferenceLocation;
 use pathfinder_geometry::vector::Vector2F;
 use string_offset::CharOffset;
@@ -32,13 +30,14 @@ use warpui::{
 
 use crate::search::result_renderer::ItemHighlightState;
 
-static CODE_LOADING: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "loading"));
+static_tr!(CODE_LOADING, "code", "loading");
 
 use super::{
     editor::view::{CodeEditorRenderOptions, CodeEditorView},
     global_buffer_model::GlobalBufferModel,
 };
 use crate::editor::InteractionState;
+use crate::static_tr;
 
 /// Maximum height for the find references card.
 pub const FIND_REFERENCES_CARD_MAX_HEIGHT: f32 = 300.;
@@ -47,7 +46,6 @@ const HAS_REFERENCES: &str = "HasReferences";
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([
         FixedBinding::new(
             "escape",
@@ -650,7 +648,7 @@ fn render_reference_entry(
             } else {
                 // Show loading indicator when line_content is None
                 Text::new_inline(
-                    &*CODE_LOADING,
+                    CODE_LOADING.get(),
                     appearance.monospace_font_family(),
                     appearance.monospace_font_size(),
                 )

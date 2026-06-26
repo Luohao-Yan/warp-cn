@@ -2,9 +2,7 @@ use std::borrow::Cow;
 use std::boxed::Box;
 use std::cell::RefCell;
 use std::rc::Rc;
-use std::sync::{Arc, LazyLock};
-
-use pathfinder_color::ColorU;
+use std::sync::Arc;use pathfinder_color::ColorU;
 #[cfg(not(target_family = "wasm"))]
 use settings::Setting as _;
 use warp_core::features::FeatureFlag;
@@ -65,7 +63,7 @@ use crate::view_components::action_button::{
 };
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::BlocklistAIHistoryModel;
-
+use crate::static_tr;
 pub enum AtContextMenuDisabledReason {
     #[cfg(target_family = "wasm")]
     Wasm,
@@ -190,7 +188,7 @@ impl AtContextMenuDisabledReason {
     }
 }
 
-static AT_CONTEXT_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "udi-attach-context"));
+static_tr!(AT_CONTEXT_TOOLTIP, "terminal", "udi-attach-context");
 
 const BLURRED_OPACITY: Opacity = 50;
 
@@ -364,7 +362,7 @@ impl UniversalDeveloperInputButtonBar {
         let at_button_view = ctx.add_typed_action_view(|_ctx| {
             ActionButton::new("", PromptIconButtonTheme::new(false))
                 .with_icon(Icon::AtSign)
-                .with_tooltip(AT_CONTEXT_TOOLTIP.as_str())
+                .with_tooltip(AT_CONTEXT_TOOLTIP.get())
                 .with_size(button_size)
                 .with_disabled_theme(UDIDisabledButtonTheme)
                 .with_tooltip_alignment(TooltipAlignment::Left)
@@ -705,7 +703,7 @@ Some(crate::tr!("terminal", "udi-mode-locked"))
             button.set_tooltip(
                 disable_reason
                     .map(|reason| reason.tooltip_text())
-                    .or_else(|| Some(AT_CONTEXT_TOOLTIP.as_str().to_string())),
+                    .or_else(|| Some(AT_CONTEXT_TOOLTIP.get().to_string())),
                 ctx,
             );
             ctx.notify();

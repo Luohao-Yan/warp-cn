@@ -104,7 +104,7 @@ terminal-monthly-limit-reached-non-admin = 请联系团队管理员提高月度�
 terminal-monthly-limit-reached-title = 月度限额已达
 terminal-manage-billing = 管理计费
 terminal-out-of-credits-title = 积分不足
-terminal-out-of-credits-admin = 向您的账户添加更多积分以继续使用 Oz 代理。
+terminal-out-of-credits-admin = 向您的账户添加更多积分以继续使用 Oz 智能体。
 terminal-out-of-credits-non-admin = 请联系团队管理员购买更多积分以继续。
 terminal-purchase-exceeds-limit = 购买这些积分将超出您的月度消费限额。
 terminal-increase-limit = 提高限额
@@ -130,7 +130,7 @@ terminal-couldnt-continue-cloud-task = 无法继续此云任务。
 terminal-sharing-ended-inactivity = 因不活跃，共享已结束
 terminal-sharing-edit-revoked-inactivity = 因不活跃，共享编辑权限已被撤销
 terminal-editing-revoked-sharer-idle = 因共享者空闲，编辑权限已被撤销
-terminal-new-cloud-agent = 新的云代理
+terminal-new-cloud-agent = 新的云智能体
 terminal-new-agent-conversation = 新建 Agent 对话
 
 ## -- 对话结束墓碑视图 -----------------------------------------------------------
@@ -141,8 +141,8 @@ terminal-continue-in-cloud-tooltip = 在云模式下继续此任务
 terminal-open-in-warp = 在 Warp 中打开
 terminal-open-in-desktop-tooltip = 在 Warp 桌面应用中打开此对话
 terminal-viewing-snapshot = 您正在查看快照
-terminal-snapshot-subtitle = 此共享对话显示的是您打开时的状态。如果代理仍在运行，请刷新以查看最新进展。
-terminal-agent-task = 代理任务
+terminal-snapshot-subtitle = 此共享对话显示的是您打开时的状态。如果智能体仍在运行，请刷新以查看最新进展。
+terminal-agent-task = 智能体任务
 terminal-directory-label = 目录：
 terminal-source-label = 来源：
 terminal-skill-label = 技能：
@@ -153,8 +153,8 @@ terminal-credits-used-label = 使用积分：
 
 terminal-warpify-subshell = Warpify 子 Shell
 terminal-warpify-subshell-tooltip = 在此会话中启用 Warp Shell 集成
-terminal-use-agent = 使用代理
-terminal-use-agent-tooltip = 请求 Warp 代理协助
+terminal-use-agent = 使用智能体
+terminal-use-agent-tooltip = 请求 Warp 智能体协助
 terminal-warpify-ssh-session = Warpify SSH 会话
 terminal-for-terminal = 返回终端
 
@@ -176,8 +176,8 @@ terminal-manage = 管理
 terminal-manage-api-keys = 管理 API 密钥
 terminal-choose-execution-profile = 选择 AI 执行配置文件
 terminal-choose-execution-profile-tooltip = 选择 AI 执行配置文件
-terminal-choose-agent-model = 选择代理模型
-terminal-choose-agent-model-tooltip = 选择代理模型
+terminal-choose-agent-model = 选择智能体模型
+terminal-choose-agent-model-tooltip = 选择智能体模型
 terminal-request-edit-access-model = 请求编辑权限以更改模型
 terminal-model-specs = 模型规格
 terminal-model-specs-tooltip = 模型规格
@@ -258,7 +258,7 @@ terminal-share-session-tab = 共享会话
 terminal-stop-sharing-all = 停止所有共享
 terminal-copy-link-tab = 复制链接
 terminal-default-no-color = 默认（无颜色）
-terminal-cloud-agent-run = 云代理运行
+terminal-cloud-agent-run = 云智能体运行
 
 ## -- MenuItemFields / 右键菜单 -------------------------------------------
 
@@ -298,8 +298,8 @@ terminal-menu-split-pane-left = 向左分割窗格
 terminal-menu-split-pane-down = 向下分割窗格
 terminal-menu-split-pane-up = 向上分割窗格
 terminal-menu-close-pane = 关闭窗格
-terminal-menu-edit-cli-agent-toolbelt = 编辑 CLI 代理工具栏
-terminal-menu-edit-agent-toolbelt = 编辑代理工具栏
+terminal-menu-edit-cli-agent-toolbelt = 编辑 CLI 智能体工具栏
+terminal-menu-edit-agent-toolbelt = 编辑智能体工具栏
 terminal-menu-edit-prompt = 编辑提示词
 terminal-menu-cut = 剪切
 terminal-menu-select-all = 全选
@@ -359,8 +359,8 @@ terminal-notifications-pending = 别忘了点击"允许"权限请求以完成通
 terminal-configure-notifications = 配置通知
 terminal-troubleshoot = 故障排除
 terminal-notifications-long-running = Warp 可以在长时间运行的命令完成时通知您。
-terminal-notifications-agent-task = Warp 可以在代理完成响应时通知您。
-terminal-notifications-needs-attention = Warp 可以在命令或代理需要您关注时通知您。
+terminal-notifications-agent-task = Warp 可以在智能体完成响应时通知您。
+terminal-notifications-needs-attention = Warp 可以在命令或智能体需要您关注时通知您。
 terminal-notifications-password-prompt = Warp 可以在提示您输入密码时通知您。
 terminal-notifications-a11y-help = 您可以通过命令面板启用通知。
 
@@ -381,21 +381,21 @@ terminal-settings = 设置
 ## -- 零状态块字符串 ---------------------------------------------------
 
 terminal-new-terminal-session = 新终端会话
-terminal-zero-state-new-agent-conversation = 开始新的代理对话
-terminal-zero-state-new-cloud-agent-conversation = 开始新的云代理对话
+terminal-zero-state-new-agent-conversation = 开始新的智能体对话
+terminal-zero-state-new-cloud-agent-conversation = 开始新的云智能体对话
 terminal-zero-state-cycle-commands = 循环浏览历史命令和对话
 terminal-zero-state-open-code-review = 打开代码审查
-terminal-zero-state-autodetect-nld = 自动检测终端会话中的代理提示词
+terminal-zero-state-autodetect-nld = 自动检测终端会话中的智能体提示词
 
 ## -- 输入提示字符串 -----------------------------------------------------------
 
-terminal-cli-agent-hint = 告诉代理你要构建什么…
-terminal-cloud-mode-v2-hint = 启动云代理
+terminal-cli-agent-hint = 告诉智能体你要构建什么…
+terminal-cloud-mode-v2-hint = 启动云智能体
 terminal-cloud-handoff-hint = 启动云运行
 terminal-input-a11y-label = 命令输入。
 terminal-ai-command-search-hint = 输入 '#' 获取 AI 命令建议
 terminal-run-commands-hint = 运行命令
-terminal-steer-agent-hint = 引导正在运行的代理
+terminal-steer-agent-hint = 引导正在运行的智能体
 terminal-ask-follow-up = 继续追问
 
 ## -- 其他附加字符串 -------------------------------------------------
@@ -462,7 +462,7 @@ terminal-loading-prompt = 正在加载提示词…
 ## -- 输入框 i18n 字符串 --
 
 terminal-input-a11y-helper = 输入 Shell 命令，按回车执行。按 cmd-up 导航到先前执行命令的输出。按 cmd-l 重新聚焦命令输入。
-terminal-steer-agent-classic = 操控正在运行的代理，或按退格键退出
+terminal-steer-agent-classic = 操控正在运行的智能体，或按退格键退出
 terminal-ask-follow-up-classic = 提出后续问题，或按退格键退出
 terminal-dynamic-enum-generate = 运行以下命令以生成变体：
 terminal-dynamic-enum-run = 运行命令
@@ -577,7 +577,7 @@ terminal-setting-description-quit-on-last-window-closed = 关闭最后一个窗�
 terminal-setting-description-restore-session = 启动 Warp 时是否恢复上次会话。
 terminal-setting-description-login-item = 登录时是否自动启动 Warp。
 terminal-setting-description-link-tooltip = 鼠标悬停在链接上时是否显示提示。
-terminal-setting-description-auto-open-code-review-pane = 代理首次修改时是否自动打开代码审查面板。
+terminal-setting-description-auto-open-code-review-pane = 智能体首次修改时是否自动打开代码审查面板。
 terminal-setting-description-language = Warp 界面显示语言。使用 'auto' 跟随系统语言。
 
 ## -- 横幅和通知字符串 ---------------------------------------------------------
@@ -672,18 +672,12 @@ terminal-warp-drive = Warp Drive
 ## -- 模型规格和推理级别字符串 -----------------------------------------------
 
 terminal-model-specs-title = 模型规格
-terminal-model-specs-description = Warp 基准测试：线束性能、积分消耗率、任务速度。
 terminal-reasoning-level-title = 推理级别
-terminal-reasoning-level-description = 更高的推理级别会消耗更多积分，延迟更高，但在复杂任务上表现更好。
-
 ## -- 初始化项目字符串 -------------------------------------------------------
-
-terminal-init-project-onboarding-text = 很好 — 让我们开始设置这个项目！你愿意授权我索引此代码库吗？这使我能快速理解上下文，在此代码库中工作时提供更具针对性的解决方案。代码不会存储在 Warp 服务器上。
-terminal-init-project-already-setup-text = 此项目似乎已经初始化。你可以点击下方按钮重新生成此代码库的 AGENTS.md 文件。
 
 ## -- 初始化环境字符串 -------------------------------------------------------
 
-terminal-init-environment-explanation-text = 你想为此项目创建一个环境以便在其中运行云代理吗？代理将引导你选择 GitHub 仓库、配置 Docker 镜像并指定启动命令。
+terminal-init-environment-explanation-text = 你想为此项目创建一个环境以便在其中运行云智能体吗？智能体将引导你选择 GitHub 仓库、配置 Docker 镜像并指定启动命令。
 terminal-init-environment-no-repos-help-text = 如果你想创建包含仓库的环境，请重新运行此命令并传入文件路径或 GitHub 链接作为参数，例如 "/create-environment <文件路径> <GitHub URL>"。
 
 ## -- 已迁移 UI 字符串的主键 --
@@ -693,9 +687,7 @@ terminal-shared-session-limit-reached = 已达到会话上限
 terminal-shared-session-denied-subheader = 共享会话是团队或商业版功能
 terminal-view-plans = 查看方案
 terminal-start-sharing = 开始共享
-terminal-stop-sharing = 停止共享
 terminal-continue-sharing = 继续共享
-terminal-make-editor = 设为编辑者
 terminal-deny = 拒绝
 terminal-requested-mode = 你已请求{ $role }模式
 terminal-waiting-for = 正在等待{ $name }...
@@ -705,12 +697,9 @@ terminal-install-and-enable = 安装并启用
 terminal-enable-selected-languages = 启用语言支持
 terminal-are-you-still-there = 你还在吗？
 terminal-sharing-will-end-due-to-inactivity = 由于不活跃，共享将在 { $minutes }:{ $seconds } 后结束。
-terminal-edit-prompt = 编辑提示
 terminal-warp-terminal-prompt = Warp 提示
 terminal-shell-prompt-ps1 = Shell 提示 (PS1)
 terminal-restore-default = 恢复默认
-terminal-cancel-request = 取消请求
-
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
 
 
@@ -721,7 +710,7 @@ terminal-regenerate-agents-md = 重新生成 AGENTS.md 文件
 ## -- Agent mode setup banner strings --------------------------------------------------
 
 terminal-optimize-codebase-header = 为此代码库优化 Warp？
-terminal-optimize-codebase-text = 让代理理解您的代码库并生成规则，以获得更智能、更一致的响应。您也可以随时通过运行 /init 来执行此操作
+terminal-optimize-codebase-text = 让智能体理解您的代码库并生成规则，以获得更智能、更一致的响应。您也可以随时通过运行 /init 来执行此操作
 terminal-optimize = 优化
 
 ## -- Alias expansion banner strings ---------------------------------------------------
@@ -786,7 +775,6 @@ terminal-share-this-object-type = 共享此 { $object_type }
 
 terminal-file-issue = 提交问题
 terminal-more-info = 更多信息
-terminal-shell-process-exited = Shell 进程已退出
 terminal-shell-could-not-start = Shell 进程无法启动！
 terminal-shell-exited-prematurely = Shell 进程提前退出！
 terminal-warpify-failure-subtext = 启动 { $shell_detail } 并进行 Warpify 时出了点问题，导致进程终止。Warpify 脚本输出显示在此处，可能指向原因。
@@ -799,7 +787,6 @@ terminal-open-link = 打开链接
 
 ## -- 提示工具字符串 --
 
-terminal-open-in-warp = 在 Warp 中打开
 terminal-show-in-finder = 在 Finder 中显示
 terminal-show-containing-folder = 显示包含文件夹
 terminal-reveal-secret = 显示密钥
@@ -809,15 +796,15 @@ terminal-copy-secret = 复制密钥
 ## -- SSH 远程服务器选择视图字符串 --
 
 terminal-install-ssh-extension = 安装 Warp 的 SSH 扩展
-terminal-install-ssh-extension-desc = 安装 Warp 的扩展以启用代理功能，如文件浏览、代码审查和此会话中的智能命令补全。
+terminal-install-ssh-extension-desc = 安装 Warp 的扩展以启用智能体功能，如文件浏览、代码审查和此会话中的智能命令补全。
 terminal-continue-without-installing = 不安装继续
 terminal-continue-without-desc = 您仍然可以获得 Warp 化的体验，只是没有编码功能。
 terminal-choose-remote-experience = 选择此远程会话的体验：
 terminal-manage-warpify-settings = 管理 Warpify 设置
 
-## -- 代理视图字符串 --
+## -- 智能体视图字符串 --
 
-terminal-cannot-start-while-monitoring = 代理正在监控命令时，无法开始新的对话。
+terminal-cannot-start-while-monitoring = 智能体正在监控命令时，无法开始新的对话。
 
 ## -- 在 Warp 中打开横幅字符串 --
 
@@ -844,8 +831,6 @@ terminal-what-happened-here = 这里发生了什么？
 terminal-checking = 检查中...
 terminal-installing = 安装中...
 terminal-updating = 更新中...
-terminal-initializing = 初始化中...
-terminal-starting-shell = 正在启动 Shell...
 terminal-what-is-the-command-to = 执行以下操作的命令是：
 
 ## -- Double-prefix aliases for inline banner strings --
@@ -902,10 +887,10 @@ terminal-aws-cli-required = 需要使用 AWS CLI 来认证你的组织的 AWS Be
 terminal-slow-bootstrap-msg = 你的 Shell 似乎启动需要一段时间...
 terminal-more-info-link = 更多信息
 terminal-show-init-block = 显示初始化块
-terminal-use-agent-btn = 使用代理
-terminal-give-control-back-btn = 将控制权交还代理
-terminal-ask-agent-assist-tooltip = 请求 Warp 代理协助
-terminal-ask-agent-resume-tooltip = 请求 Warp 代理继续
+terminal-use-agent-btn = 使用智能体
+terminal-give-control-back-btn = 将控制权交还智能体
+terminal-ask-agent-assist-tooltip = 请求 Warp 智能体协助
+terminal-ask-agent-resume-tooltip = 请求 Warp 智能体继续
 terminal-enable-lang-support-desc = 你是否要为此代码库启用可用的语言支持？这将为你提供更智能的代码导航和内联错误检查。
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
@@ -950,8 +935,8 @@ terminal-plugin-opencode-restart-update = 重启 OpenCode 以加载更新的插�
 terminal-plugin-installed-restart = Warp 插件已安装。请重启会话以激活。
 terminal-plugin-updated-restart = Warp 插件已更新。请重启会话以激活。
 terminal-plugin-no-manager = 无可用插件管理器
-terminal-plugin-auto-install-unsupported = 此代理不支持自动安装
-terminal-plugin-auto-update-unsupported = 此代理不支持自动更新
+terminal-plugin-auto-install-unsupported = 此智能体不支持自动安装
+terminal-plugin-auto-update-unsupported = 此智能体不支持自动更新
 terminal-plugin-restart-claude-activate = Warp 插件已安装。请运行 /reload-plugins 以激活。
 terminal-plugin-restart-claude-update = Warp 插件已更新。请运行 /reload-plugins 以激活。
 terminal-plugin-restart-gemini-activate = Warp 插件已安装。请重启 Gemini CLI 以激活。
@@ -969,15 +954,15 @@ terminal-creating-env-step2 = 正在创建环境（步骤 2/3）
 terminal-starting-env-step3 = 正在启动环境（步骤 3/3）
 terminal-running-setup = 正在运行设置命令...
 terminal-ran-setup = 已运行设置命令
-terminal-cloud-agent-failed = 云代理失败
+terminal-cloud-agent-failed = 云智能体失败
 terminal-quick-setup = 快速设置
 terminal-quick-setup-desc = 选择您想使用的 GitHub 仓库，我们将推荐基础镜像和配置
-terminal-use-agent = 使用代理
 terminal-use-agent-desc = 选择一个本地项目，我们将帮您基于此设置环境
 terminal-env-setup-cancelled = 环境设置已取消
 
 ## -- 分享块模态框 --------------------------------------------------------
 
+terminal-share-title = 分享
 terminal-share-create-link = 创建链接
 terminal-share-get-embed = 获取嵌入
 terminal-redact-secrets = 脱敏处理（API 密钥、密码、IP 地址、个人身份信息等）
@@ -987,3 +972,42 @@ terminal-output = 输出
 
 terminal-enter-prompt-for = 输入 { $agent } 的提示...
 terminal-hand-off-to = 移交至 { $env_name }
+
+## -- 快捷键描述 -----------------------------------------------------------
+
+terminal-show-history = 显示历史记录
+terminal-jump-to-latest-agent-message = 跳转到最新智能体消息
+terminal-cycle-to-next-orchestration-session = 切换到下一个编排会话
+terminal-cycle-to-previous-orchestration-session = 切换到上一个编排会话
+terminal-take-control-of-running-command = 接管正在运行的命令
+terminal-debug-onboarding-callout-warpinput-terminal = [调试] 引导提示: WarpInput - 终端
+terminal-debug-onboarding-callout-warpinput-project = [调试] 引导提示: WarpInput - 项目
+terminal-debug-onboarding-callout-warpinput-no-project = [调试] 引导提示: WarpInput - 无项目
+terminal-debug-onboarding-callout-modality-project = [调试] 引导提示: 模态 - 项目
+terminal-debug-onboarding-callout-modality-no-project = [调试] 引导提示: 模态 - 无项目
+terminal-debug-onboarding-callout-modality-terminal = [调试] 引导提示: 模态 - 终端
+terminal-debug-generate-codebase-index = [调试] 生成代码库索引
+
+## Agent mode hint text
+terminal-agent-hint-deploy-react = Warp 任意内容，例如：将我的 React 应用部署到 Vercel 并设置环境变量
+terminal-agent-hint-debug-python = Warp 任意内容，例如：帮我调试 Python 测试在 CI 中失败的原因
+terminal-agent-hint-setup-microservice = Warp 任意内容，例如：用 Docker 搭建微服务并创建部署流水线
+terminal-agent-hint-fix-memory-leak = Warp 任意内容，例如：找到并修复 Node.js 应用中的内存泄漏
+terminal-agent-hint-backup-postgres = Warp 任意内容，例如：为 PostgreSQL 数据库创建备份脚本并定时执行
+terminal-agent-hint-migrate-mysql = Warp 任意内容，例如：帮我将数据从 MySQL 迁移到 PostgreSQL
+terminal-agent-hint-monitor-aws = Warp 任意内容，例如：为我的 AWS 基础设施设置监控和告警
+terminal-agent-hint-build-fastapi = Warp 任意内容，例如：用 FastAPI 为我的移动应用构建 REST API
+terminal-agent-hint-optimize-sql = Warp 任意内容，例如：帮我优化运行缓慢的 SQL 查询
+terminal-agent-hint-github-actions = Warp 任意内容，例如：创建 GitHub Actions 工作流在合并时自动部署
+terminal-agent-hint-redis-cache = Warp 任意内容，例如：为我的 Web 应用设置 Redis 缓存
+terminal-agent-hint-k8s-crash = Warp 任意内容，例如：帮我排查 Kubernetes Pod 频繁崩溃的原因
+terminal-agent-hint-data-pipeline = Warp 任意内容，例如：构建数据管道处理 CSV 文件并加载到 BigQuery
+terminal-agent-hint-ssl-https = Warp 任意内容，例如：为我的域名设置 SSL 证书并配置 HTTPS
+terminal-agent-hint-refactor-legacy = Warp 任意内容，例如：帮我将遗留代码重构为现代设计模式
+terminal-agent-hint-unit-test-auth = Warp 任意内容，例如：为我的认证服务创建单元测试
+terminal-agent-hint-elk-stack = Warp 任意内容，例如：为我的分布式系统设置 ELK 日志聚合
+terminal-agent-hint-oauth-express = Warp 任意内容，例如：帮我在 Express.js 应用中实现 OAuth2 认证
+terminal-agent-hint-docker-optimize = Warp 任意内容，例如：优化 Docker 镜像以减少构建时间和体积
+terminal-agent-hint-ab-testing = Warp 任意内容，例如：为我的 Web 应用搭建 A/B 测试基础设施
+terminal-queue-follow-up-hint = 为运行中的智能体排队后续任务
+terminal-queue-follow-up-classic-hint = 为运行中的智能体排队后续任务，或按退格键退出

@@ -10,7 +10,6 @@
 //! outcome variant, and wire up dispatch.
 
 use std::borrow::Cow;
-use std::sync::LazyLock;
 
 use pathfinder_geometry::vector::vec2f;
 use warp_core::features::FeatureFlag;
@@ -32,6 +31,7 @@ use warpui::{
 
 #[cfg(feature = "local_tty")]
 use crate::terminal::local_shell::LocalShellState;
+use crate::static_tr;
 use crate::{
     code::buffer_location::LocalOrRemotePath,
     code::editor::{add_color, remove_color},
@@ -55,7 +55,7 @@ use crate::{
     workspaces::user_workspaces::UserWorkspaces,
 };
 
-static CODE_REVIEW_BRANCH: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_review", "branch").leak() as &'static str);
+static_tr!(CODE_REVIEW_BRANCH, "code_review", "branch");
 
 pub(crate) mod commit;
 pub(crate) mod pr;
@@ -215,7 +215,7 @@ fn render_branch_section(
     let sub_color = theme.sub_text_color(theme.surface_1()).into_solid();
 
     let label = Text::new(
-        *CODE_REVIEW_BRANCH,
+        CODE_REVIEW_BRANCH.get(),
         appearance.ui_font_family(),
         appearance.ui_font_size(),
     )
@@ -505,8 +505,10 @@ impl GitDialog {
         has_upstream: bool,
         ctx: &mut ViewContext<Self>,
     ) -> Self {
-        let (confirm_button, cancel_button, close_button) =
-            Self::build_dialog_buttons(Box::leak(crate::tr!("code_editor", "review-confirm").into_boxed_str()), None, ctx);
+        let (confirm_button, cancel_button, close_button) = {
+            static_tr!(CONFIRM_LABEL, "code_editor", "review-confirm");
+            Self::build_dialog_buttons(CONFIRM_LABEL.get(), None, ctx)
+        };
         ctx.subscribe_to_model(&diff_state_model, Self::handle_diff_state_event);
         let state = commit::new_state(
             repo_location.to_local_path(),
@@ -601,8 +603,8 @@ impl GitDialog {
             button.on_click(|ctx| ctx.dispatch_typed_action(GitDialogAction::Confirm))
         });
         let cancel_button = ctx.add_typed_action_view(|_ctx| {
-            static LABEL: LazyLock<&'static str> = LazyLock::new(|| crate::tr!("code_editor", "review-cancel").leak() as &'static str);
-            ActionButton::new(*LABEL, NakedTheme)
+            static_tr!(CANCEL_LABEL, "code_editor", "review-cancel");
+            ActionButton::new(CANCEL_LABEL.get().to_owned(), NakedTheme)
                 .with_size(ButtonSize::Small)
                 .with_height(32.)
                 .on_click(|ctx| ctx.dispatch_typed_action(GitDialogAction::Cancel))

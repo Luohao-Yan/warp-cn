@@ -28,6 +28,7 @@ use crate::settings::InputModeSettings;
 use crate::themes::theme::Fill;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
+use crate::static_tr;
 
 pub const FIND_BAR_WIDTH: f32 = 500.;
 const ICON_PADDING: f32 = 4.;
@@ -39,16 +40,14 @@ pub const FIND_EDITOR_BORDER_RADIUS: f32 = 6.;
 pub(crate) const FIND_EDITOR_BORDER_WIDTH: f32 = 1.;
 const FIND_EDITOR_FONT_SIZE: f32 = 12.;
 
-use std::sync::LazyLock;
-
 pub const REGEX_TOGGLE_LABEL: &str = ". *";
-pub static REGEX_TOGGLE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "regex-toggle-tooltip"));
+static_tr!(pub REGEX_TOGGLE_TOOLTIP, "code", "regex-toggle-tooltip");
 
-pub static CASE_SENSITIVE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("view_components", "case-sensitive"));
-pub static CASE_SENSITIVE_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "case-sensitive-tooltip"));
+static_tr!(pub CASE_SENSITIVE_LABEL, "view_components", "case-sensitive");
+static_tr!(pub CASE_SENSITIVE_TOOLTIP, "code", "case-sensitive-tooltip");
 
-pub static FIND_WITHIN_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-within-block-tooltip"));
-pub static FIND_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "find-placeholder"));
+static_tr!(pub FIND_WITHIN_BLOCK_TOOLTIP, "code", "find-within-block-tooltip");
+static_tr!(pub FIND_PLACEHOLDER_TEXT, "code", "find-placeholder");
 
 // Moving FindEvent, FindModel implementations away from terminal/.
 pub enum FindEvent {
@@ -132,7 +131,6 @@ pub enum FindAction {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_editable_bindings([
         EditableBinding::new(
             "find:find_next_occurrence",
@@ -170,7 +168,7 @@ impl<T: FindModel + Entity<Event = FindEvent> + 'static> Find<T> {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(&*FIND_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(FIND_PLACEHOLDER_TEXT.get(), ctx);
             editor
         });
 
@@ -550,7 +548,7 @@ impl<T: FindModel + Entity<Event = FindEvent> + 'static> View for Find<T> {
             self.button_mouse_states.toggle_regex_search.clone(),
             FindAction::ToggleRegexSearch,
             editor_height,
-            Some(&*REGEX_TOGGLE_TOOLTIP),
+            Some(REGEX_TOGGLE_TOOLTIP.get()),
             ICON_PADDING,
         );
         let case_sensitive_icon = Container::new(
@@ -562,7 +560,7 @@ impl<T: FindModel + Entity<Event = FindEvent> + 'static> View for Find<T> {
                     self.button_mouse_states.toggle_case_sensitivity.clone(),
                     FindAction::ToggleCaseSensitivity,
                     editor_height,
-                    Some(&*CASE_SENSITIVE_TOOLTIP),
+                    Some(CASE_SENSITIVE_TOOLTIP.get()),
                     ICON_PADDING,
                 ),
                 "case_sensitive_button",
@@ -579,7 +577,7 @@ impl<T: FindModel + Entity<Event = FindEvent> + 'static> View for Find<T> {
                     self.button_mouse_states.toggle_find_in_block.clone(),
                     FindAction::ToggleFindInBlock,
                     editor_height,
-                    Some(&*FIND_WITHIN_BLOCK_TOOLTIP),
+                    Some(FIND_WITHIN_BLOCK_TOOLTIP.get()),
                     0.,
                 ),
                 "find_in_block_button",

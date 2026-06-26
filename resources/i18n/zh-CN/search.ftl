@@ -152,7 +152,7 @@ search-diff-vs-branch-desc = 相对于 { $branch } 的所有更改
 ## -- 斜杠命令描述 --------------------------------------------------------------
 
 search-slash-agent = 开始新对话
-search-slash-cloud-agent = 开始新的云代理对话
+search-slash-cloud-agent = 开始新的云智能体对话
 search-slash-mcp = 通过 MCP 设置页面添加新的 MCP 服务器
 search-slash-pr-comments = 拉取 GitHub PR 评审评论
 search-slash-env = 通过引导设置创建 Oz 环境（Docker 镜像 + 仓库）
@@ -160,13 +160,13 @@ search-slash-docker = 创建新的 docker 沙盒终端会话
 search-slash-create-project = 让 Oz 引导你创建新的编码项目
 search-slash-skill = 在 Warp 内置编辑器中打开技能的 markdown 文件
 search-slash-invoke-skill = 调用技能
-search-slash-add-prompt = 添加新的代理提示词
-search-slash-add-rule = 为代理添加新的全局规则
+search-slash-add-prompt = 添加新的智能体提示词
+search-slash-add-rule = 为智能体添加新的全局规则
 search-slash-edit = 在 Warp 代码编辑器中打开文件
 search-slash-rename-tab = 重命名当前标签页
 search-slash-color-tab = 设置当前标签页的颜色
 search-slash-fork = 在新面板或新标签页中分叉当前对话
-search-slash-handoff = 将此对话移交给云代理
+search-slash-handoff = 将此对话移交给云智能体
 search-slash-review = 打开代码评审
 search-slash-index = 索引此代码库
 search-slash-agents-md = 索引此代码库并生成 AGENTS.md 文件
@@ -178,16 +178,16 @@ search-slash-feedback = 发送反馈
 search-slash-switch-repo = 切换到另一个已索引的仓库
 search-slash-view-rules = 查看所有全局和项目规则
 search-slash-new-conv = 开始新对话（/agent 的别名）
-search-slash-base-model = 切换基础代理模型
-search-slash-host = 切换云代理执行主机
-search-slash-harness = 切换云代理工具
-search-slash-environment = 切换云代理环境
+search-slash-base-model = 切换基础智能体模型
+search-slash-host = 切换云智能体执行主机
+search-slash-harness = 切换云智能体工具
+search-slash-environment = 切换云智能体环境
 search-slash-profile = 切换活动的执行配置
-search-slash-plan = 提示代理进行研究并为任务创建计划
-search-slash-multi-agent = 将任务分解为子任务并使用多个代理并行运行
+search-slash-plan = 提示智能体进行研究并为任务创建计划
+search-slash-multi-agent = 将任务分解为子任务并使用多个智能体并行运行
 search-slash-compact = 通过总结对话历史释放上下文
 search-slash-compact-send = 压缩对话然后发送后续提示词
-search-slash-queue = 在代理完成响应后排入提示词发送
+search-slash-queue = 在智能体完成响应后排入提示词发送
 search-slash-fork-compact = 分叉当前对话并在分叉副本中压缩
 search-slash-fork-from = 从特定查询分叉对话
 search-slash-continue-local = 在本地继续此云对话
@@ -238,13 +238,6 @@ search-file-open-file = 按 Enter 打开此文件
 search-create-file-display = 创建 { $file_name }…
 search-create-file-a11y-label = 创建文件：{ $file_name }
 search-create-file-a11y-help = 按 Enter 在当前目录中创建 { $file_name }
-search-diff-uncommitted = 未提交的更改
-search-diff-vs-main = 相对于 main 分支的更改
-search-diff-vs-branch = 相对于 { $branch } 的更改
-search-diff-uncommitted-desc = 工作目录中所有未提交的更改
-search-diff-vs-main-desc = 相对于 main 分支的所有更改
-search-diff-vs-branch-desc = 相对于 { $branch } 的所有更改
-
 ## -- 对话分区标题 ---
 
 search-section-active-pane = 当前面板对话
@@ -287,8 +280,8 @@ search-a11y-workflow-label = 工作流：{ $name }
 
 ## -- 命令面板提示消息 ---
 
-search-toast-cannot-switch-conv = 代理正在监控命令时无法切换对话。
-search-toast-cannot-start-conv = 代理正在监控命令时无法开始新对话。
+search-toast-cannot-switch-conv = 智能体正在监控命令时无法切换对话。
+search-toast-cannot-start-conv = 智能体正在监控命令时无法开始新对话。
 
 ## -- 命令搜索结果无障碍 ---
 

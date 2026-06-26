@@ -336,15 +336,17 @@ impl platform::Delegate for AppDelegate {
         // TODO(wasm): Investigate implementing this by creating a <input> element
         // and calling `click` on it.
 
-        #[cfg(not(target_family = "wasm"))]
+        #[cfg(target_os = "windows")]
         {
-            // This callback is called either on the “File Picker” background thread or, if starting
-            // that thread fails, on this thread. Wrap this type in order to make ownership work.
+            let callback = Arc::new(takecell::TakeOwnCell::new(callback));
+            super::windows::open_file_dialog(callback, file_picker_config, self.event_loop_proxy.clone());
+        }
+
+        #[cfg(all(not(target_family = "wasm"), not(target_os = "windows")))]
+        {
             let callback = Arc::new(takecell::TakeOwnCell::new(callback));
             let callback_clone = callback.clone();
 
-            // Since native_dialog::FileDialog blocks while waiting for the user to select a file,
-            // put it in its own thread to avoid blocking the rest of the app.
             let event_loop_proxy = self.event_loop_proxy.clone();
             let thread_result = std::thread::Builder::new()
                 .name("File Picker".to_string())
@@ -361,8 +363,6 @@ impl platform::Delegate for AppDelegate {
                         .collect_vec()
                         .concat();
 
-                    // native-dialog doesn't support file-or-directory or multi-directory pickers,
-                    // so if folders are allowed, it can only show a directory picker.
                     let result = if file_picker_config.allows_folder() {
                         native_dialog::FileDialog::new()
                             .set_title("Choose directory...")

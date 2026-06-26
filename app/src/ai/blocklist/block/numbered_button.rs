@@ -1,5 +1,4 @@
 use crate::context_chips::spacing;
-use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::color::internal_colors;
 use warpui::elements::{
@@ -12,10 +11,11 @@ use warpui::ui_components::components::{UiComponent, UiComponentStyles};
 use warpui::{AppContext, Element, SingletonEntity, ViewHandle};
 
 use super::compact_agent_input::CompactAgentInput;
+use crate::static_tr;
 const NUMBER_BADGE_BORDER_WIDTH: f32 = 1.;
 const NUMBER_BADGE_VERTICAL_PADDING: f32 = 1.;
 
-static AI_RECOMMENDED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recommended"));
+static_tr!(AI_RECOMMENDED, "ai_assistant", "ai-recommended");
 
 fn render_number_badge(
     number: usize,
@@ -50,7 +50,7 @@ pub(super) fn render_recommended_badge(appearance: &Appearance) -> Box<dyn Eleme
     let theme = appearance.theme();
     Container::new(
         Text::new(
-            &*AI_RECOMMENDED,
+            AI_RECOMMENDED.get(),
             appearance.ui_font_family(),
             appearance.monospace_font_size() - 2.,
         )

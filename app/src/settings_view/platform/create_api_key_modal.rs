@@ -1,7 +1,6 @@
 use chrono::Utc;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use pathfinder_geometry::vector::vec2f;
-use std::sync::LazyLock;
 use warp_core::features::FeatureFlag;
 use warp_server_client::auth::AgentIdentity;
 use warpui::elements::{
@@ -29,7 +28,7 @@ use crate::util::truncation::truncate_from_end;
 use crate::view_components::dropdown::{DROPDOWN_PADDING, TOP_MENU_BAR_HEIGHT};
 use crate::view_components::{Dropdown as DropdownView, DropdownItem};
 use crate::workspaces::user_workspaces::UserWorkspaces;
-
+use crate::static_tr;
 const OZ_AGENTS_URL: &str = "https://oz.warp.dev/agents?new=true";
 const API_KEY_DOCS_URL: &str =
     "https://docs.warp.dev/reference/cli/api-keys/#personal-vs-agent-keys";
@@ -38,16 +37,11 @@ const LABEL_FONT_SIZE: f32 = 14.;
 const INPUT_WIDTH: f32 = 428.; // 460px - (2 * 16px) padding
 const AGENT_DROPDOWN_POSITION_ID: &str = "create_api_key_modal_agent_dropdown";
 
-static WARP_API_KEY_PLACEHOLDER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "warp-api-key"));
-static PERSONAL_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "personal-label"));
-static TEAM_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "team-label"));
-static AGENT_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "agent-label"));
-static FAILED_CREATE_KEY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "failed-create-key"));
+static_tr!(WARP_API_KEY_PLACEHOLDER, "settings", "warp-api-key");
+static_tr!(PERSONAL_LABEL, "settings", "personal-label");
+static_tr!(TEAM_LABEL, "settings", "team-label");
+static_tr!(AGENT_LABEL, "settings", "agent-label");
+static_tr!(FAILED_CREATE_KEY, "settings", "failed-create-key");
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum ApiKeyType {
@@ -174,7 +168,7 @@ impl CreateApiKeyModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text(&*WARP_API_KEY_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(WARP_API_KEY_PLACEHOLDER.get(), ctx);
             editor
         });
 
@@ -207,9 +201,9 @@ impl CreateApiKeyModal {
                         icon_color: theme.active_ui_text_color().into(),
                         label: Some(LabelConfig {
                             label: match key_type {
-                                ApiKeyType::Personal => (*PERSONAL_LABEL).clone().into(),
-                                ApiKeyType::Team => (*TEAM_LABEL).clone().into(),
-                                ApiKeyType::Agent => (*AGENT_LABEL).clone().into(),
+                                ApiKeyType::Personal => PERSONAL_LABEL.get().into(),
+                                ApiKeyType::Team => TEAM_LABEL.get().into(),
+                                ApiKeyType::Agent => AGENT_LABEL.get().into(),
                             },
                             width_override: Some(55.0),
                             color: if is_selected {
@@ -415,7 +409,7 @@ impl CreateApiKeyModal {
                     }
                     Ok(warp_graphql::mutations::generate_api_key::GenerateApiKeyResult::Unknown) | Err(_) => {
                         me.request_state = RequestState::Idle;
-                        ctx.emit(CreateApiKeyModalEvent::Error { message: FAILED_CREATE_KEY.clone() });
+                        ctx.emit(CreateApiKeyModalEvent::Error { message: FAILED_CREATE_KEY.get().to_owned() });
                         ctx.notify();
                     }
                 }

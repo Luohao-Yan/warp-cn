@@ -59,29 +59,29 @@ use crate::terminal::TerminalModel;
 use crate::ui_components::blended_colors;
 use crate::util::bindings::keybinding_name_to_keystroke;
 use crate::view_components::action_button::{ButtonSize, KeystrokeSource, NakedTheme};
-use std::sync::LazyLock;
 use crate::view_components::compactible_action_button::{
     CompactibleActionButton, RenderCompactibleActionButton, LARGE_SIZE_SWITCH_THRESHOLD,
     MEDIUM_SIZE_SWITCH_THRESHOLD, SMALL_SIZE_SWITCH_THRESHOLD,
 };
 use crate::view_components::compactible_split_action_button::CompactibleSplitActionButton;
+use crate::static_tr;
 
 /// The vertical padding applied to the requested command row's content body.
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 pub const REQUESTED_COMMAND_BODY_VERTICAL_PADDING: f32 = 16.;
 
-static AI_ALWAYS_ASK_PERMISSION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-always-ask-permission"));
-pub static COMMAND_WAITING_FOR_USER_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-ok-run-command"));
-static MCP_TOOL_WAITING_FOR_USER_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-ok-call-mcp-tool"));
-static MONITORING_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-monitoring-command"));
-static AGENT_NEEDS_INPUT_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-needs-input"));
-static USER_TOOK_CONTROL_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-user-in-control"));
-static USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-user-stopped-agent"));
-static AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-user-take-control"));
-static AGENT_ERRORED_COMMAND_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-errored"));
-pub static VIEWING_COMMAND_DETAIL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-viewing-command-detail"));
-static VIEWING_MCP_TOOL_DETAIL_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-viewing-mcp-tool-detail"));
-static LOADING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-generating-command"));
+static_tr!(AI_ALWAYS_ASK_PERMISSION, "ai_assistant", "ai-always-ask-permission");
+static_tr!(pub COMMAND_WAITING_FOR_USER_MESSAGE, "ai_assistant", "ai-ok-run-command");
+static_tr!(MCP_TOOL_WAITING_FOR_USER_MESSAGE, "ai_assistant", "ai-ok-call-mcp-tool");
+static_tr!(MONITORING_COMMAND_MESSAGE, "ai_assistant", "ai-agent-monitoring-command");
+static_tr!(AGENT_NEEDS_INPUT_MESSAGE, "ai_assistant", "ai-agent-needs-input");
+static_tr!(USER_TOOK_CONTROL_COMMAND_MESSAGE, "ai_assistant", "ai-user-in-control");
+static_tr!(USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE, "ai_assistant", "ai-user-stopped-agent");
+static_tr!(AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE, "ai_assistant", "ai-user-take-control");
+static_tr!(AGENT_ERRORED_COMMAND_MESSAGE, "ai_assistant", "ai-agent-errored");
+static_tr!(pub VIEWING_COMMAND_DETAIL_MESSAGE, "ai_assistant", "ai-viewing-command-detail");
+static_tr!(VIEWING_MCP_TOOL_DETAIL_MESSAGE, "ai_assistant", "ai-viewing-mcp-tool-detail");
+static_tr!(LOADING_MESSAGE, "ai_assistant", "ai-generating-command");
 
 const EDIT_COMMAND_ACTION_NAME: &str = "requested_command:edit";
 
@@ -111,7 +111,6 @@ lazy_static! {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([
         FixedBinding::new(
             "ctrl-c",
@@ -1030,8 +1029,8 @@ impl RequestedCommandView {
             }
             Some(AIActionStatus::Blocked) => {
                 title = match &self.action_type {
-                    RequestedActionViewType::Command => COMMAND_WAITING_FOR_USER_MESSAGE.clone().into(),
-                    RequestedActionViewType::McpTool => MCP_TOOL_WAITING_FOR_USER_MESSAGE.clone().into(),
+                    RequestedActionViewType::Command => COMMAND_WAITING_FOR_USER_MESSAGE.get().into(),
+                    RequestedActionViewType::McpTool => MCP_TOOL_WAITING_FOR_USER_MESSAGE.get().into(),
                 };
             }
             Some(AIActionStatus::RunningAsync) | Some(AIActionStatus::Finished(..))
@@ -1051,11 +1050,11 @@ impl RequestedCommandView {
                                         );
 
                                     if is_errored {
-                                        AGENT_ERRORED_COMMAND_MESSAGE.clone().into()
+                                        AGENT_ERRORED_COMMAND_MESSAGE.get().into()
                                     } else if *is_blocked {
-                                        AGENT_NEEDS_INPUT_MESSAGE.clone().into()
+                                        AGENT_NEEDS_INPUT_MESSAGE.get().into()
                                     } else {
-                                        MONITORING_COMMAND_MESSAGE.clone().into()
+                                        MONITORING_COMMAND_MESSAGE.get().into()
                                     }
                                 }
                                 LongRunningCommandControlState::User { reason } => {
@@ -1063,15 +1062,15 @@ impl RequestedCommandView {
                                 }
                             }
                         } else {
-                            VIEWING_COMMAND_DETAIL_MESSAGE.clone().into()
+                            VIEWING_COMMAND_DETAIL_MESSAGE.get().into()
                         }
                     }
-                    RequestedActionViewType::McpTool => VIEWING_MCP_TOOL_DETAIL_MESSAGE.clone().into(),
+                    RequestedActionViewType::McpTool => VIEWING_MCP_TOOL_DETAIL_MESSAGE.get().into(),
                 };
             }
             None => {
                 if self.block_model.status(app).is_streaming() {
-                    title = LOADING_MESSAGE.clone().into();
+                    title = LOADING_MESSAGE.get().into();
 
                     if !self
                         .block_model
@@ -1092,7 +1091,7 @@ impl RequestedCommandView {
                     // mid-flight.
                     let title_str = self.get_header_title_text();
                     title = if title_str.trim().is_empty() {
-                        LOADING_MESSAGE.clone().into()
+                        LOADING_MESSAGE.get().into()
                     } else {
                         title_str.into()
                     };
@@ -1111,7 +1110,7 @@ impl RequestedCommandView {
                 // Show cancelled command loading message when the command was cancelled during generation,
                 // and then restored with an empty title as a result.
                 if title.is_empty() {
-                    title = LOADING_MESSAGE.clone().into();
+                    title = LOADING_MESSAGE.get().into();
                     font_color_override = Some(blended_colors::text_disabled(
                         appearance.theme(),
                         appearance.theme().surface_2(),
@@ -1318,10 +1317,10 @@ pub(crate) fn header_message_for_user_take_over_reason(
     reason: &UserTakeOverReason,
 ) -> String {
     match reason {
-        UserTakeOverReason::Manual => USER_TOOK_CONTROL_COMMAND_MESSAGE.clone(),
-        UserTakeOverReason::Stop => USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE.clone(),
+        UserTakeOverReason::Manual => USER_TOOK_CONTROL_COMMAND_MESSAGE.get().to_owned(),
+        UserTakeOverReason::Stop => USER_STOPPED_CLI_SUBAGENT_COMMAND_MESSAGE.get().to_owned(),
         UserTakeOverReason::TransferFromAgent { .. } => {
-            AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE.clone()
+            AGENT_REQUESTED_USER_TAKE_CONTROL_COMMAND_MESSAGE.get().to_owned()
         }
     }
 }

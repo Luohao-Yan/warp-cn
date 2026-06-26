@@ -1,7 +1,6 @@
 use std::collections::HashSet;
 use std::ops::Range;
 use std::sync::Arc;
-use std::sync::LazyLock;
 use std::time::Duration;
 
 use async_channel::Sender;
@@ -56,8 +55,9 @@ use crate::terminal::model::session::SessionId;
 use crate::terminal::resizable_data::{ModalType, ResizableData, DEFAULT_UNIVERSAL_SEARCH_WIDTH};
 use crate::terminal::{History, HistoryEvent};
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 
-static DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "command-placeholder"));
+static_tr!(DEFAULT_PLACEHOLDER_TEXT, "search", "command-placeholder");
 const PANEL_POSITION_ID: &str = "CommandSearchViewPanel";
 const DETAILS_PANEL_MARGIN: f32 = 4.;
 const MIN_WIDTH_RATIO: f32 = 0.25;
@@ -146,7 +146,7 @@ impl CommandSearchView {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                DEFAULT_PLACEHOLDER_TEXT.clone(),
+                DEFAULT_PLACEHOLDER_TEXT.get(),
                 |result_index, result| {
                     QueryResultRenderer::new(
                         result,
@@ -1123,7 +1123,6 @@ pub mod styles {
 
     use crate::appearance::Appearance;
     use crate::themes::theme::Fill;
-
     pub const CORNER_RADIUS: f32 = 8.;
     pub const VIEW_WIDTH: f32 = 700.;
     pub const VIEW_HEIGHT: f32 = 450.;

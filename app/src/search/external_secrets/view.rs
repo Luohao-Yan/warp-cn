@@ -23,6 +23,7 @@ use crate::search::external_secrets::searcher::{
 };
 use crate::search::result_renderer::{QueryResultRenderer, QueryResultRendererStyles};
 use crate::search::search_bar::{SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering};
+use crate::static_tr;
 
 lazy_static! {
     static ref QUERY_RESULT_RENDERER_STYLES: QueryResultRendererStyles =
@@ -38,9 +39,7 @@ lazy_static! {
         };
 }
 
-use std::sync::LazyLock;
-
-static DEFAULT_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "secret-placeholder").clone());
+static_tr!(DEFAULT_PLACEHOLDER_TEXT, "search", "secret-placeholder");
 
 pub struct ExternalSecretsMenu {
     scroll_state: ScrollStateHandle,
@@ -87,7 +86,7 @@ impl ExternalSecretsMenu {
             SearchBar::new(
                 mixer.clone(),
                 search_bar_state.clone(),
-                DEFAULT_PLACEHOLDER_TEXT.clone(),
+                DEFAULT_PLACEHOLDER_TEXT.get(),
                 |result_index, result| {
                     QueryResultRenderer::new(
                         result,
@@ -370,7 +369,6 @@ pub mod styles {
 
     use crate::appearance::Appearance;
     use crate::themes::theme::Fill;
-
     pub const CORNER_RADIUS: f32 = 6.;
     pub const VIEW_WIDTH: f32 = 450.;
     pub const VIEW_HEIGHT: f32 = 450.;

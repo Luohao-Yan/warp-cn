@@ -1,7 +1,5 @@
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use settings::Setting as _;
 use warp_cli::agent::Harness;
@@ -36,7 +34,7 @@ use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, ButtonSize};
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
-
+use crate::static_tr;
 const HEADER_FONT_SIZE: f32 = 12.;
 
 const ITEM_FONT_SIZE: f32 = 14.;
@@ -53,13 +51,13 @@ const SIDECAR_HORIZONTAL_GAP: f32 = 4.;
 
 const MENU_MAX_HEIGHT: f32 = 280.;
 
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-api-key-tooltip"));
-static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-api-key-header"));
-static SIDECAR_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-choose-type"));
-static NO_SECRET_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-no-secret"));
-static LOADING_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-loading"));
-static UNABLE_TO_LOAD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-unable-to-load-secrets"));
-static NEW_ITEM_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selector-new"));
+static_tr!(BUTTON_TOOLTIP, "terminal", "selector-api-key-tooltip");
+static_tr!(MENU_HEADER_LABEL, "terminal", "selector-api-key-header");
+static_tr!(SIDECAR_HEADER_LABEL, "terminal", "selector-choose-type");
+static_tr!(NO_SECRET_LABEL, "terminal", "selector-no-secret");
+static_tr!(LOADING_LABEL, "terminal", "selector-loading");
+static_tr!(UNABLE_TO_LOAD_LABEL, "terminal", "selector-unable-to-load-secrets");
+static_tr!(NEW_ITEM_LABEL, "terminal", "selector-new");
 
 const MAIN_MENU_SAVE_POSITION_ID: &str = "auth_secret_selector_main_menu";
 type PendingDeleteKey = (Harness, String, SecretOwner);
@@ -102,11 +100,11 @@ impl AuthSecretSelector {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new(NO_SECRET_LABEL.clone(), NakedHeaderButtonTheme)
+            ActionButton::new(NO_SECRET_LABEL.get(), NakedHeaderButtonTheme)
                 .with_size(ButtonSize::AgentInputButton)
                 .with_menu(true)
                 .with_icon(Icon::Key)
-                .with_tooltip(BUTTON_TOOLTIP.clone())
+                .with_tooltip(BUTTON_TOOLTIP.get())
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AuthSecretSelectorAction::ToggleMenu);
                 })
@@ -314,7 +312,7 @@ impl AuthSecretSelector {
                 .get(hovered_index)
                 .map(|item| {
                     matches!(item,
-                    MenuItem::Item(fields) if fields.label() == NEW_ITEM_LABEL.as_str())
+                    MenuItem::Item(fields) if fields.label() == NEW_ITEM_LABEL.get())
                 })
                 .unwrap_or(false)
         });
@@ -334,7 +332,7 @@ impl AuthSecretSelector {
             .as_ref(ctx)
             .selected_harness_auth_secret_name()
             .map(|s| s.to_string())
-            .unwrap_or_else(|| NO_SECRET_LABEL.clone());
+            .unwrap_or_else(|| NO_SECRET_LABEL.get().to_owned());
         self.button.update(ctx, |button, ctx| {
             button.set_label(label, ctx);
         });
@@ -566,7 +564,7 @@ fn build_main_menu_items(
     header_text_color: pathfinder_color::ColorU,
 ) -> Vec<MenuItem<AuthSecretSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(MENU_HEADER_LABEL.as_str())
+        fields: MenuItemFields::new(MENU_HEADER_LABEL.get())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(6., MENU_HORIZONTAL_PADDING)
@@ -578,7 +576,7 @@ fn build_main_menu_items(
     let mut items = vec![header];
 
     items.push(MenuItem::Item(
-        MenuItemFields::new(NO_SECRET_LABEL.as_str())
+        MenuItemFields::new(NO_SECRET_LABEL.get())
             .with_font_size_override(ITEM_FONT_SIZE)
             .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
             .with_override_hover_background_color(hover_background)
@@ -609,7 +607,7 @@ fn build_main_menu_items(
         }
         AuthSecretFetchState::NotFetched | AuthSecretFetchState::Loading => {
             items.push(MenuItem::Item(
-                MenuItemFields::new(LOADING_LABEL.as_str())
+                MenuItemFields::new(LOADING_LABEL.get())
                     .with_font_size_override(ITEM_FONT_SIZE)
                     .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
                     .with_disabled(true)
@@ -618,7 +616,7 @@ fn build_main_menu_items(
         }
         AuthSecretFetchState::Failed(_) => {
             items.push(MenuItem::Item(
-                MenuItemFields::new(UNABLE_TO_LOAD_LABEL.as_str())
+                MenuItemFields::new(UNABLE_TO_LOAD_LABEL.get())
                     .with_font_size_override(ITEM_FONT_SIZE)
                     .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
                     .with_disabled(true)
@@ -628,7 +626,7 @@ fn build_main_menu_items(
     }
 
     items.push(MenuItem::Item(
-        MenuItemFields::new(NEW_ITEM_LABEL.as_str())
+        MenuItemFields::new(NEW_ITEM_LABEL.get())
             .with_font_size_override(ITEM_FONT_SIZE)
             .with_padding_override(ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
             .with_override_hover_background_color(hover_background)
@@ -659,7 +657,7 @@ fn build_sidecar_items(
     header_text_color: pathfinder_color::ColorU,
 ) -> Vec<MenuItem<AuthSecretSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(SIDECAR_HEADER_LABEL.as_str())
+        fields: MenuItemFields::new(SIDECAR_HEADER_LABEL.get())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(6., MENU_HORIZONTAL_PADDING)

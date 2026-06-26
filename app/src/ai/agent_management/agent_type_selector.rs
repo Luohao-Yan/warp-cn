@@ -3,15 +3,13 @@
 //! This modal is displayed when users click "New agent" to choose between
 //! cloud and local agent modes.
 
-use std::sync::LazyLock;
-
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 
-static AI_CLOUD_AGENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cloud-agent"));
-static AI_LOCAL_AGENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-local-agent"));
-static AI_CLOUD_AGENT_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cloud-agent-desc"));
-static AI_LOCAL_AGENT_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-local-agent-desc"));
+static_tr!(AI_CLOUD_AGENT_TITLE, "ai_assistant", "ai-cloud-agent");
+static_tr!(AI_LOCAL_AGENT_TITLE, "ai_assistant", "ai-local-agent");
+static_tr!(AI_CLOUD_AGENT_DESC, "ai_assistant", "ai-cloud-agent-desc");
+static_tr!(AI_LOCAL_AGENT_DESC, "ai_assistant", "ai-local-agent-desc");
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::color::blend::Blend;
@@ -26,6 +24,7 @@ use warpui::keymap::{FixedBinding, Keystroke};
 use warpui::platform::Cursor;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
+use crate::static_tr;
 
 
 // Modal dimensions based on Figma design.
@@ -88,7 +87,6 @@ pub struct AgentTypeSelector {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings(vec![
         FixedBinding::new(
             "escape",
@@ -341,8 +339,8 @@ impl AgentTypeSelector {
         let cloud_agent_option = self.render_option(
             0,
             Icon::OzCloud,
-            &*AI_CLOUD_AGENT_TITLE,
-            &*AI_CLOUD_AGENT_DESC,
+            AI_CLOUD_AGENT_TITLE.get(),
+            AI_CLOUD_AGENT_DESC.get(),
             true,
             self.cloud_agent_mouse_state.clone(),
             AgentTypeSelectorAction::SelectCloudAgent,
@@ -352,8 +350,8 @@ impl AgentTypeSelector {
         let local_agent_option = self.render_option(
             1,
             Icon::Oz,
-            &*AI_LOCAL_AGENT_TITLE,
-            &*AI_LOCAL_AGENT_DESC,
+            AI_LOCAL_AGENT_TITLE.get(),
+            AI_LOCAL_AGENT_DESC.get(),
             false,
             self.local_agent_mouse_state.clone(),
             AgentTypeSelectorAction::SelectLocalAgent,

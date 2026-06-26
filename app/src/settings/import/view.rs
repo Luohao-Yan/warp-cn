@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use warp_core::settings::Setting;
 use warp_core::ui::appearance::Appearance;
@@ -30,6 +28,7 @@ use crate::themes::theme::{CustomTheme, SelectedSystemThemes, ThemeKind};
 use crate::ui_components::blended_colors;
 use crate::user_config::{self, WarpConfig};
 use crate::window_settings::WindowSettings;
+use crate::static_tr;
 use crate::{
     report_if_error, send_telemetry_from_ctx, GlobalResourceHandlesProvider, TelemetryEvent,
 };
@@ -962,9 +961,8 @@ impl View for SettingsImportView {
             })
             .with_button_vertical_offset(DROPDOWN_VERTICAL_PADDING);
 
-        static WELCOME_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "import-select-profile"));
-        static LOADING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "import-looking"));
-
+        static_tr!(WELCOME_TEXT, "settings", "import-select-profile");
+        static_tr!(LOADING_TEXT, "settings", "import-looking");
         let mut display_new_session_text = false;
 
         if let State::Completed {
@@ -1009,7 +1007,7 @@ impl View for SettingsImportView {
 
         if matches!(self.state, State::Loading) {
             return Container::new(
-                Text::new(LOADING_TEXT.as_str(), font_family, font_size)
+                Text::new(LOADING_TEXT.get(), font_family, font_size)
                     .with_color(font_color.into_solid())
                     .finish(),
             )
@@ -1023,7 +1021,7 @@ impl View for SettingsImportView {
             Flex::column()
                 .with_child(
                     Container::new(
-                        Text::new(WELCOME_TEXT.as_str(), font_family, font_size)
+                        Text::new(WELCOME_TEXT.get(), font_family, font_size)
                             .with_color(font_color.into_solid())
                             .with_style(Properties::default().weight(Weight::Bold))
                             .finish(),

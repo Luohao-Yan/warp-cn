@@ -80,6 +80,8 @@ common-status-failed = Failed
 common-status-claimed = Claimed
 common-status-queued = Queued
 common-status-pending = Pending
+common-status-reconnecting = Reconnecting
+common-status-waiting = Waiting
 
 ## -- Placeholders -------------------------------------------------------------
 
@@ -325,4 +327,8 @@ common-theme-dark = Dark
 common-new-tab-label = New tab
 common-uri-new-tab-created = New tab created
 common-uri-new-tab-description = Go to Warp to see your new tab.
+
+## -- Keybinding descriptions (debug) -------------------------------------------
+
+common-debug-enter-onboarding-state = [Debug] Enter Onboarding State
 

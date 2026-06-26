@@ -7,6 +7,7 @@ pub mod grok_subscription;
 pub mod llm_id;
 
 pub use llm_id::LLMId;
+pub mod local_provider;
 pub mod diff_validation;
 pub mod document;
 pub mod gfm_table;

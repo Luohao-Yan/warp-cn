@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::{Container, MouseStateHandle};
 use warpui::fonts::Weight;
@@ -10,10 +8,10 @@ use warpui::Element;
 
 use super::env_var_collection::{EnvVarCollectionAction, EnvVarCollectionView};
 use crate::ui_components::dialog::{dialog_styles, Dialog};
-
-static UNSAVED_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "unsaved-changes"));
-static KEEP_EDITING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "keep-editing"));
-static DISCARD_CHANGES_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "discard-changes"));
+use crate::static_tr;
+static_tr!(UNSAVED_CHANGES_TEXT, "env_vars", "unsaved-changes");
+static_tr!(KEEP_EDITING_TEXT, "env_vars", "keep-editing");
+static_tr!(DISCARD_CHANGES_TEXT, "env_vars", "discard-changes");
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_PADDING: f32 = 12.;
 const MODAL_HORIZONTAL_MARGIN: f32 = 28.;
@@ -48,19 +46,19 @@ impl EnvVarCollectionView {
             appearance,
             self.button_mouse_states.keep_editing_state.clone(),
             EnvVarCollectionAction::CloseUnsavedChangesDialog,
-            KEEP_EDITING_TEXT.as_str(),
+            KEEP_EDITING_TEXT.get(),
         );
 
         let discard_changes_button = self.render_unsaved_changes_dialog_button(
             appearance,
             self.button_mouse_states.discard_changes_state.clone(),
             EnvVarCollectionAction::ForceClose,
-            DISCARD_CHANGES_TEXT.as_str(),
+            DISCARD_CHANGES_TEXT.get(),
         );
 
         Container::new(
             Dialog::new(
-                UNSAVED_CHANGES_TEXT.clone(),
+                UNSAVED_CHANGES_TEXT.get().to_owned(),
                 None,
                 dialog_styles(appearance),
             )

@@ -5,7 +5,6 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use settings::Setting as _;
 use std::{sync::Arc, time::Duration};
-use std::sync::LazyLock;
 use url::Url;
 use warp_core::context_flag::ContextFlag;
 
@@ -96,6 +95,7 @@ use crate::{
 };
 
 use self::details_bar::DetailsBar;
+use crate::static_tr;
 
 use super::{
     active_notebook_data::{
@@ -127,10 +127,10 @@ const EDIT_BUTTON_MARGIN: f32 = 6.;
 const HEADER_MARGIN: f32 = 15.;
 const BANNER_VERTICAL_MARGIN: f32 = 10.;
 
-static CONFLICT_RESOLUTION_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "conflict-resolution-message"));
-static REFRESH_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "refresh"));
-static REFRESH_NOTEBOOK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "refresh-notebook"));
-static FEATURE_NOT_AVAILABLE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "feature-not-available-message"));
+static_tr!(CONFLICT_RESOLUTION_MESSAGE, "notebooks", "conflict-resolution-message");
+static_tr!(REFRESH_BUTTON_TEXT, "notebooks", "refresh");
+static_tr!(REFRESH_NOTEBOOK_TOOLTIP, "notebooks", "refresh-notebook");
+static_tr!(FEATURE_NOT_AVAILABLE_MESSAGE, "notebooks", "feature-not-available-message");
 
 /// The frequency at which we check for modifications and save the notebook to the server. This
 /// lets us trade off how quickly edits appear on other clients with the load on the server for RTC
@@ -157,7 +157,6 @@ lazy_static! {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_editable_bindings([
         EditableBinding::new(
             "notebookview:increase_font_size",
@@ -2076,8 +2075,8 @@ impl NotebookView {
                 .ui_builder()
                 .wrappable_text(
                     match sync_error {
-                        NotebookSyncError::FeatureNotAvailable => FEATURE_NOT_AVAILABLE_MESSAGE.clone(),
-                        NotebookSyncError::InConflict => CONFLICT_RESOLUTION_MESSAGE.clone(),
+                        NotebookSyncError::FeatureNotAvailable => FEATURE_NOT_AVAILABLE_MESSAGE.get(),
+                        NotebookSyncError::InConflict => CONFLICT_RESOLUTION_MESSAGE.get(),
                     },
                     true,
                 )
@@ -2148,7 +2147,7 @@ impl NotebookView {
                             )
                             .with_tooltip(move || {
                                 ui_builder
-                                    .tool_tip(REFRESH_NOTEBOOK_TOOLTIP.clone())
+                                    .tool_tip(REFRESH_NOTEBOOK_TOOLTIP.get().to_owned())
                                     .build()
                                     .finish()
                             })

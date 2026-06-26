@@ -34,7 +34,6 @@ use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::LazyLock;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -343,6 +342,7 @@ use crate::workspace::{
 use crate::workspaces::user_workspaces::{UserWorkspaces, UserWorkspacesEvent};
 #[allow(unused_imports)]
 use crate::ASSETS;
+use crate::static_tr;
 #[allow(unused_imports)]
 use crate::{
     cmd_or_ctrl_shift, report_if_error, send_telemetry_from_ctx, AgentModeEntrypoint,
@@ -376,10 +376,10 @@ pub const DEBOUNCE_AI_QUERY_PREDICTION_PERIOD: Duration = Duration::from_millis(
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_MAX_HEIGHT: f32 = 236.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_TOP_PADDING: f32 = 10.;
 pub(super) const CLI_AGENT_RICH_INPUT_EDITOR_BOTTOM_PADDING: f32 = 8.;
-pub(super) static CLI_AGENT_RICH_INPUT_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cli-agent-hint"));
+static_tr!(pub(super) CLI_AGENT_RICH_INPUT_HINT_TEXT, "terminal", "cli-agent-hint");
 
-static CLOUD_MODE_V2_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cloud-mode-v2-hint"));
-static CLOUD_HANDOFF_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "cloud-handoff-hint"));
+static_tr!(CLOUD_MODE_V2_HINT_TEXT, "terminal", "cloud-mode-v2-hint");
+static_tr!(CLOUD_HANDOFF_HINT_TEXT, "terminal", "cloud-handoff-hint");
 const SHORT_CIRCUIT_HIGHLIGHTING_ACTIONS: [Option<PlainTextEditorViewAction>; 7] = [
     Some(PlainTextEditorViewAction::Space),
     Some(PlainTextEditorViewAction::NonExpandingSpace),
@@ -401,11 +401,11 @@ pub fn get_input_box_top_border_width() -> f32 {
 
 pub const COMPLETIONS_MENU_WIDTH: f32 = 330.;
 pub const OPEN_COMPLETIONS_KEYBINDING_NAME: &str = "input:open_completion_suggestions";
-pub static INPUT_A11Y_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "input-a11y-label"));
-pub static INPUT_A11Y_HELPER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "input-a11y-helper"));
-pub static AI_COMMAND_SEARCH_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ai-command-search-hint"));
+static_tr!(pub INPUT_A11Y_LABEL, "terminal", "input-a11y-label");
+static_tr!(pub INPUT_A11Y_HELPER, "terminal", "input-a11y-helper");
+static_tr!(pub AI_COMMAND_SEARCH_HINT_TEXT, "terminal", "ai-command-search-hint");
 
-static AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "run-commands-hint"));
+static_tr!(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT, "terminal", "run-commands-hint");
 
 // Rotating hint text options for new Agent Mode conversations
 const AGENT_MODE_HINT_OPTIONS: &[&str] = &[
@@ -449,13 +449,13 @@ fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'
     }
 }
 
-static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "steer-agent-hint"));
-static AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "steer-agent-classic"));
+static_tr!(AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI, "terminal", "steer-agent-hint");
+static_tr!(AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC, "terminal", "steer-agent-classic");
 const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI: &str = "Queue a follow up for the running agent";
 const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC: &str =
     "Queue a follow up for the running agent, or backspace to exit";
-static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-follow-up"));
-static AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ask-follow-up-classic"));
+static_tr!(AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI, "terminal", "ask-follow-up");
+static_tr!(AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC, "terminal", "ask-follow-up-classic");
 
 /// Action name for setting input mode to agent mode
 pub const SET_INPUT_MODE_AGENT_ACTION_NAME: &str = "input:set_mode_agent";
@@ -499,11 +499,11 @@ enum InputPrefixMode {
 
 const VIM_STATUS_BAR_BOTTOM_PADDING: f32 = 20.;
 
-static DYNAMIC_ENUM_GENERATE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-generate"));
-static DYNAMIC_ENUM_RUN_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-run"));
-static DYNAMIC_ENUM_PENDING_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-pending"));
-static DYNAMIC_ENUM_FAILURE_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-failure"));
-static DYNAMIC_ENUM_NO_RESULTS_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "dynamic-enum-no-results"));
+static_tr!(DYNAMIC_ENUM_GENERATE_MESSAGE, "terminal", "dynamic-enum-generate");
+static_tr!(DYNAMIC_ENUM_RUN_MESSAGE, "terminal", "dynamic-enum-run");
+static_tr!(DYNAMIC_ENUM_PENDING_MESSAGE, "terminal", "dynamic-enum-pending");
+static_tr!(DYNAMIC_ENUM_FAILURE_MESSAGE, "terminal", "dynamic-enum-failure");
+static_tr!(DYNAMIC_ENUM_NO_RESULTS_MESSAGE, "terminal", "dynamic-enum-no-results");
 const DYNAMIC_ENUM_MENU_PADDING: f32 = 10.;
 const DYNAMIC_ENUM_MENU_HEIGHT_OFFSET: f32 = 25.;
 const DYNAMIC_ENUM_HORIZONTAL_TEXT_PADDING: f32 = 5.;
@@ -6184,7 +6184,7 @@ impl Input {
             input_model.should_run_input_autodetection(app),
         ) {
             (InputType::Shell, false) => {
-                AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.to_owned()
+                AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.get().to_owned()
             }
             (InputType::Shell, true) => {
                 // Ensure hint text is cached for new conversations
@@ -6223,16 +6223,16 @@ impl Input {
                                 AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC.to_owned()
                             }
                         } else if is_udi_enabled {
-                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI.to_owned()
+                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI.get().to_owned()
                         } else {
-                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC.to_owned()
+                            AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC.get().to_owned()
                         }
                     }
                     Some(_) => {
                         if is_udi_enabled {
-                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI.to_owned()
+                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI.get().to_owned()
                         } else {
-                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC.to_owned()
+                            AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC.get().to_owned()
                         }
                     }
                     None => {
@@ -6662,20 +6662,20 @@ impl Input {
     }
     fn cli_agent_rich_input_hint_text(&self, ctx: &ViewContext<Self>) -> Cow<'static, str> {
         if self.is_locked_in_shell_mode(ctx) {
-            return Cow::Owned(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.clone());
+            return Cow::Owned(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT.get().to_owned());
         }
 
         CLIAgentSessionsModel::as_ref(ctx)
             .session(self.terminal_view_id)
             .map(|session| match session.agent {
-                CLIAgent::Unknown => Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.clone()),
+                CLIAgent::Unknown => Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.get().to_owned()),
                 _ => Cow::Owned(format!(
                     "{}{}...",
                     crate::tr!("terminal", "enter-prompt-for", agent = session.agent.display_name().to_string()),
                     ""
                 )),
             })
-            .unwrap_or(Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.clone()))
+            .unwrap_or(Cow::Owned(CLI_AGENT_RICH_INPUT_HINT_TEXT.get().to_owned()))
     }
 
     pub fn set_zero_state_hint_text(&mut self, ctx: &mut ViewContext<Self>) {
@@ -6691,14 +6691,14 @@ impl Input {
                 .active_conversation(self.terminal_view_id)
                 .is_none_or(|c| c.is_empty());
             let hint = if conversation_is_empty {
-                CLOUD_MODE_V2_HINT_TEXT.to_owned()
+                CLOUD_MODE_V2_HINT_TEXT.get().to_owned()
             } else {
                 self.handoff_compose_state
                     .as_ref(ctx)
                     .selected_environment_id()
                     .and_then(|id| CloudAmbientAgentEnvironment::get_by_id(id, ctx))
                     .map(|env| crate::tr!("terminal", "hand-off-to", env_name = env.model().string_model.display_name().to_string()))
-                    .unwrap_or_else(|| CLOUD_HANDOFF_HINT_TEXT.to_owned())
+                    .unwrap_or_else(|| CLOUD_HANDOFF_HINT_TEXT.get().to_owned())
             };
             self.editor.update(ctx, |editor, ctx| {
                 editor.set_placeholder_text(&hint, ctx);
@@ -6710,7 +6710,7 @@ impl Input {
             let show_hint = *InputSettings::as_ref(ctx).show_hint_text;
             self.editor.update(ctx, |editor, ctx| {
                 if show_hint {
-                    editor.set_placeholder_text(&*CLOUD_MODE_V2_HINT_TEXT, ctx);
+                    editor.set_placeholder_text(CLOUD_MODE_V2_HINT_TEXT.get(), ctx);
                 } else {
                     editor.clear_placeholder_text(ctx);
                 }
@@ -6760,7 +6760,7 @@ impl Input {
                 });
             } else {
                 self.editor.update(ctx, |editor, ctx| {
-                    editor.set_placeholder_text(&*AI_COMMAND_SEARCH_HINT_TEXT, ctx);
+                    editor.set_placeholder_text(AI_COMMAND_SEARCH_HINT_TEXT.get(), ctx);
                 });
             }
         } else {
@@ -15637,9 +15637,9 @@ impl TypedActionView for Input {
         match action {
             InputAction::FocusInputBox => {
                 ActionAccessibilityContent::Custom(AccessibilityContent::new(
-                    INPUT_A11Y_LABEL.clone(),
+                    INPUT_A11Y_LABEL.get(),
                     // TODO (a11y) use bindings from user settings
-                    INPUT_A11Y_HELPER.clone(),
+                    INPUT_A11Y_HELPER.get(),
                     WarpA11yRole::TextareaRole,
                 ))
             }
@@ -15855,9 +15855,9 @@ impl View for Input {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            INPUT_A11Y_LABEL.clone(),
+            INPUT_A11Y_LABEL.get(),
             // TODO (a11y) use bindings from user settings
-            INPUT_A11Y_HELPER.clone(),
+            INPUT_A11Y_HELPER.get(),
             WarpA11yRole::TextareaRole,
         ))
     }

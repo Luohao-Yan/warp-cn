@@ -2,9 +2,7 @@
 
 use std::collections::HashMap;
 use std::str::FromStr;
-use std::sync::{Arc, LazyLock};
-
-use chrono::{DateTime, Duration, Local};
+use std::sync::Arc;use chrono::{DateTime, Duration, Local};
 use instant::Instant;
 use parking_lot::RwLock;
 use pathfinder_color::ColorU;
@@ -71,6 +69,7 @@ use crate::view_components::copyable_text_field::{
 use crate::view_components::DismissibleToast;
 use crate::workspace::{ForkedConversationDestination, ToastStack, WorkspaceAction};
 use crate::workspaces::user_profiles::{UserProfileWithUID, UserProfiles};
+use crate::static_tr;
 
 const FIELD_SPACING: f32 = 16.0;
 const HEADER_SPACING: f32 = 12.0;
@@ -79,9 +78,8 @@ const HARNESS_CIRCLE_SIZE: f32 = 16.0;
 const HARNESS_ICON_IN_CIRCLE: f32 = 9.0;
 const LABEL_VALUE_GAP: f32 = 4.0;
 const SECTION_HEADER_GAP: f32 = 8.0;
-static RUN_METADATA_ACCESS_DENIED_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "run-metadata-unavailable"));
-static RUN_METADATA_ACCESS_DENIED_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "shared-session-metadata-note"));
+static_tr!(RUN_METADATA_ACCESS_DENIED_TITLE, "ai", "run-metadata-unavailable");
+static_tr!(RUN_METADATA_ACCESS_DENIED_DESCRIPTION, "ai", "shared-session-metadata-note");
 
 /// Panel rendering mode.
 #[derive(Debug, Clone, PartialEq)]
@@ -624,7 +622,6 @@ pub enum ConversationDetailsPanelAction {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::custom(
         CustomAction::Copy,
         ConversationDetailsPanelAction::CopySelectedText,
@@ -671,9 +668,9 @@ impl ConversationDetailsPanel {
 
         #[cfg(not(target_family = "wasm"))]
         let continue_locally_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "continue-locally"));
+            static_tr!(LABEL, "common", "continue-locally");
             let tooltip = crate::tr!("common", "continue-locally-tooltip");
-            ActionButton::new(&*LABEL, PrimaryTheme)
+            ActionButton::new(LABEL.get(), PrimaryTheme)
                 .with_tooltip(tooltip)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
@@ -1160,7 +1157,7 @@ impl ConversationDetailsPanel {
                     .finish();
 
             let title = Text::new(
-                &*RUN_METADATA_ACCESS_DENIED_TITLE,
+                RUN_METADATA_ACCESS_DENIED_TITLE.get(),
                 appearance.ui_font_family(),
                 ui_font_size,
             )
@@ -1169,7 +1166,7 @@ impl ConversationDetailsPanel {
             .with_selectable(true)
             .finish();
             let description = Text::new(
-                &*RUN_METADATA_ACCESS_DENIED_DESCRIPTION,
+                RUN_METADATA_ACCESS_DENIED_DESCRIPTION.get(),
                 appearance.ui_font_family(),
                 ui_font_size - 1.,
             )

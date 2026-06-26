@@ -1,6 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
-use ::ai::api_keys::CustomEndpoint;
+use ::ai::api_keys::{ApiFormat, CustomEndpoint};
 use url::Url;
 use warp_editor::editor::NavigationKey;
 use warpui::elements::{
@@ -22,6 +22,7 @@ use crate::editor::{
 use crate::modal::{Modal, ModalViewState};
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, DangerSecondaryTheme};
+use crate::view_components::dropdown::{Dropdown, DropdownItem};
 
 const LABEL_FONT_SIZE: f32 = 12.;
 const INPUT_WIDTH: f32 = 480.;
@@ -37,6 +38,7 @@ pub enum CustomEndpointModalEvent {
         name: String,
         url: String,
         api_key: String,
+        api_format: ApiFormat,
         models: Vec<(String, Option<String>, Option<String>)>,
     },
     SaveEndpoint {
@@ -44,6 +46,7 @@ pub enum CustomEndpointModalEvent {
         name: String,
         url: String,
         api_key: String,
+        api_format: ApiFormat,
         models: Vec<(String, Option<String>, Option<String>)>,
     },
     RemoveEndpoint {
@@ -58,6 +61,7 @@ pub enum CustomEndpointModalAction {
     AddModel,
     RemoveModel(usize),
     RemoveEndpoint,
+    SetApiFormat(ApiFormat),
 }
 
 struct ModelRow {
@@ -71,6 +75,8 @@ pub struct CustomEndpointModal {
     endpoint_name_editor: ViewHandle<EditorView>,
     endpoint_url_editor: ViewHandle<EditorView>,
     api_key_editor: ViewHandle<EditorView>,
+    api_format_dropdown: ViewHandle<Dropdown<CustomEndpointModalAction>>,
+    api_format: ApiFormat,
     model_rows: Vec<ModelRow>,
     cancel_button_mouse_state: MouseStateHandle,
     save_button_mouse_state: MouseStateHandle,
@@ -157,6 +163,33 @@ impl CustomEndpointModal {
             editor
         });
 
+        // API format dropdown
+        let initial_api_format = endpoint.map(|ep| ep.api_format).unwrap_or_default();
+        let api_format_items: Vec<DropdownItem<CustomEndpointModalAction>> = [
+            ApiFormat::OpenAi,
+            ApiFormat::Anthropic,
+        ]
+        .iter()
+        .map(|fmt| {
+            DropdownItem::new(
+                fmt.display_name(),
+                CustomEndpointModalAction::SetApiFormat(*fmt),
+            )
+        })
+        .collect();
+        let api_format_dropdown = ctx.add_typed_action_view(move |ctx| {
+            let mut dropdown = Dropdown::new(ctx);
+            dropdown.add_items(api_format_items.clone(), ctx);
+            dropdown.set_selected_by_action(
+                CustomEndpointModalAction::SetApiFormat(initial_api_format),
+                ctx,
+            );
+            dropdown
+        });
+        ctx.subscribe_to_view(&api_format_dropdown, |me, _, event, ctx| {
+            me.handle_api_format_dropdown_event(event, ctx);
+        });
+
         let mut model_rows = Vec::new();
         if let Some(ep) = endpoint {
             for model in &ep.models {
@@ -215,6 +248,8 @@ impl CustomEndpointModal {
             endpoint_name_editor,
             endpoint_url_editor,
             api_key_editor,
+            api_format_dropdown,
+            api_format: initial_api_format,
             model_rows,
             cancel_button_mouse_state: Default::default(),
             save_button_mouse_state: Default::default(),
@@ -298,6 +333,15 @@ impl CustomEndpointModal {
         self.url_has_error = !url.trim().is_empty() && validate_url(&url).is_err();
         self.api_key_editor.update(ctx, |editor, ctx| {
             editor.set_buffer_text(endpoint.map(|e| e.api_key.as_str()).unwrap_or(""), ctx);
+        });
+        // Set API format dropdown
+        let api_format = endpoint.map(|e| e.api_format).unwrap_or_default();
+        self.api_format = api_format;
+        self.api_format_dropdown.update(ctx, |dropdown, ctx| {
+            dropdown.set_selected_by_action(
+                CustomEndpointModalAction::SetApiFormat(api_format),
+                ctx,
+            );
         });
         // Rebuild model rows
         // Old model row editors will be dropped with the modal body
@@ -393,6 +437,7 @@ impl CustomEndpointModal {
         let name = self.endpoint_name_editor.as_ref(ctx).buffer_text(ctx);
         let url = self.endpoint_url_editor.as_ref(ctx).buffer_text(ctx);
         let api_key = self.api_key_editor.as_ref(ctx).buffer_text(ctx);
+        let api_format = self.api_format;
         let models: Vec<(String, Option<String>, Option<String>)> = self
             .model_rows
             .iter()
@@ -414,6 +459,7 @@ impl CustomEndpointModal {
                 name,
                 url,
                 api_key,
+                api_format,
                 models,
             });
         } else {
@@ -421,6 +467,7 @@ impl CustomEndpointModal {
                 name,
                 url,
                 api_key,
+                api_format,
                 models,
             });
         }
@@ -561,17 +608,13 @@ impl CustomEndpointModal {
     fn handle_api_key_event(&mut self, event: &EditorEvent, ctx: &mut ViewContext<Self>) {
         match event {
             EditorEvent::Navigate(NavigationKey::Tab) => {
-                if let Some(first_row) = self.model_rows.first() {
-                    ctx.focus(&first_row.name_editor);
-                }
+                ctx.focus(&self.api_format_dropdown);
             }
             EditorEvent::Navigate(NavigationKey::ShiftTab) => {
                 ctx.focus(&self.endpoint_url_editor);
             }
             EditorEvent::Enter => {
-                if let Some(first_row) = self.model_rows.first() {
-                    ctx.focus(&first_row.name_editor);
-                }
+                ctx.focus(&self.api_format_dropdown);
             }
             EditorEvent::Escape => {
                 self.cancel(ctx);
@@ -581,6 +624,15 @@ impl CustomEndpointModal {
             }
             _ => {}
         }
+    }
+
+    fn handle_api_format_dropdown_event(
+        &mut self,
+        _event: &crate::view_components::dropdown::DropdownEvent,
+        _ctx: &mut ViewContext<Self>,
+    ) {
+        // The dropdown dispatches SetApiFormat action via TypedActionView when an item is selected.
+        // No additional handling needed here for toggle/close events.
     }
 
     fn handle_model_editor_event(
@@ -721,6 +773,18 @@ impl View for CustomEndpointModal {
             )
             .with_margin_bottom(16.)
             .finish(),
+        );
+
+        // API format
+        column.add_child(
+            Container::new(label("API format"))
+                .with_margin_bottom(4.)
+                .finish(),
+        );
+        column.add_child(
+            Container::new(ChildView::new(&self.api_format_dropdown).finish())
+                .with_margin_bottom(16.)
+                .finish(),
         );
 
         // Model rows
@@ -968,6 +1032,15 @@ impl TypedActionView for CustomEndpointModal {
                 if let Some(index) = self.editing_index {
                     ctx.emit(CustomEndpointModalEvent::RemoveEndpoint { index });
                 }
+            }
+            CustomEndpointModalAction::SetApiFormat(fmt) => {
+                self.api_format = *fmt;
+                self.api_format_dropdown.update(ctx, |dropdown, ctx| {
+                    dropdown.set_selected_by_action(
+                        CustomEndpointModalAction::SetApiFormat(*fmt),
+                        ctx,
+                    );
+                });
             }
         }
     }

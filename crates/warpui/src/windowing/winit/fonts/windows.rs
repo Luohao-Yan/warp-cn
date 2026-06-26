@@ -15,6 +15,14 @@ use crate::fonts::FontId;
 
 const EN_US_LOCALE: &str = "en-US";
 
+/// Returns the locale string for DirectWrite fallback lookups.
+/// Uses the system locale when available, falls back to en-US.
+fn dwrite_locale() -> String {
+    sys_locale::get_locale()
+        .map(|l| l.replace('_', "-"))
+        .unwrap_or_else(|| EN_US_LOCALE.to_owned())
+}
+
 /// Windows symbol fonts that are used to render window control icons. We specifically do not do any
 /// validation of these fonts (i.e. to check if the font contains english characters).
 const SYMBOL_ICON_FONTS: &[&str] = &["Segoe Fluent Icons", "Segoe MDL2 Assets"];
@@ -163,8 +171,9 @@ impl TextLayoutSystem {
             anyhow::anyhow!("Unable to load typeface from font_kit Handle: {err:?}")
         })?;
 
+        let locale = dwrite_locale();
         let fallback_result =
-            loaded_font.get_fallbacks(character.to_string().as_str(), EN_US_LOCALE);
+            loaded_font.get_fallbacks(character.to_string().as_str(), &locale);
 
         // Convert each font-kit fallback `Font` into a UI framework `FontHandle` and load it into
         // fontdb. We deliberately avoid `font_kit::Font::handle()` here: its default impl reads

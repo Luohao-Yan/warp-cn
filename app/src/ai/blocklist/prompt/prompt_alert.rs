@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use ai::api_keys::ApiKeyManager;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use warp_core::ui::appearance::Appearance;
@@ -17,52 +16,32 @@ use crate::settings_view::SettingsSection;
 use crate::ui_components::icons::Icon;
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
-
+use crate::static_tr;
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PERCENTAGE: f32 = 0.5;
 
-pub static TELEMETRY_DISABLED_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "telemetry-disabled-primary-text"));
-pub static ENABLE_ANALYTICS_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "enable-analytics-action-text"));
-pub static UPGRADE_TO_BUILD_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "upgrade-to-build-action-text"));
+static_tr!(pub TELEMETRY_DISABLED_PRIMARY_TEXT, "ai", "telemetry-disabled-primary-text");
+static_tr!(pub ENABLE_ANALYTICS_ACTION_TEXT, "ai", "enable-analytics-action-text");
+static_tr!(pub UPGRADE_TO_BUILD_ACTION_TEXT, "ai", "upgrade-to-build-action-text");
 
-pub static NO_CONNECTION_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "no-connection-primary-text"));
+static_tr!(pub NO_CONNECTION_PRIMARY_TEXT, "ai", "no-connection-primary-text");
 const ANONYMOUS_USER_REQUEST_LIMIT_SOFT_GATE_PRIMARY_TEXT: &str = "";
-pub static ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "anonymous-user-request-limit-hard-gate-primary-text"));
-pub static DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "delinquent-due-to-payment-issue-primary-text"));
-pub static OUT_OF_REQUESTS_PRIMARY_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "out-of-requests-primary-text"));
+static_tr!(pub ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT, "ai", "anonymous-user-request-limit-hard-gate-primary-text");
+static_tr!(pub DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT, "ai", "delinquent-due-to-payment-issue-primary-text");
+static_tr!(pub OUT_OF_REQUESTS_PRIMARY_TEXT, "ai", "out-of-requests-primary-text");
 
-pub static ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "anonymous-user-request-limit-action-text"));
-pub static DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "delinquent-due-to-payment-issue-action-text"));
-pub static OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "overages-toggleable-but-not-enabled-action-text"));
-pub static MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "monthly-overages-spend-limit-reached-action-text"));
-pub static UPGRADE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "upgrade-text"));
-pub static COMPARE_PLANS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "compare-plans-text"));
-pub static CONTACT_SUPPORT_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "contact-support-text"));
-pub static NON_ADMIN_CONTACT_ADMIN_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "non-admin-contact-admin-text"));
-pub static NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "non-admin-ask-admin-to-enable-overages-text"));
-pub static NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "non-admin-ask-admin-to-increase-overages-text"));
-pub static UPGRADE_TO_BUILD_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "upgrade-to-build-text"));
-pub static USE_YOUR_OWN_API_KEYS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "use-your-own-api-keys-text"));
-pub static ADD_CREDITS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai", "add-credits-text"));
+static_tr!(pub ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT, "ai", "anonymous-user-request-limit-action-text");
+static_tr!(pub DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT, "ai", "delinquent-due-to-payment-issue-action-text");
+static_tr!(pub OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT, "ai", "overages-toggleable-but-not-enabled-action-text");
+static_tr!(pub MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT, "ai", "monthly-overages-spend-limit-reached-action-text");
+static_tr!(pub UPGRADE_TEXT, "ai", "upgrade-text");
+static_tr!(pub COMPARE_PLANS_TEXT, "ai", "compare-plans-text");
+static_tr!(pub CONTACT_SUPPORT_TEXT, "ai", "contact-support-text");
+static_tr!(pub NON_ADMIN_CONTACT_ADMIN_TEXT, "ai", "non-admin-contact-admin-text");
+static_tr!(pub NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT, "ai", "non-admin-ask-admin-to-enable-overages-text");
+static_tr!(pub NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT, "ai", "non-admin-ask-admin-to-increase-overages-text");
+static_tr!(pub UPGRADE_TO_BUILD_TEXT, "ai", "upgrade-to-build-text");
+static_tr!(pub USE_YOUR_OWN_API_KEYS_TEXT, "ai", "use-your-own-api-keys-text");
+static_tr!(pub ADD_CREDITS_TEXT, "ai", "add-credits-text");
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PromptAlertAction {
@@ -219,7 +198,7 @@ impl PromptAlertView {
         match state {
             PromptAlertState::NoConnection => {
                 text_fragments.push(FormattedTextFragment::plain_text(
-                    NO_CONNECTION_PRIMARY_TEXT.as_str(),
+                    NO_CONNECTION_PRIMARY_TEXT.get(),
                 ));
             }
 
@@ -230,19 +209,19 @@ impl PromptAlertView {
             }
             PromptAlertState::AnonymousUserRequestLimitHardGate => {
                 text_fragments.push(FormattedTextFragment::plain_text(
-                    ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT.as_str(),
+                    ANONYMOUS_USER_REQUEST_LIMIT_HARD_GATE_PRIMARY_TEXT.get(),
                 ));
             }
             PromptAlertState::DelinquentDueToPaymentIssue => {
                 text_fragments.push(FormattedTextFragment::plain_text(
-                    DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT.as_str(),
+                    DELINQUENT_DUE_TO_PAYMENT_ISSUE_PRIMARY_TEXT.get(),
                 ));
             }
             PromptAlertState::OveragesToggleableButNotEnabled
             | PromptAlertState::MonthlyOveragesSpendLimitReached
             | PromptAlertState::RequestLimitReached => {
                 text_fragments.push(FormattedTextFragment::plain_text(
-                    OUT_OF_REQUESTS_PRIMARY_TEXT.as_str(),
+                    OUT_OF_REQUESTS_PRIMARY_TEXT.get(),
                 ));
             }
             PromptAlertState::NoAlert => {}
@@ -268,7 +247,7 @@ impl PromptAlertView {
             | PromptAlertState::AnonymousUserRequestLimitHardGate => {
                 text_fragments.push(FormattedTextFragment::plain_text("  "));
                 text_fragments.push(FormattedTextFragment::hyperlink_action(
-                    ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT.as_str(),
+                    ANONYMOUS_USER_REQUEST_LIMIT_ACTION_TEXT.get(),
                     PromptAlertAction::SignUpClickedForAnonymousUser,
                 ));
             }
@@ -280,14 +259,14 @@ impl PromptAlertView {
                 if has_admin_permissions && has_billing_history {
                     text_fragments.push(FormattedTextFragment::plain_text("  "));
                     text_fragments.push(FormattedTextFragment::hyperlink_action(
-                        DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT.as_str(),
+                        DELINQUENT_DUE_TO_PAYMENT_ISSUE_ACTION_TEXT.get(),
                         PromptAlertAction::ManageBillingClicked {
                             team_uid: current_team.map(|team| team.uid).unwrap_or_default(),
                         },
                     ));
                 } else {
                     text_fragments.push(FormattedTextFragment::plain_text(
-                        NON_ADMIN_CONTACT_ADMIN_TEXT.as_str(),
+                        NON_ADMIN_CONTACT_ADMIN_TEXT.get(),
                     ));
                 }
             }
@@ -295,12 +274,12 @@ impl PromptAlertView {
                 if has_admin_permissions {
                     text_fragments.push(FormattedTextFragment::plain_text("  "));
                     text_fragments.push(FormattedTextFragment::hyperlink_action(
-                        OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT.as_str(),
+                        OVERAGES_TOGGLEABLE_BUT_NOT_ENABLED_ACTION_TEXT.get(),
                         PromptAlertAction::OpenSettingsClicked,
                     ));
                 } else {
                     text_fragments.push(FormattedTextFragment::plain_text(
-                        NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT.as_str(),
+                        NON_ADMIN_ASK_ADMIN_TO_ENABLE_OVERAGES_TEXT.get(),
                     ));
                 }
             }
@@ -308,12 +287,12 @@ impl PromptAlertView {
                 if has_admin_permissions {
                     text_fragments.push(FormattedTextFragment::plain_text("  "));
                     text_fragments.push(FormattedTextFragment::hyperlink_action(
-                        MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT.as_str(),
+                        MONTHLY_OVERAGES_SPEND_LIMIT_REACHED_ACTION_TEXT.get(),
                         PromptAlertAction::OpenSettingsClicked,
                     ));
                 } else {
                     text_fragments.push(FormattedTextFragment::plain_text(
-                        NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT.as_str(),
+                        NON_ADMIN_ASK_ADMIN_TO_INCREASE_OVERAGES_TEXT.get(),
                     ));
                 }
             }
@@ -323,18 +302,18 @@ impl PromptAlertView {
                     if team.billing_metadata.can_upgrade_to_higher_tier_plan() {
                         let upgrade_url = UserWorkspaces::upgrade_link_for_team(team.uid);
                         let upgrade_text = if !has_admin_permissions {
-                            COMPARE_PLANS_TEXT.as_str()
+                            COMPARE_PLANS_TEXT.get()
                         } else if team.billing_metadata.can_upgrade_to_build_plan() {
-                            UPGRADE_TO_BUILD_TEXT.as_str()
+                            UPGRADE_TO_BUILD_TEXT.get()
                         } else {
-                            UPGRADE_TEXT.as_str()
+                            UPGRADE_TEXT.get()
                         };
 
                         text_fragments
                             .push(FormattedTextFragment::hyperlink(upgrade_text, upgrade_url));
                     } else {
                         text_fragments.push(FormattedTextFragment::hyperlink(
-                            CONTACT_SUPPORT_TEXT.as_str(),
+                            CONTACT_SUPPORT_TEXT.get(),
                             "mailto:support@warp.dev".to_owned(),
                         ));
                     }
@@ -344,19 +323,19 @@ impl PromptAlertView {
                     let label =
                         if let Some(workspace) = UserWorkspaces::as_ref(app).current_workspace() {
                             if workspace.billing_metadata.can_upgrade_to_build_plan() {
-                                UPGRADE_TO_BUILD_TEXT.as_str()
+                                UPGRADE_TO_BUILD_TEXT.get()
                             } else {
-                                UPGRADE_TEXT.as_str()
+                                UPGRADE_TEXT.get()
                             }
                         } else {
-                            UPGRADE_TEXT.as_str()
+                            UPGRADE_TEXT.get()
                         };
                     text_fragments.push(FormattedTextFragment::hyperlink(label, upgrade_url));
                 }
                 if UserWorkspaces::as_ref(app).is_byo_api_key_enabled(app) {
                     text_fragments.push(FormattedTextFragment::plain_text(" or "));
                     text_fragments.push(FormattedTextFragment::hyperlink_action(
-                        USE_YOUR_OWN_API_KEYS_TEXT.as_str(),
+                        USE_YOUR_OWN_API_KEYS_TEXT.get(),
                         WorkspaceAction::ShowSettingsPageWithSearch {
                             search_query: "api".to_string(),
                             section: Some(SettingsSection::WarpAgent),
@@ -420,7 +399,7 @@ impl View for PromptAlertView {
         if suggest_buy_credits {
             text_fragments.push(FormattedTextFragment::plain_text("  "));
             text_fragments.push(FormattedTextFragment::hyperlink_action(
-                ADD_CREDITS_TEXT.as_str(),
+                ADD_CREDITS_TEXT.get(),
                 WorkspaceAction::ShowSettingsPage(SettingsSection::BillingAndUsage),
             ));
         } else {

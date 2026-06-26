@@ -1,6 +1,4 @@
-use std::sync::{Arc, LazyLock};
-
-use serde::{Deserialize, Serialize};
+use std::sync::Arc;use serde::{Deserialize, Serialize};
 use warp_editor::content::text::BufferBlockItem;
 use warpui::elements::{
     AnchorPair, Border, Container, CornerRadius, MouseStateHandle, OffsetPositioning, OffsetType,
@@ -27,11 +25,11 @@ use crate::server::ids::SyncId;
 use crate::themes::theme::Fill;
 use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon;
-
+use crate::static_tr;
 /// The saved position ID for the block insertion button.
 const BLOCK_INSERT_BUTTON_ID: &str = "notebook_block_insertion_button";
 
-static INSERT_BLOCK_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "insert-block"));
+static_tr!(INSERT_BLOCK_TOOLTIP, "notebooks", "insert-block");
 
 /// Where the block insertion menu was triggered from.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -310,7 +308,7 @@ impl RichTextEditorView {
         })
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(INSERT_BLOCK_TOOLTIP.clone())
+                .tool_tip(INSERT_BLOCK_TOOLTIP.get().to_owned())
                 .build()
                 .finish()
         })

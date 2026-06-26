@@ -1,5 +1,4 @@
 use std::borrow::Cow;
-use std::sync::LazyLock;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
@@ -72,7 +71,7 @@ use crate::workspaces::update_manager::TeamUpdateManager;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::AdminEnablementSetting;
 use crate::{send_telemetry_from_ctx, TelemetryEvent};
-
+use crate::static_tr;
 const MAIN_SECTION_MARGIN: f32 = 12.;
 const SUB_SECTION_MARGIN: f32 = 8.;
 
@@ -94,8 +93,7 @@ const CODEBASE_INDEX_LIMIT_REACHED: &str = "You have reached the maximum number 
 const REMOTE_CODEBASE_INDEX_LIMIT_REACHED_FAILURE: &str =
     "maximum number of codebase indexes has been reached";
 
-static INDEX_NEW_FOLDER_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "index-new-folder"));
+static_tr!(INDEX_NEW_FOLDER_LABEL, "settings", "index-new-folder");
 
 /// Identifies which subpage of the Code settings the user is viewing.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -333,7 +331,7 @@ impl CodeSettingsPageView {
         });
 
         let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new(&*INDEX_NEW_FOLDER_LABEL, SecondaryTheme)
+            ActionButton::new(INDEX_NEW_FOLDER_LABEL.get(), SecondaryTheme)
                 .with_icon(Icon::FindAll)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -430,7 +428,7 @@ impl CodeSettingsPageView {
             // or the full categorized page when subpage is None.
             if let Some(subpage) = subpage {
                 let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-                    ActionButton::new(&*INDEX_NEW_FOLDER_LABEL, SecondaryTheme)
+                    ActionButton::new(INDEX_NEW_FOLDER_LABEL.get(), SecondaryTheme)
                         .with_icon(Icon::FindAll)
                         .on_click(|ctx| {
                             ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -481,7 +479,7 @@ impl CodeSettingsPageView {
     fn build_full_page(ctx: &mut ViewContext<Self>) -> PageType<Self> {
         if FeatureFlag::OpenWarpNewSettingsModes.is_enabled() {
             let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-                ActionButton::new(&*INDEX_NEW_FOLDER_LABEL, SecondaryTheme)
+                ActionButton::new(INDEX_NEW_FOLDER_LABEL.get(), SecondaryTheme)
                     .with_icon(Icon::FindAll)
                     .on_click(|ctx| {
                         ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);
@@ -521,7 +519,7 @@ impl CodeSettingsPageView {
             PageType::new_categorized(categories, None)
         } else {
             let manual_add_directory_button = ctx.add_typed_action_view(|_| {
-                ActionButton::new(&*INDEX_NEW_FOLDER_LABEL, SecondaryTheme)
+                ActionButton::new(INDEX_NEW_FOLDER_LABEL.get(), SecondaryTheme)
                     .with_icon(Icon::FindAll)
                     .on_click(|ctx| {
                         ctx.dispatch_typed_action(CodeSettingsPageAction::ManualAddDirectory);

@@ -1,6 +1,4 @@
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use warp_core::ui::appearance::Appearance;
 use warp_util::local_or_remote_path::LocalOrRemotePath;
 use warpui::elements::{
@@ -32,9 +30,8 @@ pub mod rule_editor;
 mod style;
 use rule::*;
 use rule_editor::*;
-
-pub static OFFLINE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-offline-banner-text"));
+use crate::static_tr;
+static_tr!(pub OFFLINE_TEXT, "ai_assistant", "ai-offline-banner-text");
 
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum AIFactPage {
@@ -81,7 +78,7 @@ pub struct AIFactView {
 
 impl AIFactView {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
-        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(HEADER_TEXT.as_str().to_string()));
+        let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(HEADER_TEXT.get().to_string()));
 
         let rule_view = ctx.add_typed_action_view(RuleView::new);
         ctx.subscribe_to_view(&rule_view, |me, _, event, ctx| {
@@ -214,7 +211,7 @@ impl AIFactView {
                         Container::new(
                             appearance
                                 .ui_builder()
-                                .wrappable_text(OFFLINE_TEXT.as_str(), true)
+                                .wrappable_text(OFFLINE_TEXT.get(), true)
                                 .build()
                                 .finish(),
                         )
@@ -330,7 +327,7 @@ impl BackingView for AIFactView {
         _ctx: &view::HeaderRenderContext<'_>,
         _app: &AppContext,
     ) -> view::HeaderContent {
-        view::HeaderContent::simple(HEADER_TEXT.as_str())
+        view::HeaderContent::simple(HEADER_TEXT.get())
     }
 
     fn set_focus_handle(&mut self, focus_handle: PaneFocusHandle, _ctx: &mut ViewContext<Self>) {

@@ -1559,7 +1559,7 @@ impl TerminalView {
 
         let window_id = ctx.window_id();
         crate::workspace::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-            let toast = DismissibleToast::default(COPY_LINK_TEXT.clone());
+            let toast = DismissibleToast::default(COPY_LINK_TEXT.get().to_owned());
             toast_stack.add_ephemeral_toast(toast, window_id, ctx);
         });
 

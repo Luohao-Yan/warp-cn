@@ -14,7 +14,6 @@ use crate::ui_components::icons::Icon;
 use crate::WorkspaceAction;
 
 use pathfinder_color::ColorU;
-use std::sync::LazyLock;
 use warp_core::ui::color::coloru_with_opacity;
 use warp_core::ui::theme::Fill;
 use warpui::elements::{
@@ -25,14 +24,10 @@ use warpui::elements::{
 };
 use warpui::fonts::{FamilyId, Properties, Weight};
 use warpui::platform::Cursor;
-
-
-static SETTINGS_OPEN_SETTINGS_FILE_INLINE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "open-settings-file-inline"));
-static SETTINGS_OPEN_FILE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "open-file"));
-static SETTINGS_FIX_WITH_OZ: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "fix-with-oz"));
+use crate::static_tr;
+static_tr!(SETTINGS_OPEN_SETTINGS_FILE_INLINE, "settings", "open-settings-file-inline");
+static_tr!(SETTINGS_OPEN_FILE, "settings", "open-file");
+static_tr!(SETTINGS_FIX_WITH_OZ, "settings", "fix-with-oz");
 
 
 /// Horizontal + vertical padding applied to the footer inside the sidebar.
@@ -124,7 +119,7 @@ pub fn render_open_settings_file_button(
             .with_height(FOOTER_ICON_SIZE)
             .finish();
 
-        let label = Text::new_inline(SETTINGS_OPEN_SETTINGS_FILE_INLINE.clone(), ui_font_family, FOOTER_FONT_SIZE)
+        let label = Text::new_inline(SETTINGS_OPEN_SETTINGS_FILE_INLINE.get(), ui_font_family, FOOTER_FONT_SIZE)
             .with_color(text_color)
             .with_style(Properties {
                 weight: Weight::Semibold,
@@ -239,7 +234,7 @@ pub fn render_settings_error_alert(
         ui_font_family,
         text_color,
         mouse_states.alert_open_file_button.clone(),
-        &*SETTINGS_OPEN_FILE,
+        SETTINGS_OPEN_FILE.get(),
         /*icon=*/ None,
         /*bordered=*/ true,
         WorkspaceAction::OpenSettingsFile,
@@ -261,7 +256,7 @@ pub fn render_settings_error_alert(
             ui_font_family,
             text_color,
             mouse_states.alert_fix_with_oz_button.clone(),
-            &*SETTINGS_FIX_WITH_OZ,
+            SETTINGS_FIX_WITH_OZ.get(),
             Some(Icon::Oz),
             /*bordered=*/ false,
             WorkspaceAction::FixSettingsWithOz { error_description },

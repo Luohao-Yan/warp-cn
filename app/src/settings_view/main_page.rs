@@ -46,38 +46,24 @@ use crate::workspaces::update_manager::TeamUpdateManager;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::CustomerType;
 use crate::{report_if_error, send_telemetry_from_ctx, TelemetryEvent};
-
-use std::sync::LazyLock;
+use crate::static_tr;
 
 const PHOTO_SIZE: f32 = 40.;
-static REFERRAL_CTA: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "referral-cta"));
+static_tr!(REFERRAL_CTA, "settings", "referral-cta");
 const REGULAR_TEXT_FONT_SIZE: f32 = 12.;
 const VERTICAL_MARGIN: f32 = 24.;
-static LOG_OUT_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "log-out"));
-static SETTINGS_SIGN_UP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "sign-up-label"));
-static SETTINGS_SETTINGS_SYNC: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "sync"));
-static SETTINGS_REFER_A_FRIEND: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "refer-a-friend"));
-static SETTINGS_FREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "free"));
-static SETTINGS_COMPARE_PLANS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "compare-plans"));
-static SETTINGS_CONTACT_SUPPORT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "contact-support"));
-static SETTINGS_MANAGE_BILLING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "manage-billing"));
-static SETTINGS_UPGRADE_TURBO: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "upgrade-turbo"));
-static SETTINGS_UPGRADE_LIGHTSPEED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "upgrade-lightspeed"));
-static SETTINGS_ACCOUNT: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "account").leak());
-static SETTINGS_VERSION: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "version").leak());
+static_tr!(LOG_OUT_TEXT, "settings", "log-out");
+static_tr!(SETTINGS_SIGN_UP_LABEL, "settings", "sign-up-label");
+static_tr!(SETTINGS_SETTINGS_SYNC, "settings", "sync");
+static_tr!(SETTINGS_REFER_A_FRIEND, "settings", "refer-a-friend");
+static_tr!(SETTINGS_FREE, "settings", "free");
+static_tr!(SETTINGS_COMPARE_PLANS, "settings", "compare-plans");
+static_tr!(SETTINGS_CONTACT_SUPPORT, "settings", "contact-support");
+static_tr!(SETTINGS_MANAGE_BILLING, "settings", "manage-billing");
+static_tr!(SETTINGS_UPGRADE_TURBO, "settings", "upgrade-turbo");
+static_tr!(SETTINGS_UPGRADE_LIGHTSPEED, "settings", "upgrade-lightspeed");
+static_tr!(SETTINGS_ACCOUNT, "settings", "account");
+static_tr!(SETTINGS_VERSION, "settings", "version");
 lazy_static! {
     static ref SETTINGS_SYNC_BINDINGS_ADDED: Arc<Mutex<bool>> = Default::default();
 }
@@ -164,45 +150,30 @@ impl MainPageAction {
     }
 }
 
-static SETTINGS_UPGRADE_PLAN: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "upgrade-plan").leak());
-static SETTINGS_GENERATE_STRIPE_LINK: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "generate-stripe-link").leak());
-static SETTINGS_TOGGLE_SETTINGS_SYNC: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "toggle-settings-sync").leak());
-static SETTINGS_UNKNOWN_REASON: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "unknown-reason").leak());
-static SETTINGS_UP_TO_DATE: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "up-to-date").leak());
-static SETTINGS_CHECK_FOR_UPDATES: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "check-for-updates").leak());
-static SETTINGS_CHECKING_FOR_UPDATE: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "checking-for-update").leak());
-static SETTINGS_DOWNLOADING_UPDATE: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "downloading-update").leak());
-static SETTINGS_UPDATE_AVAILABLE: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "update-available").leak());
-static SETTINGS_RELAUNCH_WARP: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "relaunch-warp").leak());
-static SETTINGS_UPDATING: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "updating").leak());
-static SETTINGS_INSTALLED_UPDATE: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "installed-update").leak());
-static SETTINGS_UPDATE_CANT_INSTALL: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "update-cant-install").leak());
-static SETTINGS_UPDATE_WARP_MANUALLY: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "update-warp-manually").leak());
-static SETTINGS_UPDATE_CANT_LAUNCH: LazyLock<&'static str> =
-    LazyLock::new(|| crate::tr!("settings", "update-cant-launch").leak());
+static_tr!(SETTINGS_UPGRADE_PLAN, "settings", "upgrade-plan");
+static_tr!(SETTINGS_GENERATE_STRIPE_LINK, "settings", "generate-stripe-link");
+static_tr!(SETTINGS_TOGGLE_SETTINGS_SYNC, "settings", "toggle-settings-sync");
+static_tr!(SETTINGS_UNKNOWN_REASON, "settings", "unknown-reason");
+static_tr!(SETTINGS_UP_TO_DATE, "settings", "up-to-date");
+static_tr!(SETTINGS_CHECK_FOR_UPDATES, "settings", "check-for-updates");
+static_tr!(SETTINGS_CHECKING_FOR_UPDATE, "settings", "checking-for-update");
+static_tr!(SETTINGS_DOWNLOADING_UPDATE, "settings", "downloading-update");
+static_tr!(SETTINGS_UPDATE_AVAILABLE, "settings", "update-available");
+static_tr!(SETTINGS_RELAUNCH_WARP, "settings", "relaunch-warp");
+static_tr!(SETTINGS_UPDATING, "settings", "updating");
+static_tr!(SETTINGS_INSTALLED_UPDATE, "settings", "installed-update");
+static_tr!(SETTINGS_UPDATE_CANT_INSTALL, "settings", "update-cant-install");
+static_tr!(SETTINGS_UPDATE_WARP_MANUALLY, "settings", "update-warp-manually");
+static_tr!(SETTINGS_UPDATE_CANT_LAUNCH, "settings", "update-cant-launch");
 
 impl From<&MainPageAction> for LoginGatedFeature {
     fn from(val: &MainPageAction) -> LoginGatedFeature {
         use MainPageAction::*;
         match val {
-            Upgrade { .. } => *SETTINGS_UPGRADE_PLAN,
-            GenerateStripeBillingPortalLink { .. } => *SETTINGS_GENERATE_STRIPE_LINK,
-            ToggleSettingsSync => *SETTINGS_TOGGLE_SETTINGS_SYNC,
-            _ => *SETTINGS_UNKNOWN_REASON,
+            Upgrade { .. } => SETTINGS_UPGRADE_PLAN.get(),
+            GenerateStripeBillingPortalLink { .. } => SETTINGS_GENERATE_STRIPE_LINK.get(),
+            ToggleSettingsSync => SETTINGS_TOGGLE_SETTINGS_SYNC.get(),
+            _ => SETTINGS_UNKNOWN_REASON.get(),
         }
     }
 }
@@ -354,7 +325,7 @@ impl MainSettingsPageView {
 
         widgets.push(Box::new(LogoutWidget::default()));
 
-        let page = PageType::new_uncategorized(widgets, Some(*SETTINGS_ACCOUNT));
+        let page = PageType::new_uncategorized(widgets, Some(SETTINGS_ACCOUNT.get()));
 
         MainSettingsPageView { page, auth_state }
     }
@@ -407,7 +378,7 @@ impl AccountWidget {
                 self.ui_state_handles.anonymous_user_sign_up_button.clone(),
             )
             .with_style(button_styles)
-            .with_text_label(SETTINGS_SIGN_UP_LABEL.clone())
+            .with_text_label(SETTINGS_SIGN_UP_LABEL.get().to_owned())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(MainPageAction::SignupAnonymousUser);
@@ -419,7 +390,7 @@ impl AccountWidget {
             .with_cross_axis_alignment(CrossAxisAlignment::End);
         let current_user_id = auth_state.user_id().unwrap_or_default();
 
-        plan_info.add_child(render_customer_type_badge(appearance, SETTINGS_FREE.clone().into()));
+        plan_info.add_child(render_customer_type_badge(appearance, SETTINGS_FREE.get().into()));
         plan_info.add_child(
             Container::new(
                 appearance
@@ -431,7 +402,7 @@ impl AccountWidget {
                     .with_text_and_icon_label(
                         TextAndIcon::new(
                             TextAndIconAlignment::IconFirst,
-                            SETTINGS_COMPARE_PLANS.clone(),
+                            SETTINGS_COMPARE_PLANS.get(),
                             Icon::CoinsStacked.to_warpui_icon(appearance.theme().accent()),
                             MainAxisSize::Min,
                             MainAxisAlignment::Center,
@@ -567,7 +538,7 @@ impl AccountWidget {
                         appearance
                             .ui_builder()
                             .link(
-                                SETTINGS_CONTACT_SUPPORT.clone().into(),
+                                SETTINGS_CONTACT_SUPPORT.get().into(),
                                 Some("mailto:support@warp.dev".into()),
                                 None,
                                 self.ui_state_handles.enterprise_contact_us_link.clone(),
@@ -584,7 +555,7 @@ impl AccountWidget {
                             appearance
                                 .ui_builder()
                                 .link(
-                                    SETTINGS_MANAGE_BILLING.clone().into(),
+                                    SETTINGS_MANAGE_BILLING.get().into(),
                                     None,
                                     Some(Box::new(move |ctx| {
                                         ctx.dispatch_typed_action(
@@ -605,9 +576,9 @@ impl AccountWidget {
                     // If the team is upgradeable to self-serve tier, show them the upgrade link.
                     if team.billing_metadata.can_upgrade_to_higher_tier_plan() {
                         let description = match team.billing_metadata.customer_type {
-                            CustomerType::Prosumer => SETTINGS_UPGRADE_TURBO.clone(),
-                            CustomerType::Turbo => SETTINGS_UPGRADE_LIGHTSPEED.clone(),
-                            _ => SETTINGS_COMPARE_PLANS.clone(),
+                            CustomerType::Prosumer => SETTINGS_UPGRADE_TURBO.get(),
+                            CustomerType::Turbo => SETTINGS_UPGRADE_LIGHTSPEED.get(),
+                            _ => SETTINGS_COMPARE_PLANS.get(),
                         };
                         let team_uid = team.uid;
                         plan_info.add_child(
@@ -633,14 +604,14 @@ impl AccountWidget {
                 }
             }
         } else {
-            let plan_badge_child = render_customer_type_badge(appearance, SETTINGS_FREE.clone().into());
+            let plan_badge_child = render_customer_type_badge(appearance, SETTINGS_FREE.get().into());
             plan_info.add_child(plan_badge_child);
 
             plan_info.add_child(
                 appearance
                     .ui_builder()
                     .link(
-                        SETTINGS_COMPARE_PLANS.clone().into(),
+                        SETTINGS_COMPARE_PLANS.get().into(),
                         None,
                         Some(Box::new(move |ctx| {
                             ctx.dispatch_typed_action(MainPageAction::Upgrade {
@@ -770,7 +741,7 @@ impl SettingsWidget for SettingsSyncWidget {
         };
 
         Container::new(render_body_item::<MainPageAction>(
-            SETTINGS_SETTINGS_SYNC.clone(),
+            SETTINGS_SETTINGS_SYNC.get().to_owned(),
             Some(label_info),
             // Cloud prefs are always synced, so no need to show the local-only icon.
             LocalOnlyIconState::Hidden,
@@ -850,11 +821,11 @@ impl SettingsWidget for EarnRewardsWidget {
         Container::new(
             self.render_row(
                 appearance,
-                &*REFERRAL_CTA,
+                REFERRAL_CTA.get(),
                 appearance
                     .ui_builder()
                     .link(
-                        SETTINGS_REFER_A_FRIEND.clone().into(),
+                        SETTINGS_REFER_A_FRIEND.get().into(),
                         None,
                         Some(Box::new(move |ctx| {
                             ctx.dispatch_typed_action(WorkspaceAction::ShowReferralSettingsPage);
@@ -904,73 +875,73 @@ impl VersionInfoWidget {
                 match autoupdate::get_update_state(app) {
                     AutoupdateStage::NoUpdateAvailable => (
                         Some(StatusContent {
-                            text: &*SETTINGS_UP_TO_DATE,
+                            text: SETTINGS_UP_TO_DATE.get(),
                             color: faded_text_color,
                         }),
                         Some(CallToActionContent {
-                            text: &*SETTINGS_CHECK_FOR_UPDATES,
+                            text: SETTINGS_CHECK_FOR_UPDATES.get(),
                             action: MainPageAction::CheckForUpdate,
                         }),
                     ),
                     AutoupdateStage::CheckingForUpdate => (
                         Some(StatusContent {
-                            text: &*SETTINGS_CHECKING_FOR_UPDATE,
+                            text: SETTINGS_CHECKING_FOR_UPDATE.get(),
                             color: faded_text_color,
                         }),
                         None,
                     ),
                     AutoupdateStage::DownloadingUpdate => (
                         Some(StatusContent {
-                            text: &*SETTINGS_DOWNLOADING_UPDATE,
+                            text: SETTINGS_DOWNLOADING_UPDATE.get(),
                             color: faded_text_color,
                         }),
                         None,
                     ),
                     AutoupdateStage::UpdateReady { .. } => (
                         Some(StatusContent {
-                            text: &*SETTINGS_UPDATE_AVAILABLE,
+                            text: SETTINGS_UPDATE_AVAILABLE.get(),
                             color: ansi_red,
                         }),
                         Some(CallToActionContent {
-                            text: &*SETTINGS_RELAUNCH_WARP,
+                            text: SETTINGS_RELAUNCH_WARP.get(),
                             action: MainPageAction::Relaunch,
                         }),
                     ),
                     AutoupdateStage::Updating { .. } => (
                         Some(StatusContent {
-                            text: &*SETTINGS_UPDATING,
+                            text: SETTINGS_UPDATING.get(),
                             color: faded_text_color,
                         }),
                         None,
                     ),
                     AutoupdateStage::UpdatedPendingRestart { .. } => (
                         Some(StatusContent {
-                            text: &*SETTINGS_INSTALLED_UPDATE,
+                            text: SETTINGS_INSTALLED_UPDATE.get(),
                             color: faded_text_color,
                         }),
                         Some(CallToActionContent {
-                            text: &*SETTINGS_RELAUNCH_WARP,
+                            text: SETTINGS_RELAUNCH_WARP.get(),
                             action: MainPageAction::Relaunch,
                         }),
                     ),
                     AutoupdateStage::UnableToUpdateToNewVersion { .. } => (
                         Some(StatusContent {
-                            text: &*SETTINGS_UPDATE_CANT_INSTALL,
+                            text: SETTINGS_UPDATE_CANT_INSTALL.get(),
                             color: ansi_red,
                         }),
                         Some(CallToActionContent {
-                            text: &*SETTINGS_UPDATE_WARP_MANUALLY,
+                            text: SETTINGS_UPDATE_WARP_MANUALLY.get(),
                             // note: the handler for this action is a no-op
                             action: MainPageAction::DownloadUpdate,
                         }),
                     ),
                     AutoupdateStage::UnableToLaunchNewVersion { .. } => (
                         Some(StatusContent {
-                            text: &*SETTINGS_UPDATE_CANT_LAUNCH,
+                            text: SETTINGS_UPDATE_CANT_LAUNCH.get(),
                             color: ansi_red,
                         }),
                         Some(CallToActionContent {
-                            text: &*SETTINGS_UPDATE_WARP_MANUALLY,
+                            text: SETTINGS_UPDATE_WARP_MANUALLY.get(),
                             // note: the handler for this action is a no-op
                             action: MainPageAction::DownloadUpdate,
                         }),
@@ -987,7 +958,7 @@ impl VersionInfoWidget {
                     1.0,
                     Align::new(
                         Text::new_inline(
-                            SETTINGS_VERSION.clone(),
+                            SETTINGS_VERSION.get(),
                             appearance.ui_font_family(),
                             REGULAR_TEXT_FONT_SIZE,
                         )
@@ -1115,7 +1086,7 @@ impl LogoutWidget {
         appearance
             .ui_builder()
             .button(ButtonVariant::Secondary, self.mouse_state.clone())
-            .with_text_label(LOG_OUT_TEXT.clone())
+            .with_text_label(LOG_OUT_TEXT.get().to_owned())
             .with_style(UiComponentStyles {
                 font_size: Some(14.),
                 padding: Some(Coords::uniform(8.).left(32.).right(32.)),

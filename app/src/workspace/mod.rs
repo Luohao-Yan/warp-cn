@@ -1136,7 +1136,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             "workspace:toggle_ai_assistant",
-            NEW_AGENT_PANE_LABEL.clone(),
+            NEW_AGENT_PANE_LABEL.get(),
             WorkspaceAction::NewPaneInAgentMode {
                 entrypoint: AgentModeEntrypoint::NewPaneBinding,
                 zero_state_prompt_suggestion_type: None,

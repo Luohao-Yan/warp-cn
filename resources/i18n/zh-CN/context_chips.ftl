@@ -23,7 +23,7 @@ context-chips-svn-branch = Svn 分支
 context-chips-svn-uncommitted-file-count = Svn 未提交文件数
 context-chips-remote-login = 远程登录
 context-chips-subshell = 子shell
-context-chips-agent-plan-and-todo-list = 代理计划和待办列表
+context-chips-agent-plan-and-todo-list = 智能体计划和待办列表
 
 ## -- 芯片禁用原因 ---------------------------------------------------------------
 
@@ -39,8 +39,6 @@ context-chips-svn-dirty-prefix = ±{ $value }
 context-chips-k8s-prefix = ⎈ { $value }
 
 ## -- Git 差异统计显示 ------------------------------------------------------------
-
-context-chips-git-diff-stats = { $files } • +{ $added } -{ $removed }
 
 ## -- 复制菜单 -------------------------------------------------------------------
 

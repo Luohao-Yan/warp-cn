@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use markdown_parser::markdown_parser::RUNNABLE_BLOCK_MARKDOWN_LANG;
 use markdown_parser::CodeBlockText;
 use pathfinder_color::ColorU;
@@ -34,6 +33,7 @@ use crate::send_telemetry_from_ctx;
 use crate::server::telemetry::{SaveAsWorkflowModalSource, TelemetryEvent, WarpAIActionType};
 use crate::ui_components::blended_colors;
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 
 const TRANSCRIPT_POSITION_ID: &str = "ai_assistant::transcript";
 
@@ -52,13 +52,12 @@ const COPY_BUTTON_SIZE: f32 = 14.;
 const TERMINAL_INPUT_BUTTON_SIZE: f32 = 20.;
 const SAVE_AS_WORKFLOW_BUTTON_SIZE: f32 = 20.;
 
-static HOW_DO_I_FIX_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "how-do-i-fix"));
-static SHOW_EXAMPLES_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "show-examples"));
-static WHAT_TO_DO_NEXT_PROMPT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "what-should-i-do-next"));
-static IN_FLIGHT_REQUEST_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "generating-answer"));
-static ACCURACY_NOTICE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-responses-can-be-inaccurate"));
-static MISSING_CONTEXT_NOTICE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "warp-ai-might-forget-earlier-answers"));
+static_tr!(HOW_DO_I_FIX_PROMPT, "ai", "how-do-i-fix");
+static_tr!(SHOW_EXAMPLES_PROMPT, "ai", "show-examples");
+static_tr!(WHAT_TO_DO_NEXT_PROMPT, "ai_assistant", "what-should-i-do-next");
+static_tr!(IN_FLIGHT_REQUEST_TEXT, "ai_assistant", "generating-answer");
+static_tr!(ACCURACY_NOTICE_TEXT, "ai_assistant", "ai-responses-can-be-inaccurate");
+static_tr!(MISSING_CONTEXT_NOTICE_TEXT, "ai_assistant", "warp-ai-might-forget-earlier-answers");
 
 lazy_static::lazy_static! {
     static ref SCROLL_BUFFER_OFFSET_PX: Pixels = (10.).into_pixels();
@@ -130,7 +129,6 @@ impl TypedActionView for Transcript {
 
     fn handle_action(&mut self, action: &TranscriptAction, ctx: &mut ViewContext<Self>) {
         use TranscriptAction::*;
-
         match action {
             CopyAnswerToClipboard {
                 transcript_part_index,
@@ -763,7 +761,7 @@ impl Transcript {
                 self.mouse_state_handles.what_to_do_next_button.clone(),
                 None,
                 Some(8.),
-                &*WHAT_TO_DO_NEXT_PROMPT,
+                WHAT_TO_DO_NEXT_PROMPT.get(),
             ))
             .with_child(
                 Container::new(render_prepared_response_button(
@@ -771,7 +769,7 @@ impl Transcript {
                     self.mouse_state_handles.show_examples_button.clone(),
                     None,
                     Some(8.),
-                    &*SHOW_EXAMPLES_PROMPT,
+                    SHOW_EXAMPLES_PROMPT.get(),
                 ))
                 .with_margin_left(10.)
                 .with_margin_right(10.)
@@ -782,7 +780,7 @@ impl Transcript {
                 self.mouse_state_handles.how_do_i_fix_button.clone(),
                 None,
                 Some(8.),
-                &*HOW_DO_I_FIX_PROMPT,
+                HOW_DO_I_FIX_PROMPT.get(),
             ))
             .finish()
     }
@@ -832,7 +830,7 @@ impl View for Transcript {
             let in_flight_request_markdown = markdown_segments_from_text(
                 transcript_part_index,
                 TranscriptPartSubType::Answer,
-                &*IN_FLIGHT_REQUEST_TEXT,
+                IN_FLIGHT_REQUEST_TEXT.get(),
             );
             blocks.add_child(self.render_assistant_answer(
                 transcript_part_index,
@@ -841,7 +839,7 @@ impl View for Transcript {
                     copy_all_tooltip_and_button_mouse_handles: None,
                     formatted_message: FormattedTranscriptMessage {
                         markdown: in_flight_request_markdown,
-                        raw: IN_FLIGHT_REQUEST_TEXT.clone(),
+                        raw: IN_FLIGHT_REQUEST_TEXT.get().to_owned(),
                     },
                 },
                 appearance,

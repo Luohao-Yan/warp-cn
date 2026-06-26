@@ -153,7 +153,7 @@ fn local_with_disabled_codex_disables_accept() {
     let state = make_edit_state_with_orch_fields("codex", RunAgentsExecutionMode::Local);
     assert_eq!(
         state.orch.accept_disabled_reason(),
-        Some("Local Codex child agents are temporarily disabled.")
+        Some("Local Codex child agents are temporarily disabled.".to_owned())
     );
 }
 
@@ -519,7 +519,7 @@ mod override_from_approved_config_tests {
             .override_from_approved_config(&local_config("auto", "codex"));
         assert_eq!(
             state.orch.accept_disabled_reason(),
-            Some("Local Codex child agents are temporarily disabled.")
+            Some("Local Codex child agents are temporarily disabled.".to_owned())
         );
     }
 }

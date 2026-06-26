@@ -238,6 +238,7 @@ warp_assets.workspace = true
 warp_completer.workspace = true
 warp_core.workspace = true
 warp_i18n.workspace = true
+sys-locale = "0.3"
 warp_editor.workspace = true
 warp_graphql.workspace = true
 warp_js = { workspace = true, optional = true }

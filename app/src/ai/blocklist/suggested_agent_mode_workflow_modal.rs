@@ -12,8 +12,8 @@ use crate::{
     TelemetryEvent,
 };
 use pathfinder_geometry::vector::vec2f;
-use std::{collections::HashMap, default::Default, sync::Arc, sync::LazyLock};
-use warp_core::{send_telemetry_from_ctx, ui::appearance::Appearance};
+use std::{collections::HashMap, default::Default, sync::Arc, sync::LazyLock};use warp_core::{send_telemetry_from_ctx, ui::appearance::Appearance};
+use crate::static_tr;
 use warpui::{
     elements::{
         ChildAnchor, Empty, OffsetPositioning, PositionedElementAnchor,
@@ -26,7 +26,7 @@ use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 
-static SUGGESTED_PROMPT_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "prompt-label"));
+static_tr!(SUGGESTED_PROMPT_MODAL_HEADER, "ai", "prompt-label");
 
 /// A modal component for displaying and managing suggested agent mode workflows.
 /// This component wraps a WorkflowView in a modal dialog with proper styling and
@@ -67,7 +67,6 @@ pub enum SuggestedAgentModeWorkflowModalEvent {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         SuggestedAgentModeWorkflowModalAction::Cancel,

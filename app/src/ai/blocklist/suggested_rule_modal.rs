@@ -19,7 +19,6 @@ use crate::ai::agent::SuggestedRule;
 use crate::ai::facts::{AIFact, AIMemory, CloudAIFactModel};
 use crate::cloud_object::model::generic_string_model::GenericStringObjectId;
 use crate::cloud_object::model::persistence::{CloudModel, CloudModelEvent};
-use std::sync::LazyLock;
 use crate::cloud_object::Owner;
 use crate::drive::CloudObjectTypeAndId;
 use crate::editor::{
@@ -37,13 +36,13 @@ use crate::server::telemetry::TelemetryEvent;
 use crate::ui_components::blended_colors;
 use crate::view_components::action_button::{ActionButton, PrimaryTheme};
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
 
-static HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-suggested-rule-header"));
+static_tr!(HEADER_TEXT, "ai_assistant", "ai-suggested-rule-header");
 const MAX_EDITOR_HEIGHT: f32 = 240.;
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         SuggestedRuleDialogAction::Close,
@@ -96,7 +95,7 @@ impl SuggestedRuleModal {
 
         let view_handle = view.clone();
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(HEADER_TEXT.clone()), view, ctx)
+            Modal::new(Some(HEADER_TEXT.get().to_owned()), view, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(510.),
                     background: Some(background.into()),
@@ -310,14 +309,14 @@ impl SuggestedRuleView {
         });
 
         let add_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-add-rule"));
-            ActionButton::new(&*LABEL, PrimaryTheme)
+            static_tr!(LABEL, "ai_assistant", "ai-add-rule");
+            ActionButton::new(LABEL.get(), PrimaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(SuggestedRuleDialogAction::Add))
         });
 
         let edit_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-edit-rule"));
-            ActionButton::new(&*LABEL, PrimaryTheme)
+            static_tr!(LABEL, "ai_assistant", "ai-edit-rule");
+            ActionButton::new(LABEL.get(), PrimaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(SuggestedRuleDialogAction::Edit))
         });
 

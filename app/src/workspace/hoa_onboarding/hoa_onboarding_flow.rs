@@ -1,7 +1,5 @@
 use std::borrow::Cow;
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use markdown_parser::{
     FormattedText, FormattedTextFragment, FormattedTextLine, FormattedTextStyles, Hyperlink,
 };
@@ -39,6 +37,7 @@ use crate::view_components::callout_bubble::{
     render_callout_bubble, CalloutArrowDirection, CalloutArrowPosition, CalloutBubbleConfig,
 };
 use crate::workspace::tab_settings::TabSettings;
+use crate::static_tr;
 
 const CALLOUT_WIDTH: f32 = 480.;
 
@@ -121,7 +120,6 @@ impl HoaOnboardingStep {
 
 pub fn init(app: &mut warpui::AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "enter",
         HoaOnboardingAction::EnterPressed,
@@ -209,39 +207,39 @@ impl HoaOnboardingFlow {
         });
 
         let cta_button = ctx.add_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-see-whats-new"));
-            ActionButton::new(&*LABEL, HoaWelcomeModalButtonTheme)
+            static_tr!(LABEL, "workspace", "onboarding-see-whats-new");
+            ActionButton::new(LABEL.get(), HoaWelcomeModalButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromWelcome))
         });
 
         let enter = Keystroke::parse("enter").unwrap_or_default();
 
-        static NEXT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-next"));
+        static_tr!(NEXT_LABEL, "workspace", "onboarding-next");
         let next_vtabs_button = ctx.add_view(|ctx| {
-            ActionButton::new(&*NEXT_LABEL, HoaPrimaryButtonTheme)
+            ActionButton::new(NEXT_LABEL.get(), HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromVerticalTabs)
                 })
         });
 
-        static DISMISS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-dismiss"));
+        static_tr!(DISMISS_LABEL, "workspace", "onboarding-dismiss");
         let dismiss_vtabs_button = ctx.add_view(|ctx| {
-            ActionButton::new(&*DISMISS_LABEL, HoaPrimaryButtonTheme)
+            ActionButton::new(DISMISS_LABEL.get(), HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::Dismiss))
         });
 
         let next_inbox_button = ctx.add_view(|ctx| {
-            ActionButton::new(&*NEXT_LABEL, HoaPrimaryButtonTheme)
+            ActionButton::new(NEXT_LABEL.get(), HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter.clone()), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::AdvanceFromInbox))
         });
 
-        static FINISH_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "onboarding-finish"));
+        static_tr!(FINISH_LABEL, "workspace", "onboarding-finish");
         let finish_button = ctx.add_view(|ctx| {
-            ActionButton::new(&*FINISH_LABEL, HoaPrimaryButtonTheme)
+            ActionButton::new(FINISH_LABEL.get(), HoaPrimaryButtonTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter), ctx)
                 .on_click(|ctx| ctx.dispatch_typed_action(HoaOnboardingAction::Finish))
         });

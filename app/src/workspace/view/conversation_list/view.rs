@@ -1,8 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::ops::Range;
-use std::sync::{Arc, LazyLock, Mutex};
-
-use pathfinder_geometry::vector::Vector2F;
+use std::sync::{Arc, Mutex};use pathfinder_geometry::vector::Vector2F;
 use warp_core::features::FeatureFlag;
 use warp_core::send_telemetry_from_ctx;
 use warp_core::ui::Icon;
@@ -52,7 +50,7 @@ use crate::workspace::view::conversation_list::item::{
     STATIC_ITEM_MIN_HEIGHT,
 };
 use crate::workspace::{ToastStack, WorkspaceAction};
-
+use crate::static_tr;
 /// Maximum number of past items to show before the user toggles "view all".
 const INITIAL_MAX_PAST_ITEMS: usize = 10;
 
@@ -271,8 +269,8 @@ impl ConversationListView {
         // We use this as both the "view all" and "show less" button
         // (switching out the text on-toggle).
         let toggle_view_all_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "view-all"));
-            ActionButton::new(&*LABEL, SecondaryTheme)
+            static_tr!(LABEL, "workspace", "view-all");
+            ActionButton::new(LABEL.get(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(ConversationListViewAction::ToggleViewAll);

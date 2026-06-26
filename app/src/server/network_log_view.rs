@@ -29,13 +29,12 @@ use crate::pane_group::{BackingView, PaneConfiguration, PaneEvent, PaneHeaderAct
 use crate::server::network_logging::NetworkLogModel;
 use crate::ui_components::buttons::icon_button_with_color;
 use crate::ui_components::{blended_colors, icons};
-use std::sync::LazyLock;
-
+use crate::static_tr;
 /// Header text for the network log pane.
-pub static NETWORK_LOG_HEADER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "network-log-header").clone());
+static_tr!(pub NETWORK_LOG_HEADER_TEXT, "workspace", "network-log-header");
 
 /// Tooltip shown on hover over the refresh button in the pane header.
-static REFRESH_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "network-log-refresh-tooltip").clone());
+static_tr!(REFRESH_TOOLTIP, "workspace", "network-log-refresh-tooltip");
 
 /// Event emitted by the [`NetworkLogView`].
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -66,7 +65,7 @@ pub struct NetworkLogView {
 impl NetworkLogView {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let pane_configuration =
-            ctx.add_model(|_ctx| PaneConfiguration::new(NETWORK_LOG_HEADER_TEXT.as_str()));
+            ctx.add_model(|_ctx| PaneConfiguration::new(NETWORK_LOG_HEADER_TEXT.get()));
 
         // Capture a one-shot snapshot of the model. We intentionally do not
         // subscribe to the model: new items that arrive after the pane is
@@ -154,7 +153,7 @@ impl NetworkLogView {
         )
         .with_tooltip(move || {
             ui_builder
-                .tool_tip(REFRESH_TOOLTIP.clone())
+                .tool_tip(REFRESH_TOOLTIP.get().to_owned())
                 .build()
                 .finish()
         })
@@ -230,7 +229,7 @@ impl BackingView for NetworkLogView {
         app: &AppContext,
     ) -> HeaderContent {
         HeaderContent::Standard(StandardHeader {
-            title: NETWORK_LOG_HEADER_TEXT.clone(),
+            title: NETWORK_LOG_HEADER_TEXT.get().to_owned(),
             title_secondary: None,
             title_style: None,
             title_clip_config: ClipConfig::start(),

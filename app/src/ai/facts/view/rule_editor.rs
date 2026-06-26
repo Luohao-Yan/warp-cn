@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::color::internal_colors;
 use warp_editor::editor::NavigationKey;
@@ -28,11 +27,9 @@ use crate::server::ids::SyncId;
 use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, DangerSecondaryTheme, PrimaryTheme};
-
-pub static RULE_NAME_PLACEHOLDER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rule-name-placeholder"));
-pub static RULE_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("ai_assistant", "ai-rule-description-placeholder"));
+use crate::static_tr;
+static_tr!(pub RULE_NAME_PLACEHOLDER_TEXT, "ai_assistant", "ai-rule-name-placeholder");
+static_tr!(pub RULE_DESCRIPTION_PLACEHOLDER_TEXT, "ai_assistant", "ai-rule-description-placeholder");
 
 #[derive(Debug, Clone, Copy)]
 enum EditorType {
@@ -102,7 +99,7 @@ impl RuleEditorView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(&*RULE_NAME_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(RULE_NAME_PLACEHOLDER_TEXT.get(), ctx);
             editor
         });
         ctx.subscribe_to_view(&name_editor, |me, _editor, event, ctx| {
@@ -129,7 +126,7 @@ impl RuleEditorView {
                 },
                 ctx,
             );
-            editor.set_placeholder_text(&*RULE_DESCRIPTION_PLACEHOLDER_TEXT, ctx);
+            editor.set_placeholder_text(RULE_DESCRIPTION_PLACEHOLDER_TEXT.get(), ctx);
             editor
         });
         ctx.subscribe_to_view(&content_editor, |me, _editor, event, ctx| {

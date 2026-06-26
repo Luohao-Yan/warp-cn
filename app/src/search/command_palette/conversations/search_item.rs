@@ -25,14 +25,12 @@ use crate::search::command_palette::view::Action;
 use crate::search::item::IconLocation;
 use crate::search::result_renderer::ItemHighlightState;
 use crate::search::SearchItem;
-use std::sync::LazyLock;
-
-static FORK_CURRENT_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "fork-current-conversation").clone());
-static FORK_CONVERSATION_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "fork-conversation-tooltip").clone());
-static NEW_CONVERSATION: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "new-conversation").clone());
+static_tr!(FORK_CURRENT_CONVERSATION, "search", "fork-current-conversation");
+static_tr!(FORK_CONVERSATION_TOOLTIP, "search", "fork-conversation-tooltip");
+static_tr!(NEW_CONVERSATION, "search", "new-conversation");
 use crate::ui_components::buttons::icon_button;
 use crate::util::time_format::format_approx_duration_from_now;
-
+use crate::static_tr;
 /// Information about which action to take once the conversation item is accepted.
 #[derive(Debug)]
 pub enum ConversationAction {
@@ -94,7 +92,7 @@ impl ConversationSearchItem {
         let appearance = Appearance::as_ref(app);
 
         let action_title = Text::new_inline(
-            FORK_CURRENT_CONVERSATION.clone(),
+            FORK_CURRENT_CONVERSATION.get(),
             appearance.ui_font_family(),
             appearance.monospace_font_size(),
         )
@@ -249,7 +247,7 @@ impl ConversationSearchItem {
 
             let fork_button_tool_tip = appearance
                 .ui_builder()
-                .tool_tip(FORK_CONVERSATION_TOOLTIP.clone())
+                .tool_tip(FORK_CONVERSATION_TOOLTIP.get().to_owned())
                 .build();
 
             let fork_button_inner = icon_button(
@@ -424,9 +422,9 @@ impl SearchItem for ConversationSearchItem {
                 crate::tr!("search", "a11y-conversation-label", title = matched_conversation.as_ref().conversation.title())
             }
             ConversationAction::Fork { .. } => {
-                FORK_CURRENT_CONVERSATION.clone()
+                FORK_CURRENT_CONVERSATION.get().to_owned()
             }
-            ConversationAction::New => NEW_CONVERSATION.clone(),
+            ConversationAction::New => NEW_CONVERSATION.get().to_owned(),
         }
     }
 

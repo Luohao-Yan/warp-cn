@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use std::collections::HashMap;
 
 use serde::Serialize;
@@ -32,7 +31,7 @@ use crate::send_telemetry_from_ctx;
 use crate::view_components::action_button::{ActionButton, SecondaryTheme};
 use crate::workflows::workflow::{Argument, ArgumentType, Workflow};
 use crate::workflows::WorkflowType;
-
+use crate::static_tr;
 const DOCS_URL: &str = "https://docs.warp.dev/agent-platform/cloud-agents/overview";
 const ENV_DOCS_URL: &str =
     "https://docs.warp.dev/reference/cli/integration-setup#creating-an-environment";
@@ -119,9 +118,9 @@ impl CloudSetupGuideView {
             },
         );
 
-        static VISIT_OZ_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-visit-oz"));
+        static_tr!(VISIT_OZ_LABEL, "ai_assistant", "ai-visit-oz");
         let visit_oz_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*VISIT_OZ_LABEL, SecondaryTheme)
+            ActionButton::new(VISIT_OZ_LABEL.get(), SecondaryTheme)
                 .on_click(|ctx| ctx.dispatch_typed_action(CloudSetupGuideAction::VisitOz))
         });
 
@@ -168,13 +167,13 @@ impl CloudSetupGuideView {
         header_container.add_child(subtitle);
 
         // Documentation link line.
-        static CHECK_OUT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-check-out-the"));
+        static_tr!(CHECK_OUT_TEXT, "ai_assistant", "ai-check-out-the");
         let docs_link_text = crate::tr!("ai_assistant", "ai-oz-documentation");
-        static TO_LEARN_MORE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-to-learn-more"));
+        static_tr!(TO_LEARN_MORE_TEXT, "ai_assistant", "ai-to-learn-more");
         let docs_line = Flex::row()
             .with_child(
                 Text::new_inline(
-                    &*CHECK_OUT_TEXT,
+                    CHECK_OUT_TEXT.get(),
                     appearance.ui_font_family(),
                     subtitle_font_size,
                 )
@@ -203,7 +202,7 @@ impl CloudSetupGuideView {
             )
             .with_child(
                 Text::new_inline(
-                    &*TO_LEARN_MORE_TEXT,
+                    TO_LEARN_MORE_TEXT.get(),
                     appearance.ui_font_family(),
                     subtitle_font_size,
                 )
@@ -220,9 +219,9 @@ impl CloudSetupGuideView {
         let theme = appearance.theme();
         let font_size = 16.;
 
-        static QUICK_START_VISIT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-quick-start-visit"));
+        static_tr!(QUICK_START_VISIT, "ai_assistant", "ai-quick-start-visit");
         let text = Text::new_inline(
-            &*QUICK_START_VISIT,
+            QUICK_START_VISIT.get(),
             appearance.ui_font_family(),
             font_size,
         )

@@ -1,7 +1,6 @@
 use crate::appearance::Appearance;
 use crate::modal::MODAL_CORNER_RADIUS;
 use crate::util::color::lighten;
-use std::sync::LazyLock;
 use warp_core::ui::builder::UiBuilder;
 use warp_core::ui::color::blend::Blend;
 use warp_core::ui::color::darken;
@@ -15,6 +14,7 @@ use warpui::fonts::Weight;
 use warpui::keymap::FixedBinding;
 use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use crate::static_tr;
 use warpui::{
     AppContext, Element, Entity, FocusContext, SingletonEntity, TypedActionView, View, ViewContext,
 };
@@ -29,22 +29,14 @@ const ACTION_BUTTON_BORDER_WIDTH: f32 = 2.;
 const ACTION_BUTTON_HORIZONTAL_PADDING: f32 = 8.;
 const ACTION_BUTTON_FONT_SIZE: f32 = 14.;
 
-static AUTH_OVERRIDE_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "override-description"));
-static AUTH_OVERRIDE_CONFIRMATION_WARNING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "override-cannot-undo"));
-static AUTH_OVERRIDE_INITIAL_STEP_HEADER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "override-new-login-header"));
-static AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "override-confirm-delete-header"));
-static AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "override-export-data"));
-static AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("auth", "override-export-later"));
-static AUTH_OVERRIDE_CANCEL_BUTTON_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "cancel-label"));
-static AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("common", "continue-label"));
+static_tr!(AUTH_OVERRIDE_DESCRIPTION, "auth", "override-description");
+static_tr!(AUTH_OVERRIDE_CONFIRMATION_WARNING, "auth", "override-cannot-undo");
+static_tr!(AUTH_OVERRIDE_INITIAL_STEP_HEADER, "auth", "override-new-login-header");
+static_tr!(AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER, "auth", "override-confirm-delete-header");
+static_tr!(AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL, "auth", "override-export-data");
+static_tr!(AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION, "auth", "override-export-later");
+static_tr!(AUTH_OVERRIDE_CANCEL_BUTTON_LABEL, "common", "cancel-label");
+static_tr!(AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL, "common", "continue-label");
 
 #[derive(Clone, Copy, Debug)]
 pub enum AuthOverrideWarningBodyAction {
@@ -73,7 +65,6 @@ pub struct AuthOverrideWarningBody {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "enter",
         AuthOverrideWarningBodyAction::Close,
@@ -108,9 +99,9 @@ impl AuthOverrideWarningBody {
         };
 
         let text = match self.confirmation_step {
-            AuthOverrideConfirmationStep::Initial => AUTH_OVERRIDE_INITIAL_STEP_HEADER.as_str(),
+            AuthOverrideConfirmationStep::Initial => AUTH_OVERRIDE_INITIAL_STEP_HEADER.get(),
             AuthOverrideConfirmationStep::ConfirmChangeUser => {
-                AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER.as_str()
+                AUTH_OVERRIDE_CONFIRM_CONFIRMATION_STEP_HEADER.get()
             }
         };
 
@@ -162,7 +153,7 @@ impl AuthOverrideWarningBody {
             AuthOverrideConfirmationStep::Initial => {
                 let description = Container::new(
                     ui_builder
-                        .paragraph(AUTH_OVERRIDE_DESCRIPTION.as_str())
+                        .paragraph(AUTH_OVERRIDE_DESCRIPTION.get())
                         .with_style(muted_styles)
                         .build()
                         .finish(),
@@ -175,7 +166,7 @@ impl AuthOverrideWarningBody {
                         .with_child(
                             ui_builder
                                 .link(
-                                    AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL.clone(),
+                                    AUTH_OVERRIDE_BULK_EXPORT_BUTTON_LABEL.get().to_owned(),
                                     None,
                                     Some(Box::new(|ctx| {
                                         ctx.dispatch_typed_action(
@@ -192,7 +183,7 @@ impl AuthOverrideWarningBody {
                         )
                         .with_child(
                             ui_builder
-                                .span(AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION.as_str())
+                                .span(AUTH_OVERRIDE_BULK_EXPORT_DESCRIPTION.get())
                                 .with_style(muted_styles)
                                 .build()
                                 .finish(),
@@ -208,7 +199,7 @@ impl AuthOverrideWarningBody {
             AuthOverrideConfirmationStep::ConfirmChangeUser => {
                 let confirmation = Container::new(
                     ui_builder
-                        .paragraph(AUTH_OVERRIDE_CONFIRMATION_WARNING.as_str())
+                        .paragraph(AUTH_OVERRIDE_CONFIRMATION_WARNING.get())
                         .with_style(muted_styles)
                         .build()
                         .finish(),
@@ -293,7 +284,7 @@ impl AuthOverrideWarningBody {
                 Some(click_button_style),
                 None,
             )
-            .with_centered_text_label(AUTH_OVERRIDE_CANCEL_BUTTON_LABEL.clone())
+            .with_centered_text_label(AUTH_OVERRIDE_CANCEL_BUTTON_LABEL.get().to_owned())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(AuthOverrideWarningBodyAction::Close);
@@ -319,7 +310,7 @@ impl AuthOverrideWarningBody {
                 Some(outline_click_button_style),
                 None,
             )
-            .with_centered_text_label(AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL.clone())
+            .with_centered_text_label(AUTH_OVERRIDE_CONTINUE_BUTTON_LABEL.get().to_owned())
             .build()
             .on_click(move |ctx, _, _| {
                 ctx.dispatch_typed_action(continue_action);
@@ -384,8 +375,8 @@ impl View for AuthOverrideWarningBody {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            AUTH_OVERRIDE_INITIAL_STEP_HEADER.as_str(),
-            AUTH_OVERRIDE_DESCRIPTION.as_str(),
+            AUTH_OVERRIDE_INITIAL_STEP_HEADER.get(),
+            AUTH_OVERRIDE_DESCRIPTION.get(),
             WarpA11yRole::HelpRole,
         ))
     }

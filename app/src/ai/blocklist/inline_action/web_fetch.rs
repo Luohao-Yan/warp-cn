@@ -1,16 +1,14 @@
 use warp_core::ui::appearance::Appearance;
 use warpui::elements::{Container, CrossAxisAlignment, Element, Flex, ParentElement, Text};
 use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
-use std::sync::LazyLock;
-
 use super::search_results_common::{
     render_collapsible_search_results, CollapsibleSearchResultsState,
 };
 use crate::ai::agent::icons::yellow_running_icon;
 use crate::ai::agent::WebFetchStatus;
 use crate::ai::blocklist::block::view_impl::WithContentItemSpacing;
-
-static AI_NO_URLS_FETCHED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-no-urls-fetched"));
+use crate::static_tr;
+static_tr!(AI_NO_URLS_FETCHED, "ai_assistant", "ai-no-urls-fetched");
 
 pub enum WebFetchViewEvent {}
 
@@ -121,7 +119,7 @@ impl WebFetchView {
 
         if pages.is_empty() {
             let no_results = Text::new_inline(
-                AI_NO_URLS_FETCHED.clone(),
+                AI_NO_URLS_FETCHED.get(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )

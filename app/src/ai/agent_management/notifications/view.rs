@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use warp_core::ui::theme::color::internal_colors;
 use warpui::elements::new_scrollable::{ScrollableAppearance, SingleAxisConfig};
 use warpui::elements::{
@@ -28,7 +27,7 @@ use crate::ai::artifacts::{Artifact, ArtifactButtonsRow, ArtifactButtonsRowEvent
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, ButtonSize, NakedTheme};
-
+use crate::static_tr;
 const ITEM_PADDING: f32 = 12.;
 
 /// Position ID prefix used with `SavePosition` so the clipped scrollable can
@@ -129,9 +128,9 @@ impl NotificationMailboxView {
                 })
         });
 
-        static MARK_ALL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-mark-all-as-read"));
+        static_tr!(MARK_ALL_LABEL, "ai_assistant", "ai-mark-all-as-read");
         let mark_all_read_button = ctx.add_typed_action_view(move |_| {
-            ActionButton::new(&*MARK_ALL_LABEL, NakedTheme)
+            ActionButton::new(MARK_ALL_LABEL.get(), NakedTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NotificationMailboxViewAction::MarkAllRead);

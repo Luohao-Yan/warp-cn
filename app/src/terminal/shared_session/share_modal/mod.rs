@@ -26,11 +26,10 @@ use denied_body::{DeniedBody, DeniedBodyEvent};
 
 use self::body::BodyEvent;
 use super::{SharedSessionActionSource, SharedSessionScrollbackType};
+use crate::static_tr;
 
-use std::sync::LazyLock;
-
-static MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "share-session"));
-static SESSION_LIMIT_REACHED_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "shared-session-limit-reached"));
+static_tr!(MODAL_HEADER, "terminal", "share-session");
+static_tr!(SESSION_LIMIT_REACHED_HEADER, "terminal", "shared-session-limit-reached");
 
 pub struct ShareSessionModal {
     modal: ViewHandle<Modal<Body>>,
@@ -58,7 +57,6 @@ pub enum ShareSessionModalEvent {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         ShareSessionModalAction::Cancel,
@@ -74,7 +72,7 @@ impl ShareSessionModal {
         });
 
         let modal = ctx.add_typed_action_view(|ctx| {
-            Modal::new(Some(MODAL_HEADER.clone()), body, ctx)
+            Modal::new(Some(MODAL_HEADER.get().to_owned()), body, ctx)
                 .with_modal_style(UiComponentStyles {
                     width: Some(MODAL_WIDTH),
                     height: Some(MODAL_HEIGHT),
@@ -93,7 +91,7 @@ impl ShareSessionModal {
         });
         let denied_modal = ctx.add_typed_action_view(|ctx| {
             let mut denied_modal = Modal::new(
-                Some(SESSION_LIMIT_REACHED_HEADER.clone()),
+                Some(SESSION_LIMIT_REACHED_HEADER.get().to_owned()),
                 denied_body,
                 ctx,
             )

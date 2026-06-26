@@ -1,8 +1,6 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use chrono::Local;
 use itertools::Itertools;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
@@ -106,6 +104,7 @@ const ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM: &str =
 const AMBIENT_AGENT_TRIAL_TITLE: &str = "Cloud agent trial";
 /// The threshold below which we only show the "Buy more" button (not "New agent").
 use crate::ai::request_usage_model::AMBIENT_AGENT_TRIAL_CREDIT_THRESHOLD;
+use crate::static_tr;
 
 pub fn create_discount_badge(discount: u32, appearance: &Appearance) -> Box<dyn Element> {
     if discount == 0 {
@@ -341,8 +340,8 @@ impl BillingAndUsagePageView {
         });
 
         let load_more_button = ctx.add_typed_action_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "load-more"));
-            ActionButton::new(LABEL.as_str(), SecondaryTheme).on_click(|ctx| {
+            static_tr!(LABEL, "settings", "load-more");
+            ActionButton::new(LABEL.get(), SecondaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(BillingAndUsagePageAction::RenderMoreUsageEntries);
             })
         });

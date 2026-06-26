@@ -1,8 +1,6 @@
 //! Implementation for the omnibar - a floating menu for editor interactions
 //! like formatting and changing block types.
 
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use pathfinder_geometry::rect::RectF;
 use pathfinder_geometry::vector::Vector2F;
@@ -33,13 +31,13 @@ use crate::menu::MenuVariant;
 use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon;
 use crate::view_components::{CompactDropdown, CompactDropdownEvent, CompactDropdownItem};
-
+use crate::static_tr;
 const OMNIBAR_HEIGHT: f32 = 32.;
 const OMNIBAR_PADDING: f32 = 4.;
 
 const ACTION_BUTTON_SIZE: f32 = 24.;
 
-static REMOVE_LINK_A11Y: LazyLock<String> = LazyLock::new(|| crate::tr!("notebooks", "remove-link-a11y"));
+static_tr!(REMOVE_LINK_A11Y, "notebooks", "remove-link-a11y");
 
 pub enum OmnibarEvent {
     OpenLinkEditor,
@@ -453,7 +451,7 @@ impl TypedActionView for Omnibar {
             OmnibarAction::OpenLinkEditor => ActionAccessibilityContent::from_debug(),
             OmnibarAction::UnstyleLink => ActionAccessibilityContent::Custom(
                 AccessibilityContent::new_without_help(
-                    REMOVE_LINK_A11Y.clone(),
+                    REMOVE_LINK_A11Y.get(),
                     WarpA11yRole::UserAction,
                 ),
             ),

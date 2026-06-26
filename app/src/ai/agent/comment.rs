@@ -1,9 +1,8 @@
 use crate::code::buffer_location::LocalOrRemotePath;
 use crate::code_review::comments::CommentId;
-use std::sync::LazyLock;
-
-static INVALID_FILE_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-invalid-file-name"));
-static REVIEW_COMMENT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-review-comment"));
+use crate::static_tr;
+static_tr!(INVALID_FILE_NAME, "ai_assistant", "ai-invalid-file-name");
+static_tr!(REVIEW_COMMENT, "ai_assistant", "ai-review-comment");
 
 /// The current state of a code review.
 #[derive(Debug, Clone, Default)]
@@ -36,20 +35,20 @@ impl ReviewComment {
         match (&self.diff.file_path, self.diff.line_number) {
             (Some(file_path), Some(line_number)) => {
                 let path_component = file_path.path_component();
-                let file_name = path_component.file_name().unwrap_or(&*INVALID_FILE_NAME);
+                let file_name = path_component.file_name().unwrap_or(INVALID_FILE_NAME.get());
                 let display_line = line_number + 1;
                 format!("{file_name}:{display_line}")
             }
             (Some(file_path), None) => {
                 let path_component = file_path.path_component();
-                let file_name = path_component.file_name().unwrap_or(&*INVALID_FILE_NAME);
+                let file_name = path_component.file_name().unwrap_or(INVALID_FILE_NAME.get());
                 file_name.to_string()
             }
             (None, _) => self
                 .head_title
                 .as_ref()
                 .cloned()
-                .unwrap_or_else(|| REVIEW_COMMENT.clone()),
+                .unwrap_or_else(|| REVIEW_COMMENT.get().to_owned()),
         }
     }
 }

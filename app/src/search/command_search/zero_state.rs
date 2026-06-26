@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use std::sync::LazyLock;
-
 use lazy_static::lazy_static;
 use warp_core::features::FeatureFlag;
 use warp_core::ui::theme::color::internal_colors;
@@ -14,13 +12,11 @@ use crate::appearance::Appearance;
 use crate::drive::settings::{WarpDriveSettings, WarpDriveSettingsChangedEvent};
 use crate::search::{FilterChipRenderer, QueryFilter};
 use crate::settings::{AISettings, AISettingsChangedEvent};
+use crate::static_tr;
 
-static SEARCH_COMMAND_SEARCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "command-search"));
-static SEARCH_IM_LOOKING_FOR: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "im-looking-for"));
-static SEARCH_EXAMPLE_QUERIES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "example-queries"));
+static_tr!(SEARCH_COMMAND_SEARCH, "workspace", "command-search");
+static_tr!(SEARCH_IM_LOOKING_FOR, "workspace", "im-looking-for");
+static_tr!(SEARCH_EXAMPLE_QUERIES, "workspace", "example-queries");
 
 lazy_static! {
     /// Map of sample queries to the [`QueryFilter`]s they employ.
@@ -200,7 +196,7 @@ impl View for CommandSearchZeroStateView {
 
         let command_search_text = Container::new(
             Text::new_inline(
-                &*SEARCH_COMMAND_SEARCH,
+                SEARCH_COMMAND_SEARCH.get(),
                 appearance.ui_font_family(),
                 styles::header_text_font_size(appearance),
             )
@@ -222,7 +218,7 @@ impl View for CommandSearchZeroStateView {
             .with_child(
                 Container::new(
                     Text::new_inline(
-                        &*SEARCH_IM_LOOKING_FOR,
+                        SEARCH_IM_LOOKING_FOR.get(),
                         appearance.ui_font_family(),
                         styles::subheader_text_font_size(appearance),
                     )
@@ -241,7 +237,7 @@ impl View for CommandSearchZeroStateView {
             .with_child(
                 Container::new(
                     Text::new_inline(
-                        &*SEARCH_EXAMPLE_QUERIES,
+                        SEARCH_EXAMPLE_QUERIES.get(),
                         appearance.ui_font_family(),
                         styles::subheader_text_font_size(appearance),
                     )
@@ -314,7 +310,6 @@ fn valid_query_filters(app: &AppContext) -> Vec<QueryFilter> {
 
 mod styles {
     use crate::appearance::Appearance;
-
     pub const FILTER_CHIP_MARGIN: f32 = 8.;
     pub const FILTER_CHIPS_MARGIN_BOTTOM: f32 = 16.;
 

@@ -1,6 +1,4 @@
-use std::sync::{Arc, LazyLock};
-
-use pathfinder_color::ColorU;
+use std::sync::Arc;use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use settings::Setting as _;
 use warp_core::ui::appearance::Appearance;
@@ -21,12 +19,13 @@ use crate::ai::connected_self_hosted_workers::ConnectedSelfHostedWorkersModel;
 use crate::menu::{Event as MenuEvent, Menu, MenuItem, MenuItemFields};
 use crate::report_if_error;
 use crate::terminal::input::{MenuPositioning, MenuPositioningProvider};
+use crate::static_tr;
 use crate::view_components::action_button::{
     ActionButton, ActionButtonTheme, ButtonSize, TooltipAlignment,
 };
 
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "execution-host-tooltip"));
-static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "execution-host-header"));
+static_tr!(BUTTON_TOOLTIP, "agent_cloud", "execution-host-tooltip");
+static_tr!(MENU_HEADER_LABEL, "agent_cloud", "execution-host-header");
 
 const HEADER_FONT_SIZE: f32 = 12.;
 
@@ -100,7 +99,7 @@ impl HostSelector {
             ActionButton::new(initial_label, NakedHeaderButtonTheme)
                 .with_size(ButtonSize::AgentInputButton)
                 .with_menu(true)
-                .with_tooltip(BUTTON_TOOLTIP.as_str())
+                .with_tooltip(BUTTON_TOOLTIP.get())
                 .with_tooltip_alignment(TooltipAlignment::Left)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(HostSelectorAction::ToggleMenu);
@@ -276,7 +275,7 @@ fn build_menu_items(
     ctx: &mut ViewContext<HostSelector>,
 ) -> Vec<MenuItem<HostSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(MENU_HEADER_LABEL.as_str())
+        fields: MenuItemFields::new(MENU_HEADER_LABEL.get())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(HEADER_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)

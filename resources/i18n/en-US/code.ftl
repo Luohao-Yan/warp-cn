@@ -201,9 +201,6 @@ code-go-to-line = Go to line
 
 ## -- Code view additional bindings --
 
-code-save-file-as = Save file as
-code-close-all-tabs = Close all tabs
-code-close-saved-tabs = Close saved tabs
 code-file-saved-toast = File saved.
 
 ## -- Find references and footer strings -----------------------------------------
@@ -220,5 +217,22 @@ code-server-error-detail = { $name }: { $error }
 
 ## -- Double-prefix aliases for find references and footer strings ----------------
 
+## -- Find bar accessibility strings --------------------------------------------
+
+code-find-bar-description = Find bar
+code-find-field-focused = Find field focused
+code-find-no-results = No results
+code-find-use-enter-navigate = Use Enter to navigate results
+code-find-replace-field-focused = Replace field focused
+code-find-replace-continue = Press Enter to continue replacing
+code-find-replace-last = This is the last match
+code-preserve-case-tooltip = Preserve Case
+
 ## -- Double-prefix aliases for tr!() calls that include domain prefix in message ID --
+
+## -- Missing keys added for i18n completeness --
+
+code-find-bar-with-matches = { $current } of { $total }
+code-find-replace-success = { $count } replaced
+code-find-result-of = of
 

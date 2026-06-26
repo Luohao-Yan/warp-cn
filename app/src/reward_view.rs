@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use warp_core::ui::builder::UiBuilder;
 use warpui::accessibility::{AccessibilityContent, WarpA11yRole};
 use warpui::elements::{Align, Container, Element, Flex, MouseStateHandle, ParentElement};
@@ -9,6 +7,7 @@ use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
 use crate::appearance::Appearance;
+use crate::static_tr;
 
 // Constants for the *tada* emoji rendering
 // Note: Long-term, we should convert this to a SVG, since there's no guarantee the emoji will be
@@ -18,25 +17,24 @@ const TADA_FONT_SIZE: f32 = 60.;
 const TADA_MARGIN_TOP: f32 = 0.;
 const TADA_MARGIN_BOTTOM: f32 = 50.;
 // Constants for the main title
-static TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "congrats"));
+static_tr!(TITLE, "reward", "congrats");
 const TITLE_FONT_SIZE: f32 = 20.;
 const TITLE_MARGIN_BOTTOM: f32 = 25.;
 // Constants for the subtitle
-static SUBTITLE_SENT_REFERRAL: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "sent-referral-subtitle"));
-static SUBTITLE_RECEIVED_REFERRAL: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "received-referral-subtitle"));
+static_tr!(SUBTITLE_SENT_REFERRAL, "reward", "sent-referral-subtitle");
+static_tr!(SUBTITLE_RECEIVED_REFERRAL, "reward", "received-referral-subtitle");
 const SUBTITLE_FONT_SIZE: f32 = 14.;
 const SUBTITLE_MARGIN_BOTTOM: f32 = 40.;
 // Constants for the button
-static BUTTON_CTA: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "try-it-out"));
+static_tr!(BUTTON_CTA, "reward", "try-it-out");
 const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_HEIGHT: f32 = 45.;
 const BUTTON_WIDTH: f32 = 240.;
 const BUTTON_MARGIN_BOTTOM: f32 = 14.;
-static ACCESSIBILITY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("reward", "a11y-help"));
+static_tr!(ACCESSIBILITY_HELP, "reward", "a11y-help");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "enter",
         RewardAction::OpenThemePicker,
@@ -88,8 +86,8 @@ impl RewardView {
 
     fn subtitle(&self) -> &str {
         match self.kind {
-            RewardKind::SentReferralTheme => &*SUBTITLE_SENT_REFERRAL,
-            RewardKind::ReceivedReferralTheme => &*SUBTITLE_RECEIVED_REFERRAL,
+            RewardKind::SentReferralTheme => SUBTITLE_SENT_REFERRAL.get(),
+            RewardKind::ReceivedReferralTheme => SUBTITLE_RECEIVED_REFERRAL.get(),
         }
     }
 
@@ -115,7 +113,7 @@ impl RewardView {
     fn render_title(&self, ui_builder: &UiBuilder) -> Box<dyn Element> {
         Align::new(
             ui_builder
-                .span(&*TITLE)
+                .span(TITLE.get())
                 .with_style(UiComponentStyles {
                     font_size: Some(TITLE_FONT_SIZE),
                     margin: Some(Coords {
@@ -153,7 +151,7 @@ impl RewardView {
             Container::new(
                 ui_builder
                     .button(ButtonVariant::Accent, self.cta_mouse_state.clone())
-                    .with_centered_text_label((&*BUTTON_CTA).clone())
+                    .with_centered_text_label((BUTTON_CTA.get().to_owned()).clone())
                     .with_style(UiComponentStyles {
                         height: Some(BUTTON_HEIGHT),
                         width: Some(BUTTON_WIDTH),
@@ -182,8 +180,8 @@ impl View for RewardView {
 
     fn accessibility_contents(&self, _: &AppContext) -> Option<AccessibilityContent> {
         Some(AccessibilityContent::new(
-            format!("{} {}", &*TITLE, self.subtitle()),
-            ACCESSIBILITY_HELP.as_str().to_string(),
+            format!("{} {}", TITLE.get(), self.subtitle()),
+            ACCESSIBILITY_HELP.get().to_string(),
             WarpA11yRole::WindowRole,
         ))
     }

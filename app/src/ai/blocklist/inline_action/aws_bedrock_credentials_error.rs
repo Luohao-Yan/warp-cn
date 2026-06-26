@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use settings::Setting as _;
 use warp_core::ui::Icon;
 use warpui::elements::{
@@ -18,7 +17,7 @@ use crate::settings::{AISettings, AISettingsChangedEvent};
 use crate::ui_components::blended_colors;
 use crate::view_components::action_button::{ActionButton, ButtonSize, NakedTheme, PrimaryTheme};
 use crate::{report_if_error, Appearance};
-
+use crate::static_tr;
 #[derive(Clone, Debug)]
 pub enum AwsBedrockCredentialsErrorAction {
     RunLoginCommand,
@@ -57,9 +56,9 @@ impl AwsBedrockCredentialsErrorView {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         // Run button
-        static REFRESH_AWS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-refresh-aws-credentials"));
+        static_tr!(REFRESH_AWS_LABEL, "ai_assistant", "ai-refresh-aws-credentials");
         let run_button = ctx.add_typed_action_view(move |_ctx| {
-            ActionButton::new(&*REFRESH_AWS_LABEL, PrimaryTheme)
+            ActionButton::new(REFRESH_AWS_LABEL.get(), PrimaryTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AwsBedrockCredentialsErrorAction::RunLoginCommand)
@@ -67,9 +66,9 @@ impl AwsBedrockCredentialsErrorView {
         });
 
         // Configure button
-        static CONFIGURE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-configure"));
+        static_tr!(CONFIGURE_LABEL, "ai_assistant", "ai-configure");
         let configure_button = ctx.add_typed_action_view(move |_ctx| {
-            ActionButton::new(&*CONFIGURE_LABEL, NakedTheme)
+            ActionButton::new(CONFIGURE_LABEL.get(), NakedTheme)
                 .with_size(ButtonSize::InlineActionHeader)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(AwsBedrockCredentialsErrorAction::Configure)

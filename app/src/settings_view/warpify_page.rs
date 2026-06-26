@@ -37,6 +37,7 @@ use crate::ui_components::blended_colors;
 use crate::view_components::dropdown::{Dropdown, DropdownItem};
 use crate::view_components::{SubmittableTextInput, SubmittableTextInputEvent};
 use crate::{report_if_error, send_telemetry_from_ctx};
+use crate::static_tr;
 
 pub fn init_actions_from_parent_view<T: Action + Clone>(
     app: &mut AppContext,
@@ -68,10 +69,9 @@ const ITEM_VERTICAL_SPACING: f32 = 24.;
 const BUILT_IN_TEXT_INPUT_MARGIN: f32 = 10.;
 const SPACE_AFTER_TEXT_INPUT: f32 = ITEM_VERTICAL_SPACING - BUILT_IN_TEXT_INPUT_MARGIN;
 
-const SSH_REUSE_CONTROL_MASTER_DESCRIPTION: &str = "Attach to a live SSH ControlMaster you already have configured for the destination host instead of creating a Warp-owned one. Takes effect in new tabs.";
+static_tr!(SSH_REUSE_CONTROL_MASTER_DESCRIPTION, "settings", "warpify-ssh-reuse-control-master-desc");
 
-const SSH_EXTENSION_INSTALL_MODE_DESCRIPTION: &str =
-    "Controls the installation behavior for Warp's SSH extension when a remote host doesn't have it installed.";
+static_tr!(SSH_EXTENSION_INSTALL_MODE_DESCRIPTION, "settings", "warpify-ssh-extension-install-mode-desc");
 
 /// This page lets users configure when they get asked to warpify a session. Some shell commands
 /// are recognized by default. Users can add new shell commands, or prevent the default ones from
@@ -663,7 +663,7 @@ impl SettingsWidget for SSHWidget {
                     Container::new(render_dropdown_item(
                         appearance,
                         "Install SSH extension",
-                        Some(SSH_EXTENSION_INSTALL_MODE_DESCRIPTION),
+                        Some(SSH_EXTENSION_INSTALL_MODE_DESCRIPTION.get()),
                         None,
                         LocalOnlyIconState::for_setting(
                             SshExtensionInstallModeSetting::storage_key(),
@@ -717,7 +717,7 @@ impl SettingsWidget for SSHWidget {
                 ));
                 column.add_child(
                     ui_builder
-                        .paragraph(SSH_REUSE_CONTROL_MASTER_DESCRIPTION.to_owned())
+                        .paragraph(SSH_REUSE_CONTROL_MASTER_DESCRIPTION.get())
                         .with_style(UiComponentStyles {
                             font_color: Some(description_text_color.into_solid()),
                             margin: Some(

@@ -209,7 +209,7 @@ impl SshErrorBlock {
         appearance: &Appearance,
     ) -> Box<dyn Element> {
         let header_contents = warpify::render::build_header_row(
-            SSH_ERROR_WARPIFYING_TITLE.as_str(),
+            SSH_ERROR_WARPIFYING_TITLE.get(),
             Icon::new(UiIcon::AlertTriangle.into(), theme.ui_error_color()),
             theme,
             appearance,
@@ -273,7 +273,7 @@ impl View for SshErrorBlock {
         if self.should_show_report_to_warp_button() {
             let report_issue_text = build_description_row(FormattedText::new([FormattedTextLine::Line(vec![
                     FormattedTextFragment::plain_text(SSH_FEEDBACK_MESSAGE_BEFORE_LINK.as_str()),
-                    FormattedTextFragment::hyperlink(SSH_FEEDBACK_LINK_TEXT.as_str(), get_ssh_github_issue_url(&self.error_reason.error_title())),
+                    FormattedTextFragment::hyperlink(SSH_FEEDBACK_LINK_TEXT.get(), get_ssh_github_issue_url(&self.error_reason.error_title())),
                     FormattedTextFragment::plain_text(SSH_FEEDBACK_MESSAGE_AFTER_LINK.as_str()),
                 ])]),
                 theme, appearance, self.report_link_highlight_index.clone())

@@ -36,7 +36,6 @@ mod dynamic_libraries;
 mod env_vars;
 mod experiments;
 mod external_secrets;
-#[cfg(target_family = "wasm")]
 mod font_fallback;
 mod global_resource_handles;
 mod gpu_state;
@@ -193,7 +192,6 @@ pub use warp_core::r#async::debounce;
 
 #[cfg(feature = "plugin_host")]
 pub use plugin::{run_plugin_host, PLUGIN_HOST_FLAG};
-use warp_core::user_preferences::GetUserPreferences as _;
 use warpui::modals::{AlertDialogWithCallbacks, AppModalCallback};
 use warpui::platform::app::ApproveTerminateResult;
 use window_settings::WindowSettings;
@@ -291,6 +289,7 @@ use crate::experiments::ImprovedPaletteSearch;
 pub use crate::global_resource_handles::{GlobalResourceHandles, GlobalResourceHandlesProvider};
 /// Convenience re-export so files in this crate can use `tr!("domain", "id")`.
 pub use warp_i18n::tr;
+pub use warp_i18n::{I18nString, static_tr};
 use crate::notification::NotificationContext;
 use crate::root_view::{
     quake_mode_window_id, quake_mode_window_is_open, OpenFromRestoredArg, OpenPath,
@@ -2469,8 +2468,6 @@ fn launch(ctx: &mut warpui::AppContext, app_state: Option<AppState>, launch_mode
         timer.mark_interval_end("KEYBINDINGS_LOADED");
     });
 
-    // For now, we only specify application-level fallback fonts on web.
-    #[cfg(target_family = "wasm")]
     ctx.set_fallback_font_fn(font_fallback::fallback_font_fn);
 
     match launch_mode {

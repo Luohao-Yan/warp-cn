@@ -3,8 +3,6 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::rc::Rc;
-use std::sync::LazyLock;
-
 use ::settings::{Setting, SettingSection, ToggleableSetting};
 use enum_iterator::all;
 use warp_core::ui::theme::color::internal_colors;
@@ -100,22 +98,16 @@ use crate::workspace::tab_settings::{
 };
 use crate::workspace::WorkspaceAction;
 use crate::{report_error, report_if_error, send_telemetry_from_ctx, themes};
+use crate::static_tr;
 
 // i18n statics for category titles and UI strings
-static SETTINGS_THEMES: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "themes"));
-static SETTINGS_ICON: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "icon"));
-static SETTINGS_WINDOW: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "window"));
-static SETTINGS_INPUT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "input"));
-static SETTINGS_BLOCKS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "blocks"));
-static SETTINGS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "text"));
-static SETTINGS_TABS: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "tabs"));
+static_tr!(SETTINGS_THEMES, "settings", "themes");
+static_tr!(SETTINGS_ICON, "settings", "icon");
+static_tr!(SETTINGS_WINDOW, "settings", "window");
+static_tr!(SETTINGS_INPUT, "settings", "input");
+static_tr!(SETTINGS_BLOCKS, "settings", "blocks");
+static_tr!(SETTINGS_TEXT, "settings", "text");
+static_tr!(SETTINGS_TABS, "settings", "tabs");
 
 const FONT_SIZE_INPUT_BOX_WIDTH: f32 = 80.;
 const NOTEBOOK_FONT_SIZE_INPUT_BOX_WIDTH: f32 = 50.;
@@ -1356,7 +1348,7 @@ impl AppearanceSettingsPageView {
     }
 
     fn build_page(ctx: &mut ViewContext<Self>) -> PageType<Self> {
-        let mut categories = vec![Category::new(SETTINGS_THEMES.clone().leak(),
+        let mut categories = vec![Category::new(SETTINGS_THEMES.get(),
             vec![
                 Box::new(CreateCustomThemeWidget::default()),
                 Box::new(ThemeSelectWidget::default()),
@@ -1364,7 +1356,7 @@ impl AppearanceSettingsPageView {
         )];
 
         if AppIconSettings::as_ref(ctx).is_supported_on_current_platform() {
-            categories.push(Category::new(SETTINGS_ICON.clone().leak(),
+            categories.push(Category::new(SETTINGS_ICON.get(),
                 vec![Box::new(CustomAppIconWidget::default())],
             ));
         }
@@ -1408,7 +1400,7 @@ impl AppearanceSettingsPageView {
         }
 
         if !window_settings_widgets.is_empty() {
-            categories.push(Category::new(SETTINGS_WINDOW.clone().leak(), window_settings_widgets));
+            categories.push(Category::new(SETTINGS_WINDOW.get(), window_settings_widgets));
         }
 
         // Create the Input category with all widgets
@@ -1420,7 +1412,7 @@ impl AppearanceSettingsPageView {
             Box::new(InputModeWidget::default()),
         ];
 
-        categories.push(Category::new(SETTINGS_INPUT.clone().leak(), category_widgets));
+        categories.push(Category::new(SETTINGS_INPUT.get(), category_widgets));
 
         categories.push(Category::new(
             crate::tr!("settings", "appearance-panes").leak(),
@@ -1437,7 +1429,7 @@ impl AppearanceSettingsPageView {
         if FeatureFlag::MinimalistUI.is_enabled() {
             block_settings_widgets.push(Box::new(ShowBlockDividersWidget::default()));
         }
-        categories.push(Category::new(SETTINGS_BLOCKS.clone().leak(), block_settings_widgets));
+        categories.push(Category::new(SETTINGS_BLOCKS.get(), block_settings_widgets));
 
         let font_settings = FontSettings::as_ref(ctx);
         let mut text_settings_widgets: Vec<Box<dyn SettingsWidget<View = Self>>> = vec![
@@ -1466,7 +1458,7 @@ impl AppearanceSettingsPageView {
             text_settings_widgets.push(Box::new(LigaturesWidget::default()));
         }
 
-        categories.push(Category::new(SETTINGS_TEXT.clone().leak(), text_settings_widgets));
+        categories.push(Category::new(SETTINGS_TEXT.get(), text_settings_widgets));
 
         categories.push(Category::new(
             crate::tr!("settings", "appearance-cursor").leak(),
@@ -1518,7 +1510,7 @@ impl AppearanceSettingsPageView {
             tab_settings_widgets.push(Box::new(DirectoryTabColorsWidget { add_picker }));
         }
 
-        categories.push(Category::new(SETTINGS_TABS.clone().leak(), tab_settings_widgets));
+        categories.push(Category::new(SETTINGS_TABS.get(), tab_settings_widgets));
 
         categories.push(Category::new(
             crate::tr!("settings", "appearance-fullscreen-apps").leak(),
@@ -3002,7 +2994,6 @@ impl SettingsWidget for CustomAppIconWidget {
         #[cfg(target_os = "macos")]
         {
             use crate::appearance::AppearanceManager;
-
             let app_icon_at_startup = AppearanceManager::as_ref(app).app_icon_at_startup();
             let current_icon = *AppIconSettings::as_ref(app).app_icon;
             if current_icon == AppIcon::Default
@@ -3258,8 +3249,8 @@ impl SettingsWidget for WindowOpacityWidget {
             // Skip showing the warning for OpenGL since WGPU often incorrectly reports it as not
             // supporting alpha.
             if !window.supports_transparency() && window.graphics_backend() != GraphicsBackend::Gl {
-                static TRANSPARENCY_WARNING: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "graphics-no-transparency"));
-                let mut message = Cow::Borrowed(&*TRANSPARENCY_WARNING);
+                static_tr!(TRANSPARENCY_WARNING, "settings", "graphics-no-transparency");
+                let mut message = Cow::Borrowed(TRANSPARENCY_WARNING.get());
                 let gpu_settings = GPUSettings::as_ref(app);
                 if (gpu_settings
                     .prefer_low_power_gpu

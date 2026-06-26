@@ -368,6 +368,7 @@ terminal-cancel-request = Cancel request
 
 ## -- Share block modal strings ---------------------------------------------------------
 
+terminal-share-title = Share
 terminal-share-title-optional = Title (optional)
 terminal-share-embed-label = embedded warp block
 terminal-share-error = Something went wrong. Please try again.
@@ -593,9 +594,7 @@ terminal-shared-session-limit-reached = Session limit reached
 terminal-shared-session-denied-subheader = Shared sessions are a Team or Business feature
 terminal-view-plans = View plans
 terminal-start-sharing = Start sharing
-terminal-stop-sharing = Stop sharing
 terminal-continue-sharing = Continue sharing
-terminal-make-editor = Make Editor
 terminal-deny = Deny
 terminal-requested-mode = You have requested { $role } mode
 terminal-waiting-for = Waiting for { $name }...
@@ -605,11 +604,9 @@ terminal-install-and-enable = Install and enable
 terminal-enable-selected-languages = Enable language support
 terminal-are-you-still-there = Are you still there?
 terminal-sharing-will-end-due-to-inactivity = Sharing will end in { $minutes }:{ $seconds } due to inactivity.
-terminal-edit-prompt = Edit Prompt
 terminal-warp-terminal-prompt = Warp Prompt
 terminal-shell-prompt-ps1 = Shell Prompt (PS1)
 terminal-restore-default = Restore Default
-terminal-cancel-request = Cancel request
 terminal-permission-denied = Permission denied writing to { $path }. Check file permissions.
 terminal-directory-not-found = Directory not found: { $path }
 terminal-file-already-exists = File { $path } already exists
@@ -641,14 +638,8 @@ terminal-warp-drive = Warp Drive
 ## -- Model spec and reasoning level strings --------------------------------
 
 terminal-model-specs-title = Model Specs
-terminal-model-specs-description = Warp's benchmarks for how well a model performs in our harness, the rate at which it consumes credits, and task speed.
 terminal-reasoning-level-title = Reasoning level
-terminal-reasoning-level-description = Increased reasoning levels consume more credits and have higher latency, but higher performance for complicated tasks.
-
 ## -- Init project strings --------------------------------------------------
-
-terminal-init-project-onboarding-text = Great - let's begin setting up this project! Would you like to give me permission to index this codebase? It allows me to quickly understand context and provide more targeted solutions when working in this codebase. No code is stored on Warp servers.
-terminal-init-project-already-setup-text = It looks like this project has already been initialized. You can re-generate the AGENTS.md for this codebase by clicking the button below.
 
 ## -- Init environment strings -----------------------------------------------
 
@@ -784,7 +775,6 @@ terminal-share-this-object-type = Share this { $object_type }
 
 terminal-file-issue = File issue
 terminal-more-info = More info
-terminal-shell-process-exited = Shell process exited
 terminal-shell-could-not-start = Shell process could not start!
 terminal-shell-exited-prematurely = Shell process exited prematurely!
 terminal-warpify-failure-subtext = Something went wrong while starting { $shell_detail } and Warpifying it, causing the process to terminate. Warpify script output is displayed here, which may point at a cause.
@@ -797,7 +787,6 @@ terminal-open-link = Open link
 
 ## -- Tooltip strings --
 
-terminal-open-in-warp = Open in Warp
 terminal-show-in-finder = Show in Finder
 terminal-show-containing-folder = Show containing folder
 terminal-reveal-secret = Reveal secret
@@ -842,8 +831,6 @@ terminal-what-happened-here = What happened here?
 terminal-checking = Checking...
 terminal-installing = Installing...
 terminal-updating = Updating...
-terminal-initializing = Initializing...
-terminal-starting-shell = Starting shell...
 terminal-what-is-the-command-to = What is the command to:
 
 ## -- Double-prefix aliases for inline banner strings --
@@ -957,7 +944,6 @@ terminal-ran-setup = Ran setup commands
 terminal-cloud-agent-failed = Cloud agent failed
 terminal-quick-setup = Quick setup
 terminal-quick-setup-desc = Select the GitHub repositories you'd like to work with and we'll suggest a base image and config
-terminal-use-agent = Use the agent
 terminal-use-agent-desc = Choose a locally set up project and we'll help you set up an environment based on it
 terminal-env-setup-cancelled = Environment setup cancelled
 
@@ -972,3 +958,42 @@ terminal-output = Output
 
 terminal-enter-prompt-for = Enter prompt for { $agent }
 terminal-hand-off-to = Hand off to { $env_name }
+
+## -- Keybinding descriptions --------------------------------------------------
+
+terminal-show-history = Show History
+terminal-jump-to-latest-agent-message = Jump to latest agent message
+terminal-cycle-to-next-orchestration-session = Cycle to next orchestration session
+terminal-cycle-to-previous-orchestration-session = Cycle to previous orchestration session
+terminal-take-control-of-running-command = Take control of running command
+terminal-debug-onboarding-callout-warpinput-terminal = [Debug] Onboarding Callout: WarpInput - Terminal
+terminal-debug-onboarding-callout-warpinput-project = [Debug] Onboarding Callout: WarpInput - Project
+terminal-debug-onboarding-callout-warpinput-no-project = [Debug] Onboarding Callout: WarpInput - No Project
+terminal-debug-onboarding-callout-modality-project = [Debug] Onboarding Callout: Modality - Project
+terminal-debug-onboarding-callout-modality-no-project = [Debug] Onboarding Callout: Modality - No Project
+terminal-debug-onboarding-callout-modality-terminal = [Debug] Onboarding Callout: Modality - Terminal
+terminal-debug-generate-codebase-index = [Debug] Generate codebase index
+
+## Agent mode hint text
+terminal-agent-hint-deploy-react = Warp anything e.g. Deploy my React app to Vercel and set up environment variables
+terminal-agent-hint-debug-python = Warp anything e.g. Help me debug why my Python tests are failing in CI
+terminal-agent-hint-setup-microservice = Warp anything e.g. Set up a new microservice with Docker and create the deployment pipeline
+terminal-agent-hint-fix-memory-leak = Warp anything e.g. Find and fix the memory leak in my Node.js application
+terminal-agent-hint-backup-postgres = Warp anything e.g. Create a backup script for my PostgreSQL database and schedule it
+terminal-agent-hint-migrate-mysql = Warp anything e.g. Help me migrate my data from MySQL to PostgreSQL
+terminal-agent-hint-monitor-aws = Warp anything e.g. Set up monitoring and alerts for my AWS infrastructure
+terminal-agent-hint-build-fastapi = Warp anything e.g. Build a REST API for my mobile app using FastAPI
+terminal-agent-hint-optimize-sql = Warp anything e.g. Help me optimize my SQL queries that are running slowly
+terminal-agent-hint-github-actions = Warp anything e.g. Create a GitHub Actions workflow to automatically deploy on merge
+terminal-agent-hint-redis-cache = Warp anything e.g. Set up Redis caching for my web application
+terminal-agent-hint-k8s-crash = Warp anything e.g. Help me troubleshoot why my Kubernetes pods keep crashing
+terminal-agent-hint-data-pipeline = Warp anything e.g. Build a data pipeline to process CSV files and load them into BigQuery
+terminal-agent-hint-ssl-https = Warp anything e.g. Set up SSL certificates and configure HTTPS for my domain
+terminal-agent-hint-refactor-legacy = Warp anything e.g. Help me refactor this legacy code to use modern design patterns
+terminal-agent-hint-unit-test-auth = Warp anything e.g. Create unit tests for my authentication service
+terminal-agent-hint-elk-stack = Warp anything e.g. Set up log aggregation with ELK stack for my distributed system
+terminal-agent-hint-oauth-express = Warp anything e.g. Help me implement OAuth2 authentication in my Express.js app
+terminal-agent-hint-docker-optimize = Warp anything e.g. Optimize my Docker images to reduce build times and size
+terminal-agent-hint-ab-testing = Warp anything e.g. Set up A/B testing infrastructure for my web application
+terminal-queue-follow-up-hint = Queue a follow up for the running agent
+terminal-queue-follow-up-classic-hint = Queue a follow up for the running agent, or backspace to exit

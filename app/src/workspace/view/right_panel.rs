@@ -1,7 +1,5 @@
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, LazyLock};
-
-use dunce::canonicalize;
+use std::sync::Arc;use dunce::canonicalize;
 use itertools::Itertools;
 use pathfinder_color::ColorU;
 use warp_core::features::FeatureFlag;
@@ -58,6 +56,7 @@ use crate::view_components::action_button::{NakedTheme, TooltipAlignment};
 use crate::view_components::{Dropdown, DropdownItem};
 use crate::workspace::view::TOGGLE_RIGHT_PANEL_BINDING_NAME;
 use crate::workspace::WorkspaceAction;
+use crate::static_tr;
 
 /// Describes which agent destination is available for sending review comments.
 #[derive(Clone, Debug, PartialEq)]
@@ -440,7 +439,6 @@ pub struct RightPanelView {
 impl RightPanelView {
     pub fn init(app: &mut AppContext) {
         use warpui::keymap::macros::*;
-
         app.register_editable_bindings([EditableBinding::new(
             "workspace:toggle_maximize_code_review_panel",
             crate::tr!("workspace", "toggle-maximize-code-review-panel"),
@@ -509,8 +507,8 @@ impl RightPanelView {
 
         #[cfg(feature = "local_fs")]
         let open_repository_button = ctx.add_typed_action_view(|_| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "open-repository"));
-            ActionButton::new(&*LABEL, NakedTheme)
+            static_tr!(LABEL, "workspace", "open-repository");
+            ActionButton::new(LABEL.get(), NakedTheme)
                 .with_size(crate::view_components::action_button::ButtonSize::Small)
                 .with_tooltip(crate::tr!("workspace", "open-repository-tooltip"))
                 .with_tooltip_alignment(TooltipAlignment::Center)

@@ -151,6 +151,10 @@ code-editor-review-comment-count = { $count ->
     [one] { $count } comment
    *[other] { $count } comments
 }
+code-editor-review-outdated-comment-count = { $count ->
+    [one] { $count } outdated comment
+   *[other] { $count } outdated comments
+}
 code-editor-review-commit = Commit
 code-editor-review-commit-and-create-pr = Commit and create PR
 code-editor-review-commit-and-publish = Commit and publish
@@ -211,7 +215,6 @@ code-editor-code-find-replace-last = Successfully replaced the last match.
 
 ## -- Comment editor strings --
 code-editor-code-review-update-button = Update
-code-editor-code-review-comment = Comment
 code-editor-code-comment-imported-from-github = Comment imported from GitHub
 
 ## -- Double-prefix aliases for new code_editor strings --

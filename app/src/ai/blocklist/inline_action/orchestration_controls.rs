@@ -7,8 +7,6 @@
 //! from field-change events to their own action enum.
 
 use std::collections::HashMap;
-use std::sync::LazyLock;
-
 use ai::agent::action::RunAgentsExecutionMode;
 use ai::agent::orchestration_config::{OrchestrationConfig, OrchestrationExecutionMode};
 use pathfinder_color::ColorU;
@@ -54,7 +52,7 @@ use crate::view_components::dropdown::{
 use crate::view_components::FilterableDropdown;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::{report_if_error, LLMPreferences};
-
+use crate::static_tr;
 /// Env var override for the workspace default host (developer testing).
 /// Mirrors the single-agent ambient flow.
 const DEFAULT_HOST_ENV_VAR: &str = "WARP_CLOUD_MODE_DEFAULT_HOST";
@@ -62,7 +60,7 @@ const DEFAULT_HOST_ENV_VAR: &str = "WARP_CLOUD_MODE_DEFAULT_HOST";
 // ── Shared constants ────────────────────────────────────────────────
 
 pub const ORCHESTRATION_WARP_WORKER_HOST: &str = "warp";
-pub static ORCHESTRATION_ENV_NONE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-orchestration-env-none-label"));
+static_tr!(pub ORCHESTRATION_ENV_NONE_LABEL, "ai_assistant", "ai-orchestration-env-none-label");
 
 pub const ORCHESTRATION_PICKER_HEIGHT: f32 = 36.;
 pub const ORCHESTRATION_PICKER_BORDER_WIDTH: f32 = 1.;
@@ -70,18 +68,18 @@ pub const ORCHESTRATION_PICKER_FONT_SIZE: f32 = 14.;
 pub const ORCHESTRATION_PICKER_RADIUS: f32 = 4.;
 pub const ORCHESTRATION_PICKER_MAX_WIDTH: f32 = 205.;
 
-static DEFAULT_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-default-model-label"));
+static_tr!(DEFAULT_MODEL_LABEL, "ai_assistant", "ai-default-model-label");
 
-static AGENT_LOCATION_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-location-label"));
-static LOCAL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-local-label"));
-static CLOUD_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cloud-label"));
-static AGENT_HARNESS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-agent-harness-label"));
-static HOST_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-host-label"));
-static ENVIRONMENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-environment-label"));
-static BASE_MODEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-base-model-label"));
-static OPENCODE_CLOUD_DISABLED_REASON: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-opencode-cloud-disabled-reason"));
-static RECOMMEND_SELECT_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recommend-select-env"));
-static RECOMMEND_CREATE_ENV: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-recommend-create-env"));
+static_tr!(AGENT_LOCATION_LABEL, "ai_assistant", "ai-agent-location-label");
+static_tr!(LOCAL_LABEL, "ai_assistant", "ai-local-label");
+static_tr!(CLOUD_LABEL, "ai_assistant", "ai-cloud-label");
+static_tr!(AGENT_HARNESS_LABEL, "ai_assistant", "ai-agent-harness-label");
+static_tr!(HOST_LABEL, "ai_assistant", "ai-host-label");
+static_tr!(ENVIRONMENT_LABEL, "ai_assistant", "ai-environment-label");
+static_tr!(BASE_MODEL_LABEL, "ai_assistant", "ai-base-model-label");
+static_tr!(OPENCODE_CLOUD_DISABLED_REASON, "ai_assistant", "ai-opencode-cloud-disabled-reason");
+static_tr!(RECOMMEND_SELECT_ENV, "ai_assistant", "ai-recommend-select-env");
+static_tr!(RECOMMEND_CREATE_ENV, "ai_assistant", "ai-recommend-create-env");
 
 const ORCHESTRATION_SEGMENTED_CONTROL_PADDING: f32 = 4.;
 const ORCHESTRATION_SEGMENT_VERTICAL_PADDING: f32 = 4.;
@@ -273,7 +271,7 @@ impl OrchestrationEditState {
             RunAgentsExecutionMode::Remote { .. }
                 if self.harness_type.eq_ignore_ascii_case("opencode") =>
             {
-                Some(OPENCODE_CLOUD_DISABLED_REASON.clone())
+                Some(OPENCODE_CLOUD_DISABLED_REASON.get().to_owned())
             }
             RunAgentsExecutionMode::Remote { .. } => None,
         }
@@ -556,7 +554,7 @@ pub fn populate_model_picker_for_harness<A: OrchestrationControlAction, V: View>
                 // Local Codex: only "Default model" entry.
                 let items = vec![default_model_menu_item::<A>()];
                 dropdown.set_rich_items(items, ctx_dropdown);
-                dropdown.set_selected_by_name(DEFAULT_MODEL_LABEL.as_str(), ctx_dropdown);
+                dropdown.set_selected_by_name(DEFAULT_MODEL_LABEL.get(), ctx_dropdown);
             }
             Some(harness) => {
                 // Non-Oz harness: "Default model" at top, then server-provided
@@ -575,7 +573,7 @@ pub fn populate_model_picker_for_harness<A: OrchestrationControlAction, V: View>
                 }
                 // Find display name before set_rich_items borrows ctx_dropdown mutably.
                 let selected_display_name = if initial_model_id.is_empty() {
-                    Some(DEFAULT_MODEL_LABEL.clone())
+                    Some(DEFAULT_MODEL_LABEL.get().to_owned())
                 } else {
                     availability
                         .models_for(harness)
@@ -599,7 +597,7 @@ pub fn populate_model_picker_for_harness<A: OrchestrationControlAction, V: View>
 /// Creates a "Default model" menu item that emits an empty model_id.
 fn default_model_menu_item<A: OrchestrationControlAction>() -> MenuItem<DropdownAction> {
     MenuItem::Item(
-        MenuItemFields::new(DEFAULT_MODEL_LABEL.as_str()).with_on_select_action(
+        MenuItemFields::new(DEFAULT_MODEL_LABEL.get()).with_on_select_action(
             DropdownAction::select_action_and_close(A::model_changed(String::new())),
         ),
     )
@@ -803,12 +801,12 @@ pub fn create_environment_picker<A: OrchestrationControlAction, V: View>(
         let mut items: Vec<MenuItem<DropdownAction>> = Vec::new();
         let mut selected_name: Option<String> = None;
         items.push(MenuItem::Item(
-            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL.as_str()).with_on_select_action(
+            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL.get()).with_on_select_action(
                 DropdownAction::select_action_and_close(A::environment_changed(String::new())),
             ),
         ));
         if initial_env.is_empty() {
-            selected_name = Some(ORCHESTRATION_ENV_NONE_LABEL.clone());
+            selected_name = Some(ORCHESTRATION_ENV_NONE_LABEL.get().to_owned());
         }
         for (env_id, env_name) in &sorted_envs {
             if env_id == &initial_env {
@@ -848,12 +846,12 @@ pub fn populate_environment_picker<A: OrchestrationControlAction, V: View>(
         let mut items: Vec<MenuItem<DropdownAction>> = Vec::new();
         let mut selected_name: Option<String> = None;
         items.push(MenuItem::Item(
-            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL.as_str()).with_on_select_action(
+            MenuItemFields::new(ORCHESTRATION_ENV_NONE_LABEL.get()).with_on_select_action(
                 DropdownAction::select_action_and_close(A::environment_changed(String::new())),
             ),
         ));
         if initial_env.is_empty() {
-            selected_name = Some(ORCHESTRATION_ENV_NONE_LABEL.clone());
+            selected_name = Some(ORCHESTRATION_ENV_NONE_LABEL.get().to_owned());
         }
         for (env_id, env_name) in &sorted_envs {
             if env_id == &initial_env {
@@ -1596,7 +1594,7 @@ pub fn sync_picker_selections<A: OrchestrationControlAction, V: View>(
                 }
                 Some(harness) => {
                     if target_model_id.is_empty() {
-                        Some(DEFAULT_MODEL_LABEL.clone())
+                        Some(DEFAULT_MODEL_LABEL.get().to_owned())
                     } else {
                         let availability = HarnessAvailabilityModel::as_ref(ctx_dropdown);
                         availability.models_for(harness).and_then(|models| {
@@ -1638,7 +1636,7 @@ pub fn sync_picker_selections<A: OrchestrationControlAction, V: View>(
         };
         environment_picker.update(ctx, |dropdown, ctx_dropdown| {
             if env_id.is_empty() {
-                dropdown.set_selected_by_name(ORCHESTRATION_ENV_NONE_LABEL.as_str(), ctx_dropdown);
+                dropdown.set_selected_by_name(ORCHESTRATION_ENV_NONE_LABEL.get(), ctx_dropdown);
                 return;
             }
             let all_envs = CloudAmbientAgentEnvironment::get_all(ctx_dropdown);
@@ -1831,7 +1829,7 @@ pub fn render_mode_toggle<A: OrchestrationControlAction>(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let label = Text::new(
-        AGENT_LOCATION_LABEL.clone(),
+        AGENT_LOCATION_LABEL.get(),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 1.,
     )
@@ -1839,7 +1837,7 @@ pub fn render_mode_toggle<A: OrchestrationControlAction>(
     .finish();
 
     let local_segment = render_segment_button::<A>(
-        LOCAL_LABEL.as_str(),
+        LOCAL_LABEL.get(),
         !is_remote,
         A::execution_mode_toggled(false),
         handles.local_toggle.clone(),
@@ -1847,7 +1845,7 @@ pub fn render_mode_toggle<A: OrchestrationControlAction>(
         active_segment_bg,
     );
     let cloud_segment = render_segment_button::<A>(
-        CLOUD_LABEL.as_str(),
+        CLOUD_LABEL.get(),
         is_remote,
         A::execution_mode_toggled(true),
         handles.cloud_toggle.clone(),
@@ -1970,7 +1968,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_harness_picker {
             add(
                 &mut column,
-                AGENT_HARNESS_LABEL.as_str(),
+                AGENT_HARNESS_LABEL.get(),
                 handles
                     .harness_picker
                     .as_ref()
@@ -1990,7 +1988,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if is_remote {
             add(
                 &mut column,
-                HOST_LABEL.as_str(),
+                HOST_LABEL.get(),
                 handles
                     .host_picker
                     .as_ref()
@@ -1998,7 +1996,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
             );
             add(
                 &mut column,
-                ENVIRONMENT_LABEL.as_str(),
+                ENVIRONMENT_LABEL.get(),
                 handles
                     .environment_picker
                     .as_ref()
@@ -2007,7 +2005,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         }
         add(
             &mut column,
-            BASE_MODEL_LABEL.as_str(),
+            BASE_MODEL_LABEL.get(),
             handles
                 .model_picker
                 .as_ref()
@@ -2029,7 +2027,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_harness_picker {
             add_picker(
                 &mut row,
-                AGENT_HARNESS_LABEL.as_str(),
+                AGENT_HARNESS_LABEL.get(),
                 handles
                     .harness_picker
                     .as_ref()
@@ -2039,7 +2037,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if is_remote {
             add_picker(
                 &mut row,
-                HOST_LABEL.as_str(),
+                HOST_LABEL.get(),
                 handles
                     .host_picker
                     .as_ref()
@@ -2047,7 +2045,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
             );
             add_picker(
                 &mut row,
-                ENVIRONMENT_LABEL.as_str(),
+                ENVIRONMENT_LABEL.get(),
                 handles
                     .environment_picker
                     .as_ref()
@@ -2056,7 +2054,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         }
         add_picker(
             &mut row,
-            BASE_MODEL_LABEL.as_str(),
+            BASE_MODEL_LABEL.get(),
             handles
                 .model_picker
                 .as_ref()

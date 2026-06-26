@@ -1,5 +1,4 @@
 use warpui::elements::{Container, Element, MouseStateHandle, Text};
-use std::sync::LazyLock;
 use warpui::fonts::{Properties, Style, Weight};
 use warpui::platform::Cursor;
 use warpui::ui_components::button::ButtonVariant;
@@ -9,11 +8,12 @@ use warpui::{AppContext, Entity, SingletonEntity, TypedActionView, View, ViewCon
 use crate::appearance::Appearance;
 use crate::ui_components::buttons::close_button;
 use crate::ui_components::dialog::{dialog_styles, Dialog};
+use crate::static_tr;
 
-static EDIT_ANYWAY_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "edit-anyway-label"));
-static CANCEL_CTA_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
-static EDIT_ANYWAY_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "grab-edit-warning"));
-static CURRENTLY_EDITED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "currently-edited"));
+static_tr!(EDIT_ANYWAY_CTA_LABEL, "common", "edit-anyway-label");
+static_tr!(CANCEL_CTA_LABEL, "common", "cancel-label");
+static_tr!(EDIT_ANYWAY_TEXT, "common", "grab-edit-warning");
+static_tr!(CURRENTLY_EDITED_LABEL, "common", "currently-edited");
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -52,7 +52,7 @@ impl GrabEditAccessModal {
         let theme = appearance.theme();
         let ui_builder = appearance.ui_builder();
 
-        let description = Text::new(EDIT_ANYWAY_TEXT.clone(), appearance.ui_font_family(), 13.)
+        let description = Text::new(EDIT_ANYWAY_TEXT.get(), appearance.ui_font_family(), 13.)
             .with_style(Properties {
                 style: Style::Normal,
                 weight: Weight::Bold,
@@ -67,7 +67,7 @@ impl GrabEditAccessModal {
             .finish();
 
         Dialog::new(
-            CURRENTLY_EDITED_LABEL.clone(),
+            CURRENTLY_EDITED_LABEL.get().to_owned(),
             None,
             dialog_styles(appearance),
         )
@@ -80,7 +80,7 @@ impl GrabEditAccessModal {
                         ButtonVariant::Basic,
                         self.mouse_state_handles.cancel_button.clone(),
                     )
-                    .with_text_label(CANCEL_CTA_LABEL.clone())
+                    .with_text_label(CANCEL_CTA_LABEL.get().to_owned())
                     .build()
                     .on_click(|ctx, _, _| {
                         ctx.dispatch_typed_action(GrabEditAccessModalAction::Close)
@@ -97,7 +97,7 @@ impl GrabEditAccessModal {
                     ButtonVariant::Warn,
                     self.mouse_state_handles.edit_anyway_button.clone(),
                 )
-                .with_text_label(EDIT_ANYWAY_CTA_LABEL.clone())
+                .with_text_label(EDIT_ANYWAY_CTA_LABEL.get().to_owned())
                 .build()
                 .on_click(|ctx, _, _| {
                     ctx.dispatch_typed_action(GrabEditAccessModalAction::GrabEditAccess)
@@ -132,7 +132,6 @@ impl TypedActionView for GrabEditAccessModal {
 
     fn handle_action(&mut self, action: &GrabEditAccessModalAction, ctx: &mut ViewContext<Self>) {
         use GrabEditAccessModalAction::*;
-
         match action {
             Close => self.close(ctx),
             GrabEditAccess => self.grab_edit_access(ctx),

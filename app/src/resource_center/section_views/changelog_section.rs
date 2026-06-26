@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use instant::Instant;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use warp_core::features::FeatureFlag;
@@ -25,6 +23,7 @@ use crate::send_telemetry_from_ctx;
 use crate::server::telemetry::TelemetryEvent;
 use crate::themes::theme::Fill;
 use crate::ui_components::icons;
+use crate::static_tr;
 
 #[derive(Default)]
 struct ChangelogMouseStateHandles {
@@ -32,8 +31,8 @@ struct ChangelogMouseStateHandles {
     view_changelogs_mouse_state: MouseStateHandle,
 }
 
-static CHANGELOG_FETCH_ERROR_MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("resource_center", "changelog-fetch-error"));
-static CHANGELOG_LOADING_MSG: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "loading-label"));
+static_tr!(CHANGELOG_FETCH_ERROR_MSG, "resource_center", "changelog-fetch-error");
+static_tr!(CHANGELOG_LOADING_MSG, "common", "loading-label");
 
 pub struct ChangelogSectionView {
     changelog_model_handle: ModelHandle<ChangelogModel>,
@@ -99,9 +98,9 @@ impl ChangelogSectionView {
             improvements_highlighted_link: Default::default(),
             bug_fixes_highlighted_link: Default::default(),
             changelog_fetch_error: create_formatted_text_from_string(
-                CHANGELOG_FETCH_ERROR_MSG.clone(),
+                CHANGELOG_FETCH_ERROR_MSG.get().to_owned(),
             ),
-            changelog_loading: create_formatted_text_from_string(CHANGELOG_LOADING_MSG.clone()),
+            changelog_loading: create_formatted_text_from_string(CHANGELOG_LOADING_MSG.get().to_owned()),
         }
     }
 

@@ -9,10 +9,9 @@ use warpui::{AppContext, Element, Entity, TypedActionView, View, ViewContext, Vi
 use crate::modal::Modal;
 use crate::themes::theme::ThemeKind;
 use crate::themes::theme_deletion_body::{ThemeDeletionBody, ThemeDeletionBodyEvent};
+use crate::static_tr;
 
-use std::sync::LazyLock;
-
-static THEME_DELETION_MODAL_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "delete-theme-confirm"));
+static_tr!(THEME_DELETION_MODAL_HEADER, "settings", "delete-theme-confirm");
 
 pub struct ThemeDeletionModal {
     theme_deletion_modal: ViewHandle<Modal<ThemeDeletionBody>>,
@@ -31,7 +30,6 @@ pub enum ThemeDeletionModalEvent {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         ThemeDeletionModalAction::Cancel,
@@ -52,7 +50,7 @@ impl ThemeDeletionModal {
 
         let theme_deletion_modal = ctx.add_typed_action_view(|ctx| {
             Modal::new(
-                Some(THEME_DELETION_MODAL_HEADER.clone()),
+                Some(THEME_DELETION_MODAL_HEADER.get().to_owned()),
                 theme_deletion_body,
                 ctx,
             )

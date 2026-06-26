@@ -275,7 +275,6 @@ drive-anyone-with-link = Anyone with the link
 
 drive-collaborate-with-teammates = Collaborate with { $count } of your teammates already on Warp.
 drive-team-space-zero-state = Drag or move a personal workflow or notebook here to share it with your team.
-drive-create-team = Create team
 drive-view-teams-to-join = View teams to join
 drive-view-team-to-join = View team to join
 drive-learn-file-support = Learn about file support and formatting

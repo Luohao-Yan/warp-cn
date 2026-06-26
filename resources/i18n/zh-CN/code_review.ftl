@@ -141,17 +141,55 @@ code-review-commit-placeholder = 输入提交消息
 
 ## -- Double-prefix aliases --
 
+## -- Git 对话框/操作按钮字符串（从旧版 JSON 迁移） --
 
+code-review-add-diff-set-context = 添加差异集作为上下文
+code-review-approve = 批准
+code-review-authentication-failed = 身份验证失败。请检查您的 Git 凭据。
+code-review-branch-published = 分支已成功发布。
+code-review-cancel = 取消
+code-review-changes-committed-and-pushed = 更改已提交并推送。
+code-review-changes-pushed = 更改已成功推送。
+code-review-changes-successfully-committed = 更改已成功提交。
+code-review-close = 关闭审查
+code-review-commit-and-create-pr = 提交并创建 PR
+code-review-commit-and-publish = 提交并发布
+code-review-commit-and-push = 提交并推送
+code-review-commit-your-changes = 提交你的更改
+code-review-committing = 正在提交…
+code-review-confirm = 确认
+code-review-copy-text = 复制文本
+code-review-create-pull-request = 创建拉取请求
+code-review-creating = 正在创建…
+code-review-discard-all = 全部丢弃
+code-review-edit = 编辑
+code-review-enter-commit-message = 输入提交消息
+code-review-generating-message = 正在生成提交消息…
+code-review-gh-cli-not-authenticated = GitHub CLI 未认证。请运行 `gh auth login`。
+code-review-gh-cli-not-installed = 未安装 GitHub CLI (gh)。请访问 https://cli.github.com/
+code-review-git-identity-not-configured = Git 身份未配置。请设置 user.name 和 user.email。
+code-review-git-operation-failed = Git 操作失败。
+code-review-initialize-codebase = 初始化代码库
+code-review-initialize-codebase-tooltip = 启用代码库索引和 WARP.md
+code-review-network-error = 网络错误。请检查您的连接。
+code-review-no-remote-configured = 此分支未配置远程。
+code-review-open = 打开审查
+code-review-open-pr = 打开 PR
+code-review-open-repository = 打开仓库
+code-review-open-repository-tooltip = 导航到仓库并初始化用于编码
+code-review-pr-created = PR 已成功创建。
+code-review-publish-branch = 发布分支
+code-review-publishing = 正在发布…
+code-review-push-changes = 推送更改
+code-review-pushing = 正在推送…
+code-review-remote-has-new-changes = 远程有新更改 — 请先拉取。
+code-review-remote-repository-not-found = 找不到远程仓库。
+code-review-remove = 移除
+code-review-request-changes = 请求更改
+code-review-send-to-agent = 发送给智能体
+code-review-type-commit-message = 输入提交消息
+code-review-view-in-github = 在 GitHub 中查看
 
+## -- 快捷键描述 -----------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
+code-review-toggle-file-navigation-in-code-review = 切换代码审查中的文件导航

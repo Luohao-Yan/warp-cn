@@ -1,7 +1,5 @@
 //! Shared message producers for displaying attached blocks/text context.
 
-use std::sync::LazyLock;
-
 use warp_core::features::FeatureFlag;
 use warpui::keymap::Keystroke;
 
@@ -13,9 +11,9 @@ use crate::terminal::input::message_bar::{
 };
 use crate::terminal::input::InputAction;
 use crate::terminal::model::TerminalModel;
-
-static TERMINAL_TO_REMOVE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "to-remove"));
-static TERMINAL_SELECTED_TEXT_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "selected-text-as-context"));
+use crate::static_tr;
+static_tr!(TERMINAL_TO_REMOVE, "terminal", "to-remove");
+static_tr!(TERMINAL_SELECTED_TEXT_AS_CONTEXT, "terminal", "selected-text-as-context");
 
 /// Trait for message args that can provide attached context information.
 /// Exposes the required dependencies for attached context message producers.
@@ -81,7 +79,7 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args> for AttachedBlocksM
                         key: "escape".to_owned(),
                         ..Default::default()
                     }),
-                    MessageItem::text(&*TERMINAL_TO_REMOVE),
+                    MessageItem::text(TERMINAL_TO_REMOVE.get()),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(InputAction::ClearAttachedContext);
@@ -118,7 +116,7 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args>
 
         let _ = args.context_model().pending_context_selected_text()?;
 
-        let mut items = vec![MessageItem::text(&*TERMINAL_SELECTED_TEXT_AS_CONTEXT)];
+        let mut items = vec![MessageItem::text(TERMINAL_SELECTED_TEXT_AS_CONTEXT.get())];
 
         // Always show ESC hint in agent view, make it clickable
         if args.agent_view_controller().is_active() {
@@ -129,7 +127,7 @@ impl<Args: AttachedContextArgs + Copy> MessageProvider<Args>
                         key: "escape".to_owned(),
                         ..Default::default()
                     }),
-                    MessageItem::text(&*TERMINAL_TO_REMOVE),
+                    MessageItem::text(TERMINAL_TO_REMOVE.get()),
                 ],
                 |ctx| {
                     ctx.dispatch_typed_action(InputAction::ClearAttachedContext);

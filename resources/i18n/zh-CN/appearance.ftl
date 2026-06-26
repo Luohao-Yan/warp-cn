@@ -4,7 +4,7 @@
 # Message IDs: appearance-{id}
 # =============================================================================
 
-appearance-agent-font = 代理字体
+appearance-agent-font = 智能体字体
 appearance-create-custom-theme = 创建自定义主题
 appearance-font-size = 字体大小（px）
 appearance-font-weight = 字体粗细

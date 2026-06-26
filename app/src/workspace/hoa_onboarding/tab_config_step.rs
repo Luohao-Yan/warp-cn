@@ -1,6 +1,4 @@
 use std::path::Path;
-use std::sync::LazyLock;
-
 use warpui::elements::{
     Container, CrossAxisAlignment, Flex, MouseStateHandle, ParentElement, Text,
 };
@@ -11,14 +9,15 @@ use warpui::{Element, EventContext};
 use crate::appearance::Appearance;
 use crate::tab_configs::session_config::SessionType;
 use crate::tab_configs::session_config_rendering;
+use crate::static_tr;
 use crate::view_components::callout_bubble::{
     callout_background_fill, callout_body_color, callout_title_color,
 };
 
 const SECTION_GAP: f32 = 16.;
 
-static TAB_CONFIG_STEP_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "tab-config-step-title").clone());
-static TAB_CONFIG_STEP_DESC: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "tab-config-step-desc").clone());
+static_tr!(TAB_CONFIG_STEP_TITLE, "workspace", "tab-config-step-title");
+static_tr!(TAB_CONFIG_STEP_DESC, "workspace", "tab-config-step-desc");
 
 pub struct TabConfigFormState<'a> {
     pub session_types: &'a [SessionType],
@@ -59,7 +58,7 @@ where
 {
     let callout_bg = callout_background_fill(appearance).into_solid();
     let title = Text::new(
-        TAB_CONFIG_STEP_TITLE.clone(),
+        TAB_CONFIG_STEP_TITLE.get(),
         appearance.ui_font_family(),
         16.,
     )
@@ -68,7 +67,7 @@ where
     .finish();
 
     let description = Text::new(
-        TAB_CONFIG_STEP_DESC.clone(),
+        TAB_CONFIG_STEP_DESC.get(),
         appearance.ui_font_family(),
         14.,
     )

@@ -11,13 +11,11 @@ use warpui::elements::{
 use warpui::platform::Cursor;
 use warpui::{AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext};
 
-use std::sync::LazyLock;
-
 use crate::terminal::model::session::SessionId;
 use crate::ui_components::icons::Icon;
 use crate::Appearance;
-
-static BANNER_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "ssh-connection-failed"));
+use crate::static_tr;
+static_tr!(BANNER_TITLE, "terminal", "ssh-connection-failed");
 
 const BANNER_BODY: &str =
     "While advanced features like file browsing and code review are currently \
@@ -81,7 +79,7 @@ impl View for SshRemoteServerFailedBanner {
         .finish();
 
         let title = Text::new(
-            &*BANNER_TITLE,
+            BANNER_TITLE.get(),
             appearance.ui_font_family(),
             font_size,
         )

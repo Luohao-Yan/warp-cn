@@ -6,8 +6,8 @@ use super::{
     LocalOnlyIconState, SettingsSection, ToggleState,
 };
 use crate::{appearance::Appearance, auth::AuthStateProvider, drive::settings::WarpDriveSettings};
-use std::sync::LazyLock;
 use warp_core::{features::FeatureFlag, report_if_error, settings::ToggleableSetting as _};
+use crate::static_tr;
 use warpui::{
     elements::{Container, Element, Flex, MouseStateHandle, ParentElement, Shrinkable, Text},
     fonts::Weight,
@@ -19,12 +19,9 @@ use warpui::{
     AppContext, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
 };
 
-static SETTINGS_WARP_DRIVE_ACCOUNT_PROMPT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "warp-drive-account-prompt"));
-static SETTINGS_SIGN_UP_LABEL: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "sign-up-label"));
-static SETTINGS_WARP_DRIVE_DESCRIPTION: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("settings", "warp-drive-description"));
+static_tr!(SETTINGS_WARP_DRIVE_ACCOUNT_PROMPT, "settings", "warp-drive-account-prompt");
+static_tr!(SETTINGS_SIGN_UP_LABEL, "settings", "sign-up-label");
+static_tr!(SETTINGS_WARP_DRIVE_DESCRIPTION, "settings", "warp-drive-description");
 
 #[derive(Debug, Clone)]
 pub enum WarpDriveSettingsPageAction {
@@ -147,7 +144,7 @@ impl SettingsWidget for WarpDriveHeaderWidget {
 
         let message = Container::new(
             Text::new_inline(
-                SETTINGS_WARP_DRIVE_ACCOUNT_PROMPT.clone(),
+                SETTINGS_WARP_DRIVE_ACCOUNT_PROMPT.get(),
                 appearance.ui_font_family(),
                 14.,
             )
@@ -179,7 +176,7 @@ impl SettingsWidget for WarpDriveHeaderWidget {
                     }),
                     ..Default::default()
                 })
-                .with_text_label(SETTINGS_SIGN_UP_LABEL.clone())
+                .with_text_label(SETTINGS_SIGN_UP_LABEL.get().to_owned())
                 .build()
                 .on_click(move |ctx, _, _| {
                     ctx.dispatch_typed_action(WarpDriveSettingsPageAction::SignUp);
@@ -256,7 +253,7 @@ impl SettingsWidget for WarpDriveToggleWidget {
                     }
                 })
                 .finish(),
-            Some(SETTINGS_WARP_DRIVE_DESCRIPTION.clone()),
+            Some(SETTINGS_WARP_DRIVE_DESCRIPTION.get().to_owned()),
         )
     }
 }

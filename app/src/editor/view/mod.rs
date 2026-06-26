@@ -135,15 +135,14 @@ use crate::BlocklistAIHistoryModel;
 const CURSOR_BLINK_INTERVAL: Duration = Duration::from_millis(500);
 const DEFAULT_TAB_SIZE: usize = 4;
 
-use std::sync::LazyLock;
-
 pub const ACCEPT_AUTOSUGGESTION_KEYBINDING_NAME: &str = "editor_view:insert_autosuggestion";
-pub static VOICE_LIMIT_HIT_TOAST_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "voice-limit-hit"));
-pub static VOICE_ERROR_TOAST_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "voice-error"));
+static_tr!(pub VOICE_LIMIT_HIT_TOAST_TEXT, "ai_assistant", "voice-limit-hit");
+static_tr!(pub VOICE_ERROR_TOAST_TEXT, "ai_assistant", "voice-error");
 
 pub const MAX_IMAGES_PER_CONVERSATION: usize = 200;
 
 use warpui::clipboard_utils::CLIPBOARD_IMAGE_MIME_TYPES;
+use crate::static_tr;
 
 #[derive(Clone, Copy)]
 pub enum AutosuggestionLocation {

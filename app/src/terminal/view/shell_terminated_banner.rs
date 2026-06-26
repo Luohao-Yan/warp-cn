@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use std::borrow::Cow;
 use std::cell::RefCell;
 
@@ -15,9 +14,9 @@ use warpui::{Entity, SingletonEntity as _, TypedActionView, View, ViewContext};
 
 use crate::terminal::model::terminal_model::ExitReason;
 use crate::ui_components;
-
-static FILE_ISSUE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "file-issue"));
-static MORE_INFO_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "more-info"));
+use crate::static_tr;
+static_tr!(FILE_ISSUE_TEXT, "terminal", "file-issue");
+static_tr!(MORE_INFO_TEXT, "terminal", "more-info");
 
 /// A banner to display when the shell process terminates.
 ///
@@ -208,7 +207,7 @@ impl TerminationType {
                 vec![
                     ui_builder
                         .button(ButtonVariant::Text, handles[0].clone())
-                        .with_text_label(FILE_ISSUE_TEXT.clone())
+                        .with_text_label(FILE_ISSUE_TEXT.get().to_owned())
                         .build()
                         .on_click(|ctx, _, _| {
                             ctx.dispatch_typed_action(Action::OpenUrl(
@@ -218,7 +217,7 @@ impl TerminationType {
                         .finish(),
                     ui_builder
                         .button(ButtonVariant::Outlined, handles[1].clone())
-                        .with_text_label(MORE_INFO_TEXT.clone())
+                        .with_text_label(MORE_INFO_TEXT.get().to_owned())
                         .build()
                         .on_click(|ctx, _, _| {
                             ctx.dispatch_typed_action(Action::OpenUrl(
@@ -246,7 +245,7 @@ impl TerminationType {
                         .finish(),
                     ui_builder
                         .button(ButtonVariant::Text, handles[1].clone())
-                        .with_text_label(FILE_ISSUE_TEXT.clone())
+                        .with_text_label(FILE_ISSUE_TEXT.get().to_owned())
                         .build()
                         .on_click(|ctx, _, _| {
                             ctx.dispatch_typed_action(Action::OpenUrl(
@@ -256,7 +255,7 @@ impl TerminationType {
                         .finish(),
                     ui_builder
                         .button(ButtonVariant::Outlined, handles[2].clone())
-                        .with_text_label(MORE_INFO_TEXT.clone())
+                        .with_text_label(MORE_INFO_TEXT.get().to_owned())
                         .build()
                         .on_click(|ctx, _, _| {
                             ctx.dispatch_typed_action(Action::OpenUrl(

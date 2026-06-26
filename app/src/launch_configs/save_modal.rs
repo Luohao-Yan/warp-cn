@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use crate::app_state::{get_app_state, AppState};
 use crate::appearance::Appearance;
 use crate::editor::{
@@ -29,6 +28,7 @@ use warpui::elements::{
 use warpui::keymap::FixedBinding;
 use warpui::ui_components::button::{Button, ButtonVariant};
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
+use crate::static_tr;
 use warpui::{
     AppContext, Entity, FocusContext, ModelHandle, SingletonEntity, TypedActionView, View,
     ViewContext, ViewHandle,
@@ -435,14 +435,14 @@ impl LaunchConfigSaveModal {
 
     /// Renders the title of the modal
     fn render_header(&self, appearance: &Appearance) -> Box<dyn Element> {
-        static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "save-current-configuration"));
+        static_tr!(LABEL, "common", "save-current-configuration");
         let header = Flex::row()
             .with_child(
                 Shrinkable::new(
                     1.0,
                     Align::new(
                         Text::new_inline(
-                            &*LABEL,
+                            LABEL.get(),
                             appearance.header_font_family(),
                             appearance.header_font_size(),
                         )

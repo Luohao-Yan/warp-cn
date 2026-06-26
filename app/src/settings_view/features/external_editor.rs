@@ -19,18 +19,18 @@ use crate::util::file::external_editor::settings::{
 use crate::util::file::external_editor::{EditorSettings, SUPPORTED_EDITORS};
 use crate::view_components::{Dropdown, DropdownItem};
 use crate::{report_if_error, send_telemetry_from_ctx};
-
-static SPLIT_PANE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "split-pane"));
-static NEW_TAB_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "new-tab"));
-static DEFAULT_APP_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "default-app"));
+use crate::static_tr;
+static_tr!(SPLIT_PANE_LABEL, "settings", "split-pane");
+static_tr!(NEW_TAB_LABEL, "settings", "new-tab");
+static_tr!(DEFAULT_APP_LABEL, "settings", "default-app");
 static WARP_LABEL: LazyLock<String> = LazyLock::new(|| "Warp".to_string());
 static EDITOR_LABEL: LazyLock<String> = LazyLock::new(|| "$EDITOR".to_string());
-static CHOOSE_EDITOR_FILES_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "choose-editor-files"));
-static CHOOSE_EDITOR_CODE_PANELS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "choose-editor-code-panels"));
-static CHOOSE_LAYOUT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "choose-layout"));
-static TABBED_HEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "group-files-header"));
-static TABBED_DESCRIPTION: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "group-files-description"));
-static MARKDOWN_DEFAULT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "open-markdown-default"));
+static_tr!(CHOOSE_EDITOR_FILES_LABEL, "settings", "choose-editor-files");
+static_tr!(CHOOSE_EDITOR_CODE_PANELS_LABEL, "settings", "choose-editor-code-panels");
+static_tr!(CHOOSE_LAYOUT_LABEL, "settings", "choose-layout");
+static_tr!(TABBED_HEADER, "settings", "group-files-header");
+static_tr!(TABBED_DESCRIPTION, "settings", "group-files-description");
+static_tr!(MARKDOWN_DEFAULT, "settings", "open-markdown-default");
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExternalEditorAction {
@@ -125,7 +125,7 @@ impl ExternalEditorView {
         dropdown: &mut Dropdown<ExternalEditorAction>,
         ctx: &mut ViewContext<Dropdown<ExternalEditorAction>>,
     ) {
-        let default_option_text = &*SPLIT_PANE_LABEL;
+        let default_option_text = SPLIT_PANE_LABEL.get();
         let default_app = DropdownItem::new(
             default_option_text,
             ExternalEditorAction::SetLayout(EditorLayout::SplitPane),
@@ -133,14 +133,14 @@ impl ExternalEditorView {
 
         let mut items = vec![default_app];
         items.push(DropdownItem::new(
-            &*NEW_TAB_LABEL,
+            NEW_TAB_LABEL.get(),
             ExternalEditorAction::SetLayout(EditorLayout::NewTab),
         ));
 
         dropdown.set_items(items, ctx);
         match layout_to_open_files {
             EditorLayout::SplitPane => dropdown.set_selected_by_name(default_option_text, ctx),
-            EditorLayout::NewTab => dropdown.set_selected_by_name(&*NEW_TAB_LABEL, ctx),
+            EditorLayout::NewTab => dropdown.set_selected_by_name(NEW_TAB_LABEL.get(), ctx),
         };
     }
 
@@ -150,7 +150,7 @@ impl ExternalEditorView {
         mut make_action: impl FnMut(EditorChoice) -> ExternalEditorAction,
         ctx: &mut ViewContext<Dropdown<ExternalEditorAction>>,
     ) {
-        let default_option_text = &*DEFAULT_APP_LABEL;
+        let default_option_text = DEFAULT_APP_LABEL.get();
         let default_app = DropdownItem::new(
             default_option_text,
             make_action(EditorChoice::SystemDefault),
@@ -284,7 +284,7 @@ impl View for ExternalEditorView {
 
         let default_editor = render_dropdown_item(
             appearance,
-            &*CHOOSE_EDITOR_FILES_LABEL,
+            CHOOSE_EDITOR_FILES_LABEL.get(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -299,7 +299,7 @@ impl View for ExternalEditorView {
 
         let code_panels_editor = render_dropdown_item(
             appearance,
-            &*CHOOSE_EDITOR_CODE_PANELS_LABEL,
+            CHOOSE_EDITOR_CODE_PANELS_LABEL.get(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -314,7 +314,7 @@ impl View for ExternalEditorView {
 
         let default_layout = render_dropdown_item(
             appearance,
-            &*CHOOSE_LAYOUT_LABEL,
+            CHOOSE_LAYOUT_LABEL.get(),
             None,
             None,
             LocalOnlyIconState::for_setting(
@@ -334,7 +334,7 @@ impl View for ExternalEditorView {
 
         if FeatureFlag::TabbedEditorView.is_enabled() {
             column.add_child(render_body_item::<ExternalEditorAction>(
-                TABBED_HEADER.clone(),
+                TABBED_HEADER.get().to_owned(),
                 None,
                 LocalOnlyIconState::for_setting(
                     PreferTabbedEditorView::storage_key(),
@@ -357,12 +357,12 @@ impl View for ExternalEditorView {
                         ctx.dispatch_typed_action(ExternalEditorAction::ToggleTabbedEditorView);
                     })
                     .finish(),
-                Some(TABBED_DESCRIPTION.clone()),
+                Some(TABBED_DESCRIPTION.get().to_owned()),
             ));
         }
 
         column.add_child(render_body_item::<ExternalEditorAction>(
-            MARKDOWN_DEFAULT.clone(),
+            MARKDOWN_DEFAULT.get().to_owned(),
             Some(AdditionalInfo {
                 mouse_state: self.markdown_viewer_mouse_state.clone(),
                 on_click_action: Some(ExternalEditorAction::OpenUrl(

@@ -443,24 +443,24 @@ settings::macros::implement_setting_for_enum!(
 
 impl OrchestrationMessageDisplayMode {
     /// Display name for the settings dropdown.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         match self {
-            OrchestrationMessageDisplayMode::ShowAndCollapse => "Show & collapse",
-            OrchestrationMessageDisplayMode::AlwaysShow => "Always show",
-            OrchestrationMessageDisplayMode::AlwaysCollapse => "Always collapse",
+            OrchestrationMessageDisplayMode::ShowAndCollapse => crate::tr!("settings", "orchestration-show-and-collapse"),
+            OrchestrationMessageDisplayMode::AlwaysShow => crate::tr!("settings", "orchestration-always-show"),
+            OrchestrationMessageDisplayMode::AlwaysCollapse => crate::tr!("settings", "orchestration-always-collapse"),
         }
     }
 
-    pub fn command_palette_description(&self) -> &'static str {
+    pub fn command_palette_description(&self) -> String {
         match self {
             OrchestrationMessageDisplayMode::ShowAndCollapse => {
-                "Set child-agent message display: show & collapse"
+                crate::tr!("settings", "orchestration-cmd-show-and-collapse")
             }
             OrchestrationMessageDisplayMode::AlwaysShow => {
-                "Set child-agent message display: always show"
+                crate::tr!("settings", "orchestration-cmd-always-show")
             }
             OrchestrationMessageDisplayMode::AlwaysCollapse => {
-                "Set child-agent message display: always collapse"
+                crate::tr!("settings", "orchestration-cmd-always-collapse")
             }
         }
     }
@@ -524,18 +524,18 @@ settings::macros::implement_setting_for_enum!(
 
 impl PromptSubmissionMode {
     /// Display name for the settings dropdown.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         match self {
-            PromptSubmissionMode::Interrupt => "Interrupt response",
-            PromptSubmissionMode::Queue => "Queue until response finishes",
+            PromptSubmissionMode::Interrupt => crate::tr!("settings", "prompt-interrupt"),
+            PromptSubmissionMode::Queue => crate::tr!("settings", "prompt-queue"),
         }
     }
 
-    pub fn command_palette_description(&self) -> &'static str {
+    pub fn command_palette_description(&self) -> String {
         match self {
-            PromptSubmissionMode::Interrupt => "Set default prompt submission: interrupt response",
+            PromptSubmissionMode::Interrupt => crate::tr!("settings", "prompt-cmd-interrupt"),
             PromptSubmissionMode::Queue => {
-                "Set default prompt submission: queue until response finishes"
+                crate::tr!("settings", "prompt-cmd-queue")
             }
         }
     }
@@ -585,22 +585,22 @@ settings::macros::implement_setting_for_enum!(
 
 impl LongRunningCommandSubmissionMode {
     /// Display name for the settings dropdown.
-    pub fn display_name(&self) -> &'static str {
+    pub fn display_name(&self) -> String {
         match self {
-            LongRunningCommandSubmissionMode::SendImmediately => "Send immediately",
+            LongRunningCommandSubmissionMode::SendImmediately => crate::tr!("settings", "lrc-send-immediately"),
             LongRunningCommandSubmissionMode::QueueUntilCommandCompletes => {
-                "Queue until command finishes"
+                crate::tr!("settings", "lrc-queue-until-command-finishes")
             }
         }
     }
 
-    pub fn command_palette_description(&self) -> &'static str {
+    pub fn command_palette_description(&self) -> String {
         match self {
             LongRunningCommandSubmissionMode::SendImmediately => {
-                "Set long-running command submission: send immediately"
+                crate::tr!("settings", "lrc-cmd-send-immediately")
             }
             LongRunningCommandSubmissionMode::QueueUntilCommandCompletes => {
-                "Set long-running command submission: queue until command finishes"
+                crate::tr!("settings", "lrc-cmd-queue-until-command-finishes")
             }
         }
     }

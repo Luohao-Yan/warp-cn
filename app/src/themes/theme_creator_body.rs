@@ -1,7 +1,6 @@
 use std::default::Default;
 use std::fmt;
 use std::path::PathBuf;
-use std::sync::LazyLock;
 #[cfg(feature = "local_fs")]
 use std::{fs::copy, io::Write};
 
@@ -27,6 +26,7 @@ use crate::appearance::{Appearance, AppearanceManager};
 use crate::editor::{EditorView, Event as EditorEvent};
 use crate::themes::theme::{InMemoryThemeOptions, ThemeKind};
 use crate::user_config;
+use crate::static_tr;
 #[cfg(feature = "local_fs")]
 use crate::{
     send_telemetry_from_ctx, server::telemetry::TelemetryEvent, themes::theme::CustomTheme,
@@ -37,12 +37,12 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
-static MODAL_SUBHEADER: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "theme-creator-subheader"));
-static IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "select-image"));
-static IMAGE_PICKER_BUTTON_SELECTING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "selecting-image"));
-static IMAGE_PICKER_BUTTON_POST_SELECT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "select-new-image"));
-static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
-static CREATE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "create-theme"));
+static_tr!(MODAL_SUBHEADER, "common", "theme-creator-subheader");
+static_tr!(IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT, "common", "select-image");
+static_tr!(IMAGE_PICKER_BUTTON_SELECTING_TEXT, "common", "selecting-image");
+static_tr!(IMAGE_PICKER_BUTTON_POST_SELECT_TEXT, "common", "select-new-image");
+static_tr!(CANCEL_BUTTON_TEXT, "common", "cancel-label");
+static_tr!(CREATE_BUTTON_TEXT, "common", "create-theme");
 
 #[derive(Default)]
 struct MouseStateHandles {
@@ -85,12 +85,12 @@ pub enum ThemeCreatorImageState {
 impl fmt::Display for ThemeCreatorImageState {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            ThemeCreatorImageState::Empty => write!(f, "{}", *IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT),
+            ThemeCreatorImageState::Empty => write!(f, "{}", IMAGE_PICKER_BUTTON_PRE_SELECT_TEXT.get()),
             ThemeCreatorImageState::Uploading => {
-                write!(f, "{}", *IMAGE_PICKER_BUTTON_SELECTING_TEXT)
+                write!(f, "{}", IMAGE_PICKER_BUTTON_SELECTING_TEXT.get())
             }
             ThemeCreatorImageState::Uploaded => {
-                write!(f, "{}", *IMAGE_PICKER_BUTTON_POST_SELECT_TEXT)
+                write!(f, "{}", IMAGE_PICKER_BUTTON_POST_SELECT_TEXT.get())
             }
         }
     }
@@ -418,7 +418,7 @@ impl View for ThemeCreatorBody {
                 padding: Some(Coords::uniform(BUTTON_PADDING)),
                 ..Default::default()
             })
-            .with_centered_text_label(CANCEL_BUTTON_TEXT.clone());
+            .with_centered_text_label(CANCEL_BUTTON_TEXT.get().to_owned());
 
         let mut create_button = appearance
             .ui_builder()
@@ -430,13 +430,13 @@ impl View for ThemeCreatorBody {
                 Some(create_hovered_styles),
                 Some(disabled_styles),
             )
-            .with_centered_text_label(CREATE_BUTTON_TEXT.clone());
+            .with_centered_text_label(CREATE_BUTTON_TEXT.get().to_owned());
 
         let mut flex: Flex = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_child(
                 Container::new(
-                    Text::new_inline(MODAL_SUBHEADER.clone(), appearance.ui_font_family(), 14.)
+                    Text::new_inline(MODAL_SUBHEADER.get(), appearance.ui_font_family(), 14.)
                         .with_color(appearance.theme().active_ui_text_color().into())
                         .finish(),
                 )

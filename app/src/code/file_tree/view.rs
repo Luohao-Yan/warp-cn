@@ -1,9 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::ops::Range;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, LazyLock};
-
-use editing::sort_entries_for_file_tree;
+use std::sync::Arc;use editing::sort_entries_for_file_tree;
 use itertools::Itertools;
 use pathfinder_geometry::rect::RectF;
 use pathfinder_geometry::vector::Vector2F;
@@ -67,10 +65,11 @@ mod editing;
 mod render;
 
 use crate::settings::{CodeSettings, CodeSettingsChangedEvent};
+use crate::static_tr;
 
-pub static REMOTE_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-remote"));
-pub static DISABLED_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-disabled"));
-pub static WSL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "explorer-wsl"));
+static_tr!(pub REMOTE_TEXT, "code", "explorer-remote");
+static_tr!(pub DISABLED_TEXT, "code", "explorer-disabled");
+static_tr!(pub WSL_TEXT, "code", "explorer-wsl");
 
 /// Stable identifier for an item in the file tree.
 /// Includes both the root directory and the index within that root's flattened list.
@@ -1470,7 +1469,6 @@ impl FileTreeView {
         ctx: &mut ViewContext<Self>,
     ) {
         use crate::remote_server::manager::RemoteServerManager;
-
         if !FeatureFlag::SshRemoteServer.is_enabled() {
             return;
         }

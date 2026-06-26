@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use thousands::Separable;
 use uuid::Uuid;
@@ -68,8 +66,9 @@ fn nice_step(raw: f64) -> f64 {
 }
 
 use crate::settings_view::{render_input_list, render_separator, InputListItem};
+use crate::static_tr;
 
-pub static WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-workspace-override-tooltip"));
+static_tr!(pub WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE, "ai_assistant", "ai-workspace-override-tooltip");
 pub fn render_header_section(
     appearance: &Appearance,
     profile_name_editor: &ViewHandle<EditorView>,
@@ -771,7 +770,6 @@ fn render_command_denylist_section(
     app: &warpui::AppContext,
 ) -> Box<dyn Element> {
     use crate::ai::blocklist::BlocklistAIPermissions;
-
     let ai_disabled = !AISettings::as_ref(app).is_any_ai_enabled(app);
     let org_denylist = BlocklistAIPermissions::get_org_execute_commands_denylist(app);
     let mut tooltip_idx = 0usize;
@@ -1041,7 +1039,7 @@ pub fn wrap_disabled_with_workspace_override_tooltip(
         if state.is_hovered() {
             let tooltip = appearance
                 .ui_builder()
-                .tool_tip(WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE.clone())
+                .tool_tip(WORKSPACE_OVERRIDE_TOOLTIP_MESSAGE.get().to_owned())
                 .build()
                 .finish();
 

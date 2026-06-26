@@ -29,7 +29,7 @@ use crate::terminal::shell::ShellType;
 use crate::terminal::{History, TerminalView};
 use crate::ui_components::icons as UIIcon;
 use crate::user_config::themes_dir;
-
+use crate::static_tr;
 const ONBOARDING_BOX_WIDTH: f32 = 210.;
 const ONBOARDING_BOX_HEIGHT: f32 = 140.;
 const CONTAINER_MARGIN_TOP: f32 = 20.;
@@ -46,8 +46,7 @@ static PATH_REGEX: LazyLock<Regex> = LazyLock::new(|| {
         .expect("command line path regex invalid")
 });
 
-static TERMINAL_THINKING: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "thinking"));
+static_tr!(TERMINAL_THINKING, "terminal", "thinking");
 
 pub struct OnboardingAgenticSuggestionsBlock {
     agent_suggestions: Vec<(AgenticSuggestionsContent, MouseStateHandle)>,
@@ -583,14 +582,13 @@ impl OnboardingAgenticSuggestionsBlock {
         let font_size = appearance.monospace_font_size();
         let font_color = current_theme.main_text_color(current_theme.background());
 
-        static WELCOME_TEXT_LINE_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "welcome-text"));
-        static WELCOME_TEXT_LINE_TWO_PART_ONE: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "agent-examples-intro"));
-        static WELCOME_TEXT_LINE_TWO_PART_TWO: LazyLock<String> = LazyLock::new(|| crate::tr!("onboarding", "agent-mode-label"));
-
+        static_tr!(WELCOME_TEXT_LINE_ONE, "onboarding", "welcome-text");
+        static_tr!(WELCOME_TEXT_LINE_TWO_PART_ONE, "onboarding", "agent-examples-intro");
+        static_tr!(WELCOME_TEXT_LINE_TWO_PART_TWO, "onboarding", "agent-mode-label");
         Flex::column()
             .with_children(vec![
                 Container::new(
-                    Text::new(&*WELCOME_TEXT_LINE_ONE, font_family, font_size)
+                    Text::new(WELCOME_TEXT_LINE_ONE.get(), font_family, font_size)
                         .with_color(font_color.into_solid())
                         .finish(),
                 )
@@ -598,9 +596,9 @@ impl OnboardingAgenticSuggestionsBlock {
                 .finish(),
                 FormattedTextElement::new(
                     FormattedText::new([FormattedTextLine::Line(vec![
-                        FormattedTextFragment::plain_text(&*WELCOME_TEXT_LINE_TWO_PART_ONE),
+                        FormattedTextFragment::plain_text(WELCOME_TEXT_LINE_TWO_PART_ONE.get()),
                         FormattedTextFragment::weighted(
-                            &*WELCOME_TEXT_LINE_TWO_PART_TWO,
+                            WELCOME_TEXT_LINE_TWO_PART_TWO.get(),
                             Some(CustomWeight::Bold),
                         ),
                     ])]),
@@ -643,7 +641,7 @@ impl OnboardingAgenticSuggestionsBlock {
                     )
                     .with_child(
                         Text::new(
-                            &*TERMINAL_THINKING,
+                            TERMINAL_THINKING.get(),
                             appearance.ui_font_family(),
                             appearance.monospace_font_size(),
                         )

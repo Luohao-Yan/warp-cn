@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use crate::{
     ai::agent::icons::{yellow_running_icon, yellow_stop_icon},
     ai::blocklist::block::view_impl::{
@@ -38,6 +36,7 @@ use warpui::elements::{
     SelectableArea, SelectionHandle,
 };
 use warpui::keymap::{FixedBinding, Keystroke};
+use crate::static_tr;
 use warpui::{
     AppContext, Element, Entity, EntityId, FocusContext, SingletonEntity, TypedActionView, View,
     ViewContext,
@@ -47,8 +46,8 @@ use warpui::{
 /// For horizontal padding, use [`INLINE_ACTION_HORIZONTAL_PADDING`] for consistency.
 const ENV_VAR_COLLECTION_BODY_VERTICAL_PADDING: f32 = 16.;
 
-static ENV_VAR_COLLECTION_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "cancel-label"));
-static ENV_VAR_COLLECTION_ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "run-label"));
+static_tr!(ENV_VAR_COLLECTION_CANCEL_LABEL, "common", "cancel-label");
+static_tr!(ENV_VAR_COLLECTION_ACCEPT_LABEL, "common", "run-label");
 
 lazy_static! {
     static ref CANCEL_ENV_VAR_COLLECTION_KEYSTROKE: Keystroke = Keystroke {
@@ -122,7 +121,6 @@ pub struct EnvVarCollectionBlock {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([
         FixedBinding::new(
             "ctrl-c",
@@ -150,7 +148,7 @@ impl EnvVarCollectionBlock {
         ctx: &mut ViewContext<Self>,
     ) -> Self {
         let cancel_button = CompactibleActionButton::new(
-            ENV_VAR_COLLECTION_CANCEL_LABEL.clone(),
+            ENV_VAR_COLLECTION_CANCEL_LABEL.get().to_owned(),
             Some(KeystrokeSource::Fixed(
                 CANCEL_ENV_VAR_COLLECTION_KEYSTROKE.clone(),
             )),
@@ -162,7 +160,7 @@ impl EnvVarCollectionBlock {
         );
 
         let accept_button = CompactibleActionButton::new(
-            ENV_VAR_COLLECTION_ACCEPT_LABEL.clone(),
+            ENV_VAR_COLLECTION_ACCEPT_LABEL.get().to_owned(),
             Some(KeystrokeSource::Fixed(
                 ACCEPT_ENV_VAR_COLLECTION_KEYSTROKE.clone(),
             )),

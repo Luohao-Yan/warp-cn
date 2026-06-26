@@ -1172,7 +1172,7 @@ fn render_row(props: RenderRowProps<'_>, app: &AppContext) -> Box<dyn Element> {
             } else if origin == QueuedQueryOrigin::LrcAutoQueue {
                 let suffix_color: ColorU = theme.sub_text_color(theme.surface_1()).into();
                 let suffix = Text::new(
-                    LRC_AUTO_QUEUE_ROW_SUFFIX.to_owned(),
+                    LRC_AUTO_QUEUE_ROW_SUFFIX,
                     appearance.ui_font_family(),
                     queued_input_font_size,
                 )

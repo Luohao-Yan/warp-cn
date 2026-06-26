@@ -1,8 +1,6 @@
 //! AI Assistant has since been renamed to "Warp AI" in the product.
 use std::collections::HashSet;
-use std::sync::{Arc, LazyLock};
-
-use itertools::Itertools;
+use std::sync::Arc;use itertools::Itertools;
 use lazy_static::lazy_static;
 use pathfinder_color::ColorU;
 use serde::{Deserialize, Serialize};
@@ -17,7 +15,7 @@ use crate::ai::{RequestLimitInfo, RequestLimitRefreshDuration};
 use crate::server::telemetry::OpenedWarpAISource;
 use crate::terminal::model::terminal_model::BlockIndex;
 use crate::workflows::workflow::{Argument, Workflow};
-
+use crate::static_tr;
 pub mod execution_context;
 pub mod panel;
 pub mod requests;
@@ -32,8 +30,8 @@ mod test_util;
 /// This is also roughly the limit at which the editor starts degrading.
 pub const PROMPT_CHARACTER_LIMIT: usize = 1000;
 
-pub static AI_ASSISTANT_FEATURE_NAME: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "feature-name"));
-pub static ASK_AI_ASSISTANT_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("ai", "ask-text"));
+static_tr!(pub AI_ASSISTANT_FEATURE_NAME, "ai", "feature-name");
+static_tr!(pub ASK_AI_ASSISTANT_TEXT, "ai", "ask-text");
 
 pub const AI_ASSISTANT_SVG_PATH: &str = "bundled/svg/ai-assistant.svg";
 

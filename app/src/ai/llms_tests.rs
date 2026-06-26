@@ -150,6 +150,7 @@ fn endpoint(
         name: name.into(),
         url: url.into(),
         api_key: api_key.into(),
+        api_format: Default::default(),
         models,
     }
 }
@@ -387,6 +388,7 @@ fn reconcile_preserves_custom_models_saved_on_execution_profile() {
                 "local".to_string(),
                 "https://example.com/v1".to_string(),
                 "test-key".to_string(),
+                Default::default(),
                 vec![(
                     "custom-model".to_string(),
                     Some("Custom Model".to_string()),

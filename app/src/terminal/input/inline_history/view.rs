@@ -1,7 +1,5 @@
 //! Inline history menu view for up-arrow history with conversations, commands and prompts.
 use std::collections::HashSet;
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use warp_core::ui::appearance::Appearance;
 use warp_core::ui::theme::color::internal_colors;
@@ -31,7 +29,7 @@ use crate::terminal::model::session::active_session::ActiveSession;
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, ActionButtonTheme, ButtonSize};
 use crate::workspace::WorkspaceAction;
-
+use crate::static_tr;
 #[derive(Debug, Clone)]
 pub enum InlineHistoryMenuEvent {
     NavigateToConversation {
@@ -263,8 +261,8 @@ impl InlineHistoryMenuView {
 
         let menu_view = if FeatureFlag::InlineMenuHeaders.is_enabled() {
             let configure_button = ctx.add_view(|_| {
-                static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "configure"));
-                ActionButton::new(&*LABEL, ConfigureButtonTheme)
+                static_tr!(LABEL, "terminal", "configure");
+                ActionButton::new(LABEL.get(), ConfigureButtonTheme)
                     .with_icon(Icon::Settings)
                     .with_size(ButtonSize::Small)
                     .on_click(|ctx| {

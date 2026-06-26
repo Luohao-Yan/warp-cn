@@ -88,7 +88,7 @@ const DROP_SHADOW_COLOR: ColorU = ColorU {
 
 const HOVER_DEBOUNCE_PERIOD: Duration = Duration::from_millis(500);
 
-static CODE_ADD_AS_CONTEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("code", "add-as-context"));
+static_tr!(CODE_ADD_AS_CONTEXT, "code", "add-as-context");
 
 use super::diff_viewer::DiffViewer;
 use super::editor::{
@@ -101,6 +101,7 @@ use super::lsp_telemetry::LspTelemetryEvent;
 use super::ImmediateSaveError;
 use warp_core::send_telemetry_from_ctx;
 use crate::code::buffer_location::LocalOrRemotePath;
+use crate::static_tr;
 
 type SaveCallback =
     Box<dyn FnOnce(SaveOutcome, &mut ViewContext<LocalCodeEditorView>) + Send + Sync + 'static>;
@@ -1435,7 +1436,6 @@ impl LocalCodeEditorView {
     #[cfg(feature = "local_fs")]
     fn install_and_enable_lsp_for_path(path: &Path, ctx: &mut ViewContext<Self>) {
         use crate::ai::persisted_workspace::LspTask;
-
         let Some(language_id) = LanguageId::from_path(path) else {
             log::warn!("Install and enable lsp for path should only work for supported file paths");
             return;
@@ -1826,7 +1826,7 @@ impl LocalCodeEditorView {
                         Shrinkable::new(
                             1.,
                             Text::new_inline(
-                                &*CODE_ADD_AS_CONTEXT,
+                                CODE_ADD_AS_CONTEXT.get(),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )

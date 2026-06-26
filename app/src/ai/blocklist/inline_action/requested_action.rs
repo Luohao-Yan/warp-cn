@@ -10,8 +10,6 @@
 //! for an example on how that transformation could be made.
 
 use std::borrow::Cow;
-use std::sync::LazyLock;
-
 use lazy_static::lazy_static;
 use markdown_parser::{FormattedText, FormattedTextFragment, FormattedTextLine};
 use pathfinder_color::ColorU;
@@ -34,9 +32,9 @@ use crate::ai::blocklist::inline_action::inline_action_header::{
 };
 use crate::ai::blocklist::inline_action::inline_action_icons::icon_size;
 use crate::ui_components::blended_colors;
-
-static REQUESTED_ACTION_CANCEL_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-cancel"));
-static REQUESTED_ACTION_RUN_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run"));
+use crate::static_tr;
+static_tr!(REQUESTED_ACTION_CANCEL_LABEL, "ai_assistant", "ai-cancel");
+static_tr!(REQUESTED_ACTION_RUN_LABEL, "ai_assistant", "ai-run");
 
 const KEYBOARD_SHORTCUT_MARGIN_RIGHT: f32 = 8.;
 lazy_static! {

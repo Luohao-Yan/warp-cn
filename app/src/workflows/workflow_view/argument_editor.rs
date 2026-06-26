@@ -1,6 +1,4 @@
 use std::cmp::Ordering;
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use pathfinder_color::ColorU;
 use warp_core::features::FeatureFlag;
@@ -34,14 +32,14 @@ use crate::ui_components::buttons::icon_button;
 use crate::ui_components::icons::Icon;
 use crate::workflows::workflow::Workflow;
 use crate::workspace::WorkspaceAction;
-
+use crate::static_tr;
 const ARGUMENT_INPUT_HEIGHT: f32 = 30.;
-static ARGUMENT_LABEL_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "arguments-label"));
+static_tr!(ARGUMENT_LABEL_TEXT, "workflows", "arguments-label");
 const ARGUMENT_LABEL_HEIGHT: f32 = 20.;
 const ARGUMENT_LABEL_MARGIN_BOTTOM: f32 = 5.;
-static ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "argument-description-placeholder"));
-static ARGUMENT_ALIAS_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "argument-alias-description-placeholder"));
-static ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("workflows", "default-value-placeholder"));
+static_tr!(ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT, "workflows", "argument-description-placeholder");
+static_tr!(ARGUMENT_ALIAS_DESCRIPTION_PLACEHOLDER_TEXT, "workflows", "argument-alias-description-placeholder");
+static_tr!(ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT, "workflows", "default-value-placeholder");
 pub const DEFAULT_ARGUMENT_PREFIX: &str = "argument";
 
 /// Width of the argument editor in alias mode.
@@ -121,7 +119,7 @@ impl WorkflowView {
                                 ctx,
                                 Some(EDITOR_FONT_SIZE),
                                 Some(ui_font_family),
-                                Some(&*ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT),
+                                Some(ARGUMENT_DESCRIPTION_PLACEHOLDER_TEXT.get()),
                                 false, /* vim_keybindings */
                                 true,
                                 false,
@@ -138,7 +136,7 @@ impl WorkflowView {
                                 ctx,
                                 Some(EDITOR_FONT_SIZE),
                                 Some(ui_font_family),
-                                Some(&*ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT),
+                                Some(ARGUMENT_DEFAULT_VALUE_PLACEHOLDER_TEXT.get()),
                                 false, /* vim_keybindings */
                                 true,
                                 false,
@@ -564,7 +562,7 @@ impl WorkflowView {
         arguments_section_row.add_child(
             Shrinkable::new(
                 2.,
-                self.render_section_header(&*ARGUMENT_LABEL_TEXT, appearance),
+                self.render_section_header(ARGUMENT_LABEL_TEXT.get(), appearance),
             )
             .finish(),
         );
@@ -772,7 +770,7 @@ impl WorkflowView {
 
             // If the description is empty, show a placeholder text.
             if current_description.is_empty() {
-                current_description.push_str(&*ARGUMENT_ALIAS_DESCRIPTION_PLACEHOLDER_TEXT);
+                current_description.push_str(ARGUMENT_ALIAS_DESCRIPTION_PLACEHOLDER_TEXT.get());
                 styles.font_color = Some(theme.sub_text_color(theme.background()).into_solid());
             }
 

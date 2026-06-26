@@ -4,8 +4,6 @@
 
 use std::sync::Arc;
 
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use settings::Setting as _;
 use warp_cli::agent::Harness;
@@ -30,12 +28,12 @@ use crate::report_if_error;
 use crate::terminal::input::{MenuPositioning, MenuPositioningProvider};
 use crate::terminal::view::ambient_agent::AmbientAgentViewModel;
 use crate::view_components::action_button::{ActionButton, ActionButtonTheme, ButtonSize};
-
+use crate::static_tr;
 /// Tooltip string for the closed-state button.
-static BUTTON_TOOLTIP: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-harness-tooltip"));
+static_tr!(BUTTON_TOOLTIP, "agent_cloud", "agent-harness-tooltip");
 
 /// Label rendered at the top of the dropdown.
-static MENU_HEADER_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("agent_cloud", "agent-harness-header"));
+static_tr!(MENU_HEADER_LABEL, "agent_cloud", "agent-harness-header");
 
 /// Font size for the header row (Figma: 12px).
 const HEADER_FONT_SIZE: f32 = 12.;
@@ -97,7 +95,7 @@ impl HarnessSelector {
                 .with_size(ButtonSize::AgentInputButton)
                 .with_menu(true)
                 .with_disabled_theme(AgentInputButtonTheme)
-                .with_tooltip(BUTTON_TOOLTIP.as_str())
+                .with_tooltip(BUTTON_TOOLTIP.get())
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(HarnessSelectorAction::ToggleMenu);
                 })
@@ -229,7 +227,7 @@ impl HarnessSelector {
                 Some(if is_locked_to_oz {
                     crate::tr!("agent_cloud", "warp-handoff-tooltip")
                 } else {
-                    BUTTON_TOOLTIP.clone()
+                    BUTTON_TOOLTIP.get().to_owned()
                 }),
                 ctx,
             );
@@ -285,7 +283,7 @@ fn build_menu_items(
     disabled_text_color: pathfinder_color::ColorU,
 ) -> Vec<MenuItem<HarnessSelectorAction>> {
     let header = MenuItem::Header {
-        fields: MenuItemFields::new(MENU_HEADER_LABEL.as_str())
+        fields: MenuItemFields::new(MENU_HEADER_LABEL.get())
             .with_font_size_override(HEADER_FONT_SIZE)
             .with_override_text_color(header_text_color)
             .with_padding_override(HEADER_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)

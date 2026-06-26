@@ -1,8 +1,6 @@
 #[cfg(feature = "local_fs")]
 use std::path::PathBuf;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::icons;
 use warp_core::ui::icons::ICON_DIMENSIONS;
@@ -92,6 +90,7 @@ use crate::notebooks::file::MarkdownDisplayMode;
 use crate::util::file::external_editor::settings::EditorLayout;
 #[cfg(feature = "local_fs")]
 use crate::util::openable_file_type::FileTarget;
+use crate::static_tr;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AIDocumentAction {
@@ -134,7 +133,7 @@ impl From<PaneEvent> for AIDocumentEvent {
     }
 }
 
-pub static DEFAULT_PLANNING_DOCUMENT_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-default-planning-document-title"));
+static_tr!(pub DEFAULT_PLANNING_DOCUMENT_TITLE, "ai_assistant", "ai-default-planning-document-title");
 
 /// Entry for the version history dropdown menu.
 struct VersionMenuEntry {
@@ -404,10 +403,10 @@ impl AIDocumentView {
         let save_action = keybinding_name_to_keystroke(SAVE_FILE_BINDING_NAME, ctx)
             .map(|k| k.displayed())
             .unwrap_or_else(|| crate::tr!("common", "click-label").to_string());
-        static UPDATE_AGENT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-update-agent"));
+        static_tr!(UPDATE_AGENT_LABEL, "ai_assistant", "ai-update-agent");
         let tooltip_text = crate::tr!("ai_assistant", "ai-plan-update-tooltip", save_action = save_action.as_str());
         let update_plan_button = ctx.add_typed_action_view(move |_ctx| {
-            ActionButton::new(&*UPDATE_AGENT_LABEL, PrimaryTheme)
+            ActionButton::new(UPDATE_AGENT_LABEL.get(), PrimaryTheme)
                 .with_size(ButtonSize::Small)
                 .with_tooltip(tooltip_text)
                 .with_tooltip_alignment(TooltipAlignment::Right)
@@ -422,9 +421,9 @@ impl AIDocumentView {
         });
 
         // Create restore button
-        static RESTORE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-restore"));
+        static_tr!(RESTORE_LABEL, "ai_assistant", "ai-restore");
         let restore_button = ctx.add_typed_action_view(move |_ctx| {
-            ActionButton::new(&*RESTORE_LABEL, SecondaryTheme)
+            ActionButton::new(RESTORE_LABEL.get(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(

@@ -5,8 +5,6 @@
 //! the view; only `RejectRequested` flows back to the parent.
 use std::collections::HashMap;
 use std::rc::Rc;
-use std::sync::LazyLock;
-
 use ai::agent::action::{RunAgentsAgentRunConfig, RunAgentsExecutionMode, RunAgentsRequest};
 use ai::agent::action_result::{RunAgentsAgentOutcomeKind, RunAgentsResult};
 use ai::agent::orchestration_config::{OrchestrationConfig, OrchestrationConfigStatus};
@@ -70,15 +68,16 @@ use crate::view_components::compactible_action_button::{
 use crate::view_components::compactible_split_action_button::CompactibleSplitActionButton;
 use crate::view_components::dropdown::DropdownEvent;
 use crate::view_components::{FilterableDropdownEvent, FilterableDropdownOrientation};
+use crate::static_tr;
 
-static RUN_AGENTS_CARD_TITLE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-run-agents-card-title"));
+static_tr!(RUN_AGENTS_CARD_TITLE, "ai_assistant", "ai-run-agents-card-title");
 
-static REJECT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-reject-label"));
-static ACCEPT_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-accept-label"));
-static ORCHESTRATION_DISABLED_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-orchestration-disabled-message"));
-static CONFIGURING_AGENTS: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-configuring-agents"));
-static SPAWN_AGENTS_CANCELLED: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-spawn-agents-cancelled"));
-static FAILED_TO_START_ORCHESTRATION: LazyLock<String> = LazyLock::new(|| crate::tr!("ai_assistant", "ai-failed-to-start-orchestration"));
+static_tr!(REJECT_LABEL, "ai_assistant", "ai-reject-label");
+static_tr!(ACCEPT_LABEL, "ai_assistant", "ai-accept-label");
+static_tr!(ORCHESTRATION_DISABLED_MESSAGE, "ai_assistant", "ai-orchestration-disabled-message");
+static_tr!(CONFIGURING_AGENTS, "ai_assistant", "ai-configuring-agents");
+static_tr!(SPAWN_AGENTS_CANCELLED, "ai_assistant", "ai-spawn-agents-cancelled");
+static_tr!(FAILED_TO_START_ORCHESTRATION, "ai_assistant", "ai-failed-to-start-orchestration");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -320,7 +319,7 @@ impl RunAgentsCardView {
         let accept_keystroke = ENTER_KEYSTROKE.clone();
 
         let reject_button = CompactibleActionButton::new(
-            REJECT_LABEL.clone(),
+            REJECT_LABEL.get().to_owned(),
             Some(KeystrokeSource::Fixed(reject_keystroke)),
             ButtonSize::Small,
             RunAgentsCardViewAction::Reject,
@@ -330,7 +329,7 @@ impl RunAgentsCardView {
         );
         let position_id_prefix = format!("{action_id:?}");
         let accept_button = CompactibleSplitActionButton::new(
-            ACCEPT_LABEL.clone(),
+            ACCEPT_LABEL.get().to_owned(),
             Some(KeystrokeSource::Fixed(accept_keystroke)),
             ButtonSize::Small,
             RunAgentsCardViewAction::Accept,
@@ -992,7 +991,7 @@ impl View for RunAgentsCardView {
         // because restored blocks have no pending action status.
         if self.block_model.is_restored() {
             return render_status_only_card(
-                SPAWN_AGENTS_CANCELLED.clone(),
+                SPAWN_AGENTS_CANCELLED.get().to_owned(),
                 appearance,
                 StatusKind::Cancelled,
                 app,
@@ -1004,7 +1003,7 @@ impl View for RunAgentsCardView {
         // and the action is queued for user confirmation).
         if !matches!(status, Some(AIActionStatus::Blocked)) {
             return render_status_only_card(
-                CONFIGURING_AGENTS.clone(),
+                CONFIGURING_AGENTS.get().to_owned(),
                 appearance,
                 StatusKind::Spawning,
                 app,
@@ -1270,7 +1269,7 @@ fn render_confirmation_card(
 
 fn render_header(handles: &RunAgentsCardHandles, app: &AppContext) -> Box<dyn Element> {
     let appearance = Appearance::as_ref(app);
-    let mut config = HeaderConfig::new(RUN_AGENTS_CARD_TITLE.as_str(), app)
+    let mut config = HeaderConfig::new(RUN_AGENTS_CARD_TITLE.get(), app)
         .with_icon(icons::yellow_stop_icon(appearance))
         .with_corner_radius_override(CornerRadius::with_top(Radius::Pixels(8.)));
 
@@ -1394,7 +1393,7 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
         }
         RunAgentsResult::Denied { reason } => {
             let body = if reason.is_empty() {
-                ORCHESTRATION_DISABLED_MESSAGE.clone()
+                ORCHESTRATION_DISABLED_MESSAGE.get().to_owned()
             } else {
                 crate::tr!("ai_assistant", "ai-orchestration-disabled-with-reason", reason = reason.as_str())
             };
@@ -1402,7 +1401,7 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
         }
         RunAgentsResult::Failure { error } => {
             let label = if error.is_empty() {
-                FAILED_TO_START_ORCHESTRATION.clone()
+                FAILED_TO_START_ORCHESTRATION.get().to_owned()
             } else {
                 crate::tr!("ai_assistant", "ai-failed-to-start-orchestration-with-error", error = error.as_str())
             };

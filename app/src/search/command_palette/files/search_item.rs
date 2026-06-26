@@ -1,8 +1,5 @@
 use std::fmt::Debug;
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
-
 use fuzzy_match::FuzzyMatchResult;
 use ordered_float::OrderedFloat;
 use warp_util::path::LineAndColumnArg;
@@ -17,9 +14,9 @@ use crate::search::files::icon::icon_from_file_path;
 use crate::search::item::{IconLocation, SearchItem};
 use crate::search::result_renderer::ItemHighlightState;
 use crate::ui_components::render_file_search_row::{render_file_search_row, FileSearchRowOptions};
-
-static NAVIGATE_DIRECTORY_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "file-navigate-directory").clone());
-static OPEN_FILE_HELP: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "file-open-file").clone());
+use crate::static_tr;
+static_tr!(NAVIGATE_DIRECTORY_HELP, "search", "file-navigate-directory");
+static_tr!(OPEN_FILE_HELP, "search", "file-open-file");
 
 #[derive(Debug)]
 pub struct FileSearchItem {
@@ -112,9 +109,9 @@ impl SearchItem for FileSearchItem {
 
     fn accessibility_help_message(&self) -> Option<String> {
         Some(if self.is_directory {
-            NAVIGATE_DIRECTORY_HELP.clone()
+            NAVIGATE_DIRECTORY_HELP.get().to_owned()
         } else {
-            OPEN_FILE_HELP.clone()
+            OPEN_FILE_HELP.get().to_owned()
         })
     }
 

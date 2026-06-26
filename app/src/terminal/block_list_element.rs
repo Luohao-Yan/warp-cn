@@ -7,8 +7,6 @@ use std::ops::{Deref, Range, RangeInclusive};
 use std::rc::Rc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
-use std::sync::LazyLock;
-
 use enum_iterator::Sequence;
 use itertools::Itertools;
 use parking_lot::FairMutex;
@@ -94,6 +92,7 @@ use crate::terminal::{grid_renderer, SizeInfo};
 use crate::themes::theme::{Fill, WarpTheme};
 use crate::ui_components::{self, icons as UIIcon};
 use crate::util::color::Opacity;
+use crate::static_tr;
 
 /// The number of pixels at the bottom of padding where selection scrolling is performed.
 const BOTTOM_VERTICAL_MARGIN: f32 = 10.0;
@@ -152,14 +151,11 @@ const LINEAR_SCROLLING: ScrollingAcceleration = ScrollingAcceleration::Polynomia
 /// have a height that extends down to the bottom of the window when there's a horizontal scroll bar, which messes with the on-hover behavior.
 const BLOCK_HOVER_BUTTON_HEIGHT: f32 = 28.;
 
-static TAG_AGENT_FOR_ASSISTANCE_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "block-tag-agent"));
+static_tr!(TAG_AGENT_FOR_ASSISTANCE_TEXT, "terminal", "block-tag-agent");
 
-static SAVE_AS_WORKFLOW_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "block-save-workflow"));
+static_tr!(SAVE_AS_WORKFLOW_TEXT, "terminal", "block-save-workflow");
 
-static SAVE_AS_WORKFLOW_SECRETS_TEXT: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "block-secrets-cannot-save"));
+static_tr!(SAVE_AS_WORKFLOW_SECRETS_TEXT, "terminal", "block-secrets-cannot-save");
 
 enum ScrollingAcceleration {
     Polynomial(f32),
@@ -1169,18 +1165,18 @@ impl BlockListElement {
                 if has_active_long_running_command && active_block.index() == block_index {
                     (
                         Some(TerminalAction::SetInputModeAgent),
-                        TAG_AGENT_FOR_ASSISTANCE_TEXT.as_str(),
+                        TAG_AGENT_FOR_ASSISTANCE_TEXT.get(),
                     )
                 } else {
                     (
                         Some(TerminalAction::AskAIAssistant { block_index }),
-                        ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.as_str(),
+                        ATTACH_AS_AGENT_MODE_CONTEXT_TEXT.get(),
                     )
                 }
             } else {
                 (
                     Some(TerminalAction::AskAIAssistant { block_index }),
-                    ASK_AI_ASSISTANT_TEXT.as_str(),
+                    ASK_AI_ASSISTANT_TEXT.get(),
                 )
             };
 
@@ -3077,7 +3073,6 @@ impl BlockListElement {
         ctx: &mut EventContext,
     ) -> bool {
         use crate::terminal::view::TerminalAction;
-
         if let Some(voice_input_toggle_key_code) = self.voice_input_toggle_key_code {
             if *key_code == voice_input_toggle_key_code {
                 ctx.dispatch_typed_action(TerminalAction::ToggleCLIAgentVoiceInput(

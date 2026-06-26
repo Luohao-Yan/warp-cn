@@ -1,11 +1,9 @@
-use std::sync::LazyLock;
-
 use warpui::elements::MouseStateHandle;
 use warpui::Element;
 
 use crate::appearance::Appearance;
 use crate::terminal::view::TerminalAction;
-
+use crate::static_tr;
 use super::{
     render_inline_block_list_banner, InlineBannerButtonState, InlineBannerCloseButton,
     InlineBannerContent, InlineBannerIcon, InlineBannerStyle, InlineBannerTextButton,
@@ -15,8 +13,7 @@ use super::{
 const AWS_CLI_INSTALL_DOCS_URL: &str =
     "https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html";
 
-static TERMINAL_AWS_CLI_REQUIRED: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("terminal", "aws-cli-required"));
+static_tr!(TERMINAL_AWS_CLI_REQUIRED, "terminal", "aws-cli-required");
 
 pub struct AwsCliNotInstalledBannerState {
     pub id: usize,
@@ -73,7 +70,7 @@ pub fn render_aws_cli_not_installed_banner(
     });
 
     let description_text = warpui::elements::Text::new(
-        &*TERMINAL_AWS_CLI_REQUIRED,
+        TERMINAL_AWS_CLI_REQUIRED.get(),
         appearance.ui_font_family(),
         appearance.monospace_font_size() - 2.,
     )

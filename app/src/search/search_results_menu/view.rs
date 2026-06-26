@@ -1,7 +1,5 @@
 use std::marker::PhantomData;
 use std::ops::Range;
-use std::sync::LazyLock;
-
 use itertools::Itertools;
 use warpui::elements::{
     ConstrainedBox, Container, Empty, Flex, ParentElement, SavePosition, ScrollStateHandle,
@@ -13,7 +11,7 @@ use warpui::{
     ViewHandle, WeakViewHandle,
 };
 
-static NO_RESULTS_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "no-results").clone());
+static_tr!(NO_RESULTS_LABEL, "search", "no-results");
 
 use super::styles::{ESTIMATED_RESULT_HEIGHT, MAX_DISPLAYED_RESULT_COUNT};
 use crate::appearance::Appearance;
@@ -22,7 +20,7 @@ use crate::search::search_bar::{
     CreateQueryResultRendererFn, SearchBar, SearchBarEvent, SearchBarState, SearchResultOrdering,
 };
 use crate::search::QueryFilter;
-
+use crate::static_tr;
 const HEADER_HORIZONTAL_PADDING: f32 = 16.;
 const HEADER_VERTICAL_PADDING: f32 = 4.;
 
@@ -194,7 +192,7 @@ impl<T: Action + Clone> SearchResultsMenuView<T> {
         let theme = appearance.theme();
         Container::new(
             Text::new(
-                NO_RESULTS_LABEL.as_str(),
+                NO_RESULTS_LABEL.get(),
                 appearance.ui_font_family(),
                 appearance.monospace_font_size(),
             )

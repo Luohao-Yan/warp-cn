@@ -1,4 +1,3 @@
-use std::sync::LazyLock;
 use markdown_parser::{
     FormattedText, FormattedTextFragment, FormattedTextLine, FormattedTextStyles, Hyperlink,
 };
@@ -22,6 +21,7 @@ use warpui::{
 use crate::appearance::Appearance;
 use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, ActionButtonTheme, ButtonSize};
+use crate::static_tr;
 
 const MODAL_WIDTH: f32 = 420.;
 const HERO_HEIGHT: f32 = 92.;
@@ -74,7 +74,6 @@ fn feature_items() -> Vec<FeatureItem> {
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
-
     app.register_fixed_bindings([FixedBinding::new(
         "escape",
         OpenWarpLaunchModalAction::Close,
@@ -146,8 +145,8 @@ impl OpenWarpLaunchModal {
         });
 
         let cta_button = ctx.add_view(|_ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("workspace", "openwarp-visit-repo"));
-            ActionButton::new(&*LABEL, CtaButtonTheme)
+            static_tr!(LABEL, "workspace", "openwarp-visit-repo");
+            ActionButton::new(LABEL.get(), CtaButtonTheme)
                 .with_full_width(true)
                 .on_click(|ctx| ctx.dispatch_typed_action(OpenWarpLaunchModalAction::VisitRepo))
         });

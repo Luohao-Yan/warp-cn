@@ -1,7 +1,5 @@
 use std::path::Path;
 use std::sync::Arc;
-use std::sync::LazyLock;
-
 use pathfinder_color::ColorU;
 use pathfinder_geometry::vector::vec2f;
 use warp_core::ui::theme::{Fill, WarpTheme};
@@ -19,6 +17,7 @@ use warpui::{Element, EventContext};
 use crate::appearance::Appearance;
 use crate::tab_configs::session_config::SessionType;
 use crate::ui_components::blended_colors;
+use crate::static_tr;
 use crate::view_components::callout_bubble::{
     callout_checkbox, callout_label_color, phenomenon_accent_color, phenomenon_background_color,
     phenomenon_body_text_color, phenomenon_disabled_label_text_color, phenomenon_foreground_color,
@@ -27,16 +26,11 @@ use crate::view_components::callout_bubble::{
 
 const PILL_GAP: f32 = 8.;
 
-static TAB_SELECT_DIRECTORY: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "select-directory"));
-static TAB_SELECT_GIT_REPO: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "select-git-repo"));
-static TAB_AUTO_CREATE_WORKTREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "auto-create-worktree"));
-static TAB_MUST_SELECT_WORKTREE: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "must-select-worktree"));
-static TAB_AUTO_GENERATE_BRANCH: LazyLock<String> =
-    LazyLock::new(|| crate::tr!("workspace", "auto-generate-branch"));
+static_tr!(TAB_SELECT_DIRECTORY, "workspace", "select-directory");
+static_tr!(TAB_SELECT_GIT_REPO, "workspace", "select-git-repo");
+static_tr!(TAB_AUTO_CREATE_WORKTREE, "workspace", "auto-create-worktree");
+static_tr!(TAB_MUST_SELECT_WORKTREE, "workspace", "must-select-worktree");
+static_tr!(TAB_AUTO_GENERATE_BRANCH, "workspace", "auto-generate-branch");
 
 fn session_type_item_color(
     is_selected: bool,
@@ -236,7 +230,7 @@ where
     let on_accent_bg = bg.is_some();
 
     let label = Text::new_inline(
-        &*TAB_SELECT_DIRECTORY,
+        TAB_SELECT_DIRECTORY.get(),
         appearance.ui_font_family(),
         12.,
     )
@@ -368,7 +362,7 @@ where
             if state.is_hovered() {
                 let tooltip = Container::new(
                     Text::new_inline(
-                        &*TAB_SELECT_GIT_REPO,
+                        TAB_SELECT_GIT_REPO.get(),
                         font_family,
                         12.,
                     )
@@ -412,7 +406,7 @@ where
         blended_colors::text_sub(theme, theme.background())
     };
     let label = Text::new(
-        &*TAB_AUTO_CREATE_WORKTREE,
+        TAB_AUTO_CREATE_WORKTREE.get(),
         appearance.ui_font_family(),
         12.,
     )
@@ -499,7 +493,7 @@ where
             if state.is_hovered() {
                 let tooltip = Container::new(
                     Text::new_inline(
-                        &*TAB_MUST_SELECT_WORKTREE,
+                        TAB_MUST_SELECT_WORKTREE.get(),
                         font_family,
                         12.,
                     )
@@ -544,7 +538,7 @@ where
     };
 
     let label = Text::new(
-        &*TAB_AUTO_GENERATE_BRANCH,
+        TAB_AUTO_GENERATE_BRANCH.get(),
         appearance.ui_font_family(),
         12.,
     )

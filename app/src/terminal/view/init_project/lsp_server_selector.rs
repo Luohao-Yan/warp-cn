@@ -1,6 +1,4 @@
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use lsp::supported_servers::LSPServerType;
 use warpui::elements::{
     Border, ChildView, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Expanded, Flex,
@@ -20,6 +18,7 @@ use crate::ai::blocklist::inline_action::inline_action_header::INLINE_ACTION_HOR
 use crate::ai::blocklist::inline_action::inline_action_icons::icon_size;
 use crate::appearance::Appearance;
 use crate::ui_components::blended_colors;
+use crate::static_tr;
 
 
 #[derive(Debug, Clone)]
@@ -28,7 +27,7 @@ pub struct LSPServerInfo {
     pub is_installed: bool,
 }
 
-static TERMINAL_ENABLE_LANG_SUPPORT: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "enable-lang-support-desc"));
+static_tr!(TERMINAL_ENABLE_LANG_SUPPORT, "terminal", "enable-lang-support-desc");
 
 /// Creates a ToggleableItemsView configured for LSP server selection.
 pub fn create_lsp_server_selector(
@@ -65,7 +64,6 @@ pub fn create_lsp_server_selector(
         &view_handle,
         move |parent_me, lsp_view_handle, event, parent_ctx| {
             use crate::ai::blocklist::block::toggleable_items::ToggleableItemsEvent;
-
             match event {
                 ToggleableItemsEvent::SelectionChanged => {
                     // Notify to trigger re-render (button state may have changed)
@@ -130,7 +128,7 @@ pub fn render_lsp_selector_block(
     );
 
     let title_element = Span::new(
-        &*TERMINAL_ENABLE_LANG_SUPPORT,
+        TERMINAL_ENABLE_LANG_SUPPORT.get(),
         UiComponentStyles {
             font_family_id: Some(appearance.ui_font_family()),
             font_color: Some(blended_colors::text_main(appearance.theme(), header_background)),

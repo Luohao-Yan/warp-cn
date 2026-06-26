@@ -71,3 +71,8 @@ resource-center-sign-up-benefits = 免费注册以增加存储限制并解锁更
 
 
 ## -- 已迁移 UI 字符串的双前缀别名 --
+
+## -- Drive 导入字符串 --
+
+resource-center-choose-files = 选择文件...
+resource-center-preparing = 准备中...

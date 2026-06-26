@@ -254,12 +254,7 @@ notebooks-move-to-space-prefix = Move to {""}
 
 ## -- Notebook additional bindings --
 
-notebooks-increase-font-size = Increase notebook font size
-notebooks-decrease-font-size = Decrease notebook font size
 notebooks-reset-font-size = Reset notebook font size
-notebooks-focus-terminal-input-from-notebook = Focus Terminal Input from Notebook
-notebooks-focus-terminal-input-from-file = Focus Terminal Input from File
-notebooks-reload-file = Reload file
 notebooks-link-copied = Link copied
 
 ## -- Primary keys for migrated UI strings --
@@ -272,14 +267,8 @@ notebooks-copy-notebook-contents-to-personal-tooltip = Copy notebook contents in
 
 ## -- Additional notebook strings --
 
-notebooks-conflict-resolution-message = This notebook could not be saved because changes were made while you were editing. Please copy your work and refresh.
-notebooks-refresh-notebook = Refresh notebook
 notebooks-remove-link-a11y = Remove link
 notebooks-convert-to-block-a11y = Convert to { $block_label }
-notebooks-enable-regex-search-a11y = Enable regex search
-notebooks-disable-regex-search-a11y = Disable regex search
-notebooks-enable-case-sensitive-search-a11y = Enable case-sensitive search
-notebooks-disable-case-sensitive-search-a11y = Disable case-sensitive search
 notebooks-focus-next-match-a11y = Focus next match
 notebooks-focus-previous-match-a11y = Focus previous match
 notebooks-close-find-bar-a11y = Close find bar
@@ -292,14 +281,8 @@ notebooks-command-from = Command from { $location_name }
 notebooks-could-not-read = Could not read { $name }
 notebooks-loading-file = Loading { $name }...
 notebooks-editor-is-editing = { $editor } is editing
-notebooks-pasting-a11y = Pasting: { $content }
-notebooks-copy-link-a11y = Copy Link
-notebooks-open-link-a11y = Open link: { $url }
-notebooks-secondary-click-a11y = Secondary click on { $url }
 notebooks-modifier-click-a11y = [{ $modifier } Click]
-notebooks-insert-block-a11y = Insert { $block } block
 notebooks-change-lang-a11y = Change code block language to { $language }
-notebooks-copy-code-block-a11y = Copy code block
 notebooks-open-embed-search-a11y = Open embedded object search menu
 
 ## -- Double-prefix aliases for additional file notebook and editor strings ----------

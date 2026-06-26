@@ -36,6 +36,7 @@ use crate::util::bindings::{
     CommandBinding,
 };
 use crate::{send_telemetry_from_ctx, themes, TelemetryEvent};
+use crate::static_tr;
 
 const FONT_DELTA: f32 = 2.;
 const CANCEL_SAVE_BUTTONS_SPACING: f32 = 4.0;
@@ -45,24 +46,22 @@ const ROW_LEFT_MARGIN: f32 = 20.0;
 const ROW_HEIGHT: f32 = 28.;
 const EDIT_BUTTONS_BORDER_RADIUS: f32 = 4.0;
 
-use std::sync::LazyLock;
-
 pub fn search_placeholder() -> String {
     crate::tr!("settings", "keybindings-search-placeholder")
 }
 
-static SHORTCUT_CONFLICT_WARNING_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "shortcut-conflict-warning"));
+static_tr!(SHORTCUT_CONFLICT_WARNING_TEXT, "settings", "shortcut-conflict-warning");
 const KEYBINDINGS_PAGE_SHORTCUT: &str = "workspace:toggle_keybindings_page";
-static CONFIGURE_KEYBOARD_SHORTCUTS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "configure-keyboard-shortcuts"));
-static COMMAND_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "command-label"));
-static RESET_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "default-button"));
-static CANCEL_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "cancel-button"));
-static CLEAR_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "clear-button"));
-static SAVE_BUTTON_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "save-button"));
-static PRESS_NEW_SHORTCUT: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "press-new-shortcut"));
-static ADD_CUSTOM_KEYBINDINGS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "add-custom-keybindings"));
-static USE_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "use-label"));
-static TO_REFERENCE_KEYBINDINGS: LazyLock<String> = LazyLock::new(|| crate::tr!("settings", "to-reference-keybindings"));
+static_tr!(CONFIGURE_KEYBOARD_SHORTCUTS, "settings", "configure-keyboard-shortcuts");
+static_tr!(COMMAND_LABEL, "settings", "command-label");
+static_tr!(RESET_BUTTON_TEXT, "settings", "default-button");
+static_tr!(CANCEL_BUTTON_TEXT, "settings", "cancel-button");
+static_tr!(CLEAR_BUTTON_TEXT, "settings", "clear-button");
+static_tr!(SAVE_BUTTON_TEXT, "settings", "save-button");
+static_tr!(PRESS_NEW_SHORTCUT, "settings", "press-new-shortcut");
+static_tr!(ADD_CUSTOM_KEYBINDINGS, "settings", "add-custom-keybindings");
+static_tr!(USE_LABEL, "settings", "use-label");
+static_tr!(TO_REFERENCE_KEYBINDINGS, "settings", "to-reference-keybindings");
 
 /// Notifier for custom keybinding changed. Views could subscribe to this for
 /// KeybindingChangedEvent.
@@ -324,7 +323,7 @@ impl KeybindingRow {
     ) -> Box<dyn Element> {
         let conflict_warning = if has_conflicting_binding {
             render_text(
-                SHORTCUT_CONFLICT_WARNING_TEXT.as_str(),
+                SHORTCUT_CONFLICT_WARNING_TEXT.get(),
                 Some(UiComponentStyles {
                     font_weight: Some(Weight::Bold),
                     ..Default::default()
@@ -335,7 +334,7 @@ impl KeybindingRow {
             Empty::new().finish()
         };
 
-        let press_new_shortcut_text = render_text(&*PRESS_NEW_SHORTCUT, None, appearance);
+        let press_new_shortcut_text = render_text(PRESS_NEW_SHORTCUT.get(), None, appearance);
 
         let new_shortcut_element = Container::new(press_new_shortcut_text)
             .with_margin_left(ROW_LEFT_MARGIN)
@@ -411,7 +410,7 @@ impl KeybindingRow {
                 self.mouse_state_handles.remove_mouse_state.clone(),
                 |state| {
                     render_button(
-                        CLEAR_BUTTON_TEXT.as_str(),
+                        CLEAR_BUTTON_TEXT.get(),
                         appearance,
                         self.get_button_text_color(appearance, state),
                     )
@@ -432,7 +431,7 @@ impl KeybindingRow {
                     .clone(),
                 |state| {
                     render_button(
-                        RESET_BUTTON_TEXT.as_str(),
+                        RESET_BUTTON_TEXT.get(),
                         appearance,
                         self.get_button_text_color(appearance, state),
                     )
@@ -454,12 +453,12 @@ impl KeybindingRow {
                     let cancel_button_color = self.get_button_text_color(appearance, state);
                     if index == 0 {
                         SavePosition::new(
-                            render_button(CANCEL_BUTTON_TEXT.as_str(), appearance, cancel_button_color),
+                            render_button(CANCEL_BUTTON_TEXT.get(), appearance, cancel_button_color),
                             "first_keybinding_cancel",
                         )
                         .finish()
                     } else {
-                        render_button(CANCEL_BUTTON_TEXT.as_str(), appearance, cancel_button_color)
+                        render_button(CANCEL_BUTTON_TEXT.get(), appearance, cancel_button_color)
                     }
                 },
             )
@@ -476,7 +475,7 @@ impl KeybindingRow {
         let save = Container::new(
             Hoverable::new(self.mouse_state_handles.save_mouse_state.clone(), |state| {
                 render_button(
-                    SAVE_BUTTON_TEXT.as_str(),
+                    SAVE_BUTTON_TEXT.get(),
                     appearance,
                     self.get_button_text_color(appearance, state),
                 )
@@ -850,7 +849,6 @@ impl TypedActionView for KeybindingsView {
 
     fn handle_action(&mut self, action: &Self::Action, ctx: &mut ViewContext<Self>) {
         use KeybindingsViewAction::*;
-
         match action {
             RemoveKeyStroke(index) => self.remove_keystroke(*index, ctx),
             ResetToDefaultKeyStroke(index) => self.reset_to_default_keystroke(*index, ctx),
@@ -983,7 +981,7 @@ impl KeybindingsWidget {
     ) -> Box<dyn Element> {
         let font_size = appearance.ui_font_size() + FONT_DELTA;
         let mut description = Flex::column().with_child(render_text(
-            &*ADD_CUSTOM_KEYBINDINGS,
+            ADD_CUSTOM_KEYBINDINGS.get(),
             Some(UiComponentStyles {
                 font_size: Some(font_size),
                 font_color: Some(
@@ -1009,7 +1007,7 @@ impl KeybindingsWidget {
                 Wrap::row()
                     .with_child(
                         Container::new(render_text(
-                            &*USE_LABEL,
+                            USE_LABEL.get(),
                             Some(UiComponentStyles {
                                 font_size: Some(font_size),
                                 font_color: Some(
@@ -1038,7 +1036,7 @@ impl KeybindingsWidget {
                     )
                     .with_child(
                         Container::new(render_text(
-                            &*TO_REFERENCE_KEYBINDINGS,
+                            TO_REFERENCE_KEYBINDINGS.get(),
                             Some(UiComponentStyles {
                                 font_size: Some(font_size),
                                 font_color: Some(
@@ -1126,7 +1124,7 @@ impl SettingsWidget for KeybindingsWidget {
 
         let subheader = render_sub_header(
             appearance,
-            &*CONFIGURE_KEYBOARD_SHORTCUTS,
+            CONFIGURE_KEYBOARD_SHORTCUTS.get(),
             local_only_icon_state,
         );
         let description = self.render_description(view.bindings.as_ref(), appearance);
@@ -1136,7 +1134,7 @@ impl SettingsWidget for KeybindingsWidget {
             .with_child(description)
             .with_child(render_columns(
                 Container::new(render_text(
-                    &*COMMAND_LABEL,
+                    COMMAND_LABEL.get(),
                     Some(UiComponentStyles {
                         font_size: Some(appearance.ui_font_size() + FONT_DELTA),
                         ..Default::default()

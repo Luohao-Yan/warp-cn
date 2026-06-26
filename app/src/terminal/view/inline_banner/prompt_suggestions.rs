@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use serde::Serialize;
 use std::rc::Rc;
 
@@ -41,12 +39,12 @@ use crate::ui_components::icons::Icon as WarpUIIcon;
 use crate::util::bindings::keybinding_name_to_keystroke;
 use crate::workspace::WorkspaceAction;
 use crate::workspaces::user_workspaces::UserWorkspaces;
-
+use crate::static_tr;
 const INLINE_BANNER_SPACING: f32 = 8.;
 const INLINE_BANNER_BUTTON_PADDING: f32 = 8.;
 
-static DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "restricted-due-to-payment-issue"));
-static OUT_OF_REQUESTS_TOOLTIP_MESSAGE: LazyLock<String> = LazyLock::new(|| crate::tr!("terminal", "out-of-credits"));
+static_tr!(DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE, "terminal", "restricted-due-to-payment-issue");
+static_tr!(OUT_OF_REQUESTS_TOOLTIP_MESSAGE, "terminal", "out-of-credits");
 
 /// Types of zero-state prompt suggestions.
 #[derive(Debug, Copy, Clone, Serialize)]
@@ -296,14 +294,14 @@ fn get_tooltip_text_for_alert_state(alert_state: &PromptAlertState) -> Option<St
     // so we can keep the tooltip's text relatively minimal and just capture broad groups.
     match alert_state {
         PromptAlertState::DelinquentDueToPaymentIssue => {
-            Some(DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE.clone())
+            Some(DELINQUENT_DUE_TO_PAYMENT_ISSUE_TOOLTIP_MESSAGE.get().to_owned())
         }
         PromptAlertState::RequestLimitReached
         | PromptAlertState::AnonymousUserRequestLimitHardGate
         | PromptAlertState::AnonymousUserRequestLimitSoftGate
         | PromptAlertState::OveragesToggleableButNotEnabled
         | PromptAlertState::MonthlyOveragesSpendLimitReached => {
-            Some(OUT_OF_REQUESTS_TOOLTIP_MESSAGE.clone())
+            Some(OUT_OF_REQUESTS_TOOLTIP_MESSAGE.get().to_owned())
         }
         _ => None,
     }

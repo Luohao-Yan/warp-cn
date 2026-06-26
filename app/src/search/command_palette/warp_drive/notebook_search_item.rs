@@ -17,10 +17,8 @@ use crate::search::notebooks::fuzzy_match::{
 };
 use crate::search::result_renderer::ItemHighlightState;
 use crate::ui_components::icons::Icon;
-use std::sync::LazyLock;
-
-
-static UNTITLED_LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("search", "untitled").clone());
+use crate::static_tr;
+static_tr!(UNTITLED_LABEL, "search", "untitled");
 
 /// Search item result for a cloud notebook.
 #[derive(Debug)]
@@ -66,7 +64,7 @@ impl SearchItem for NotebookSearchItem {
     ) -> Box<dyn Element> {
         let appearance = Appearance::as_ref(app);
         let title = if self.cloud_notebook.model().title.is_empty() {
-            UNTITLED_LABEL.clone()
+            UNTITLED_LABEL.get().to_owned()
         } else {
             self.cloud_notebook.model().title.clone()
         };

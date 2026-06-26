@@ -1,6 +1,4 @@
 use std::path::PathBuf;
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::vec2f;
 use warpui::elements::{
     ChildAnchor, ChildView, ConstrainedBox, Container, CrossAxisAlignment, Flex,
@@ -20,6 +18,7 @@ use super::session_config::{is_git_repo, SessionConfigSelection, SessionType};
 use super::session_config_rendering;
 use crate::appearance::Appearance;
 use crate::ui_components::blended_colors;
+use crate::static_tr;
 use crate::view_components::action_button::{
     ActionButton, ButtonSize, KeystrokeSource, NakedTheme, PrimaryTheme,
 };
@@ -87,8 +86,8 @@ impl SessionConfigModal {
         });
 
         let submit_button = ctx.add_view(|ctx| {
-            static LABEL: LazyLock<String> = LazyLock::new(|| crate::tr!("common", "get-warping"));
-            ActionButton::new(&*LABEL, PrimaryTheme)
+            static_tr!(LABEL, "common", "get-warping");
+            ActionButton::new(LABEL.get(), PrimaryTheme)
                 .with_full_width(true)
                 .with_keybinding(
                     KeystrokeSource::Fixed(Keystroke::parse("enter").unwrap_or_default()),

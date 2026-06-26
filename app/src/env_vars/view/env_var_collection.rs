@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use pathfinder_geometry::vector::{vec2f, Vector2F};
 use warp_core::features::FeatureFlag;
 use warpui::clipboard::ClipboardContent;
@@ -58,7 +56,7 @@ use crate::view_components::alert::AlertConfig;
 use crate::view_components::{Alert, DismissibleToast, ToastType};
 use crate::workspace::ToastStack;
 use crate::{send_telemetry_from_ctx, Appearance, CloudObjectTypeAndId, TelemetryEvent};
-
+use crate::static_tr;
 // Universal
 pub(super) const CORE_HORIZONATAL_MARGIN: f32 = 24.;
 pub(super) const CORE_MAX_WIDTH: f32 = 800.;
@@ -77,14 +75,14 @@ const DESCRIPTION_BOTTOM_MARGIN: f32 = 12.;
 const DIVIDER_BOTTOM_MARGIN: f32 = 4.;
 const PLACEHOLDER_FONT_SIZE: f32 = 14.;
 
-static VARIABLE_VALUE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "value-label"));
-static VARIABLE_DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "description-label"));
-static VARIABLE_NAME_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "variable-label"));
-pub static EDUCATION_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "education-text"));
+static_tr!(VARIABLE_VALUE_PLACEHOLDER_TEXT, "env_vars", "value-label");
+static_tr!(VARIABLE_DESCRIPTION_PLACEHOLDER_TEXT, "env_vars", "description-label");
+static_tr!(VARIABLE_NAME_PLACEHOLDER_TEXT, "env_vars", "variable-label");
+static_tr!(pub EDUCATION_TEXT, "env_vars", "education-text");
 
 // Text input fields
-static TITLE_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "title-placeholder"));
-static DESCRIPTION_PLACEHOLDER_TEXT: LazyLock<String> = LazyLock::new(|| crate::tr!("env_vars", "description-placeholder"));
+static_tr!(TITLE_PLACEHOLDER_TEXT, "env_vars", "title-placeholder");
+static_tr!(DESCRIPTION_PLACEHOLDER_TEXT, "env_vars", "description-placeholder");
 
 // Button spacing
 const BUTTON_CONTAINER_HORIZONTAL_MARGIN: f32 = 36.;
@@ -510,14 +508,14 @@ impl EnvVarCollectionView {
             ctx,
             Some(PLACEHOLDER_FONT_SIZE),
             Some(ui_font_family),
-            Some(TITLE_PLACEHOLDER_TEXT.as_str()),
+            Some(TITLE_PLACEHOLDER_TEXT.get()),
             true,
         );
         let description_editor = Self::create_editor_handle(
             ctx,
             Some(PLACEHOLDER_FONT_SIZE),
             Some(ui_font_family),
-            Some(DESCRIPTION_PLACEHOLDER_TEXT.as_str()),
+            Some(DESCRIPTION_PLACEHOLDER_TEXT.get()),
             false,
         );
         ctx.subscribe_to_view(&title_editor, |me, _, event, ctx| {
@@ -877,7 +875,7 @@ impl EnvVarCollectionView {
             ctx,
             Some(VARIABLE_FONT_SIZE),
             Some(ui_font_family),
-            Some(VARIABLE_NAME_PLACEHOLDER_TEXT.as_str()),
+            Some(VARIABLE_NAME_PLACEHOLDER_TEXT.get()),
             true,
         );
 
@@ -889,7 +887,7 @@ impl EnvVarCollectionView {
             ctx,
             Some(VARIABLE_FONT_SIZE),
             Some(ui_font_family),
-            Some(VARIABLE_VALUE_PLACEHOLDER_TEXT.as_str()),
+            Some(VARIABLE_VALUE_PLACEHOLDER_TEXT.get()),
             true,
         );
 
@@ -901,7 +899,7 @@ impl EnvVarCollectionView {
             ctx,
             Some(VARIABLE_FONT_SIZE),
             Some(ui_font_family),
-            Some(VARIABLE_DESCRIPTION_PLACEHOLDER_TEXT.as_str()),
+            Some(VARIABLE_DESCRIPTION_PLACEHOLDER_TEXT.get()),
             true,
         );
 
@@ -1134,7 +1132,7 @@ impl EnvVarCollectionView {
                     .finish()
                 } else {
                     appearance.ui_builder().tool_tip_on_element(
-                        EDUCATION_TEXT.clone(),
+                        EDUCATION_TEXT.get().to_owned(),
                         self.button_mouse_states.secret_tooltip_state.clone(),
                         icon_button_with_context_menu(
                             Icon::Key,
