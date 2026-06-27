@@ -199,14 +199,14 @@ pub fn init(app: &mut AppContext) {
         FixedBinding::custom(
             CustomAction::IncreaseFontSize,
             NotebookAction::IncreaseFontSize,
-            "Increase font size",
+            &crate::tr!("notebooks", "increase-font-size"),
             id!("NotebookView") & id!("NotMatchNotebookToMonospaceSize"),
         )
         .with_group(bindings::BindingGroup::Settings.as_str()),
         FixedBinding::custom(
             CustomAction::DecreaseFontSize,
             NotebookAction::DecreaseFontSize,
-            "Decrease font size",
+            &crate::tr!("notebooks", "decrease-font-size"),
             id!("NotebookView") & id!("NotMatchNotebookToMonospaceSize"),
         )
         .with_group(bindings::BindingGroup::Settings.as_str()),

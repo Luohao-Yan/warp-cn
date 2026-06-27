@@ -64,7 +64,7 @@ pub fn init(app: &mut AppContext) {
         // Reuse the save file keybinding name and description
         // so that there's only one entry in settings reused for both cases.
         SAVE_FILE_BINDING_NAME,
-        SAVE_FILE_BINDING_DESCRIPTION,
+        crate::tr!("code", "save-file"),
         AIDocumentAction::SendUpdatedPlan,
     )
     .with_context_predicate(id!("AIDocumentView") & !id!("IMEOpen"))
@@ -84,7 +84,7 @@ use warp_util::path::LineAndColumnArg;
 #[cfg(feature = "local_fs")]
 use crate::code::editor_management::CodeSource;
 // Import keybinding constants from code view to ensure consistency
-use crate::code::view::{SAVE_FILE_BINDING_DESCRIPTION, SAVE_FILE_BINDING_NAME};
+use crate::code::view::SAVE_FILE_BINDING_NAME;
 use crate::notebooks::file::MarkdownDisplayMode;
 #[cfg(feature = "local_fs")]
 use crate::util::file::external_editor::settings::EditorLayout;

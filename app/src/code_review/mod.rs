@@ -76,7 +76,7 @@ pub fn init(app: &mut AppContext) {
         .with_enabled(|| crate::features::FeatureFlag::CodeReviewFind.is_enabled()),
         EditableBinding::new(
             "code_review:toggle_file_navigation",
-            "Toggle file navigation in code review",
+            crate::tr!("code_review", "toggle-file-navigation-in-code-review"),
             CodeReviewAction::ToggleFileSidebar,
         )
         .with_context_predicate(id!("CodeReviewView_NotEditing"))
