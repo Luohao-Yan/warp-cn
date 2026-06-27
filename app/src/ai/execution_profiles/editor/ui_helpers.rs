@@ -15,8 +15,8 @@ use super::{ExecutionProfileEditorView, ExecutionProfileEditorViewAction};
 use crate::ai::blocklist::BlocklistAIPermissions;
 use crate::ai::execution_profiles::{
     long_context_pricing_warning_title, AIExecutionProfile, AIExecutionProfileAppExt as _,
-    ActionPermission,
 };
+use cloud_object_models::{ActionPermission, WriteToPtyPermission, ComputerUsePermission, RunAgentsPermission, AskUserQuestionPermission};
 use crate::editor::EditorView;
 use crate::settings::AISettings;
 use crate::ui_components::icons::Icon;
@@ -450,29 +450,40 @@ pub fn render_permissions_section(
     let ai_settings = AISettings::as_ref(app);
     let mut column = Flex::column().with_children([
         render_separator(appearance),
-        render_section_label(&crate::tr!("ai_assistant", "ai-permissions-section"), appearance),
-        render_permission_row(
-            appearance,
-            Icon::Code2,
-            &crate::tr!("ai_assistant", "ai-apply-code-diffs"),
-            &view.apply_code_diffs_dropdown,
-            &crate::tr!("ai_assistant", profile_data.apply_code_diffs.description()),
-            !ai_settings.is_code_diffs_permissions_editable(app),
-            view.tooltip_mouse_state_handles
-                .apply_code_diffs_tooltip_mouse_state
-                .clone(),
-        ),
-        render_permission_row(
-            appearance,
-            Icon::Notebook,
-            &crate::tr!("ai_assistant", "ai-read-files"),
-            &view.read_files_dropdown,
-            &crate::tr!("ai_assistant", profile_data.read_files.description()),
-            !ai_settings.is_read_files_permissions_editable(app),
-            view.tooltip_mouse_state_handles
-                .read_files_tooltip_mouse_state
-                .clone(),
-        ),
+        {
+            let label = crate::tr!("ai_assistant", "ai-permissions-section");
+            render_section_label(&label, appearance)
+        },
+        {
+            let label = crate::tr!("ai_assistant", "ai-apply-code-diffs");
+            let desc = action_permission_description(&profile_data.apply_code_diffs);
+            render_permission_row(
+                appearance,
+                Icon::Code2,
+                &label,
+                &view.apply_code_diffs_dropdown,
+                &desc,
+                !ai_settings.is_code_diffs_permissions_editable(app),
+                view.tooltip_mouse_state_handles
+                    .apply_code_diffs_tooltip_mouse_state
+                    .clone(),
+            )
+        },
+        {
+            let label = crate::tr!("ai_assistant", "ai-read-files");
+            let desc = action_permission_description(&profile_data.read_files);
+            render_permission_row(
+                appearance,
+                Icon::Notebook,
+                &label,
+                &view.read_files_dropdown,
+                &desc,
+                !ai_settings.is_read_files_permissions_editable(app),
+                view.tooltip_mouse_state_handles
+                    .read_files_tooltip_mouse_state
+                    .clone(),
+            )
+        },
     ]);
 
     if profile_data.read_files == ActionPermission::AlwaysAsk
@@ -489,9 +500,9 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Terminal,
-        "Execute commands",
+        &crate::tr!("ai_assistant", "ai-execute-commands"),
         &view.execute_commands_dropdown,
-        profile_data.execute_commands.description(),
+        &action_permission_description(&profile_data.execute_commands),
         !ai_settings.is_execute_commands_permissions_editable(app),
         view.tooltip_mouse_state_handles
             .execute_commands_tooltip_mouse_state
@@ -526,9 +537,9 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Workflow,
-        "Interact with running commands",
+        &crate::tr!("ai_assistant", "ai-interact-with-running-commands"),
         &view.write_to_pty_dropdown,
-        profile_data.write_to_pty.description(),
+        &write_to_pty_permission_description(&profile_data.write_to_pty),
         !ai_settings.is_write_to_pty_permissions_editable(app),
         view.tooltip_mouse_state_handles
             .write_to_pty_tooltip_mouse_state
@@ -539,9 +550,9 @@ pub fn render_permissions_section(
         column.add_child(render_permission_row(
             appearance,
             Icon::Laptop,
-            "Computer use",
+            &crate::tr!("ai_assistant", "ai-computer-use"),
             &view.computer_use_dropdown,
-            profile_data.computer_use.description(),
+            &computer_use_permission_description(&profile_data.computer_use),
             !ai_settings.is_computer_use_permissions_editable(app),
             view.tooltip_mouse_state_handles
                 .computer_use_tooltip_mouse_state
@@ -552,9 +563,9 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::MessageText,
-        "Ask questions",
+        &crate::tr!("ai_assistant", "ai-ask-questions"),
         &view.ask_user_question_dropdown,
-        profile_data.ask_user_question.description(),
+        &ask_permission_description(&profile_data.ask_user_question),
         !ai_settings.is_ask_user_question_permissions_editable(app),
         view.tooltip_mouse_state_handles
             .ask_user_question_tooltip_mouse_state
@@ -563,9 +574,9 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Atom,
-        "Run orchestrated agents",
+        &crate::tr!("ai_assistant", "ai-run-orchestrated-agents"),
         &view.run_agents_dropdown,
-        profile_data.run_agents.description(),
+        &run_agents_permission_description(&profile_data.run_agents),
         !ai_settings.is_run_agents_permissions_editable(app),
         view.tooltip_mouse_state_handles
             .run_agents_tooltip_mouse_state
@@ -575,9 +586,9 @@ pub fn render_permissions_section(
     column.add_child(render_permission_row(
         appearance,
         Icon::Dataflow,
-        "Call MCP servers",
+        &crate::tr!("ai_assistant", "ai-call-mcp-servers"),
         &view.call_mcp_servers_dropdown,
-        profile_data.mcp_permissions.description(),
+        &action_permission_description(&profile_data.mcp_permissions),
         !ai_settings.is_mcp_permission_editable(app), // Use MCP override for this permission
         view.tooltip_mouse_state_handles
             .call_mcp_servers_tooltip_mouse_state
@@ -1056,4 +1067,83 @@ pub fn wrap_disabled_with_workspace_override_tooltip(
         stack.finish()
     })
     .finish()
+}
+
+fn action_permission_description(perm: &ActionPermission) -> String {
+    match perm {
+        ActionPermission::AgentDecides | ActionPermission::Unknown => {
+            crate::tr!("ai_assistant", "ai-perm-desc-agent-decides")
+        }
+        ActionPermission::AlwaysAllow => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-allow")
+        }
+        ActionPermission::AlwaysAsk => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-ask")
+        }
+    }
+}
+
+fn write_to_pty_permission_description(perm: &WriteToPtyPermission) -> String {
+    match perm {
+        WriteToPtyPermission::AlwaysAllow => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-allow")
+        }
+        WriteToPtyPermission::AskOnFirstWrite => {
+            crate::tr!("ai_assistant", "ai-perm-desc-ask-on-first-write")
+        }
+        WriteToPtyPermission::AlwaysAsk => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-ask")
+        }
+        WriteToPtyPermission::Unknown => {
+            crate::tr!("ai_assistant", "ai-perm-desc-agent-decides")
+        }
+    }
+}
+
+fn computer_use_permission_description(perm: &ComputerUsePermission) -> String {
+    match perm {
+        ComputerUsePermission::Never => {
+            crate::tr!("ai_assistant", "ai-perm-desc-never")
+        }
+        ComputerUsePermission::AlwaysAsk => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-ask")
+        }
+        ComputerUsePermission::AlwaysAllow => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-allow")
+        }
+        ComputerUsePermission::Unknown => {
+            crate::tr!("ai_assistant", "ai-perm-desc-never")
+        }
+    }
+}
+
+fn run_agents_permission_description(perm: &RunAgentsPermission) -> String {
+    match perm {
+        RunAgentsPermission::NeverAllow => {
+            crate::tr!("ai_assistant", "ai-perm-desc-never-ask")
+        }
+        RunAgentsPermission::AlwaysAllow => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-allow")
+        }
+        RunAgentsPermission::AlwaysAsk => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-ask")
+        }
+        RunAgentsPermission::Unknown => {
+            crate::tr!("ai_assistant", "ai-perm-desc-never-ask")
+        }
+    }
+}
+
+fn ask_permission_description(perm: &AskUserQuestionPermission) -> String {
+    match perm {
+        AskUserQuestionPermission::Never => {
+            crate::tr!("ai_assistant", "ai-perm-desc-never-ask-questions")
+        }
+        AskUserQuestionPermission::AskExceptInAutoApprove | AskUserQuestionPermission::Unknown => {
+            crate::tr!("ai_assistant", "ai-perm-desc-ask-unless-auto")
+        }
+        AskUserQuestionPermission::AlwaysAsk => {
+            crate::tr!("ai_assistant", "ai-perm-desc-always-ask-questions")
+        }
+    }
 }
