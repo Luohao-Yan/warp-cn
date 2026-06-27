@@ -11,6 +11,12 @@ use warpui::{
 use crate::appearance::Appearance;
 use crate::ui_components::dialog::{dialog_styles, Dialog};
 use crate::view_components::action_button::{ActionButton, DangerPrimaryTheme, NakedTheme};
+use crate::static_tr;
+
+static_tr!(CANCEL_LABEL, "common", "cancel-label");
+static_tr!(DELETE_LABEL, "common", "delete-label");
+static_tr!(DIALOG_TITLE, "terminal", "delete-secret-title");
+static_tr!(DIALOG_DESCRIPTION, "terminal", "delete-secret-description");
 
 const DIALOG_WIDTH: f32 = 450.;
 
@@ -41,13 +47,13 @@ pub(super) struct DeleteAuthSecretConfirmationDialog {
 impl DeleteAuthSecretConfirmationDialog {
     pub(super) fn new(ctx: &mut ViewContext<Self>) -> Self {
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Cancel", NakedTheme).on_click(|ctx| {
+            ActionButton::new(CANCEL_LABEL.get(), NakedTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteAuthSecretConfirmationDialogAction::Cancel);
             })
         });
 
         let delete_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Delete", DangerPrimaryTheme).on_click(|ctx| {
+            ActionButton::new(DELETE_LABEL.get(), DangerPrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(DeleteAuthSecretConfirmationDialogAction::Confirm);
             })
         });
@@ -93,13 +99,10 @@ impl View for DeleteAuthSecretConfirmationDialog {
         };
 
         let appearance = Appearance::as_ref(app);
-        let description = format!(
-            "Are you sure you want to delete {}? This action cannot be undone. Any agents or environments referencing this secret will no longer have access to it.",
-            pending_deletion.name
-        );
+        let description = crate::tr!("terminal", "delete-secret-description", name = pending_deletion.name.clone());
 
         let dialog = Dialog::new(
-            "Delete secret".to_string(),
+            DIALOG_TITLE.get().to_string(),
             Some(description),
             dialog_styles(appearance),
         )

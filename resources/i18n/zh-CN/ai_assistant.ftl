@@ -1439,3 +1439,179 @@ ai-assistant-ai-view-changelog = 查看更新日志
 ai-assistant-ai-in-location = 在 `{ $location }`
 ai-assistant-ai-again-stop-exit = 再次按下停止并退出
 ai-assistant-ai-again-exit = 再次按下退出
+
+# conversation_rename.rs
+ai-assistant-ai-conv-empty-title = 请提供对话标题
+ai-assistant-ai-conv-empty-conversation = 无法重命名空对话
+ai-assistant-ai-conv-not-found = 未找到对话
+ai-assistant-ai-conv-not-synced = 您的对话尚未同步到云端。请尝试发送另一条消息，然后再次重命名。
+ai-assistant-ai-conv-rename-in-progress = 此对话的重命名正在进行中
+ai-assistant-ai-conv-not-ready = 您的对话仍在同步中。请稍后再次尝试重命名。
+ai-assistant-ai-conv-renamed-to = 对话已重命名为 { $title }
+ai-assistant-ai-conv-failed-rename = 重命名对话失败：{ $error }
+ai-assistant-ai-conv-title-max-chars = 对话标题不得超过 { $count } 个字符
+
+# host_picker.rs
+ai-assistant-ai-host-custom = 自定义主机…
+ai-assistant-ai-host-default = 默认
+ai-assistant-ai-host-placeholder = my-worker-host
+
+# orchestration_controls.rs
+ai-assistant-ai-orch-skip-advanced = 跳过（高级）
+ai-assistant-ai-orch-api-key = API 密钥
+ai-assistant-ai-orch-new-api-key = 新 API 密钥…
+ai-assistant-ai-orch-unable-load-secrets = 无法加载密钥
+
+# run_agents_card_view.rs
+ai-assistant-ai-orch-spawned-one-agent = 已生成 1 个智能体
+ai-assistant-ai-orch-spawned-agents = 已生成 { $count } 个智能体
+ai-assistant-ai-orch-failed-spawn-one = 生成智能体失败
+ai-assistant-ai-orch-failed-spawn-agents = 生成 { $count } 个智能体失败
+ai-assistant-ai-orch-spawned-of-agents = 已生成 { $launched }/{ $total } 个智能体
+ai-assistant-ai-orch-spawning-one-agent = 正在生成 1 个智能体…
+ai-assistant-ai-orch-spawning-agents = 正在生成 { $count } 个智能体…
+
+# summarization_cancel_dialog.rs
+ai-assistant-ai-cancel-summarization-title = 取消摘要？
+ai-assistant-ai-cancel-summarization-body = 摘要正在运行中。如果现在取消，请求可能仍会产生费用，目前的进度将会丢失，重新启动需要更长时间。\n\n确定要取消吗？
+
+# conversation_usage_view.rs
+ai-assistant-ai-usage-commands-executed = 已执行命令
+ai-assistant-ai-usage-last-response-time = 最近响应时间
+ai-assistant-ai-usage-time-to-first-token = 首个令牌时间
+ai-assistant-ai-usage-total-agent-response-time = 智能体总响应时间
+ai-assistant-ai-usage-total-time-including-tool-calls = 总时间（包含工具调用）
+ai-assistant-ai-usage-show-more = 显示更多 { $count } 项
+ai-assistant-ai-usage-call-label = 次调用
+ai-assistant-ai-usage-file-label = 个文件
+ai-assistant-ai-usage-command-label = 条命令
+ai-assistant-ai-models-category-label = 模型（{ $category }）
+
+# todos.rs
+ai-assistant-ai-todo-tasks-label = 任务
+ai-assistant-ai-todo-outdated-label = 已过时
+ai-assistant-ai-todo-completed = 已完成 { $title }
+ai-assistant-ai-todo-completed-next = ，{ $title }
+ai-assistant-ai-todo-completed-index = 已完成 { $title }（{ $index }/{ $total }）
+
+# orchestration_conversation_links.rs
+ai-assistant-ai-conv-parent-title = 父对话
+ai-assistant-ai-conv-back-to-parent = 返回父对话
+
+# suggestion_chip_view.rs
+ai-assistant-ai-chip-add-rule = 添加规则：{ $content }
+ai-assistant-ai-chip-suggested-prompt = 建议的提示词：\n{ $prompt }
+
+# requested_command.rs
+ai-assistant-ai-inline-manage-cmd-exec = 管理命令执行设置
+ai-assistant-ai-inline-tool-json-error = JSON 格式化错误
+ai-assistant-ai-inline-tool-error = 错误：{ $error }
+ai-assistant-ai-inline-tool-cancelled = 工具调用已取消
+
+# search_codebase.rs
+ai-assistant-ai-inline-search-for = 正在搜索
+ai-assistant-ai-inline-search-codebase-for = 正在代码库中搜索"{ $query }"
+ai-assistant-ai-inline-search-cancelled-in = 在 { $repo } 中搜索"{ $query }"已取消
+ai-assistant-ai-inline-search-cancelled = 搜索"{ $query }"已取消
+ai-assistant-ai-inline-searched-codebase-in = 已在 { $repo } 中搜索代码库"{ $query }"
+ai-assistant-ai-inline-searched-codebase = 已搜索代码库"{ $query }"
+ai-assistant-ai-inline-no-results = 未找到结果
+ai-assistant-ai-inline-results-label = 个结果
+
+# web_search.rs
+ai-assistant-ai-inline-web-searching = 正在搜索网络
+ai-assistant-ai-inline-web-searching-for = 正在搜索网络"{ $query }"
+ai-assistant-ai-inline-web-searched = 已搜索网络
+ai-assistant-ai-inline-web-searched-for = 已搜索网络"{ $query }"
+ai-assistant-ai-inline-urls-label = 个链接
+
+# web_fetch.rs
+ai-assistant-ai-inline-fetching-pages = 正在获取 { $count } 个网页…
+ai-assistant-ai-inline-fetched-pages = 已获取 { $count } 个网页
+ai-assistant-ai-inline-fetched-pages-of = 已获取 { $successful }/{ $total } 个网页
+
+# harness_display.rs
+ai-assistant-ai-harness-warp = Warp
+ai-assistant-ai-harness-claude = Claude Code
+ai-assistant-ai-harness-opencode = OpenCode
+ai-assistant-ai-harness-gemini = Gemini CLI
+ai-assistant-ai-harness-codex = Codex
+ai-assistant-ai-harness-unknown = 未知
+
+# output.rs grep/file-glob strings
+ai-assistant-ai-inline-current-dir = 当前目录
+ai-assistant-ai-inline-grep-for = 搜索
+ai-assistant-ai-inline-grepping-for = 正在搜索
+ai-assistant-ai-inline-in-path =  在 { $path }
+ai-assistant-ai-inline-in-path-cancelled =  在 { $path } 已取消
+ai-assistant-ai-inline-cancelled-grep-in = 在 { $path } 中搜索以下模式已取消
+ai-assistant-ai-inline-grep-patterns-in = 在 { $path } 中搜索以下模式
+ai-assistant-ai-inline-grepping-patterns-in = 正在 { $path } 中搜索以下模式
+ai-assistant-ai-inline-find-files-match = 搜索匹配的文件
+ai-assistant-ai-inline-finding-files-match = 正在查找匹配的文件
+ai-assistant-ai-inline-cancelled-search-files-in = 在 { $path } 中搜索匹配以下模式的文件已取消
+ai-assistant-ai-inline-find-files-patterns-in = 在 { $path } 中查找匹配以下模式的文件
+ai-assistant-ai-inline-finding-files-patterns-in = 正在 { $path } 中查找匹配以下模式的文件
+ai-assistant-ai-inline-listing-messages = 正在列出消息
+ai-assistant-ai-inline-grepping-patterns = 正在搜索模式
+ai-assistant-ai-inline-grepping-for-patterns = 正在搜索模式：{ $patterns }
+ai-assistant-ai-inline-reading-messages = 正在读取 { $count } 条消息
+
+# agent_input_footer
+ai-assistant-ai-see-logs-for-details = 查看日志了解详情
+ai-assistant-ai-voice-limit-reached = 语音输入已达上限
+ai-assistant-ai-voice-transcribe-failed = 语音转文字失败
+
+# local_agent_task_sync_model.rs
+ai-assistant-ai-task-cancelled-by-user = 用户已取消
+ai-assistant-ai-task-blocked-waiting = 智能体在等待用户确认操作时卡住：{ $blocked_action }
+ai-assistant-ai-task-agent-error = 智能体遇到错误
+
+# common.rs additional strings
+ai-assistant-ai-invalid-api-key-error = 提供的 API 密钥无效
+ai-assistant-ai-aws-credentials-fallback = { $model_name } 的 AWS 凭证已过期或缺失。请刷新您的 AWS 凭证。
+ai-assistant-ai-quota-limit-reached = 已达到配额限制。
+ai-assistant-ai-context-window-exceeded = 超出上下文窗口：{ $message }
+ai-assistant-ai-aws-bedrock-credentials-expired = { $model_name } 的 AWS Bedrock 凭证已过期或无效
+ai-assistant-ai-one-second = 1 秒
+ai-assistant-ai-seconds-format = { $count } 秒
+ai-assistant-ai-check-now-inline =  · 立即检查
+ai-assistant-ai-fast-forward-locked-tooltip = 云端智能体对话始终启用快进
+ai-assistant-ai-calling-mcp-tool-short = 正在调用 "{$name}" MCP 工具...
+ai-assistant-ai-reading-mcp-resource-short = 正在读取 "{$name}" MCP 资源...
+
+# 附加 i18n 键用于硬编码 UI 字符串
+ai-assistant-ai-transient-network-error = Warp 在接收智能体响应时失去连接。这通常是暂时的。
+ai-assistant-ai-cli-grep-for = 在 { $path } 中搜索 `{ $query }`
+ai-assistant-ai-cli-grep-patterns-in = 在 { $path } 中搜索以下模式：\n{ $patterns_list }
+ai-assistant-ai-cli-find-files-match = 在 { $path } 中查找匹配 `{ $pattern }` 的文件
+ai-assistant-ai-cli-find-files-patterns-in = 在 { $path } 中查找匹配以下模式的文件：\n{ $patterns_list }
+ai-assistant-ai-settings-ai = 设置 > AI
+ai-assistant-ai-orch-loading = 加载中…
+ai-assistant-ai-manage-suggested-banner-settings = 管理建议代码横幅设置
+ai-assistant-ai-orch-failed-send-message = 向 { $recipients } 发送消息失败：{ $error }
+ai-assistant-ai-orch-send-message-cancelled = 向 { $recipients } 发送消息已取消。
+ai-assistant-ai-conv-created-by-at = 由 { $creator } 创建 • { $time }
+ai-assistant-ai-diff-failed-save-file = 保存文件 { $file_path } 失败
+ai-assistant-ai-voice-input-toast = 语音输入已启用。您也可以按住 `{ $key }` 键来激活语音输入（在 设置 > AI > 语音 中配置）
+ai-assistant-ai-get-files-indexing = 当前 git 仓库仍在索引中，搜索暂时不可用。您可以稍后重试
+ai-assistant-ai-get-files-not-available = 在当前目录中无法使用相关文件搜索
+ai-assistant-ai-get-files-not-git = 当前目录不在 git 仓库中，而搜索相关文件需要 git 仓库。
+ai-assistant-ai-search-codebase-not-available = 搜索失败，代码库不可用。请尝试其他方式查找相关文件。
+ai-assistant-ai-secret-col-name = 名称
+ai-assistant-ai-secret-col-scope = 范围
+ai-assistant-ai-secret-col-created = 创建时间
+ai-assistant-ai-secret-col-updated = 更新时间
+ai-assistant-ai-secret-name-required-usage = 密钥名称为必填项。用法：oz secret create <NAME>
+ai-assistant-ai-secret-created-ok = 密钥 '{ $name }' 已创建
+ai-assistant-ai-secret-deleted-ok = 密钥 '{ $name }' 已删除
+ai-assistant-ai-secret-deletion-cancelled = 删除已取消
+ai-assistant-ai-secret-scope-personal = 个人
+ai-assistant-ai-secret-scope-team = 团队
+ai-assistant-ai-secret-delete-confirm = 删除 { $scope } 密钥 '{ $name }'？
+ai-assistant-ai-secret-action-cannot-undo = 此操作无法撤销
+ai-assistant-ai-secret-delete-no-confirm-force = 拒绝在非交互模式下未经确认删除密钥（使用 --force 跳过）
+ai-assistant-ai-search-files-not-exist = 这些文件不存在：{ $missing_files }
+ai-assistant-ai-search-failed-try-another = 搜索失败。请尝试其他方式查找相关文件。
+ai-assistant-ai-remote-search-unavailable = 远程代码库搜索不可用。
+ai-assistant-ai-search-codebase-not-available-try = 搜索失败，代码库不可用。请尝试其他方式查找相关文件。

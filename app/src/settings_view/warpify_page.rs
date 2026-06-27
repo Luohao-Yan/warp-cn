@@ -39,6 +39,11 @@ use crate::view_components::{SubmittableTextInput, SubmittableTextInputEvent};
 use crate::{report_if_error, send_telemetry_from_ctx};
 use crate::static_tr;
 
+static_tr!(SUBSHELLS_TITLE, "settings", "subshells-title");
+static_tr!(SUBSHELLS_SUBTITLE, "settings", "subshells-subtitle");
+static_tr!(SSH_TITLE, "settings", "ssh-title");
+static_tr!(SSH_SUBTITLE, "settings", "ssh-subtitle");
+
 pub fn init_actions_from_parent_view<T: Action + Clone>(
     app: &mut AppContext,
     context: &ContextPredicate,
@@ -111,7 +116,7 @@ impl WarpifyPageView {
         let add_added_commands_editor = ctx.add_typed_action_view(|ctx| {
             let mut input =
                 SubmittableTextInput::new(ctx).validate_on_edit(|regex| Regex::new(regex).is_ok());
-            input.set_placeholder_text("command (supports regex)", ctx);
+            input.set_placeholder_text(crate::tr!("settings", "command-regex-placeholder"), ctx);
             input
         });
 
@@ -122,7 +127,7 @@ impl WarpifyPageView {
 
         let add_denylisted_commands_editor = ctx.add_typed_action_view(|ctx| {
             let mut input = SubmittableTextInput::new(ctx);
-            input.set_placeholder_text("command (supports regex)", ctx);
+            input.set_placeholder_text(crate::tr!("settings", "command-regex-placeholder"), ctx);
             input
         });
 
@@ -150,8 +155,8 @@ impl WarpifyPageView {
     fn build_page(ctx: &mut ViewContext<Self>) -> PageType<Self> {
         let mut categories = vec![
             Category::new("", vec![Box::new(TitleWidget::default())]),
-            Category::new("Subshells", vec![Box::new(SubshellsWidget::default())])
-                .with_subtitle("Subshells supported: bash, zsh, and fish."),
+            Category::new(SUBSHELLS_TITLE.get(), vec![Box::new(SubshellsWidget::default())])
+                .with_subtitle(SUBSHELLS_SUBTITLE.get()),
         ];
 
         let warpify_settings = WarpifySettings::as_ref(ctx);
@@ -160,8 +165,8 @@ impl WarpifyPageView {
             .is_supported_on_current_platform()
         {
             categories.push(
-                Category::new("SSH", vec![Box::new(SSHWidget::default())])
-                    .with_subtitle("Warpify your interactive SSH sessions."),
+                Category::new(SSH_TITLE.get(), vec![Box::new(SSHWidget::default())])
+                    .with_subtitle(SSH_SUBTITLE.get()),
             );
         }
         PageType::new_categorized(categories, None)
@@ -481,11 +486,10 @@ impl TitleWidget {
     fn render_top_of_page(&self, appearance: &Appearance, _app: &AppContext) -> Box<dyn Element> {
         let warpify_description = vec![
             FormattedTextFragment::plain_text(
-                "Configure whether Warp attempts to “Warpify” (add support for blocks, \
-                    input modes, etc) certain shells. ",
+                crate::tr!("settings", "warpify-description"),
             ),
             FormattedTextFragment::hyperlink(
-                "Learn more",
+                crate::tr!("settings", "warpify-learn-more"),
                 "https://docs.warp.dev/terminal/warpify/subshells",
             ),
         ];
@@ -504,8 +508,9 @@ impl TitleWidget {
         })
         .finish();
 
+        let page_title = crate::tr!("settings", "warpify-title");
         Flex::column()
-            .with_child(render_page_title("Warpify", HEADER_FONT_SIZE, appearance))
+            .with_child(render_page_title(&page_title, HEADER_FONT_SIZE, appearance))
             .with_child(warpify_description)
             .finish()
     }
@@ -544,9 +549,10 @@ impl SubshellsWidget {
 
         let warpify_settings = WarpifySettings::as_ref(app);
 
+        let added_title = crate::tr!("settings", "added-commands");
         column.add_child(
             view.build_input_list(
-                "Added commands",
+                &added_title,
                 &warpify_settings.added_subshell_commands,
                 &view.remove_added_command_button_states,
                 WarpifyPageAction::RemoveAddedCommand,
@@ -556,9 +562,10 @@ impl SubshellsWidget {
             .finish(),
         );
 
+        let denylisted_title = crate::tr!("settings", "denylisted-commands");
         column.add_child(
             view.build_input_list(
-                "Denylisted commands",
+                &denylisted_title,
                 &warpify_settings.subshell_command_denylist,
                 &view.remove_denylisted_command_button_states,
                 WarpifyPageAction::RemoveDenylistedCommand,
@@ -627,7 +634,7 @@ impl SettingsWidget for SSHWidget {
             &WarpifySettings::as_ref(app).enable_ssh_warpification,
             move || {
                 render_body_item::<WarpifyPageAction>(
-                    "Warpify SSH Sessions".into(),
+                    crate::tr!("settings", "warpify-ssh-sessions").into(),
                     None,
                     LocalOnlyIconState::for_setting(
                         EnableSshWarpification::storage_key(),
@@ -660,9 +667,10 @@ impl SettingsWidget for SSHWidget {
                 &mut column,
                 &WarpifySettings::as_ref(app).ssh_extension_install_mode,
                 move || {
+                    let ssh_install_label = crate::tr!("settings", "install-ssh-extension");
                     Container::new(render_dropdown_item(
                         appearance,
-                        "Install SSH extension",
+                        &ssh_install_label,
                         Some(SSH_EXTENSION_INSTALL_MODE_DESCRIPTION.get()),
                         None,
                         LocalOnlyIconState::for_setting(
@@ -689,7 +697,7 @@ impl SettingsWidget for SSHWidget {
             move || {
                 let mut column = Flex::column();
                 column.add_child(render_body_item::<WarpifyPageAction>(
-                    "Reuse existing SSH ControlMaster".into(),
+                    crate::tr!("settings", "reuse-ssh-controlmaster").into(),
                     None,
                     LocalOnlyIconState::for_setting(
                         ReuseExistingSshControlMaster::storage_key(),

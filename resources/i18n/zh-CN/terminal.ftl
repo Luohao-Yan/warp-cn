@@ -960,6 +960,37 @@ terminal-quick-setup-desc = 选择您想使用的 GitHub 仓库，我们将推�
 terminal-use-agent-desc = 选择一个本地项目，我们将帮您基于此设置环境
 terminal-env-setup-cancelled = 环境设置已取消
 
+## -- 删除认证密钥对话框字符串 --
+
+terminal-delete-secret-title = 删除密钥
+terminal-delete-secret-description = 确定要删除 { $name } 吗？此操作无法撤销。任何引用此密钥的智能体或环境将不再拥有访问权限。
+
+terminal-github-auth-required = 需要 GitHub 认证
+
+terminal-cloud-agent-failed-to-start = 云智能体启动失败
+
+## -- 认证密钥 FTUX 视图字符串 --
+
+terminal-ftux-enter-credentials = 请在下方输入您的凭证。
+terminal-ftux-privacy-text = 您的凭证已进行端到端加密。
+terminal-ftux-learn-more-auth = 了解更多关于在 Warp 中使用 { $harness_name } 认证的信息。
+terminal-ftux-share-with-team = 与团队共享
+
+## -- 队列提示面板字符串 --
+
+terminal-queued-send-now = 立即发送
+terminal-queued-initial-cloud-tip = 首个云模式提示词无法更改。
+terminal-queued-cloud-setup-tip = 环境设置完成前无法发送提示词。
+terminal-queued-full-terminal-use-tip = 发送到完全终端使用智能体
+terminal-queued-read-only-viewer-tip = 只读查看者无法发送提示词。
+terminal-queued-lrc-suffix = （排队等待命令完成后执行）
+terminal-queued-to-send = 发送
+terminal-queued-header-label = { $count } 个已排队
+
+terminal-offline-reconnecting = 离线，正在尝试重新连接...
+
+terminal-again-to-send-to-agent = 再次发送给智能体
+
 ## -- 分享块模态框 --------------------------------------------------------
 
 terminal-share-title = 分享
@@ -1011,3 +1042,99 @@ terminal-agent-hint-docker-optimize = Warp 任意内容，例如：优化 Docker
 terminal-agent-hint-ab-testing = Warp 任意内容，例如：为我的 Web 应用搭建 A/B 测试基础设施
 terminal-queue-follow-up-hint = 为运行中的智能体排队后续任务
 terminal-queue-follow-up-classic-hint = 为运行中的智能体排队后续任务，或按退格键退出
+terminal-steer-child-agent = 引导 { $agent_name } 智能体
+terminal-queue-child-follow-up = 为 { $agent_name } 智能体排队后续任务
+terminal-ask-child-follow-up = 向 { $agent_name } 智能体追问
+terminal-images-removed-model-unsupported = 已移除附加图片 — 所选模型不支持图片。
+terminal-conversation-navigate-error = 无法导航到对话。
+
+## -- 输入消息栏提示字符串 --
+
+input-hint-navigate =  导航
+input-hint-cycle-tabs =  切换标签
+input-hint-dismiss =  关闭
+input-hint-new-conversation =  新对话
+input-hint-plan-with-agent =  使用智能体规划
+input-hint-to-continue-conversation =  继续对话
+input-hint-to-execute =  执行
+input-hint-to-send =  发送
+input-hint-to-open-title =  打开'{$title}'
+input-hint-autodetected =  （自动检测）
+input-hint-to-override =  覆盖
+input-hint-new-agent-conversation =  新 /agent 对话
+input-hint-agent-for-new-conversation = /agent 新建对话
+input-hint-attach-output-as-context =  将 `{$name}` 输出作为智能体上下文附加
+input-hint-to-select =  选择
+input-hint-select-and-save-to-profile =  选择并保存到配置文件
+input-hint-no-skills-found = 未找到技能
+input-hint-open-plan =  打开计划
+input-hint-rewind = 回退
+input-hint-current-pane =  当前窗格
+input-hint-new-pane =  新窗格
+input-hint-no-rewind-current-state = 当前状态（无回退）
+input-hint-rewind-to = 回退到：{$query}（+{$added} -{$removed}）
+input-hint-loading = 加载中...
+input-hint-no-results = 无结果
+input-hint-prompts-label = 提示词
+input-hint-untitled-conversation = 未命名对话
+
+## -- 模型数据源字符串 --
+
+input-model-auto-bedrock-tooltip = Warp 在 Auto 模型选择支持 Bedrock 时使用 Bedrock，否则可能使用 Warp 托管的推理。
+input-model-inference-may-use-bedrock = 推理可能使用 Bedrock
+input-model-inference-via-bedrock = 通过 Bedrock 推理
+input-model-inference-via-api-key = 通过 API 密钥推理
+input-model-upgrade-not-available = {$display_name} 对免费用户不可用。
+input-model-upgrade = 升级
+input-model-or =  或
+input-model-bring-your-own-key = 自带密钥
+input-model-open-file-local-only = /open-file 命令仅适用于本地会话
+input-model-open-file-directories-only = /open-file 命令仅适用于文件，不适用于目录
+
+## -- 右键菜单项字符串 (ctx- 前缀) --
+
+ctx-copy = 复制
+ctx-copy-prompt = 复制提示词
+ctx-copy-output-as-markdown = 以 Markdown 复制输出
+ctx-copy-url = 复制 URL
+ctx-copy-path = 复制路径
+ctx-copy-command = 复制命令
+ctx-copy-git-branch = 复制 Git 分支
+ctx-save-as-prompt = 保存为提示词
+ctx-copy-share-link = 复制分享链接
+ctx-share-conversation = 分享对话
+ctx-copy-conversation-text = 复制对话文本
+ctx-copy-debugging-link = 复制调试链接
+ctx-copy-conversation-id = 复制对话 ID
+ctx-copy-debugging-id = 复制调试 ID
+ctx-fork = 分叉
+ctx-fork-from-here = 从此处分叉
+ctx-rewind-to-before-here = 回退到此处之前
+ctx-open-in-warp = 在 Warp 中打开
+ctx-paste = 粘贴
+ctx-clear-blocks = 清除区块
+ctx-hide = 隐藏
+ctx-show = 显示
+ctx-toggle-input-hint-text = { $action } 输入提示文本
+
+## -- 横幅字符串 (banner- 前缀) --
+
+banner-ssh-compat-before-link = 您的补全似乎无法正常工作（
+banner-ssh-compat-more-info = 更多信息
+banner-ssh-compat-after-link = ）。在
+banner-ssh-compat-settings = 设置
+banner-ssh-compat-may-resolve = 中启用 SSH 扩展可能可以解决此问题。
+banner-shell-incompat = 您的 Shell 配置与 Warp 不兼容...
+banner-more-info = 更多信息
+banner-clipboard-blocked = 终端程序尝试访问您的剪贴板。默认情况下，出于安全原因此功能已禁用。
+banner-clipboard-allow = 允许
+banner-clipboard-dont-show = 不再显示
+banner-couldnt-continue-cloud-task = 无法继续此云任务。
+banner-p10k-now-supports = Powerlevel10k 现已支持 Warp！
+banner-p10k-unsupported-version = 您似乎正在运行较旧的（不支持的）版本，请按照
+banner-p10k-these-instructions = 这些说明
+banner-p10k-to-update =  更新到最新版本。
+banner-pure-unsupported = Pure 提示符尚不支持 Warp。您可以考虑使用其他受支持的提示符作为替代。
+banner-tmux-ssh-deprecated = 基于 Tmux 的 SSH Warp 化已被弃用
+banner-tmux-ssh-deprecated-body = Warp 现在通过 SSH 扩展连接到远程会话，这比基于 Tmux 的方式更稳定。Tmux 选项已被移除。
+banner-ssh-remote-body = 虽然文件浏览和代码审查等高级功能当前已禁用，但您的其余 Warp 化体验完全可用。

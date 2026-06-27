@@ -1376,7 +1376,7 @@ impl AgentInputFooter {
                                 DismissibleToast::error(format!("{error_label}: {err}"));
                             if let Some(log_path) = log_path {
                                 toast = toast.with_link(
-                                    ToastLink::new("See logs for details".to_owned())
+                                    ToastLink::new(crate::tr!("ai_assistant", "ai-see-logs-for-details"))
                                         .with_onclick_action(WorkspaceAction::OpenFilePath {
                                             path: log_path,
                                         }),
@@ -1797,7 +1797,7 @@ impl AgentInputFooter {
         match &self.cli_voice_input_state {
             CLIVoiceInputState::Stopped => {
                 if !crate::ai::AIRequestUsageModel::as_ref(ctx).can_request_voice() {
-                    self.show_cli_voice_error_toast("Voice input limit reached", ctx);
+                    self.show_cli_voice_error_toast(&crate::tr!("ai_assistant", "ai-voice-limit-reached"), ctx);
                     return;
                 }
 
@@ -1912,11 +1912,11 @@ impl AgentInputFooter {
             }
             Err(e) => match e {
                 TranscribeError::QuotaLimit => {
-                    self.show_cli_voice_error_toast("Voice input limit reached", ctx);
+                    self.show_cli_voice_error_toast(&crate::tr!("ai_assistant", "ai-voice-limit-reached"), ctx);
                 }
                 _ => {
                     log::error!("Failed to transcribe CLI voice input: {e:?}");
-                    self.show_cli_voice_error_toast("Failed to transcribe voice input", ctx);
+                    self.show_cli_voice_error_toast(&crate::tr!("ai_assistant", "ai-voice-transcribe-failed"), ctx);
                 }
             },
         }
@@ -1967,10 +1967,7 @@ impl AgentInputFooter {
         AISettings::handle(ctx).update(ctx, |settings, ctx| {
             if let Some(toggle_key) = settings.maybe_setup_first_time_voice(ctx) {
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::success(format!(
-                        "Voice input is enabled. You can also press and hold the `{}` key to activate voice input (configure in Settings > AI > Voice)",
-                        toggle_key.display_name()
-                    ));
+                    let toast = DismissibleToast::success(crate::tr!("ai_assistant", "ai-voice-input-toast", key = toggle_key.display_name().as_ref()));
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }

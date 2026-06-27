@@ -35,6 +35,9 @@ use crate::editor::{
 use crate::server::server_api::auth::UserAuthenticationError;
 use crate::themes::theme::Fill as ThemeFill;
 use crate::util::bindings::CustomAction;
+use crate::static_tr;
+
+static_tr!(SAFE_ERR_PARSE_PASTED_URL, "auth", "safe-err-parse-pasted-auth-url");
 
 const MODAL_WIDTH: f32 = 460.;
 const AUTH_TOKEN_INPUT_BORDER_RADIUS: Radius = Radius::Pixels(4.);
@@ -202,7 +205,7 @@ impl PasteAuthTokenModalView {
             }
             Err(error) => {
                 safe_error!(
-                    safe: ("Failed to parse pasted auth URL"),
+                    safe: ("{}", SAFE_ERR_PARSE_PASTED_URL.get()),
                     full: ("Failed to parse pasted auth URL: {error:#}")
                 );
                 self.last_failure_reason =

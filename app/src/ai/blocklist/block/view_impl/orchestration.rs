@@ -460,7 +460,7 @@ pub(super) fn render_send_message(
                 );
             }
             SendMessageToAgentResult::Error(error) => {
-                let label = format!("Failed to send message to {recipients}: {error}");
+                let label = crate::tr!("ai_assistant", "ai-orch-failed-send-message", recipients = recipients, error = error);
                 let status_icon = inline_action_icons::red_x_icon(appearance).finish();
                 return render_requested_action_row_for_text(
                     label.into(),
@@ -477,7 +477,7 @@ pub(super) fn render_send_message(
                 .finish();
             }
             SendMessageToAgentResult::Cancelled => {
-                let label = format!("Send message to {recipients} cancelled.");
+                let label = crate::tr!("ai_assistant", "ai-orch-send-message-cancelled", recipients = recipients);
                 let status_icon = inline_action_icons::cancelled_icon(appearance).finish();
                 return render_requested_action_row_for_text(
                     label.into(),

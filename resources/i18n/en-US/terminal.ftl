@@ -947,6 +947,37 @@ terminal-quick-setup-desc = Select the GitHub repositories you'd like to work wi
 terminal-use-agent-desc = Choose a locally set up project and we'll help you set up an environment based on it
 terminal-env-setup-cancelled = Environment setup cancelled
 
+## -- Delete auth secret dialog strings --
+
+terminal-delete-secret-title = Delete secret
+terminal-delete-secret-description = Are you sure you want to delete { $name }? This action cannot be undone. Any agents or environments referencing this secret will no longer have access to it.
+
+terminal-github-auth-required = GitHub authentication required
+
+terminal-cloud-agent-failed-to-start = Cloud agent failed to start
+
+## -- Auth secret FTUX view strings --
+
+terminal-ftux-enter-credentials = Enter your credentials below.
+terminal-ftux-privacy-text = Your credentials are encrypted end-to-end.
+terminal-ftux-learn-more-auth = Learn more about authentication for { $harness_name } in Warp.
+terminal-ftux-share-with-team = Share with team
+
+## -- Queued prompts panel strings --
+
+terminal-queued-send-now = Send now
+terminal-queued-initial-cloud-tip = The first cloud-mode prompt cannot be changed.
+terminal-queued-cloud-setup-tip = Prompts cannot be sent until environment setup is complete.
+terminal-queued-full-terminal-use-tip = Send to full terminal use agent
+terminal-queued-read-only-viewer-tip = Read-only viewers cannot send prompts.
+terminal-queued-lrc-suffix = (queued until the command finishes)
+terminal-queued-to-send = to send
+terminal-queued-header-label = { $count } queued
+
+terminal-offline-reconnecting = Offline, trying to reconnect...
+
+terminal-again-to-send-to-agent = again to send to agent
+
 ## -- Share block modal --------------------------------------------------------
 
 terminal-share-create-link = Create link
@@ -997,3 +1028,99 @@ terminal-agent-hint-docker-optimize = Warp anything e.g. Optimize my Docker imag
 terminal-agent-hint-ab-testing = Warp anything e.g. Set up A/B testing infrastructure for my web application
 terminal-queue-follow-up-hint = Queue a follow up for the running agent
 terminal-queue-follow-up-classic-hint = Queue a follow up for the running agent, or backspace to exit
+terminal-steer-child-agent = Steer the { $agent_name } agent
+terminal-queue-child-follow-up = Queue a follow up for the { $agent_name } agent
+terminal-ask-child-follow-up = Ask the { $agent_name } agent a follow up
+terminal-images-removed-model-unsupported = Attached images were removed — the selected model does not support images.
+terminal-conversation-navigate-error = Couldn't navigate to conversation.
+
+## -- Input message bar hint strings --
+
+input-hint-navigate =  to navigate
+input-hint-cycle-tabs =  to cycle tabs
+input-hint-dismiss =  to dismiss
+input-hint-new-conversation =  new conversation
+input-hint-plan-with-agent =  plan with agent
+input-hint-to-continue-conversation =  to continue conversation
+input-hint-to-execute =  to execute
+input-hint-to-send =  to send
+input-hint-to-open-title =  to open '{$title}'
+input-hint-autodetected =  (autodetected)
+input-hint-to-override =  to override
+input-hint-new-agent-conversation =  new /agent conversation
+input-hint-agent-for-new-conversation = /agent for new conversation
+input-hint-attach-output-as-context =  attach `{$name}` output as agent context
+input-hint-to-select =  to select
+input-hint-select-and-save-to-profile =  select and save to profile
+input-hint-no-skills-found = No skills found
+input-hint-open-plan =  open plan
+input-hint-rewind = rewind
+input-hint-current-pane =  current pane
+input-hint-new-pane =  new pane
+input-hint-no-rewind-current-state = Current state (no rewind)
+input-hint-rewind-to = Rewind to: {$query} (+{$added} -{$removed})
+input-hint-loading = Loading...
+input-hint-no-results = No results
+input-hint-prompts-label = Prompts
+input-hint-untitled-conversation = Untitled conversation
+
+## -- Model data source strings --
+
+input-model-auto-bedrock-tooltip = Warp uses Bedrock when the model Auto selects supports it; otherwise it may use Warp-hosted inference.
+input-model-inference-may-use-bedrock = Inference may use Bedrock
+input-model-inference-via-bedrock = Inference via Bedrock
+input-model-inference-via-api-key = Inference via API key
+input-model-upgrade-not-available = {$display_name} is not available for free users.
+input-model-upgrade = Upgrade
+input-model-or =  or
+input-model-bring-your-own-key = bring your own key
+input-model-open-file-local-only = The /open-file command is only available for local sessions
+input-model-open-file-directories-only = The /open-file command only works for files, not directories
+
+## -- Context menu item strings (ctx- prefix) --
+
+ctx-copy = Copy
+ctx-copy-prompt = Copy prompt
+ctx-copy-output-as-markdown = Copy output as Markdown
+ctx-copy-url = Copy URL
+ctx-copy-path = Copy path
+ctx-copy-command = Copy command
+ctx-copy-git-branch = Copy git branch
+ctx-save-as-prompt = Save as prompt
+ctx-copy-share-link = Copy share link
+ctx-share-conversation = Share conversation
+ctx-copy-conversation-text = Copy conversation text
+ctx-copy-debugging-link = Copy debugging link
+ctx-copy-conversation-id = Copy conversation ID
+ctx-copy-debugging-id = Copy debugging ID
+ctx-fork = Fork
+ctx-fork-from-here = Fork from here
+ctx-rewind-to-before-here = Rewind to before here
+ctx-open-in-warp = Open in Warp
+ctx-paste = Paste
+ctx-clear-blocks = Clear Blocks
+ctx-hide = Hide
+ctx-show = Show
+ctx-toggle-input-hint-text = { $action } input hint text
+
+## -- Banner strings (banner- prefix) --
+
+banner-ssh-compat-before-link = Seems like your completions are not working (
+banner-ssh-compat-more-info = more info
+banner-ssh-compat-after-link = ). Enabling the SSH extension in
+banner-ssh-compat-settings = settings
+banner-ssh-compat-may-resolve =  may resolve this issue.
+banner-shell-incompat = Your shell configuration is incompatible with Warp...
+banner-more-info = More info
+banner-clipboard-blocked = A terminal program tried to access your clipboard. This is disabled by default for security reasons.
+banner-clipboard-allow = Allow
+banner-clipboard-dont-show = Don't show again
+banner-couldnt-continue-cloud-task = Couldn't continue this cloud task.
+banner-p10k-now-supports = Powerlevel10k now supports Warp!
+banner-p10k-unsupported-version = You seem to be running an older (unsupported) version, please follow
+banner-p10k-these-instructions = these instructions
+banner-p10k-to-update =  to update to the latest version.
+banner-pure-unsupported = Pure is not yet supported in Warp. You might consider one of the supported prompts as an alternative.
+banner-tmux-ssh-deprecated = Tmux SSH warpification has been deprecated
+banner-tmux-ssh-deprecated-body = Warp now connects to remote sessions using the SSH extension, which is more robust than the tmux-based flow. The tmux option has been removed.
+banner-ssh-remote-body = While advanced features like file browsing and code review are currently disabled, the rest of your Warpified experience is fully available.

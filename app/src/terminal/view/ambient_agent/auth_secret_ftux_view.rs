@@ -34,6 +34,12 @@ use crate::ui_components::icons::Icon as UiIcon;
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
 use crate::workspaces::user_workspaces::UserWorkspaces;
+use crate::static_tr;
+
+static_tr!(ENTER_CREDENTIALS, "terminal", "ftux-enter-credentials");
+static_tr!(PRIVACY_TEXT, "terminal", "ftux-privacy-text");
+static_tr!(LEARN_MORE_LABEL, "terminal", "ftux-learn-more-auth");
+static_tr!(SHARE_WITH_TEAM, "terminal", "ftux-share-with-team");
 
 const DESCRIPTION_FONT_SIZE: f32 = 14.;
 
@@ -741,7 +747,7 @@ impl AuthSecretFtuxView {
 
         let main_text = {
             let description = if self.current_type_info().is_some() {
-                "Enter your credentials below.".to_string()
+                ENTER_CREDENTIALS.get().to_string()
             } else {
                 let display_name = harness_display::display_name(self.harness);
                 crate::tr!("agent_cloud", "select-api-key", display_name = display_name)
@@ -753,7 +759,7 @@ impl AuthSecretFtuxView {
         };
 
         let privacy_text = Text::new_inline(
-            "Your credentials are encrypted end-to-end. ".to_string(),
+            PRIVACY_TEXT.get().to_string(),
             font_family,
             TYPE_DESCRIPTION_FONT_SIZE,
         )
@@ -767,7 +773,7 @@ impl AuthSecretFtuxView {
             .map(|info| info.learn_more_url)
             .unwrap_or_else(|| learn_more_url_for_harness(self.harness));
         let learn_more_label =
-            format!("Learn more about authentication for {harness_name} in Warp.");
+            crate::tr!("terminal", "ftux-learn-more-auth", harness_name = harness_name.clone());
         let learn_more = Hoverable::new(self.learn_more_mouse_state.clone(), move |state| {
             let color = if state.is_hovered() {
                 accent_color
@@ -874,7 +880,7 @@ impl AuthSecretFtuxView {
         let theme = appearance.theme();
         let label_color = internal_colors::text_sub(theme, theme.surface_1());
         let label = Text::new_inline(
-            "Share with team".to_string(),
+            SHARE_WITH_TEAM.get().to_string(),
             appearance.ui_font_family(),
             TYPE_DESCRIPTION_FONT_SIZE,
         )

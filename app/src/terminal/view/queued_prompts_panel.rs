@@ -50,18 +50,24 @@ use crate::terminal::input::suggestions_mode_model::InputSuggestionsModeModel;
 use crate::ui_components::icons::Icon as TerminalIcon;
 use crate::util::truncation::truncate_from_end;
 use crate::view_components::action_button::{ActionButton, ButtonSize, NakedTheme};
+use crate::static_tr;
+
+static_tr!(SEND_NOW_LABEL, "terminal", "queued-send-now");
+static_tr!(EDIT_LABEL, "common", "edit-label");
+static_tr!(DELETE_LABEL, "common", "delete-label");
+static_tr!(TO_SEND_LABEL, "terminal", "queued-to-send");
+static_tr!(INITIAL_CLOUD_TIP, "terminal", "queued-initial-cloud-tip");
+static_tr!(CLOUD_SETUP_TIP, "terminal", "queued-cloud-setup-tip");
+static_tr!(FULL_TERMINAL_USE_TIP, "terminal", "queued-full-terminal-use-tip");
+static_tr!(READ_ONLY_VIEWER_TIP, "terminal", "queued-read-only-viewer-tip");
+static_tr!(LRC_SUFFIX, "terminal", "queued-lrc-suffix");
+static_tr!(HEADER_LABEL, "terminal", "queued-header-label");
 
 const MAX_PROMPT_LINES: f32 = 5.;
 /// Max characters shown in a row's single-line preview before truncation.
 const PROMPT_PREVIEW_MAX_CHARS: usize = 500;
-const INITIAL_CLOUD_MODE_PROMPT_TOOLTIP: &str = "The first cloud-mode prompt cannot be changed.";
-const SEND_NOW_DURING_CLOUD_SETUP_TOOLTIP: &str =
-    "Prompts cannot be sent until environment setup is complete.";
-const SEND_NOW_TO_FULL_TERMINAL_USE_AGENT_TOOLTIP: &str = "Send to full terminal use agent";
-const SEND_NOW_AS_READ_ONLY_VIEWER_TOOLTIP: &str = "Read-only viewers cannot send prompts.";
 /// Suffix on rows auto-queued during an agent-requested long-running command, which fire
 /// when that command completes rather than at the end of the full response.
-const LRC_AUTO_QUEUE_ROW_SUFFIX: &str = "(queued until the command finishes)";
 
 /// Returns the position-cache id used to look up a row's bounding rect during a drag.
 /// Indexed by the row's current visual index so swaps maintain stable lookups.
@@ -80,17 +86,17 @@ fn build_row_state(
     // "wait for the cloud agent" message while send-now is disabled; "Send now" is the default.
     let (edit_tooltip, delete_tooltip) = if is_initial_cloud_mode_prompt {
         (
-            INITIAL_CLOUD_MODE_PROMPT_TOOLTIP,
-            INITIAL_CLOUD_MODE_PROMPT_TOOLTIP,
+            INITIAL_CLOUD_TIP.get(),
+            INITIAL_CLOUD_TIP.get(),
         )
     } else {
-        ("Edit", "Delete")
+        (EDIT_LABEL.get(), DELETE_LABEL.get())
     };
 
     let send_now_button = ctx.add_typed_action_view(move |_| {
         ActionButton::new("", NakedTheme)
             .with_icon(TerminalIcon::ArrowUp)
-            .with_tooltip("Send now")
+            .with_tooltip(SEND_NOW_LABEL.get())
             .with_size(ButtonSize::XSmall)
             .with_disabled_theme(NakedTheme)
             .on_click(move |ctx| {
@@ -413,13 +419,13 @@ impl QueuedPromptsPanelView {
                 *origin == QueuedQueryOrigin::InitialCloudMode || cloud_setup_in_progress;
             let disabled = disabled_for_cloud_setup || !self.can_send_prompt;
             let tooltip = if disabled_for_cloud_setup {
-                SEND_NOW_DURING_CLOUD_SETUP_TOOLTIP
+                CLOUD_SETUP_TIP.get()
             } else if !self.can_send_prompt {
-                SEND_NOW_AS_READ_ONLY_VIEWER_TOOLTIP
+                READ_ONLY_VIEWER_TIP.get()
             } else if lrc_subagent_in_progress {
-                SEND_NOW_TO_FULL_TERMINAL_USE_AGENT_TOOLTIP
+                FULL_TERMINAL_USE_TIP.get()
             } else {
-                "Send now"
+                SEND_NOW_LABEL.get()
             };
             send_now_button.update(ctx, |button, ctx| {
                 button.set_disabled(disabled, ctx);
@@ -1032,7 +1038,7 @@ fn render_header(
             );
             row.add_child(Container::new(keycap).with_margin_left(4.).finish());
             row.add_child(
-                Text::new("to send", ui_font_family, ui_font_size)
+                Text::new(TO_SEND_LABEL.get(), ui_font_family, ui_font_size)
                     .with_style(Properties {
                         style: Style::Normal,
                         weight: Weight::Normal,
@@ -1172,7 +1178,7 @@ fn render_row(props: RenderRowProps<'_>, app: &AppContext) -> Box<dyn Element> {
             } else if origin == QueuedQueryOrigin::LrcAutoQueue {
                 let suffix_color: ColorU = theme.sub_text_color(theme.surface_1()).into();
                 let suffix = Text::new(
-                    LRC_AUTO_QUEUE_ROW_SUFFIX,
+                    LRC_SUFFIX.get(),
                     appearance.ui_font_family(),
                     queued_input_font_size,
                 )
@@ -1219,7 +1225,7 @@ fn render_row(props: RenderRowProps<'_>, app: &AppContext) -> Box<dyn Element> {
                 if drag_state.is_hovered() {
                     stack.add_positioned_overlay_child(
                         ui_builder
-                            .tool_tip(INITIAL_CLOUD_MODE_PROMPT_TOOLTIP.to_owned())
+                            .tool_tip(INITIAL_CLOUD_TIP.get().to_owned())
                             .build()
                             .finish(),
                         OffsetPositioning::offset_from_parent(
@@ -1310,5 +1316,5 @@ fn render_row(props: RenderRowProps<'_>, app: &AppContext) -> Box<dyn Element> {
 
 /// Returns the user-visible header label for `count` queued prompts.
 fn header_label_text(count: usize) -> String {
-    format!("{count} queued")
+    crate::tr!("terminal", "queued-header-label", count = count)
 }

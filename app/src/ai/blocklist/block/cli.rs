@@ -1861,7 +1861,7 @@ fn render_permissions_speedbump(
 
     let formatted_text = FormattedTextElement::new(
         FormattedText::new([FormattedTextLine::Line(vec![
-            FormattedTextFragment::hyperlink("Manage Agent permissions", "Settings > AI"),
+            FormattedTextFragment::hyperlink(&crate::tr!("ai_assistant", "ai-manage-autonomy-permissions"), &crate::tr!("ai_assistant", "ai-settings-ai")),
         ])]),
         font_size,
         font_family,
@@ -2032,32 +2032,35 @@ fn render_search_action_input(
             ref path,
         } => {
             let display_path = if path == "." {
-                "the current directory"
+                crate::tr!("ai_assistant", "ai-inline-current-dir")
             } else {
-                path.as_str()
+                path.as_str().to_owned()
             };
 
             if queries.len() == 1 {
-                format!("Grep for `{}` in {}", queries[0], display_path)
+                crate::tr!("ai_assistant", "ai-cli-grep-for", query = &queries[0], path = &display_path)
             } else {
                 let patterns_list = queries
                     .iter()
                     .map(|q| format!(" - `{q}`"))
                     .collect::<Vec<_>>()
                     .join("\n");
-                format!("Grep for the following patterns in {display_path}:\n{patterns_list}")
+                crate::tr!("ai_assistant", "ai-cli-grep-patterns-in", path = &display_path, patterns_list = &patterns_list)
             }
         }
         AIAgentActionType::FileGlobV2 {
             ref patterns,
             ref search_dir,
         } => {
-            let display_path = search_dir.as_deref().unwrap_or("the current directory");
+            let current_dir_label = crate::tr!("ai_assistant", "ai-inline-current-dir");
+            let display_path = search_dir.as_deref().unwrap_or(&current_dir_label);
 
             if patterns.len() == 1 {
-                format!(
-                    "Search for files that match `{}` in {}",
-                    patterns[0], display_path
+                crate::tr!(
+                    "ai_assistant",
+                    "ai-cli-find-files-match",
+                    pattern = &patterns[0],
+                    path = display_path
                 )
             } else {
                 let patterns_list = patterns
@@ -2065,8 +2068,11 @@ fn render_search_action_input(
                     .map(|p| format!(" - `{p}`"))
                     .collect::<Vec<_>>()
                     .join("\n");
-                format!(
-                    "Find files that match the following patterns in {display_path}:\n{patterns_list}"
+                crate::tr!(
+                    "ai_assistant",
+                    "ai-cli-find-files-patterns-in",
+                    path = display_path,
+                    patterns_list = &patterns_list
                 )
             }
         }

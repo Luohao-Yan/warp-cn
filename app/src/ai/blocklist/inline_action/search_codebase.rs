@@ -166,10 +166,11 @@ impl SearchCodebaseView {
             None
         };
 
+        let results_label = crate::tr!("ai_assistant", "ai-inline-results-label");
         render_collapsible_search_results(
             title_text,
             file_contexts.len(),
-            "results",
+            &results_label,
             &self.collapsible,
             body,
             |ctx| {
@@ -229,7 +230,7 @@ impl SearchCodebaseView {
                 font_size: Some(appearance.monospace_font_size()),
                 ..Default::default()
             };
-            self.render_formatted_text("No results found".to_string(), no_results_style, appearance)
+            self.render_formatted_text(crate::tr!("ai_assistant", "ai-inline-no-results"), no_results_style, appearance)
         } else {
             render_read_files_text(
                 render_read_file_args,
@@ -461,9 +462,9 @@ impl View for SearchCodebaseView {
                 | AIActionStatus::RunningAsync,
             ) => {
                 let loading_text = if let Some(repo_name) = &self.repo_name {
-                    format!("Searching for \"{}\" in {}", self.search_query, repo_name)
+                    format!("{} \"{}\" {}", crate::tr!("ai_assistant", "ai-inline-search-for"), self.search_query, repo_name)
                 } else {
-                    format!("Searching codebase for \"{}\"", self.search_query)
+                    crate::tr!("ai_assistant", "ai-inline-search-codebase-for", query = &self.search_query)
                 };
                 let loading_icon = yellow_running_icon(appearance);
                 self.render_header(appearance, loading_text, loading_icon, app)
@@ -472,12 +473,9 @@ impl View for SearchCodebaseView {
             }
             Some(AIActionStatus::Finished(result)) if result.result.is_cancelled() => {
                 let cancelled_text = if let Some(repo_name) = &self.repo_name {
-                    format!(
-                        "Search for \"{}\" in {} cancelled",
-                        self.search_query, repo_name
-                    )
+                    crate::tr!("ai_assistant", "ai-inline-search-cancelled-in", query = &self.search_query, repo = repo_name)
                 } else {
-                    format!("Search for \"{}\" cancelled", self.search_query)
+                    crate::tr!("ai_assistant", "ai-inline-search-cancelled", query = &self.search_query)
                 };
                 let cancelled_icon = cancelled_icon(appearance);
                 self.render_header(appearance, cancelled_text, cancelled_icon, app)
@@ -490,12 +488,9 @@ impl View for SearchCodebaseView {
                 .finish(),
             _ => {
                 let text = if let Some(repo_name) = &self.repo_name {
-                    format!(
-                        "Searched codebase for \"{}\" in {}",
-                        self.search_query, repo_name
-                    )
+                    crate::tr!("ai_assistant", "ai-inline-searched-codebase-in", query = &self.search_query, repo = repo_name)
                 } else {
-                    format!("Searched codebase for \"{}\"", self.search_query)
+                    crate::tr!("ai_assistant", "ai-inline-searched-codebase", query = &self.search_query)
                 };
                 self.render_simple_header(text, app)
                     .with_agent_output_item_spacing(app)

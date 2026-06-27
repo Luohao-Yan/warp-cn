@@ -408,35 +408,43 @@ static_tr!(pub AI_COMMAND_SEARCH_HINT_TEXT, "terminal", "ai-command-search-hint"
 static_tr!(AGENT_MODE_AI_DISABLED_AUTODETECTION_DISABLED_HINT_TEXT, "terminal", "run-commands-hint");
 
 // Rotating hint text options for new Agent Mode conversations
-const AGENT_MODE_HINT_OPTIONS: &[&str] = &[
-    "Warp anything e.g. Deploy my React app to Vercel and set up environment variables",
-    "Warp anything e.g. Help me debug why my Python tests are failing in CI",
-    "Warp anything e.g. Set up a new microservice with Docker and create the deployment pipeline",
-    "Warp anything e.g. Find and fix the memory leak in my Node.js application",
-    "Warp anything e.g. Create a backup script for my PostgreSQL database and schedule it",
-    "Warp anything e.g. Help me migrate my data from MySQL to PostgreSQL",
-    "Warp anything e.g. Set up monitoring and alerts for my AWS infrastructure",
-    "Warp anything e.g. Build a REST API for my mobile app using FastAPI",
-    "Warp anything e.g. Help me optimize my SQL queries that are running slowly",
-    "Warp anything e.g. Create a GitHub Actions workflow to automatically deploy on merge",
-    "Warp anything e.g. Set up Redis caching for my web application",
-    "Warp anything e.g. Help me troubleshoot why my Kubernetes pods keep crashing",
-    "Warp anything e.g. Build a data pipeline to process CSV files and load them into BigQuery",
-    "Warp anything e.g. Set up SSL certificates and configure HTTPS for my domain",
-    "Warp anything e.g. Help me refactor this legacy code to use modern design patterns",
-    "Warp anything e.g. Create unit tests for my authentication service",
-    "Warp anything e.g. Set up log aggregation with ELK stack for my distributed system",
-    "Warp anything e.g. Help me implement OAuth2 authentication in my Express.js app",
-    "Warp anything e.g. Optimize my Docker images to reduce build times and size",
-    "Warp anything e.g. Set up A/B testing infrastructure for my web application",
+static_tr!(AGENT_HINT_1, "terminal", "agent-hint-deploy-react");
+static_tr!(AGENT_HINT_2, "terminal", "agent-hint-debug-python");
+static_tr!(AGENT_HINT_3, "terminal", "agent-hint-setup-microservice");
+static_tr!(AGENT_HINT_4, "terminal", "agent-hint-fix-memory-leak");
+static_tr!(AGENT_HINT_5, "terminal", "agent-hint-backup-postgres");
+static_tr!(AGENT_HINT_6, "terminal", "agent-hint-migrate-mysql");
+static_tr!(AGENT_HINT_7, "terminal", "agent-hint-monitor-aws");
+static_tr!(AGENT_HINT_8, "terminal", "agent-hint-build-fastapi");
+static_tr!(AGENT_HINT_9, "terminal", "agent-hint-optimize-sql");
+static_tr!(AGENT_HINT_10, "terminal", "agent-hint-github-actions");
+static_tr!(AGENT_HINT_11, "terminal", "agent-hint-redis-cache");
+static_tr!(AGENT_HINT_12, "terminal", "agent-hint-k8s-crash");
+static_tr!(AGENT_HINT_13, "terminal", "agent-hint-data-pipeline");
+static_tr!(AGENT_HINT_14, "terminal", "agent-hint-ssl-https");
+static_tr!(AGENT_HINT_15, "terminal", "agent-hint-refactor-legacy");
+static_tr!(AGENT_HINT_16, "terminal", "agent-hint-unit-test-auth");
+static_tr!(AGENT_HINT_17, "terminal", "agent-hint-elk-stack");
+static_tr!(AGENT_HINT_18, "terminal", "agent-hint-oauth-express");
+static_tr!(AGENT_HINT_19, "terminal", "agent-hint-docker-optimize");
+static_tr!(AGENT_HINT_20, "terminal", "agent-hint-ab-testing");
+
+use warp_i18n::I18nString;
+
+const AGENT_HINT_REFS: &[&I18nString] = &[
+    &AGENT_HINT_1, &AGENT_HINT_2, &AGENT_HINT_3, &AGENT_HINT_4,
+    &AGENT_HINT_5, &AGENT_HINT_6, &AGENT_HINT_7, &AGENT_HINT_8,
+    &AGENT_HINT_9, &AGENT_HINT_10, &AGENT_HINT_11, &AGENT_HINT_12,
+    &AGENT_HINT_13, &AGENT_HINT_14, &AGENT_HINT_15, &AGENT_HINT_16,
+    &AGENT_HINT_17, &AGENT_HINT_18, &AGENT_HINT_19, &AGENT_HINT_20,
 ];
 
 fn get_agent_mode_new_conversation_hint_text() -> &'static str {
     use std::sync::atomic::{AtomicUsize, Ordering};
     static HINT_INDEX: AtomicUsize = AtomicUsize::new(0);
 
-    let index = HINT_INDEX.fetch_add(1, Ordering::Relaxed) % AGENT_MODE_HINT_OPTIONS.len();
-    AGENT_MODE_HINT_OPTIONS[index]
+    let index = HINT_INDEX.fetch_add(1, Ordering::Relaxed) % AGENT_HINT_REFS.len();
+    AGENT_HINT_REFS[index].get()
 }
 
 fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'static str {
@@ -451,9 +459,8 @@ fn get_stable_agent_mode_hint_text(cached_hint: &mut Option<&'static str>) -> &'
 
 static_tr!(AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI, "terminal", "steer-agent-hint");
 static_tr!(AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_CLASSIC, "terminal", "steer-agent-classic");
-const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI: &str = "Queue a follow up for the running agent";
-const AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC: &str =
-    "Queue a follow up for the running agent, or backspace to exit";
+static_tr!(AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI, "terminal", "queue-follow-up-hint");
+static_tr!(AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC, "terminal", "queue-follow-up-classic-hint");
 static_tr!(AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_UDI, "terminal", "ask-follow-up");
 static_tr!(AGENT_MODE_AI_ENABLED_FOLLOW_UP_HINT_TEXT_CLASSIC, "terminal", "ask-follow-up-classic");
 
@@ -3298,7 +3305,7 @@ impl Input {
                     ToastStack::handle(ctx).update(ctx, |ts, ctx| {
                         ts.add_ephemeral_toast(
                             DismissibleToast::error(
-                                "Attached images were removed — the selected model does not support images.".to_string(),
+                                crate::tr!("terminal", "images-removed-model-unsupported"),
                             ),
                             window_id,
                             ctx,
@@ -4642,7 +4649,7 @@ impl Input {
                     ctx.dispatch_typed_action_deferred(action);
                 } else {
                     ctx.emit(Event::ShowToast {
-                        message: "Couldn't navigate to conversation.".to_string(),
+                        message: crate::tr!("terminal", "conversation-navigate-error"),
                         flavor: ToastFlavor::Error,
                     });
                 }
@@ -6198,11 +6205,11 @@ impl Input {
                         let agent_name = conversation.agent_name().unwrap_or("child");
                         if conversation.status().is_in_progress() {
                             if is_queue_next_prompt_enabled {
-                                return format!("Queue a follow up for the {agent_name} agent");
+                                return crate::tr!("terminal", "queue-child-follow-up", agent_name = agent_name);
                             }
-                            return format!("Steer the {agent_name} agent");
+                            return crate::tr!("terminal", "steer-child-agent", agent_name = agent_name);
                         }
-                        return format!("Ask the {agent_name} agent a follow up");
+                        return crate::tr!("terminal", "ask-child-follow-up", agent_name = agent_name);
                     }
                 }
 
@@ -6218,9 +6225,9 @@ impl Input {
                     Some(status) if status.is_in_progress() => {
                         if is_queue_next_prompt_enabled {
                             if is_udi_enabled {
-                                AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI.to_owned()
+                                AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_UDI.get().to_owned()
                             } else {
-                                AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC.to_owned()
+                                AGENT_MODE_AI_ENABLED_QUEUE_HINT_TEXT_CLASSIC.get().to_owned()
                             }
                         } else if is_udi_enabled {
                             AGENT_MODE_AI_ENABLED_STEER_HINT_TEXT_UDI.get().to_owned()

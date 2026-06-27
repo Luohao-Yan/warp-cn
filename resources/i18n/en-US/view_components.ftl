@@ -24,3 +24,7 @@ view-components-raw = Raw
 
 view-components-case-sensitive = Aa
 
+## -- Scanning indicator --
+
+view-components-find-scanning = Scanning...
+

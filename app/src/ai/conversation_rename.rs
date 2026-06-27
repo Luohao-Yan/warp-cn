@@ -8,14 +8,14 @@ use crate::workspace::ToastStack;
 
 const CONVERSATION_TITLE_MAX_CHARS: usize = 500;
 
-const EMPTY_TITLE_MESSAGE: &str = "Please provide a conversation title";
-const EMPTY_CONVERSATION_MESSAGE: &str = "You can't rename an empty conversation";
-const CONVERSATION_NOT_FOUND_MESSAGE: &str = "Conversation not found";
-const NOT_SYNCED_MESSAGE: &str =
-    "Your conversation hasn't synced to the cloud yet. Try sending another message, then rename it again.";
-const RENAME_IN_PROGRESS_MESSAGE: &str = "A rename is already in progress for this conversation";
-const CONVERSATION_NOT_READY_MESSAGE: &str =
-    "Your conversation is still syncing. Try renaming it again in a moment.";
+use crate::static_tr;
+
+static_tr!(EMPTY_TITLE_MESSAGE, "ai_assistant", "ai-conv-empty-title");
+static_tr!(EMPTY_CONVERSATION_MESSAGE, "ai_assistant", "ai-conv-empty-conversation");
+static_tr!(CONVERSATION_NOT_FOUND_MESSAGE, "ai_assistant", "ai-conv-not-found");
+static_tr!(NOT_SYNCED_MESSAGE, "ai_assistant", "ai-conv-not-synced");
+static_tr!(RENAME_IN_PROGRESS_MESSAGE, "ai_assistant", "ai-conv-rename-in-progress");
+static_tr!(CONVERSATION_NOT_READY_MESSAGE, "ai_assistant", "ai-conv-not-ready");
 
 /// Renames a conversation locally and triggers a conversation rename on the server.
 ///
@@ -43,7 +43,7 @@ pub(crate) fn rename_conversation<T: View>(
         let window_id = ctx.window_id();
         ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
             toast_stack.add_ephemeral_toast(
-                DismissibleToast::error(EMPTY_CONVERSATION_MESSAGE.to_owned()),
+                DismissibleToast::error(EMPTY_CONVERSATION_MESSAGE.get().to_owned()),
                 window_id,
                 ctx,
             );
@@ -61,13 +61,13 @@ pub(crate) fn rename_conversation<T: View>(
         Ok(server_conversation_id) => server_conversation_id,
         Err(err) => {
             let message = match err {
-                BeginConversationRenameError::MissingServerConversationToken => NOT_SYNCED_MESSAGE,
-                BeginConversationRenameError::RenameInProgress => RENAME_IN_PROGRESS_MESSAGE,
+                BeginConversationRenameError::MissingServerConversationToken => NOT_SYNCED_MESSAGE.get().to_owned(),
+                BeginConversationRenameError::RenameInProgress => RENAME_IN_PROGRESS_MESSAGE.get().to_owned(),
                 BeginConversationRenameError::ConversationNotFound => {
-                    CONVERSATION_NOT_FOUND_MESSAGE
+                    CONVERSATION_NOT_FOUND_MESSAGE.get().to_owned()
                 }
                 BeginConversationRenameError::ConversationNotReady => {
-                    CONVERSATION_NOT_READY_MESSAGE
+                    CONVERSATION_NOT_READY_MESSAGE.get().to_owned()
                 }
             };
             let window_id = ctx.window_id();
@@ -99,7 +99,7 @@ pub(crate) fn rename_conversation<T: View>(
                     });
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::success(format!("Conversation renamed to {title}")),
+                            DismissibleToast::success(crate::tr!("ai_assistant", "ai-conv-renamed-to", title = title.as_str())),
                             window_id,
                             ctx,
                         );
@@ -111,7 +111,7 @@ pub(crate) fn rename_conversation<T: View>(
                     });
                     ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                         toast_stack.add_ephemeral_toast(
-                            DismissibleToast::error(format!("Failed to rename conversation: {e}")),
+                            DismissibleToast::error(crate::tr!("ai_assistant", "ai-conv-failed-rename", error = format!("{e:#}"))),
                             window_id,
                             ctx,
                         );
@@ -140,13 +140,11 @@ fn conversation_already_has_title<T: View>(
 fn validate_conversation_title(title: String) -> Result<String, String> {
     let title = title.trim();
     if title.is_empty() {
-        return Err(EMPTY_TITLE_MESSAGE.to_owned());
+        return Err(EMPTY_TITLE_MESSAGE.get().to_owned());
     }
 
     if title.chars().count() > CONVERSATION_TITLE_MAX_CHARS {
-        return Err(format!(
-            "Conversation title must be {CONVERSATION_TITLE_MAX_CHARS} characters or fewer",
-        ));
+        return Err(crate::tr!("ai_assistant", "ai-conv-title-max-chars", count = CONVERSATION_TITLE_MAX_CHARS as i64));
     }
 
     Ok(title.to_owned())

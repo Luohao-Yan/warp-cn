@@ -236,3 +236,137 @@ code-find-bar-with-matches = { $current } of { $total }
 code-find-replace-success = { $count } replaced
 code-find-result-of = of
 
+## -- Code settings page strings (code_page.rs) ----------------------------
+
+code-feature-name = Code
+code-initialization-settings-header = Initialization Settings
+code-codebase-indexing-label = Codebase indexing
+code-codebase-index-description = Warp can automatically index code repositories as you navigate them, helping agents quickly understand context and provide solutions. Code is never stored on the server. If a codebase is unable to be indexed, Warp can still navigate your codebase and gain insights via grep and find tool calling.
+code-warp-indexing-ignore-description = To exclude specific files or directories from indexing, add them to the .warpindexingignore file in your repository directory. These files will still be accessible to AI features, but they won't be included in codebase embeddings.
+code-index-new-folder = Index new folder
+code-auto-index-feature-name = Index new folders by default
+code-auto-index-description = When set to true, Warp will automatically index code repositories as you navigate them - helping agents quickly understand context and provide targeted solutions.
+code-indexing-disabled-admin = Team admins have disabled codebase indexing.
+code-indexing-enabled-admin = Team admins have enabled codebase indexing.
+code-indexing-disabled-global-ai = AI Features must be enabled to use codebase indexing.
+code-codebase-index-limit-reached = You have reached the maximum number of codebase indices for your plan. Delete existing indices to auto-index new codebases.
+code-initialized-indexed-folders = Initialized / indexed folders
+code-no-folders-initialized = No folders have been initialized yet.
+code-open-project-rules = Open project rules
+code-indexing-label = INDEXING
+code-lsp-servers-label = LSP SERVERS
+code-index-no-index-created = No index created
+code-index-discovered-chunks = Discovered { $total_nodes } chunks
+code-index-syncing-progress = Syncing - { $completed_nodes } / { $total_nodes }
+code-index-syncing = Syncing...
+code-index-synced = Synced
+code-index-codebase-too-large = Codebase too large
+code-index-stale = Stale
+code-index-failed = Failed
+code-index-no-index-built = No index built
+code-index-limit-reached = Index limit reached
+code-index-unavailable = Unavailable
+code-index-disabled = Disabled
+code-index-queued = Queued
+code-index-indexing-progress = Indexing - { $completed } / { $total }
+code-index-indexing-partial = Indexing - { $completed }
+code-index-indexing-zero = Indexing - 0 / { $total }
+code-index-indexing = Indexing...
+code-lsp-installed = Installed
+code-lsp-installing = Installing...
+code-lsp-checking = Checking...
+code-lsp-available-download = Available for download
+code-lsp-available = Available
+code-lsp-busy = Busy
+code-lsp-failed = Failed
+code-lsp-stopped = Stopped
+code-lsp-not-running = Not running
+code-restart-server = Restart server
+code-view-logs = View logs
+code-codebase-indexing-category = Codebase Indexing
+code-code-editor-review-category = Code Editor and Review
+code-codebase-indexing-subpage = Codebase Indexing
+code-auto-open-code-review = Auto open code review panel
+code-auto-open-code-review-desc = When this setting is on, the code review panel will open on the first accepted diff of a conversation
+code-show-code-review-btn = Show code review button
+code-show-code-review-btn-desc = Show a button in the top right of the window to toggle the code review panel.
+code-show-diff-stats-btn = Show diff stats on code review button
+code-show-diff-stats-btn-desc = Show lines added and removed counts on the code review button.
+code-project-explorer = Project explorer
+code-project-explorer-desc = Adds an IDE-style project explorer / file tree to the left side tools panel.
+code-global-file-search = Global file search
+code-global-file-search-desc = Adds global file search to the left side tools panel.
+code-show-hidden-files = Show hidden files in project explorer
+code-show-hidden-files-desc = Show dotfiles and hidden files (starting with .) in the project explorer.
+code-format-on-save = Format on save (requires an active language server)
+code-format-on-save-desc = Only applies when a language server is active for the file. Automatically formats the file with the language server on save; other LSP features (hover, go-to-definition, references, diagnostics) are unaffected.
+
+## -- MCP server list page strings (list_page.rs) --------------------------
+
+code-mcp-description-text = Add MCP servers to extend the Warp Agent's capabilities. MCP servers expose data sources or tools to agents through a standardized interface, essentially acting like plugins. Add a custom server, or use the presets to get started with popular servers. You can also find team servers that have been shared with you here.
+code-mcp-empty-state = Once you add a MCP server, it will be shown here.
+code-mcp-no-search-results = No search results found
+code-mcp-search-placeholder = Search MCP Servers
+code-mcp-learn-more = Learn more.
+code-mcp-auto-detect-desc = Automatically detect and spawn MCP servers from globally-scoped third-party AI agent configuration files (e.g. in your home directory). Servers detected inside a repository are never spawned automatically and must be enabled individually in the "Detected from" sections below.
+code-mcp-see-providers = See supported providers.
+code-mcp-my-mcps = My MCPs
+code-mcp-shared-by-warp-and-team-name = Shared by Warp and { $team_name }
+code-mcp-shared-by-warp-and-devices = Shared by Warp and from other devices
+code-mcp-shared-from-warp = Shared from Warp
+code-mcp-detected-from = Detected from { $provider }
+code-mcp-global = global
+code-mcp-shared-by-creator = Shared by: { $creator }
+code-mcp-shared-by-team-member = Shared by a team member
+code-mcp-from-another-device = From another device
+code-mcp-shared-from-team = Shared from team
+
+## -- MCP installation modal strings (installation_modal.rs) ---------------
+
+code-mcp-install = Install
+code-mcp-install-name = Install { $name }
+code-mcp-no-server-selected = No MCP server selected
+
+## -- MCP update modal strings (update_modal.rs) --------------------------
+
+code-mcp-update = Update
+code-mcp-update-name = Update { $name }
+code-mcp-updates-available = This server has { $count } updates available, which would you like to proceed with?
+code-mcp-another-device = another device
+code-mcp-a-team-member = a team member
+code-mcp-update-from = Update from { $publisher }
+code-mcp-update-from-gallery = Update from { $name }
+code-mcp-version = Version { $version }
+code-mcp-no-updates = No updates available
+
+## -- Custom inference modal strings (custom_inference_modal.rs) -----------
+
+code-custom-inf-endpoint-desc = Provide your endpoint details below. You can add as many models from the endpoint as you'd like and can also provide aliases for the model picker in your input.
+code-custom-inf-endpoint-name = Endpoint name
+code-custom-inf-endpoint-url = Endpoint URL
+code-custom-inf-api-key = API key
+code-custom-inf-api-format = API format
+code-custom-inf-model-name = Model name
+code-custom-inf-model-alias = Model alias (optional)
+code-custom-inf-add-model = + Add model
+code-custom-inf-add-endpoint = Add endpoint
+code-custom-inf-save = Save
+code-custom-inf-name-placeholder = e.g., Zach's external models
+code-custom-inf-url-placeholder = Please include 'https://'
+code-custom-inf-api-key-placeholder = e.g., sk-...
+code-custom-inf-model-name-placeholder = e.g., GLM-5-FP8
+code-custom-inf-model-alias-placeholder = e.g., GLM-5
+
+## -- Execution profile strings (execution_profile_view.rs) ----------------
+
+code-exec-profile-never = Never
+code-exec-profile-always-allow = Always allow
+code-exec-profile-always-ask = Always ask
+code-exec-profile-run-agents = Run agents:
+
+## -- Remove endpoint dialog strings (remove_custom_endpoint_confirmation_dialog.rs) --
+
+code-remove-endpoint-title = Remove endpoint?
+code-remove-endpoint-desc = Are you sure you want to remove this endpoint? You won't be able to use its models in your agent sessions moving forward.
+code-remove-endpoint-button = Remove endpoint
+

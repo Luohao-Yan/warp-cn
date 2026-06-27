@@ -12,6 +12,12 @@ use crate::appearance::Appearance;
 use crate::ui_components::dialog::{dialog_styles, Dialog};
 use crate::view_components::action_button::{ActionButton, DangerPrimaryTheme, NakedTheme};
 
+use crate::static_tr;
+
+static_tr!(REMOVE_ENDPOINT_TITLE, "code", "remove-endpoint-title");
+static_tr!(REMOVE_ENDPOINT_DESC, "code", "remove-endpoint-desc");
+static_tr!(REMOVE_ENDPOINT_BUTTON, "code", "remove-endpoint-button");
+
 const DIALOG_WIDTH: f32 = 450.;
 
 pub enum RemoveCustomEndpointConfirmationDialogEvent {
@@ -37,13 +43,13 @@ pub struct RemoveCustomEndpointConfirmationDialog {
 impl RemoveCustomEndpointConfirmationDialog {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Cancel", NakedTheme).on_click(|ctx| {
+            ActionButton::new(crate::tr!("common", "cancel-label"), NakedTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(RemoveCustomEndpointConfirmationDialogAction::Cancel);
             })
         });
 
         let confirm_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Remove endpoint", DangerPrimaryTheme).on_click(|ctx| {
+            ActionButton::new(REMOVE_ENDPOINT_BUTTON.get(), DangerPrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(RemoveCustomEndpointConfirmationDialogAction::Confirm);
             })
         });
@@ -99,7 +105,7 @@ impl View for RemoveCustomEndpointConfirmationDialog {
         let appearance = Appearance::as_ref(app);
         let theme = appearance.theme();
 
-        let description = "Are you sure you want to remove this endpoint? You won't be able to use its models in your agent sessions moving forward.".to_string();
+        let description = REMOVE_ENDPOINT_DESC.get().to_string();
 
         let endpoint_title = Text::new_inline(
             self.endpoint_name.clone(),
@@ -130,7 +136,7 @@ impl View for RemoveCustomEndpointConfirmationDialog {
         .finish();
 
         let dialog = Dialog::new(
-            "Remove endpoint?".to_string(),
+            REMOVE_ENDPOINT_TITLE.get().to_string(),
             Some(description),
             dialog_styles(appearance),
         )

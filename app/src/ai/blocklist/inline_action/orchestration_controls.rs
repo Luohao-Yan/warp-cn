@@ -86,10 +86,10 @@ const ORCHESTRATION_SEGMENT_VERTICAL_PADDING: f32 = 4.;
 
 /// Label shown in the auth secret picker when no secret is selected
 /// (the child agent will inherit credentials from its environment).
-const AUTH_SECRET_INHERIT_LABEL: &str = "Skip (advanced)";
+static_tr!(AUTH_SECRET_INHERIT_LABEL, "ai_assistant", "ai-orch-skip-advanced");
 /// Label for the auth secret column.
-pub const AUTH_SECRET_COLUMN_LABEL: &str = "API key";
-const AUTH_SECRET_CREATE_NEW_LABEL: &str = "New API key…";
+static_tr!(AUTH_SECRET_COLUMN_LABEL, "ai_assistant", "ai-orch-api-key");
+static_tr!(AUTH_SECRET_CREATE_NEW_LABEL, "ai_assistant", "ai-orch-new-api-key");
 
 // ── Action trait ────────────────────────────────────────────────────
 
@@ -1224,7 +1224,7 @@ pub fn populate_auth_secret_picker_for_harness<A: OrchestrationControlAction, V:
         let mut items: Vec<MenuItem<DropdownAction>> = Vec::new();
 
         items.push(MenuItem::Item(
-            MenuItemFields::new(AUTH_SECRET_INHERIT_LABEL).with_on_select_action(
+            MenuItemFields::new(AUTH_SECRET_INHERIT_LABEL.get()).with_on_select_action(
                 DropdownAction::select_action_and_close(A::auth_secret_changed(None)),
             ),
         ));
@@ -1248,12 +1248,12 @@ pub fn populate_auth_secret_picker_for_harness<A: OrchestrationControlAction, V:
             }
             AuthSecretFetchState::NotFetched | AuthSecretFetchState::Loading => {
                 items.push(MenuItem::Item(
-                    MenuItemFields::new("Loading…").with_disabled(true),
+                    MenuItemFields::new(crate::tr!("ai_assistant", "ai-orch-loading")).with_disabled(true),
                 ));
             }
             AuthSecretFetchState::Failed(_) => {
                 items.push(MenuItem::Item(
-                    MenuItemFields::new("Unable to load secrets").with_disabled(true),
+                    MenuItemFields::new(crate::tr!("ai_assistant", "ai-orch-unable-load-secrets")).with_disabled(true),
                 ));
             }
         }
@@ -1261,7 +1261,7 @@ pub fn populate_auth_secret_picker_for_harness<A: OrchestrationControlAction, V:
         if supports_create_new {
             items.push(MenuItem::Separator);
             items.push(MenuItem::Item(
-                MenuItemFields::new(AUTH_SECRET_CREATE_NEW_LABEL).with_on_select_action(
+                MenuItemFields::new(AUTH_SECRET_CREATE_NEW_LABEL.get()).with_on_select_action(
                     DropdownAction::select_action_and_close(A::create_new_auth_secret_requested()),
                 ),
             ));
@@ -1272,12 +1272,12 @@ pub fn populate_auth_secret_picker_for_harness<A: OrchestrationControlAction, V:
         // loaded key.
         let final_selection = match &selection {
             AuthSecretSelection::Named(name) => name.clone(),
-            AuthSecretSelection::Inherit => AUTH_SECRET_INHERIT_LABEL.to_string(),
-            AuthSecretSelection::CreatingNew => AUTH_SECRET_CREATE_NEW_LABEL.to_string(),
+            AuthSecretSelection::Inherit => AUTH_SECRET_INHERIT_LABEL.get().to_string(),
+            AuthSecretSelection::CreatingNew => AUTH_SECRET_CREATE_NEW_LABEL.get().to_string(),
             AuthSecretSelection::Unset if supports_create_new => {
-                AUTH_SECRET_CREATE_NEW_LABEL.to_string()
+                AUTH_SECRET_CREATE_NEW_LABEL.get().to_string()
             }
-            AuthSecretSelection::Unset => AUTH_SECRET_INHERIT_LABEL.to_string(),
+            AuthSecretSelection::Unset => AUTH_SECRET_INHERIT_LABEL.get().to_string(),
         };
         let _ = selected_display_name;
         let _ = &availability;
@@ -1663,12 +1663,12 @@ pub fn sync_picker_selections<A: OrchestrationControlAction, V: View>(
         auth_secret_picker.update(ctx, |dropdown, ctx_dropdown| {
             let label = match &selection {
                 AuthSecretSelection::Named(name) => name.clone(),
-                AuthSecretSelection::Inherit => AUTH_SECRET_INHERIT_LABEL.to_string(),
-                AuthSecretSelection::CreatingNew => AUTH_SECRET_CREATE_NEW_LABEL.to_string(),
+                AuthSecretSelection::Inherit => AUTH_SECRET_INHERIT_LABEL.get().to_string(),
+                AuthSecretSelection::CreatingNew => AUTH_SECRET_CREATE_NEW_LABEL.get().to_string(),
                 AuthSecretSelection::Unset if supports_create_new => {
-                    AUTH_SECRET_CREATE_NEW_LABEL.to_string()
+                    AUTH_SECRET_CREATE_NEW_LABEL.get().to_string()
                 }
-                AuthSecretSelection::Unset => AUTH_SECRET_INHERIT_LABEL.to_string(),
+                AuthSecretSelection::Unset => AUTH_SECRET_INHERIT_LABEL.get().to_string(),
             };
             dropdown.set_selected_by_name(&label, ctx_dropdown);
         });
@@ -1978,7 +1978,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_auth_picker {
             add(
                 &mut column,
-                AUTH_SECRET_COLUMN_LABEL,
+                AUTH_SECRET_COLUMN_LABEL.get(),
                 handles
                     .auth_secret_picker
                     .as_ref()
@@ -2063,7 +2063,7 @@ pub fn render_picker_row_with_layout<A: OrchestrationControlAction>(
         if show_auth_picker {
             add_picker(
                 &mut row,
-                AUTH_SECRET_COLUMN_LABEL,
+                AUTH_SECRET_COLUMN_LABEL.get(),
                 handles
                     .auth_secret_picker
                     .as_ref()

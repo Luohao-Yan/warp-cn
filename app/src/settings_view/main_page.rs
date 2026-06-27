@@ -1131,18 +1131,18 @@ impl SettingsWidget for IapCredentialsWidget {
         let disabled: ColorU = appearance.theme().disabled_ui_text_color().into();
         let active: ColorU = appearance.theme().active_ui_text_color().into();
         let (status_text, status_color): (String, ColorU) = match &state {
-            IapCredentialsState::Missing => ("Not yet loaded".to_string(), disabled),
-            IapCredentialsState::Refreshing { .. } => ("Refreshing…".to_string(), active),
+            IapCredentialsState::Missing => (crate::tr!("settings", "not-yet-loaded"), disabled),
+            IapCredentialsState::Refreshing { .. } => (crate::tr!("settings", "refreshing"), active),
             IapCredentialsState::Loaded(cached) => {
                 let remaining = cached
                     .expires_at
                     .saturating_duration_since(instant::Instant::now());
                 let mins = remaining.as_secs() / 60;
-                (format!("Loaded (refreshes in ~{mins}m)"), active)
+                (crate::tr!("settings", "loaded-refreshes", mins = mins), active)
             }
-            IapCredentialsState::Failed { message, .. } => (format!("Failed: {message}"), ansi_red),
+            IapCredentialsState::Failed { message, .. } => (crate::tr!("settings", "failed-message", message = message.clone()), ansi_red),
             IapCredentialsState::EnvInjected { .. } => {
-                ("Using injected token (WARP_IAP_TOKEN)".to_string(), active)
+                (crate::tr!("settings", "using-injected-token"), active)
             }
         };
 
@@ -1150,7 +1150,7 @@ impl SettingsWidget for IapCredentialsWidget {
 
         let label = Align::new(
             Text::new_inline(
-                "Staging IAP credentials".to_string(),
+                crate::tr!("settings", "staging-iap-credentials"),
                 appearance.ui_font_family(),
                 REGULAR_TEXT_FONT_SIZE,
             )
@@ -1182,9 +1182,9 @@ impl SettingsWidget for IapCredentialsWidget {
                 self.refresh_button_mouse_state.clone(),
             )
             .with_text_label(if is_refreshing {
-                "Refreshing…".into()
+                crate::tr!("settings", "refreshing")
             } else {
-                "Refresh".into()
+                crate::tr!("settings", "refresh")
             })
             .with_style(UiComponentStyles {
                 font_size: Some(12.),

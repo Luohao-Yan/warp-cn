@@ -761,7 +761,8 @@ impl AgentManagementView {
         ctx: &mut ViewContext<FilterableDropdown<AgentManagementViewAction>>,
     ) -> FilterableDropdown<AgentManagementViewAction> {
         let mut dropdown = FilterableDropdown::new(ctx);
-        Self::setup_searchable_filter_menu(&mut dropdown, "Created by", ctx);
+        static_tr!(CREATED_BY_LABEL, "ai_assistant", "ai-filter-created-by-label");
+        Self::setup_searchable_filter_menu(&mut dropdown, CREATED_BY_LABEL.get(), ctx);
         dropdown
     }
 
@@ -1859,11 +1860,11 @@ impl AgentManagementView {
         }
 
         if let Some(run_time) = &entry.display.run_time {
-            metadata_parts.push(crate::tr!("ai_assistant", "ai-run-time-label", run_time = run_time.as_str()));
+            metadata_parts.push(crate::tr!("ai_assistant", "ai-run-time-label", run_time = run_time));
         }
 
         if let Some(usage) = entry.display.request_usage.map(format_credits) {
-            metadata_parts.push(crate::tr!("ai_assistant", "ai-credits-used-label", usage = usage.as_str()));
+            metadata_parts.push(crate::tr!("ai_assistant", "ai-credits-used-label", usage = &usage));
         }
 
         Text::new(metadata_parts.join(" • "), font_family, font_size)

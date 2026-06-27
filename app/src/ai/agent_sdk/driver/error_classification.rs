@@ -30,7 +30,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
                     crate::tr!("ai", "share-session-internal-error")
                 }
                 ShareSessionError::Failed(reason) => {
-                    crate::tr!("ai", "share-session-failed", reason = reason.as_str())
+                    crate::tr!("ai", "share-session-failed", reason = reason)
                 }
                 ShareSessionError::Disabled => {
                     crate::tr!("ai", "share-session-disabled")
@@ -65,7 +65,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             (
                 AgentTaskState::Error,
                 TaskStatusUpdate::with_error_code(
-                    &crate::tr!("ai", "auth-required", bin = bin.as_str()),
+                    &crate::tr!("ai", "auth-required", bin = &bin),
                     PlatformErrorCode::AuthenticationRequired,
                 ),
             )
@@ -112,7 +112,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::MCPJsonParseError(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "mcp-json-parse-error", msg = msg.as_str()),
+                &crate::tr!("ai", "mcp-json-parse-error", msg = msg),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
@@ -126,28 +126,28 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::ProfileError(name) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "profile-not-found", name = name.as_str()),
+                &crate::tr!("ai", "profile-not-found", name = name),
                 PlatformErrorCode::ResourceNotFound,
             ),
         ),
         AgentDriverError::AIWorkflowNotFound(id) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "workflow-not-found", id = id.as_str()),
+                &crate::tr!("ai", "workflow-not-found", id = id),
                 PlatformErrorCode::ResourceNotFound,
             ),
         ),
         AgentDriverError::EnvironmentNotFound(id) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "environment-not-found", id = id.as_str()),
+                &crate::tr!("ai", "environment-not-found", id = id),
                 PlatformErrorCode::ResourceNotFound,
             ),
         ),
         AgentDriverError::EnvironmentSetupFailed(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "environment-setup-failed-msg", msg = msg.as_str()),
+                &crate::tr!("ai", "environment-setup-failed-msg", msg = msg),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
@@ -156,7 +156,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             (
                 AgentTaskState::Failed,
                 TaskStatusUpdate::with_error_code(
-                    &crate::tr!("ai", "invalid-working-directory", path = path_str.as_str()),
+                    &crate::tr!("ai", "invalid-working-directory", path = &path_str),
                     PlatformErrorCode::EnvironmentSetupFailed,
                 ),
             )
@@ -187,7 +187,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         ),
         AgentDriverError::ConversationBlocked { blocked_action } => (
             AgentTaskState::Blocked,
-            TaskStatusUpdate::message(crate::tr!("ai", "agent-blocked", blocked_action = blocked_action.as_str())),
+            TaskStatusUpdate::message(crate::tr!("ai", "agent-blocked", blocked_action = blocked_action)),
         ),
 
         // --- Setup errors ---
@@ -201,7 +201,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::SkillResolutionFailed(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "skill-resolution-failed", msg = msg.as_str()),
+                &crate::tr!("ai", "skill-resolution-failed", msg = msg),
                 PlatformErrorCode::ResourceNotFound,
             ),
         ),
@@ -229,14 +229,14 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
         AgentDriverError::AwsBedrockCredentialsFailed(msg) => (
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "aws-bedrock-credentials-failed", msg = msg.as_str()),
+                &crate::tr!("ai", "aws-bedrock-credentials-failed", msg = msg),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
         ),
         AgentDriverError::ConversationLoadFailed(msg) => (
             AgentTaskState::Error,
             TaskStatusUpdate::with_error_code(
-                &crate::tr!("ai", "conversation-load-failed", msg = msg.as_str()),
+                &crate::tr!("ai", "conversation-load-failed", msg = msg),
                 PlatformErrorCode::InternalError,
             ),
         ),
@@ -277,8 +277,8 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 &crate::tr!("ai", "conversation-resume-state-missing",
-                    conversation_id = conversation_id.as_str(),
-                    harness = harness.as_str(),
+                    conversation_id = conversation_id,
+                    harness = harness,
                 ),
                 PlatformErrorCode::ResourceNotFound,
             ),
@@ -288,7 +288,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             (
                 AgentTaskState::Failed,
                 TaskStatusUpdate::with_error_code(
-                    &crate::tr!("ai", "harness-command-failed", exit_code = exit_code_str.as_str()),
+                    &crate::tr!("ai", "harness-command-failed", exit_code = &exit_code_str),
                     PlatformErrorCode::InternalError,
                 ),
             )
@@ -297,8 +297,8 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 &crate::tr!("ai", "harness-setup-failed",
-                    harness = harness.as_str(),
-                    reason = reason.as_str(),
+                    harness = harness,
+                    reason = reason,
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,
             ),
@@ -307,7 +307,7 @@ pub fn classify_driver_error(error: &AgentDriverError) -> (AgentTaskState, TaskS
             AgentTaskState::Failed,
             TaskStatusUpdate::with_error_code(
                 &crate::tr!("ai", "harness-config-setup-failed",
-                    harness = harness.as_str(),
+                    harness = harness,
                     error = error.to_string(),
                 ),
                 PlatformErrorCode::EnvironmentSetupFailed,

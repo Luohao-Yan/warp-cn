@@ -340,7 +340,7 @@ impl ConversationUsageView {
 
         labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-tool-calls"), appearance));
         values.push(render_value_text(
-            format_value_text(self.usage_info.tool_calls, "call"),
+            format_value_text(self.usage_info.tool_calls, &crate::tr!("ai_assistant", "ai-usage-call-label")),
             appearance,
         ));
 
@@ -362,7 +362,8 @@ impl ConversationUsageView {
             {
                 crate::tr!("ai_assistant", "ai-models-label").to_string()
             } else {
-                format!("Models ({})", token_usage_category_display_name(&category))
+                let category_name = token_usage_category_display_name(&category);
+                crate::tr!("ai_assistant", "ai-models-category-label", category = &category_name)
             };
 
             // For FULL_TERMINAL_USE_CATEGORY, add an info icon with tooltip
@@ -481,7 +482,7 @@ impl ConversationUsageView {
 
         labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-files-changed"), appearance));
         values.push(render_value_text(
-            format_value_text(self.usage_info.files_changed, "file"),
+            format_value_text(self.usage_info.files_changed, &crate::tr!("ai_assistant", "ai-usage-file-label")),
             appearance,
         ));
 
@@ -522,9 +523,9 @@ impl ConversationUsageView {
             .finish();
         values.push(diffs_element);
 
-        labels.push(render_label_text("Commands executed", appearance));
+        labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-usage-commands-executed"), appearance));
         values.push(render_value_text(
-            format_value_text(self.usage_info.commands_executed, "command"),
+            format_value_text(self.usage_info.commands_executed, &crate::tr!("ai_assistant", "ai-usage-command-label")),
             appearance,
         ));
 
@@ -549,12 +550,12 @@ impl ConversationUsageView {
 
                     // Section header
                     labels.push(render_section_header(
-                        "LAST RESPONSE TIME".to_string(),
+                        crate::tr!("ai_assistant", "ai-usage-last-response-time"),
                         appearance,
                     ));
                     values.push(render_section_header("".to_string(), appearance));
 
-                    labels.push(render_label_text("Time to first token", appearance));
+                    labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-usage-time-to-first-token"), appearance));
                     values.push(render_value_text(
                         format!(
                             "{:.1} seconds",
@@ -563,7 +564,7 @@ impl ConversationUsageView {
                         appearance,
                     ));
 
-                    labels.push(render_label_text("Total agent response time", appearance));
+                    labels.push(render_label_text(&crate::tr!("ai_assistant", "ai-usage-total-agent-response-time"), appearance));
                     values.push(render_value_text(
                         format!(
                             "{:.1} seconds",
@@ -575,7 +576,7 @@ impl ConversationUsageView {
                     if let Some(wall_ms) = timing.wall_to_wall_response_time_ms {
                         if wall_ms != 0 {
                             labels.push(render_label_text(
-                                "Total time (including tool calls)",
+                                &crate::tr!("ai_assistant", "ai-usage-total-time-including-tool-calls"),
                                 appearance,
                             ));
                             values.push(render_value_text(
@@ -792,7 +793,7 @@ impl ConversationUsageView {
         let theme = appearance.theme();
         let font_size = appearance.ui_font_size() + 2.;
         let link_color = theme.ansi_fg_blue();
-        let label = format!("Show {hidden_count} more");
+        let label = crate::tr!("ai_assistant", "ai-usage-show-more", count = hidden_count as i64);
         Hoverable::new(self.show_more_mouse_state.clone(), move |_hover_state| {
             Text::new(label.clone(), appearance.ui_font_family(), font_size)
                 .with_color(link_color)
@@ -907,7 +908,11 @@ fn render_section_header(header_label: String, appearance: &Appearance) -> Box<d
 /// Format a value and a label into one usage string,
 /// making the label plural if the value is not 1.
 fn format_value_text(value: i32, label: &str) -> String {
-    format!("{} {}{}", value, label, if value == 1 { "" } else { "s" })
+    if value == 1 {
+        format!("{value} {label}")
+    } else {
+        format!("{value} {label}s")
+    }
 }
 
 /// Helper to build a text element with consistent styling for labels.

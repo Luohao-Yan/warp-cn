@@ -190,7 +190,7 @@ impl ConversationEndedTombstoneView {
             })
             .unwrap_or_default();
         if display_data.is_error && task_id.is_none() && !display_data.conversation_is_transcript {
-            display_data.title = Some("Cloud agent failed to start".to_string());
+            display_data.title = Some(crate::tr!("terminal", "cloud-agent-failed-to-start"));
             display_data.credits = None;
         }
 

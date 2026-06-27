@@ -447,7 +447,7 @@ fn open_file_download_picker<V: warpui::View>(
                 },
                 move |_me, result, ctx| match result {
                     Ok(()) => {
-                        let downloaded_label = crate::tr!("ai_assistant", "ai-downloaded-file", filename = toast_filename.as_str());
+                        let downloaded_label = crate::tr!("ai_assistant", "ai-downloaded-file", filename = &toast_filename);
                         show_file_download_toast(
                             &artifact_uid,
                             DismissibleToast::success(downloaded_label),
@@ -456,7 +456,7 @@ fn open_file_download_picker<V: warpui::View>(
                     }
                     Err(error) => {
                         log::warn!("Failed to download file artifact {artifact_uid}: {error}");
-                        let failed_download_label = crate::tr!("ai_assistant", "ai-failed-download-file", filename = toast_filename.as_str());
+                        let failed_download_label = crate::tr!("ai_assistant", "ai-failed-download-file", filename = &toast_filename);
                         show_file_download_toast(
                             &artifact_uid,
                             DismissibleToast::error(failed_download_label),

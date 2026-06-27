@@ -148,6 +148,29 @@ auth-unsaved-files-warning = 您有 { $num } 个未保存的{ $plural }。退出
 auth-loading = 加载中...
 auth-error-authenticating = 认证错误 - 请刷新页面
 
+## -- 登录失败疑难解答字符串 --
+
+auth-login-failure-troubleshooting-prefix =  不是第一次？请查看我们的
+auth-login-failure-troubleshooting-link = 疑难解答文档
+auth-login-failure-troubleshooting-suffix = 。
+
+## -- 认证重定向安全错误字符串 --
+
+auth-safe-err-redirect-unexpected-host = 认证重定向 URL 的主机名异常
+auth-safe-err-redirect-missing-credential = 认证重定向 URL 缺少必需的凭证
+auth-safe-err-parse-redirect-payload = 无法解析认证重定向 URL
+auth-safe-err-parse-pasted-auth-url = 无法解析粘贴的认证 URL
+
+## -- 供应商密钥模态框字符串 --
+
+auth-provider-keys-title = 添加 API 密钥
+auth-provider-keys-subtitle = 使用来自模型供应商的您自己的 API 密钥来使用 Warp 智能体。
+auth-provider-keys-openai-label = OpenAI API 密钥
+auth-provider-keys-anthropic-label = Anthropic API 密钥
+auth-provider-keys-google-label = Google API 密钥
+auth-provider-keys-cancel-label = 取消
+auth-provider-keys-add-keys-label = 添加密钥
+
 ## -- Double-prefix aliases for auth view body strings --
 
 ## -- Double-prefix aliases for offline overlay strings --

@@ -309,27 +309,43 @@ impl TeamsPageAction {
     }
 }
 
+static_tr!(LEAVE_TEAM_LGF, "settings", "teams-leave-team");
+static_tr!(DELETE_TEAM_LGF, "settings", "teams-delete-team");
+static_tr!(CREATE_TEAM_LGF, "settings", "teams-create-team");
+static_tr!(DELETE_PENDING_EMAIL_LGF, "settings", "teams-delete-pending-email-invitation");
+static_tr!(REMOVE_USER_LGF, "settings", "teams-remove-user-from-team");
+static_tr!(ADD_DOMAIN_LGF, "settings", "teams-add-domain-restrictions");
+static_tr!(DELETE_DOMAIN_LGF, "settings", "teams-delete-domain-restriction");
+static_tr!(SEND_EMAIL_INVITES_LGF, "settings", "teams-send-email-invites");
+static_tr!(GENERATE_UPGRADE_LGF, "settings", "teams-generate-upgrade-link");
+static_tr!(GENERATE_STRIPE_LGF, "settings", "teams-generate-stripe-billing-portal-link");
+static_tr!(OPEN_ADMIN_LGF, "settings", "teams-open-admin-panel");
+static_tr!(CONTACT_SUPPORT_LGF, "settings", "teams-contact-support");
+static_tr!(TOGGLE_DISCOVER_LGF, "settings", "teams-toggle-team-discoverability");
+static_tr!(JOIN_TEAM_LGF, "settings", "teams-join-team-with-team-discovery");
+static_tr!(UNKNOWN_REASON_LGF, "settings", "teams-unknown-reason");
+
 impl From<&TeamsPageAction> for LoginGatedFeature {
     fn from(val: &TeamsPageAction) -> LoginGatedFeature {
         use TeamsPageAction::*;
         match val {
-            LeaveTeam => "Leave Team",
-            ShowDeleteTeamConfirmationDialog => "Delete Team",
-            CreateTeam => "Create Team",
-            DeletePendingEmailInvitation { .. } => "Delete Pending Email Invitation",
-            RemoveUserFromTeam { .. } => "Remove User From Team",
-            AddDomainRestrictions { .. } => "Add Domain Restrictions",
-            DeleteDomainRestriction { .. } => "Delete Domain Restriction",
-            SendEmailInvites { .. } => "Send Email Invites",
-            GenerateUpgradeLink { .. } => "Generate Upgrade Link",
-            GenerateStripeBillingPortalLink { .. } => "Generate Stripe Billing Portal Link",
-            OpenAdminPanel { .. } => "Open Admin Panel",
-            ContactSupport => "Contact Support",
+            LeaveTeam => LEAVE_TEAM_LGF.get(),
+            ShowDeleteTeamConfirmationDialog => DELETE_TEAM_LGF.get(),
+            CreateTeam => CREATE_TEAM_LGF.get(),
+            DeletePendingEmailInvitation { .. } => DELETE_PENDING_EMAIL_LGF.get(),
+            RemoveUserFromTeam { .. } => REMOVE_USER_LGF.get(),
+            AddDomainRestrictions { .. } => ADD_DOMAIN_LGF.get(),
+            DeleteDomainRestriction { .. } => DELETE_DOMAIN_LGF.get(),
+            SendEmailInvites { .. } => SEND_EMAIL_INVITES_LGF.get(),
+            GenerateUpgradeLink { .. } => GENERATE_UPGRADE_LGF.get(),
+            GenerateStripeBillingPortalLink { .. } => GENERATE_STRIPE_LGF.get(),
+            OpenAdminPanel { .. } => OPEN_ADMIN_LGF.get(),
+            ContactSupport => CONTACT_SUPPORT_LGF.get(),
             ToggleTeamDiscoverability { .. } | ToggleTeamDiscoverabilityBeforeCreation => {
-                "Toggle Team Discoverability"
+                TOGGLE_DISCOVER_LGF.get()
             }
-            JoinTeamWithTeamDiscovery { .. } => "Join Team With Team Discovery",
-            _ => "Unknown reason",
+            JoinTeamWithTeamDiscovery { .. } => JOIN_TEAM_LGF.get(),
+            _ => UNKNOWN_REASON_LGF.get(),
         }
     }
 }

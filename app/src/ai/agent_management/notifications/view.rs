@@ -122,7 +122,7 @@ impl NotificationMailboxView {
                 .with_icon(Icon::X)
                 .with_size(ButtonSize::XSmall)
                 .with_tooltip(&close_tooltip)
-                .with_tooltip_sublabel("Esc")
+                .with_tooltip_sublabel(&crate::tr!("common", "esc-key-label"))
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(NotificationMailboxViewAction::Dismiss);
                 })

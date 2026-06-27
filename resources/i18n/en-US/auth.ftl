@@ -143,6 +143,29 @@ auth-unsaved-files-warning = You have { $num } unsaved { $plural }. Logging out 
 auth-loading = Loading...
 auth-error-authenticating = Error authenticating - please refresh the page
 
+## -- Login failure troubleshooting strings --
+
+auth-login-failure-troubleshooting-prefix =  Not the first time? See our
+auth-login-failure-troubleshooting-link = troubleshooting docs
+auth-login-failure-troubleshooting-suffix = .
+
+## -- Auth redirect safe-error strings --
+
+auth-safe-err-redirect-unexpected-host = Auth redirect URL has unexpected host
+auth-safe-err-redirect-missing-credential = Auth redirect URL is missing required credential
+auth-safe-err-parse-redirect-payload = Failed to parse auth redirect URL
+auth-safe-err-parse-pasted-auth-url = Failed to parse pasted auth URL
+
+## -- Provider keys modal strings --
+
+auth-provider-keys-title = Add API key
+auth-provider-keys-subtitle = Use your own API keys from model providers for Warp Agent.
+auth-provider-keys-openai-label = OpenAI API key
+auth-provider-keys-anthropic-label = Anthropic API key
+auth-provider-keys-google-label = Google API key
+auth-provider-keys-cancel-label = Cancel
+auth-provider-keys-add-keys-label = Add keys
+
 ## -- Double-prefix aliases for auth view body strings --
 ## -- Double-prefix aliases for new auth strings --
 ## -- Double-prefix aliases for new auth strings --

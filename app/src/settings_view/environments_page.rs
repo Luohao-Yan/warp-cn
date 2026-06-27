@@ -85,6 +85,7 @@ static_tr!(PERSONAL_LABEL, "settings", "personal");
 static_tr!(ENVIRONMENTS_HEADER, "settings", "environments-title");
 static_tr!(SHARE_TOOLTIP, "settings", "share-tooltip");
 static_tr!(EDIT_TOOLTIP, "settings", "edit-tooltip");
+static_tr!(SEARCH_PLACEHOLDER, "env_vars", "env-search-placeholder");
 
 const CARD_BORDER_WIDTH: f32 = 1.;
 const CARD_PADDING: f32 = 16.;
@@ -369,7 +370,7 @@ impl EnvironmentsPageView {
         });
 
         // Create search editor for list page
-        let search_editor = Self::create_single_line_editor("Search environments...", ctx);
+        let search_editor = Self::create_single_line_editor(SEARCH_PLACEHOLDER.get(), ctx);
         ctx.subscribe_to_view(&search_editor, |me, _, event, ctx| match event {
             crate::editor::Event::Edited(_) => {
                 me.search_query = me.search_editor.as_ref(ctx).buffer_text(ctx);

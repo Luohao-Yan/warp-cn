@@ -7,6 +7,11 @@ use warpui::ui_components::components::UiComponent;
 use warpui::{Action, AppContext, Element, SingletonEntity};
 
 use crate::appearance::Appearance;
+use crate::static_tr;
+
+static_tr!(TROUBLESHOOTING_PREFIX, "auth", "login-failure-troubleshooting-prefix");
+static_tr!(TROUBLESHOOTING_LINK, "auth", "login-failure-troubleshooting-link");
+static_tr!(TROUBLESHOOTING_SUFFIX, "auth", "login-failure-troubleshooting-suffix");
 
 const LOGIN_TROUBLESHOOTING_DOCS_URL: &str =
     "https://docs.warp.dev/support-and-community/troubleshooting-and-support/troubleshooting-login-issues";
@@ -27,12 +32,12 @@ impl LoginFailureReason {
             mut fragments: Vec<FormattedTextFragment>,
         ) -> Vec<FormattedTextFragment> {
             fragments.extend([
-                FormattedTextFragment::plain_text(" Not the first time? See our "),
+                FormattedTextFragment::plain_text(TROUBLESHOOTING_PREFIX.get()),
                 FormattedTextFragment::hyperlink(
-                    "troubleshooting docs",
+                    TROUBLESHOOTING_LINK.get(),
                     LOGIN_TROUBLESHOOTING_DOCS_URL,
                 ),
-                FormattedTextFragment::plain_text("."),
+                FormattedTextFragment::plain_text(TROUBLESHOOTING_SUFFIX.get()),
             ]);
             fragments
         }

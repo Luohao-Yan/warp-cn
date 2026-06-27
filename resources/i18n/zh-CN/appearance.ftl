@@ -37,3 +37,8 @@ appearance-theme-warp-referral = Warp 推荐
 appearance-theme-solar-flare = 太阳耀斑
 appearance-theme-adeberry = Adeberry
 appearance-theme-received-referral-reward = 已获得推荐奖励
+
+## -- 导入的主题名称 --
+
+appearance-imported-alacritty-theme = 导入的 Alacritty 主题
+appearance-imported-iterm-theme = 导入的 iTerm 主题{ $suffix }

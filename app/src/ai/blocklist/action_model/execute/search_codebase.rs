@@ -91,9 +91,7 @@ impl SearchCodebaseExecutor {
                                     if !result.missing_files.is_empty() {
                                         let missing_files = result.missing_files.join(", ");
                                         SearchCodebaseResult::Failed {
-                                            message: format!(
-                                                "These files do not exist: {missing_files}"
-                                            ),
+                                            message: crate::tr!("ai_assistant", "ai-search-files-not-exist", missing_files = missing_files.as_str()),
                                             reason: SearchCodebaseFailureReason::InvalidFilePaths,
                                         }
                                     } else {
@@ -125,8 +123,7 @@ impl SearchCodebaseExecutor {
                         return;
                     };
                     if let Err(e) = result_tx.send(SearchCodebaseResult::Failed {
-                        message: "The search failed. Try another way to locate the relevant files."
-                            .to_owned(),
+                        message: crate::tr!("ai_assistant", "ai-search-failed-try-another"),
                         reason: SearchCodebaseFailureReason::GetRelevantFilesError,
                     }) {
                         log::warn!("Failed to send search codebase results to receiver {e:?}.");
@@ -228,7 +225,7 @@ impl SearchCodebaseExecutor {
                 return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                     SearchCodebaseResult::Failed {
                         reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-                        message: "The search failed because the codebase is not available. Try another way to locate the relevant files.".to_owned(),
+                        message: crate::tr!("ai_assistant", "ai-search-codebase-not-available"),
                     },
                 ));
             };
@@ -277,7 +274,7 @@ impl SearchCodebaseExecutor {
                     ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                         SearchCodebaseResult::Failed {
                             reason: SearchCodebaseFailureReason::CodebaseNotIndexed,
-                            message: "Remote codebase search is unavailable.".to_owned(),
+                            message: crate::tr!("ai_assistant", "ai-remote-search-unavailable"),
                         },
                     ))
                 }
@@ -296,8 +293,7 @@ impl SearchCodebaseExecutor {
                 return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(
                     SearchCodebaseResult::Failed {
                         reason: SearchCodebaseFailureReason::MissingCurrentWorkingDirectory,
-                        message: "The search failed. Try another way to locate the relevant files."
-                            .to_string(),
+                        message: crate::tr!("ai_assistant", "ai-search-failed-try-another"),
                     },
                 ));
             };
@@ -340,7 +336,7 @@ impl SearchCodebaseExecutor {
                     );
                 });
                 return ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(SearchCodebaseResult::Failed {
-                    message: "The search failed because the codebase is not available. Try another way to locate the relevant files.".to_owned(),
+                    message: crate::tr!("ai_assistant", "ai-search-codebase-not-available-try"),
                     reason: SearchCodebaseFailureReason::CodebaseNotIndexed
                 }));
             };
@@ -389,13 +385,13 @@ impl SearchCodebaseExecutor {
 
                     let error_message = match e {
                             GetRelevantFilesError::Pending => {
-                                "The current git repository is still being indexed, so search is unavailable right now. You can try again later".to_owned()
+                                crate::tr!("ai_assistant", "ai-get-files-indexing")
                             }
                             GetRelevantFilesError::CreateFailed => {
-                                "Relevant file search in the current directory is not available".to_owned()
+                                crate::tr!("ai_assistant", "ai-get-files-not-available")
                             }
                             GetRelevantFilesError::Missing => {
-                                "The current directory isn't within a git repository, which is necessary to search for relevant files.".to_owned()
+                                crate::tr!("ai_assistant", "ai-get-files-not-git")
                             }
                         };
                     ActionExecution::Sync(AIAgentActionResultType::SearchCodebase(

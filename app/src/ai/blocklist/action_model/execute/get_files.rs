@@ -170,7 +170,7 @@ impl GetFilesExecutor {
             // current working directory is, which is never the case.
             return ActionExecution::Sync(AIAgentActionResultType::GetFiles(
                 GetFilesResult::Error(
-                    "The search failed. Try another way to locate the relevant files.".to_string(),
+                    crate::tr!("ai_assistant", "ai-search-failed-try-another"),
                 ),
             ));
         };
@@ -218,13 +218,13 @@ impl GetFilesExecutor {
 
                                 let error_message = match e {
                                     GetRelevantFilesError::Pending => {
-                                        "The current git repository is still being indexed, so search is unavailable right now. You can try again later".to_owned()
+                                        crate::tr!("ai_assistant", "ai-get-files-indexing")
                                     }
                                     GetRelevantFilesError::CreateFailed => {
-                                        "Relevant file search in the current directory is not available".to_owned()
+                                        crate::tr!("ai_assistant", "ai-get-files-not-available")
                                     }
                                     GetRelevantFilesError::Missing => {
-                                        "The current directory isn't within a git repository, which is necessary to search for relevant files.".to_owned()
+                                        crate::tr!("ai_assistant", "ai-get-files-not-git")
                                     }
                                 };
                                 ActionExecution::Sync(AIAgentActionResultType::GetFiles(
@@ -249,8 +249,7 @@ impl GetFilesExecutor {
                         ),
                     Some(GetRelevantFilesStatus::Failed { .. }) => ActionExecution::Sync(
                         AIAgentActionResultType::GetFiles(GetFilesResult::Error(
-                            "The search failed. Try another way to locate the relevant files."
-                                .to_owned(),
+                            crate::tr!("ai_assistant", "ai-search-failed-try-another"),
                         )),
                     ),
                     None => {
@@ -319,10 +318,7 @@ impl GetFilesExecutor {
                     })
                 } else {
                     let missing_files = result.missing_files.join(", ");
-                    Ok(GetFilesResult::Error(format!(
-                        "These files do not exist: {}",
-                        missing_files
-                    )))
+                    Ok(GetFilesResult::Error(crate::tr!("ai_assistant", "ai-search-files-not-exist", missing_files = missing_files.as_str())))
                 }
             }),
             on_complete: Box::new(|res, _ctx| {

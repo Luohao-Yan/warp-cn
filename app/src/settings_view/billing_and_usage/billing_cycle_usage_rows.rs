@@ -50,11 +50,11 @@ pub enum SourceFilter {
 }
 
 impl SourceFilter {
-    pub fn label(self) -> &'static str {
+    pub fn label(self) -> String {
         match self {
-            SourceFilter::All => "All",
-            SourceFilter::Local => "Local",
-            SourceFilter::Cloud => "Cloud",
+            SourceFilter::All => crate::tr!("billing", "filter-all"),
+            SourceFilter::Local => crate::tr!("billing", "filter-local"),
+            SourceFilter::Cloud => crate::tr!("billing", "filter-cloud"),
         }
     }
 
@@ -90,7 +90,7 @@ fn viewer_identity(app: &AppContext) -> (Option<String>, String) {
         .display_name()
         .or_else(|| auth_state.username_for_display())
         .or_else(|| auth_state.user_email())
-        .unwrap_or_else(|| "Your usage".to_string());
+        .unwrap_or_else(|| crate::tr!("billing", "your-usage"));
     (viewer_uid, display_name)
 }
 
@@ -173,7 +173,7 @@ impl MemberUsageRow {
             subject_type: AiCreditsUsageAndCostSubjectType::Team,
             subject_key: OTHER_MEMBERS_KEY.to_string(),
             subject_uid: None,
-            display_name: "Other members".to_string(),
+            display_name: crate::tr!("billing", "other-members"),
             total_credits,
             total_cost_cents,
             segments,
@@ -431,7 +431,7 @@ fn render_usage_tooltip_content(row: &MemberUsageRow, appearance: &Appearance) -
 fn render_service_account_info_tooltip(appearance: &Appearance) -> Box<dyn Element> {
     let theme = appearance.theme();
     let text = Text::new_inline(
-        "This is an automated agent on your team.".to_string(),
+        crate::tr!("billing", "automated-agent-description"),
         appearance.ui_font_family(),
         12.,
     )
@@ -791,7 +791,7 @@ fn render_member_header(
     let show_toggle = visibility.granularity == UsageVisibilityGranularity::FullBreakdown
         && has_cloud_usage(entries);
 
-    let subheader = render_section_subheader("Members", appearance);
+    let subheader = render_section_subheader(&crate::tr!("billing", "members"), appearance);
     let header = if show_toggle {
         Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)

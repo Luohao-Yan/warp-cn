@@ -332,3 +332,15 @@ common-uri-new-tab-description = Go to Warp to see your new tab.
 
 common-debug-enter-onboarding-state = [Debug] Enter Onboarding State
 
+## -- Hotkey window binding labels --
+
+common-hide-all-windows = Hide All Windows
+common-show-dedicated-hotkey-window = Show Dedicated Hotkey Window
+common-hide-dedicated-hotkey-window = Hide Dedicated Hotkey Window
+
+common-resource-not-found-or-access-denied = Resource not found or access denied
+
+common-something-went-wrong = Something went wrong
+
+common-esc-key-label = Esc
+

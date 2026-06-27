@@ -342,10 +342,10 @@ pub fn render_warping_indicator<V: View>(
             }
             Some(AIAgentActionType::Grep { .. }) => LOAD_OUTPUT_MESSAGE_FOR_GREP.get().to_owned(),
             Some(AIAgentActionType::CallMCPTool { name, .. }) => {
-                format!("Calling \"{name}\" MCP tool...")
+                crate::tr!("ai_assistant", "ai-calling-mcp-tool", name = name)
             }
             Some(AIAgentActionType::ReadMCPResource { name, .. }) => {
-                format!("Reading \"{name}\" MCP resource...")
+                crate::tr!("ai_assistant", "ai-reading-mcp-resource", name = name)
             }
             Some(AIAgentActionType::FileGlob { .. })
             | Some(AIAgentActionType::FileGlobV2 { .. }) => {
@@ -434,8 +434,8 @@ pub fn render_warping_indicator<V: View>(
     if let Some(take_over_button_props) = props.take_over_lrc_control_button {
         has_buttons = true;
         buttons_row.add_child(render_switch_control_to_user_button(
-            "Take over".to_string(),
-            "Take over control of the command".to_string(),
+            crate::tr!("ai_assistant", "ai-take-over"),
+            crate::tr!("ai_assistant", "ai-take-over-tooltip"),
             take_over_button_props,
             appearance,
         ));
@@ -662,9 +662,9 @@ pub fn render_warping_indicator_base(
 pub fn format_elapsed_seconds(elapsed: std::time::Duration) -> String {
     let total_seconds = elapsed.as_secs();
     if total_seconds == 1 {
-        "1 second".to_string()
+        crate::tr!("ai_assistant", "ai-one-second")
     } else {
-        format!("{total_seconds} seconds")
+        crate::tr!("ai_assistant", "ai-seconds-format", count = total_seconds)
     }
 }
 
@@ -745,9 +745,9 @@ fn render_hide_responses_button(
 ) -> Box<dyn Element> {
     let theme = appearance.theme();
     let button_text = if should_hide_responses {
-        "Show responses"
+        crate::tr!("ai_assistant", "ai-show-responses")
     } else {
-        "Hide responses"
+        crate::tr!("ai_assistant", "ai-hide-responses")
     };
     let text = Container::new(
         Text::new(
@@ -761,9 +761,9 @@ fn render_hide_responses_button(
     .finish();
 
     let tooltip_text = if should_hide_responses {
-        "Show agent responses"
+        crate::tr!("ai_assistant", "ai-show-agent-responses")
     } else {
-        "Hide agent responses"
+        crate::tr!("ai_assistant", "ai-hide-agent-responses")
     };
 
     render_warping_indicator_button(
@@ -828,7 +828,7 @@ fn render_stop_button(props: ButtonProps, appearance: &Appearance) -> Box<dyn El
         appearance,
         stop_icon,
         props.keystroke,
-        "Stop agent task".to_string(),
+        crate::tr!("ai_assistant", "ai-stop-agent-task"),
         props.is_active,
         false,
         |ctx: &mut EventContext<'_>| {
@@ -856,9 +856,9 @@ fn render_queue_next_prompt_button(
     .finish();
 
     let tooltip_text = if props.is_active {
-        "Auto-queue is on: your next prompt will be queued"
+        crate::tr!("ai_assistant", "ai-auto-queue-on")
     } else {
-        "Auto-queue next prompt while agent is responding"
+        crate::tr!("ai_assistant", "ai-auto-queue-off")
     };
 
     render_warping_indicator_button(
@@ -900,11 +900,11 @@ fn render_auto_approve_button(
     .finish();
 
     let tooltip_text = if props.is_locked {
-        "Fast forward is always enabled for cloud agent conversations"
+        crate::tr!("ai_assistant", "ai-fast-forward-locked-tooltip")
     } else if is_active {
-        "Turn off auto-approve all agent actions"
+        crate::tr!("ai_assistant", "ai-fast-forward-on-tooltip")
     } else {
-        "Auto-approve all agent actions for this task"
+        crate::tr!("ai_assistant", "ai-fast-forward-off-tooltip")
     };
 
     render_warping_indicator_button(
@@ -958,7 +958,7 @@ fn render_force_refresh_inline(
         // Mirror `render_output_status_text` exactly: same `Text` configuration plus
         // the `Container::with_margin_top(1.)` wrapper so this sits on the same
         // baseline as the adjacent `Last seen by agent ...` text.
-        let text = Text::new(" · Check now".to_string(), font_family, font_size)
+        let text = Text::new(crate::tr!("ai_assistant", "ai-check-now-inline"), font_family, font_size)
             .with_color(color)
             .with_style(Properties::default())
             .with_clip(ClipConfig::end())
@@ -972,7 +972,7 @@ fn render_force_refresh_inline(
         let mut stack = Stack::new().with_child(text_with_margin);
         if state.is_hovered() {
             let tool_tip = ui_builder
-                .tool_tip("Ask the agent to check this command now, skipping its timer.".to_owned())
+                .tool_tip(crate::tr!("ai_assistant", "ai-check-now-tooltip"))
                 .build()
                 .finish();
             stack.add_positioned_overlay_child(
@@ -2173,7 +2173,7 @@ fn render_mermaid_diagram_section<A: Action>(
         .finish();
 
     render_visual_card(
-        "Mermaid diagram".to_string(),
+        crate::tr!("ai_assistant", "ai-mermaid-diagram"),
         Icon::Dataflow,
         Container::new(mermaid_canvas)
             .with_background(theme.background())
@@ -3056,13 +3056,14 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
                     .to_string();
 
                 format!(
-                    "{}\n\nYou've reached your credit limit. Your credit limit resets on {formatted_next_refresh_time}.",
+                    "{}\n\n{}",
                     ERROR_APOLOGY_TEXT.get(),
+                    crate::tr!("ai_assistant", "ai-credit-limit-reached", date = formatted_next_refresh_time),
                 )
             }
         }
         RenderableAIError::ServerOverloaded => {
-            "Warp is currently overloaded. Please try again later.".to_string()
+            crate::tr!("ai_assistant", "ai-server-overloaded")
         }
         RenderableAIError::InternalWarpError => {
             format!("{}\n\n{}", ERROR_APOLOGY_TEXT.get(), INTERNAL_WARP_ERROR.get())
@@ -3103,9 +3104,9 @@ pub fn render_failed_output(props: FailedOutputProps, app: &AppContext) -> Box<d
             }
             // Fallback for contexts that don't have the stateful view (e.g. CLI subagent)
             format!(
-                "{}\n\nAWS credentials expired or missing for {model_name}. \
-                 Please refresh your AWS credentials.",
+                "{}\n\n{}",
                 ERROR_APOLOGY_TEXT.get(),
+                crate::tr!("ai_assistant", "ai-aws-credentials-fallback", model_name = model_name),
             )
         }
     };
@@ -3173,7 +3174,7 @@ fn render_invalid_api_key_error(
     .finish();
 
     let alert_text = Text::new(
-        "Provided API key is not valid",
+        crate::tr!("ai_assistant", "ai-invalid-api-key-error"),
         appearance.ui_font_family(),
         14.,
     )
@@ -3182,10 +3183,7 @@ fn render_invalid_api_key_error(
     .finish();
 
     let detail_text = Text::new(
-        format!(
-            "Failed to authenticate with {provider} when using {model_name}. \
-                     Double-check that your API key is correct."
-        ),
+        crate::tr!("ai_assistant", "ai-failed-authenticate-provider", provider = provider, model_name = model_name),
         appearance.ui_font_family(),
         14.,
     )
@@ -3214,7 +3212,7 @@ fn render_invalid_api_key_error(
             background: Some(internal_colors::fg_overlay_3(theme).into()),
             ..Default::default()
         })
-        .with_text_label("Edit API Keys".to_string())
+        .with_text_label(crate::tr!("ai_assistant", "ai-edit-api-keys"))
         .with_cursor(Some(Cursor::PointingHand))
         .build()
         .on_click(move |ctx, _, _| {
@@ -3347,7 +3345,7 @@ pub(crate) fn render_debug_footer<V: View>(
                     warpui::ui_components::button::ButtonVariant::Text,
                     props.submit_issue_button_handle,
                 )
-                .with_centered_text_label("Send Feedback".to_string())
+                .with_centered_text_label(crate::tr!("ai_assistant", "ai-send-feedback"))
                 .with_style(submit_button_style)
                 .with_hovered_styles(submit_button_hover_style)
                 .with_clicked_styles(submit_button_hover_style)
@@ -3362,8 +3360,9 @@ pub(crate) fn render_debug_footer<V: View>(
     };
 
     // render the conversation's debug id so screenshots automatically show the debug id
+    let debug_info_for_tr = debug_info.clone();
     let debug_text = Text::new(
-        format!("Debug information: {debug_info}"),
+        crate::tr!("ai_assistant", "ai-debug-information", debug_info = debug_info_for_tr),
         appearance.ui_font_family(),
         appearance.monospace_font_size(),
     )
@@ -3407,7 +3406,7 @@ pub(crate) fn render_debug_footer<V: View>(
     })
     .finish();
     let copy_button_with_tooltip = appearance.ui_builder().tool_tip_on_element(
-        "Copy debug ID".to_string(),
+        crate::tr!("ai_assistant", "ai-copy-debug-id"),
         props.debug_copy_button_handle,
         copy_button,
         warpui::elements::ParentAnchor::TopRight,

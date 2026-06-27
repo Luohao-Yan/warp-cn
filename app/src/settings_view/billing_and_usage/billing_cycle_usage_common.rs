@@ -91,26 +91,26 @@ pub fn cost_type_color(cost_type: &AiCreditsUsageAndCostType) -> ColorU {
     }
 }
 
-fn cost_type_label(cost_type: &AiCreditsUsageAndCostType) -> &'static str {
+fn cost_type_label(cost_type: &AiCreditsUsageAndCostType) -> String {
     match cost_type {
-        AiCreditsUsageAndCostType::BaseLimit => "Base",
-        AiCreditsUsageAndCostType::BonusGrant => "Add-ons",
-        AiCreditsUsageAndCostType::Payg => "Pay-as-you-go",
-        AiCreditsUsageAndCostType::AmbientBonusGrant => "Cloud-only",
-        AiCreditsUsageAndCostType::Aggregate => "Combined",
-        AiCreditsUsageAndCostType::Other(_) => "Other",
+        AiCreditsUsageAndCostType::BaseLimit => crate::tr!("billing", "base"),
+        AiCreditsUsageAndCostType::BonusGrant => crate::tr!("billing", "add-ons"),
+        AiCreditsUsageAndCostType::Payg => crate::tr!("billing", "pay-as-you-go"),
+        AiCreditsUsageAndCostType::AmbientBonusGrant => crate::tr!("billing", "cloud-only"),
+        AiCreditsUsageAndCostType::Aggregate => crate::tr!("billing", "combined"),
+        AiCreditsUsageAndCostType::Other(_) => crate::tr!("billing", "other"),
     }
 }
 
-fn bucket_label(bucket: &AiCreditsUsageBucket) -> &'static str {
+fn bucket_label(bucket: &AiCreditsUsageBucket) -> String {
     match bucket {
-        AiCreditsUsageBucket::Ai => "AI",
-        AiCreditsUsageBucket::Compute => "Compute",
-        AiCreditsUsageBucket::Platform => "Platform",
-        AiCreditsUsageBucket::SuggestedCodeDiffs => "Suggested code diffs",
-        AiCreditsUsageBucket::Voice => "Voice",
-        AiCreditsUsageBucket::Aggregate => "Total",
-        AiCreditsUsageBucket::Other(_) => "Other",
+        AiCreditsUsageBucket::Ai => "AI".to_string(),
+        AiCreditsUsageBucket::Compute => crate::tr!("billing", "compute"),
+        AiCreditsUsageBucket::Platform => crate::tr!("billing", "platform"),
+        AiCreditsUsageBucket::SuggestedCodeDiffs => crate::tr!("billing", "suggested-code-diffs"),
+        AiCreditsUsageBucket::Voice => crate::tr!("billing", "voice"),
+        AiCreditsUsageBucket::Aggregate => crate::tr!("billing", "total"),
+        AiCreditsUsageBucket::Other(_) => crate::tr!("billing", "other"),
     }
 }
 
@@ -286,7 +286,7 @@ pub fn render_breakdown_tooltip(
 
     column.add_child(render_tooltip_row(
         /* no swatch on the total row */ None,
-        "Total usage".to_string(),
+        crate::tr!("billing", "total-usage"),
         total_credits,
         total_cost_cents,
         main,

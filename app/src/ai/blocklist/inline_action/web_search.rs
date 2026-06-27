@@ -41,9 +41,9 @@ impl WebSearchView {
         let loading_icon = yellow_running_icon(appearance);
 
         let text = if let Some(q) = query {
-            format!("Searching the web for \"{q}\"")
+            crate::tr!("ai_assistant", "ai-inline-web-searching-for", query = q)
         } else {
-            "Searching the web".to_string()
+            crate::tr!("ai_assistant", "ai-inline-web-searching")
         };
 
         super::search_results_common::render_loading_header(text, loading_icon, app)
@@ -56,9 +56,9 @@ impl WebSearchView {
         app: &AppContext,
     ) -> Box<dyn Element> {
         let title_text = if query.is_empty() {
-            "Searched the web".to_string()
+            crate::tr!("ai_assistant", "ai-inline-web-searched")
         } else {
-            format!("Searched the web for \"{query}\"")
+            crate::tr!("ai_assistant", "ai-inline-web-searched-for", query = query)
         };
 
         let body = if self.collapsible.is_expanded {
@@ -67,10 +67,11 @@ impl WebSearchView {
             None
         };
 
+        let results_label = crate::tr!("ai_assistant", "ai-inline-urls-label");
         render_collapsible_search_results(
             title_text,
             pages.len(),
-            "URLs",
+            &results_label,
             &self.collapsible,
             body,
             |ctx| {

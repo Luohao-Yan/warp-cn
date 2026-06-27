@@ -774,7 +774,7 @@ impl RequestedCommandView {
                             appearance
                                 .ui_builder()
                                 .link(
-                                    "Manage command execution setting".into(),
+                                    crate::tr!("ai_assistant", "ai-inline-manage-cmd-exec").into(),
                                     None,
                                     Some(Box::new(move |ctx| {
                                         ctx.dispatch_typed_action(
@@ -1437,11 +1437,11 @@ impl View for RequestedCommandView {
                 // If we have a result, show the JSON response.
                 let result_text = match result {
                     CallMCPToolResult::Success { result } => serde_json::to_string_pretty(result)
-                        .unwrap_or_else(|_| "Error formatting JSON".to_string()),
+                        .unwrap_or_else(|_| crate::tr!("ai_assistant", "ai-inline-tool-json-error")),
                     CallMCPToolResult::Error(error) => {
-                        format!("Error: {error}")
+                        crate::tr!("ai_assistant", "ai-inline-tool-error", error = format!("{error:#}"))
                     }
-                    CallMCPToolResult::Cancelled => "Tool call was cancelled".to_string(),
+                    CallMCPToolResult::Cancelled => crate::tr!("ai_assistant", "ai-inline-tool-cancelled"),
                 };
                 format!("{command_text}\n\nResponse: {result_text}")
             } else if self.is_header_expanded {

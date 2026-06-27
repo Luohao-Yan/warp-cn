@@ -24,3 +24,7 @@ view-components-raw = 原始
 
 view-components-case-sensitive = Aa
 
+## -- 扫描指示器 --
+
+view-components-find-scanning = 扫描中...
+

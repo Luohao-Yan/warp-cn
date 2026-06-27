@@ -400,11 +400,11 @@ impl Requests {
                 let num_hours = num_minutes / 60;
                 let num_days = num_hours / 24;
                 let remaining_text = if num_days > 0 {
-                    crate::tr!("ai_assistant", "duration-days", count = num_days as usize)
+                    crate::tr!("ai_assistant", "duration-days", count = num_days as i64)
                 } else if num_hours > 0 {
-                    crate::tr!("ai_assistant", "duration-hours", count = num_hours as usize)
+                    crate::tr!("ai_assistant", "duration-hours", count = num_hours as i64)
                 } else {
-                    crate::tr!("ai_assistant", "duration-minutes", count = num_minutes as usize)
+                    crate::tr!("ai_assistant", "duration-minutes", count = num_minutes as i64)
                 };
                 Some(remaining_text)
             }

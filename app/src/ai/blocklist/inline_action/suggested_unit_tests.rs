@@ -323,8 +323,8 @@ impl SuggestedUnitTestsView {
         let formatted_text = FormattedTextElement::new(
             FormattedText::new([FormattedTextLine::Line(vec![
                 FormattedTextFragment::hyperlink(
-                    "Manage suggested code banner settings",
-                    "Settings > AI",
+                    &crate::tr!("ai_assistant", "ai-manage-suggested-banner-settings"),
+                    &crate::tr!("ai_assistant", "ai-settings-ai"),
                 ),
             ])]),
             font_size,

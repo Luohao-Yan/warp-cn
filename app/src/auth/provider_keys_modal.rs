@@ -19,6 +19,15 @@ use crate::appearance::Appearance;
 use crate::editor::{
     EditorView, PropagateAndNoOpNavigationKeys, SingleLineEditorOptions, TextOptions,
 };
+use crate::static_tr;
+
+static_tr!(TITLE, "auth", "provider-keys-title");
+static_tr!(SUBTITLE, "auth", "provider-keys-subtitle");
+static_tr!(OPENAI_LABEL, "auth", "provider-keys-openai-label");
+static_tr!(ANTHROPIC_LABEL, "auth", "provider-keys-anthropic-label");
+static_tr!(GOOGLE_LABEL, "auth", "provider-keys-google-label");
+static_tr!(CANCEL_LABEL, "auth", "provider-keys-cancel-label");
+static_tr!(ADD_KEYS_LABEL, "auth", "provider-keys-add-keys-label");
 
 const MODAL_WIDTH: f32 = 460.;
 const INPUT_BORDER_RADIUS: Radius = Radius::Pixels(4.);
@@ -195,7 +204,7 @@ impl View for ProviderKeysModalView {
         let border_color = internal_colors::neutral_4(theme);
         let ui_builder = appearance.ui_builder();
 
-        let title = FormattedTextElement::from_str("Add API key", appearance.ui_font_family(), 16.)
+        let title = FormattedTextElement::from_str(TITLE.get(), appearance.ui_font_family(), 16.)
             .with_color(internal_colors::text_main(theme, dialog_surface_solid))
             .with_weight(Weight::Bold)
             .with_line_height_ratio(1.25)
@@ -218,7 +227,7 @@ impl View for ProviderKeysModalView {
             .finish();
 
         let subtitle = FormattedTextElement::from_str(
-            "Use your own API keys from model providers for Warp Agent.",
+            SUBTITLE.get(),
             appearance.ui_font_family(),
             14.,
         )
@@ -231,11 +240,11 @@ impl View for ProviderKeysModalView {
         let body = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
             .with_child(Container::new(subtitle).with_margin_bottom(16.).finish())
-            .with_child(self.render_field(appearance, "OpenAI API key", self.openai_input.clone()))
+            .with_child(self.render_field(appearance, OPENAI_LABEL.get(), self.openai_input.clone()))
             .with_child(
                 Container::new(self.render_field(
                     appearance,
-                    "Anthropic API key",
+                    ANTHROPIC_LABEL.get(),
                     self.anthropic_input.clone(),
                 ))
                 .with_margin_top(16.)
@@ -244,7 +253,7 @@ impl View for ProviderKeysModalView {
             .with_child(
                 Container::new(self.render_field(
                     appearance,
-                    "Google API key",
+                    GOOGLE_LABEL.get(),
                     self.google_input.clone(),
                 ))
                 .with_margin_top(16.)
@@ -255,7 +264,7 @@ impl View for ProviderKeysModalView {
         let cancel_button = self.cancel_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Cancel".into()),
+                content: button::Content::Label(CANCEL_LABEL.get().into()),
                 theme: &button::themes::Naked,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {
@@ -269,7 +278,7 @@ impl View for ProviderKeysModalView {
         let add_button = self.add_button.render(
             appearance,
             button::Params {
-                content: button::Content::Label("Add keys".into()),
+                content: button::Content::Label(ADD_KEYS_LABEL.get().into()),
                 theme: &button::themes::Primary,
                 options: button::Options {
                     on_click: Some(Box::new(|ctx, _app, _pos| {

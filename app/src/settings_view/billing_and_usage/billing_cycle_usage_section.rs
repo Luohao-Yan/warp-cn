@@ -383,7 +383,7 @@ impl BillingCycleUsageSectionView {
             .with_main_axis_size(MainAxisSize::Max);
 
         row.add_child(
-            Text::new_inline("Usage", appearance.ui_font_family(), HEADER_FONT_SIZE)
+            Text::new_inline(crate::tr!("billing", "usage"), appearance.ui_font_family(), HEADER_FONT_SIZE)
                 .with_style(Properties::default().weight(Weight::Bold))
                 .with_color(theme.active_ui_text_color().into())
                 .finish(),
@@ -446,10 +446,16 @@ impl BillingCycleUsageSectionView {
             return None;
         }
         let theme = appearance.theme();
-        let reset_str = AIRequestUsageModel::as_ref(app)
-            .next_refresh_time_local()
-            .format("Resets %b %d, %-I:%M %p")
-            .to_string();
+        let reset_str = crate::tr!("billing", "resets-datetime",
+            date = AIRequestUsageModel::as_ref(app)
+                .next_refresh_time_local()
+                .format("%b %d")
+                .to_string(),
+            time = AIRequestUsageModel::as_ref(app)
+                .next_refresh_time_local()
+                .format("%-I:%M %p")
+                .to_string(),
+        );
         Some(
             Text::new_inline(
                 reset_str,
@@ -733,53 +739,50 @@ impl BillingCycleUsageSectionView {
 /// visibility CTA banner, or `None` to suppress the banner entirely.
 fn visibility_cta_for(
     granularity: UsageVisibilityGranularity,
-) -> Option<(&'static str, &'static str, BillingCycleUsageAction, Icon)> {
+) -> Option<(String, String, BillingCycleUsageAction, Icon)> {
     match granularity {
         UsageVisibilityGranularity::OwnOnly => Some((
-            "Upgrade to Build",
-            "to see team-level credit usage.",
+            crate::tr!("billing", "upgrade-to-build"),
+            crate::tr!("billing", "see-team-usage"),
             BillingCycleUsageAction::OpenUpgrade,
             Icon::ArrowCircleBrokenUp,
         )),
         UsageVisibilityGranularity::TeamAggregate => Some((
-            "Upgrade to Business",
-            "to see per-user credit attribution.",
+            crate::tr!("billing", "upgrade-to-business"),
+            crate::tr!("billing", "see-per-user-usage"),
             BillingCycleUsageAction::OpenUpgrade,
             Icon::ArrowCircleBrokenUp,
         )),
         UsageVisibilityGranularity::PerUserTotals => Some((
-            "Upgrade to Enterprise",
-            "to see fine-grained credit attribution and set per-user spend limits.",
+            crate::tr!("billing", "upgrade-to-enterprise"),
+            crate::tr!("billing", "see-fine-grained-usage"),
             BillingCycleUsageAction::OpenUpgrade,
             Icon::ArrowCircleBrokenUp,
         )),
-        // FullBreakdown viewers already have full visibility; nudge them to
-        // the admin panel where per-user spend limits actually get configured.
         UsageVisibilityGranularity::FullBreakdown => Some((
-            "Open the admin panel",
-            "to set per-user spend limits.",
+            crate::tr!("billing", "open-admin-panel"),
+            crate::tr!("billing", "set-per-user-spend-limits"),
             BillingCycleUsageAction::OpenAdminPanel,
             Icon::Users,
         )),
     }
 }
 
-fn legend_style_for(cost_type: AiCreditsUsageAndCostType) -> (ColorU, &'static str) {
+fn legend_style_for(cost_type: AiCreditsUsageAndCostType) -> (ColorU, String) {
     match cost_type {
-        AiCreditsUsageAndCostType::BaseLimit => (BASE_CREDITS_DOT_COLOR, "Base"),
-        AiCreditsUsageAndCostType::BonusGrant => (BONUS_CREDITS_DOT_COLOR, "Add-ons"),
-        AiCreditsUsageAndCostType::Payg => (PAYG_CREDITS_DOT_COLOR, "Pay-as-you-go"),
-        AiCreditsUsageAndCostType::AmbientBonusGrant => (AMBIENT_CREDITS_DOT_COLOR, "Cloud-only"),
-        AiCreditsUsageAndCostType::Aggregate => (AGGREGATE_CREDITS_DOT_COLOR, "Combined"),
-        AiCreditsUsageAndCostType::Other(_) => (BASE_CREDITS_DOT_COLOR, ""),
+        AiCreditsUsageAndCostType::BaseLimit => (BASE_CREDITS_DOT_COLOR, crate::tr!("billing", "base")),
+        AiCreditsUsageAndCostType::BonusGrant => (BONUS_CREDITS_DOT_COLOR, crate::tr!("billing", "add-ons")),
+        AiCreditsUsageAndCostType::Payg => (PAYG_CREDITS_DOT_COLOR, crate::tr!("billing", "pay-as-you-go")),
+        AiCreditsUsageAndCostType::AmbientBonusGrant => (AMBIENT_CREDITS_DOT_COLOR, crate::tr!("billing", "cloud-only")),
+        AiCreditsUsageAndCostType::Aggregate => (AGGREGATE_CREDITS_DOT_COLOR, crate::tr!("billing", "combined")),
+        AiCreditsUsageAndCostType::Other(_) => (BASE_CREDITS_DOT_COLOR, String::new()),
     }
 }
 
 fn render_aggregate_legend_tooltip(appearance: &Appearance) -> Box<dyn Element> {
     let theme = appearance.theme();
     let text = Text::new_inline(
-        "Other team members' usage across add-on, pay-as-you-go, and cloud-only credits."
-            .to_string(),
+        crate::tr!("billing", "other-team-members-usage"),
         appearance.ui_font_family(),
         12.,
     )

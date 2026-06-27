@@ -397,7 +397,7 @@ impl LoginSlideView {
             }
             Err(error) => {
                 safe_error!(
-                    safe: ("Failed to parse AuthRedirectPayload from redirect URL"),
+                    safe: ("{}", crate::auth::auth_view_modal::SAFE_ERR_PARSE_PAYLOAD.get()),
                     full: ("Failed to parse AuthRedirectPayload from redirect URL: {error:#}")
                 );
                 self.last_login_failure_reason =

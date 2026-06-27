@@ -55,6 +55,7 @@ use crate::terminal::model::block::BlockId;
 use crate::terminal::shell::ShellType;
 use crate::terminal::view::block_onboarding::onboarding_agentic_suggestions_block::OnboardingChipType;
 use crate::TelemetryEvent;
+use crate::static_tr;
 
 /// A server supplied ID for a specific AI generated output.
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
@@ -676,9 +677,9 @@ pub enum RenderableAIError {
     },
 }
 
+static_tr!(TRANSIENT_NETWORK_ERROR_MESSAGE, "ai_assistant", "ai-transient-network-error");
+
 impl RenderableAIError {
-    const TRANSIENT_NETWORK_ERROR_MESSAGE: &'static str =
-        "Warp lost connection while receiving the agent response. This is usually temporary.";
     /// Creates a transient network error. `kind` is the structured cause (including the raw API
     /// error where one exists), preserved so user reports can disambiguate the different causes
     /// behind the shared user-facing copy.
@@ -809,15 +810,15 @@ impl Display for RenderableAIError {
                 if let Some(message) = user_display_message {
                     write!(f, "{message}")
                 } else {
-                    write!(f, "Quota limit reached.")
+                    write!(f, "{}", crate::tr!("ai_assistant", "ai-quota-limit-reached"))
                 }
             }
             Self::ServerOverloaded => {
-                write!(f, "Warp is currently overloaded. Please try again later.")
+                write!(f, "{}", crate::tr!("ai_assistant", "ai-server-overloaded-short"))
             }
             Self::InternalWarpError => write!(f, "{}", crate::tr!("ai_assistant", "ai-internal-warp-error")),
             Self::ContextWindowExceeded(message) => {
-                write!(f, "Context window exceeded: {message}")
+                write!(f, "{}", crate::tr!("ai_assistant", "ai-context-window-exceeded", message = message))
             }
             Self::InvalidApiKey { provider, .. } => {
                 write!(f, "{}", crate::tr!("ai_assistant", "ai-invalid-api-key-for-provider", provider = provider))
@@ -825,14 +826,15 @@ impl Display for RenderableAIError {
             Self::AwsBedrockCredentialsExpiredOrInvalid { model_name } => {
                 write!(
                     f,
-                    "AWS Bedrock credentials expired or invalid for {model_name}"
+                    "{}",
+                    crate::tr!("ai_assistant", "ai-aws-bedrock-credentials-expired", model_name = model_name)
                 )
             }
             Self::TransientNetworkError { kind, .. } => {
                 write!(
                     f,
                     "{}\n\nDebug info: {kind}",
-                    Self::TRANSIENT_NETWORK_ERROR_MESSAGE
+                    TRANSIENT_NETWORK_ERROR_MESSAGE.get()
                 )
             }
             Self::Other { error_message, .. } => write!(f, "{error_message}"),

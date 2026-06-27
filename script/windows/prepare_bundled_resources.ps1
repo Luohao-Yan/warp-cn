@@ -53,6 +53,19 @@ if (Test-Path $BundledSource -PathType Container) {
     Write-Warning "No bundled directory found at $BundledSource"
 }
 
+# Copy i18n translation resources
+$I18nSource = Join-Path $ResourcesSource 'i18n'
+if (Test-Path $I18nSource -PathType Container) {
+    $I18nDestination = Join-Path $DestinationDir 'i18n'
+    Write-Output "Copying i18n resources to $I18nDestination"
+    if (Test-Path $I18nDestination -PathType Container) {
+        Remove-Item -Path $I18nDestination -Recurse -Force
+    }
+    Copy-Item -Path $I18nSource -Destination $I18nDestination -Recurse -Force
+} else {
+    Write-Warning "No i18n directory found at $I18nSource"
+}
+
 if ($env:GIT_RELEASE_TAG) {
     $VersionMetadataDir = Join-Path (Join-Path $DestinationDir 'bundled') 'metadata'
     $VersionMetadataPath = Join-Path $VersionMetadataDir 'version.json'

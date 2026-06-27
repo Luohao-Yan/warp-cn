@@ -168,7 +168,7 @@ impl GenericMenuItem for NewEnvironmentMenuItem {
     }
 
     fn name(&self) -> String {
-        "New environment".to_string()
+        crate::tr!("ai_assistant", "ai-new-environment")
     }
 
     fn icon(&self, _app: &AppContext) -> Option<Icon> {
@@ -430,9 +430,9 @@ impl EnvironmentSelector {
         let label = if let Some(id) = self.target.selected_environment_id(ctx) {
             CloudAmbientAgentEnvironment::get_by_id(&id, ctx)
                 .map(|env| env.model().string_model.display_name())
-                .unwrap_or_else(|| "New environment".to_string())
+                .unwrap_or_else(|| crate::tr!("ai_assistant", "ai-new-environment"))
         } else {
-            "New environment".to_string()
+            crate::tr!("ai_assistant", "ai-new-environment")
         };
 
         let is_configuring = self.is_configuring(ctx);

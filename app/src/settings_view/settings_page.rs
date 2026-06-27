@@ -45,11 +45,15 @@ use super::warp_drive_page::WarpDriveSettingsPageView;
 use super::warpify_page::WarpifyPageView;
 use super::SettingsSection;
 use crate::appearance::Appearance;
+use crate::static_tr;
 use crate::settings::CloudPreferencesSettings;
 use crate::themes::theme::Fill;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 use crate::view_components::{Dropdown, DropdownItemAction, SubmittableTextInput};
+
+static_tr!(CLICK_TO_LEARN_MORE, "settings", "click-to-learn-more");
+static_tr!(NOT_SYNCED_TOOLTIP, "settings", "not-synced-tooltip");
 
 pub const TOGGLE_BUTTON_RIGHT_PADDING: f32 = 5.;
 pub const HEADER_PADDING: f32 = 15.;
@@ -550,7 +554,7 @@ pub fn render_info_icon<T: Clone + Action>(
 ) -> Box<dyn Element> {
     let tooltip_text = additional_info
         .tooltip_override_text
-        .unwrap_or("Click to learn more in docs".to_owned());
+        .unwrap_or(CLICK_TO_LEARN_MORE.get().to_owned());
     let icon = Container::new(
         ConstrainedBox::new(
             Icon::Info
@@ -608,7 +612,7 @@ pub fn render_local_only_icon(
         .ui_builder()
         .local_only_icon_with_tooltip(
             13.,
-            custom_tooltip.unwrap_or("This setting is not synced to your other devices".to_owned()),
+            custom_tooltip.unwrap_or(NOT_SYNCED_TOOLTIP.get().to_owned()),
             mouse_state.clone(),
         )
         .finish();
@@ -1023,8 +1027,6 @@ pub(crate) fn render_settings_info_banner(
     .finish()
 }
 
-const WORKSPACE_OVERRIDE_TOOLTIP_TEXT: &str =
-    "This option is enforced by your organization's settings and cannot be customized.";
 
 pub struct InputListItem<SettingsPageAction: Action + Clone> {
     pub item: String,
@@ -1133,7 +1135,7 @@ fn render_workspace_override_row_tooltip(
         if state.is_hovered() {
             let tooltip = appearance
                 .ui_builder()
-                .tool_tip(WORKSPACE_OVERRIDE_TOOLTIP_TEXT.to_string())
+                .tool_tip(crate::tr!("settings", "org-enforcement-tooltip"))
                 .build()
                 .finish();
             stack.add_positioned_child(
@@ -1921,5 +1923,5 @@ pub(super) fn build_reset_button(
             font_size: Some(appearance.ui_font_size() * 0.8),
             ..Default::default()
         })
-        .with_text_label("Reset to default".to_owned())
+        .with_text_label(crate::tr!("settings", "reset-to-default"))
 }

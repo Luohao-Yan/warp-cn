@@ -3890,14 +3890,14 @@ impl TerminalView {
 
         let control_master_error_banner = ctx.add_typed_action_view(|_| {
             Banner::new(BannerTextContent::formatted_text(vec![
-                FormattedTextFragment::plain_text("Seems like your completions are not working ("),
-                FormattedTextFragment::hyperlink("more info", CONTROLMASTER_ISSUES_URL),
-                FormattedTextFragment::plain_text("). Enabling the SSH extension in "),
+                FormattedTextFragment::plain_text(crate::tr!("terminal", "banner-ssh-compat-before-link")),
+                FormattedTextFragment::hyperlink(crate::tr!("terminal", "banner-ssh-compat-more-info"), CONTROLMASTER_ISSUES_URL),
+                FormattedTextFragment::plain_text(crate::tr!("terminal", "banner-ssh-compat-after-link")),
                 FormattedTextFragment::hyperlink_action(
-                    "settings",
+                    crate::tr!("terminal", "banner-ssh-compat-settings"),
                     TerminalAction::ShowWarpifySettings,
                 ),
-                FormattedTextFragment::plain_text(" may resolve this issue."),
+                FormattedTextFragment::plain_text(crate::tr!("terminal", "banner-ssh-compat-may-resolve")),
             ]))
         });
 
@@ -3908,9 +3908,9 @@ impl TerminalView {
         let incompatible_configuration_banner = ctx.add_typed_action_view(|_| {
             Banner::new(BannerTextContent::formatted_text(vec![
                 FormattedTextFragment::plain_text(
-                    "Your shell configuration is incompatible with Warp...  ",
+                    crate::tr!("terminal", "banner-shell-incompat"),
                 ),
-                FormattedTextFragment::hyperlink("More info", KNOWN_ISSUES_URL),
+                FormattedTextFragment::hyperlink(crate::tr!("terminal", "banner-more-info"), KNOWN_ISSUES_URL),
             ]))
         });
 
@@ -3962,11 +3962,11 @@ impl TerminalView {
         let osc52_clipboard_blocked_banner = ctx.add_typed_action_view(|_| {
             Banner::<TerminalAction>::new_with_buttons(
                 BannerTextContent::plain_text(
-                    "A terminal program tried to access your clipboard. This is disabled by default for security reasons.",
+                    crate::tr!("terminal", "banner-clipboard-blocked"),
                 ),
                 vec![
                     BannerTextButton::new(
-                        "Allow".to_string(),
+                        crate::tr!("terminal", "banner-clipboard-allow"),
                         Rc::new(|event_ctx, _ctx, _position| {
                             event_ctx.dispatch_typed_action(BannerAction::<TerminalAction>::Action(
                                 TerminalAction::Osc52AllowBlockedClipboardOperation,
@@ -3974,7 +3974,7 @@ impl TerminalView {
                         }),
                     ),
                     BannerTextButton::new(
-                        "Don't show again".to_string(),
+                        crate::tr!("terminal", "banner-clipboard-dont-show"),
                         Rc::new(|event_ctx, _ctx, _position| {
                             event_ctx.dispatch_typed_action(
                                 BannerAction::<TerminalAction>::Dismiss(DismissalType::Permanent),
@@ -16567,7 +16567,7 @@ impl TerminalView {
 
                             if is_markdown_file(&path) {
                                 items.push(
-                                    MenuItemFields::new("Open in Warp")
+                                    MenuItemFields::new(crate::tr!("terminal", "ctx-open-in-warp"))
                                         .with_on_select_action(TerminalAction::OpenFileInWarp(path))
                                         .into_item(),
                                 );
@@ -16664,7 +16664,7 @@ impl TerminalView {
                 } else {
                     crate::tr!("terminal", "menu-copy-commands")
                 };
-                let copy_str = "Copy";
+                let copy_str = crate::tr!("terminal", "ctx-copy");
                 let find_str = if is_single_selection {
                     crate::tr!("terminal", "menu-find-within-block")
                 } else {
@@ -17108,7 +17108,7 @@ impl TerminalView {
             return None;
         }
         Some(
-            MenuItemFields::new("Clear Blocks")
+            MenuItemFields::new(crate::tr!("terminal", "ctx-clear-blocks"))
                 .with_on_select_action(TerminalAction::ClearBuffer)
                 .with_key_shortcut_label(keybinding_name_to_display_string(
                     "terminal:clear_blocks",
@@ -17406,7 +17406,7 @@ impl TerminalView {
         }
 
         items.push(
-            MenuItemFields::new("Paste")
+            MenuItemFields::new(crate::tr!("terminal", "ctx-paste"))
                 .with_on_select_action(TerminalAction::InputContextMenuItem(
                     InputContextMenuAction::Paste,
                 ))
@@ -17477,13 +17477,13 @@ impl TerminalView {
         if !is_editor_disabled {
             let input_settings = InputSettings::as_ref(ctx);
             let inverse_action = if *input_settings.show_hint_text {
-                "Hide"
+                crate::tr!("terminal", "ctx-hide")
             } else {
-                "Show"
+                crate::tr!("terminal", "ctx-show")
             };
             items.push(MenuItem::Separator);
             items.push(
-                MenuItemFields::new(format!("{inverse_action} input hint text"))
+                MenuItemFields::new(crate::tr!("terminal", "ctx-toggle-input-hint-text", action = inverse_action))
                     .with_on_select_action(TerminalAction::InputContextMenuItem(
                         InputContextMenuAction::ToggleInputHintText,
                     ))
@@ -21156,13 +21156,13 @@ impl TerminalView {
 
         let Some(ambient_agent_view_model) = self.ambient_agent_view_model.clone() else {
             self.restore_followup_prompt_after_failed_submission(&prompt, ctx);
-            self.show_error_toast("Couldn't continue this cloud task.".to_string(), ctx);
+            self.show_error_toast(crate::tr!("terminal", "banner-couldnt-continue-cloud-task"), ctx);
             return true;
         };
 
         if ambient_agent_view_model.as_ref(ctx).task_id() != Some(task_id) {
             self.restore_followup_prompt_after_failed_submission(&prompt, ctx);
-            self.show_error_toast("Couldn't continue this cloud task.".to_string(), ctx);
+            self.show_error_toast(crate::tr!("terminal", "banner-couldnt-continue-cloud-task"), ctx);
             return true;
         }
 
@@ -21243,7 +21243,7 @@ impl TerminalView {
                 {
                     return;
                 }
-                self.show_error_toast("Couldn't continue this cloud task.".to_string(), ctx);
+                self.show_error_toast(crate::tr!("terminal", "banner-couldnt-continue-cloud-task"), ctx);
             }
             InputEvent::CancelSharedSessionConversation {
                 server_conversation_token,
@@ -22146,21 +22146,20 @@ impl TerminalView {
         let show_banner = if honor_ps1 {
             let banner_content = if shell_plugins.contains("p10k_unsupported") {
                 Some(BannerTextContent::formatted_text(vec![
-                    FormattedTextFragment::bold("Powerlevel10k now supports Warp!  "),
+                    FormattedTextFragment::bold(crate::tr!("terminal", "banner-p10k-now-supports")),
                     FormattedTextFragment::plain_text(
-                        "You seem to be running an older (unsupported) version, please follow ",
+                        crate::tr!("terminal", "banner-p10k-unsupported-version"),
                     ),
                     FormattedTextFragment::hyperlink(
-                        "these instructions",
+                        crate::tr!("terminal", "banner-p10k-these-instructions"),
                         P10K_UPDATE_INSTRUCTIONS_URL,
                     ),
-                    FormattedTextFragment::plain_text(" to update to the latest version."),
+                    FormattedTextFragment::plain_text(crate::tr!("terminal", "banner-p10k-to-update")),
                 ]))
             } else if shell_plugins.contains("pure") {
                 Some(BannerTextContent::formatted_text(vec![
                     FormattedTextFragment::plain_text(
-                        "Pure is not yet supported in Warp. You might consider one of the \
-                        supported prompts as an alternative.  ",
+                        crate::tr!("terminal", "banner-pure-unsupported"),
                     ),
                     FormattedTextFragment::hyperlink(crate::tr!("common", "learn-more-label"), PROMPT_COMPATIBILITY_URL),
                 ]))
@@ -24892,7 +24891,7 @@ impl TerminalView {
         let model = self.model.lock();
         model.block_list().block_at(index).map(|block| {
             let status = if block.has_failed() {
-                crate::tr!("terminal", "a11y-status-failed", code = block.exit_code().value() as usize)
+                crate::tr!("terminal", "a11y-status-failed", code = block.exit_code().value() as i64)
             } else if block.is_background() {
                 crate::tr!("terminal", "a11y-status-background")
             } else if block.is_done() {
@@ -25920,7 +25919,7 @@ impl TypedActionView for TerminalView {
                 ))
             }
             OpenBlockFilterEditor(block_index) => Custom(AccessibilityContent::new_without_help(
-                crate::tr!("terminal", "a11y-open-block-filter-editor", block_index = block_index.0 as usize),
+                crate::tr!("terminal", "a11y-open-block-filter-editor", block_index = block_index.0 as i64),
                 WarpA11yRole::TextRole,
             )),
             ShowInitializationBlock => Custom(AccessibilityContent::new_without_help(

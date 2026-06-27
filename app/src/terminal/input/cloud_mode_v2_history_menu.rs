@@ -53,7 +53,7 @@ impl CloudModeV2HistoryMenuView {
     ) -> Self {
         let tab_configs = vec![InlineMenuTabConfig {
             id: HistoryTab::Prompts,
-            label: "Prompts".to_string(),
+            label: crate::tr!("terminal", "input-hint-prompts-label"),
             filters: HashSet::from([QueryFilter::PromptHistory]),
         }];
         let inner = ctx.add_view(|ctx| {

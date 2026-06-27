@@ -13,6 +13,11 @@ use super::AmbientAgentProgressUIState;
 use crate::ai::active_agent_views_model::ActiveAgentViewsModel;
 use crate::ai::agent::conversation::AIConversationId;
 use crate::ai::agent::extract_user_query_mode;
+use crate::static_tr;
+
+static_tr!(STEP1, "terminal", "connecting-host-step1");
+static_tr!(STEP2, "terminal", "creating-env-step2");
+static_tr!(STEP3, "terminal", "starting-env-step3");
 use crate::ai::ambient_agents::github_auth_notifier::{GitHubAuthEvent, GitHubAuthNotifier};
 use crate::ai::ambient_agents::spawn::{spawn_task, submit_run_followup, AmbientAgentEvent};
 use crate::ai::ambient_agents::task::{HarnessAuthSecretsConfig, HarnessConfig};
@@ -89,11 +94,11 @@ impl AgentProgress {
 
     pub fn setup_status_text(&self) -> &'static str {
         if self.harness_started_at.is_some() {
-            "Starting Environment (Step 3/3)"
+            STEP3.get()
         } else if self.claimed_at.is_some() {
-            "Creating Environment (Step 2/3)"
+            STEP2.get()
         } else {
-            "Connecting to Host (Step 1/3)"
+            STEP1.get()
         }
     }
 }

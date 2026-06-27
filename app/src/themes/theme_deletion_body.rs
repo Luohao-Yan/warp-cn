@@ -24,6 +24,8 @@ const BUTTON_FONT_SIZE: f32 = 14.;
 const BUTTON_BORDER_RADIUS: f32 = 4.;
 const BORDER_WIDTH: f32 = 1.;
 
+static_tr!(ERROR_TOAST_MSG, "common", "something-went-wrong");
+
 static_tr!(MODAL_SUBHEADER, "common", "theme-delete-subheader");
 static_tr!(CANCEL_BUTTON_TEXT, "common", "cancel-label");
 static_tr!(DELETE_BUTTON_TEXT, "common", "delete-theme");
@@ -105,7 +107,7 @@ impl ThemeDeletionBody {
             }
         }
         if errored {
-            self.send_error_toast("Something went wrong", ctx);
+            self.send_error_toast(ERROR_TOAST_MSG.get(), ctx);
         }
     }
 

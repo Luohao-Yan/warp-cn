@@ -307,7 +307,7 @@ impl View for ExecutionProfileView {
                         permissions_column.add_child(with_standard_vertical_margin(
                             render_run_agents_permission_line_with_icon(
                                 Icon::Workflow,
-                                "Run agents:",
+                                crate::tr!("code", "exec-profile-run-agents"),
                                 &profile.run_agents,
                                 appearance,
                                 is_any_ai_enabled,
@@ -760,9 +760,9 @@ fn render_run_agents_permission_line_with_icon(
     is_ai_enabled: bool,
 ) -> Box<dyn Element> {
     let permission_text = match permission {
-        RunAgentsPermission::NeverAllow | RunAgentsPermission::Unknown => "Never",
-        RunAgentsPermission::AlwaysAllow => "Always allow",
-        RunAgentsPermission::AlwaysAsk => "Always ask",
+        RunAgentsPermission::NeverAllow | RunAgentsPermission::Unknown => crate::tr!("code", "exec-profile-never"),
+        RunAgentsPermission::AlwaysAllow => crate::tr!("code", "exec-profile-always-allow"),
+        RunAgentsPermission::AlwaysAsk => crate::tr!("code", "exec-profile-always-ask"),
     };
     render_permission_line_with_icon(icon, label, permission_text, appearance, is_ai_enabled)
 }

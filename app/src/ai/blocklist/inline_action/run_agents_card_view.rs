@@ -1370,23 +1370,21 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
                 .count();
             if launched == total {
                 let label = if total == 1 {
-                    "Spawned 1 agent".to_string()
+                    crate::tr!("ai_assistant", "ai-orch-spawned-one-agent")
                 } else {
-                    format!("Spawned {total} agents")
+                    crate::tr!("ai_assistant", "ai-orch-spawned-agents", count = total as i64)
                 };
                 (label, StatusKind::Success)
             } else if launched == 0 {
-                // Every child failed to launch: surface a terminal failure
-                // rather than the in-progress-looking mixed state.
                 let label = if total == 1 {
-                    "Failed to spawn agent".to_string()
+                    crate::tr!("ai_assistant", "ai-orch-failed-spawn-one")
                 } else {
-                    format!("Failed to spawn {total} agents")
+                    crate::tr!("ai_assistant", "ai-orch-failed-spawn-agents", count = total as i64)
                 };
                 (label, StatusKind::Failure)
             } else {
                 (
-                    format!("Spawned {launched} of {total} agents"),
+                    crate::tr!("ai_assistant", "ai-orch-spawned-of-agents", launched = launched as i64, total = total as i64),
                     StatusKind::Mixed,
                 )
             }
@@ -1395,7 +1393,7 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
             let body = if reason.is_empty() {
                 ORCHESTRATION_DISABLED_MESSAGE.get().to_owned()
             } else {
-                crate::tr!("ai_assistant", "ai-orchestration-disabled-with-reason", reason = reason.as_str())
+                crate::tr!("ai_assistant", "ai-orchestration-disabled-with-reason", reason = reason)
             };
             (body, StatusKind::Cancelled)
         }
@@ -1403,11 +1401,11 @@ pub(crate) fn format_terminal_state(result: &RunAgentsResult) -> (String, Status
             let label = if error.is_empty() {
                 FAILED_TO_START_ORCHESTRATION.get().to_owned()
             } else {
-                crate::tr!("ai_assistant", "ai-failed-to-start-orchestration-with-error", error = error.as_str())
+                crate::tr!("ai_assistant", "ai-failed-to-start-orchestration-with-error", error = error)
             };
             (label, StatusKind::Failure)
         }
-        RunAgentsResult::Cancelled => ("Spawn agents cancelled".to_string(), StatusKind::Cancelled),
+        RunAgentsResult::Cancelled => (SPAWN_AGENTS_CANCELLED.get().to_owned(), StatusKind::Cancelled),
     }
 }
 
@@ -1427,9 +1425,9 @@ fn render_spawning_card(
 ) -> Box<dyn Element> {
     let total = snapshot.agent_count;
     let label = if total == 1 {
-        "Spawning 1 agent\u{2026}".to_string()
+        crate::tr!("ai_assistant", "ai-orch-spawning-one-agent")
     } else {
-        format!("Spawning {total} agents\u{2026}")
+        crate::tr!("ai_assistant", "ai-orch-spawning-agents", count = total as i64)
     };
     render_status_only_card(label, appearance, StatusKind::Spawning, app)
 }

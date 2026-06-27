@@ -24,6 +24,24 @@ use crate::ui_components::icons::Icon;
 use crate::view_components::action_button::{ActionButton, DangerSecondaryTheme};
 use crate::view_components::dropdown::{Dropdown, DropdownItem};
 
+use crate::static_tr;
+
+static_tr!(CUSTOM_INF_ENDPOINT_DESC, "code", "custom-inf-endpoint-desc");
+static_tr!(CUSTOM_INF_ENDPOINT_NAME, "code", "custom-inf-endpoint-name");
+static_tr!(CUSTOM_INF_ENDPOINT_URL, "code", "custom-inf-endpoint-url");
+static_tr!(CUSTOM_INF_API_KEY, "code", "custom-inf-api-key");
+static_tr!(CUSTOM_INF_API_FORMAT, "code", "custom-inf-api-format");
+static_tr!(CUSTOM_INF_MODEL_NAME, "code", "custom-inf-model-name");
+static_tr!(CUSTOM_INF_MODEL_ALIAS, "code", "custom-inf-model-alias");
+static_tr!(CUSTOM_INF_ADD_MODEL, "code", "custom-inf-add-model");
+static_tr!(CUSTOM_INF_ADD_ENDPOINT, "code", "custom-inf-add-endpoint");
+static_tr!(CUSTOM_INF_SAVE, "code", "custom-inf-save");
+static_tr!(CUSTOM_INF_NAME_PLACEHOLDER, "code", "custom-inf-name-placeholder");
+static_tr!(CUSTOM_INF_URL_PLACEHOLDER, "code", "custom-inf-url-placeholder");
+static_tr!(CUSTOM_INF_API_KEY_PLACEHOLDER, "code", "custom-inf-api-key-placeholder");
+static_tr!(CUSTOM_INF_MODEL_NAME_PLACEHOLDER, "code", "custom-inf-model-name-placeholder");
+static_tr!(CUSTOM_INF_MODEL_ALIAS_PLACEHOLDER, "code", "custom-inf-model-alias-placeholder");
+
 const LABEL_FONT_SIZE: f32 = 12.;
 const INPUT_WIDTH: f32 = 480.;
 
@@ -115,7 +133,7 @@ impl CustomEndpointModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("e.g., Zach's external models", ctx);
+            editor.set_placeholder_text(CUSTOM_INF_NAME_PLACEHOLDER.get(), ctx);
             if let Some(ep) = endpoint {
                 editor.set_buffer_text(&ep.name, ctx);
             }
@@ -135,7 +153,7 @@ impl CustomEndpointModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("Please include 'https://'", ctx);
+            editor.set_placeholder_text(CUSTOM_INF_URL_PLACEHOLDER.get(), ctx);
             if let Some(ep) = endpoint {
                 editor.set_buffer_text(&ep.url, ctx);
             }
@@ -156,7 +174,7 @@ impl CustomEndpointModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("e.g., sk-...", ctx);
+            editor.set_placeholder_text(CUSTOM_INF_API_KEY_PLACEHOLDER.get(), ctx);
             if let Some(ep) = endpoint {
                 editor.set_buffer_text(&ep.api_key, ctx);
             }
@@ -237,7 +255,7 @@ impl CustomEndpointModal {
             });
         }
         let remove_endpoint_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Remove", DangerSecondaryTheme)
+            ActionButton::new(crate::tr!("common", "remove-label"), DangerSecondaryTheme)
                 .with_icon(Icon::Trash)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(CustomEndpointModalAction::RemoveEndpoint);
@@ -281,7 +299,7 @@ impl CustomEndpointModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("e.g., GLM-5-FP8", ctx);
+            editor.set_placeholder_text(CUSTOM_INF_MODEL_NAME_PLACEHOLDER.get(), ctx);
             if let Some(n) = name {
                 editor.set_buffer_text(n, ctx);
             }
@@ -301,7 +319,7 @@ impl CustomEndpointModal {
                 ..Default::default()
             };
             let mut editor = EditorView::single_line(options, ctx);
-            editor.set_placeholder_text("e.g., GLM-5", ctx);
+            editor.set_placeholder_text(CUSTOM_INF_MODEL_ALIAS_PLACEHOLDER.get(), ctx);
             if let Some(a) = alias {
                 editor.set_buffer_text(a, ctx);
             }
@@ -677,7 +695,7 @@ impl View for CustomEndpointModal {
 
         let label_font_family = appearance.ui_font_family();
         let label_text_color = theme.active_ui_text_color().into();
-        let label = move |text: &'static str| {
+        let label = |text: String| {
             Text::new(text, label_font_family, LABEL_FONT_SIZE)
                 .with_color(label_text_color)
                 .finish()
@@ -699,7 +717,7 @@ impl View for CustomEndpointModal {
         column.add_child(
             Container::new(
                 Text::new(
-                    "Provide your endpoint details below. You can add as many models from the endpoint as you'd like and can also provide aliases for the model picker in your input.",
+                    CUSTOM_INF_ENDPOINT_DESC.get(),
                     appearance.ui_font_family(),
                     LABEL_FONT_SIZE,
                 )
@@ -713,7 +731,7 @@ impl View for CustomEndpointModal {
 
         // Endpoint name
         column.add_child(
-            Container::new(label("Endpoint name"))
+            Container::new(label(CUSTOM_INF_ENDPOINT_NAME.get().to_string()))
                 .with_margin_bottom(4.)
                 .finish(),
         );
@@ -732,7 +750,7 @@ impl View for CustomEndpointModal {
 
         // Endpoint URL
         column.add_child(
-            Container::new(label("Endpoint URL"))
+            Container::new(label(CUSTOM_INF_ENDPOINT_URL.get().to_string()))
                 .with_margin_bottom(4.)
                 .finish(),
         );
@@ -758,7 +776,7 @@ impl View for CustomEndpointModal {
 
         // API key
         column.add_child(
-            Container::new(label("API key"))
+            Container::new(label(CUSTOM_INF_API_KEY.get().to_string()))
                 .with_margin_bottom(4.)
                 .finish(),
         );
@@ -777,7 +795,7 @@ impl View for CustomEndpointModal {
 
         // API format
         column.add_child(
-            Container::new(label("API format"))
+            Container::new(label(CUSTOM_INF_API_FORMAT.get().to_string()))
                 .with_margin_bottom(4.)
                 .finish(),
         );
@@ -794,12 +812,12 @@ impl View for CustomEndpointModal {
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_spacing(MODEL_ROW_SPACING)
             .with_child(
-                ConstrainedBox::new(label("Model name"))
+                ConstrainedBox::new(label(CUSTOM_INF_MODEL_NAME.get().to_string()))
                     .with_width(MODEL_INPUT_WIDTH)
                     .finish(),
             )
             .with_child(
-                ConstrainedBox::new(label("Model alias (optional)"))
+                ConstrainedBox::new(label(CUSTOM_INF_MODEL_ALIAS.get().to_string()))
                     .with_width(MODEL_INPUT_WIDTH)
                     .finish(),
             );
@@ -878,7 +896,7 @@ impl View for CustomEndpointModal {
                         ButtonVariant::Secondary,
                         self.add_model_button_mouse_state.clone(),
                     )
-                    .with_text_label("+ Add model".to_string())
+                    .with_text_label(CUSTOM_INF_ADD_MODEL.get().to_string())
                     .with_style(UiComponentStyles {
                         font_size: Some(14.),
                         padding: Some(Coords::uniform(6.).left(8.).right(8.)),
@@ -913,7 +931,7 @@ impl View for CustomEndpointModal {
                     ButtonVariant::Secondary,
                     self.cancel_button_mouse_state.clone(),
                 )
-                .with_text_label("Cancel".to_string())
+                .with_text_label(crate::tr!("common", "cancel-label"))
                 .with_style(button_style)
                 .build()
                 .on_click(move |ctx, _, _| {
@@ -926,9 +944,9 @@ impl View for CustomEndpointModal {
             .ui_builder()
             .button(ButtonVariant::Accent, self.save_button_mouse_state.clone())
             .with_text_label(if is_editing {
-                "Save".to_string()
+                CUSTOM_INF_SAVE.get().to_string()
             } else {
-                "Add endpoint".to_string()
+                CUSTOM_INF_ADD_ENDPOINT.get().to_string()
             })
             .with_style(button_style);
         if !is_valid {

@@ -41,9 +41,10 @@ use crate::terminal::input::inline_menu::{
 };
 use crate::terminal::input::message_bar::{Message, MessageItem};
 use crate::workspace::WorkspaceAction;
+use crate::static_tr;
 use crate::workspaces::user_workspaces::UserWorkspaces;
 
-const AUTO_BEDROCK_TOOLTIP: &str = "Warp uses Bedrock when the model Auto selects supports it; otherwise it may use Warp-hosted inference.";
+static_tr!(TERMINAL_AUTO_BEDROCK_TOOLTIP, "terminal", "input-model-auto-bedrock-tooltip");
 
 #[derive(Clone, Debug)]
 pub struct AcceptModel {
@@ -63,7 +64,7 @@ impl InlineMenuAction for AcceptModel {
                 key: "enter".to_owned(),
                 ..Default::default()
             }),
-            MessageItem::text(" to select"),
+            MessageItem::text(crate::tr!("terminal", "input-hint-to-select")),
             MessageItem::keystroke(if OperatingSystem::get().is_mac() {
                 Keystroke {
                     key: "enter".to_owned(),
@@ -78,7 +79,7 @@ impl InlineMenuAction for AcceptModel {
                     ..Default::default()
                 }
             }),
-            MessageItem::text(" select and save to profile"),
+            MessageItem::text(crate::tr!("terminal", "input-hint-select-and-save-to-profile")),
         ];
 
         if args.inline_menu_model.tab_configs().len() > 1 {
@@ -87,7 +88,7 @@ impl InlineMenuAction for AcceptModel {
                 shift: true,
                 ..Default::default()
             }));
-            items.push(MessageItem::text(" to cycle tabs"));
+            items.push(MessageItem::text(crate::tr!("terminal", "input-hint-cycle-tabs")));
         }
 
         items.push(MessageItem::clickable(
@@ -96,7 +97,7 @@ impl InlineMenuAction for AcceptModel {
                     key: "escape".to_owned(),
                     ..Default::default()
                 }),
-                MessageItem::text(" to dismiss"),
+                MessageItem::text(crate::tr!("terminal", "input-hint-dismiss")),
             ],
             |ctx| {
                 ctx.dispatch_typed_action(
@@ -394,9 +395,9 @@ impl SearchItem for ModelSearchItem {
         }
 
         if self.is_selected {
-            let selected_label = "(selected)";
+            let selected_label = crate::tr!("terminal", "selected-label");
             let selected_text = Text::new_inline(
-                selected_label.to_string(),
+                format!("({selected_label})"),
                 appearance.ui_font_family(),
                 font_size,
             )
@@ -413,9 +414,9 @@ impl SearchItem for ModelSearchItem {
         }
 
         if self.is_disabled() {
-            let disabled_label = "(disabled)";
+            let disabled_label = crate::tr!("terminal", "disabled-label");
             let disabled_text = Text::new_inline(
-                disabled_label.to_string(),
+                format!("({disabled_label})"),
                 appearance.ui_font_family(),
                 font_size,
             )
@@ -515,15 +516,15 @@ impl SearchItem for ModelSearchItem {
                 .finish();
             CostRow::BilledToProvider {
                 label: if self.is_using_bedrock && self.is_auto {
-                    "Inference may use Bedrock"
+                    crate::tr!("terminal", "input-model-inference-may-use-bedrock").leak()
                 } else if self.is_using_bedrock {
-                    "Inference via Bedrock"
+                    crate::tr!("terminal", "input-model-inference-via-bedrock").leak()
                 } else {
-                    "Inference via API key"
+                    crate::tr!("terminal", "input-model-inference-via-api-key").leak()
                 },
                 tooltip: if self.is_using_bedrock && self.is_auto {
                     Some(CostRowTooltip {
-                        text: AUTO_BEDROCK_TOOLTIP,
+                        text: TERMINAL_AUTO_BEDROCK_TOOLTIP.get(),
                         mouse_state: self.cost_row_tooltip_mouse_state.clone(),
                     })
                 } else {
@@ -576,15 +577,19 @@ impl SearchItem for ModelSearchItem {
 
             let mut text_fragments = vec![
                 FormattedTextFragment::plain_text(format!(
-                    "{display_name} is not available for free users. "
+                    "{}",
+                    crate::tr!("terminal", "input-model-upgrade-not-available", display_name = display_name.clone())
                 )),
-                FormattedTextFragment::hyperlink("Upgrade", upgrade_url),
+                FormattedTextFragment::hyperlink(
+                    crate::tr!("terminal", "input-model-upgrade"),
+                    upgrade_url,
+                ),
             ];
 
             if byok_available {
-                text_fragments.push(FormattedTextFragment::plain_text(" or ".to_string()));
+                text_fragments.push(FormattedTextFragment::plain_text(crate::tr!("terminal", "input-model-or")));
                 text_fragments.push(FormattedTextFragment::hyperlink_action(
-                    "bring your own key",
+                    crate::tr!("terminal", "input-model-bring-your-own-key"),
                     WorkspaceAction::ShowSettingsPageWithSearch {
                         search_query: "api".to_string(),
                         section: Some(SettingsSection::WarpAgent),

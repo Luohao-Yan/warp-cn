@@ -21,6 +21,7 @@ use crate::search::item::SearchItemDetail;
 use crate::search::mixer::{AddAsyncSourceOptions, SearchMixer, SearchMixerEvent};
 use crate::search::result_renderer::{QueryResultRenderer, QueryResultRendererStyles};
 use crate::search::slash_command_menu::static_commands::commands::COMMAND_REGISTRY;
+use crate::static_tr;
 use crate::terminal::input::buffer_model::{InputBufferModel, InputBufferUpdateEvent};
 use crate::terminal::input::inline_menu::{styles as inline_styles, QueryResultRendererExt as _};
 use crate::terminal::input::slash_command_model::{SlashCommandEntryState, SlashCommandModel};
@@ -99,6 +100,10 @@ static QUERY_RESULT_RENDERER_STYLES: LazyLock<QueryResultRendererStyles> =
         ..Default::default()
     });
 
+static_tr!(SECTION_COMMANDS, "slash_commands", "section-commands");
+static_tr!(SECTION_SKILLS, "slash_commands", "section-skills");
+static_tr!(SECTION_PROMPTS, "slash_commands", "section-prompts");
+
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Section {
     Commands,
@@ -111,9 +116,9 @@ impl Section {
 
     fn header(self) -> &'static str {
         match self {
-            Self::Commands => "Commands",
-            Self::Skills => "Skills",
-            Self::Prompts => "Prompts",
+            Self::Commands => SECTION_COMMANDS.get(),
+            Self::Skills => SECTION_SKILLS.get(),
+            Self::Prompts => SECTION_PROMPTS.get(),
         }
     }
 
@@ -893,9 +898,9 @@ impl CloudModeV2SlashCommandView {
         let theme = appearance.theme();
         let menu_bg = inline_styles::menu_background_color(app);
         let label = if self.mixer.as_ref(app).is_loading() {
-            "Loading..."
+            crate::tr!("terminal", "input-hint-loading")
         } else {
-            "No results"
+            crate::tr!("terminal", "input-hint-no-results")
         };
         Container::new(
             Text::new(

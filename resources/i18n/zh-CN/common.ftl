@@ -337,3 +337,15 @@ common-uri-new-tab-description = 前往 Warp 查看您的新标签页。
 ## -- 快捷键描述（调试） -----------------------------------------------------
 
 common-debug-enter-onboarding-state = [调试] 进入引导状态
+
+## -- 热键窗口绑定标签 --
+
+common-hide-all-windows = 隐藏所有窗口
+common-show-dedicated-hotkey-window = 显示专用热键窗口
+common-hide-dedicated-hotkey-window = 隐藏专用热键窗口
+
+common-resource-not-found-or-access-denied = 资源未找到或访问被拒绝
+
+common-something-went-wrong = 出了点问题
+
+common-esc-key-label = Esc

@@ -30,6 +30,11 @@ use crate::modal::Modal;
 use crate::root_view::unthemed_window_border;
 use crate::server::server_api::auth::UserAuthenticationError;
 use crate::util::bindings::CustomAction;
+use crate::static_tr;
+
+static_tr!(SAFE_ERR_UNEXPECTED_HOST, "auth", "safe-err-redirect-unexpected-host");
+static_tr!(SAFE_ERR_MISSING_CREDENTIAL, "auth", "safe-err-redirect-missing-credential");
+static_tr!(pub SAFE_ERR_PARSE_PAYLOAD, "auth", "safe-err-parse-redirect-payload");
 
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
@@ -102,7 +107,7 @@ impl AuthRedirectPayload {
     pub fn from_url(url: Url) -> Result<Self> {
         if url.host_str() != Some(AUTH_URL_HOST) {
             return Err(safe_anyhow!(
-                safe: ("Auth redirect URL has unexpected host"),
+                safe: ("{}", SAFE_ERR_UNEXPECTED_HOST.get()),
                 full: ("Received URL with unexpected host: {} ", url)
             ));
         }
@@ -122,7 +127,7 @@ impl AuthRedirectPayload {
             })
         } else {
             Err(safe_anyhow!(
-                safe: ("Auth redirect URL is missing required credential"),
+                safe: ("{}", SAFE_ERR_MISSING_CREDENTIAL.get()),
                 full: ("Received URL without refresh token query param: {}", url)
             ))
         }
@@ -248,7 +253,7 @@ impl AuthView {
             }
             Err(error) => {
                 safe_error!(
-                    safe: ("Failed to parse AuthRedirectPayload from redirect URL"),
+                    safe: ("{}", SAFE_ERR_PARSE_PAYLOAD.get()),
                     full: ("Failed to parse AuthRedirectPayload from redirect URL: {error:#}")
                 );
                 self.last_login_failure_reason =

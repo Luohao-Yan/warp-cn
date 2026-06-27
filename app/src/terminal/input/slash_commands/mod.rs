@@ -411,7 +411,7 @@ impl Input {
                     self.ephemeral_message_model.update(ctx, |model, ctx| {
                         let appearance = Appearance::handle(ctx).as_ref(ctx);
                         let message = Message::from_text(
-                            "cannot start new conversation while terminal command is running",
+                            crate::tr!("slash_commands", "slash-cannot-start-while-running"),
                         )
                         .with_text_color(appearance.theme().ansi_fg_red());
                         model.show_ephemeral_message(
@@ -497,7 +497,7 @@ impl Input {
                     .filter(|name| !name.is_empty())
                 else {
                     show_error_toast(
-                        "Please provide a tab name after /rename-tab".to_owned(),
+                        crate::tr!("slash_commands", "slash-rename-tab-missing-name"),
                         ctx,
                     );
                     return true;
@@ -512,7 +512,7 @@ impl Input {
                     .selected_conversation_id(ctx)
                 else {
                     show_error_toast(
-                        "/rename-conversation requires an active conversation".to_owned(),
+                        crate::tr!("slash_commands", "slash-rename-conversation-requires-active"),
                         ctx,
                     );
                     return true;
@@ -534,10 +534,7 @@ impl Input {
                     .filter(|name| !name.is_empty())
                 else {
                     show_error_toast(
-                        format!(
-                            "Please provide a color after /set-tab-color ({})",
-                            supported_options()
-                        ),
+                        crate::tr!("slash_commands", "slash-set-tab-color-missing", options = supported_options()),
                         ctx,
                     );
                     return true;
@@ -554,10 +551,7 @@ impl Input {
                         Some(c) => SelectedTabColor::Color(c),
                         None => {
                             show_error_toast(
-                                format!(
-                                    "Unknown tab color '{arg}'. Use one of: {}.",
-                                    supported_options()
-                                ),
+                                crate::tr!("slash_commands", "slash-unknown-tab-color", arg = arg.to_string(), options = supported_options()),
                                 ctx,
                             );
                             return true;
@@ -583,8 +577,7 @@ impl Input {
             create_project if command.name == commands::CREATE_NEW_PROJECT.name => {
                 if argument.is_none_or(|args| args.is_empty()) {
                     show_error_toast(
-                        "Please describe the project you want to create after /create-new-project"
-                            .to_owned(),
+                        crate::tr!("slash_commands", "slash-create-project-missing-desc"),
                         ctx,
                     );
                     return true;
@@ -610,8 +603,7 @@ impl Input {
                             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                                 toast_stack.add_ephemeral_toast(
                                     DismissibleToast::error(
-                                        "The /open-file command is only available for local sessions"
-                                            .to_owned(),
+                                        crate::tr!("slash_commands", "input-model-open-file-local-only"),
                                     ),
                                     window_id,
                                     ctx,
@@ -645,8 +637,7 @@ impl Input {
                             }
                             Ok(_) => {
                                 show_error_toast(
-                                    "The /open-file command only works for files, not directories"
-                                        .to_owned(),
+                                    crate::tr!("slash_commands", "input-model-open-file-directories-only"),
                                     ctx,
                                 );
                                 return true;
@@ -671,7 +662,7 @@ impl Input {
                 #[cfg(not(feature = "local_fs"))]
                 {
                     show_error_toast(
-                        "The /open-file command is not supported in this build".to_owned(),
+                        crate::tr!("slash_commands", "slash-open-file-unsupported"),
                         ctx,
                     );
                     return true;
@@ -696,9 +687,9 @@ impl Input {
                 // Show a toast to confirm the export
                 let window_id = ctx.window_id();
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-                    let toast = DismissibleToast::default(String::from(
-                        "Conversation exported to clipboard",
-                    ));
+                    let toast = DismissibleToast::default(
+                        crate::tr!("slash_commands", "slash-export-clipboard-success"),
+                    );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
             }
@@ -713,7 +704,7 @@ impl Input {
                 #[cfg(target_family = "wasm")]
                 {
                     show_error_toast(
-                        "Export conversation to file unsupported in web".to_owned(),
+                        crate::tr!("slash_commands", "slash-export-file-unsupported-web"),
                         ctx,
                     );
                     return true;
@@ -899,7 +890,7 @@ impl Input {
                     .shared_session_status()
                     .is_sharer_or_viewer()
                 {
-                    show_error_toast("Session is already being shared".to_owned(), ctx);
+                    show_error_toast(crate::tr!("slash_commands", "slash-session-already-shared"), ctx);
                     return true;
                 }
                 ctx.emit(Event::StartRemoteControl);
@@ -911,17 +902,17 @@ impl Input {
                     .active_conversation(self.terminal_view_id);
                 if conversation.is_none() {
                     show_error_toast(
-                        "Cannot show conversation cost: no active conversation".to_owned(),
+                        crate::tr!("slash_commands", "slash-cost-no-active-conversation"),
                         ctx,
                     );
                 } else if conversation.is_some_and(|c| c.is_empty()) {
                     show_error_toast(
-                        "Cannot show conversation cost: conversation is empty".to_owned(),
+                        crate::tr!("slash_commands", "slash-cost-conversation-empty"),
                         ctx,
                     );
                 } else if conversation.is_some_and(|c| !c.status().is_done()) {
                     show_error_toast(
-                        "Cannot show conversation cost: conversation is in progress".to_owned(),
+                        crate::tr!("slash_commands", "slash-cost-conversation-in-progress"),
                         ctx,
                     );
                 } else {
@@ -969,7 +960,7 @@ impl Input {
                     // back to `&` compose mode here; the slash-command flow
                     // does not because it has no compose-draft state to seed.
                     show_error_toast(
-                        "Nothing to hand off — start a conversation first.".to_owned(),
+                        crate::tr!("slash_commands", "slash-handoff-no-source-content"),
                         ctx,
                     );
                 }
@@ -980,7 +971,7 @@ impl Input {
                     .as_ref(ctx)
                     .selected_conversation_id(ctx)
                 else {
-                    show_error_toast("/fork requires an active conversation".to_owned(), ctx);
+                    show_error_toast(crate::tr!("slash_commands", "slash-fork-requires-active-conversation"), ctx);
                     return true;
                 };
 
@@ -1019,7 +1010,7 @@ impl Input {
                     .selected_conversation_id(ctx)
                 else {
                     show_error_toast(
-                        "/continue-locally requires an active conversation".to_owned(),
+                        crate::tr!("slash_commands", "slash-continue-locally-requires-active"),
                         ctx,
                     );
                     return true;
@@ -1069,7 +1060,7 @@ impl Input {
                     .selected_conversation_id(ctx)
                 else {
                     show_error_toast(
-                        "/fork-and-compact requires an active conversation".to_owned(),
+                        crate::tr!("slash_commands", "slash-fork-and-compact-requires-active"),
                         ctx,
                     );
                     return true;
@@ -1099,7 +1090,7 @@ impl Input {
                     .is_none()
                 {
                     show_error_toast(
-                        "/compact-and requires an active conversation".to_owned(),
+                        crate::tr!("slash_commands", "slash-compact-and-requires-active"),
                         ctx,
                     );
                     return true;
@@ -1116,12 +1107,12 @@ impl Input {
                     .as_ref(ctx)
                     .selected_conversation_id(ctx)
                 else {
-                    show_error_toast("/queue requires an active conversation".to_owned(), ctx);
+                    show_error_toast(crate::tr!("slash_commands", "slash-queue-requires-active"), ctx);
                     return true;
                 };
 
                 let Some(prompt) = argument.filter(|a| !a.is_empty()).cloned() else {
-                    show_error_toast("/queue requires a prompt argument".to_owned(), ctx);
+                    show_error_toast(crate::tr!("slash_commands", "slash-queue-requires-prompt"), ctx);
                     return true;
                 };
 
@@ -1449,12 +1440,12 @@ pub(crate) fn fork_button_action(
         && conversation_id.is_some_and(|id| conversation_is_cloud_oz_for_slash_command(id, ctx))
     {
         ForkButtonAction {
-            tooltip: "Continue locally",
+            tooltip: crate::tr!("slash_commands", "slash-tooltip-continue-locally").leak(),
             command_name: commands::CONTINUE_LOCALLY.name,
         }
     } else {
         ForkButtonAction {
-            tooltip: "Fork conversation",
+            tooltip: crate::tr!("slash_commands", "slash-tooltip-fork-conversation").leak(),
             command_name: commands::FORK.name,
         }
     }

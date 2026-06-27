@@ -1441,3 +1441,179 @@ ai-assistant-ai-view-changelog = View changelog
 ai-assistant-ai-in-location = in `{ $location }`
 ai-assistant-ai-again-stop-exit = again to stop and exit
 ai-assistant-ai-again-exit = again to exit
+
+# conversation_rename.rs
+ai-assistant-ai-conv-empty-title = Please provide a conversation title
+ai-assistant-ai-conv-empty-conversation = You can't rename an empty conversation
+ai-assistant-ai-conv-not-found = Conversation not found
+ai-assistant-ai-conv-not-synced = Your conversation hasn't synced to the cloud yet. Try sending another message, then rename it again.
+ai-assistant-ai-conv-rename-in-progress = A rename is already in progress for this conversation
+ai-assistant-ai-conv-not-ready = Your conversation is still syncing. Try renaming it again in a moment.
+ai-assistant-ai-conv-renamed-to = Conversation renamed to { $title }
+ai-assistant-ai-conv-failed-rename = Failed to rename conversation: { $error }
+ai-assistant-ai-conv-title-max-chars = Conversation title must be { $count } characters or fewer
+
+# host_picker.rs
+ai-assistant-ai-host-custom = Custom host…
+ai-assistant-ai-host-default = Default
+ai-assistant-ai-host-placeholder = my-worker-host
+
+# orchestration_controls.rs
+ai-assistant-ai-orch-skip-advanced = Skip (advanced)
+ai-assistant-ai-orch-api-key = API key
+ai-assistant-ai-orch-new-api-key = New API key…
+ai-assistant-ai-orch-unable-load-secrets = Unable to load secrets
+
+# run_agents_card_view.rs
+ai-assistant-ai-orch-spawned-one-agent = Spawned 1 agent
+ai-assistant-ai-orch-spawned-agents = Spawned { $count } agents
+ai-assistant-ai-orch-failed-spawn-one = Failed to spawn agent
+ai-assistant-ai-orch-failed-spawn-agents = Failed to spawn { $count } agents
+ai-assistant-ai-orch-spawned-of-agents = Spawned { $launched } of { $total } agents
+ai-assistant-ai-orch-spawning-one-agent = Spawning 1 agent…
+ai-assistant-ai-orch-spawning-agents = Spawning { $count } agents…
+
+# summarization_cancel_dialog.rs
+ai-assistant-ai-cancel-summarization-title = Cancel summarization?
+ai-assistant-ai-cancel-summarization-body = Summarization is already running. If you cancel now, the request may still incur cost, any progress so far will be lost, and restarting will take longer.\n\nAre you sure you want to cancel?
+
+# conversation_usage_view.rs
+ai-assistant-ai-usage-commands-executed = Commands executed
+ai-assistant-ai-usage-last-response-time = LAST RESPONSE TIME
+ai-assistant-ai-usage-time-to-first-token = Time to first token
+ai-assistant-ai-usage-total-agent-response-time = Total agent response time
+ai-assistant-ai-usage-total-time-including-tool-calls = Total time (including tool calls)
+ai-assistant-ai-usage-show-more = Show { $count } more
+ai-assistant-ai-usage-call-label = call
+ai-assistant-ai-usage-file-label = file
+ai-assistant-ai-usage-command-label = command
+ai-assistant-ai-models-category-label = Models ({ $category })
+
+# todos.rs
+ai-assistant-ai-todo-tasks-label = Tasks
+ai-assistant-ai-todo-outdated-label = Outdated
+ai-assistant-ai-todo-completed = Completed { $title }
+ai-assistant-ai-todo-completed-next = , { $title }
+ai-assistant-ai-todo-completed-index = Completed { $title } ({ $index }/{ $total })
+
+# orchestration_conversation_links.rs
+ai-assistant-ai-conv-parent-title = Parent conversation
+ai-assistant-ai-conv-back-to-parent = Back to parent conversation
+
+# suggestion_chip_view.rs
+ai-assistant-ai-chip-add-rule = Add rule: { $content }
+ai-assistant-ai-chip-suggested-prompt = Suggested prompt:\n{ $prompt }
+
+# requested_command.rs
+ai-assistant-ai-inline-manage-cmd-exec = Manage command execution setting
+ai-assistant-ai-inline-tool-json-error = Error formatting JSON
+ai-assistant-ai-inline-tool-error = Error: { $error }
+ai-assistant-ai-inline-tool-cancelled = Tool call was cancelled
+
+# search_codebase.rs
+ai-assistant-ai-inline-search-for = Searching for
+ai-assistant-ai-inline-search-codebase-for = Searching codebase for "{ $query }"
+ai-assistant-ai-inline-search-cancelled-in = Search for "{ $query }" in { $repo } cancelled
+ai-assistant-ai-inline-search-cancelled = Search for "{ $query }" cancelled
+ai-assistant-ai-inline-searched-codebase-in = Searched codebase for "{ $query }" in { $repo }
+ai-assistant-ai-inline-searched-codebase = Searched codebase for "{ $query }"
+ai-assistant-ai-inline-no-results = No results found
+ai-assistant-ai-inline-results-label = results
+
+# web_search.rs
+ai-assistant-ai-inline-web-searching = Searching the web
+ai-assistant-ai-inline-web-searching-for = Searching the web for "{ $query }"
+ai-assistant-ai-inline-web-searched = Searched the web
+ai-assistant-ai-inline-web-searched-for = Searched the web for "{ $query }"
+ai-assistant-ai-inline-urls-label = URLs
+
+# web_fetch.rs
+ai-assistant-ai-inline-fetching-pages = Fetching { $count } web pages…
+ai-assistant-ai-inline-fetched-pages = Fetched { $count } web pages
+ai-assistant-ai-inline-fetched-pages-of = Fetched { $successful } of { $total } web pages
+
+# harness_display.rs
+ai-assistant-ai-harness-warp = Warp
+ai-assistant-ai-harness-claude = Claude Code
+ai-assistant-ai-harness-opencode = OpenCode
+ai-assistant-ai-harness-gemini = Gemini CLI
+ai-assistant-ai-harness-codex = Codex
+ai-assistant-ai-harness-unknown = Unknown
+
+# output.rs grep/file-glob strings
+ai-assistant-ai-inline-current-dir = the current directory
+ai-assistant-ai-inline-grep-for = Grep for
+ai-assistant-ai-inline-grepping-for = Grepping for
+ai-assistant-ai-inline-in-path =  in { $path }
+ai-assistant-ai-inline-in-path-cancelled =  in { $path } cancelled
+ai-assistant-ai-inline-cancelled-grep-in = Cancelled grep for the following patterns in { $path }
+ai-assistant-ai-inline-grep-patterns-in = Grep for the following patterns in { $path }
+ai-assistant-ai-inline-grepping-patterns-in = Grepping for the following patterns in { $path }
+ai-assistant-ai-inline-find-files-match = Search for files that match
+ai-assistant-ai-inline-finding-files-match = Finding files that match
+ai-assistant-ai-inline-cancelled-search-files-in = Cancelled search for files that match the following patterns in { $path }
+ai-assistant-ai-inline-find-files-patterns-in = Find files that match the following patterns in { $path }
+ai-assistant-ai-inline-finding-files-patterns-in = Finding files that match the following patterns in { $path }
+ai-assistant-ai-inline-listing-messages = Listing messages
+ai-assistant-ai-inline-grepping-patterns = Grepping for patterns
+ai-assistant-ai-inline-grepping-for-patterns = Grepping for patterns: { $patterns }
+ai-assistant-ai-inline-reading-messages = Reading { $count } messages
+
+# agent_input_footer
+ai-assistant-ai-see-logs-for-details = See logs for details
+ai-assistant-ai-voice-limit-reached = Voice input limit reached
+ai-assistant-ai-voice-transcribe-failed = Failed to transcribe voice input
+
+# local_agent_task_sync_model.rs (server-bound, keeping English)
+ai-assistant-ai-task-cancelled-by-user = Cancelled by user
+ai-assistant-ai-task-blocked-waiting = The agent got stuck waiting for user confirmation on the action: { $blocked_action }
+ai-assistant-ai-task-agent-error = Agent encountered an error
+
+# common.rs additional strings
+ai-assistant-ai-invalid-api-key-error = Provided API key is not valid
+ai-assistant-ai-aws-credentials-fallback = AWS credentials expired or missing for { $model_name }. Please refresh your AWS credentials.
+ai-assistant-ai-quota-limit-reached = Quota limit reached.
+ai-assistant-ai-context-window-exceeded = Context window exceeded: { $message }
+ai-assistant-ai-aws-bedrock-credentials-expired = AWS Bedrock credentials expired or invalid for { $model_name }
+ai-assistant-ai-one-second = 1 second
+ai-assistant-ai-seconds-format = { $count } seconds
+ai-assistant-ai-check-now-inline =  · Check now
+ai-assistant-ai-fast-forward-locked-tooltip = Fast forward is always enabled for cloud agent conversations
+ai-assistant-ai-calling-mcp-tool-short = Calling "{$name}" MCP tool...
+ai-assistant-ai-reading-mcp-resource-short = Reading "{$name}" MCP resource...
+
+# Additional i18n keys for hardcoded UI strings
+ai-assistant-ai-transient-network-error = Warp lost connection while receiving the agent response. This is usually temporary.
+ai-assistant-ai-cli-grep-for = Grep for `{ $query }` in { $path }
+ai-assistant-ai-cli-grep-patterns-in = Grep for the following patterns in { $path }:\n{ $patterns_list }
+ai-assistant-ai-cli-find-files-match = Search for files that match `{ $pattern }` in { $path }
+ai-assistant-ai-cli-find-files-patterns-in = Find files that match the following patterns in { $path }:\n{ $patterns_list }
+ai-assistant-ai-settings-ai = Settings > AI
+ai-assistant-ai-orch-loading = Loading…
+ai-assistant-ai-manage-suggested-banner-settings = Manage suggested code banner settings
+ai-assistant-ai-orch-failed-send-message = Failed to send message to { $recipients }: { $error }
+ai-assistant-ai-orch-send-message-cancelled = Send message to { $recipients } cancelled.
+ai-assistant-ai-conv-created-by-at = Created by { $creator } • { $time }
+ai-assistant-ai-diff-failed-save-file = Failed to save file { $file_path }
+ai-assistant-ai-voice-input-toast = Voice input is enabled. You can also press and hold the `{ $key }` key to activate voice input (configure in Settings > AI > Voice)
+ai-assistant-ai-get-files-indexing = The current git repository is still being indexed, so search is unavailable right now. You can try again later
+ai-assistant-ai-get-files-not-available = Relevant file search in the current directory is not available
+ai-assistant-ai-get-files-not-git = The current directory isn't within a git repository, which is necessary to search for relevant files.
+ai-assistant-ai-search-codebase-not-available = The search failed because the codebase is not available. Try another way to locate the relevant files.
+ai-assistant-ai-secret-col-name = Name
+ai-assistant-ai-secret-col-scope = Scope
+ai-assistant-ai-secret-col-created = Created
+ai-assistant-ai-secret-col-updated = Updated
+ai-assistant-ai-secret-name-required-usage = Secret name is required. Usage: oz secret create <NAME>
+ai-assistant-ai-secret-created-ok = Secret '{ $name }' created
+ai-assistant-ai-secret-deleted-ok = Secret '{ $name }' deleted
+ai-assistant-ai-secret-deletion-cancelled = Deletion cancelled
+ai-assistant-ai-secret-scope-personal = personal
+ai-assistant-ai-secret-scope-team = team
+ai-assistant-ai-secret-delete-confirm = Delete { $scope } secret '{ $name }'?
+ai-assistant-ai-secret-action-cannot-undo = This action cannot be undone
+ai-assistant-ai-secret-delete-no-confirm-force = Refusing to delete secret without confirmation in non-interactive mode (use --force to bypass)
+ai-assistant-ai-search-files-not-exist = These files do not exist: { $missing_files }
+ai-assistant-ai-search-failed-try-another = The search failed. Try another way to locate the relevant files.
+ai-assistant-ai-remote-search-unavailable = Remote codebase search is unavailable.
+ai-assistant-ai-search-codebase-not-available-try = The search failed because the codebase is not available. Try another way to locate the relevant files.

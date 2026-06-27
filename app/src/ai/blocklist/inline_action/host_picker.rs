@@ -49,9 +49,11 @@ pub enum HostPickerEvent {
     Closed,
 }
 
-const CUSTOM_HOST_LABEL: &str = "Custom host…";
-const DEFAULT_BADGE: &str = "Default";
-const EDITOR_PLACEHOLDER: &str = "my-worker-host";
+use crate::static_tr;
+
+static_tr!(CUSTOM_HOST_LABEL, "ai_assistant", "ai-host-custom");
+static_tr!(DEFAULT_BADGE, "ai_assistant", "ai-host-default");
+static_tr!(EDITOR_PLACEHOLDER, "ai_assistant", "ai-host-placeholder");
 
 // ── Internal action plumbing ────────────────────────────────────────
 
@@ -136,7 +138,7 @@ impl HostPicker {
                 },
                 ctx_editor,
             );
-            editor.set_placeholder_text(EDITOR_PLACEHOLDER, ctx_editor);
+            editor.set_placeholder_text(EDITOR_PLACEHOLDER.get(), ctx_editor);
             editor
         });
         ctx.subscribe_to_view(&editor, |me, _, event, ctx| {
@@ -429,7 +431,7 @@ pub(crate) fn build_menu_items(
     if let Some(slug) = default_host {
         items.push(menu_item_for_known(
             slug,
-            Some(DEFAULT_BADGE),
+            Some(DEFAULT_BADGE.get()),
             InternalAction::SelectKnown(slug.to_string()),
         ));
         known_slugs.push(slug.to_string());
@@ -471,7 +473,7 @@ pub(crate) fn build_menu_items(
         }
     }
     items.push(MenuItem::Item(
-        MenuItemFields::new(CUSTOM_HOST_LABEL).with_on_select_action(
+        MenuItemFields::new(CUSTOM_HOST_LABEL.get()).with_on_select_action(
             DropdownAction::select_action_and_close(InternalAction::EnterCustomMode),
         ),
     ));
@@ -483,7 +485,7 @@ pub(crate) fn build_menu_items(
 /// badge when it matches the workspace default.
 pub(crate) fn menu_label_for(slug: &str, default_host: Option<&str>) -> String {
     if default_host == Some(slug) {
-        format_known_label(slug, Some(DEFAULT_BADGE))
+        format_known_label(slug, Some(DEFAULT_BADGE.get()))
     } else {
         format_known_label(slug, None)
     }

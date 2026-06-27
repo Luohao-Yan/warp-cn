@@ -38,7 +38,7 @@ impl WebFetchView {
         let appearance = Appearance::as_ref(app);
         let loading_icon = yellow_running_icon(appearance);
 
-        let text = format!("Fetching {} web pages...", urls.len());
+        let text = crate::tr!("ai_assistant", "ai-inline-fetching-pages", count = urls.len() as i64);
 
         super::search_results_common::render_loading_header(text, loading_icon, app)
     }
@@ -50,9 +50,9 @@ impl WebFetchView {
     ) -> Box<dyn Element> {
         let successful_count = pages.iter().filter(|(_, _, success)| *success).count();
         let title_text = if successful_count == pages.len() {
-            format!("Fetched {} web pages", pages.len())
+            crate::tr!("ai_assistant", "ai-inline-fetched-pages", count = pages.len() as i64)
         } else {
-            format!("Fetched {} of {} web pages", successful_count, pages.len())
+            crate::tr!("ai_assistant", "ai-inline-fetched-pages-of", successful = successful_count as i64, total = pages.len() as i64)
         };
 
         let body = if self.collapsible.is_expanded {
@@ -61,10 +61,11 @@ impl WebFetchView {
             None
         };
 
+        let results_label = crate::tr!("ai_assistant", "ai-inline-urls-label");
         render_collapsible_search_results(
             title_text,
             pages.len(),
-            "URLs",
+            &results_label,
             &self.collapsible,
             body,
             |ctx| {

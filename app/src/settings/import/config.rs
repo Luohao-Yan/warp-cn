@@ -30,6 +30,20 @@ pub enum ThemeType {
     Single(WarpTheme),
 }
 
+use crate::static_tr;
+
+static_tr!(SETTING_THEME, "settings", "import-setting-theme");
+static_tr!(SETTING_OPTION_AS_META, "settings", "import-setting-option-as-meta");
+static_tr!(SETTING_MOUSE_SCROLL, "settings", "import-setting-mouse-scroll-reporting");
+static_tr!(SETTING_FONT, "settings", "import-setting-font");
+static_tr!(SETTING_DEFAULT_SHELL, "settings", "import-setting-default-shell");
+static_tr!(SETTING_WORKING_DIR, "settings", "import-setting-working-directory");
+static_tr!(SETTING_HOTKEY_MODE, "settings", "import-setting-global-hotkey");
+static_tr!(SETTING_WINDOW_SIZE, "settings", "import-setting-window-dimensions");
+static_tr!(SETTING_COPY_ON_SELECT, "settings", "import-setting-copy-on-select");
+static_tr!(SETTING_OPACITY, "settings", "import-setting-window-opacity");
+static_tr!(SETTING_CURSOR_BLINK, "settings", "import-setting-cursor-blinking");
+
 #[derive(Clone, Debug)]
 pub enum ThemeError {
     /// A hex color is malformatted (not missing).
@@ -38,13 +52,17 @@ pub enum ThemeError {
     MissingValueError,
 }
 
+static_tr!(HOTKEY_UNSUPPORTED_WINDOW, "settings", "import-hotkey-unsupported-window-type");
+static_tr!(HOTKEY_MULTIPLE, "settings", "import-hotkey-multiple-configured");
+static_tr!(HOTKEY_MISSING, "settings", "import-hotkey-missing");
+
 #[derive(Clone, Error, Debug)]
 pub enum HotkeyError {
-    #[error("A hotkey window opens in a way Warp does not support")]
+    #[error("{msg}", msg = HOTKEY_UNSUPPORTED_WINDOW.get())]
     UnsupportedWindowType,
-    #[error("There are multiple hotkeys configured")]
+    #[error("{msg}", msg = HOTKEY_MULTIPLE.get())]
     MultipleHotkeys,
-    #[error("No hotkey is set")]
+    #[error("{msg}", msg = HOTKEY_MISSING.get())]
     MissingHotkey,
 }
 
@@ -77,17 +95,17 @@ pub enum SettingType {
 impl SettingType {
     pub fn get_name(&self) -> &'static str {
         match self {
-            SettingType::Theme => "Theme",
-            SettingType::OptionAsMeta => "Option as Meta",
-            SettingType::MouseAndScrollReporting => "Mouse/Scroll Reporting",
-            SettingType::Font => "Font",
-            SettingType::DefaultShell => "Default Shell",
-            SettingType::WorkingDirectory => "Working Directory",
-            SettingType::HotkeyMode => "Global hotkey",
-            SettingType::WindowSize => "Window Dimensions",
-            SettingType::CopyOnSelect => "Copy On Select",
-            SettingType::Opacity => "Window Opacity",
-            SettingType::CursorBlinking => "Cursor Blinking",
+            SettingType::Theme => SETTING_THEME.get(),
+            SettingType::OptionAsMeta => SETTING_OPTION_AS_META.get(),
+            SettingType::MouseAndScrollReporting => SETTING_MOUSE_SCROLL.get(),
+            SettingType::Font => SETTING_FONT.get(),
+            SettingType::DefaultShell => SETTING_DEFAULT_SHELL.get(),
+            SettingType::WorkingDirectory => SETTING_WORKING_DIR.get(),
+            SettingType::HotkeyMode => SETTING_HOTKEY_MODE.get(),
+            SettingType::WindowSize => SETTING_WINDOW_SIZE.get(),
+            SettingType::CopyOnSelect => SETTING_COPY_ON_SELECT.get(),
+            SettingType::Opacity => SETTING_OPACITY.get(),
+            SettingType::CursorBlinking => SETTING_CURSOR_BLINK.get(),
         }
     }
 }

@@ -1003,11 +1003,7 @@ impl ConversationDetailsPanel {
         .finish();
 
         let created_text = Text::new(
-            format!(
-                "Created by {} • {}",
-                creator.display_name,
-                format_approx_duration_from_now(created_at)
-            ),
+            crate::tr!("ai_assistant", "ai-conv-created-by-at", creator = creator.display_name.as_str(), time = format_approx_duration_from_now(created_at).as_str()),
             appearance.ui_font_family(),
             ui_font_size,
         )

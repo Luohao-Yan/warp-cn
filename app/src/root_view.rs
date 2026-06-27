@@ -428,19 +428,19 @@ pub fn init(app: &mut AppContext) {
 
     app.register_fixed_bindings([
         FixedBinding::empty(
-            "Hide All Windows",
+            &crate::tr!("common", "hide-all-windows"),
             RootViewAction::ShowOrHideNonQuakeModeWindows,
             id!("RootView") & id!(flags::ACTIVATION_HOTKEY_FLAG),
         ),
         FixedBinding::empty(
-            "Show Dedicated Hotkey Window",
+            &crate::tr!("common", "show-dedicated-hotkey-window"),
             RootViewAction::ToggleQuakeModeWindow,
             id!("RootView")
                 & id!(flags::QUAKE_MODE_ENABLED_CONTEXT_FLAG)
                 & !id!(flags::QUAKE_WINDOW_OPEN_FLAG),
         ),
         FixedBinding::empty(
-            "Hide Dedicated Hotkey Window",
+            &crate::tr!("common", "hide-dedicated-hotkey-window"),
             RootViewAction::ToggleQuakeModeWindow,
             id!("RootView")
                 & id!(flags::QUAKE_MODE_ENABLED_CONTEXT_FLAG)
@@ -1059,7 +1059,7 @@ fn open_warp_drive_object(arg: &OpenWarpDriveObjectArgs, ctx: &mut AppContext) {
 
 fn display_object_missing_error_in_window(window_id: WindowId, ctx: &mut AppContext) {
     crate::workspace::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
-        let toast = DismissibleToast::error(String::from("Resource not found or access denied"));
+        let toast = DismissibleToast::error(crate::tr!("common", "resource-not-found-or-access-denied"));
         toast_stack.add_ephemeral_toast(toast, window_id, ctx);
     });
 }
@@ -2336,11 +2336,10 @@ impl RootView {
                 let is_editing = existing.is_some();
                 let editing_index = is_editing.then_some(0);
                 let title = if is_editing {
-                    "Edit custom endpoint"
+                    crate::tr!("settings", "edit-custom-endpoint")
                 } else {
-                    "Add custom endpoint"
-                }
-                .to_string();
+                    crate::tr!("settings", "add-custom-endpoint")
+                };
                 let body = ctx.add_typed_action_view(move |ctx| {
                     CustomEndpointModal::new(existing.as_ref(), editing_index, ctx)
                 });

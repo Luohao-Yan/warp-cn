@@ -99,3 +99,41 @@ slash-commands-slash-command-no-conversation-export = No active conversation to 
 ## -- Missing keys added for i18n completeness --
 
 slash-commands-slash-command-desc = Search commands and workflows
+
+## -- Slash command toast/error strings --
+
+slash-rename-tab-missing-name = Please provide a tab name after /rename-tab
+slash-set-tab-color-missing = Please provide a color after /set-tab-color ({$options})
+slash-unknown-tab-color = Unknown tab color '{$arg}'. Use one of: {$options}.
+slash-create-project-missing-desc = Please describe the project you want to create after /create-new-project
+slash-open-file-unsupported = The /open-file command is not supported in this build
+slash-export-clipboard-success = Conversation exported to clipboard
+slash-export-file-unsupported-web = Export conversation to file unsupported in web
+slash-session-already-shared = Session is already being shared
+slash-cost-no-active-conversation = Cannot show conversation cost: no active conversation
+slash-cost-conversation-empty = Cannot show conversation cost: conversation is empty
+slash-cost-conversation-in-progress = Cannot show conversation cost: conversation is in progress
+slash-handoff-no-source-content = Nothing to hand off -- start a conversation first.
+slash-fork-requires-active-conversation = /fork requires an active conversation
+slash-continue-locally-requires-active = /continue-locally requires an active conversation
+slash-fork-and-compact-requires-active = /fork-and-compact requires an active conversation
+slash-compact-and-requires-active = /compact-and requires an active conversation
+slash-queue-requires-active = /queue requires an active conversation
+slash-queue-requires-prompt = /queue requires a prompt argument
+slash-tooltip-continue-locally = Continue locally
+slash-tooltip-fork-conversation = Fork conversation
+
+## -- Additional slash command strings --
+
+slash-cannot-start-while-running = cannot start new conversation while terminal command is running
+slash-rename-conversation-requires-active = /rename-conversation requires an active conversation
+
+## -- Section header strings --
+
+section-commands = Commands
+section-skills = Skills
+section-prompts = Prompts
+
+## -- Search item strings --
+
+slash-or =  or

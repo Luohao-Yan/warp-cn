@@ -14,15 +14,24 @@ use crate::ai::blocklist::CLAUDE_ORANGE;
 use crate::terminal::cli_agent::{GEMINI_BLUE, OPENAI_COLOR, OPENCODE_COLOR};
 use crate::ui_components::icons::Icon;
 
+use crate::static_tr;
+
+static_tr!(HARNESS_WARP, "ai_assistant", "ai-harness-warp");
+static_tr!(HARNESS_CLAUDE, "ai_assistant", "ai-harness-claude");
+static_tr!(HARNESS_OPENCODE, "ai_assistant", "ai-harness-opencode");
+static_tr!(HARNESS_GEMINI, "ai_assistant", "ai-harness-gemini");
+static_tr!(HARNESS_CODEX, "ai_assistant", "ai-harness-codex");
+static_tr!(HARNESS_UNKNOWN, "ai_assistant", "ai-harness-unknown");
+
 /// User-visible display name for a [`Harness`].
 pub fn display_name(harness: Harness) -> &'static str {
     match harness {
-        Harness::Oz => "Warp",
-        Harness::Claude => "Claude Code",
-        Harness::OpenCode => "OpenCode",
-        Harness::Gemini => "Gemini CLI",
-        Harness::Codex => "Codex",
-        Harness::Unknown => "Unknown",
+        Harness::Oz => HARNESS_WARP.get(),
+        Harness::Claude => HARNESS_CLAUDE.get(),
+        Harness::OpenCode => HARNESS_OPENCODE.get(),
+        Harness::Gemini => HARNESS_GEMINI.get(),
+        Harness::Codex => HARNESS_CODEX.get(),
+        Harness::Unknown => HARNESS_UNKNOWN.get(),
     }
 }
 

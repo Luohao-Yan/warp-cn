@@ -1330,6 +1330,30 @@ settings-import-looking = 正在查找可导入的设置...
 settings-import-new-session-effect = 部分设置将在打开新会话时生效。
 settings-import-reset-defaults = 重置为 Warp 默认值
 
+settings-import-theme-label = 主题
+settings-import-theme-comma-label = 主题，
+settings-import-one-other-setting = 1 项其他设置
+settings-import-other-settings = { $count } 项其他设置
+
+settings-import-setting-theme = 主题
+settings-import-setting-option-as-meta = Option 作为 Meta
+settings-import-setting-mouse-scroll-reporting = 鼠标/滚动报告
+settings-import-setting-font = 字体
+settings-import-setting-default-shell = 默认 Shell
+settings-import-setting-working-directory = 工作目录
+settings-import-setting-global-hotkey = 全局热键
+settings-import-setting-window-dimensions = 窗口尺寸
+settings-import-setting-copy-on-select = 选中即复制
+settings-import-setting-window-opacity = 窗口不透明度
+settings-import-setting-cursor-blinking = 光标闪烁
+
+settings-import-hotkey-unsupported-window-type = 热键窗口以 Warp 不支持的方式打开
+settings-import-hotkey-multiple-configured = 配置了多个热键
+settings-import-hotkey-missing = 未设置热键
+
+settings-line-number-absolute = 绝对
+settings-line-number-relative = 相对
+
 
 # === Final missing entries ===
 
@@ -1752,3 +1776,124 @@ settings-ai-auto-handoff-sleep-desc = 当 macOS 即将进入睡眠时，自动�
 settings-ai-use-and-trigger-handoff = 使用 & 触发交接
 settings-ai-use-and-trigger-handoff-desc = 输入 & 作为第一个字符以进入云端交接撰写模式。
 settings-ai-openai-api-key-label = OpenAI API 密钥
+settings-ai-anthropic-api-key-label = Anthropic API 密钥
+settings-ai-google-api-key-label = Google API 密钥
+settings-ai-warp-credit-fallback-agent-desc = 启用后，代理请求在出错时可能会路由到 Warp 提供的模型之一。Warp 将优先使用你的 API 密钥而非 Warp 积分。
+settings-ai-profiles-header = 配置
+settings-ai-profiles-desc = 配置允许你定义代理的运行方式——从它可以执行的操作和需要审批的时机，到它用于编码和规划等任务的模型。你还可以将它们限定为特定项目。
+settings-ai-custom-inference-header = 自定义推理
+settings-ai-api-keys-header = API 密钥
+settings-ai-aws-bedrock-header = AWS Bedrock
+settings-ai-cloud-agent-computer-use-label = 云端代理中的计算机使用
+settings-ai-aws-bedrock-credentials-label = 使用 AWS Bedrock 凭证
+settings-ai-aws-bedrock-credentials-desc = Warp 加载并发送本地 AWS CLI 凭证用于 Bedrock 支持的模型。
+settings-ai-aws-bedrock-credentials-admin-desc = Warp 加载并发送本地 AWS CLI 凭证用于 Bedrock 支持的模型。此设置由你的组织管理。
+settings-ai-aws-bedrock-login-command-label = 登录命令
+settings-ai-aws-bedrock-profile-label = AWS 配置文件
+settings-ai-aws-bedrock-auto-login-label = 自动运行登录命令
+settings-ai-aws-bedrock-auto-login-desc = 启用后，当 AWS Bedrock 凭证过期时，将自动运行登录命令。
+settings-ai-custom-inference-desc = 使用你自己的模型提供商 API 密钥来运行 Warp 代理。你还可以添加自定义端点以使用第三方模型。自定义端点必须支持 OpenAI 兼容的 Chat Completions API。API 密钥仅存储在你的设备上，从不存储在 Warp 的服务器上。它们用于向你选择的模型提供商发送请求。使用自动模型或未提供 API 密钥的提供商模型将消耗 Warp 积分。
+settings-ai-custom-inference-learn-more-link = 了解更多
+settings-ai-custom-inference-terms-prefix = 使用 BYOK 或自定义端点，即表示你同意仅在
+settings-ai-custom-inference-terms-link = Warp 服务条款
+settings-ai-custom-inference-terms-suffix = 允许的范围内使用。BYOK 和自定义端点适用于个人使用和小型团队。员工超过 10 人的公司或组织应使用 Warp 商业版或企业版。
+settings-ai-custom-endpoints-label = 自定义端点
+settings-ai-mcp-servers-header = MCP 服务器
+settings-ai-mcp-servers-desc = 添加 MCP 服务器以扩展 Warp 代理的功能。MCP 服务器通过标准化接口向代理公开数据源或工具，本质上是插件。
+settings-ai-mcp-learn-more-link = 了解更多
+settings-ai-mcp-auto-detect-desc = 自动检测并启动来自全局范围的第三方 AI 代理配置文件（例如主目录中）的 MCP 服务器。在仓库内检测到的服务器不会自动启动，必须从 MCP 设置页面单独启用。
+settings-ai-mcp-manage-servers-link = 管理 MCP 服务器
+settings-ai-mcp-call-servers-label = 调用 MCP 服务器
+settings-ai-mcp-zero-state-desc = 你还没有添加任何 MCP 服务器。添加后，你将能够控制 Warp 代理在与其交互时拥有多少自主权。
+settings-ai-mcp-or-separator =  或
+settings-ai-mcp-learn-more-mcps-link = 了解有关 MCP 的更多信息。
+settings-ai-mcp-allowlist-label = MCP 允许列表
+settings-ai-mcp-allowlist-desc = 允许 Warp 代理调用这些 MCP 服务器。
+settings-ai-mcp-denylist-label = MCP 拒绝列表
+settings-ai-mcp-denylist-desc = Warp 代理在调用此列表中的任何 MCP 服务器之前，将始终请求许可。
+settings-ai-grok-use-prefix = 使用你的
+settings-ai-grok-subscription-label = Premium 或 SuperGrok 订阅
+settings-ai-grok-connect-desc = 连接你的 SuperGrok 订阅，通过你的 xAI 账户在 Warp 代理中使用 Grok 模型。
+settings-ai-grok-connected-on = 已于 { $date } 连接。
+settings-ai-grok-connected = 已连接。
+settings-ai-grok-connect-btn = 连接
+settings-ai-grok-connecting-btn = 连接中
+settings-ai-grok-disconnect-btn = 断开连接
+settings-ai-grok-login-error = 无法启动 Grok 登录：{ $err }
+settings-ai-grok-copy-url-link = 复制 URL
+settings-ai-grok-connected-toast = SuperGrok 订阅已连接
+settings-ai-grok-connect-error = 无法连接 SuperGrok：{ $err }
+settings-ai-byok-enterprise-link = 联系销售
+settings-ai-byok-enterprise-desc =  以在企业计划上启用自带 API 密钥功能。
+settings-ai-byok-admin-link = 升级到 Build 计划
+settings-ai-byok-admin-desc =  以使用你自己的 API 密钥。
+settings-ai-byok-non-admin-desc = 请要求你的团队管理员升级到 Build 计划以使用你自己的 API 密钥。
+settings-ai-byok-anonymous-link = 创建账户
+settings-ai-byok-anonymous-desc =  以使用你自己的 API 密钥。
+settings-ai-byok-solo-link = 升级到 Build 计划
+settings-ai-byok-solo-desc =  以使用你自己的 API 密钥。
+settings-ai-dir-allowlist-placeholder = 例如 ~/code-repos/repo
+settings-ai-cmd-allowlist-placeholder = 例如 ls .*
+settings-ai-cmd-denylist-placeholder = 例如 rm .*
+settings-ai-cli-agent-cmd-placeholder = 命令（支持正则表达式）
+settings-ai-aws-login-placeholder = aws login
+
+settings-add-custom-endpoint = 添加自定义端点
+settings-edit-custom-endpoint = 编辑自定义端点
+
+## -- 团队页面字符串 (teams- 前缀) -----------------------------------------------
+
+teams-leave-team = 离开团队
+teams-delete-team = 删除团队
+teams-create-team = 创建团队
+teams-delete-pending-email-invitation = 删除待处理的邮件邀请
+teams-remove-user-from-team = 从团队中移除用户
+teams-add-domain-restrictions = 添加域名限制
+teams-delete-domain-restriction = 删除域名限制
+teams-send-email-invites = 发送邮件邀请
+teams-generate-upgrade-link = 生成升级链接
+teams-generate-stripe-billing-portal-link = 生成 Stripe 账单门户链接
+teams-open-admin-panel = 打开管理面板
+teams-contact-support = 联系支持
+teams-toggle-team-discoverability = 切换团队可见性
+teams-join-team-with-team-discovery = 通过团队发现加入团队
+teams-unknown-reason = 未知原因
+
+## -- 附加设置字符串 -----------------------------------------------------------
+
+settings-warpify-title = Warpify
+settings-warpify-description = 配置 Warp 是否尝试"Warpify"（添加对区块、输入模式等的支持）某些 shell。
+settings-warpify-learn-more = 了解更多
+settings-subshells-title = 子 Shell
+settings-subshells-subtitle = 支持的子 Shell：bash、zsh 和 fish。
+settings-ssh-title = SSH
+settings-ssh-subtitle = Warpify 你的交互式 SSH 会话。
+settings-added-commands = 已添加的命令
+settings-denylisted-commands = 已拒绝的命令
+settings-command-regex-placeholder = 命令（支持正则）
+settings-warpify-ssh-sessions = Warpify SSH 会话
+settings-install-ssh-extension = 安装 SSH 扩展
+settings-reuse-ssh-controlmaster = 重用现有 SSH ControlMaster
+settings-scripting-title = 脚本
+settings-scripting-installed = 成功安装 Warp Control CLI！你现在可以在命令行运行 '{command_name}'。
+settings-scripting-failed = 安装 Warp Control 命令失败：{error}
+settings-scripting-installing = 安装中…
+settings-scripting-installed-label = 已安装
+settings-scripting-install = 安装
+settings-scripting-cli-command = Warp Control CLI 命令
+settings-scripting-cli-desc = 安装 warpctrl 命令以便从终端脚本化 Warp。
+settings-scripting-cli-label = warpctrl CLI
+settings-hide-search-bar-vertical-tabs = 在垂直标签布局中隐藏搜索栏
+settings-hide-search-bar-vertical-tabs-desc = 使用垂直标签布局时，隐藏标题栏中的搜索栏。搜索仍可通过命令面板和键盘快捷键使用。
+settings-org-enforcement-tooltip = 此选项由组织设置强制执行，无法自定义。
+settings-reset-to-default = 恢复默认
+settings-not-yet-loaded = 尚未加载
+settings-refreshing = 刷新中…
+settings-loaded-refreshes = 已加载（约 {mins} 分钟后刷新）
+settings-failed-message = 失败：{message}
+settings-using-injected-token = 使用注入令牌 (WARP_IAP_TOKEN)
+settings-staging-iap-credentials = 暂存 IAP 凭证
+show-warp-in-dock = 在 Dock 中显示 Warp
+scripting-page-title = 脚本
+click-to-learn-more = 点击在文档中了解更多
+not-synced-tooltip = 此设置不会同步到你的其他设备

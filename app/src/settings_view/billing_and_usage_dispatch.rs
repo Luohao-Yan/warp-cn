@@ -15,6 +15,7 @@ use super::SettingsSection;
 use crate::auth::{AuthManager, AuthStateProvider};
 use crate::workspaces::user_workspaces::UserWorkspaces;
 use crate::workspaces::workspace::Workspace;
+use crate::static_tr;
 
 pub struct BillingAndUsageDispatchView {
     page: PageType<Self>,
@@ -47,7 +48,7 @@ impl BillingAndUsageDispatchView {
             ctx.notify();
         });
 
-        let page = PageType::new_monolith(BillingAndUsageWidget, Some("Billing and Usage"), true);
+        let page = PageType::new_monolith(BillingAndUsageWidget, Some(crate::tr!("billing", "and-usage-title").leak()), true);
 
         Self { page, v1, v2 }
     }
@@ -89,7 +90,8 @@ impl Entity for BillingAndUsageDispatchView {
 
 impl View for BillingAndUsageDispatchView {
     fn ui_name() -> &'static str {
-        "Billing and usage"
+        static_tr!(UI_NAME, "billing", "and-usage-title");
+        UI_NAME.get()
     }
 
     fn render(&self, app: &AppContext) -> Box<dyn Element> {

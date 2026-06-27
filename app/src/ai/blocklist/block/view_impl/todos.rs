@@ -36,7 +36,7 @@ pub(super) fn render_todos(
 
     // Add collapsible header.
     let id = id.clone();
-    let mut header_config = HeaderConfig::new("Tasks", app)
+    let mut header_config = HeaderConfig::new(crate::tr!("ai_assistant", "ai-todo-tasks-label"), app)
         .with_interaction_mode(InteractionMode::ManuallyExpandable(
             ExpandedConfig::new(state.is_expanded, state.header_toggle_mouse_state.clone())
                 .with_toggle_callback(move |ctx| {
@@ -60,7 +60,7 @@ pub(super) fn render_todos(
     let is_list_outdated = has_cancelled_todo
         || todos.len() != conversation.active_todo_list().map_or(0, |list| list.len());
     if is_list_outdated {
-        header_config = header_config.with_badge("Outdated".to_string());
+        header_config = header_config.with_badge(crate::tr!("ai_assistant", "ai-todo-outdated-label"));
     }
 
     let header_element = header_config.render(app);
@@ -186,21 +186,18 @@ pub(super) fn render_completed_todo_items(
 
         if i == 0 {
             if let Some((index, list_len)) = index_and_len {
-                completed_text += format!(
-                    "Completed {} ({}/{})",
-                    completed_item.title,
-                    index + 1,
-                    list_len
-                )
-                .as_str()
+                let text = crate::tr!("ai_assistant", "ai-todo-completed-index", title = &completed_item.title, index = (index + 1) as i64, total = list_len as i64);
+                completed_text += &text;
             } else {
-                completed_text += format!("Completed {}", completed_item.title).as_str()
+                let text = crate::tr!("ai_assistant", "ai-todo-completed", title = &completed_item.title);
+                completed_text += &text;
             }
         } else if let Some((index, list_len)) = index_and_len {
-            completed_text +=
-                format!(", {} ({}/{})", completed_item.title, index + 1, list_len).as_str()
+            let text = crate::tr!("ai_assistant", "ai-todo-completed-index", title = &completed_item.title, index = (index + 1) as i64, total = list_len as i64);
+            completed_text += &text;
         } else {
-            completed_text += format!(", {}", completed_item.title).as_str()
+            let text = crate::tr!("ai_assistant", "ai-todo-completed-next", title = &completed_item.title);
+            completed_text += &text;
         }
     }
     if completed_text.is_empty() {

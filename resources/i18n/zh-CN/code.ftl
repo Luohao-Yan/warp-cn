@@ -236,3 +236,137 @@ code-find-bar-with-matches = { $current } / { $total }
 code-find-replace-success = 已替换 { $count } 处
 code-find-result-of = /
 
+## -- 代码设置页字符串 (code_page.rs) ------------------------------------
+
+code-feature-name = 代码
+code-initialization-settings-header = 初始化设置
+code-codebase-indexing-label = 代码库索引
+code-codebase-index-description = Warp 可以在你浏览代码仓库时自动为其建立索引，帮助智能体快速理解上下文并提供解决方案。代码绝不会存储在服务器上。如果代码库无法建立索引，Warp 仍可通过 grep 和 find 工具调用浏览代码库并获取洞见。
+code-warp-indexing-ignore-description = 要从索引中排除特定文件或目录，请将它们添加到仓库目录中的 .warpindexingignore 文件。这些文件仍可被 AI 功能访问，但不会包含在代码库嵌入中。
+code-index-new-folder = 索引新文件夹
+code-auto-index-feature-name = 默认索引新文件夹
+code-auto-index-description = 设置为 true 时，Warp 会在你浏览代码仓库时自动为其建立索引，帮助智能体快速理解上下文并提供针对性解决方案。
+code-indexing-disabled-admin = 团队管理员已禁用代码库索引。
+code-indexing-enabled-admin = 团队管理员已启用代码库索引。
+code-indexing-disabled-global-ai = 必须启用 AI 功能才能使用代码库索引。
+code-codebase-index-limit-reached = 你已达到当前计划允许的代码库索引数量上限。请删除现有索引以自动索引新代码库。
+code-initialized-indexed-folders = 已初始化 / 已索引的文件夹
+code-no-folders-initialized = 尚未初始化任何文件夹。
+code-open-project-rules = 打开项目规则
+code-indexing-label = 索引中
+code-lsp-servers-label = LSP 服务器
+code-index-no-index-created = 未创建索引
+code-index-discovered-chunks = 已发现 { $total_nodes } 个块
+code-index-syncing-progress = 正在同步 - { $completed_nodes } / { $total_nodes }
+code-index-syncing = 正在同步...
+code-index-synced = 已同步
+code-index-codebase-too-large = 代码库过大
+code-index-stale = 过期
+code-index-failed = 失败
+code-index-no-index-built = 未构建索引
+code-index-limit-reached = 已达索引上限
+code-index-unavailable = 不可用
+code-index-disabled = 已禁用
+code-index-queued = 排队中
+code-index-indexing-progress = 正在索引 - { $completed } / { $total }
+code-index-indexing-partial = 正在索引 - { $completed }
+code-index-indexing-zero = 正在索引 - 0 / { $total }
+code-index-indexing = 正在索引...
+code-lsp-installed = 已安装
+code-lsp-installing = 正在安装...
+code-lsp-checking = 正在检查...
+code-lsp-available-download = 可供下载
+code-lsp-available = 可用
+code-lsp-busy = 忙碌
+code-lsp-failed = 失败
+code-lsp-stopped = 已停止
+code-lsp-not-running = 未运行
+code-restart-server = 重启服务器
+code-view-logs = 查看日志
+code-codebase-indexing-category = 代码库索引
+code-code-editor-review-category = 代码编辑器与审查
+code-codebase-indexing-subpage = 代码库索引
+code-auto-open-code-review = 自动打开代码审查面板
+code-auto-open-code-review-desc = 开启此设置后，代码审查面板将在对话首次接受差异时打开
+code-show-code-review-btn = 显示代码审查按钮
+code-show-code-review-btn-desc = 在窗口右上角显示一个按钮，用于切换代码审查面板。
+code-show-diff-stats-btn = 在代码审查按钮上显示差异统计
+code-show-diff-stats-btn-desc = 在代码审查按钮上显示新增和删除的行数。
+code-project-explorer = 项目资源管理器
+code-project-explorer-desc = 在左侧工具面板中添加 IDE 风格的项目资源管理器 / 文件树。
+code-global-file-search = 全局文件搜索
+code-global-file-search-desc = 在左侧工具面板中添加全局文件搜索。
+code-show-hidden-files = 在项目资源管理器中显示隐藏文件
+code-show-hidden-files-desc = 在项目资源管理器中显示点文件和隐藏文件（以 . 开头的文件）。
+code-format-on-save = 保存时格式化（需要活跃的语言服务器）
+code-format-on-save-desc = 仅当文件有活跃的语言服务器时适用。保存时自动使用语言服务器格式化文件；其他 LSP 功能（悬停、跳转定义、引用、诊断）不受影响。
+
+## -- MCP 服务器列表页字符串 (list_page.rs) --------------------------------
+
+code-mcp-description-text = 添加 MCP 服务器以扩展 Warp 智能体的功能。MCP 服务器通过标准化接口向智能体暴露数据源或工具，本质上类似于插件。你可以添加自定义服务器，或使用预设快速开始使用热门服务器。你还可以在这里找到与你共享的团队服务器。
+code-mcp-empty-state = 添加 MCP 服务器后，它将显示在此处。
+code-mcp-no-search-results = 未找到搜索结果
+code-mcp-search-placeholder = 搜索 MCP 服务器
+code-mcp-learn-more = 了解更多。
+code-mcp-auto-detect-desc = 自动检测并启动来自全局范围的第三方 AI 智能体配置文件（例如你的主目录中）的 MCP 服务器。在仓库内检测到的服务器不会自动启动，必须在下方"检测自"部分中单独启用。
+code-mcp-see-providers = 查看支持的提供商。
+code-mcp-my-mcps = 我的 MCP
+code-mcp-shared-by-warp-and-team-name = 由 Warp 和 { $team_name } 共享
+code-mcp-shared-by-warp-and-devices = 由 Warp 和其他设备共享
+code-mcp-shared-from-warp = 由 Warp 共享
+code-mcp-detected-from = 检测自 { $provider }
+code-mcp-global = 全局
+code-mcp-shared-by-creator = 共享者：{ $creator }
+code-mcp-shared-by-team-member = 由团队成员共享
+code-mcp-from-another-device = 来自另一设备
+code-mcp-shared-from-team = 来自团队
+
+## -- MCP 安装弹窗字符串 (installation_modal.rs) --------------------------
+
+code-mcp-install = 安装
+code-mcp-install-name = 安装 { $name }
+code-mcp-no-server-selected = 未选择 MCP 服务器
+
+## -- MCP 更新弹窗字符串 (update_modal.rs) --------------------------------
+
+code-mcp-update = 更新
+code-mcp-update-name = 更新 { $name }
+code-mcp-updates-available = 此服务器有 { $count } 个可用更新，你希望继续哪些？
+code-mcp-another-device = 另一设备
+code-mcp-a-team-member = 团队成员
+code-mcp-update-from = 来自 { $publisher } 的更新
+code-mcp-update-from-gallery = 来自 { $name } 的更新
+code-mcp-version = 版本 { $version }
+code-mcp-no-updates = 无可用更新
+
+## -- 自定义推理端点弹窗字符串 (custom_inference_modal.rs) ------------------
+
+code-custom-inf-endpoint-desc = 请在下方提供你的端点详情。你可以根据需要从端点添加任意数量的模型，还可以为输入中的模型选择器提供别名。
+code-custom-inf-endpoint-name = 端点名称
+code-custom-inf-endpoint-url = 端点 URL
+code-custom-inf-api-key = API 密钥
+code-custom-inf-api-format = API 格式
+code-custom-inf-model-name = 模型名称
+code-custom-inf-model-alias = 模型别名（可选）
+code-custom-inf-add-model = + 添加模型
+code-custom-inf-add-endpoint = 添加端点
+code-custom-inf-save = 保存
+code-custom-inf-name-placeholder = 例如，Zach 的外部模型
+code-custom-inf-url-placeholder = 请包含 'https://'
+code-custom-inf-api-key-placeholder = 例如，sk-...
+code-custom-inf-model-name-placeholder = 例如，GLM-5-FP8
+code-custom-inf-model-alias-placeholder = 例如，GLM-5
+
+## -- 执行配置字符串 (execution_profile_view.rs) --------------------------
+
+code-exec-profile-never = 从不
+code-exec-profile-always-allow = 总是允许
+code-exec-profile-always-ask = 总是询问
+code-exec-profile-run-agents = 运行智能体：
+
+## -- 删除端点确认对话框字符串 (remove_custom_endpoint_confirmation_dialog.rs) --
+
+code-remove-endpoint-title = 删除端点？
+code-remove-endpoint-desc = 你确定要删除此端点吗？你将无法在后续的智能体会话中使用其模型。
+code-remove-endpoint-button = 删除端点
+

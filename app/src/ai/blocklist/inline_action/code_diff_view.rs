@@ -646,9 +646,7 @@ impl CodeDiffView {
                     safe: ("Failed to save file for accepted AgentMode diffs"),
                     full: ("Failed to save file for accepted AgentMode diffs for {}: {}", file_path_clone, error)
                 );
-                let toast = DismissibleToast::error(format!(
-                    "Failed to save file {file_path_clone}"
-                ));
+                let toast = DismissibleToast::error(crate::tr!("ai_assistant", "ai-diff-failed-save-file", file_path = file_path_clone.as_str()));
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
@@ -1150,7 +1148,7 @@ impl CodeDiffView {
                     .unwrap_or_else(|| FILE_FALLBACK_LABEL.to_string());
                 ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
                     toast_stack.add_ephemeral_toast(
-                        DismissibleToast::error(crate::tr!("ai_assistant", "ai-failed-revert", file_name = file_name.as_str())),
+                        DismissibleToast::error(crate::tr!("ai_assistant", "ai-failed-revert", file_name = &file_name)),
                         window_id,
                         ctx,
                     );
@@ -1864,10 +1862,10 @@ impl CodeDiffView {
             let diff_type = diff.diff_view.as_ref(app).diff();
             let file_name = match diff.diff_view.as_ref(app).file_name() {
                 Some(file_name) if matches!(diff_type, Some(DiffType::Create { .. })) => {
-                    crate::tr!("ai_assistant", "ai-file-new", file_name = file_name.as_str())
+                    crate::tr!("ai_assistant", "ai-file-new", file_name = &file_name)
                 }
                 Some(file_name) if matches!(diff_type, Some(DiffType::Delete { .. })) => {
-                    crate::tr!("ai_assistant", "ai-file-deleted", file_name = file_name.as_str())
+                    crate::tr!("ai_assistant", "ai-file-deleted", file_name = &file_name)
                 }
                 Some(file_name) => {
                     // Check if this is a rename

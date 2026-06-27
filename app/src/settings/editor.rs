@@ -5,6 +5,11 @@ use serde::{Deserialize, Serialize};
 use settings::macros::define_settings_group;
 use settings::{RespectUserSyncSetting, Setting as _, SupportedPlatforms, SyncToCloud};
 use warpui::ModelContext;
+use crate::static_tr;
+
+static_tr!(LINENUM_ABSOLUTE, "settings", "line-number-absolute");
+static_tr!(LINENUM_RELATIVE, "settings", "line-number-relative");
+static_tr!(SEPARATOR_NONE, "common", "none-label");
 
 #[derive(
     Clone,
@@ -104,8 +109,8 @@ pub enum CodeEditorLineNumberMode {
 impl CodeEditorLineNumberMode {
     pub fn dropdown_item_label(&self) -> &'static str {
         match self {
-            Self::Absolute => "Absolute",
-            Self::Relative => "Relative",
+            Self::Absolute => LINENUM_ABSOLUTE.get(),
+            Self::Relative => LINENUM_RELATIVE.get(),
         }
     }
 }
@@ -161,7 +166,7 @@ pub enum WarpPromptSeparator {
 impl WarpPromptSeparator {
     pub fn dropdown_item_label(&self) -> &'static str {
         match self {
-            Self::None => "None",
+            Self::None => SEPARATOR_NONE.get(),
             Self::PercentSign => "%",
             Self::DollarSign => "$",
             Self::ChevronSymbol => ">",

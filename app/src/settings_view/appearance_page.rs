@@ -108,6 +108,7 @@ static_tr!(SETTINGS_INPUT, "settings", "input");
 static_tr!(SETTINGS_BLOCKS, "settings", "blocks");
 static_tr!(SETTINGS_TEXT, "settings", "text");
 static_tr!(SETTINGS_TABS, "settings", "tabs");
+static_tr!(SHOW_WARP_IN_DOCK, "settings", "show-warp-in-dock");
 
 const FONT_SIZE_INPUT_BOX_WIDTH: f32 = 80.;
 const NOTEBOOK_FONT_SIZE_INPUT_BOX_WIDTH: f32 = 50.;
@@ -2966,7 +2967,7 @@ impl SettingsWidget for CustomAppIconWidget {
         );
 
         let show_dock_icon_toggle = render_body_item::<AppearancePageAction>(
-            "Show Warp in Dock".into(),
+            SHOW_WARP_IN_DOCK.get().into(),
             None,
             LocalOnlyIconState::for_setting(
                 ShowDockIconState::storage_key(),
@@ -4828,7 +4829,7 @@ impl SettingsWidget for HideTitleBarSearchBarInVerticalTabsWidget {
         let tab_settings = TabSettings::as_ref(app);
 
         render_body_item::<AppearancePageAction>(
-            "Hide search bar in vertical tab layout".into(),
+            crate::tr!("settings", "hide-search-bar-vertical-tabs").into(),
             None,
             LocalOnlyIconState::for_setting(
                 HideTitleBarSearchBarInVerticalTabs::storage_key(),
@@ -4850,8 +4851,7 @@ impl SettingsWidget for HideTitleBarSearchBarInVerticalTabsWidget {
                 })
                 .finish(),
             Some(
-                "When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts."
-                    .to_string(),
+                crate::tr!("settings", "hide-search-bar-vertical-tabs-desc"),
             ),
         )
     }

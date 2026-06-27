@@ -44,11 +44,11 @@ struct SecretInfo {
 impl TableFormat for SecretInfo {
     fn header() -> Vec<Cell> {
         vec![
-            Cell::new("Name"),
-            Cell::new("Scope"),
+            Cell::new(crate::tr!("ai_assistant", "ai-secret-col-name")),
+            Cell::new(crate::tr!("ai_assistant", "ai-secret-col-scope")),
             Cell::new(crate::tr!("common", "type-label")),
-            Cell::new("Created"),
-            Cell::new("Updated"),
+            Cell::new(crate::tr!("ai_assistant", "ai-secret-col-created")),
+            Cell::new(crate::tr!("ai_assistant", "ai-secret-col-updated")),
         ]
     }
 
@@ -195,7 +195,7 @@ fn create_secret(ctx: &mut AppContext, args: CreateSecretArgs) -> Result<()> {
         },
         None => {
             let name = args.name.ok_or_else(|| {
-                anyhow::anyhow!("Secret name is required. Usage: oz secret create <NAME>")
+                anyhow::anyhow!(crate::tr!("ai_assistant", "ai-secret-name-required-usage"))
             })?;
             (
                 name,
@@ -268,7 +268,7 @@ fn create_secret_with_input(
             );
             ctx.spawn(create_future, move |_, result, ctx| match result {
                 Ok(secret) => {
-                    println!("Secret '{}' created", secret.name);
+                    println!("{}", crate::tr!("ai_assistant", "ai-secret-created-ok", name = secret.name.as_str()));
                     ctx.terminate_app(TerminationMode::ForceTerminate, None);
                 }
                 Err(err) => {
@@ -315,22 +315,20 @@ fn delete_secret(ctx: &mut AppContext, args: DeleteSecretArgs) -> Result<()> {
             if !force {
                 if !io::stdin().is_terminal() {
                     super::report_fatal_error(
-                        anyhow::anyhow!(
-                            "Refusing to delete secret without confirmation in non-interactive mode (use --force to bypass)"
-                        ),
+                        anyhow::anyhow!(crate::tr!("ai_assistant", "ai-secret-delete-no-confirm-force")),
                         ctx,
                     );
                     return;
                 }
 
                 let scope = match owner {
-                    Owner::User { .. } => "personal",
-                    Owner::Team { .. } => "team",
+                    Owner::User { .. } => crate::tr!("ai_assistant", "ai-secret-scope-personal"),
+                    Owner::Team { .. } => crate::tr!("ai_assistant", "ai-secret-scope-team"),
                 };
 
-                let should_delete = match Confirm::new(&format!("Delete {scope} secret '{name}'?"))
+                let should_delete = match Confirm::new(&crate::tr!("ai_assistant", "ai-secret-delete-confirm", scope = scope.as_str(), name = name.as_str()))
                     .with_default(false)
-                    .with_help_message("This action cannot be undone")
+                    .with_help_message(&crate::tr!("ai_assistant", "ai-secret-action-cannot-undo"))
                     .prompt()
                 {
                     Ok(should_delete) => should_delete,
@@ -346,7 +344,7 @@ fn delete_secret(ctx: &mut AppContext, args: DeleteSecretArgs) -> Result<()> {
                 };
 
                 if !should_delete {
-                    println!("Deletion cancelled");
+                    println!("{}", crate::tr!("ai_assistant", "ai-secret-deletion-cancelled"));
                     ctx
                         .terminate_app(TerminationMode::ForceTerminate, None);
                     return;
@@ -356,7 +354,7 @@ fn delete_secret(ctx: &mut AppContext, args: DeleteSecretArgs) -> Result<()> {
             let delete_future = manager.delete_secret(secret_owner, name.clone());
             ctx.spawn(delete_future, move |_, result, ctx| match result {
                 Ok(()) => {
-                    println!("Secret '{name}' deleted");
+                    println!("{}", crate::tr!("ai_assistant", "ai-secret-deleted-ok", name = name.as_str()));
                     ctx
                         .terminate_app(TerminationMode::ForceTerminate, None);
                 }

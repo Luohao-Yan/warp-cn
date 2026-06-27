@@ -62,6 +62,42 @@ static_tr!(SETTINGS_SAVE_LABEL, "common", "save-label");
 static_tr!(SETTINGS_DELETE_ENV, "settings", "delete-environment");
 static_tr!(SETTINGS_RETRY, "common", "retry-label");
 
+static_tr!(ENV_NAME_PLACEHOLDER, "env_vars", "env-name-placeholder");
+static_tr!(ENV_NAME_PLACEHOLDER_SHORT, "env_vars", "env-name-placeholder-short");
+static_tr!(ENV_REPOS_PLACEHOLDER_AUTHED, "env_vars", "env-repos-placeholder-authed");
+static_tr!(ENV_REPOS_PLACEHOLDER_AUTHED_BROWSE, "env_vars", "env-repos-placeholder-authed-browse");
+static_tr!(ENV_REPOS_PLACEHOLDER_UNAUTHED, "env_vars", "env-repos-placeholder-unauthed");
+static_tr!(ENV_DOCKER_IMAGE_LABEL, "env_vars", "env-docker-image-label");
+static_tr!(ENV_DOCKER_IMAGE_LABEL_SHORT, "env_vars", "env-docker-image-label-short");
+static_tr!(ENV_DOCKER_IMAGE_PLACEHOLDER, "env_vars", "env-docker-image-placeholder");
+static_tr!(ENV_DOCKER_IMAGE_PLACEHOLDER_SHORT, "env_vars", "env-docker-image-placeholder-short");
+static_tr!(ENV_DESCRIPTION_PLACEHOLDER, "env_vars", "env-description-placeholder");
+static_tr!(ENV_SETUP_COMMANDS_PLACEHOLDER, "env_vars", "env-setup-commands-placeholder");
+static_tr!(ENV_SETUP_COMMANDS_PLACEHOLDER_SHORT, "env_vars", "env-setup-commands-placeholder-short");
+static_tr!(ENV_SETUP_COMMANDS_HELPER, "env_vars", "env-setup-commands-helper");
+static_tr!(ENV_SETUP_COMMANDS_HELPER_SHORT, "env_vars", "env-setup-commands-helper-short");
+static_tr!(ENV_SAVE_ENVIRONMENT, "env_vars", "env-save-environment");
+static_tr!(ENV_SHARE_WITH_TEAM, "env_vars", "env-share-with-team");
+static_tr!(ENV_EDIT_TITLE, "env_vars", "env-edit-title");
+static_tr!(ENV_CANCEL, "env_vars", "env-cancel");
+static_tr!(ENV_PERSONAL_WARNING, "env_vars", "env-personal-warning");
+static_tr!(ENV_SETUP_COMMANDS_LABEL, "env_vars", "env-setup-commands-label");
+static_tr!(ENV_DESCRIPTION_LABEL, "env_vars", "env-description-label");
+static_tr!(ENV_REPOS_LABEL, "env_vars", "env-repos-label");
+static_tr!(ENV_AUTH_WITH_GITHUB, "env_vars", "env-auth-with-github");
+static_tr!(ENV_GITHUB_REPOS_LOAD_ERROR, "env_vars", "env-github-repos-load-error");
+static_tr!(ENV_GITHUB_REPOS_FAILED, "env_vars", "env-github-repos-failed");
+static_tr!(ENV_REPO_HELPER_TEXT, "env_vars", "env-repo-helper-text");
+static_tr!(ENV_MISSING_REPO, "env_vars", "env-missing-repo");
+static_tr!(ENV_CONFIGURE_ACCESS_GITHUB, "env_vars", "env-configure-access-github");
+static_tr!(ENV_NO_REPOS_FOUND, "env_vars", "env-no-repos-found");
+static_tr!(ENV_GENERATING, "env_vars", "env-generating");
+static_tr!(ENV_SUGGEST_IMAGE, "env_vars", "env-suggest-image");
+static_tr!(ENV_SUGGEST_IMAGE_TOOLTIP, "env_vars", "env-suggest-image-tooltip");
+static_tr!(ENV_NAME_LABEL, "env_vars", "env-name-label");
+static_tr!(ENV_AUTHENTICATE, "env_vars", "env-authenticate");
+static_tr!(ENV_SUGGEST_IMAGE_AUTH_WARNING, "env_vars", "env-suggest-image-auth-warning");
+
 pub fn init(app: &mut AppContext) {
     use warpui::keymap::macros::*;
 
@@ -265,14 +301,14 @@ pub struct EnvironmentFormCopy {
 impl EnvironmentFormCopy {
     pub fn orchestration_modal() -> Self {
         Self {
-            name_placeholder: "e.g., dev-env",
-            repos_placeholder_authed: "Browse GitHub repos...",
-            repos_placeholder_unauthed: REPOS_PLACEHOLDER_UNAUTHED,
-            docker_image_label: "Docker image",
-            docker_image_placeholder: "e.g., node:20-alpine",
-            description_placeholder: DESCRIPTION_PLACEHOLDER,
-            setup_commands_placeholder: "e.g., node start",
-            setup_commands_helper: "Press Enter or click the submit button to add each command.",
+            name_placeholder: ENV_NAME_PLACEHOLDER_SHORT.get(),
+            repos_placeholder_authed: ENV_REPOS_PLACEHOLDER_AUTHED_BROWSE.get(),
+            repos_placeholder_unauthed: ENV_REPOS_PLACEHOLDER_UNAUTHED.get(),
+            docker_image_label: ENV_DOCKER_IMAGE_LABEL_SHORT.get(),
+            docker_image_placeholder: ENV_DOCKER_IMAGE_PLACEHOLDER_SHORT.get(),
+            description_placeholder: ENV_DESCRIPTION_PLACEHOLDER.get(),
+            setup_commands_placeholder: ENV_SETUP_COMMANDS_PLACEHOLDER_SHORT.get(),
+            setup_commands_helper: ENV_SETUP_COMMANDS_HELPER_SHORT.get(),
             show_description_character_count: false,
         }
     }
@@ -281,14 +317,14 @@ impl EnvironmentFormCopy {
 impl Default for EnvironmentFormCopy {
     fn default() -> Self {
         Self {
-            name_placeholder: "Environment name",
-            repos_placeholder_authed: REPOS_PLACEHOLDER_AUTHED,
-            repos_placeholder_unauthed: REPOS_PLACEHOLDER_UNAUTHED,
-            docker_image_label: "Docker image reference",
-            docker_image_placeholder: "e.g. python:3.11, node:20-alpine",
-            description_placeholder: DESCRIPTION_PLACEHOLDER,
-            setup_commands_placeholder: "e.g. cd my-repo && pip install -r requirements.txt",
-            setup_commands_helper: "Setup commands run independently. Each command runs from the workspace root (/workspace). If a command depends on the previous one, combine them with &&.",
+            name_placeholder: ENV_NAME_PLACEHOLDER.get(),
+            repos_placeholder_authed: ENV_REPOS_PLACEHOLDER_AUTHED.get(),
+            repos_placeholder_unauthed: ENV_REPOS_PLACEHOLDER_UNAUTHED.get(),
+            docker_image_label: ENV_DOCKER_IMAGE_LABEL.get(),
+            docker_image_placeholder: ENV_DOCKER_IMAGE_PLACEHOLDER.get(),
+            description_placeholder: ENV_DESCRIPTION_PLACEHOLDER.get(),
+            setup_commands_placeholder: ENV_SETUP_COMMANDS_PLACEHOLDER.get(),
+            setup_commands_helper: ENV_SETUP_COMMANDS_HELPER.get(),
             show_description_character_count: true,
         }
     }
@@ -370,9 +406,6 @@ pub struct UpdateEnvironmentForm {
 }
 
 const DESCRIPTION_MAX_CHARS: usize = 240;
-const DESCRIPTION_PLACEHOLDER: &str = "e.g., this environment is for all front end focused agents";
-const REPOS_PLACEHOLDER_AUTHED: &str = "Enter repos (owner/repo format)";
-const REPOS_PLACEHOLDER_UNAUTHED: &str = "Paste repo URL(s)";
 const FORM_FIELD_SPACING: f32 = 20.;
 const FORM_LABEL_SPACING: f32 = 6.;
 const FORM_INPUT_HEIGHT: f32 = 36.;
@@ -488,7 +521,7 @@ impl UpdateEnvironmentForm {
         });
 
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Cancel", SecondaryTheme).on_click(|ctx| {
+            ActionButton::new(crate::tr!("env_vars", "env-cancel"), SecondaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(UpdateEnvironmentFormAction::Cancel);
             })
         });
@@ -844,7 +877,7 @@ impl UpdateEnvironmentForm {
             (EnvironmentFormMode::Create, true) => SETTINGS_CREATE_LABEL.get(),
             (EnvironmentFormMode::Create, false) => SETTINGS_CREATE_ENV.get(),
             (EnvironmentFormMode::Edit { .. }, true) => SETTINGS_SAVE_LABEL.get(),
-            (EnvironmentFormMode::Edit { .. }, false) => "Save environment",
+            (EnvironmentFormMode::Edit { .. }, false) => ENV_SAVE_ENVIRONMENT.get(),
         };
         self.submit_button.update(ctx, |button, ctx| {
             button.set_label(button_text, ctx);
@@ -929,7 +962,7 @@ impl UpdateEnvironmentForm {
         //
         // Note: We intentionally do not set `suggest_image_last_attempt_key` here.
         // That field tracks the last *attempted* suggest-image key, and is used to enforce
-        // “repos must change to retry”. Edit-mode gating is handled via `edit_repos_modified`.
+        // "repos must change to retry". Edit-mode gating is handled via `edit_repos_modified`.
         self.suggest_image_state = SuggestImageState::Idle;
         self.suggest_image_last_attempt_key = None;
         self.suggest_image_request_seq = 0;
@@ -1036,7 +1069,7 @@ impl UpdateEnvironmentForm {
                 ..Default::default()
             };
             let mut editor = EditorView::new(options, ctx);
-            editor.set_placeholder_text(DESCRIPTION_PLACEHOLDER, ctx);
+            editor.set_placeholder_text(crate::tr!("env_vars", "env-description-placeholder"), ctx);
             editor
         })
     }
@@ -1364,16 +1397,14 @@ impl UpdateEnvironmentForm {
                     }
                     Ok(UserGithubInfoResult::Unknown) => {
                         me.github_dropdown_state.load_error_message = Some(
-                            "Couldn't load GitHub repos. You can paste repo URL(s), or retry."
-                                .to_string(),
+                            crate::tr!("env_vars", "env-github-repos-load-error"),
                         );
                         me.update_repos_input_placeholder(ctx);
                     }
                     Err(e) => {
                         debug!("Failed to load GitHub repos: {e}");
                         me.github_dropdown_state.load_error_message = Some(
-                            "Couldn't load GitHub repos. You can paste repo URL(s), or retry."
-                                .to_string(),
+                            crate::tr!("env_vars", "env-github-repos-load-error"),
                         );
                         me.update_repos_input_placeholder(ctx);
                     }
@@ -1659,7 +1690,7 @@ impl UpdateEnvironmentForm {
                         theme.active_ui_text_color()
                     };
 
-                    Text::new_inline("Share with team", font_family, font_size)
+                    Text::new_inline(crate::tr!("env_vars", "env-share-with-team"), font_family, font_size)
                         .with_color(color.into())
                         .finish()
                 },
@@ -1696,7 +1727,7 @@ impl UpdateEnvironmentForm {
 
         Some(render_warning_box(
             WarningBoxConfig::new(
-                "Personal environments cannot be used with external integrations or team API keys. For the best experience, use shared environments.",
+                crate::tr!("env_vars", "env-personal-warning"),
             )
             .with_width(self.field_max_width),
             appearance,
@@ -1742,7 +1773,7 @@ impl UpdateEnvironmentForm {
     fn render_header(&self, appearance: &Appearance, app: &AppContext) -> Box<dyn Element> {
         let (title, button_handle) = match &self.mode {
             EnvironmentFormMode::Create => (SETTINGS_CREATE_ENV.get(), &self.submit_button),
-            EnvironmentFormMode::Edit { .. } => ("Edit environment", &self.submit_button),
+            EnvironmentFormMode::Edit { .. } => (ENV_EDIT_TITLE.get(), &self.submit_button),
         };
 
         let submit_actions = || self.render_submit_actions(appearance, app, button_handle);
@@ -1868,7 +1899,7 @@ impl UpdateEnvironmentForm {
             .with_spacing(FORM_LABEL_SPACING);
 
         field.add_child(Self::render_form_label(
-            "Setup command(s)",
+            ENV_SETUP_COMMANDS_LABEL.get(),
             false,
             appearance,
         ));
@@ -1939,7 +1970,7 @@ impl UpdateEnvironmentForm {
 
         field.add_child(
             Text::new(
-                "Description",
+                ENV_DESCRIPTION_LABEL.get(),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
@@ -2002,7 +2033,7 @@ impl UpdateEnvironmentForm {
     fn render_repos_field_label(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         Text::new(
-            "Repo(s)",
+            ENV_REPOS_LABEL.get(),
             appearance.ui_font_family(),
             appearance.ui_font_size(),
         )
@@ -2121,7 +2152,7 @@ impl UpdateEnvironmentForm {
                         )
                         .with_child(
                             Text::new(
-                                "Auth with GitHub",
+                                ENV_AUTH_WITH_GITHUB.get(),
                                 appearance.ui_font_family(),
                                 appearance.ui_font_size(),
                             )
@@ -2169,7 +2200,7 @@ impl UpdateEnvironmentForm {
             .github_dropdown_state
             .load_error_message
             .clone()
-            .unwrap_or_else(|| "Failed to load GitHub repositories".to_string());
+            .unwrap_or_else(|| crate::tr!("env_vars", "env-github-repos-failed"));
 
         let mut field = Flex::column()
             .with_cross_axis_alignment(CrossAxisAlignment::Stretch)
@@ -2478,7 +2509,7 @@ impl UpdateEnvironmentForm {
     fn render_repo_helper_text_row(&self, appearance: &Appearance) -> Box<dyn Element> {
         let theme = appearance.theme();
         let helper = Text::new(
-            "Type owner/repo and press Enter to add, or select from dropdown.",
+            ENV_REPO_HELPER_TEXT.get(),
             appearance.ui_font_family(),
             appearance.ui_font_size() * 0.85,
         )
@@ -2504,7 +2535,7 @@ impl UpdateEnvironmentForm {
             // Plain text part
             text_row.add_child(
                 Text::new(
-                    "Missing a repo?",
+                    ENV_MISSING_REPO.get(),
                     appearance.ui_font_family(),
                     appearance.ui_font_size() * 0.85,
                 )
@@ -2522,7 +2553,7 @@ impl UpdateEnvironmentForm {
                         theme.accent()
                     };
                     Text::new(
-                        "Configure access on GitHub",
+                        ENV_CONFIGURE_ACCESS_GITHUB.get(),
                         appearance.ui_font_family(),
                         appearance.ui_font_size() * 0.85,
                     )
@@ -2691,7 +2722,7 @@ impl UpdateEnvironmentForm {
             content.add_child(
                 Container::new(
                     Text::new(
-                        "No repositories found",
+                        ENV_NO_REPOS_FOUND.get(),
                         appearance.ui_font_family(),
                         appearance.ui_font_size(),
                     )
@@ -2976,7 +3007,7 @@ impl UpdateEnvironmentForm {
                 let ui_builder = appearance.ui_builder().clone();
                 move || {
                     ui_builder
-                        .tool_tip(format!("Open image at {docker_hub_url}"))
+                        .tool_tip(crate::tr!("env_vars", "env-open-image-tooltip", docker_hub_url = docker_hub_url.as_str()))
                         .build()
                         .finish()
                 }
@@ -3077,7 +3108,7 @@ impl UpdateEnvironmentForm {
             return false;
         }
 
-        // Enforce “repos must change to retry” after a suggest-image attempt.
+        // Enforce "repos must change to retry" after a suggest-image attempt.
         let repos_unchanged = self
             .selected_repos_key()
             .and_then(|key| {
@@ -3100,12 +3131,12 @@ impl UpdateEnvironmentForm {
         let is_disabled = !self.can_suggest_image_for_current_repos();
 
         let button_text = if is_loading {
-            "Generating…"
+            ENV_GENERATING.get()
         } else {
-            "Suggest image"
+            ENV_SUGGEST_IMAGE.get()
         };
 
-        let tooltip_text = "Warp will suggest a Docker image based on your selected repositories.";
+        let tooltip_text = ENV_SUGGEST_IMAGE_TOOLTIP.get();
 
         let button = Hoverable::new(
             self.suggest_image_button_mouse_state.clone(),
@@ -3224,7 +3255,7 @@ impl UpdateEnvironmentForm {
                 let auth_url_with_next = self.auth_url_with_next(auth_url);
                 let action = UpdateEnvironmentFormAction::OpenUrl(auth_url_with_next);
                 let button = WarningBoxButtonConfig::new(
-                    "Authenticate",
+                    ENV_AUTHENTICATE.get(),
                     self.suggest_image_auth_button_mouse_state.clone(),
                     move |ctx| {
                         ctx.dispatch_typed_action(action.clone());
@@ -3232,7 +3263,7 @@ impl UpdateEnvironmentForm {
                 );
                 Some(render_warning_box(
                     WarningBoxConfig::new(
-                        "You need to grant access to your GitHub repos to suggest a Docker image",
+                        ENV_SUGGEST_IMAGE_AUTH_WARNING.get(),
                     )
                     .with_width(self.field_max_width)
                     .with_button(button),
@@ -3532,7 +3563,7 @@ impl View for UpdateEnvironmentForm {
 
         // Form fields
         page.add_child(Self::render_form_field(
-            "Name",
+            ENV_NAME_LABEL.get(),
             true,
             None,
             &self.name_editor,

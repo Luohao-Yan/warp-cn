@@ -1331,6 +1331,30 @@ settings-import-looking = Looking for settings to import...
 settings-import-new-session-effect = Some settings will take effect when you open a new session.
 settings-import-reset-defaults = Reset to Warp defaults
 
+settings-import-theme-label = Theme
+settings-import-theme-comma-label = Theme,
+settings-import-one-other-setting = 1 other setting
+settings-import-other-settings = { $count } other settings
+
+settings-import-setting-theme = Theme
+settings-import-setting-option-as-meta = Option as Meta
+settings-import-setting-mouse-scroll-reporting = Mouse/Scroll Reporting
+settings-import-setting-font = Font
+settings-import-setting-default-shell = Default Shell
+settings-import-setting-working-directory = Working Directory
+settings-import-setting-global-hotkey = Global hotkey
+settings-import-setting-window-dimensions = Window Dimensions
+settings-import-setting-copy-on-select = Copy On Select
+settings-import-setting-window-opacity = Window Opacity
+settings-import-setting-cursor-blinking = Cursor Blinking
+
+settings-import-hotkey-unsupported-window-type = A hotkey window opens in a way Warp does not support
+settings-import-hotkey-multiple-configured = There are multiple hotkeys configured
+settings-import-hotkey-missing = No hotkey is set
+
+settings-line-number-absolute = Absolute
+settings-line-number-relative = Relative
+
 
 # === Final missing entries ===
 
@@ -1750,3 +1774,124 @@ settings-ai-auto-handoff-sleep-desc = When macOS is about to sleep, automaticall
 settings-ai-use-and-trigger-handoff = Use & to trigger handoff
 settings-ai-use-and-trigger-handoff-desc = Type & as the first character to enter cloud handoff compose mode.
 settings-ai-openai-api-key-label = OpenAI API key
+settings-ai-anthropic-api-key-label = Anthropic API key
+settings-ai-google-api-key-label = Google API key
+settings-ai-warp-credit-fallback-agent-desc = When enabled, agent requests may be routed to one of Warp's provided models in the event of an error. Warp will prioritize using your API keys over your Warp credits.
+settings-ai-profiles-header = Profiles
+settings-ai-profiles-desc = Profiles let you define how your Agent operates — from the actions it can take and when it needs approval, to the models it uses for tasks like coding and planning. You can also scope them to individual projects.
+settings-ai-custom-inference-header = Custom inference
+settings-ai-api-keys-header = API Keys
+settings-ai-aws-bedrock-header = AWS Bedrock
+settings-ai-cloud-agent-computer-use-label = Computer use in Cloud Agents
+settings-ai-aws-bedrock-credentials-label = Use AWS Bedrock credentials
+settings-ai-aws-bedrock-credentials-desc = Warp loads and sends local AWS CLI credentials for Bedrock-supported models.
+settings-ai-aws-bedrock-credentials-admin-desc = Warp loads and sends local AWS CLI credentials for Bedrock-supported models. This setting is managed by your organization.
+settings-ai-aws-bedrock-login-command-label = Login Command
+settings-ai-aws-bedrock-profile-label = AWS Profile
+settings-ai-aws-bedrock-auto-login-label = Automatically run login command
+settings-ai-aws-bedrock-auto-login-desc = When enabled, the login command will run automatically when AWS Bedrock credentials expire.
+settings-ai-custom-inference-desc = Use your own API keys from model providers for Warp Agent. You can also add custom endpoints to use third-party models. Custom endpoints must support the OpenAI-compatible Chat Completions API. API keys are stored only on your device, never on Warp's servers. They're used to make requests to your chosen model provider. Using auto models or models from providers you have not provided API keys for will consume Warp credits.
+settings-ai-custom-inference-learn-more-link = Learn more
+settings-ai-custom-inference-terms-prefix = By using BYOK or custom endpoints, you agree to use them only as permitted by
+settings-ai-custom-inference-terms-link = Warp's Terms of Service
+settings-ai-custom-inference-terms-suffix = . BYOK and custom endpoints are intended for individual use and small teams. Companies or organizations with more than 10 employees should use Warp Business or Enterprise.
+settings-ai-custom-endpoints-label = Custom endpoints
+settings-ai-mcp-servers-header = MCP Servers
+settings-ai-mcp-servers-desc = Add MCP servers to extend the Warp Agent's capabilities. MCP servers expose data sources or tools to agents through a standardized interface, essentially acting like plugins.
+settings-ai-mcp-learn-more-link = Learn more
+settings-ai-mcp-auto-detect-desc = Automatically detect and spawn MCP servers from globally-scoped third-party AI agent configuration files (e.g. in your home directory). Servers detected inside a repository are never spawned automatically and must be enabled individually from the MCP settings page.
+settings-ai-mcp-manage-servers-link = Manage MCP servers
+settings-ai-mcp-call-servers-label = Call MCP servers
+settings-ai-mcp-zero-state-desc = You haven't added any MCP servers yet. Once you do, you'll be able to control how much autonomy the Warp Agent has when interacting with them.
+settings-ai-mcp-or-separator =  or
+settings-ai-mcp-learn-more-mcps-link = learn more about MCPs.
+settings-ai-mcp-allowlist-label = MCP allowlist
+settings-ai-mcp-allowlist-desc = Allow the Warp Agent to call these MCP servers.
+settings-ai-mcp-denylist-label = MCP denylist
+settings-ai-mcp-denylist-desc = The Warp Agent will always ask for permission before calling any MCP servers on this list.
+settings-ai-grok-use-prefix = Use your
+settings-ai-grok-subscription-label = Premium or SuperGrok subscription
+settings-ai-grok-connect-desc = Connect your SuperGrok subscription to use Grok models in the Warp Agent through your xAI account.
+settings-ai-grok-connected-on = Connected on { $date }.
+settings-ai-grok-connected = Connected.
+settings-ai-grok-connect-btn = Connect
+settings-ai-grok-connecting-btn = Connecting
+settings-ai-grok-disconnect-btn = Disconnect
+settings-ai-grok-login-error = Couldn't start Grok login: { $err }
+settings-ai-grok-copy-url-link = Copy URL
+settings-ai-grok-connected-toast = SuperGrok subscription connected
+settings-ai-grok-connect-error = Couldn't connect SuperGrok: { $err }
+settings-ai-byok-enterprise-link = Contact sales
+settings-ai-byok-enterprise-desc =  to enable bringing your own API keys on your Enterprise plan.
+settings-ai-byok-admin-link = Upgrade to the Build plan
+settings-ai-byok-admin-desc =  to use your own API keys.
+settings-ai-byok-non-admin-desc = Ask your team's admin to upgrade to the Build plan to use your own API keys.
+settings-ai-byok-anonymous-link = Create an account
+settings-ai-byok-anonymous-desc =  to use your own API keys.
+settings-ai-byok-solo-link = Upgrade to the Build plan
+settings-ai-byok-solo-desc =  to use your own API keys.
+settings-ai-dir-allowlist-placeholder = e.g. ~/code-repos/repo
+settings-ai-cmd-allowlist-placeholder = e.g. ls .*
+settings-ai-cmd-denylist-placeholder = e.g. rm .*
+settings-ai-cli-agent-cmd-placeholder = command (supports regex)
+settings-ai-aws-login-placeholder = aws login
+
+settings-add-custom-endpoint = Add custom endpoint
+settings-edit-custom-endpoint = Edit custom endpoint
+
+## -- Teams page strings (teams- prefix) -----------------------------------------
+
+teams-leave-team = Leave Team
+teams-delete-team = Delete Team
+teams-create-team = Create Team
+teams-delete-pending-email-invitation = Delete Pending Email Invitation
+teams-remove-user-from-team = Remove User From Team
+teams-add-domain-restrictions = Add Domain Restrictions
+teams-delete-domain-restriction = Delete Domain Restriction
+teams-send-email-invites = Send Email Invites
+teams-generate-upgrade-link = Generate Upgrade Link
+teams-generate-stripe-billing-portal-link = Generate Stripe Billing Portal Link
+teams-open-admin-panel = Open Admin Panel
+teams-contact-support = Contact Support
+teams-toggle-team-discoverability = Toggle Team Discoverability
+teams-join-team-with-team-discovery = Join Team With Team Discovery
+teams-unknown-reason = Unknown reason
+
+## -- Additional settings strings -------------------------------------------------
+
+settings-warpify-title = Warpify
+settings-warpify-description = Configure whether Warp attempts to "Warpify" (add support for blocks, input modes, etc) certain shells.
+settings-warpify-learn-more = Learn more
+settings-subshells-title = Subshells
+settings-subshells-subtitle = Subshells supported: bash, zsh, and fish.
+settings-ssh-title = SSH
+settings-ssh-subtitle = Warpify your interactive SSH sessions.
+settings-added-commands = Added commands
+settings-denylisted-commands = Denylisted commands
+settings-command-regex-placeholder = command (supports regex)
+settings-warpify-ssh-sessions = Warpify SSH Sessions
+settings-install-ssh-extension = Install SSH extension
+settings-reuse-ssh-controlmaster = Reuse existing SSH ControlMaster
+settings-scripting-title = Scripting
+settings-scripting-installed = Successfully installed the Warp Control CLI! You can now run '{command_name}' from the command line.
+settings-scripting-failed = Failed to install Warp Control command: {error}
+settings-scripting-installing = Installing…
+settings-scripting-installed-label = Installed
+settings-scripting-install = Install
+settings-scripting-cli-command = Warp Control CLI command
+settings-scripting-cli-desc = Install the warpctrl command for scripting Warp from your terminal.
+settings-scripting-cli-label = warpctrl CLI
+settings-hide-search-bar-vertical-tabs = Hide search bar in vertical tab layout
+settings-hide-search-bar-vertical-tabs-desc = When using the vertical tab layout, hide the search bar in the title bar. Search stays available via the command palette and keyboard shortcuts.
+settings-org-enforcement-tooltip = This option is enforced by your organization's settings and cannot be customized.
+settings-reset-to-default = Reset to default
+settings-not-yet-loaded = Not yet loaded
+settings-refreshing = Refreshing…
+settings-loaded-refreshes = Loaded (refreshes in ~{mins}m)
+settings-failed-message = Failed: {message}
+settings-using-injected-token = Using injected token (WARP_IAP_TOKEN)
+settings-staging-iap-credentials = Staging IAP credentials
+show-warp-in-dock = Show Warp in Dock
+scripting-page-title = Scripting
+click-to-learn-more = Click to learn more in docs
+not-synced-tooltip = This setting is not synced to your other devices

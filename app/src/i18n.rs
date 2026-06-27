@@ -178,11 +178,13 @@ fn detect_system_locale() -> Option<String> {
     None
 }
 
-/// Returns the path to the `i18n` directory inside the macOS .app bundle's
-/// Resources folder, if running from a bundle.
+/// Returns the path to the `i18n` directory inside the application's
+/// resources folder, if running from a bundled/installed location.
 ///
-/// For a bundled build at `WarpOss.app`, this returns something like:
-///   `WarpOss.app/Contents/Resources/i18n`
+/// Platform resolution:
+/// - **macOS**: `<bundle>/Contents/Resources/i18n` via NSBundle
+/// - **Windows**: `<exe_dir>/resources/i18n` (exe-relative, matches Inno Setup layout)
+/// - **Linux**: `/opt/warp-terminal/resources/i18n` (fixed install prefix)
 fn bundle_resources_dir() -> Option<String> {
     #[cfg(target_os = "macos")]
     {
@@ -194,6 +196,26 @@ fn bundle_resources_dir() -> Option<String> {
             .join("Contents")
             .join("Resources")
             .join("i18n");
+        if resources_dir.is_dir() {
+            return Some(resources_dir.to_string_lossy().to_string());
+        }
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        if let Ok(exe) = std::env::current_exe() {
+            if let Some(exe_dir) = exe.parent() {
+                let resources_dir = exe_dir.join("resources").join("i18n");
+                if resources_dir.is_dir() {
+                    return Some(resources_dir.to_string_lossy().to_string());
+                }
+            }
+        }
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        let resources_dir = std::path::Path::new("/opt/warp-terminal/resources/i18n");
         if resources_dir.is_dir() {
             return Some(resources_dir.to_string_lossy().to_string());
         }

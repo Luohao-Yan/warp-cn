@@ -21,6 +21,12 @@ use crate::settings::{
     AppEditorSettings, CursorBlink, FontSettings, GlobalHotkeyMode, SelectionSettings,
     ThemeSettings,
 };
+use crate::static_tr;
+
+static_tr!(THEME_LABEL, "settings", "import-theme-label");
+static_tr!(THEME_COMMA_LABEL, "settings", "import-theme-comma-label");
+static_tr!(ONE_OTHER_SETTING, "settings", "import-one-other-setting");
+static_tr!(OTHER_SETTINGS, "settings", "import-other-settings");
 use crate::terminal::alt_screen_reporting::AltScreenReporting;
 use crate::terminal::keys_settings::KeysSettings;
 use crate::terminal::session_settings::SessionSettings;
@@ -28,7 +34,6 @@ use crate::themes::theme::{CustomTheme, SelectedSystemThemes, ThemeKind};
 use crate::ui_components::blended_colors;
 use crate::user_config::{self, WarpConfig};
 use crate::window_settings::WindowSettings;
-use crate::static_tr;
 use crate::{
     report_if_error, send_telemetry_from_ctx, GlobalResourceHandlesProvider, TelemetryEvent,
 };
@@ -413,20 +418,23 @@ impl SettingsImportView {
                 .any(|setting| setting.setting_type == SettingType::Theme)
             {
                 if num_prefs == 1 {
-                    preference_text_elements.push(self.render_secondary_text(appearance, "Theme"));
+                    preference_text_elements.push(self.render_secondary_text(appearance, THEME_LABEL.get()));
                 } else {
-                    preference_text_elements.push(self.render_secondary_text(appearance, "Theme,"));
+                    preference_text_elements.push(self.render_secondary_text(appearance, THEME_COMMA_LABEL.get()));
                 }
                 theme_subtraction = 1;
             }
             match num_prefs - theme_subtraction {
                 1 => preference_text_elements
-                    .push(self.render_secondary_text(appearance, "1 other setting")),
+                    .push(self.render_secondary_text(appearance, ONE_OTHER_SETTING.get())),
                 0 => (),
-                _ => preference_text_elements.push(self.render_secondary_text(
-                    appearance,
-                    format!("{} other settings", num_prefs - theme_subtraction),
-                )),
+                _ => {
+                    let other_settings_text = crate::tr!("settings", "import-other-settings", count = (num_prefs - theme_subtraction) as i64);
+                    preference_text_elements.push(self.render_secondary_text(
+                        appearance,
+                        other_settings_text,
+                    ))
+                }
             }
         }
 

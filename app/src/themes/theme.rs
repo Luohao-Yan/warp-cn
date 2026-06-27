@@ -15,6 +15,32 @@ use warpui::elements::{
 };
 use warpui::fonts::FamilyId;
 
+use crate::static_tr;
+
+static_tr!(THEME_LIGHT, "appearance", "theme-light");
+static_tr!(THEME_DARK, "appearance", "theme-dark");
+static_tr!(THEME_DRACULA, "appearance", "theme-dracula");
+static_tr!(THEME_SOLARIZED_DARK, "appearance", "theme-solarized-dark");
+static_tr!(THEME_SOLARIZED_LIGHT, "appearance", "theme-solarized-light");
+static_tr!(THEME_GRUVBOX_DARK, "appearance", "theme-gruvbox-dark");
+static_tr!(THEME_GRUVBOX_LIGHT, "appearance", "theme-gruvbox-light");
+static_tr!(THEME_JELLYFISH, "appearance", "theme-jellyfish");
+static_tr!(THEME_KOI, "appearance", "theme-koi");
+static_tr!(THEME_LEAFY, "appearance", "theme-leafy");
+static_tr!(THEME_MARBLE, "appearance", "theme-marble");
+static_tr!(THEME_PINK_CITY, "appearance", "theme-pink-city");
+static_tr!(THEME_SNOWY, "appearance", "theme-snowy");
+static_tr!(THEME_DARK_CITY, "appearance", "theme-dark-city");
+static_tr!(THEME_RED_ROCK, "appearance", "theme-red-rock");
+static_tr!(THEME_CYBER_WAVE, "appearance", "theme-cyber-wave");
+static_tr!(THEME_WILLOW_DREAM, "appearance", "theme-willow-dream");
+static_tr!(THEME_FANCY_DRACULA, "appearance", "theme-fancy-dracula");
+static_tr!(THEME_PHENOMENON, "appearance", "theme-phenomenon");
+static_tr!(THEME_SOLAR_FLARE, "appearance", "theme-solar-flare");
+static_tr!(THEME_ADEBERRY, "appearance", "theme-adeberry");
+static_tr!(THEME_WARP_REFERRAL, "appearance", "theme-warp-referral");
+static_tr!(THEME_REFERRED_TO_WARP, "appearance", "theme-received-referral-reward");
+
 use super::default_themes::*;
 use super::theme_creator::{pick_accent_color_from_options, top_colors_for_image};
 
@@ -142,6 +168,39 @@ impl std::fmt::Display for ThemeKind {
 }
 
 impl ThemeKind {
+    /// Returns a localized display name for the theme kind.
+    /// Falls back to the custom theme name for custom/in-memory themes.
+    pub fn localized_display(&self) -> &'static str {
+        match &self {
+            ThemeKind::Light => THEME_LIGHT.get(),
+            ThemeKind::Dark => THEME_DARK.get(),
+            ThemeKind::Dracula => THEME_DRACULA.get(),
+            ThemeKind::SolarizedDark => THEME_SOLARIZED_DARK.get(),
+            ThemeKind::SolarizedLight => THEME_SOLARIZED_LIGHT.get(),
+            ThemeKind::GruvboxDark => THEME_GRUVBOX_DARK.get(),
+            ThemeKind::GruvboxLight => THEME_GRUVBOX_LIGHT.get(),
+            ThemeKind::JellyFish => THEME_JELLYFISH.get(),
+            ThemeKind::Koi => THEME_KOI.get(),
+            ThemeKind::Leafy => THEME_LEAFY.get(),
+            ThemeKind::Marble => THEME_MARBLE.get(),
+            ThemeKind::PinkCity => THEME_PINK_CITY.get(),
+            ThemeKind::Snowy => THEME_SNOWY.get(),
+            ThemeKind::DarkCity => THEME_DARK_CITY.get(),
+            ThemeKind::RedRock => THEME_RED_ROCK.get(),
+            ThemeKind::CyberWave => THEME_CYBER_WAVE.get(),
+            ThemeKind::WillowDream => THEME_WILLOW_DREAM.get(),
+            ThemeKind::FancyDracula => THEME_FANCY_DRACULA.get(),
+            ThemeKind::Phenomenon => THEME_PHENOMENON.get(),
+            ThemeKind::SolarFlare => THEME_SOLAR_FLARE.get(),
+            ThemeKind::Adeberry => THEME_ADEBERRY.get(),
+            ThemeKind::SentReferralReward => THEME_WARP_REFERRAL.get(),
+            ThemeKind::ReceivedReferralReward => THEME_REFERRED_TO_WARP.get(),
+            ThemeKind::Custom(custom_theme) => custom_theme.name.clone().leak(),
+            ThemeKind::CustomBase16(custom_theme) => custom_theme.name.clone().leak(),
+            ThemeKind::InMemory(in_memory_theme) => in_memory_theme.name.clone().leak(),
+        }
+    }
+
     pub fn matches(&self, query: &str) -> bool {
         let theme_name = format!("{self}").to_lowercase();
         theme_name.contains(&query.to_lowercase())

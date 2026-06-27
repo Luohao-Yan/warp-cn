@@ -45,7 +45,7 @@ impl RewindSearchItem {
     pub fn new_current() -> Self {
         Self {
             exchange_id: None,
-            query_text: "Current".to_string(),
+            query_text: crate::tr!("terminal", "input-hint-no-rewind-current-state"),
             file_changes: FileChangesInfo::default(),
             query_match_result: None,
             score: OrderedFloat(0.0),
@@ -220,12 +220,9 @@ impl SearchItem for RewindSearchItem {
 
     fn accessibility_label(&self) -> String {
         if self.is_current {
-            "Current state (no rewind)".to_string()
+            crate::tr!("terminal", "input-hint-no-rewind-current-state")
         } else if self.has_code_changes() {
-            format!(
-                "Rewind to: {} (+{} -{})",
-                self.query_text, self.file_changes.lines_added, self.file_changes.lines_removed
-            )
+            crate::tr!("terminal", "input-hint-rewind-to", query = self.query_text.clone(), added = self.file_changes.lines_added as i64, removed = self.file_changes.lines_removed as i64)
         } else {
             crate::tr!("terminal", "search-rewind", query = self.query_text.clone())
         }

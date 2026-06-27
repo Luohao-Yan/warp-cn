@@ -404,7 +404,7 @@ impl AIDocumentView {
             .map(|k| k.displayed())
             .unwrap_or_else(|| crate::tr!("common", "click-label").to_string());
         static_tr!(UPDATE_AGENT_LABEL, "ai_assistant", "ai-update-agent");
-        let tooltip_text = crate::tr!("ai_assistant", "ai-plan-update-tooltip", save_action = save_action.as_str());
+        let tooltip_text = crate::tr!("ai_assistant", "ai-plan-update-tooltip", save_action = &save_action);
         let update_plan_button = ctx.add_typed_action_view(move |_ctx| {
             ActionButton::new(UPDATE_AGENT_LABEL.get(), PrimaryTheme)
                 .with_size(ButtonSize::Small)
@@ -1311,13 +1311,13 @@ impl BackingView for AIDocumentView {
             AIDocumentModel::as_ref(ctx).get_document_warp_drive_object_link(&self.document_id, ctx)
         {
             menu_items.push(
-                MenuItemFields::new("Copy link")
+                MenuItemFields::new(crate::tr!("ai_assistant", "ai-doc-copy-link"))
                     .with_on_select_action(AIDocumentAction::CopyLink(link))
                     .with_icon(Icon::Link)
                     .into_item(),
             );
             menu_items.push(
-                MenuItemFields::new("Show in Warp Drive")
+                MenuItemFields::new(crate::tr!("ai_assistant", "ai-doc-show-in-warp-drive"))
                     .with_on_select_action(AIDocumentAction::ShowInWarpDrive)
                     .with_icon(Icon::WarpDrive)
                     .into_item(),
@@ -1327,7 +1327,7 @@ impl BackingView for AIDocumentView {
         #[cfg(feature = "local_fs")]
         {
             menu_items.push(
-                crate::menu::MenuItemFields::new("Save as markdown file")
+                crate::menu::MenuItemFields::new(crate::tr!("ai_assistant", "ai-doc-save-as-markdown"))
                     .with_on_select_action(AIDocumentAction::Export)
                     .with_icon(Icon::Download)
                     .into_item(),
@@ -1336,7 +1336,7 @@ impl BackingView for AIDocumentView {
 
         // Add "Attach to active session" menu item
         menu_items.push(
-            MenuItemFields::new("Attach to active session")
+            MenuItemFields::new(crate::tr!("ai_assistant", "ai-doc-attach-to-active-session"))
                 .with_on_select_action(AIDocumentAction::AttachToActiveSession)
                 .with_icon(Icon::Paperclip)
                 .into_item(),
@@ -1344,7 +1344,7 @@ impl BackingView for AIDocumentView {
 
         // Add "Copy plan ID" menu item
         menu_items.push(
-            MenuItemFields::new("Copy plan ID")
+            MenuItemFields::new(crate::tr!("ai_assistant", "ai-doc-copy-plan-id"))
                 .with_on_select_action(AIDocumentAction::CopyPlanId)
                 .with_icon(Icon::Copy)
                 .into_item(),

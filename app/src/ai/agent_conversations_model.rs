@@ -492,7 +492,7 @@ impl AgentRunDisplayStatus {
 impl std::fmt::Display for AgentRunDisplayStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AgentRunDisplayStatus::TaskQueued => write!(f, "Queued"),
+            AgentRunDisplayStatus::TaskQueued => write!(f, "{}", crate::tr!("common", "status-queued")),
             AgentRunDisplayStatus::TaskPending => write!(f, "Pending"),
             AgentRunDisplayStatus::TaskClaimed => write!(f, "{}", crate::tr!("common", "status-claimed")),
             AgentRunDisplayStatus::TaskInProgress
@@ -509,7 +509,7 @@ impl std::fmt::Display for AgentRunDisplayStatus {
             AgentRunDisplayStatus::TaskCancelled | AgentRunDisplayStatus::ConversationCancelled => {
                 write!(f, "{}", crate::tr!("common", "status-cancelled"))
             }
-            AgentRunDisplayStatus::TaskUnknown => write!(f, "Failed"),
+            AgentRunDisplayStatus::TaskUnknown => write!(f, "{}", crate::tr!("common", "status-failed")),
         }
     }
 }

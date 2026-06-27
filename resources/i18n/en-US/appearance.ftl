@@ -38,3 +38,8 @@ appearance-theme-warp-referral = Warp Referral
 appearance-theme-solar-flare = Solar Flare
 appearance-theme-adeberry = Adeberry
 appearance-theme-received-referral-reward = Received Referral Reward
+
+## -- Imported theme names --
+
+appearance-imported-alacritty-theme = Imported Alacritty Theme
+appearance-imported-iterm-theme = Imported iTerm Theme{ $suffix }

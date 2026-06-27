@@ -98,3 +98,41 @@ slash-commands-slash-command-no-conversation-export = 没有活跃的对话可�
 ## -- 为 i18n 完整性补充的缺失键 --
 
 slash-commands-slash-command-desc = 搜索命令和工作流
+
+## -- 斜杠命令提示/错误字符串 --
+
+slash-rename-tab-missing-name = 请在 /rename-tab 后提供标签页名称
+slash-set-tab-color-missing = 请在 /set-tab-color 后提供颜色（{$options}）
+slash-unknown-tab-color = 未知标签颜色'{$arg}'。请使用以下之一：{$options}。
+slash-create-project-missing-desc = 请在 /create-new-project 后描述你想要创建的项目
+slash-open-file-unsupported = 此版本不支持 /open-file 命令
+slash-export-clipboard-success = 对话已导出到剪贴板
+slash-export-file-unsupported-web = 网页版不支持导出对话到文件
+slash-session-already-shared = 会话正在共享中
+slash-cost-no-active-conversation = 无法显示对话费用：没有活跃的对话
+slash-cost-conversation-empty = 无法显示对话费用：对话为空
+slash-cost-conversation-in-progress = 无法显示对话费用：对话进行中
+slash-handoff-no-source-content = 没有可移交的内容——请先开始对话。
+slash-fork-requires-active-conversation = /fork 需要一个活跃的对话
+slash-continue-locally-requires-active = /continue-locally 需要一个活跃的对话
+slash-fork-and-compact-requires-active = /fork-and-compact 需要一个活跃的对话
+slash-compact-and-requires-active = /compact-and 需要一个活跃的对话
+slash-queue-requires-active = /queue 需要一个活跃的对话
+slash-queue-requires-prompt = /queue 需要一个提示参数
+slash-tooltip-continue-locally = 在本地继续
+slash-tooltip-fork-conversation = 分叉对话
+
+## -- 额外斜杠命令字符串 --
+
+slash-cannot-start-while-running = 终端命令运行中，无法开始新对话
+slash-rename-conversation-requires-active = /rename-conversation 需要一个活跃的对话
+
+## -- 节标题字符串 --
+
+section-commands = 命令
+section-skills = 技能
+section-prompts = 提示词
+
+## -- 搜索项字符串 --
+
+slash-or =  或

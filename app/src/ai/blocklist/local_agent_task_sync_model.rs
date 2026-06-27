@@ -389,13 +389,11 @@ fn map_conversation_status(
         }
         ConversationStatus::Cancelled => (
             AgentTaskState::Cancelled,
-            Some(TaskStatusUpdate::message("Cancelled by user")),
+            Some(TaskStatusUpdate::message(crate::tr!("ai_assistant", "ai-task-cancelled-by-user"))),
         ),
         ConversationStatus::Blocked { blocked_action } => (
             AgentTaskState::Blocked,
-            Some(TaskStatusUpdate::message(format!(
-                "The agent got stuck waiting for user confirmation on the action: {blocked_action}"
-            ))),
+            Some(TaskStatusUpdate::message(crate::tr!("ai_assistant", "ai-task-blocked-waiting", blocked_action = blocked_action))),
         ),
     }
 }
@@ -410,7 +408,7 @@ fn task_update_for_conversation_error(
         Some(error) => classify_renderable_error(error),
         None => (
             AgentTaskState::Error,
-            Some(TaskStatusUpdate::message("Agent encountered an error")),
+            Some(TaskStatusUpdate::message(crate::tr!("ai_assistant", "ai-task-agent-error"))),
         ),
     }
 }

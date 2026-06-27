@@ -162,7 +162,7 @@ impl ITermTheme {
                 bright,
             },
             None,
-            Some(format!("Imported iTerm Theme{suffix}")),
+            Some(crate::tr!("appearance", "imported-iterm-theme", suffix = suffix)),
         ))
     }
 }

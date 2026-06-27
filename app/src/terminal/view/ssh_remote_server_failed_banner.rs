@@ -17,9 +17,7 @@ use crate::Appearance;
 use crate::static_tr;
 static_tr!(BANNER_TITLE, "terminal", "ssh-connection-failed");
 
-const BANNER_BODY: &str =
-    "While advanced features like file browsing and code review are currently \
-    disabled, the rest of your Warpified experience is fully available.";
+static_tr!(BANNER_BODY, "terminal", "banner-ssh-remote-body");
 
 #[derive(Clone, Debug)]
 pub enum SshRemoteServerFailedBannerAction {
@@ -87,7 +85,7 @@ impl View for SshRemoteServerFailedBanner {
         .finish();
 
         let body = Text::new(
-            BANNER_BODY.to_string(),
+            BANNER_BODY.get().to_string(),
             appearance.ui_font_family(),
             small_font_size,
         )

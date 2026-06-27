@@ -57,14 +57,14 @@ pub struct UpdateModalBody {
 impl UpdateModalBody {
     pub fn new(ctx: &mut ViewContext<Self>) -> Self {
         let cancel_button = ctx.add_typed_action_view(|_ctx| {
-            ActionButton::new("Cancel", NakedTheme).on_click(|ctx| {
+            ActionButton::new(crate::tr!("common", "cancel-label"), NakedTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(UpdateModalBodyAction::Cancel);
             })
         });
 
         let enter_keystroke = Keystroke::parse("enter").expect("valid keystroke");
         let update_button = ctx.add_typed_action_view(|ctx| {
-            let mut button = ActionButton::new("Update", PrimaryTheme)
+            let mut button = ActionButton::new(crate::tr!("code", "mcp-update"), PrimaryTheme)
                 .with_keybinding(KeystrokeSource::Fixed(enter_keystroke), ctx)
                 .on_click(|ctx| {
                     ctx.dispatch_typed_action(UpdateModalBodyAction::Update);
@@ -153,7 +153,7 @@ impl UpdateModalBody {
 
         // Renders MCP title text
         let title = Text::new(
-            format!("Update {name}"),
+            crate::tr!("code", "mcp-update-name", name = name),
             appearance.ui_font_family(),
             appearance.header_font_size(),
         )
@@ -220,9 +220,10 @@ impl UpdateModalBody {
 
     fn render_description(&self, appearance: &Appearance) -> Box<dyn Element> {
         // Modal appears only when multiple updates are available
-        let description = format!(
-            "This server has {} updates available, which would you like to proceed with?",
-            self.update_options.len()
+        let description = crate::tr!(
+            "code",
+            "mcp-updates-available",
+            count = self.update_options.len()
         );
 
         Text::new(
@@ -257,9 +258,9 @@ impl UpdateModalBody {
                 ..
             } => {
                 let publisher_string = match publisher {
-                    Author::CurrentUser => "another device",
-                    Author::OtherUser { name } => name,
-                    Author::Unknown => "a team member",
+                    Author::CurrentUser => crate::tr!("code", "mcp-another-device"),
+                    Author::OtherUser { name } => name.clone(),
+                    Author::Unknown => crate::tr!("code", "mcp-a-team-member"),
                 };
                 let datetime = Local
                     .timestamp_opt(*new_version_ts, 0)
@@ -267,15 +268,15 @@ impl UpdateModalBody {
                     .unwrap_or_else(Local::now);
                 let formatted_time = format_approx_duration_from_now(datetime);
                 (
-                    format!("Update from {publisher_string}"),
+                    crate::tr!("code", "mcp-update-from", publisher = publisher_string),
                     formatted_time.to_string(),
                 )
             }
             MCPServerUpdate::Gallery {
                 name, new_version, ..
             } => (
-                format!("Update from {name}"),
-                format!("Version {new_version}"),
+                crate::tr!("code", "mcp-update-from-gallery", name = name),
+                crate::tr!("code", "mcp-version", version = *new_version as i64),
             ),
         };
 
@@ -391,7 +392,7 @@ impl View for UpdateModalBody {
         // Add update options
         if self.update_options.is_empty() {
             let no_updates_text = Text::new(
-                "No updates available",
+                crate::tr!("code", "mcp-no-updates"),
                 appearance.ui_font_family(),
                 appearance.ui_font_size(),
             )
