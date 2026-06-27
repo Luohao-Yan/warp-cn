@@ -435,6 +435,42 @@ fn build_appearance(ctx: &mut AppContext) -> Appearance {
     )
 }
 
+/// Register system CJK fonts into the fallback map so that simplified Chinese
+/// glyphs are always available even when the CDN-hosted Noto Sans SC fonts
+/// cannot be downloaded (e.g. from mainland China).
+fn register_system_cjk_fallback(ctx: &mut AppContext) {
+    #[cfg(target_os = "windows")]
+    {
+        warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
+            if !font_cache.is_fallback_family_loaded("Noto Sans SC") {
+                if let Ok(family_id) = font_cache.get_or_load_system_font("Microsoft YaHei") {
+                    font_cache.register_system_fallback_family("Noto Sans SC", family_id);
+                }
+            }
+        });
+    }
+    #[cfg(target_os = "macos")]
+    {
+        warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
+            if !font_cache.is_fallback_family_loaded("Noto Sans SC") {
+                if let Ok(family_id) = font_cache.get_or_load_system_font("PingFang SC") {
+                    font_cache.register_system_fallback_family("Noto Sans SC", family_id);
+                }
+            }
+        });
+    }
+    #[cfg(target_os = "linux")]
+    {
+        warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
+            if !font_cache.is_fallback_family_loaded("Noto Sans SC") {
+                if let Ok(family_id) = font_cache.get_or_load_system_font("Noto Sans CJK SC") {
+                    font_cache.register_system_fallback_family("Noto Sans SC", family_id);
+                }
+            }
+        });
+    }
+}
+
 #[cfg(target_family = "wasm")]
 fn emit_theme_background_event(theme: &WarpTheme) {
     let bg = theme.background().into_solid();
@@ -445,6 +481,10 @@ fn emit_theme_background_event(theme: &WarpTheme) {
 }
 
 pub fn register(app: &mut impl AddSingletonModel) {
-    app.add_singleton_model(|ctx| build_appearance(ctx));
+    app.add_singleton_model(|ctx| {
+        let appearance = build_appearance(ctx);
+        register_system_cjk_fallback(ctx);
+        appearance
+    });
     app.add_singleton_model(AppearanceManager::new);
 }

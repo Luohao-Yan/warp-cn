@@ -1430,7 +1430,7 @@ pub fn fallback_font_fn(ch: char) -> Option<ExternalFontFamily> {
         | '\u{2F8CD}'..='\u{2F8CD}'
         | '\u{2F994}'..='\u{2F994}'
         | '\u{2F9B2}'..='\u{2F9BC}'
-        | '\u{2F9D4}'..='\u{2F9D4}' => Some(NOTO_SANS_HK.clone()),
+        | '\u{2F9D4}'..='\u{2F9D4}' => Some(NOTO_SANS_SC.clone()),
         _ => None,
     }
 }

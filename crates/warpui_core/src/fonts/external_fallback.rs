@@ -161,9 +161,15 @@ impl Cache {
         result.into_iter()
     }
 
-    pub(crate) fn is_fallback_family_loaded(&self, family: FontFamilyName) -> bool {
+    pub fn is_fallback_family_loaded(&self, family: FontFamilyName) -> bool {
         self.font_fallback_cache
             .loaded_fallback_families
             .contains_key(family)
+    }
+
+    pub fn register_system_fallback_family(&mut self, name: FontFamilyName, family_id: FamilyId) {
+        self.font_fallback_cache
+            .loaded_fallback_families
+            .insert(name, family_id);
     }
 }
