@@ -61,20 +61,15 @@ pub fn init_i18n() {
         }
     };
 
-    log::info!(
-        "Initializing i18n: locale={locale_tag}, path={resolved_path}"
-    );
+    log::info!("[i18n] locale={locale_tag}, path={resolved_path}");
 
     match I18nBundle::from_dir(&resolved_path, &langid) {
         Ok(bundle) => {
+            log::info!("[i18n] bundle loaded OK");
             warp_i18n::init(bundle);
-            log::info!("i18n initialized successfully for locale '{locale_tag}'");
         }
         Err(e) => {
-            log::warn!(
-                "Failed to load i18n bundle from {resolved_path}: {e:?}. \
-                 Falling back to raw message IDs."
-            );
+            log::error!("[i18n] FAILED to load bundle: {e:?}");
             // Initialize with an empty bundle so `tr!()` doesn't panic.
             // Missing messages will return the raw key.
             warp_i18n::init(I18nBundle::empty());

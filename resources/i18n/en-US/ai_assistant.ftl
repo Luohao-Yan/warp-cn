@@ -1626,3 +1626,7 @@ ai-assistant-ai-search-files-not-exist = These files do not exist: { $missing_fi
 ai-assistant-ai-search-failed-try-another = The search failed. Try another way to locate the relevant files.
 ai-assistant-ai-remote-search-unavailable = Remote codebase search is unavailable.
 ai-assistant-ai-search-codebase-not-available-try = The search failed because the codebase is not available. Try another way to locate the relevant files.
+
+## -- Keybinding descriptions -------------------------------------------------
+
+ai-assistant-ai-take-control-of-running-command = Take control of running command

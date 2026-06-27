@@ -801,3 +801,18 @@ workspace-open-palette = 打开面板
 workspace-open-settings-features = 显示功能设置
 workspace-show-diff-view = 显示差异视图
 workspace-warp-drive-period = Warp Drive。
+
+## -- 标签页分组快捷键描述 -------------------------------------------------------
+
+workspace-create-new-tab-group = 新建标签页分组
+workspace-create-tab-group-from-active-or-selected-tabs = 从当前或选中的标签页创建分组
+workspace-remove-active-or-selected-tabs-from-group = 将当前或选中的标签页从分组中移除
+workspace-pin-current-tab = 固定当前标签页
+workspace-unpin-current-tab = 取消固定当前标签页
+workspace-pin-current-tab-group = 固定当前标签页分组
+workspace-unpin-current-tab-group = 取消固定当前标签页分组
+
+## -- 窗格类型显示名称 -----------------------------------------------------------
+
+workspace-pane-custom-router = 自定义路由编辑器
+workspace-pane-get-started = 入门

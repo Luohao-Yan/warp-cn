@@ -1625,3 +1625,7 @@ ai-assistant-ai-search-files-not-exist = 这些文件不存在：{ $missing_file
 ai-assistant-ai-search-failed-try-another = 搜索失败。请尝试其他方式查找相关文件。
 ai-assistant-ai-remote-search-unavailable = 远程代码库搜索不可用。
 ai-assistant-ai-search-codebase-not-available-try = 搜索失败，代码库不可用。请尝试其他方式查找相关文件。
+
+## -- 快捷键描述 -------------------------------------------------------------
+
+ai-assistant-ai-take-control-of-running-command = 接管正在运行的命令

@@ -38,6 +38,7 @@ use crate::server::telemetry::PaletteSource;
 use crate::settings::AISettings;
 use crate::settings_view::{self, flags, SettingsSection};
 use crate::tab_configs;
+use crate::tab::{uses_vertical_tabs, NewSessionMenuItem};
 use warpui::SingletonEntity;
 
 use crate::channel::ChannelState;
@@ -49,8 +50,7 @@ use serde::{Deserialize, Serialize};
 use warp_core::context_flag::ContextFlag;
 use warpui::accessibility::AccessibilityVerbosity;
 use warpui::elements::DropTargetData;
-use warpui::keymap::FixedBinding;
-use warpui::keymap::EditableBinding;
+use warpui::keymap::{BindingDescription, EditableBinding, FixedBinding};
 use warpui::AppContext;
 
 pub use action::{
@@ -915,6 +915,99 @@ pub fn init(app: &mut AppContext) {
     )
     .with_group(bindings::BindingGroup::Settings.as_str())
     .with_context_predicate(id!("Workspace"))]);
+
+    // Tab grouping bindings (keyless by default; gated on `GroupedTabs`).
+    app.register_editable_bindings([
+        EditableBinding::new(
+            "workspace:new_tab_group",
+            crate::tr!("workspace", "create-new-tab-group"),
+            // Reuse the new-session dropdown's action, not a dedicated variant.
+            WorkspaceAction::SelectNewSessionMenuItem(NewSessionMenuItem::CreateNewTabGroup),
+        )
+        .with_enabled(|| FeatureFlag::GroupedTabs.is_enabled())
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(id!("Workspace") & !id!("Workspace_PaneDragging")),
+        EditableBinding::new(
+            "workspace:new_tab_group_from_active_or_selected_tabs",
+            crate::tr!("workspace", "create-tab-group-from-active-or-selected-tabs"),
+            WorkspaceAction::NewTabGroupFromActiveOrSelectedTabs,
+        )
+        .with_enabled(|| FeatureFlag::GroupedTabs.is_enabled())
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(id!("Workspace") & !id!("Workspace_PaneDragging")),
+        // Gated on `Workspace_ActiveOrSelectedTabsInGroup`: offered only when
+        // there's an unambiguous group to leave — a single-group multi-selection,
+        // or (with no selection) a grouped active tab. Mixed selections aren't
+        // offered, matching the multi-tab right-click menu.
+        EditableBinding::new(
+            "workspace:remove_active_or_selected_tabs_from_group",
+            crate::tr!("workspace", "remove-active-or-selected-tabs-from-group"),
+            WorkspaceAction::RemoveActiveOrSelectedTabsFromGroup,
+        )
+        .with_enabled(|| FeatureFlag::GroupedTabs.is_enabled())
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(
+            id!("Workspace")
+                & id!("Workspace_ActiveOrSelectedTabsInGroup")
+                & !id!("Workspace_PaneDragging"),
+        ),
+    ]);
+
+    // Tab/group pinning bindings (keyless by default; gated on `PinnedTabs`).
+    // Pin/unpin are split into separate entries so the palette label tracks
+    // the active tab/group's current state.
+    app.register_editable_bindings([
+        EditableBinding::new(
+            "workspace:pin_active_tab",
+            crate::tr!("workspace", "pin-current-tab"),
+            WorkspaceAction::PinActiveTab,
+        )
+        .with_enabled(|| FeatureFlag::PinnedTabs.is_enabled())
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(
+            id!("Workspace") & !id!("Workspace_ActiveTabPinned") & !id!("Workspace_PaneDragging"),
+        ),
+        EditableBinding::new(
+            "workspace:unpin_active_tab",
+            crate::tr!("workspace", "unpin-current-tab"),
+            WorkspaceAction::UnpinActiveTab,
+        )
+        .with_enabled(|| FeatureFlag::PinnedTabs.is_enabled())
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(
+            id!("Workspace") & id!("Workspace_ActiveTabPinned") & !id!("Workspace_PaneDragging"),
+        ),
+        EditableBinding::new(
+            "workspace:pin_active_tab_group",
+            crate::tr!("workspace", "pin-current-tab-group"),
+            WorkspaceAction::PinActiveTabGroup,
+        )
+        .with_enabled(|| {
+            FeatureFlag::PinnedTabs.is_enabled() && FeatureFlag::GroupedTabs.is_enabled()
+        })
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(
+            id!("Workspace")
+                & id!("Workspace_ActiveTabInGroup")
+                & !id!("Workspace_ActiveTabGroupPinned")
+                & !id!("Workspace_PaneDragging"),
+        ),
+        EditableBinding::new(
+            "workspace:unpin_active_tab_group",
+            crate::tr!("workspace", "unpin-current-tab-group"),
+            WorkspaceAction::UnpinActiveTabGroup,
+        )
+        .with_enabled(|| {
+            FeatureFlag::PinnedTabs.is_enabled() && FeatureFlag::GroupedTabs.is_enabled()
+        })
+        .with_group(bindings::BindingGroup::Navigation.as_str())
+        .with_context_predicate(
+            id!("Workspace")
+                & id!("Workspace_ActiveTabInGroup")
+                & id!("Workspace_ActiveTabGroupPinned")
+                & !id!("Workspace_PaneDragging"),
+        ),
+    ]);
 
     app.register_editable_bindings([
         EditableBinding::new(

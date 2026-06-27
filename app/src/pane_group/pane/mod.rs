@@ -12,6 +12,7 @@ pub(super) mod ai_document_pane;
 pub(super) mod ai_fact_pane;
 pub(super) mod code_diff_pane;
 pub(super) mod code_diff_pane_model;
+pub(super) mod custom_router_editor_pane;
 pub(super) mod code_pane;
 pub(super) mod env_var_collection_pane;
 pub(crate) mod environment_management_pane;
@@ -45,6 +46,7 @@ pub use self::view::{PaneHeaderAction, PaneHeaderCustomAction, PaneView, PaneVie
 use super::{ActivationReason, LeafContents, PaneGroup, PaneGroupAction};
 use crate::ai::ai_document_view::AIDocumentView;
 use crate::ai::blocklist::inline_action::code_diff_view::CodeDiffView;
+use crate::ai::custom_model_router_editor::CustomRouterEditorView;
 use crate::ai::execution_profiles::editor::ExecutionProfileEditorView;
 use crate::ai::facts::AIFactView;
 #[cfg(feature = "local_fs")]
@@ -142,6 +144,7 @@ pub(crate) enum IPaneType {
     AIFact,
     AIDocument,
     ExecutionProfileEditor,
+    CustomRouterEditor,
     GetStarted,
     NetworkLog,
     DeferredPlaceholder,
@@ -165,7 +168,8 @@ impl Display for IPaneType {
             IPaneType::AIFact => write!(f, "{}", crate::tr!("workspace", "pane-ai-fact")),
             IPaneType::AIDocument => write!(f, "{}", crate::tr!("workspace", "pane-ai-document")),
             IPaneType::ExecutionProfileEditor => write!(f, "{}", crate::tr!("workspace", "pane-execution-profile")),
-            IPaneType::GetStarted => write!(f, "GetStarted"),
+            IPaneType::CustomRouterEditor => write!(f, "{}", crate::tr!("workspace", "pane-custom-router")),
+            IPaneType::GetStarted => write!(f, "{}", crate::tr!("workspace", "pane-get-started")),
             IPaneType::NetworkLog => write!(f, "{}", crate::tr!("workspace", "network-log-header")),
             IPaneType::DeferredPlaceholder => write!(f, "{}", crate::tr!("workspace", "placeholder")),
             #[cfg(test)]
@@ -253,6 +257,13 @@ impl PaneId {
         ctx: &ViewContext<PaneView<ExecutionProfileEditorView>>,
     ) -> Self {
         Self::new_from_ctx(IPaneType::ExecutionProfileEditor, ctx)
+    }
+
+    /// Creates a [`PaneId`] from a [`ViewContext<PaneView<CustomRouterEditorView>>`]
+    pub fn from_custom_router_editor_pane_ctx(
+        ctx: &ViewContext<PaneView<CustomRouterEditorView>>,
+    ) -> Self {
+        Self::new_from_ctx(IPaneType::CustomRouterEditor, ctx)
     }
 
     pub fn from_get_started_pane_ctx(ctx: &ViewContext<PaneView<GetStartedView>>) -> Self {
@@ -345,6 +356,16 @@ impl PaneId {
         Self::new(
             IPaneType::ExecutionProfileEditor,
             execution_profile_editor_pane_view,
+        )
+    }
+
+    /// Creates a [`PaneId`] from a [`PaneView<CustomRouterEditorView>`] entity ID.
+    pub fn from_custom_router_editor_pane_view(
+        custom_router_editor_pane_view: &ViewHandle<PaneView<CustomRouterEditorView>>,
+    ) -> Self {
+        Self::new(
+            IPaneType::CustomRouterEditor,
+            custom_router_editor_pane_view,
         )
     }
 
@@ -465,6 +486,9 @@ impl PaneId {
             }
             IPaneType::AIDocument => {
                 ChildView::<PaneView<AIDocumentView>>::with_id(self.0.pane_view_id).finish()
+            }
+            IPaneType::CustomRouterEditor => {
+                ChildView::<PaneView<crate::ai::custom_model_router_editor::CustomRouterEditorView>>::with_id(self.0.pane_view_id).finish()
             }
             IPaneType::ExecutionProfileEditor => {
                 ChildView::<PaneView<ExecutionProfileEditorView>>::with_id(self.0.pane_view_id)

@@ -168,7 +168,7 @@ pub fn init(app: &mut AppContext) {
     ]);
     app.register_editable_bindings([EditableBinding::new(
         SET_INPUT_MODE_TERMINAL_ACTION_NAME,
-        "Take control of running command",
+        crate::tr!("ai_assistant", "take-control-of-running-command"),
         CLISubagentAction::TakeControlOfRunningCommand,
     )
     .with_mac_key_binding("cmd-i")

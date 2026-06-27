@@ -794,3 +794,18 @@ workspace-open-palette = Open Palette
 workspace-open-settings-features = Show Features Settings
 workspace-show-diff-view = Show Diff View
 workspace-warp-drive-period = Warp Drive.
+
+## -- Tab grouping keybinding descriptions ---------------------------------------
+
+workspace-create-new-tab-group = Create new tab group
+workspace-create-tab-group-from-active-or-selected-tabs = Create tab group from active or selected tab(s)
+workspace-remove-active-or-selected-tabs-from-group = Remove active or selected tab(s) from group
+workspace-pin-current-tab = Pin current tab
+workspace-unpin-current-tab = Unpin current tab
+workspace-pin-current-tab-group = Pin current tab group
+workspace-unpin-current-tab-group = Unpin current tab group
+
+## -- Pane type display names -----------------------------------------------------
+
+workspace-pane-custom-router = Custom Router Editor
+workspace-pane-get-started = Get Started

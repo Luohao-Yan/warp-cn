@@ -416,7 +416,7 @@ pub fn init(app: &mut AppContext) {
         .with_context_predicate(id!("Terminal") & !id!("IMEOpen")),
         EditableBinding::new(
             "terminal:jump_to_latest_agent_message",
-            "Jump to latest agent message",
+            crate::tr!("terminal", "jump-to-latest-agent-message"),
             TerminalAction::JumpToLatestAgentMessage,
         )
         // Available from the terminal (enters the latest conversation's agent view)
@@ -840,26 +840,7 @@ pub fn init(app: &mut AppContext) {
     }
 
     app.register_editable_bindings([
-        EditableBinding::new(
-            "terminal:onboarding_flow",
-            crate::tr!("terminal", "setup-guide"),
-            TerminalAction::OnboardingFlow(OnboardingVersion::Legacy),
-        )
-        .with_context_predicate(
-            id!("Terminal") & id!(SharedSessionStatus::NotShared.as_keymap_context()),
-        ),
         // UniversalInput callout debug bindings
-        EditableBinding::new(
-            "terminal:agent_onboarding_flow_legacy_terminal",
-            "[Debug] Onboarding Callout: WarpInput - Terminal",
-            TerminalAction::OnboardingFlow(OnboardingVersion::Legacy),
-        )
-        .with_enabled(|| {
-            FeatureFlag::AgentOnboarding.is_enabled() && ChannelState::enable_debug_features()
-        })
-        .with_context_predicate(
-            id!("Terminal") & id!(SharedSessionStatus::NotShared.as_keymap_context()),
-        ),
         EditableBinding::new(
             "terminal:agent_onboarding_flow_universal_input_project",
             "[Debug] Onboarding Callout: WarpInput - Project",
@@ -1019,29 +1000,6 @@ pub fn init(app: &mut AppContext) {
         }),
     ]);
 
-    app.register_fixed_bindings(vec![
-        FixedBinding::new(
-            "cmdorctrl-1",
-            TerminalAction::SelectAgenticSuggestion(1),
-            id!("Terminal") & id!("OnboardingAgenticSuggestionsBlock"),
-        ),
-        FixedBinding::new(
-            "cmdorctrl-2",
-            TerminalAction::SelectAgenticSuggestion(2),
-            id!("Terminal") & id!("OnboardingAgenticSuggestionsBlock"),
-        ),
-        FixedBinding::new(
-            "cmdorctrl-3",
-            TerminalAction::SelectAgenticSuggestion(3),
-            id!("Terminal") & id!("OnboardingAgenticSuggestionsBlock"),
-        ),
-        FixedBinding::new(
-            "cmdorctrl-4",
-            TerminalAction::SelectAgenticSuggestion(4),
-            id!("Terminal") & id!("OnboardingAgenticSuggestionsBlock"),
-        ),
-    ]);
-
     app.register_editable_bindings([EditableBinding::new(
         "workspace:write_codebase_index",
         BindingDescription::new(crate::tr!("terminal", "write-current-codebase-index-snapshot")),
@@ -1093,7 +1051,7 @@ pub fn init(app: &mut AppContext) {
     app.register_editable_bindings([
         EditableBinding::new(
             CYCLE_NEXT_ORCHESTRATION_CHILD_AGENT_KEYBINDING,
-            "Cycle to next orchestration session",
+            crate::tr!("terminal", "cycle-to-next-orchestration-session"),
             TerminalAction::CycleNextOrchestrationChildAgent,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
@@ -1104,7 +1062,7 @@ pub fn init(app: &mut AppContext) {
         .with_linux_or_windows_key_binding("ctrl-alt-]"),
         EditableBinding::new(
             CYCLE_PREVIOUS_ORCHESTRATION_CHILD_AGENT_KEYBINDING,
-            "Cycle to previous orchestration session",
+            crate::tr!("terminal", "cycle-to-previous-orchestration-session"),
             TerminalAction::CyclePreviousOrchestrationChildAgent,
         )
         .with_group(bindings::BindingGroup::WarpAi.as_str())
