@@ -1654,3 +1654,10 @@ ai-assistant-mcp-server-type-name = MCP server
 ## -- Task cancellation strings --
 ai-assistant-task-cancelled = Task cancelled
 ai-assistant-failed-cancel-task = Failed to cancel task: { $error }
+
+## -- Secret type names (for agent_sdk/secret.rs, tr!("ai", "secret-*")) --
+ai-secret-raw-value = Raw Value
+ai-secret-anthropic-key = Anthropic API Key
+ai-secret-anthropic-bedrock-access = Anthropic Bedrock Access Key
+ai-secret-anthropic-bedrock-key = Anthropic Bedrock API Key
+ai-secret-openai-key = OpenAI API Key

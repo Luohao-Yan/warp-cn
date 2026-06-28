@@ -1128,3 +1128,84 @@ banner-ssh-remote-body = While advanced features like file browsing and code rev
 ## -- Auth secret FTUX and selector strings --
 terminal-ftux-new-secret = New { $display_name }
 terminal-selector-delete-api-key = Delete API key { $name }
+
+## -- Banner context strings --
+terminal-banner-clipboard-allow = Allow
+terminal-banner-clipboard-blocked = Clipboard access blocked
+terminal-banner-clipboard-dont-show = Don't show again
+terminal-banner-couldnt-continue-cloud-task = Couldn't continue this cloud task.
+terminal-banner-more-info = More info
+terminal-banner-p10k-now-supports = Powerlevel10k now supports Warp!
+terminal-banner-p10k-these-instructions = these instructions
+terminal-banner-p10k-to-update =  to update to the latest version.
+terminal-banner-p10k-unsupported-version = You seem to be running an older (unsupported) version, please follow
+terminal-banner-pure-unsupported = Pure is not yet supported in Warp. You might consider one of the supported prompts as an alternative.
+terminal-banner-shell-incompat = Your shell configuration is incompatible with Warp...
+terminal-banner-ssh-compat-after-link = ). Enabling the SSH extension in
+terminal-banner-ssh-compat-before-link = You are using SSH ControlMaster which is unsupported (
+terminal-banner-ssh-compat-may-resolve = may resolve this issue.
+terminal-banner-ssh-compat-more-info = More info
+terminal-banner-ssh-compat-settings = Settings
+
+## -- Context menu strings --
+terminal-ctx-clear-blocks = Clear blocks
+terminal-ctx-copy = Copy
+terminal-ctx-copy-command = Copy Command
+terminal-ctx-copy-conversation-id = Copy conversation ID
+terminal-ctx-copy-conversation-text = Copy conversation text
+terminal-ctx-copy-debugging-id = Copy debugging ID
+terminal-ctx-copy-debugging-link = Copy debugging link
+terminal-ctx-copy-git-branch = Copy git branch
+terminal-ctx-copy-output-as-markdown = Copy output as markdown
+terminal-ctx-copy-path = Copy path
+terminal-ctx-copy-prompt = Copy prompt
+terminal-ctx-copy-share-link = Copy share link
+terminal-ctx-copy-url = Copy URL
+terminal-ctx-fork = Fork
+terminal-ctx-fork-from-here = Fork from here
+terminal-ctx-hide = Hide
+terminal-ctx-open-in-warp = Open in Warp
+terminal-ctx-paste = Paste
+terminal-ctx-rewind-to-before-here = Rewind to before here
+terminal-ctx-save-as-prompt = Save as prompt
+terminal-ctx-share-conversation = Share conversation
+terminal-ctx-show = Show
+terminal-ctx-toggle-input-hint-text = Toggle input hint text
+
+## -- Input hint strings --
+terminal-input-hint-agent-for-new-conversation = Agent for new conversation
+terminal-input-hint-attach-output-as-context = Attach output as context
+terminal-input-hint-autodetected = Autodetected
+terminal-input-hint-current-pane = Current pane
+terminal-input-hint-cycle-tabs = Cycle tabs
+terminal-input-hint-dismiss = Dismiss
+terminal-input-hint-loading = Loading...
+terminal-input-hint-navigate = Navigate
+terminal-input-hint-new-agent-conversation = New agent conversation
+terminal-input-hint-new-conversation = New conversation
+terminal-input-hint-new-pane = New pane
+terminal-input-hint-no-results = No results
+terminal-input-hint-no-rewind-current-state = No rewind current state
+terminal-input-hint-no-skills-found = No skills found
+terminal-input-hint-open-plan = Open plan
+terminal-input-hint-plan-with-agent = Plan with agent
+terminal-input-hint-prompts-label = Prompts
+terminal-input-hint-rewind = Rewind
+terminal-input-hint-rewind-to = Rewind to
+terminal-input-hint-select-and-save-to-profile = Select and save to profile
+terminal-input-hint-to-continue-conversation = To continue conversation
+terminal-input-hint-to-execute = To execute
+terminal-input-hint-to-open-title = To open title
+terminal-input-hint-to-override = To override
+terminal-input-hint-to-select = To select
+terminal-input-hint-to-send = To send
+terminal-input-hint-untitled-conversation = Untitled conversation
+
+## -- Input model strings --
+terminal-input-model-bring-your-own-key = Bring your own key
+terminal-input-model-inference-may-use-bedrock = Inference may use Bedrock
+terminal-input-model-inference-via-api-key = Inference via API key
+terminal-input-model-inference-via-bedrock = Inference via Bedrock
+terminal-input-model-or = or
+terminal-input-model-upgrade = Upgrade
+terminal-input-model-upgrade-not-available = Upgrade not available

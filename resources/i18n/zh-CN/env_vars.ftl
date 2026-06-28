@@ -98,3 +98,14 @@ env-name-label = 名称
 env-authenticate = 认证
 env-suggest-image-auth-warning = 你需要授予访问 GitHub 仓库的权限才能推荐 Docker 镜像
 
+## -- tr!("env_vars", "env-*") 调用的域前缀别名 --
+env-vars-env-cancel = 取消
+env-vars-env-create-not-logged-in = 未登录
+env-vars-env-create-title = 创建环境
+env-vars-env-description-placeholder = 例如，此环境用于所有前端代理
+env-vars-env-github-repos-failed = 加载 GitHub 仓库失败
+env-vars-env-github-repos-load-error = 无法加载 GitHub 仓库。你可以粘贴仓库 URL，或重试。
+env-vars-env-open-image-tooltip = 在 { $docker_hub_url } 打开镜像
+env-vars-env-personal-warning = 个人环境无法与外部集成或团队 API 密钥一起使用。为获得最佳体验，请使用共享环境。
+env-vars-env-share-with-team = 与团队共享
+

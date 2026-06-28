@@ -137,3 +137,32 @@ section-prompts = Prompts
 ## -- Search item strings --
 
 slash-or =  or
+
+## -- Domain-prefixed aliases for tr!("slash_commands", "slash-*") calls --
+slash-commands-slash-rename-tab-missing-name = Please provide a tab name after /rename-tab
+slash-commands-slash-set-tab-color-missing = Please provide a color after /set-tab-color ({$options})
+slash-commands-slash-unknown-tab-color = Unknown tab color '{$arg}'. Use one of: {$options}.
+slash-commands-slash-create-project-missing-desc = Please describe the project you want to create after /create-new-project
+slash-commands-slash-open-file-unsupported = The /open-file command is not supported in this build
+slash-commands-slash-export-clipboard-success = Conversation exported to clipboard
+slash-commands-slash-export-file-unsupported-web = Export conversation to file unsupported in web
+slash-commands-slash-session-already-shared = Session is already being shared
+slash-commands-slash-cost-no-active-conversation = Cannot show conversation cost: no active conversation
+slash-commands-slash-cost-conversation-empty = Cannot show conversation cost: conversation is empty
+slash-commands-slash-cost-conversation-in-progress = Cannot show conversation cost: conversation is in progress
+slash-commands-slash-handoff-no-source-content = Nothing to hand off -- start a conversation first.
+slash-commands-slash-fork-requires-active-conversation = /fork requires an active conversation
+slash-commands-slash-continue-locally-requires-active = /continue-locally requires an active conversation
+slash-commands-slash-fork-and-compact-requires-active = /fork-and-compact requires an active conversation
+slash-commands-slash-compact-and-requires-active = /compact-and requires an active conversation
+slash-commands-slash-queue-requires-active = /queue requires an active conversation
+slash-commands-slash-queue-requires-prompt = /queue requires a prompt argument
+slash-commands-slash-tooltip-continue-locally = Continue locally
+slash-commands-slash-tooltip-fork-conversation = Fork conversation
+slash-commands-slash-cannot-start-while-running = cannot start new conversation while terminal command is running
+slash-commands-slash-rename-conversation-requires-active = /rename-conversation requires an active conversation
+slash-commands-slash-or =  or
+
+## -- Domain-prefixed input-model keys --
+slash-commands-input-model-open-file-directories-only = The /open-file command can only open files, not directories
+slash-commands-input-model-open-file-local-only = The /open-file command is only available for local sessions

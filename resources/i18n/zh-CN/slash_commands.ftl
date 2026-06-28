@@ -136,3 +136,32 @@ section-prompts = 提示词
 ## -- 搜索项字符串 --
 
 slash-or =  或
+
+## -- tr!("slash_commands", "slash-*") 调用的域前缀别名 --
+slash-commands-slash-rename-tab-missing-name = 请在 /rename-tab 后提供标签页名称
+slash-commands-slash-set-tab-color-missing = 请在 /set-tab-color 后提供颜色（{$options}）
+slash-commands-slash-unknown-tab-color = 未知标签颜色'{$arg}'。请使用以下之一：{$options}。
+slash-commands-slash-create-project-missing-desc = 请在 /create-new-project 后描述你想要创建的项目
+slash-commands-slash-open-file-unsupported = 此版本不支持 /open-file 命令
+slash-commands-slash-export-clipboard-success = 对话已导出到剪贴板
+slash-commands-slash-export-file-unsupported-web = 网页版不支持导出对话到文件
+slash-commands-slash-session-already-shared = 会话正在共享中
+slash-commands-slash-cost-no-active-conversation = 无法显示对话费用：没有活跃的对话
+slash-commands-slash-cost-conversation-empty = 无法显示对话费用：对话为空
+slash-commands-slash-cost-conversation-in-progress = 无法显示对话费用：对话进行中
+slash-commands-slash-handoff-no-source-content = 没有可移交的内容——请先开始对话。
+slash-commands-slash-fork-requires-active-conversation = /fork 需要一个活跃的对话
+slash-commands-slash-continue-locally-requires-active = /continue-locally 需要一个活跃的对话
+slash-commands-slash-fork-and-compact-requires-active = /fork-and-compact 需要一个活跃的对话
+slash-commands-slash-compact-and-requires-active = /compact-and 需要一个活跃的对话
+slash-commands-slash-queue-requires-active = /queue 需要一个活跃的对话
+slash-commands-slash-queue-requires-prompt = /queue 需要一个提示参数
+slash-commands-slash-tooltip-continue-locally = 在本地继续
+slash-commands-slash-tooltip-fork-conversation = 分叉对话
+slash-commands-slash-cannot-start-while-running = 终端命令运行中，无法开始新对话
+slash-commands-slash-rename-conversation-requires-active = /rename-conversation 需要一个活跃的对话
+slash-commands-slash-or =  或
+
+## -- 域前缀 input-model 键 --
+slash-commands-input-model-open-file-directories-only = /open-file 命令只能打开文件，不能打开目录
+slash-commands-input-model-open-file-local-only = /open-file 命令仅适用于本地会话

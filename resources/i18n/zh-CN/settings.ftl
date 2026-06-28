@@ -1944,3 +1944,12 @@ settings-routing-complexity-desc =  路由根据 Warp 对任务难度的分类�
 settings-routing-rules-desc = 规则是自定义提示，用于描述何时使用特定模型。Warp 会智能地将您的任务与这些规则进行匹配。
 settings-rules-match-order-desc = 规则按从上到下的顺序匹配——列表中靠上的规则优先于下方的规则。
 settings-field-model-required = { $field }模型为必填项。
+
+## -- 本地模式（本地代理）字符串 --
+settings-ai-local-mode-desc = 使用您自己的 API 密钥和模型在本地运行 AI 代理。
+settings-ai-local-mode-header = 本地模式
+settings-ai-local-mode-label = 本地模式
+settings-ai-local-no-providers = 未配置本地提供商
+settings-ai-local-provider-edit-title = 编辑本地提供商
+settings-ai-local-providers-section = 本地提供商
+settings-edit-label = 编辑

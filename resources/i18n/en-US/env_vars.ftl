@@ -98,3 +98,14 @@ env-name-label = Name
 env-authenticate = Authenticate
 env-suggest-image-auth-warning = You need to grant access to your GitHub repos to suggest a Docker image
 
+## -- Domain-prefixed aliases for tr!("env_vars", "env-*") calls --
+env-vars-env-cancel = Cancel
+env-vars-env-create-not-logged-in = Not logged in
+env-vars-env-create-title = Create environment
+env-vars-env-description-placeholder = e.g., this environment is for all front end focused agents
+env-vars-env-github-repos-failed = Failed to load GitHub repositories
+env-vars-env-github-repos-load-error = Couldn't load GitHub repos. You can paste repo URL(s), or retry.
+env-vars-env-open-image-tooltip = Open image at { $docker_hub_url }
+env-vars-env-personal-warning = Personal environments cannot be used with external integrations or team API keys. For the best experience, use shared environments.
+env-vars-env-share-with-team = Share with team
+

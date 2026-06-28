@@ -1653,3 +1653,10 @@ ai-assistant-mcp-server-type-name = MCP 服务器
 ## -- 任务取消字符串 --
 ai-assistant-task-cancelled = 任务已取消
 ai-assistant-failed-cancel-task = 取消任务失败：{ $error }
+
+## -- 密钥类型名称（用于 agent_sdk/secret.rs，tr!("ai", "secret-*")）--
+ai-secret-raw-value = 原始值
+ai-secret-anthropic-key = Anthropic API 密钥
+ai-secret-anthropic-bedrock-access = Anthropic Bedrock 访问密钥
+ai-secret-anthropic-bedrock-key = Anthropic Bedrock API 密钥
+ai-secret-openai-key = OpenAI API 密钥

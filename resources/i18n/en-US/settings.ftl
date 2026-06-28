@@ -1942,3 +1942,12 @@ settings-routing-complexity-desc =  routing chooses a model based on Warp's clas
 settings-routing-rules-desc = Rules are custom prompts that describe when to use a specific model. Warp intelligently matches your tasks against these rules.
 settings-rules-match-order-desc = Rules are matched top to bottom — rules higher in the list take precedence over those below.
 settings-field-model-required = { $field } model is required.
+
+## -- Local mode (local agent) strings --
+settings-ai-local-mode-desc = Run AI agents locally with your own API keys and models.
+settings-ai-local-mode-header = Local Mode
+settings-ai-local-mode-label = Local Mode
+settings-ai-local-no-providers = No local providers configured
+settings-ai-local-provider-edit-title = Edit local provider
+settings-ai-local-providers-section = Local Providers
+settings-edit-label = Edit

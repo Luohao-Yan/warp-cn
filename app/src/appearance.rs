@@ -439,51 +439,33 @@ fn build_appearance(ctx: &mut AppContext) -> Appearance {
 /// glyphs are always available even when the CDN-hosted Noto Sans SC fonts
 /// cannot be downloaded (e.g. from mainland China).
 pub fn register_system_cjk_fallback(ctx: &mut AppContext) {
-    #[cfg(target_os = "windows")]
-    {
-        log::info!("Registering system CJK fallback fonts for Windows");
-        warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
-            if font_cache.is_fallback_family_loaded("Noto Sans SC") {
-                log::info!("Noto Sans SC already loaded, skipping system fallback");
-                return;
-            }
-            for name in &["Microsoft YaHei", "微软雅黑", "SimHei", "SimSun"] {
-                match font_cache.get_or_load_system_font(name) {
-                    Ok(family_id) => {
-                        log::info!("Registered '{}' as Noto Sans SC fallback (id={:?})", name, family_id);
-                        font_cache.register_system_fallback_family("Noto Sans SC", family_id);
-                        return;
-                    }
-                    Err(e) => log::warn!("Failed to load '{}': {:?}", name, e),
-                }
-            }
-            log::error!("No suitable CJK system font found");
-        });
-    }
-    #[cfg(target_os = "macos")]
-    {
-        warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
-            if font_cache.is_fallback_family_loaded("Noto Sans SC") {
-                return;
-            }
-            for name in &["PingFang SC", "Heiti SC", "STHeiti"] {
-                if let Ok(family_id) = font_cache.get_or_load_system_font(name) {
+    log::info!("register_system_cjk_fallback called");
+    warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
+        if font_cache.is_fallback_family_loaded("Noto Sans SC") {
+            log::info!("Noto Sans SC already loaded, skipping system fallback");
+            return;
+        }
+        #[cfg(target_os = "windows")]
+        let candidates: &[&str] = &["Microsoft YaHei", "微软雅黑", "SimHei", "SimSun"];
+        #[cfg(target_os = "macos")]
+        let candidates: &[&str] = &["PingFang SC", "Heiti SC", "STHeiti"];
+        #[cfg(target_os = "linux")]
+        let candidates: &[&str] = &["Noto Sans CJK SC", "WenQuanYi Micro Hei", "Droid Sans Fallback"];
+        #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+        let candidates: &[&str] = &[];
+
+        for name in candidates {
+            match font_cache.get_or_load_system_font(name) {
+                Ok(family_id) => {
+                    log::info!("Registered '{}' as Noto Sans SC fallback (id={:?})", name, family_id);
                     font_cache.register_system_fallback_family("Noto Sans SC", family_id);
                     return;
                 }
+                Err(e) => log::warn!("Failed to load system font '{}': {:?}", name, e),
             }
-        });
-    }
-    #[cfg(target_os = "linux")]
-    {
-        warpui::fonts::Cache::handle(ctx).update(ctx, |font_cache, _| {
-            if font_cache.is_fallback_family_loaded("Noto Sans SC") {
-                if let Ok(family_id) = font_cache.get_or_load_system_font("Noto Sans CJK SC") {
-                    font_cache.register_system_fallback_family("Noto Sans SC", family_id);
-                }
-            }
-        });
-    }
+        }
+        log::error!("No suitable CJK system font found for simplified Chinese fallback");
+    });
 }
 
 #[cfg(target_family = "wasm")]
