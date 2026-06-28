@@ -600,7 +600,7 @@ fn build_main_menu_items(
                         name: secret.name.clone(),
                         owner: secret.owner.clone(),
                     })
-                    .with_right_side_icon_a11y_label(format!("Delete API key {}", secret.name))
+                    .with_right_side_icon_a11y_label(crate::tr!("terminal", "selector-delete-api-key", name = secret.name.clone()).to_string())
                     .with_right_side_icon_disabled(is_pending_delete);
                 items.push(MenuItem::Item(fields));
             }

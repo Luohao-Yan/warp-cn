@@ -1124,3 +1124,7 @@ banner-pure-unsupported = Pure is not yet supported in Warp. You might consider 
 banner-tmux-ssh-deprecated = Tmux SSH warpification has been deprecated
 banner-tmux-ssh-deprecated-body = Warp now connects to remote sessions using the SSH extension, which is more robust than the tmux-based flow. The tmux option has been removed.
 banner-ssh-remote-body = While advanced features like file browsing and code review are currently disabled, the rest of your Warpified experience is fully available.
+
+## -- Auth secret FTUX and selector strings --
+terminal-ftux-new-secret = New { $display_name }
+terminal-selector-delete-api-key = Delete API key { $name }

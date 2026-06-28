@@ -266,7 +266,9 @@ pub fn render_agent_shortcuts_view(
 }
 
 pub mod styles {
+    use pathfinder_color::ColorU;
     use warp_core::ui::appearance::Appearance;
+    use warpui::SingletonEntity;
 
     pub fn keystroke_size(appearance: &Appearance) -> f32 {
         font_size(appearance) + 2.
@@ -274,5 +276,16 @@ pub mod styles {
 
     pub fn font_size(appearance: &Appearance) -> f32 {
         appearance.monospace_font_size() - 2.
+    }
+
+    pub fn body_font_color(enabled: bool, app: &warpui::AppContext) -> warpui::color::ColorU {
+        let appearance = Appearance::as_ref(app);
+        let theme = appearance.theme();
+        let background = theme.background();
+        if enabled {
+            ColorU::from(theme.main_text_color(background))
+        } else {
+            ColorU::from(theme.sub_text_color(background))
+        }
     }
 }

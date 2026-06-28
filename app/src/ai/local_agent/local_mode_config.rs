@@ -18,7 +18,7 @@ pub fn is_local_mode_enabled() -> bool {
     LOCAL_MODE_ENABLED.load(Ordering::Relaxed)
 }
 
-fn set_local_mode_enabled(value: bool) {
+pub(crate) fn set_local_mode_enabled(value: bool) {
     LOCAL_MODE_ENABLED.store(value, Ordering::Relaxed);
 }
 
@@ -149,6 +149,13 @@ impl LocalModeConfig {
         ctx: &mut ModelContext<Self>,
     ) {
         self.provider_registry.register(provider);
+        sync_global_registry(&self.provider_registry);
+        ctx.emit(LocalModeConfigEvent::ProviderRegistered);
+    }
+
+    /// Replace the entire provider registry and sync the global snapshot.
+    pub fn replace_registry(&mut self, registry: ProviderRegistry, ctx: &mut ModelContext<Self>) {
+        self.provider_registry = registry;
         sync_global_registry(&self.provider_registry);
         ctx.emit(LocalModeConfigEvent::ProviderRegistered);
     }

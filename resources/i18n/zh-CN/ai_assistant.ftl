@@ -1629,3 +1629,27 @@ ai-assistant-ai-search-codebase-not-available-try = 搜索失败，代码库不�
 ## -- 快捷键描述 -------------------------------------------------------------
 
 ai-assistant-ai-take-control-of-running-command = 接管正在运行的命令
+
+## -- 代理来源显示名称（用于 task.rs）--
+ai-assistant-source-linear = Linear
+ai-assistant-source-api = API
+ai-assistant-source-slack = Slack
+ai-assistant-source-cli = CLI
+ai-assistant-source-scheduled = 计划
+ai-assistant-source-warp-app = Warp 应用
+ai-assistant-source-web-app = Oz Web
+ai-assistant-source-github-action = GitHub Action
+ai-assistant-source-agent-fallback = 代理
+
+## -- MCP 提供者显示名称（用于 mcp/mod.rs）--
+ai-assistant-mcp-provider-warp = Warp
+ai-assistant-mcp-provider-claude = Claude
+ai-assistant-mcp-provider-codex = Codex
+ai-assistant-mcp-provider-agents = 其他代理
+
+## -- MCP 模型类型名称 --
+ai-assistant-mcp-server-type-name = MCP 服务器
+
+## -- 任务取消字符串 --
+ai-assistant-task-cancelled = 任务已取消
+ai-assistant-failed-cancel-task = 取消任务失败：{ $error }

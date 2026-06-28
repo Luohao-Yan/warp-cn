@@ -1146,6 +1146,16 @@ fn save_pane_state(
             );
             return Ok(());
         }
+        LeafContents::CustomRouterEditor => {
+            // Custom router editor panes are not persisted to SQLite yet.
+            // They are created on-demand when editing a custom model router.
+            // Reaching this arm is treated the same as other non-persisted variants.
+            debug_assert!(
+                false,
+                "save_pane_state called for non-persisted LeafContents::CustomRouterEditor"
+            );
+            return Ok(());
+        }
     };
 
     let leaf = model::NewPane {
@@ -1364,6 +1374,9 @@ fn save_pane_state(
         }
         LeafContents::NetworkLog => {
             // Unreachable: filtered by `is_persisted` in `save_app_state`.
+        }
+        LeafContents::CustomRouterEditor => {
+            // Custom router editor panes are not persisted to SQLite yet.
         }
     }
 

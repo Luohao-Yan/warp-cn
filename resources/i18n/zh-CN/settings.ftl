@@ -1897,3 +1897,50 @@ show-warp-in-dock = 在 Dock 中显示 Warp
 scripting-page-title = 脚本
 click-to-learn-more = 点击在文档中了解更多
 not-synced-tooltip = 此设置不会同步到你的其他设备
+
+
+## -- 自定义路由视图字符串 --
+settings-custom-router-open-file = 打开文件
+settings-custom-router-edit = 编辑
+settings-custom-router-delete = 删除
+settings-custom-router-complexity = 基于复杂度的路由
+settings-custom-router-prompt = 基于提示的路由
+settings-custom-router-default = 默认：
+settings-custom-router-easy = 简单：
+settings-custom-router-medium = 中等：
+settings-custom-router-hard = 困难：
+settings-custom-router-1-rule = 1 条规则
+settings-custom-router-n-rules = { $count } 条规则
+settings-not-now = 暂不
+settings-change-default-model = 更改默认模型
+
+## -- 自定义路由编辑器字符串 --
+settings-router-editor = 路由编辑器
+settings-new-router = 新建路由
+settings-my-custom-router = 我的自定义路由
+settings-complexity-tab = 复杂度
+settings-rules-tab = 规则
+settings-save = 保存
+settings-cancel = 取消
+settings-add-rule = + 添加规则
+settings-editor-models-section = 模型
+settings-default-required = 默认（必填）
+settings-easy-required = 简单（必填）
+settings-medium-required = 中等（必填）
+settings-hard-required = 困难（必填）
+settings-default-model-label = 默认模型
+settings-editor-rules-section = 规则
+settings-router-name-label = 路由名称
+settings-router-type-label = 路由类型
+settings-complexity-based = 基于复杂度
+settings-rule-based = 基于规则
+settings-rule-label = 规则
+settings-model-label = 模型
+settings-router-name-required = 路由名称为必填项。
+settings-default-model-required = 必须指定默认模型。
+settings-at-least-one-rule-required = 至少需要一条包含描述和模型的规则。
+settings-describe-when-to-use-model = 描述何时使用此模型…
+settings-routing-complexity-desc =  路由根据 Warp 对任务难度的分类选择模型。
+settings-routing-rules-desc = 规则是自定义提示，用于描述何时使用特定模型。Warp 会智能地将您的任务与这些规则进行匹配。
+settings-rules-match-order-desc = 规则按从上到下的顺序匹配——列表中靠上的规则优先于下方的规则。
+settings-field-model-required = { $field }模型为必填项。

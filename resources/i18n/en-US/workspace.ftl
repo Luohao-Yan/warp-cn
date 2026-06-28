@@ -809,3 +809,6 @@ workspace-unpin-current-tab-group = Unpin current tab group
 
 workspace-pane-custom-router = Custom Router Editor
 workspace-pane-get-started = Get Started
+
+## -- Auto handoff toast --
+workspace-handed-session-off-to-cloud = Handed session off to the cloud

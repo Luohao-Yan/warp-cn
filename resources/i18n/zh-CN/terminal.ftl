@@ -1138,3 +1138,7 @@ banner-pure-unsupported = Pure 提示符尚不支持 Warp。您可以考虑使�
 banner-tmux-ssh-deprecated = 基于 Tmux 的 SSH Warp 化已被弃用
 banner-tmux-ssh-deprecated-body = Warp 现在通过 SSH 扩展连接到远程会话，这比基于 Tmux 的方式更稳定。Tmux 选项已被移除。
 banner-ssh-remote-body = 虽然文件浏览和代码审查等高级功能当前已禁用，但您的其余 Warp 化体验完全可用。
+
+## -- 认证密钥 FTUX 和选择器字符串 --
+terminal-ftux-new-secret = 新建{ $display_name }
+terminal-selector-delete-api-key = 删除 API 密钥 { $name }

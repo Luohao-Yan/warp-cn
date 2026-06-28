@@ -4000,6 +4000,7 @@ impl PaneGroup {
             IPaneType::AIFact => TypedPane::AIFact,
             IPaneType::AIDocument => TypedPane::AIDocument,
             IPaneType::ExecutionProfileEditor => TypedPane::ExecutionProfileEditor,
+            IPaneType::CustomRouterEditor => TypedPane::Other,
             IPaneType::GetStarted | IPaneType::NetworkLog | IPaneType::DeferredPlaceholder => {
                 TypedPane::Other
             }

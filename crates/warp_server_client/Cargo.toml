@@ -10,6 +10,7 @@ license.workspace = true
 integration_tests = ["warp_server_auth/integration_tests"]
 skip_login = ["warp_server_auth/skip_login"]
 test-util = ["cloud_object_client/test-util", "cloud_objects/test-util", "dep:mockall"]
+agent_mode_evals = []
 
 [dependencies]
 anyhow.workspace = true

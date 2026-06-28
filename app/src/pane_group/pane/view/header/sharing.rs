@@ -16,13 +16,11 @@ use crate::drive::sharing::dialog::{SharingDialog, SharingDialogEvent};
 use crate::drive::sharing::{ContentEditability, ShareableObject};
 use crate::pane_group::BackingView;
 use crate::server::telemetry::SharingDialogSource;
+use crate::static_tr;
 use crate::ui_components::buttons::{icon_button, icon_button_with_color};
 use crate::ui_components::icons::Icon;
 
-const UNSHARABLE_CONVERSATION_TOOLTIP: &str =
-    "This conversation cannot be shared because it is not \
-    stored in the cloud.\nTo sync to cloud and share, enable the setting under Settings > Privacy, \
-    and then make another request.";
+static_tr!(UNSHARABLE_CONVERSATION_TOOLTIP, "pane_group", "unsharable-conversation-tooltip");
 
 /// Pane header component for sharing the pane contents.
 pub struct SharedPaneContent {
@@ -196,7 +194,7 @@ impl<P: BackingView> PaneHeader<P> {
                 (
                     Icon::Share,
                     false,
-                    UNSHARABLE_CONVERSATION_TOOLTIP.to_string(),
+                    UNSHARABLE_CONVERSATION_TOOLTIP.get().to_string(),
                 )
             } else if editability.can_edit() {
                 (
@@ -205,7 +203,7 @@ impl<P: BackingView> PaneHeader<P> {
                     crate::tr!("common", "share-label"),
                 )
             } else {
-                (Icon::Link, false, "Copy link".to_string())
+                (Icon::Link, false, crate::tr!("workspace", "menu-copy-link").to_string())
             };
 
         let ui_builder = appearance.ui_builder().clone();

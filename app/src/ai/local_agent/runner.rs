@@ -915,6 +915,7 @@ impl LocalAgentRunner {
                     model_id: model_id.to_string(),
                     model_display_name,
                     is_fallback: false,
+                    prompt_cache_expires_at: Default::default(),
                 },
             )),
             ..Default::default()

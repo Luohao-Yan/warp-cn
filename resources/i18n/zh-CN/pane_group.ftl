@@ -34,3 +34,6 @@ pane-group-pane-code-diff-title = 请求的编辑
 
 pane-group-share-session = 共享会话
 pane-group-unsupported-shell-fallback = Warp 目前不支持您的默认 shell，将回退到 zsh。
+
+## -- 不可共享会话提示 --
+pane-group-unsharable-conversation-tooltip = 此会话无法共享，因为它未存储在云端。\n要同步到云端并共享，请在 设置 > 隐私 下启用相应设置，然后再次发起请求。

@@ -262,3 +262,43 @@ billing-admin-autoreload-description-generic = 您的管理员已启用附加额
 
 billing-no-usage-history = 暂无用量历史
 billing-kick-off-agent-task = 启动代理任务以在此查看用量历史。
+
+## -- 计费 v1 排序标签 --
+billing-sort-a-z = A 到 Z
+billing-sort-z-a = Z 到 A
+billing-sort-usage-asc = 用量升序
+billing-sort-usage-desc = 用量降序
+
+## -- 附加额度说明 (v1) --
+billing-addon-credits-description = 附加额度以预付包形式购买，每个计费周期结转，一年后过期。购买越多，单位额度价格越优惠。基础计划额度用完后，将消耗附加额度。
+billing-additional-addon-credits-description-for-team = 购买的附加额度在团队中共享。
+
+## -- 附加额度说明 (v2) --
+billing-addon-credits-description-v2 = 附加额度以预付包形式购买，每个计费周期结转，一年后过期。购买越多，单位额度价格越优惠。基础计划额度用完后，将消耗附加额度。
+billing-additional-addon-credits-description-for-team-v2 = 购买的附加额度将添加到您的个人余额中。
+
+## -- 托管自动续购标题 --
+billing-auto-reload-enabled = 自动续购已启用
+
+## -- 警告字符串 (v2) --
+billing-addon-credits-delinquent-warning = 因账单问题被限制。请更新付款方式以购买附加额度。
+billing-addon-credits-non-admin-delinquent-warning = 因账单问题被限制。请联系团队管理员更新付款方式。
+billing-restricted-billing-usage-warning = 自动续购因最近续购失败已禁用。请更新付款方式后重试。
+billing-restricted-billing-usage-non-admin-warning = 自动续购因最近续购失败已禁用。请联系团队管理员更新付款方式。
+
+## -- 附加计费 v2 字符串 --
+billing-buy-more = 购买更多
+billing-credits-per-dollar = { $credits } 额度 / { $dollars }
+billing-n-credits = { $count } 额度
+billing-selected-credit-amount = 已选额度数量
+billing-auto-reload-tooltip-v2 = 当您团队中任何成员的额度余额仅剩 100 额度时，自动购买 { $amount }。
+billing-default-spend-limit = $200.00
+billing-failed-update-workspace-settings = 更新工作区设置失败
+billing-successfully-purchased-addon-credits = 成功购买附加额度
+billing-unable-enable-auto-reload = 定价选项加载前无法启用自动续购。
+billing-your-selected = 您选择的
+billing-auto-reload-enabled-toast = 自动续购已启用。当余额不足时，我们将自动补充 { $credits } 额度。
+billing-auto-reload-disabled-toast = 自动续购已禁用。
+billing-percent-off = { $discount }% 折扣
+billing-purchased-addon-credits = 成功购买附加额度
+billing-expires-on = 到期时间 { $date }

@@ -70,10 +70,10 @@ static_tr!(OVERAGE_TOGGLE_ADMIN_HEADER, "billing", "overage-toggle-admin-header"
 static_tr!(OVERAGE_TOGGLE_USER_HEADER_ENABLED, "billing", "overage-toggle-user-header-enabled");
 static_tr!(OVERAGE_TOGGLE_USER_HEADER_DISABLED, "billing", "overage-toggle-user-header-disabled");
 
-const SORT_MENU_ITEM_DISPLAY_NAME_A_Z_LABEL: &str = "A to Z";
-const SORT_MENU_ITEM_DISPLAY_NAME_Z_A_LABEL: &str = "Z to A";
-const SORT_MENU_ITEM_REQUEST_USAGE_ASCENDING_LABEL: &str = "Usage ascending";
-const SORT_MENU_ITEM_REQUEST_USAGE_DESCENDING_LABEL: &str = "Usage descending";
+static_tr!(SORT_MENU_ITEM_DISPLAY_NAME_A_Z_LABEL, "billing", "sort-a-z");
+static_tr!(SORT_MENU_ITEM_DISPLAY_NAME_Z_A_LABEL, "billing", "sort-z-a");
+static_tr!(SORT_MENU_ITEM_REQUEST_USAGE_ASCENDING_LABEL, "billing", "sort-usage-asc");
+static_tr!(SORT_MENU_ITEM_REQUEST_USAGE_DESCENDING_LABEL, "billing", "sort-usage-desc");
 
 static_tr!(AUTO_RELOAD_EXCEED_LIMIT_WARNING_STRING, "billing", "autoreload-exceed-limit");
 static_tr!(AUTO_RELOAD_DELINQUENT_WARNING_STRING, "billing", "autoreload-delinquent");
@@ -86,12 +86,13 @@ static_tr!(ENTERPRISE_USAGE_CALLOUT_HEADER, "billing", "enterprise-usage-callout
 static_tr!(ENTERPRISE_USAGE_CALLOUT_BODY_ADMIN_LINK, "billing", "enterprise-usage-callout-admin-link");
 static_tr!(ENTERPRISE_USAGE_CALLOUT_BODY_NON_ADMIN, "billing", "enterprise-usage-callout-non-admin");
 
-const ADDON_CREDITS_DESCRIPTION: &str = "Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed.";
-const ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM: &str =
-    "Purchased add-on credits are shared across your team.";
+static_tr!(ADDON_CREDITS_DESCRIPTION, "billing", "addon-credits-description");
+static_tr!(ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM, "billing", "additional-addon-credits-description-for-team");
 
 // Cloud agent trial widget constants.
 static_tr!(AMBIENT_AGENT_TRIAL_TITLE, "billing", "cloud-agent-trial");
+static_tr!(FAILED_UPDATE_WORKSPACE_SETTINGS, "billing", "failed-update-workspace-settings");
+static_tr!(PURCHASED_ADDON_CREDITS, "billing", "purchased-addon-credits");
 /// The threshold below which we only show the "Buy more" button (not "New agent").
 use crate::ai::request_usage_model::AMBIENT_AGENT_TRIAL_CREDIT_THRESHOLD;
 use crate::static_tr;
@@ -105,7 +106,7 @@ pub fn create_discount_badge(discount: u32, appearance: &Appearance) -> Box<dyn 
     let bg_color: Fill = theme.terminal_colors().normal.green.into();
 
     Container::new(
-        Text::new_inline(format!("{discount}% off"), appearance.ui_font_family(), 10.)
+        Text::new_inline(crate::tr!("billing", "percent-off", discount = discount).to_string(), appearance.ui_font_family(), 10.)
             .with_color(theme.main_text_color(bg_color).into())
             .finish(),
     )
@@ -436,7 +437,7 @@ impl BillingAndUsagePageView {
             }
             UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
                 self.show_toast(
-                    "Failed to update workspace settings",
+                    FAILED_UPDATE_WORKSPACE_SETTINGS.get(),
                     ToastFlavor::Error,
                     ctx,
                 );
@@ -449,7 +450,7 @@ impl BillingAndUsagePageView {
             UserWorkspacesEvent::PurchaseAddonCreditsSuccess => {
                 self.purchase_addon_credits_loading = false;
                 self.show_toast(
-                    "Successfully purchased add-on credits",
+                    PURCHASED_ADDON_CREDITS.get(),
                     ToastFlavor::Success,
                     ctx,
                 );
@@ -820,24 +821,24 @@ impl TypedActionView for BillingAndUsagePageView {
                     return;
                 }
                 // Build four menu items with checkmark for selected state
-                let sort_options = [
+                let sort_options: [(&str, SortKey, SortOrder); 4] = [
                     (
-                        SORT_MENU_ITEM_DISPLAY_NAME_A_Z_LABEL,
+                        SORT_MENU_ITEM_DISPLAY_NAME_A_Z_LABEL.get(),
                         SortKey::DisplayName,
                         SortOrder::Asc,
                     ),
                     (
-                        SORT_MENU_ITEM_DISPLAY_NAME_Z_A_LABEL,
+                        SORT_MENU_ITEM_DISPLAY_NAME_Z_A_LABEL.get(),
                         SortKey::DisplayName,
                         SortOrder::Desc,
                     ),
                     (
-                        SORT_MENU_ITEM_REQUEST_USAGE_ASCENDING_LABEL,
+                        SORT_MENU_ITEM_REQUEST_USAGE_ASCENDING_LABEL.get(),
                         SortKey::Requests,
                         SortOrder::Asc,
                     ),
                     (
-                        SORT_MENU_ITEM_REQUEST_USAGE_DESCENDING_LABEL,
+                        SORT_MENU_ITEM_REQUEST_USAGE_DESCENDING_LABEL.get(),
                         SortKey::Requests,
                         SortOrder::Desc,
                     ),
@@ -1756,9 +1757,9 @@ impl BillingAndUsagePageView {
             .unwrap_or(1);
 
         let paragraph_text = if team_member_count > 1 {
-            format!("{ADDON_CREDITS_DESCRIPTION} {ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM}")
+            format!("{} {}", ADDON_CREDITS_DESCRIPTION.get(), ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM.get())
         } else {
-            ADDON_CREDITS_DESCRIPTION.to_string()
+            ADDON_CREDITS_DESCRIPTION.get().to_string()
         };
         let paragraph = ui_builder
             .paragraph(paragraph_text)

@@ -92,6 +92,7 @@ mod features;
 mod features_page;
 pub(crate) mod handoff_environment_creation_modal;
 pub mod keybindings;
+pub(crate) mod local_provider_modal;
 mod main_page;
 pub mod mcp_servers;
 pub mod mcp_servers_page;

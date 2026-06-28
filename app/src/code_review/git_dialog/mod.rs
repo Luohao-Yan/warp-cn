@@ -681,17 +681,17 @@ impl GitDialog {
         });
     }
 
-    fn title(&self) -> &'static str {
+    fn title(&self) -> String {
         match &self.mode {
-            GitDialogMode::Commit(_) => "Commit your changes",
+            GitDialogMode::Commit(_) => crate::tr!("code_editor", "review-commit-your-changes").to_string(),
             GitDialogMode::Push(state) => {
                 if state.publish {
-                    "Publish branch"
+                    crate::tr!("code_editor", "review-publish-branch").to_string()
                 } else {
-                    "Push changes"
+                    crate::tr!("code_editor", "review-push-changes").to_string()
                 }
             }
-            GitDialogMode::CreatePr(_) => "Create pull request",
+            GitDialogMode::CreatePr(_) => crate::tr!("code_editor", "review-create-pull-request").to_string(),
         }
     }
 

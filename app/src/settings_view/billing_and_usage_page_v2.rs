@@ -59,17 +59,14 @@ use crate::workspaces::workspace::{CustomerType, Workspace, WorkspaceUid};
 use crate::{send_telemetry_from_ctx, WorkspaceAction};
 use crate::static_tr;
 
-const ADDON_CREDITS_DESCRIPTION: &str = "Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed.";
-const ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM: &str =
-    "Purchased add-on credits are added to your personal balance.";
-const MANAGED_AUTO_RELOAD_HEADER: &str = "Auto-reload is enabled";
+static_tr!(ADDON_CREDITS_DESCRIPTION_V2, "billing", "addon-credits-description-v2");
+static_tr!(ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM_V2, "billing", "additional-addon-credits-description-for-team-v2");
+static_tr!(MANAGED_AUTO_RELOAD_HEADER, "billing", "auto-reload-enabled");
 
-const ADDON_CREDITS_DELINQUENT_WARNING_STRING: &str =
-    "Restricted due to billing issue. Update your payment method to purchase add-on credits.";
-const ADDON_CREDITS_NON_ADMIN_DELINQUENT_WARNING_STRING: &str =
-    "Restricted due to billing issue. Contact your team admin to update their payment method.";
-const RESTRICTED_BILLING_USAGE_WARNING_STRING: &str = "Auto reload is disabled due to recent failed reload. Please update your payment method and try again.";
-const RESTRICTED_BILLING_USAGE_NON_ADMIN_WARNING_STRING: &str = "Auto reload is disabled due to recent failed reload. Contact your team admin to update their payment method.";
+static_tr!(ADDON_CREDITS_DELINQUENT_WARNING_STRING, "billing", "addon-credits-delinquent-warning");
+static_tr!(ADDON_CREDITS_NON_ADMIN_DELINQUENT_WARNING_STRING, "billing", "addon-credits-non-admin-delinquent-warning");
+static_tr!(RESTRICTED_BILLING_USAGE_WARNING_STRING, "billing", "restricted-billing-usage-warning");
+static_tr!(RESTRICTED_BILLING_USAGE_NON_ADMIN_WARNING_STRING, "billing", "restricted-billing-usage-non-admin-warning");
 
 const HEADER_FONT_SIZE: f32 = 16.;
 
@@ -206,7 +203,7 @@ impl GrantBucket {
             .all(|e| e.date_naive() == first.date_naive())
         {
             let local = first.with_timezone(&Local);
-            format!("Expires {}", local.format("%b %d, %Y"))
+            crate::tr!("billing", "expires-on", date = local.format("%b %d, %Y").to_string()).to_string()
         } else {
             String::new()
         }
@@ -419,7 +416,7 @@ impl BillingAndUsagePageV2View {
             UserWorkspacesEvent::UpdateWorkspaceSettingsRejected(_err) => {
                 self.pending_auto_reload_toast = None;
                 self.show_toast(
-                    "Failed to update workspace settings",
+                    &crate::tr!("billing", "failed-update-workspace-settings"),
                     ToastFlavor::Error,
                     ctx,
                 );
@@ -430,7 +427,7 @@ impl BillingAndUsagePageV2View {
             UserWorkspacesEvent::PurchaseAddonCreditsSuccess => {
                 self.addon_credits.purchase_loading = false;
                 self.show_toast(
-                    "Successfully purchased add-on credits",
+                    &crate::tr!("billing", "successfully-purchased-addon-credits"),
                     ToastFlavor::Success,
                     ctx,
                 );
@@ -963,7 +960,7 @@ impl BillingAndUsagePageV2View {
                     ButtonVariant::Secondary,
                     self.ambient_trial_mouse_states.buy_more_button.clone(),
                 )
-                .with_text_label("Buy more".to_string())
+                .with_text_label(crate::tr!("billing", "buy-more").to_string())
                 .with_style(UiComponentStyles {
                     background: Some(bg.into()),
                     font_size: Some(14.),
@@ -1114,9 +1111,9 @@ impl BillingAndUsagePageV2View {
             .map(|t| t.members.len())
             .unwrap_or(1);
         let description_text = if team_count > 1 {
-            format!("{ADDON_CREDITS_DESCRIPTION} {ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM}")
+            format!("{} {}", ADDON_CREDITS_DESCRIPTION_V2.get(), ADDITIONAL_ADDON_CREDITS_DESCRIPTION_FOR_TEAM_V2.get())
         } else {
-            ADDON_CREDITS_DESCRIPTION.to_string()
+            ADDON_CREDITS_DESCRIPTION_V2.get().to_string()
         };
 
         let would_exceed = selected_credit_option.is_some_and(|opt| {
@@ -1138,28 +1135,25 @@ impl BillingAndUsagePageV2View {
             .map(|opt| {
                 let credits = opt.credits.separate_with_commas();
                 let dollars = format!("${:.2}", opt.price_usd_cents as f64 / 100.0);
-                format!("{credits} credits / {dollars}")
+                crate::tr!("billing", "credits-per-dollar", credits = credits, dollars = dollars).to_string()
             })
             .unwrap_or_default();
         let auto_reload_credit_amount = selected_credit_option
-            .map(|o| format!("{} credits", o.credits.separate_with_commas()))
-            .unwrap_or_else(|| "selected credit amount".to_string());
-        let auto_reload_tooltip_text = format!(
-            "When any member on your team’s credit balance reaches 100 credits remaining, \
-            automatically purchase {auto_reload_credit_amount}."
-        );
+            .map(|o| crate::tr!("billing", "n-credits", count = o.credits as u64).to_string())
+            .unwrap_or_else(|| crate::tr!("billing", "selected-credit-amount").to_string());
+        let auto_reload_tooltip_text = crate::tr!("billing", "auto-reload-tooltip-v2", amount = auto_reload_credit_amount.clone()).to_string();
         let warning_text = if delinquent && has_admin_permissions {
-            Some(ADDON_CREDITS_DELINQUENT_WARNING_STRING)
+            Some(ADDON_CREDITS_DELINQUENT_WARNING_STRING.get())
         } else if delinquent {
-            Some(ADDON_CREDITS_NON_ADMIN_DELINQUENT_WARNING_STRING)
+            Some(ADDON_CREDITS_NON_ADMIN_DELINQUENT_WARNING_STRING.get())
         } else if workspace
             .billing_metadata
             .has_failed_addon_credit_auto_reload_status()
         {
             Some(if has_admin_permissions {
-                RESTRICTED_BILLING_USAGE_WARNING_STRING
+                RESTRICTED_BILLING_USAGE_WARNING_STRING.get()
             } else {
-                RESTRICTED_BILLING_USAGE_NON_ADMIN_WARNING_STRING
+                RESTRICTED_BILLING_USAGE_NON_ADMIN_WARNING_STRING.get()
             })
         } else if would_exceed {
             let warning: &'static str = match (auto_reload_enabled, has_admin_permissions) {
@@ -1307,7 +1301,7 @@ impl BillingAndUsagePageV2View {
         let theme = appearance.theme();
         let bg = theme.background();
         let auto_reload_header = Text::new_inline(
-            MANAGED_AUTO_RELOAD_HEADER,
+            MANAGED_AUTO_RELOAD_HEADER.get(),
             appearance.ui_font_family(),
             HEADER_FONT_SIZE,
         )
@@ -1404,7 +1398,7 @@ impl BillingAndUsagePageV2View {
                 .addon_credits_settings
                 .max_monthly_spend_cents
                 .map(|c| format!("${:.2}", c as f64 / 100.0))
-                .unwrap_or_else(|| "$200.00".to_string());
+                .unwrap_or_else(|| crate::tr!("billing", "default-spend-limit").to_string());
             let spend_row = Flex::row()
                 .with_cross_axis_alignment(CrossAxisAlignment::Center)
                 .with_children([
@@ -2107,7 +2101,7 @@ impl TypedActionView for BillingAndUsagePageV2View {
                         .get(self.addon_credits.selected_denomination)
                     else {
                         self.show_toast(
-                            "Unable to enable auto-reload until pricing options load.",
+                            &crate::tr!("billing", "unable-enable-auto-reload"),
                             ToastFlavor::Error,
                             ctx,
                         );
@@ -2130,12 +2124,10 @@ impl TypedActionView for BillingAndUsagePageV2View {
                 self.pending_auto_reload_toast = Some(if *enabled {
                     let credits = auto_reload_denomination_credits
                         .map(|c| c.separate_with_commas())
-                        .unwrap_or_else(|| "your selected".to_string());
-                    format!(
-                        "Auto-reload enabled. We'll refill with {credits} credits when your balance runs low."
-                    )
+                        .unwrap_or_else(|| crate::tr!("billing", "your-selected").to_string());
+                    crate::tr!("billing", "auto-reload-enabled-toast", credits = credits.clone()).to_string()
                 } else {
-                    "Auto-reload disabled.".to_string()
+                    crate::tr!("billing", "auto-reload-disabled-toast").to_string()
                 });
                 UserWorkspaces::handle(ctx).update(ctx, |ws, ctx| {
                     ws.update_addon_credits_settings(

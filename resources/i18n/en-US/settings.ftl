@@ -1895,3 +1895,50 @@ show-warp-in-dock = Show Warp in Dock
 scripting-page-title = Scripting
 click-to-learn-more = Click to learn more in docs
 not-synced-tooltip = This setting is not synced to your other devices
+
+
+## -- Custom router view strings --
+settings-custom-router-open-file = Open file
+settings-custom-router-edit = Edit
+settings-custom-router-delete = Delete
+settings-custom-router-complexity = Complexity-based routing
+settings-custom-router-prompt = Prompt-based routing
+settings-custom-router-default = Default:
+settings-custom-router-easy = Easy:
+settings-custom-router-medium = Medium:
+settings-custom-router-hard = Hard:
+settings-custom-router-1-rule = 1 rule
+settings-custom-router-n-rules = { $count } rules
+settings-not-now = Not now
+settings-change-default-model = Change default model
+
+## -- Custom router editor strings --
+settings-router-editor = Router Editor
+settings-new-router = New Router
+settings-my-custom-router = My custom router
+settings-complexity-tab = Complexity
+settings-rules-tab = Rules
+settings-save = Save
+settings-cancel = Cancel
+settings-add-rule = + Add rule
+settings-editor-models-section = Models
+settings-default-required = Default (required)
+settings-easy-required = Easy (required)
+settings-medium-required = Medium (required)
+settings-hard-required = Hard (required)
+settings-default-model-label = Default model
+settings-editor-rules-section = Rules
+settings-router-name-label = Router name
+settings-router-type-label = Router type
+settings-complexity-based = Complexity-based
+settings-rule-based = Rule-based
+settings-rule-label = Rule
+settings-model-label = Model
+settings-router-name-required = Router name is required.
+settings-default-model-required = A default model is required.
+settings-at-least-one-rule-required = At least one rule with a description and model is required.
+settings-describe-when-to-use-model = Describe when to use this model…
+settings-routing-complexity-desc =  routing chooses a model based on Warp's classification of the task's difficulty.
+settings-routing-rules-desc = Rules are custom prompts that describe when to use a specific model. Warp intelligently matches your tasks against these rules.
+settings-rules-match-order-desc = Rules are matched top to bottom — rules higher in the list take precedence over those below.
+settings-field-model-required = { $field } model is required.

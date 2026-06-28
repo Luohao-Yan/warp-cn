@@ -63,6 +63,15 @@ pub struct SwitchStateHandle {
     thumb_mouse_state: MouseStateHandle,
 }
 
+impl SwitchStateHandle {
+    /// Creates a new `SwitchStateHandle`. The `enabled` parameter is accepted for
+    /// API compatibility with upstream but does not affect the internal state,
+    /// which is managed by the owning view.
+    pub fn new(_enabled: bool) -> Self {
+        Self::default()
+    }
+}
+
 impl UiComponent for Switch {
     type ElementType = Hoverable;
     fn build(self) -> Hoverable {

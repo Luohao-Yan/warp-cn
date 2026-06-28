@@ -195,3 +195,10 @@ code-review-view-in-github = View in GitHub
 ## -- Keybinding descriptions --------------------------------------------------
 
 code-review-toggle-file-navigation-in-code-review = Toggle file navigation in code review
+
+## -- Tooltip and label strings --
+code-review-unsaved-changes-tooltip = This file has unsaved changes. { $shortcut } to save
+code-review-commit-changes-locally = Commit changes locally
+code-review-view-pr-on-github = View pull request on GitHub
+code-review-repo-initialized-with-file = Repo is initialized with a { $file_name } file.
+code-review-pr-number = PR #{ $number }

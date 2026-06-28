@@ -213,3 +213,14 @@ code-editor-code-review-update-button = 更新
 code-editor-code-comment-imported-from-github = 从 GitHub 导入的评论
 
 ## -- 新 code_editor 字符串的双前缀别名 --
+
+## -- Git 对话框标题字符串 --
+code-editor-review-commit-your-changes = 提交你的更改
+code-editor-review-publish-branch = 发布分支
+code-editor-review-push-changes = 推送更改
+code-editor-review-create-pull-request = 创建拉取请求
+
+## -- Git 操作提示字符串 --
+code-editor-review-push-tooltip = 将提交推送到远程
+code-editor-review-create-pr-tooltip = 创建拉取请求
+code-editor-review-publish-tooltip = 将分支发布到远程

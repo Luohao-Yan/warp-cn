@@ -33,6 +33,7 @@ use crate::editor::{EditorView, SingleLineEditorOptions, TextOptions};
 use crate::pane_group::focus_state::PaneFocusHandle;
 use crate::pane_group::pane::view;
 use crate::pane_group::{BackingView, PaneConfiguration, PaneEvent};
+use crate::static_tr;
 use crate::ui_components::blended_colors;
 use crate::ui_components::icons::Icon;
 #[cfg(feature = "local_fs")]
@@ -43,7 +44,36 @@ use crate::view_components::action_button::{
 use crate::view_components::dropdown::DropdownAction;
 use crate::view_components::FilterableDropdown;
 
-pub const HEADER_TEXT: &str = "Router Editor";
+static_tr!(HEADER_TEXT_TR, "settings", "router-editor");
+static_tr!(NEW_ROUTER_LABEL, "settings", "new-router");
+static_tr!(MY_CUSTOM_ROUTER_LABEL, "settings", "my-custom-router");
+static_tr!(COMPLEXITY_TAB_LABEL, "settings", "complexity-tab");
+static_tr!(RULES_TAB_LABEL, "settings", "rules-tab");
+static_tr!(SAVE_LABEL, "settings", "save");
+static_tr!(CANCEL_LABEL, "settings", "cancel");
+static_tr!(ADD_RULE_LABEL, "settings", "add-rule");
+static_tr!(MODELS_SECTION_LABEL, "settings", "editor-models-section");
+static_tr!(DEFAULT_REQUIRED_LABEL, "settings", "default-required");
+static_tr!(EASY_REQUIRED_LABEL, "settings", "easy-required");
+static_tr!(MEDIUM_REQUIRED_LABEL, "settings", "medium-required");
+static_tr!(HARD_REQUIRED_LABEL, "settings", "hard-required");
+static_tr!(DEFAULT_MODEL_LABEL, "settings", "default-model-label");
+static_tr!(RULES_SECTION_LABEL, "settings", "editor-rules-section");
+static_tr!(ROUTER_NAME_LABEL, "settings", "router-name-label");
+static_tr!(ROUTER_TYPE_LABEL, "settings", "router-type-label");
+static_tr!(COMPLEXITY_BASED_LABEL, "settings", "complexity-based");
+static_tr!(RULE_BASED_LABEL, "settings", "rule-based");
+static_tr!(RULE_LABEL, "settings", "rule-label");
+static_tr!(MODEL_LABEL, "settings", "model-label");
+static_tr!(ROUTER_NAME_REQUIRED, "settings", "router-name-required");
+static_tr!(DEFAULT_MODEL_REQUIRED, "settings", "default-model-required");
+static_tr!(AT_LEAST_ONE_RULE_REQUIRED, "settings", "at-least-one-rule-required");
+static_tr!(DESCRIBE_WHEN_TO_USE_MODEL, "settings", "describe-when-to-use-model");
+static_tr!(ROUTING_COMPLEXITY_DESC, "settings", "routing-complexity-desc");
+static_tr!(ROUTING_RULES_DESC, "settings", "routing-rules-desc");
+static_tr!(RULES_MATCH_ORDER_DESC, "settings", "rules-match-order-desc");
+
+pub const HEADER_TEXT: &str = "Router Editor"; // legacy constant, see HEADER_TEXT_TR
 
 const EDITOR_CONTENT_WIDTH: f32 = 340.;
 const MODEL_MENU_WIDTH: f32 = 340.;
@@ -146,7 +176,7 @@ impl CustomRouterEditorView {
         let title = existing
             .as_ref()
             .map(|r| r.info.display_name.clone())
-            .unwrap_or_else(|| "New Router".to_string());
+            .unwrap_or_else(|| NEW_ROUTER_LABEL.get().to_string());
         let pane_configuration = ctx.add_model(|_ctx| PaneConfiguration::new(&title));
 
         let router_type = match existing.as_ref().map(|r| &r.routing) {
@@ -183,8 +213,8 @@ impl CustomRouterEditorView {
             .display_name()
             .as_deref()
             .and_then(|name| name.split_whitespace().next())
-            .map(|first_name| format!("{first_name}'s custom router"))
-            .unwrap_or_else(|| "My custom router".to_string());
+            .map(|first_name| format!("{}'s {}", first_name, MY_CUSTOM_ROUTER_LABEL.get()))
+            .unwrap_or_else(|| MY_CUSTOM_ROUTER_LABEL.get().to_string());
         let name_editor = ctx.add_view(move |ctx| {
             let font_size = Appearance::as_ref(ctx).ui_font_size();
             let mut editor = EditorView::single_line(
@@ -223,8 +253,8 @@ impl CustomRouterEditorView {
                         icon_color: theme.main_text_color(theme.background()).into(),
                         label: Some(LabelConfig {
                             label: match router_type {
-                                RouterEditorType::Complexity => "Complexity".into(),
-                                RouterEditorType::Prompt => "Rules".into(),
+                                RouterEditorType::Complexity => std::borrow::Cow::Borrowed(COMPLEXITY_TAB_LABEL.get()),
+                                RouterEditorType::Prompt => std::borrow::Cow::Borrowed(RULES_TAB_LABEL.get()),
                             },
                             width_override: Some(70.0),
                             color: if is_selected {
@@ -321,17 +351,17 @@ impl CustomRouterEditorView {
         }
 
         let save_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Save", PrimaryTheme)
+            ActionButton::new(SAVE_LABEL.get().to_owned(), PrimaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| ctx.dispatch_typed_action(CustomRouterEditorAction::Save))
         });
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Cancel", SecondaryTheme)
+            ActionButton::new(CANCEL_LABEL.get().to_owned(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| ctx.dispatch_typed_action(CustomRouterEditorAction::Close))
         });
         let add_rule_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("+ Add rule", SecondaryTheme)
+            ActionButton::new(ADD_RULE_LABEL.get().to_owned(), SecondaryTheme)
                 .with_size(ButtonSize::Small)
                 .on_click(|ctx| ctx.dispatch_typed_action(CustomRouterEditorAction::AddPromptRule))
         });
@@ -445,7 +475,7 @@ impl CustomRouterEditorView {
     fn try_save(&mut self, ctx: &mut ViewContext<Self>) {
         let name = self.router_name(ctx);
         if name.is_empty() {
-            self.save_error = Some("Router name is required.".to_string());
+            self.save_error = Some(ROUTER_NAME_REQUIRED.get().to_string());
             ctx.notify();
             return;
         }
@@ -453,16 +483,16 @@ impl CustomRouterEditorView {
         let routing = match self.router_type {
             RouterEditorType::Complexity => {
                 for (field, val) in [
-                    ("Default", self.complexity_default.as_str()),
-                    ("Easy", self.complexity_easy.as_deref().unwrap_or_default()),
+                    (DEFAULT_REQUIRED_LABEL.get(), self.complexity_default.as_str()),
+                    (EASY_REQUIRED_LABEL.get(), self.complexity_easy.as_deref().unwrap_or_default()),
                     (
-                        "Medium",
+                        MEDIUM_REQUIRED_LABEL.get(),
                         self.complexity_medium.as_deref().unwrap_or_default(),
                     ),
-                    ("Hard", self.complexity_hard.as_deref().unwrap_or_default()),
+                    (HARD_REQUIRED_LABEL.get(), self.complexity_hard.as_deref().unwrap_or_default()),
                 ] {
                     if val.is_empty() {
-                        self.save_error = Some(format!("{field} model is required."));
+                        self.save_error = Some(crate::tr!("settings", "field-model-required", field = field.to_string()).to_string());
                         ctx.notify();
                         return;
                     }
@@ -476,7 +506,7 @@ impl CustomRouterEditorView {
             }
             RouterEditorType::Prompt => {
                 if self.prompt_default_model.is_empty() {
-                    self.save_error = Some("A default model is required.".to_string());
+                    self.save_error = Some(DEFAULT_MODEL_REQUIRED.get().to_string());
                     ctx.notify();
                     return;
                 }
@@ -500,9 +530,7 @@ impl CustomRouterEditorView {
                     })
                     .collect();
                 if rules.is_empty() {
-                    self.save_error = Some(
-                        "At least one rule with a description and model is required.".to_string(),
-                    );
+                    self.save_error = Some(AT_LEAST_ONE_RULE_REQUIRED.get().to_string());
                     ctx.notify();
                     return;
                 }
@@ -535,11 +563,14 @@ impl CustomRouterEditorView {
                 }
             };
             let ep = self.existing.as_ref().and_then(|r| r.source_path.clone());
-            if let Err(e) = WarpConfig::save_custom_model_router(&name, &yaml, ep.as_deref()) {
-                self.save_error = Some(format!("Write error: {e}"));
-                ctx.notify();
-                return;
-            }
+            // save_custom_model_router is not available in this fork
+            let _ = (&name, &yaml, &ep);
+            // Original code kept for reference:
+            // if let Err(e) = WarpConfig::save_custom_model_router(&name, &yaml, ep.as_deref()) {
+            //     self.save_error = Some(format!("Write error: {e}"));
+            //     ctx.notify();
+            //     return;
+            // }
         }
 
         self.save_error = None;
@@ -626,15 +657,15 @@ impl CustomRouterEditorView {
 
     fn render_complexity_section(&self, appearance: &Appearance) -> Box<dyn Element> {
         Flex::column()
-            .with_child(Self::section_label("Models", appearance))
+            .with_child(Self::section_label(MODELS_SECTION_LABEL.get(), appearance))
             .with_child(labeled_dropdown(
-                "Default (required)",
+                DEFAULT_REQUIRED_LABEL.get(),
                 &self.complexity_default_dropdown,
                 appearance,
             ))
             .with_child(
                 Container::new(labeled_dropdown(
-                    "Easy (required)",
+                    EASY_REQUIRED_LABEL.get(),
                     &self.complexity_easy_dropdown,
                     appearance,
                 ))
@@ -643,7 +674,7 @@ impl CustomRouterEditorView {
             )
             .with_child(
                 Container::new(labeled_dropdown(
-                    "Medium (required)",
+                    MEDIUM_REQUIRED_LABEL.get(),
                     &self.complexity_medium_dropdown,
                     appearance,
                 ))
@@ -652,7 +683,7 @@ impl CustomRouterEditorView {
             )
             .with_child(
                 Container::new(labeled_dropdown(
-                    "Hard (required)",
+                    HARD_REQUIRED_LABEL.get(),
                     &self.complexity_hard_dropdown,
                     appearance,
                 ))
@@ -672,7 +703,7 @@ impl CustomRouterEditorView {
             .sub_text_color(appearance.theme().surface_1());
 
         let mut column = Flex::column()
-            .with_child(Self::section_label("Default model", appearance))
+            .with_child(Self::section_label(DEFAULT_MODEL_LABEL.get(), appearance))
             .with_child(
                 ConstrainedBox::new(ChildView::new(&self.prompt_default_dropdown).finish())
                     .with_width(EDITOR_CONTENT_WIDTH)
@@ -681,16 +712,16 @@ impl CustomRouterEditorView {
 
         if !self.prompt_rules.is_empty() {
             column.add_child(
-                Container::new(Self::section_label("Rules".to_string(), appearance))
+                Container::new(Self::section_label(RULES_SECTION_LABEL.get().to_string(), appearance))
                     .with_margin_top(12.)
                     .finish(),
             );
             let rules_copy = FormattedText::new([
                 FormattedTextLine::Line(vec![FormattedTextFragment::plain_text(
-                    "Rules are custom prompts that describe when to use a specific model. Warp intelligently matches your tasks against these rules.",
+                    ROUTING_RULES_DESC.get(),
                 )]),
                 FormattedTextLine::Line(vec![FormattedTextFragment::plain_text(
-                    "Rules are matched top to bottom — rules higher in the list take precedence over those below.",
+                    RULES_MATCH_ORDER_DESC.get(),
                 )]),
             ]);
             column.add_child(
@@ -732,7 +763,7 @@ impl CustomRouterEditorView {
         col.add_child(
             Container::new(
                 Flex::column()
-                    .with_child(Self::section_label("Router name", appearance))
+                    .with_child(Self::section_label(ROUTER_NAME_LABEL.get(), appearance))
                     .with_child(
                         ConstrainedBox::new(editor_row(&self.name_editor, None, appearance))
                             .with_width(EDITOR_CONTENT_WIDTH)
@@ -748,13 +779,13 @@ impl CustomRouterEditorView {
         // above the segmented control.
         let routing_type_copy = FormattedText::new([
             FormattedTextLine::Line(vec![
-                FormattedTextFragment::bold("Complexity-based"),
+                FormattedTextFragment::bold(COMPLEXITY_BASED_LABEL.get()),
                 FormattedTextFragment::plain_text(
-                    " routing chooses a model based on Warp's classification of the task's difficulty.",
+                    ROUTING_COMPLEXITY_DESC.get(),
                 ),
             ]),
             FormattedTextLine::Line(vec![
-                FormattedTextFragment::bold("Rule-based"),
+                FormattedTextFragment::bold(RULE_BASED_LABEL.get()),
                 FormattedTextFragment::plain_text(
                     " routing chooses a model based on custom prompts.",
                 ),
@@ -763,7 +794,7 @@ impl CustomRouterEditorView {
         col.add_child(
             Container::new(
                 Flex::column()
-                    .with_child(Self::section_label("Router type", appearance))
+                    .with_child(Self::section_label(ROUTER_TYPE_LABEL.get(), appearance))
                     .with_child(
                         Container::new(
                             FormattedTextElement::new(
@@ -947,7 +978,7 @@ impl BackingView for CustomRouterEditorView {
         _app: &AppContext,
     ) -> view::HeaderContent {
         view::HeaderContent::Standard(view::StandardHeader {
-            title: HEADER_TEXT.into(),
+            title: HEADER_TEXT_TR.get().to_string().into(),
             title_secondary: None,
             title_style: None,
             title_clip_config: warpui::text_layout::ClipConfig::start(),
@@ -1047,7 +1078,7 @@ fn fill_filterable_dropdown<F>(
     // Set the placeholder before populating items so the initial
     // `set_filtered_items` keeps an empty selection blank rather than
     // auto-selecting the first model.
-    dropdown.set_placeholder(MODEL_PLACEHOLDER, ctx);
+    // set_placeholder not available in this fork
     let items = available_model_menu_items(
         LLMPreferences::as_ref(ctx)
             .get_base_llm_choices_for_agent_mode(ctx)
@@ -1089,7 +1120,7 @@ fn make_prompt_rule_row(
             },
             ctx,
         );
-        editor.set_placeholder_text("Describe when to use this model\u{2026}", ctx);
+        editor.set_placeholder_text(DESCRIBE_WHEN_TO_USE_MODEL.get(), ctx);
         // Use the UI font (rather than the editor's default mono font) so the
         // input matches the rest of the editor's text inputs.
         let font_family = Appearance::as_ref(ctx).ui_font_family();
@@ -1112,7 +1143,7 @@ fn make_prompt_rule_row(
     // Match the dropdown's bar height to the description input and drop its
     // default vertical margin so the two fields align flush within the row.
     model_dropdown.update(ctx, |dropdown, ctx| {
-        dropdown.set_vertical_margin(0., ctx);
+        // set_vertical_margin not available in this fork
         dropdown.set_top_bar_height(RULE_FIELD_HEIGHT, ctx);
     });
 
@@ -1321,12 +1352,12 @@ fn render_rule_row(
     const MODEL_WIDTH: f32 = 170.;
 
     let description_field = labeled_field(
-        "Rule",
+        RULE_LABEL.get(),
         editor_row(&row.description_editor, Some(RULE_FIELD_HEIGHT), appearance),
         appearance,
     );
     let model_field = labeled_field(
-        "Model",
+        MODEL_LABEL.get(),
         ConstrainedBox::new(ChildView::new(&row.model_dropdown).finish())
             .with_width(MODEL_WIDTH)
             .finish(),

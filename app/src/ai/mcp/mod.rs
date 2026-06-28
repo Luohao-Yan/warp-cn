@@ -28,6 +28,12 @@ use crate::drive::CloudObjectTypeAndId;
 use crate::persistence::model::MCPEnvironmentVariables;
 use crate::server::ids::SyncId;
 use crate::server::sync_queue::QueueItem;
+use crate::static_tr;
+
+static_tr!(MCP_PROVIDER_WARP, "ai_assistant", "mcp-provider-warp");
+static_tr!(MCP_PROVIDER_CLAUDE, "ai_assistant", "mcp-provider-claude");
+static_tr!(MCP_PROVIDER_CODEX, "ai_assistant", "mcp-provider-codex");
+static_tr!(MCP_PROVIDER_AGENTS, "ai_assistant", "mcp-provider-agents");
 
 cfg_if::cfg_if! {
     if #[cfg(not(feature = "local_fs"))] {
@@ -79,7 +85,7 @@ impl StringModel for MCPServer {
     type CloudObjectType = CloudMCPServer;
 
     fn model_type_name(&self) -> &'static str {
-        "MCP server"
+        crate::tr!("ai_assistant", "mcp-server-type-name").leak()
     }
 
     fn should_enforce_revisions() -> bool {
@@ -502,10 +508,10 @@ pub enum MCPProvider {
 impl MCPProvider {
     pub fn display_name(&self) -> &str {
         match self {
-            MCPProvider::Warp => "Warp",
-            MCPProvider::Claude => "Claude",
-            MCPProvider::Codex => "Codex",
-            MCPProvider::Agents => "Other Agents",
+            MCPProvider::Warp => MCP_PROVIDER_WARP.get(),
+            MCPProvider::Claude => MCP_PROVIDER_CLAUDE.get(),
+            MCPProvider::Codex => MCP_PROVIDER_CODEX.get(),
+            MCPProvider::Agents => MCP_PROVIDER_AGENTS.get(),
         }
     }
 

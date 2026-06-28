@@ -9,8 +9,12 @@ use warpui::{
 
 use crate::ai::llms::LLMId;
 use crate::appearance::Appearance;
+use crate::static_tr;
 use crate::view_components::action_button::{ActionButton, NakedTheme, PrimaryTheme};
 use crate::view_components::{DropdownItem, FilterableDropdown, FilterableDropdownEvent};
+
+static_tr!(NOT_NOW_LABEL, "settings", "not-now");
+static_tr!(CHANGE_DEFAULT_LABEL, "settings", "change-default-model");
 
 /// Width shared by the model dropdown's top bar and open menu so long model
 /// names stay readable inside the modal.
@@ -67,13 +71,13 @@ impl SetDefaultModelModalBody {
         });
 
         let cancel_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Not now", NakedTheme).on_click(|ctx| {
+            ActionButton::new(NOT_NOW_LABEL.get().to_owned(), NakedTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(SetDefaultModelModalBodyAction::Cancel);
             })
         });
 
         let save_button = ctx.add_typed_action_view(|_| {
-            ActionButton::new("Change default model", PrimaryTheme).on_click(|ctx| {
+            ActionButton::new(CHANGE_DEFAULT_LABEL.get().to_owned(), PrimaryTheme).on_click(|ctx| {
                 ctx.dispatch_typed_action(SetDefaultModelModalBodyAction::Save);
             })
         });

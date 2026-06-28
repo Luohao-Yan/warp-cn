@@ -1142,6 +1142,15 @@ define_settings_group!(AISettings, settings: [
         supported_platforms: SupportedPlatforms::DESKTOP,
         sync_to_cloud: SyncToCloud::Globally(RespectUserSyncSetting::Yes),
         private: true,
+    },
+    local_mode_enabled: LocalModeEnabled {
+        type: bool,
+        default: false,
+        supported_platforms: SupportedPlatforms::DESKTOP,
+        sync_to_cloud: SyncToCloud::Never,
+        private: false,
+        toml_path: "agents.local.mode.enabled",
+        description: crate::tr!("settings", "ai-local-mode-desc"),
     }
     // Whether to mint and attach Gemini Enterprise (GEAP) credentials to eligible agent
     // requests, routing them through the workspace's Google Cloud project. Only consulted

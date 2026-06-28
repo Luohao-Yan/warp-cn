@@ -1630,3 +1630,27 @@ ai-assistant-ai-search-codebase-not-available-try = The search failed because th
 ## -- Keybinding descriptions -------------------------------------------------
 
 ai-assistant-ai-take-control-of-running-command = Take control of running command
+
+## -- Agent source display names (for task.rs) --
+ai-assistant-source-linear = Linear
+ai-assistant-source-api = API
+ai-assistant-source-slack = Slack
+ai-assistant-source-cli = CLI
+ai-assistant-source-scheduled = Scheduled
+ai-assistant-source-warp-app = Warp App
+ai-assistant-source-web-app = Oz Web
+ai-assistant-source-github-action = GitHub Action
+ai-assistant-source-agent-fallback = Agent
+
+## -- MCP provider display names (for mcp/mod.rs) --
+ai-assistant-mcp-provider-warp = Warp
+ai-assistant-mcp-provider-claude = Claude
+ai-assistant-mcp-provider-codex = Codex
+ai-assistant-mcp-provider-agents = Other Agents
+
+## -- MCP model type name --
+ai-assistant-mcp-server-type-name = MCP server
+
+## -- Task cancellation strings --
+ai-assistant-task-cancelled = Task cancelled
+ai-assistant-failed-cancel-task = Failed to cancel task: { $error }

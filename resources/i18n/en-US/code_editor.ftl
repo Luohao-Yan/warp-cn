@@ -218,3 +218,14 @@ code-editor-code-review-update-button = Update
 code-editor-code-comment-imported-from-github = Comment imported from GitHub
 
 ## -- Double-prefix aliases for new code_editor strings --
+
+## -- Git dialog title strings --
+code-editor-review-commit-your-changes = Commit your changes
+code-editor-review-publish-branch = Publish branch
+code-editor-review-push-changes = Push changes
+code-editor-review-create-pull-request = Create pull request
+
+## -- Git action tooltip strings --
+code-editor-review-push-tooltip = Push commits to remote
+code-editor-review-create-pr-tooltip = Create a pull request
+code-editor-review-publish-tooltip = Publish branch to remote

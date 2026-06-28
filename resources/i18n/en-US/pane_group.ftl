@@ -34,3 +34,6 @@ pane-group-pane-code-diff-title = Requested Edit
 
 pane-group-share-session = Share Session
 pane-group-unsupported-shell-fallback = Warp doesn't currently support your default shell, falling back to zsh.
+
+## -- Unsharable conversation tooltip --
+pane-group-unsharable-conversation-tooltip = This conversation cannot be shared because it is not stored in the cloud.\nTo sync to cloud and share, enable the setting under Settings > Privacy, and then make another request.

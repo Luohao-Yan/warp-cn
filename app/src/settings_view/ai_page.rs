@@ -37,6 +37,9 @@ use warpui::{
 use super::custom_inference_modal::{
     CustomEndpointModal, CustomEndpointModalEvent, CustomEndpointModalViewState,
 };
+use super::local_provider_modal::{
+    LocalProviderModal, LocalProviderModalEvent, LocalProviderModalViewState,
+};
 use super::execution_profile_view::{ExecutionProfileView, ExecutionProfileViewEvent};
 use super::remove_custom_endpoint_confirmation_dialog::{
     RemoveCustomEndpointConfirmationDialog, RemoveCustomEndpointConfirmationDialogEvent,
@@ -722,6 +725,11 @@ pub struct AISettingsPageView {
     pending_remove_custom_endpoint_index: Option<usize>,
     custom_inference_add_button: ViewHandle<ActionButton>,
     custom_endpoint_edit_buttons: Vec<ViewHandle<ActionButton>>,
+
+    // Local provider (local mode)
+    local_provider_modal_state: LocalProviderModalViewState,
+    local_provider_add_button: ViewHandle<ActionButton>,
+    local_provider_edit_buttons: Vec<ViewHandle<ActionButton>>,
 
     // In-flight fallback exchange for a pasted SuperGrok authorization code.
     // This stores only the PKCE verifier clone needed by the manual path while
@@ -1890,6 +1898,43 @@ impl AISettingsPageView {
             pending_remove_custom_endpoint_index: None,
             custom_inference_add_button,
             custom_endpoint_edit_buttons,
+            local_provider_modal_state: {
+                let local_provider_modal_body =
+                    ctx.add_typed_action_view(|ctx| LocalProviderModal::new(None, None, ctx));
+                ctx.subscribe_to_view(&local_provider_modal_body, |me, _, event, ctx| {
+                    me.handle_local_provider_modal_event(event, ctx);
+                });
+
+                let local_provider_modal_view = ctx.add_typed_action_view(|ctx| {
+                    Modal::new(
+                        Some(crate::tr!("settings", "ai-local-mode-header").to_string()),
+                        local_provider_modal_body.clone(),
+                        ctx,
+                    )
+                    .with_modal_style(UiComponentStyles {
+                        width: Some(560.),
+                        height: Some(600.),
+                        ..Default::default()
+                    })
+                    .with_background_opacity(100)
+                    .with_dismiss_on_click()
+                    .with_dismiss_keystroke(Keystroke::parse("escape").unwrap())
+                });
+                ctx.subscribe_to_view(&local_provider_modal_view, |me, _, event, ctx| {
+                    me.handle_local_provider_modal_close_event(event, ctx);
+                });
+
+                LocalProviderModalViewState::new(ModalViewState::new(local_provider_modal_view))
+            },
+            local_provider_add_button: ctx.add_typed_action_view(|_| {
+                ActionButton::new(crate::tr!("settings", "ai-add-custom-endpoint"), SecondaryTheme)
+                    .with_icon(Icon::Plus)
+                    .with_size(ButtonSize::Small)
+                    .on_click(|ctx| {
+                        ctx.dispatch_typed_action(AISettingsPageAction::OpenAddLocalProviderModal);
+                    })
+            }),
+            local_provider_edit_buttons: Vec::new(),
             #[cfg(not(target_family = "wasm"))]
             grok_oauth_attempt: None,
             #[cfg(not(target_family = "wasm"))]
@@ -1913,6 +1958,8 @@ impl AISettingsPageView {
     pub fn get_modal_content(&self, app: &AppContext) -> Option<Box<dyn Element>> {
         if self.custom_endpoint_modal_state.is_open() {
             Some(self.custom_endpoint_modal_state.render())
+        } else if self.local_provider_modal_state.is_open() {
+            Some(self.local_provider_modal_state.render())
         } else if self
             .remove_custom_endpoint_confirmation_dialog
             .as_ref(app)
@@ -1942,6 +1989,23 @@ impl AISettingsPageView {
                 });
             }
         }
+
+        self.local_provider_add_button.update(ctx, |button, ctx| {
+            button.set_disabled(!*AISettings::as_ref(ctx).local_mode_enabled, ctx);
+        });
+
+        let local_endpoint_count = ApiKeyManager::as_ref(ctx).keys().custom_endpoints.len();
+        let local_mode_on = *AISettings::as_ref(ctx).local_mode_enabled;
+        if self.local_provider_edit_buttons.len() != local_endpoint_count {
+            self.local_provider_edit_buttons =
+                Self::create_local_provider_edit_buttons(local_endpoint_count, local_mode_on, ctx);
+        } else {
+            for button in &self.local_provider_edit_buttons {
+                button.update(ctx, |button, ctx| {
+                    button.set_disabled(!local_mode_on, ctx);
+                });
+            }
+        }
     }
 
     fn create_custom_endpoint_edit_buttons(
@@ -1968,6 +2032,32 @@ impl AISettingsPageView {
             })
             .collect()
     }
+
+    fn create_local_provider_edit_buttons(
+        count: usize,
+        enabled: bool,
+        ctx: &mut ViewContext<Self>,
+    ) -> Vec<ViewHandle<ActionButton>> {
+        (0..count)
+            .map(|index| {
+                let button = ctx.add_typed_action_view(move |_| {
+                    ActionButton::new(crate::tr!("settings", "edit-label"), SecondaryTheme)
+                        .with_icon(Icon::Pencil)
+                        .with_size(ButtonSize::Small)
+                        .on_click(move |ctx| {
+                            ctx.dispatch_typed_action(
+                                AISettingsPageAction::OpenEditLocalProviderModal(index),
+                            );
+                        })
+                });
+                button.update(ctx, |button, ctx| {
+                    button.set_disabled(!enabled, ctx);
+                });
+                button
+            })
+            .collect()
+    }
+
     fn can_use_custom_inference_controls(app: &AppContext) -> bool {
         FeatureFlag::CustomInferenceEndpoints.is_enabled()
             && AISettings::as_ref(app).is_any_ai_enabled(app)
@@ -2120,6 +2210,112 @@ impl AISettingsPageView {
                 }
                 self.hide_custom_endpoint_modal(ctx);
                 self.show_remove_custom_endpoint_confirmation_dialog(*index, ctx);
+            }
+        }
+    }
+
+    fn hide_local_provider_modal(&mut self, ctx: &mut ViewContext<Self>) {
+        self.local_provider_modal_state.close(ctx);
+        ctx.emit(AISettingsPageEvent::HideModal);
+        ctx.notify();
+    }
+
+    fn handle_local_provider_modal_close_event(
+        &mut self,
+        event: &ModalEvent,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match event {
+            ModalEvent::Close => {
+                self.hide_local_provider_modal(ctx);
+            }
+        }
+    }
+
+    fn handle_local_provider_modal_event(
+        &mut self,
+        event: &LocalProviderModalEvent,
+        ctx: &mut ViewContext<Self>,
+    ) {
+        match event {
+            LocalProviderModalEvent::Close => {
+                self.hide_local_provider_modal(ctx);
+            }
+            LocalProviderModalEvent::AddProvider {
+                name,
+                url,
+                api_key,
+                api_format,
+                models,
+            } => {
+                self.hide_local_provider_modal(ctx);
+                ApiKeyManager::handle(ctx).update(ctx, |manager, ctx| {
+                    manager.add_custom_endpoint(
+                        name.clone(),
+                        url.clone(),
+                        api_key.clone(),
+                        *api_format,
+                        models.clone(),
+                        ctx,
+                    );
+                });
+                crate::ai::local_agent::sync_providers_from_api_keys(ctx);
+
+                let window_id = ctx.window_id();
+                crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
+                    let toast = crate::view_components::DismissibleToast::success(
+                        crate::tr!("settings", "ai-endpoint-added"),
+                    );
+                    toast_stack.add_ephemeral_toast(toast, window_id, ctx);
+                });
+                ctx.notify();
+            }
+            LocalProviderModalEvent::SaveProvider {
+                index,
+                name,
+                url,
+                api_key,
+                api_format,
+                models,
+            } => {
+                self.hide_local_provider_modal(ctx);
+                ApiKeyManager::handle(ctx).update(ctx, |manager, ctx| {
+                    manager.save_custom_endpoint(
+                        *index,
+                        name.clone(),
+                        url.clone(),
+                        api_key.clone(),
+                        *api_format,
+                        models.clone(),
+                        ctx,
+                    );
+                });
+                crate::ai::local_agent::sync_providers_from_api_keys(ctx);
+
+                let window_id = ctx.window_id();
+                crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
+                    let toast = crate::view_components::DismissibleToast::success(
+                        crate::tr!("settings", "ai-endpoint-saved"),
+                    );
+                    toast_stack.add_ephemeral_toast(toast, window_id, ctx);
+                });
+                ctx.notify();
+            }
+            LocalProviderModalEvent::RemoveProvider { index } => {
+                self.hide_local_provider_modal(ctx);
+                ApiKeyManager::handle(ctx).update(ctx, |manager, ctx| {
+                    manager.remove_custom_endpoint(*index, ctx);
+                });
+                crate::ai::local_agent::sync_providers_from_api_keys(ctx);
+
+                let window_id = ctx.window_id();
+                crate::ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {
+                    let toast = crate::view_components::DismissibleToast::success(
+                        crate::tr!("settings", "ai-endpoint-removed"),
+                    );
+                    toast_stack.add_ephemeral_toast(toast, window_id, ctx);
+                });
+                ctx.notify();
             }
         }
     }
@@ -2443,6 +2639,7 @@ impl AISettingsPageView {
             None => {
                 // Full page: all widgets (legacy behavior)
                 widgets.push(Box::new(GlobalAIWidget::default()));
+                widgets.push(Box::new(LocalModeWidget::default()));
                 if !FeatureFlag::UsageBasedPricing.is_enabled() {
                     widgets.push(Box::new(UsageWidget::default()));
                 }
@@ -2495,6 +2692,7 @@ impl AISettingsPageView {
             Some(AISubpage::WarpAgent) => {
                 // Oz page: global toggle + Active AI + Input + Other
                 widgets.push(Box::new(GlobalAIWidget::default()));
+                widgets.push(Box::new(LocalModeWidget::default()));
                 if ai_settings
                     .intelligent_autosuggestions_enabled_internal
                     .is_supported_on_current_platform()
@@ -3279,6 +3477,9 @@ pub enum AISettingsPageAction {
         pattern: String,
         agent: Option<CLIAgent>,
     },
+    ToggleLocalMode,
+    OpenAddLocalProviderModal,
+    OpenEditLocalProviderModal(usize),
 }
 
 impl From<&AISettingsPageAction> for LoginGatedFeature {
@@ -4109,6 +4310,40 @@ impl TypedActionView for AISettingsPageView {
                     );
                     toast_stack.add_ephemeral_toast(toast, window_id, ctx);
                 });
+                ctx.notify();
+            }
+            AISettingsPageAction::ToggleLocalMode => {
+                AISettings::handle(ctx).update(ctx, |settings, ctx| {
+                    settings.local_mode_enabled.toggle_and_save_value(ctx);
+                });
+                crate::ai::local_agent::local_mode_config::set_local_mode_enabled(
+                    *AISettings::as_ref(ctx).local_mode_enabled,
+                );
+                ctx.notify();
+            }
+            AISettingsPageAction::OpenAddLocalProviderModal => {
+                self.local_provider_modal_state.prefill(None, None, ctx);
+                self.local_provider_modal_state.set_title(
+                    Some(crate::tr!("settings", "ai-local-mode-header").to_string()),
+                    ctx,
+                );
+                self.local_provider_modal_state.open(ctx);
+                ctx.notify();
+            }
+            AISettingsPageAction::OpenEditLocalProviderModal(index) => {
+                let local_endpoints = ApiKeyManager::as_ref(ctx).keys().custom_endpoints.clone();
+                if let Some(endpoint) = local_endpoints.get(*index) {
+                    self.local_provider_modal_state.prefill(
+                        Some(endpoint),
+                        Some(*index),
+                        ctx,
+                    );
+                }
+                self.local_provider_modal_state.set_title(
+                    Some(crate::tr!("settings", "ai-local-provider-edit-title").to_string()),
+                    ctx,
+                );
+                self.local_provider_modal_state.open(ctx);
                 ctx.notify();
             }
         }
@@ -8973,6 +9208,146 @@ impl SettingsWidget for AwsBedrockWidget {
         Container::new(column.finish())
             .with_margin_bottom(HEADER_PADDING)
             .finish()
+    }
+}
+
+#[derive(Default)]
+struct LocalModeWidget {
+    switch_state: SwitchStateHandle,
+}
+
+impl SettingsWidget for LocalModeWidget {
+    type View = AISettingsPageView;
+
+    fn search_terms(&self) -> &str {
+        "local agent mode ollama deepseek kimi local provider llm"
+    }
+
+    fn render(
+        &self,
+        _view: &Self::View,
+        appearance: &Appearance,
+        app: &AppContext,
+    ) -> Box<dyn Element> {
+        let ai_settings = AISettings::as_ref(app);
+        let is_any_ai_enabled = ai_settings.is_any_ai_enabled(app);
+        let local_mode_enabled = *ai_settings.local_mode_enabled;
+        let theme = appearance.theme();
+
+        let mut column = Flex::column().with_child(render_separator(appearance));
+
+        column.add_child(
+            build_sub_header(
+                appearance,
+                crate::tr!("settings", "ai-local-mode-header"),
+                Some(styles::header_font_color(is_any_ai_enabled, app)),
+            )
+            .with_padding_bottom(HEADER_PADDING)
+            .finish(),
+        );
+
+        column.add_child(
+            Container::new(
+                Text::new(
+                    crate::tr!("settings", "ai-local-mode-desc"),
+                    appearance.ui_font_family(),
+                    CONTENT_FONT_SIZE,
+                )
+                .with_color(theme.nonactive_ui_text_color().into())
+                .soft_wrap(true)
+                .finish(),
+            )
+            .with_margin_bottom(12.)
+            .finish(),
+        );
+
+        let toggle_row = Flex::row()
+            .with_main_axis_size(MainAxisSize::Max)
+            .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
+            .with_cross_axis_alignment(CrossAxisAlignment::Center)
+            .with_child(
+                Text::new(
+                    crate::tr!("settings", "ai-local-mode-label"),
+                    appearance.ui_font_family(),
+                    CONTENT_FONT_SIZE,
+                )
+                .with_color(
+                    styles::description_font_color(is_any_ai_enabled, app).into(),
+                )
+                .finish(),
+            )
+            .with_child(
+                Container::new(
+                    appearance
+                        .ui_builder()
+                        .switch(self.switch_state.clone())
+                        .check(local_mode_enabled)
+                        .build()
+                        .on_click(move |ctx, _, _| {
+                            ctx.dispatch_typed_action(AISettingsPageAction::ToggleLocalMode);
+                        })
+                        .finish(),
+                )
+                .with_padding_right(TOGGLE_BUTTON_RIGHT_PADDING)
+                .finish(),
+            )
+            .finish();
+
+        column.add_child(Container::new(toggle_row).finish());
+
+        if local_mode_enabled {
+            let endpoints = &ApiKeyManager::as_ref(app).keys().custom_endpoints;
+            column.add_child(
+                Container::new(
+                    build_sub_header(
+                        appearance,
+                        crate::tr!("settings", "ai-local-providers-section"),
+                        Some(styles::header_font_color(true, app)),
+                    )
+                    .with_margin_top(16.)
+                    .with_padding_bottom(8.)
+                    .finish(),
+                )
+                .finish(),
+            );
+
+            if endpoints.is_empty() {
+                column.add_child(
+                    Container::new(
+                        Text::new(
+                            crate::tr!("settings", "ai-local-no-providers"),
+                            appearance.ui_font_family(),
+                            CONTENT_FONT_SIZE,
+                        )
+                        .with_color(theme.nonactive_ui_text_color().into())
+                        .soft_wrap(true)
+                        .finish(),
+                    )
+                    .with_margin_bottom(8.)
+                    .finish(),
+                );
+            } else {
+                for (i, ep) in endpoints.iter().enumerate() {
+                    let models_str = ep
+                        .models
+                        .iter()
+                        .map(|m| m.alias.as_deref().unwrap_or(&m.name))
+                        .join(", ");
+                    let label = format!("{} ({})", ep.name, models_str);
+                    column.add_child(
+                        Container::new(
+                            Text::new(label, appearance.ui_font_family(), CONTENT_FONT_SIZE)
+                                .with_color(theme.active_ui_text_color().into())
+                                .finish(),
+                        )
+                        .with_margin_bottom(4.)
+                        .finish(),
+                    );
+                }
+            }
+        }
+
+        column.finish()
     }
 }
 

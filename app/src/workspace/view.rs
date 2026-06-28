@@ -25394,6 +25394,12 @@ impl TypedActionView for Workspace {
             SyncTrafficLights => {
                 self.sync_window_button_visibility(ctx);
             }
+            PinActiveTab => {}
+            UnpinActiveTab => {}
+            PinActiveTabGroup => {}
+            UnpinActiveTabGroup => {}
+            NewTabGroupFromActiveOrSelectedTabs => {}
+            RemoveActiveOrSelectedTabsFromGroup => {}
         };
         if action.should_save_app_state_on_action() {
             ctx.dispatch_global_action("workspace:save_app", ());

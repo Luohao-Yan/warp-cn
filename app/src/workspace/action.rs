@@ -236,6 +236,18 @@ pub enum WorkspaceAction {
     /// Unpins the entire tab group: clears the pinned flag on the group
     /// and moves the group block to the start of the unpinned region.
     UnpinTabGroup(TabGroupId),
+    /// Pins the currently active tab.
+    PinActiveTab,
+    /// Unpins the currently active tab.
+    UnpinActiveTab,
+    /// Pins the tab group containing the currently active tab.
+    PinActiveTabGroup,
+    /// Unpins the tab group containing the currently active tab.
+    UnpinActiveTabGroup,
+    /// Creates a new tab group from the active tab or the currently selected tabs.
+    NewTabGroupFromActiveOrSelectedTabs,
+    /// Removes the active tab or selected tabs from their current group.
+    RemoveActiveOrSelectedTabsFromGroup,
     AddDefaultTab,
     AddTerminalTab {
         hide_homepage: bool,
@@ -915,6 +927,12 @@ impl WorkspaceAction {
             | UnpinTab(_)
             | PinTabGroup(_)
             | UnpinTabGroup(_)
+            | PinActiveTab
+            | UnpinActiveTab
+            | PinActiveTabGroup
+            | UnpinActiveTabGroup
+            | NewTabGroupFromActiveOrSelectedTabs
+            | RemoveActiveOrSelectedTabsFromGroup
             | ToggleTabColor { .. }
             | AddDefaultTab
             | AddTerminalTab { .. }

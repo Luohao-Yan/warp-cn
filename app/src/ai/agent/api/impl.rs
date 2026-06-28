@@ -104,6 +104,7 @@ pub async fn generate_multi_agent_output(
             custom_model_providers: params.custom_model_providers,
             // Background computer use is not supported by the local client yet.
             supports_background_computer_use: false,
+            custom_model_routers: Default::default(),
         }),
         metadata: Some(api::request::Metadata {
             logging: logging_metadata,

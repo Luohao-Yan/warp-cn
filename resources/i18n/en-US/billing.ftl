@@ -262,3 +262,43 @@ billing-admin-autoreload-description-generic = Your admin has enabled auto-reloa
 
 billing-no-usage-history = No usage history
 billing-kick-off-agent-task = Kick off an agent task to view usage history here.
+
+## -- Billing v1 sort labels --
+billing-sort-a-z = A to Z
+billing-sort-z-a = Z to A
+billing-sort-usage-asc = Usage ascending
+billing-sort-usage-desc = Usage descending
+
+## -- Addon credits description (v1) --
+billing-addon-credits-description = Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed.
+billing-additional-addon-credits-description-for-team = Purchased add-on credits are shared across your team.
+
+## -- Addon credits description (v2) --
+billing-addon-credits-description-v2 = Add-on credits are purchased in prepaid packages that roll over each billing cycle and expire after one year. The more you purchase, the better the per-credit rate. Once your base plan credits are used, add-on credits will be consumed.
+billing-additional-addon-credits-description-for-team-v2 = Purchased add-on credits are added to your personal balance.
+
+## -- Managed auto-reload header --
+billing-auto-reload-enabled = Auto-reload is enabled
+
+## -- Warning strings (v2) --
+billing-addon-credits-delinquent-warning = Restricted due to billing issue. Update your payment method to purchase add-on credits.
+billing-addon-credits-non-admin-delinquent-warning = Restricted due to billing issue. Contact your team admin to update their payment method.
+billing-restricted-billing-usage-warning = Auto reload is disabled due to recent failed reload. Please update your payment method and try again.
+billing-restricted-billing-usage-non-admin-warning = Auto reload is disabled due to recent failed reload. Contact your team admin to update their payment method.
+
+## -- Additional billing v2 strings --
+billing-buy-more = Buy more
+billing-credits-per-dollar = { $credits } credits / { $dollars }
+billing-n-credits = { $count } credits
+billing-selected-credit-amount = selected credit amount
+billing-auto-reload-tooltip-v2 = When any member on your team's credit balance reaches 100 credits remaining, automatically purchase { $amount }.
+billing-default-spend-limit = $200.00
+billing-failed-update-workspace-settings = Failed to update workspace settings
+billing-successfully-purchased-addon-credits = Successfully purchased add-on credits
+billing-unable-enable-auto-reload = Unable to enable auto-reload until pricing options load.
+billing-your-selected = your selected
+billing-auto-reload-enabled-toast = Auto-reload enabled. We'll refill with { $credits } credits when your balance runs low.
+billing-auto-reload-disabled-toast = Auto-reload disabled.
+billing-percent-off = { $discount }% off
+billing-purchased-addon-credits = Successfully purchased add-on credits
+billing-expires-on = Expires { $date }

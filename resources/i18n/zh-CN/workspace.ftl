@@ -816,3 +816,6 @@ workspace-unpin-current-tab-group = 取消固定当前标签页分组
 
 workspace-pane-custom-router = 自定义路由编辑器
 workspace-pane-get-started = 入门
+
+## -- 自动移交提示 --
+workspace-handed-session-off-to-cloud = 已将会话移交至云端

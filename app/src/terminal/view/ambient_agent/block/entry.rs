@@ -27,8 +27,10 @@ use crate::terminal::{BlockListSettings, TerminalManager, TerminalView};
 use crate::ui_components::agent_icon::terminal_view_agent_icon_variant;
 use crate::ui_components::blended_colors;
 
-const DEFAULT_CLOUD_AGENT_TITLE: &str = "New cloud agent";
+use crate::static_tr;
 use crate::ui_components::icon_with_status::{render_icon_with_status, IconWithStatusVariant};
+
+static_tr!(DEFAULT_CLOUD_AGENT_TITLE, "agent_cloud", "new-cloud-agent");
 
 #[derive(Default)]
 struct StateHandles {
@@ -136,7 +138,7 @@ impl AmbientAgentEntryBlock {
 
     fn meaningful_title(title: &str) -> Option<String> {
         let title = title.trim();
-        (!title.is_empty() && !title.eq_ignore_ascii_case(DEFAULT_CLOUD_AGENT_TITLE))
+        (!title.is_empty() && !title.eq_ignore_ascii_case(DEFAULT_CLOUD_AGENT_TITLE.get()))
             .then(|| title.to_owned())
     }
 

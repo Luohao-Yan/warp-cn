@@ -191,6 +191,8 @@ fn create_finished_event_from_conversation(conversation: &AIConversation) -> Res
                 .iter()
                 .filter_map(|u| u.to_proto_custom_endpoint_usage())
                 .collect(),
+            context_window_segments: Default::default(),
+            total_input_tokens: Default::default(),
         },
     );
 

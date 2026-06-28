@@ -4132,7 +4132,7 @@ impl CodeReviewView {
                         zero_state_column.add_child(
                             Container::new(
                                 Text::new(
-                                    format!("Repo is initialized with a {file_name} file."),
+                                    crate::tr!("code_review", "repo-initialized-with-file", file_name = file_name.to_string()).to_string(),
                                     appearance.ui_font_family(),
                                     12.,
                                 )
@@ -4951,7 +4951,7 @@ impl CodeReviewView {
                 let save_keystroke = Keystroke::parse("cmdorctrl-s").unwrap_or_default();
                 let save_shortcut = save_keystroke.displayed();
                 let tooltip_text =
-                    format!("This file has unsaved changes. {save_shortcut} to save");
+                    crate::tr!("code_review", "unsaved-changes-tooltip", shortcut = save_shortcut.to_string()).to_string();
                 render_unsaved_circle_with_tooltip(
                     editor_state.unsaved_changes_mouse_state(),
                     tooltip_text,
@@ -6544,7 +6544,7 @@ impl CodeReviewView {
                         Some(if disabled {
                             crate::tr!("code_review", "no-changes-to-commit")
                         } else {
-                            "Commit changes locally".to_string()
+                            crate::tr!("code_review", "commit-changes-locally")
                         }),
                         ctx,
                     );
@@ -6564,7 +6564,7 @@ impl CodeReviewView {
                     button.set_label(crate::tr!("code_editor", "code-review-push"), ctx);
                     button.set_icon(Some(Icon::ArrowUp), ctx);
                     button.set_disabled(false, ctx);
-                    button.set_tooltip(Some("Push commits to remote"), ctx);
+                    button.set_tooltip(Some(crate::tr!("code_editor", "review-push-tooltip")), ctx);
                     button.set_on_click(
                         |ctx| ctx.dispatch_typed_action(CodeReviewAction::OpenPushDialog),
                         ctx,
@@ -6580,7 +6580,7 @@ impl CodeReviewView {
                     button.set_label(crate::tr!("code_editor", "code-review-create-pr"), ctx);
                     button.set_icon(Some(Icon::Github), ctx);
                     button.set_disabled(false, ctx);
-                    button.set_tooltip(Some("Create a pull request"), ctx);
+                    button.set_tooltip(Some(crate::tr!("code_editor", "review-create-pr-tooltip")), ctx);
                     button.set_on_click(
                         |ctx| ctx.dispatch_typed_action(CodeReviewAction::OpenCreatePrDialog),
                         ctx,
@@ -6594,7 +6594,7 @@ impl CodeReviewView {
                 if let Some(pr_info) = pr_info {
                     let url = pr_info.url.clone();
                     let number = pr_info.number;
-                    let label = format!("PR #{number}");
+                    let label = crate::tr!("code_review", "pr-number", number = number).to_string();
                     self.git_primary_action_button.update(ctx, |button, ctx| {
                         button.set_label(label, ctx);
                         button.set_icon(Some(Icon::Github), ctx);
@@ -6603,7 +6603,7 @@ impl CodeReviewView {
                             Some(if is_pr_info_refreshing {
                                 crate::tr!("code_review", "refreshing-pr-info")
                             } else {
-                                "View pull request on GitHub".to_string()
+                                crate::tr!("code_review", "view-pr-on-github")
                             }),
                             ctx,
                         );
@@ -6622,7 +6622,7 @@ impl CodeReviewView {
                     button.set_label(crate::tr!("code_editor", "code-review-publish"), ctx);
                     button.set_icon(Some(Icon::UploadCloud), ctx);
                     button.set_disabled(false, ctx);
-                    button.set_tooltip(Some("Publish branch to remote"), ctx);
+                    button.set_tooltip(Some(crate::tr!("code_editor", "review-publish-tooltip")), ctx);
                     button.set_on_click(
                         |ctx| ctx.dispatch_typed_action(CodeReviewAction::PublishBranch),
                         ctx,
@@ -6673,7 +6673,7 @@ impl CodeReviewView {
         let diff_state = self.diff_state_model.as_ref(app);
         let is_pr_info_refreshing = self.is_pr_info_refreshing(app);
         if let Some(pr_info) = self.pr_info(app) {
-            MenuItemFields::new(format!("PR #{}", pr_info.number))
+            MenuItemFields::new(crate::tr!("code_review", "pr-number", number = pr_info.number).to_string())
                 .with_icon(Icon::Github)
                 .with_on_select_action(CodeReviewAction::ViewPr(pr_info.url))
                 .with_disabled(is_pr_info_refreshing)

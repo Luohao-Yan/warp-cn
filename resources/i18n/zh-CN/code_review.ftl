@@ -193,3 +193,10 @@ code-review-view-in-github = 在 GitHub 中查看
 ## -- 快捷键描述 -----------------------------------------------------------
 
 code-review-toggle-file-navigation-in-code-review = 切换代码审查中的文件导航
+
+## -- 提示和标签字符串 --
+code-review-unsaved-changes-tooltip = 此文件有未保存的更改。{ $shortcut } 保存
+code-review-commit-changes-locally = 在本地提交更改
+code-review-view-pr-on-github = 在 GitHub 上查看拉取请求
+code-review-repo-initialized-with-file = 仓库初始化时包含 { $file_name } 文件。
+code-review-pr-number = PR #{ $number }

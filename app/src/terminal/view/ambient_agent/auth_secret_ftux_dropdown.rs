@@ -320,7 +320,7 @@ impl AuthSecretFtuxDropdown {
             // Compact (modal) mode: only render "+ New …" entries.
             for (index, info) in auth_secret_types_for_harness(harness).iter().enumerate() {
                 items.push(MenuItem::Item(
-                    MenuItemFields::new(format!("New {}", info.display_name))
+                    MenuItemFields::new(crate::tr!("terminal", "ftux-new-secret", display_name = info.display_name.clone()).to_string())
                         .with_font_size_override(FONT_SIZE)
                         .with_padding_override(MENU_ITEM_VERTICAL_PADDING, MENU_HORIZONTAL_PADDING)
                         .with_override_hover_background_color(hover_background)

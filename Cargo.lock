@@ -611,7 +611,7 @@ dependencies = [
  "objc2-foundation 0.3.2",
  "parking_lot",
  "percent-encoding",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
  "wl-clipboard-rs",
  "x11rb",
 ]
@@ -2084,7 +2084,7 @@ dependencies = [
  "bitflags 2.9.4",
  "cexpr",
  "clang-sys",
- "itertools 0.11.0",
+ "itertools 0.10.5",
  "lazy_static",
  "lazycell",
  "log",
@@ -3081,7 +3081,7 @@ version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fde0e0ec90c9dfb3b4b1a0891a7dcd0e2bffde2f7efed5fe7c9bb00e5bfb915e"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4398,7 +4398,7 @@ checksum = "6738d2e996274e499bc7b0d693c858b7720b9cd2543a0643a3087e6cb0a4fa16"
 dependencies = [
  "cfg-if",
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4703,7 +4703,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -6993,6 +6993,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "469fb0b9cefa57e3ef31275ee7cacb78f2fdca44e4765491884a2b119d4eb130"
 
 [[package]]
+name = "ipynb_parser"
+version = "0.1.0"
+dependencies = [
+ "markdown_parser",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "iri-string"
 version = "0.7.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7019,7 +7029,7 @@ checksum = "3640c1c38b8e4e43584d8df18be5fc6b0aa314ce6ebf51b53313d4306cca8e46"
 dependencies = [
  "hermit-abi 0.5.2",
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -7213,7 +7223,7 @@ dependencies = [
  "portable-atomic",
  "portable-atomic-util",
  "serde_core",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -10275,8 +10285,8 @@ version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "343d3bd7056eda839b03204e68deff7d1b13aba7af2b2fd16890697274262ee7"
 dependencies = [
- "heck 0.4.1",
- "itertools 0.11.0",
+ "heck 0.5.0",
+ "itertools 0.10.5",
  "log",
  "multimap",
  "petgraph",
@@ -10295,7 +10305,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "27c6023962132f4b30eb4c172c91ce92d933da334c59c23cddee82358ddafb0b"
 dependencies = [
  "anyhow",
- "itertools 0.11.0",
+ "itertools 0.10.5",
  "proc-macro2",
  "quote",
  "syn 2.0.117",
@@ -10540,7 +10550,7 @@ dependencies = [
  "once_cell",
  "socket2 0.5.10",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -11430,7 +11440,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.4.15",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -11443,7 +11453,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.11.0",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -11511,7 +11521,7 @@ dependencies = [
  "security-framework 3.5.1",
  "security-framework-sys",
  "webpki-root-certs 1.0.1",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -13171,7 +13181,7 @@ dependencies = [
  "getrandom 0.3.4",
  "once_cell",
  "rustix 1.1.2",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -15005,6 +15015,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "warp_channel_config"
+version = "0.0.0"
+dependencies = [
+ "command",
+ "serde_json",
+ "warp_core",
+]
+
+[[package]]
 name = "warp_cli"
 version = "0.0.0"
 dependencies = [
@@ -15330,13 +15349,31 @@ dependencies = [
 [[package]]
 name = "warp_multi_agent_api"
 version = "0.0.0"
-source = "git+https://github.com/warpdotdev/warp-proto-apis.git?rev=97d1b367b955c562812e0a1315a6ec7ee6a5389e#97d1b367b955c562812e0a1315a6ec7ee6a5389e"
+source = "git+https://github.com/warpdotdev/warp-proto-apis.git?rev=ac1af7303d2931b0fb485be650a1fbc8b80d5667#ac1af7303d2931b0fb485be650a1fbc8b80d5667"
 dependencies = [
  "prost",
  "prost-reflect",
  "prost-reflect-build",
  "prost-types",
  "regex",
+]
+
+[[package]]
+name = "warp_multi_agent_client"
+version = "0.1.0"
+dependencies = [
+ "aha-reqwest-eventsource",
+ "anyhow",
+ "base64 0.22.1",
+ "cfg-if",
+ "futures",
+ "prost",
+ "thiserror 2.0.17",
+ "tracing",
+ "tracing-futures",
+ "warp_core",
+ "warp_multi_agent_api",
+ "warp_server_client",
 ]
 
 [[package]]
@@ -15481,6 +15518,21 @@ dependencies = [
  "warp_completer",
  "warp_core",
  "warp_util",
+ "warpui_core",
+]
+
+[[package]]
+name = "warp_tui"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "num-traits",
+ "string-offset",
+ "vec1",
+ "warp",
+ "warp_channel_config",
+ "warp_core",
+ "warp_editor",
  "warpui_core",
 ]
 
@@ -16342,7 +16394,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]

@@ -1969,6 +1969,13 @@ impl PaneGroup {
                     "Environment management panes are not restored"
                 ))
             }
+            LeafContents::CustomRouterEditor => {
+                // Custom router editor panes are not restored from persistence.
+                // They are opened on-demand when editing a custom model router.
+                Err(anyhow::anyhow!(
+                    "Custom router editor panes are not restored"
+                ))
+            }
         };
 
         if let (Ok((pane_data, _)), Some(title)) = (&result, custom_vertical_tabs_title.as_deref())

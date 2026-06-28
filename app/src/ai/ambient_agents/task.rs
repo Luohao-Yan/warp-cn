@@ -17,9 +17,20 @@ use warpui::{SingletonEntity, View, ViewContext};
 use super::AmbientAgentTaskId;
 use crate::ai::artifacts::{deserialize_artifacts, Artifact};
 use crate::server::server_api::ServerApiProvider;
+use crate::static_tr;
 use crate::ui_components::icons::Icon;
 use crate::view_components::DismissibleToast;
 use crate::workspace::ToastStack;
+
+static_tr!(SOURCE_LINEAR, "ai_assistant", "source-linear");
+static_tr!(SOURCE_API, "ai_assistant", "source-api");
+static_tr!(SOURCE_SLACK, "ai_assistant", "source-slack");
+static_tr!(SOURCE_CLI, "ai_assistant", "source-cli");
+static_tr!(SOURCE_SCHEDULED, "ai_assistant", "source-scheduled");
+static_tr!(SOURCE_WARP_APP, "ai_assistant", "source-warp-app");
+static_tr!(SOURCE_WEB_APP, "ai_assistant", "source-web-app");
+static_tr!(SOURCE_GITHUB_ACTION, "ai_assistant", "source-github-action");
+static_tr!(SOURCE_AGENT_FALLBACK, "ai_assistant", "source-agent-fallback");
 
 fn parse_session_id_from_link(session_link: &str) -> Option<SessionId> {
     Url::parse(session_link).ok().and_then(|url| {
@@ -69,14 +80,14 @@ impl AgentSource {
 
     pub fn display_name(&self) -> &str {
         match self {
-            AgentSource::Linear => "Linear",
-            AgentSource::AgentWebhook => "API",
-            AgentSource::Slack => "Slack",
-            AgentSource::Cli => "CLI",
-            AgentSource::ScheduledAgent => "Scheduled",
-            AgentSource::Interactive | AgentSource::CloudMode => "Warp App",
-            AgentSource::WebApp => "Oz Web",
-            AgentSource::GitHubAction => "GitHub Action",
+            AgentSource::Linear => SOURCE_LINEAR.get(),
+            AgentSource::AgentWebhook => SOURCE_API.get(),
+            AgentSource::Slack => SOURCE_SLACK.get(),
+            AgentSource::Cli => SOURCE_CLI.get(),
+            AgentSource::ScheduledAgent => SOURCE_SCHEDULED.get(),
+            AgentSource::Interactive | AgentSource::CloudMode => SOURCE_WARP_APP.get(),
+            AgentSource::WebApp => SOURCE_WEB_APP.get(),
+            AgentSource::GitHubAction => SOURCE_GITHUB_ACTION.get(),
         }
     }
 
@@ -259,7 +270,7 @@ impl AmbientAgentTask {
         if !trimmed_title.is_empty() {
             return trimmed_title;
         }
-        "Agent"
+        SOURCE_AGENT_FALLBACK.get()
     }
 
     pub fn conversation_id(&self) -> Option<&str> {
@@ -532,10 +543,10 @@ pub fn cancel_task_with_toast<V: View>(task_id: AmbientAgentTaskId, ctx: &mut Vi
         async move { ai_client.cancel_ambient_agent_task(&task_id).await },
         move |_view, result, ctx| {
             let message = match result {
-                Ok(()) => "Task cancelled".to_string(),
+                Ok(()) => crate::tr!("ai_assistant", "task-cancelled").to_string(),
                 Err(e) => {
                     log::error!("Failed to cancel task: {e}");
-                    format!("Failed to cancel task: {e}")
+                    crate::tr!("ai_assistant", "failed-cancel-task", error = e.to_string()).to_string()
                 }
             };
             ToastStack::handle(ctx).update(ctx, |toast_stack, ctx| {

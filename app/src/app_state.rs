@@ -144,6 +144,7 @@ pub enum LeafContents {
     Settings(SettingsPaneSnapshot),
     AIFact(AIFactPaneSnapshot),
     ExecutionProfileEditor,
+    CustomRouterEditor,
     CodeReview(CodeReviewPaneSnapshot),
     AmbientAgent(AmbientAgentPaneSnapshot),
     /// The in-app network log pane. Not persisted across restarts because the
@@ -172,7 +173,9 @@ impl LeafContents {
             LeafContents::NetworkLog
             // Environment management panes are opened on-demand via workspace
             // actions and have no persistable state.
-            | LeafContents::EnvironmentManagement(_) => false,
+            | LeafContents::EnvironmentManagement(_)
+            // Custom router editor panes are not yet persisted to SQLite.
+            | LeafContents::CustomRouterEditor => false,
             LeafContents::Terminal(_)
             | LeafContents::Notebook(_)
             | LeafContents::AIDocument(_)
