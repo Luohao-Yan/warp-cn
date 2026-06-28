@@ -2469,6 +2469,7 @@ fn launch(ctx: &mut warpui::AppContext, app_state: Option<AppState>, launch_mode
     });
 
     ctx.set_fallback_font_fn(font_fallback::fallback_font_fn);
+    appearance::register_system_cjk_fallback(ctx);
 
     match launch_mode {
         LaunchMode::App { .. } | LaunchMode::Test { .. } => {
