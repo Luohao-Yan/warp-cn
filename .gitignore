@@ -69,3 +69,22 @@ __pycache__/
 
 # Project notes
 .note/
+
+# i18n migration temp/scripts
+*.py
+*.js
+!crates/*/src/**/*.rs
+*.txt
+*.json
+!app/src/**/*.json
+!crates/*/src/**/*.json
+fix_temp/
+.fix_temp/
+SERVER_DEPENDENT_FEATURES_AUDIT.md
+docs/
+scripts/
+tmp_*
+dev_debug.log
+crash_log.txt
+crates/ai/src/local_provider/
+crates/input_classifier/models/

@@ -4,13 +4,16 @@
 //! Parallel execution is used when multiple independent tool calls are present
 //! in a single assistant turn.
 
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::sync::Arc;
 use std::time::Duration;
 
 use futures::future::join_all;
+use futures::StreamExt;
 use tokio::process::Command as TokioCommand;
+use tokio::sync::Mutex;
 use tokio_util::sync::CancellationToken;
 use uuid::Uuid;
 use warp_multi_agent_api as api;
@@ -29,6 +32,12 @@ const MAX_CONCURRENT_TOOLS: usize = 8;
 
 /// Timeout for MCP tool calls and resource reads.
 const MCP_TIMEOUT_SECS: u64 = 30;
+
+/// Maximum concurrent subagent spawns within a single agent turn.
+const MAX_CONCURRENT_SUBAGENTS_PER_TURN: usize = 3;
+
+/// Maximum total subagent spawns for the lifetime of a task.
+const MAX_TOTAL_SUBAGENTS_PER_TASK: usize = 10;
 
 /// Result of executing a single tool call.
 #[derive(Debug, Clone)]
@@ -57,6 +66,12 @@ pub struct ToolExecutor {
     max_context_tokens: usize,
     /// MCP spawner for accessing TemplatableMCPServerManager.
     mcp_spawner: Option<warpui::ModelSpawner<crate::ai::mcp::TemplatableMCPServerManager>>,
+    /// Pause handle for interactive tools (AskUserQuestion, SuggestPlan).
+    pause_handle: Option<super::runner::PauseHandle>,
+    /// Background command tracker for long-running shell commands.
+    bg_commands: super::pty_executor::BackgroundCommands,
+    /// Active child agents spawned via RunAgents (shared with runner for cleanup).
+    active_children: Arc<Mutex<HashMap<String, super::runner::ActiveChild>>>,
 }
 
 impl ToolExecutor {
@@ -70,7 +85,10 @@ impl ToolExecutor {
         model_id: String,
         max_context_tokens: usize,
         mcp_spawner: Option<warpui::ModelSpawner<crate::ai::mcp::TemplatableMCPServerManager>>,
+        pause_handle: Option<super::runner::PauseHandle>,
     ) -> Self {
+        let bg_commands = super::pty_executor::BackgroundCommands::new(working_dir.clone());
+        let active_children = Arc::new(Mutex::new(HashMap::new()));
         Self {
             working_dir,
             cancellation_token,
@@ -81,6 +99,9 @@ impl ToolExecutor {
             model_id,
             max_context_tokens,
             mcp_spawner,
+            pause_handle,
+            bg_commands,
+            active_children,
         }
     }
 
@@ -88,6 +109,11 @@ impl ToolExecutor {
     pub fn with_shell_timeout(mut self, timeout: Duration) -> Self {
         self.shell_timeout = timeout;
         self
+    }
+
+    /// Get the shared active children map (for runner cleanup).
+    pub fn active_children(&self) -> Arc<Mutex<HashMap<String, super::runner::ActiveChild>>> {
+        self.active_children.clone()
     }
 
     /// Execute multiple tool calls in parallel.
@@ -118,6 +144,22 @@ impl ToolExecutor {
                 Some(api::message::tool_call::Tool::Subagent(_)) => "subagent",
                 Some(api::message::tool_call::Tool::AskUserQuestion(_)) => "ask_user_question",
                 Some(api::message::tool_call::Tool::SuggestPlan(_)) => "suggest_plan",
+                Some(api::message::tool_call::Tool::WriteToLongRunningShellCommand(_)) => "write_to_long_running_shell_command",
+                Some(api::message::tool_call::Tool::ReadShellCommandOutput(_)) => "read_shell_command_output",
+                Some(api::message::tool_call::Tool::TransferShellCommandControlToUser(_)) => "transfer_shell_command_control_to_user",
+                Some(api::message::tool_call::Tool::RunAgents(_)) => "run_agents",
+                Some(api::message::tool_call::Tool::SendMessageToAgent(_)) => "send_message_to_agent",
+                Some(api::message::tool_call::Tool::ReadDocuments(_)) => "read_documents",
+                Some(api::message::tool_call::Tool::EditDocuments(_)) => "edit_documents",
+                Some(api::message::tool_call::Tool::CreateDocuments(_)) => "create_documents",
+                Some(api::message::tool_call::Tool::SuggestNewConversation(_)) => "suggest_new_conversation",
+                Some(api::message::tool_call::Tool::SuggestPrompt(_)) => "suggest_prompt",
+                Some(api::message::tool_call::Tool::ReadSkill(_)) => "read_skill",
+                Some(api::message::tool_call::Tool::FetchConversation(_)) => "fetch_conversation",
+                Some(api::message::tool_call::Tool::UploadFileArtifact(_)) => "upload_file_artifact",
+                Some(api::message::tool_call::Tool::InsertReviewComments(_)) => "insert_review_comments",
+                Some(api::message::tool_call::Tool::OpenCodeReview(_)) => "open_code_review",
+                Some(api::message::tool_call::Tool::InitProject(_)) => "init_project",
                 _ => "unknown",
             }.to_string();
             let result_fut = self.execute_single(tc);
@@ -182,17 +224,172 @@ impl ToolExecutor {
                 self.spawn_subagent(sub).await
             }
             Some(api::message::tool_call::Tool::AskUserQuestion(ask)) => {
-                // AskUserQuestion is at api::AskUserQuestion, but the tool
-                // variant wraps it in the tool_call oneof. The questions
-                // field is Vec<ask_user_question::Question> where each Question
-                // has a plain String `question` field (not Option<String>).
                 let question_texts: Vec<String> = ask.questions.iter()
                     .map(|q| q.question.clone())
                     .collect();
-                Ok(format!("Questions for user: {}", question_texts.join("; ")))
+                let question = question_texts.join("; ");
+                if let Some(handle) = &self.pause_handle {
+                    let resume = handle.pause_and_wait(
+                        super::runner::PauseReason::AskUserQuestion {
+                            question: question.clone(),
+                        },
+                    ).await;
+                    Ok(resume.answer)
+                } else {
+                    Ok(question)
+                }
             }
             Some(api::message::tool_call::Tool::SuggestPlan(plan)) => {
-                Ok(format!("Suggested plan: {}", plan.summary))
+                if let Some(handle) = &self.pause_handle {
+                    let resume = handle.pause_and_wait(
+                        super::runner::PauseReason::SuggestPlan {
+                            plan: plan.summary.clone(),
+                        },
+                    ).await;
+                    if resume.approved {
+                        Ok(format!("Plan approved. Proceeding with: {}", plan.summary))
+                    } else {
+                        Ok(format!("Plan rejected: {}", plan.summary))
+                    }
+                } else {
+                    Ok(format!("Suggested plan: {}", plan.summary))
+                }
+            }
+            Some(api::message::tool_call::Tool::WriteToLongRunningShellCommand(write)) => {
+                self.write_to_long_running_command(&write.command_id, &write.input).await
+            }
+            Some(api::message::tool_call::Tool::ReadShellCommandOutput(read)) => {
+                self.read_command_output(&read.command_id, &read.delay).await
+            }
+            Some(api::message::tool_call::Tool::TransferShellCommandControlToUser(transfer)) => {
+                if let Some(handle) = &self.pause_handle {
+                    let _ = handle.pause_and_wait(
+                        super::runner::PauseReason::AskUserQuestion {
+                            question: format!("Agent transferred control to you: {}. Type anything to resume the agent.", transfer.reason),
+                        },
+                    ).await;
+                    Ok("Control returned to agent".to_string())
+                } else {
+                    Ok(format!("Control transfer requested: {}", transfer.reason))
+                }
+            }
+            Some(api::message::tool_call::Tool::RunAgents(run)) => {
+                self.run_agents(run).await
+            }
+            Some(api::message::tool_call::Tool::SendMessageToAgent(msg)) => {
+                self.send_message_to_agent(msg).await
+            }
+            Some(api::message::tool_call::Tool::ReadDocuments(read)) => {
+                let paths: Vec<String> = read.documents.iter().map(|d| d.document_id.clone()).collect();
+                self.read_files(&paths).await
+            }
+            Some(api::message::tool_call::Tool::EditDocuments(edit)) => {
+                let diffs: Vec<api::message::tool_call::apply_file_diffs::FileDiff> = edit.diffs.iter().map(|d| {
+                    api::message::tool_call::apply_file_diffs::FileDiff {
+                        file_path: d.document_id.clone(),
+                        search: d.search.clone(),
+                        replace: d.replace.clone(),
+                    }
+                }).collect();
+                self.apply_file_diffs(&diffs).await
+            }
+            Some(api::message::tool_call::Tool::CreateDocuments(create)) => {
+                let mut results = Vec::new();
+                for doc in &create.new_documents {
+                    let path = self.resolve_path(Path::new(&doc.title));
+                    if let Some(parent) = path.parent() {
+                        let _ = std::fs::create_dir_all(parent);
+                    }
+                    match std::fs::write(&path, &doc.content) {
+                        Ok(()) => results.push(format!("Created {}", doc.title)),
+                        Err(e) => results.push(format!("Failed to create {}: {e}", doc.title)),
+                    }
+                }
+                Ok(results.join("\n"))
+            }
+            Some(api::message::tool_call::Tool::SuggestNewConversation(_)) => {
+                Ok("New conversation suggested. Start a fresh conversation for a new topic.".to_string())
+            }
+            Some(api::message::tool_call::Tool::SuggestPrompt(suggest)) => {
+                let prompt_text = suggest.display_mode.as_ref().map(|m| match m {
+                    api::message::tool_call::suggest_prompt::DisplayMode::InlineQueryBanner(b) => b.query.clone(),
+                    api::message::tool_call::suggest_prompt::DisplayMode::PromptChip(c) => c.prompt.clone(),
+                }).unwrap_or_default();
+                Ok(if prompt_text.is_empty() { "Suggested a new prompt.".to_string() } else { format!("Suggested prompt: {prompt_text}") })
+            }
+            Some(api::message::tool_call::Tool::ReadSkill(skill)) => {
+                let skill_path = dirs::home_dir()
+                    .unwrap_or_default()
+                    .join(".warp")
+                    .join("skills")
+                    .join(format!("{}.md", skill.name));
+                if skill_path.exists() {
+                    self.read_files(&[skill_path.to_string_lossy().to_string()]).await
+                } else {
+                    Ok(format!("Skill '{}' not found", skill.name))
+                }
+            }
+            Some(api::message::tool_call::Tool::FetchConversation(fetch)) => {
+                let messages = self.child_spawner.task_store().get_messages(&fetch.conversation_id)?;
+                let mut parts = Vec::new();
+                for msg in &messages {
+                    let role = &msg.role;
+                    if let Some(content) = &msg.content {
+                        parts.push(format!("[{role}] {content}"));
+                    }
+                }
+                Ok(parts.join("\n"))
+            }
+            Some(api::message::tool_call::Tool::UploadFileArtifact(upload)) => {
+                let artifact_dir = dirs::home_dir()
+                    .unwrap_or_default()
+                    .join(".warp")
+                    .join("artifacts");
+                let _ = std::fs::create_dir_all(&artifact_dir);
+                let source_path = upload.file.as_ref()
+                    .map(|f| f.file_path.clone())
+                    .unwrap_or_default();
+                let file_name = Path::new(&source_path).file_name()
+                    .map(|n| n.to_string_lossy().to_string())
+                    .unwrap_or_else(|| "artifact".to_string());
+                let artifact_path = artifact_dir.join(&file_name);
+                let src = self.resolve_path(Path::new(&source_path));
+                if src.exists() {
+                    match std::fs::copy(&src, &artifact_path) {
+                        Ok(bytes) => Ok(format!("Uploaded artifact '{}' ({} bytes)", file_name, bytes)),
+                        Err(e) => Ok(format!("Upload failed: {e}")),
+                    }
+                } else {
+                    Ok(format!("Source file {} not found", source_path))
+                }
+            }
+            Some(api::message::tool_call::Tool::InsertReviewComments(insert)) => {
+                let review_dir = self.resolve_path(Path::new(&insert.repo_path));
+                let _ = std::fs::create_dir_all(&review_dir);
+                let review_path = review_dir.join("review_comments.md");
+                let mut existing = if review_path.exists() {
+                    std::fs::read_to_string(&review_path).unwrap_or_default()
+                } else {
+                    String::new()
+                };
+                for comment in &insert.comments {
+                    let location_info = comment.location.as_ref()
+                        .map(|l| format!(":{}{}", l.file_path, l.line.as_ref().map(|ln| format!(":{}", "placeholder")).unwrap_or_default()))
+                        .unwrap_or_default();
+                    existing.push_str(&format!("\n### Comment by {} ({})\n{}\n", comment.author, comment.last_modified_timestamp, comment.comment_body));
+                }
+                match std::fs::write(&review_path, &existing) {
+                    Ok(()) => Ok(format!("Inserted {} review comments to {}", insert.comments.len(), insert.repo_path)),
+                    Err(e) => Ok(format!("Failed to write review comments: {e}")),
+                }
+            }
+            Some(api::message::tool_call::Tool::OpenCodeReview(_review)) => {
+                let cmd = format!("cd {} && git diff", self.working_dir.display());
+                self.run_shell_command(&cmd).await
+            }
+            Some(api::message::tool_call::Tool::InitProject(_init)) => {
+                let query = format!("List project structure and key files for: {}", self.working_dir.display());
+                self.search_codebase(&query).await
             }
             _ => Err(LocalAgentError::ToolExecution {
                 tool_name: "unknown".to_string(),
@@ -204,54 +401,107 @@ impl ToolExecutor {
     // -- Shell command execution ---------------------------------------------
 
     async fn run_shell_command(&self, command: &str) -> Result<String, LocalAgentError> {
-        // Use the platform's default shell to execute the command.
-        let shell = if cfg!(target_os = "windows") {
-            "cmd"
-        } else {
-            "/bin/sh"
-        };
-        let shell_arg = if cfg!(target_os = "windows") {
-            "/C"
-        } else {
-            "-c"
-        };
+        let command_id = Uuid::new_v4().to_string();
 
-        let child = TokioCommand::new(shell)
-            .arg(shell_arg)
-            .arg(command)
-            .current_dir(&self.working_dir)
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .map_err(|_| LocalAgentError::ShellCommand {
-                command: command.to_string(),
-                exit_code: -1,
-            })?;
-
-        let result = tokio::time::timeout(self.shell_timeout, child.wait_with_output())
+        // Start the command via BackgroundCommands (non-blocking)
+        self.bg_commands
+            .start(command_id.clone(), command)
             .await
-            .map_err(|_| LocalAgentError::ShellTimeout {
-                command: command.to_string(),
-                timeout_secs: self.shell_timeout.as_secs(),
-            })?
-            .map_err(|_| LocalAgentError::ShellCommand {
-                command: command.to_string(),
-                exit_code: -1,
+            .map_err(|e| LocalAgentError::ToolExecution {
+                tool_name: "run_shell_command".to_string(),
+                message: e,
             })?;
 
-        let stdout = String::from_utf8_lossy(&result.stdout);
-        let stderr = String::from_utf8_lossy(&result.stderr);
-        let mut output = format!("{stdout}{stderr}");
-        truncate_string(&mut output, MAX_SHELL_OUTPUT);
-
-        if result.status.success() {
-            Ok(output)
-        } else {
-            Err(LocalAgentError::ShellCommand {
-                command: command.to_string(),
-                exit_code: result.status.code().unwrap_or(-1),
-            })
+        // Poll for up to shell_timeout. If it finishes, return full output.
+        // If still running, return a snapshot so the LLM can read output later.
+        let deadline = tokio::time::Instant::now() + self.shell_timeout;
+        loop {
+            if self.bg_commands.is_finished(&command_id).await {
+                let output = self.bg_commands.full_output(&command_id).await;
+                let exit_code = self.bg_commands.exit_code(&command_id).await;
+                self.bg_commands.remove(&command_id).await;
+                if exit_code == Some(0) {
+                    return Ok(output);
+                } else {
+                    return Err(LocalAgentError::ShellCommand {
+                        command: command.to_string(),
+                        exit_code: exit_code.unwrap_or(-1),
+                    });
+                }
+            }
+            if tokio::time::Instant::now() >= deadline {
+                // Command still running — return snapshot for LLM to read later
+                let (stdout, stderr) = self.bg_commands.read_output(&command_id).await;
+                let mut snapshot = stdout;
+                if !stderr.is_empty() {
+                    snapshot.push_str(&stderr);
+                }
+                truncate_string(&mut snapshot, MAX_SHELL_OUTPUT);
+                return Ok(format!(
+                    "[Command still running (id: {command_id}). Use read_shell_command_output to check progress.]\n{snapshot}"
+                ));
+            }
+            tokio::time::sleep(Duration::from_secs(2)).await;
         }
+    }
+
+    // -- Long-running command operations ------------------------------------
+
+    async fn write_to_long_running_command(
+        &self,
+        command_id: &str,
+        input: &[u8],
+    ) -> Result<String, LocalAgentError> {
+        self.bg_commands
+            .write_input(command_id, input)
+            .await
+            .map_err(|e| LocalAgentError::ToolExecution {
+                tool_name: "write_to_long_running_shell_command".to_string(),
+                message: e,
+            })?;
+        Ok(format!("Wrote {} bytes to command {command_id}", input.len()))
+    }
+
+    async fn read_command_output(
+        &self,
+        command_id: &str,
+        delay: &Option<api::message::tool_call::read_shell_command_output::Delay>,
+    ) -> Result<String, LocalAgentError> {
+        // If delay specifies OnCompletion, wait until the command finishes
+        if matches!(delay, Some(api::message::tool_call::read_shell_command_output::Delay::OnCompletion(()))) {
+            while !self.bg_commands.is_finished(command_id).await {
+                tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+            }
+        } else if let Some(api::message::tool_call::read_shell_command_output::Delay::Duration(d)) = delay {
+            let wait = std::time::Duration::from_secs(d.seconds as u64)
+                + std::time::Duration::from_nanos(d.nanos as u64);
+            tokio::time::sleep(wait).await;
+        } else {
+            // Default small delay to allow output to accumulate
+            tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+        }
+
+        let (stdout, stderr) = self.bg_commands.read_output(command_id).await;
+        let finished = self.bg_commands.is_finished(command_id).await;
+        let exit_code = self.bg_commands.exit_code(command_id).await;
+
+        let mut result = String::new();
+        if !stdout.is_empty() {
+            result.push_str(&stdout);
+        }
+        if !stderr.is_empty() {
+            result.push_str(&stderr);
+        }
+        if finished {
+            if let Some(code) = exit_code {
+                result.push_str(&format!("\n[Command exited with code {code}]"));
+            }
+            self.bg_commands.remove(command_id).await;
+        }
+        if result.is_empty() {
+            result = "(No new output)\n".to_string();
+        }
+        Ok(result)
     }
 
     // -- File reading -------------------------------------------------------
@@ -715,6 +965,136 @@ impl ToolExecutor {
         Ok(result)
     }
 
+    // -- Multi-agent orchestration (RunAgents / SendMessageToAgent) ----------
+
+    async fn run_agents(&self, run: &api::RunAgents) -> Result<String, LocalAgentError> {
+        let configs = &run.agent_run_configs;
+        if configs.is_empty() {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "run_agents".to_string(),
+                message: "No agent configs provided".to_string(),
+            });
+        }
+
+        // Enforce limits
+        let current_total = {
+            let children = self.active_children.lock().await;
+            children.len()
+        };
+        if current_total + configs.len() > MAX_TOTAL_SUBAGENTS_PER_TASK {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "run_agents".to_string(),
+                message: format!("Would exceed max total subagents ({MAX_TOTAL_SUBAGENTS_PER_TASK})"),
+            });
+        }
+        if configs.len() > MAX_CONCURRENT_SUBAGENTS_PER_TURN {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "run_agents".to_string(),
+                message: format!("Too many concurrent agents ({}/{MAX_CONCURRENT_SUBAGENTS_PER_TURN})", configs.len()),
+            });
+        }
+
+        // Build parent context summary
+        let parent_context_summary = build_parent_context_summary(
+            &self.child_spawner.task_store(),
+            &self.parent_task_id,
+        );
+
+        let model_id = if run.model_id.is_empty() {
+            self.model_id.clone()
+        } else {
+            run.model_id.clone()
+        };
+
+        // Spawn all child agents and collect their join handles
+        let mut spawned: Vec<(String, String, tokio::task::JoinHandle<Result<String, LocalAgentError>>)> = Vec::new();
+        let mut results: Vec<String> = Vec::new();
+
+        for config in configs {
+            let name = config.name.clone();
+            let enriched_prompt = format!(
+                "[Parent agent context summary]\n{parent_context_summary}\n\n[Your specific task]\n{task}",
+                task = config.prompt
+            );
+
+            let child_config = super::child_agent::ChildAgentConfig {
+                prompt: enriched_prompt,
+                model_id: model_id.clone(),
+                working_dir: self.working_dir.clone(),
+                max_context_tokens: self.max_context_tokens / 2,
+                parent_task_id: self.parent_task_id.clone(),
+                conversation_id: self.conversation_id.clone(),
+                child_task_id: String::new(),
+            };
+
+            match self.child_spawner.spawn(&child_config) {
+                Ok((task_id, handle)) => {
+                    spawned.push((task_id, name, handle));
+                }
+                Err(e) => {
+                    results.push(format!("Agent '{}': FAILED to spawn - {e}", config.name));
+                }
+            }
+        }
+
+        // Wait for all children concurrently
+        let mut futures = futures::stream::FuturesUnordered::new();
+        for (task_id, name, handle) in spawned {
+            futures.push(async move { (task_id, name, handle.await) });
+        }
+
+        while let Some((task_id, name, result)) = futures.next().await {
+            match result {
+                Ok(Ok(output)) => {
+                    let _ = self.child_spawner.task_store().append_tool_message(
+                        &self.parent_task_id, None, "run_agents", &name, &output, &output,
+                    );
+                    results.push(format!("Agent '{name}' (id: {task_id}): completed"));
+                }
+                Ok(Err(e)) => {
+                    results.push(format!("Agent '{name}': FAILED - {e}"));
+                }
+                Err(e) => {
+                    results.push(format!("Agent '{name}': JOIN error - {e}"));
+                }
+            }
+        }
+
+        Ok(results.join("\n"))
+    }
+
+    async fn send_message_to_agent(&self, msg: &api::SendMessageToAgent) -> Result<String, LocalAgentError> {
+        let children = self.active_children.lock().await;
+        let mut sent = Vec::new();
+        let mut errors = Vec::new();
+
+        for addr in &msg.addresses {
+            if let Some(child) = children.get::<str>(addr) {
+                let child_msg = super::runner::ChildMessage {
+                    subject: msg.subject.clone(),
+                    body: msg.message.clone(),
+                };
+                match child.message_tx.try_send(child_msg) {
+                    Ok(_) => sent.push(addr.clone()),
+                    Err(e) => errors.push(format!("{addr}: send failed - {e}")),
+                }
+            } else {
+                errors.push(format!("{addr}: agent not found"));
+            }
+        }
+
+        if errors.is_empty() {
+            Ok(format!("Message sent to agents: {}", sent.join(", ")))
+        } else if sent.is_empty() {
+            Err(LocalAgentError::ToolExecution {
+                tool_name: "send_message_to_agent".to_string(),
+                message: format!("All sends failed: {}", errors.join("; ")),
+            })
+        } else {
+            Ok(format!("Partially sent: {}; errors: {}", sent.join(", "), errors.join("; ")))
+        }
+    }
+
     // -- Helpers -------------------------------------------------------------
 
     /// Resolve a path relative to the working directory.
@@ -904,6 +1284,217 @@ fn build_tool_call_result(tc: &api::message::ToolCall, output: &str) -> api::mes
                     },
                 ))
             }
+            Some(api::message::tool_call::Tool::WriteToLongRunningShellCommand(_)) => {
+                Some(api::message::tool_call_result::Result::WriteToLongRunningShellCommand(
+                    api::WriteToLongRunningShellCommandResult {
+                        result: Some(api::write_to_long_running_shell_command_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: output.to_string(),
+                                exit_code: 0,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                        ..Default::default()
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::ReadShellCommandOutput(_)) => {
+                Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
+                    api::ReadShellCommandOutputResult {
+                        command: String::new(),
+                        result: Some(api::read_shell_command_output_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: output.to_string(),
+                                exit_code: 0,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::TransferShellCommandControlToUser(_)) => {
+                Some(api::message::tool_call_result::Result::TransferShellCommandControlToUser(
+                    api::TransferShellCommandControlToUserResult {
+                        result: Some(api::transfer_shell_command_control_to_user_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: output.to_string(),
+                                exit_code: 0,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                        ..Default::default()
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::AskUserQuestion(_)) |
+            Some(api::message::tool_call::Tool::SuggestPlan(_)) => {
+                Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
+                    api::ReadShellCommandOutputResult {
+                        command: String::new(),
+                        result: Some(api::read_shell_command_output_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: output.to_string(),
+                                exit_code: 0,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::RunAgents(_)) => {
+                Some(api::message::tool_call_result::Result::RunAgentsResult(
+                    api::RunAgentsResult {
+                        outcome: Some(api::run_agents_result::Outcome::Launched(
+                            api::run_agents_result::Launched {
+                                resolved_model_id: String::new(),
+                                resolved_harness: None,
+                                agents: vec![api::run_agents_result::AgentOutcome {
+                                    name: String::new(),
+                                    result: Some(api::run_agents_result::agent_outcome::Result::Launched(
+                                        api::run_agents_result::LaunchedAgent {
+                                            agent_id: String::new(),
+                                        },
+                                    )),
+                                }],
+                                resolved_execution_mode: None,
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::SendMessageToAgent(_)) => {
+                Some(api::message::tool_call_result::Result::SendMessageToAgent(
+                    api::SendMessageToAgentResult {
+                        result: Some(api::send_message_to_agent_result::Result::Success(
+                            api::send_message_to_agent_result::Success {
+                                message_id: Uuid::new_v4().to_string(),
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::ReadDocuments(_)) => {
+                Some(api::message::tool_call_result::Result::ReadDocuments(
+                    api::ReadDocumentsResult {
+                        result: Some(api::read_documents_result::Result::Success(
+                            api::read_documents_result::Success {
+                                documents: vec![api::DocumentContent {
+                                    document_id: String::new(),
+                                    content: output.to_string(),
+                                    line_range: None,
+                                }],
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::EditDocuments(_)) => {
+                Some(api::message::tool_call_result::Result::EditDocuments(
+                    api::EditDocumentsResult {
+                        result: Some(api::edit_documents_result::Result::Success(
+                            api::edit_documents_result::Success {
+                                updated_documents: Vec::new(),
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::CreateDocuments(_)) => {
+                Some(api::message::tool_call_result::Result::CreateDocuments(
+                    api::CreateDocumentsResult {
+                        result: Some(api::create_documents_result::Result::Success(
+                            api::create_documents_result::Success {
+                                created_documents: Vec::new(),
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::SuggestNewConversation(_)) => {
+                Some(api::message::tool_call_result::Result::SuggestNewConversation(
+                    api::SuggestNewConversationResult {
+                        result: Some(api::suggest_new_conversation_result::Result::Accepted(
+                            api::suggest_new_conversation_result::Accepted {
+                                message_id: String::new(),
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::SuggestPrompt(_)) => {
+                Some(api::message::tool_call_result::Result::SuggestPrompt(
+                    api::SuggestPromptResult {
+                        result: Some(api::suggest_prompt_result::Result::Accepted(())),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::ReadSkill(_)) => {
+                Some(api::message::tool_call_result::Result::ReadSkill(
+                    api::ReadSkillResult {
+                        result: Some(api::read_skill_result::Result::Success(
+                            api::read_skill_result::Success {
+                                content: Some(api::FileContent {
+                                    file_path: String::new(),
+                                    content: output.to_string(),
+                                    line_range: None,
+                                }),
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::FetchConversation(_)) => {
+                Some(api::message::tool_call_result::Result::FetchConversation(
+                    api::FetchConversationResult {
+                        result: Some(api::fetch_conversation_result::Result::Success(
+                            api::fetch_conversation_result::Success {
+                                directory_path: output.to_string(),
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::UploadFileArtifact(_)) => {
+                Some(api::message::tool_call_result::Result::UploadFileArtifact(
+                    api::UploadFileArtifactResult {
+                        result: Some(api::upload_file_artifact_result::Result::Success(
+                            api::upload_file_artifact_result::Success {
+                                artifact_uid: String::new(),
+                                mime_type: "application/octet-stream".to_string(),
+                                size_bytes: 0,
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::InsertReviewComments(_)) => {
+                Some(api::message::tool_call_result::Result::InsertReviewComments(
+                    api::InsertReviewCommentsResult {
+                        repo_path: String::new(),
+                        result: Some(api::insert_review_comments_result::Result::Success(
+                            api::insert_review_comments_result::Success {},
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::OpenCodeReview(_)) => {
+                Some(api::message::tool_call_result::Result::OpenCodeReview(
+                    api::OpenCodeReviewResult {},
+                ))
+            }
+            Some(api::message::tool_call::Tool::InitProject(_)) => {
+                Some(api::message::tool_call_result::Result::InitProject(
+                    api::InitProjectResult {},
+                ))
+            }
             _ => Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
                 api::ReadShellCommandOutputResult {
                     command: String::new(),
@@ -924,23 +1515,244 @@ fn build_tool_call_result(tc: &api::message::ToolCall, output: &str) -> api::mes
 }
 
 pub fn build_tool_call_error(tc: &api::message::ToolCall, error: &LocalAgentError) -> api::message::ToolCallResult {
-    api::message::ToolCallResult {
-        tool_call_id: tc.tool_call_id.clone(),
-        result: Some(api::message::tool_call_result::Result::RunShellCommand(
-            api::RunShellCommandResult {
-                result: Some(api::run_shell_command_result::Result::CommandFinished(
-                    api::ShellCommandFinished {
-                        output: format!("Error: {error}"),
-                        exit_code: 1,
-                        command_id: String::new(),
-                        start_ts: None,
-                        finish_ts: None,
+    match &tc.tool {
+        Some(api::message::tool_call::Tool::RunShellCommand(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::RunShellCommand(
+                    api::RunShellCommandResult {
+                        result: Some(api::run_shell_command_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: format!("Error: {error}"),
+                                exit_code: 1,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                        ..Default::default()
                     },
                 )),
                 ..Default::default()
-            },
-        )),
-        ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::CallMcpTool(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::CallMcpTool(
+                    api::CallMcpToolResult {
+                        result: Some(api::call_mcp_tool_result::Result::Error(
+                            api::call_mcp_tool_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                        ..Default::default()
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::ReadShellCommandOutput(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
+                    api::ReadShellCommandOutputResult {
+                        command: String::new(),
+                        result: Some(api::read_shell_command_output_result::Result::Error(
+                            api::ShellCommandError {
+                                r#type: Some(api::shell_command_error::Type::CommandNotFound(())),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::RunAgents(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::RunAgentsResult(
+                    api::RunAgentsResult {
+                        outcome: Some(api::run_agents_result::Outcome::Failure(
+                            api::run_agents_result::Failure {
+                                error: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::SendMessageToAgent(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::SendMessageToAgent(
+                    api::SendMessageToAgentResult {
+                        result: Some(api::send_message_to_agent_result::Result::Error(
+                            api::send_message_to_agent_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::ReadDocuments(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::ReadDocuments(
+                    api::ReadDocumentsResult {
+                        result: Some(api::read_documents_result::Result::Error(
+                            api::read_documents_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::EditDocuments(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::EditDocuments(
+                    api::EditDocumentsResult {
+                        result: Some(api::edit_documents_result::Result::Error(
+                            api::edit_documents_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::CreateDocuments(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::CreateDocuments(
+                    api::CreateDocumentsResult {
+                        result: Some(api::create_documents_result::Result::Error(
+                            api::create_documents_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::ReadSkill(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::ReadSkill(
+                    api::ReadSkillResult {
+                        result: Some(api::read_skill_result::Result::Error(
+                            api::read_skill_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::FetchConversation(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::FetchConversation(
+                    api::FetchConversationResult {
+                        result: Some(api::fetch_conversation_result::Result::Error(
+                            api::fetch_conversation_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::UploadFileArtifact(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::UploadFileArtifact(
+                    api::UploadFileArtifactResult {
+                        result: Some(api::upload_file_artifact_result::Result::Error(
+                            api::upload_file_artifact_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::InsertReviewComments(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::InsertReviewComments(
+                    api::InsertReviewCommentsResult {
+                        repo_path: String::new(),
+                        result: Some(api::insert_review_comments_result::Result::Error(
+                            api::insert_review_comments_result::Error {
+                                message: format!("{error}"),
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        Some(api::message::tool_call::Tool::WriteToLongRunningShellCommand(_)) |
+        Some(api::message::tool_call::Tool::TransferShellCommandControlToUser(_)) |
+        Some(api::message::tool_call::Tool::AskUserQuestion(_)) |
+        Some(api::message::tool_call::Tool::SuggestPlan(_)) |
+        Some(api::message::tool_call::Tool::Subagent(_)) |
+        Some(api::message::tool_call::Tool::ReadMcpResource(_)) |
+        Some(api::message::tool_call::Tool::OpenCodeReview(_)) |
+        Some(api::message::tool_call::Tool::InitProject(_)) |
+        Some(api::message::tool_call::Tool::SuggestNewConversation(_)) |
+        Some(api::message::tool_call::Tool::SuggestPrompt(_)) => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
+                    api::ReadShellCommandOutputResult {
+                        command: String::new(),
+                        result: Some(api::read_shell_command_output_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: format!("Error: {error}"),
+                                exit_code: 1,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
+        _ => {
+            api::message::ToolCallResult {
+                tool_call_id: tc.tool_call_id.clone(),
+                result: Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
+                    api::ReadShellCommandOutputResult {
+                        command: String::new(),
+                        result: Some(api::read_shell_command_output_result::Result::CommandFinished(
+                            api::ShellCommandFinished {
+                                output: format!("Error: {error}"),
+                                exit_code: 1,
+                                command_id: String::new(),
+                                start_ts: None,
+                                finish_ts: None,
+                            },
+                        )),
+                    },
+                )),
+                ..Default::default()
+            }
+        }
     }
 }
 

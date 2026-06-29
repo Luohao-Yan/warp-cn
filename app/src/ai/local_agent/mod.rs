@@ -10,6 +10,7 @@ pub(crate) mod tool_executor;
 pub(crate) mod child_agent;
 pub(crate) mod context_manager;
 pub(crate) mod task_store;
+pub(crate) mod pty_executor;
 
 #[cfg(test)]
 mod tests {

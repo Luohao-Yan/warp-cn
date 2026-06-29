@@ -7,7 +7,7 @@ use chrono::{DateTime, Local, TimeDelta};
 use futures::channel::oneshot;
 use uuid::Uuid;
 use warp_multi_agent_api::response_event;
-use warpui::{Entity, ModelContext, SingletonEntity};
+use warpui::{Entity, GetSingletonModelHandle, ModelContext, SingletonEntity};
 
 use crate::ai::agent::api::{self, generate_multi_agent_output, ConvertToAPITypeError};
 use crate::ai::agent::conversation::AIConversationId;
@@ -160,21 +160,50 @@ impl ResponseStream {
         can_attempt_resume_on_error: bool,
         ctx: &mut ModelContext<Self>,
     ) -> Self {
-        let server_api = ServerApiProvider::as_ref(ctx).get();
         let (cancellation_tx, cancellation_rx) = oneshot::channel();
         let start_time = Local::now();
-
         let request_id = Uuid::new_v4();
-        let params_clone = params.clone();
-        let _ =
-            ctx.spawn(
-                async move {
-                    generate_multi_agent_output(server_api, params_clone, cancellation_rx).await
-                },
-                move |me, stream, ctx| {
-                    me.handle_response_stream_result(request_id, stream, ctx);
-                },
-            );
+
+        // Local mode dispatch: when local agent mode is enabled, route the
+        // request to the local runner instead of the Warp cloud server.
+        if crate::ai::local_agent::local_mode_config::is_local_mode_enabled() {
+            let task_store = crate::ai::local_agent::service::LocalMultiAgentService::as_ref(ctx)
+                .task_store()
+                .clone();
+            let mcp_handle: warpui::ModelHandle<crate::ai::mcp::TemplatableMCPServerManager> =
+                ctx.get_singleton_model_handle();
+            let mcp_spawner = mcp_handle.update(ctx, |_: &mut crate::ai::mcp::TemplatableMCPServerManager, ctx| ctx.spawner());
+            let params_clone = params.clone();
+            let _ =
+                ctx.spawn(
+                    async move {
+                        let (stream, _resume_tx) = crate::ai::local_agent::service::LocalMultiAgentService::generate_local(
+                            params_clone,
+                            cancellation_rx,
+                            Some(mcp_spawner),
+                            task_store,
+                        )
+                        .await?;
+                        Ok(stream)
+                    },
+                    move |me, stream, ctx| {
+                        me.handle_response_stream_result(request_id, stream, ctx);
+                    },
+                );
+        } else {
+            let server_api = ServerApiProvider::as_ref(ctx).get();
+            let params_clone = params.clone();
+            let _ =
+                ctx.spawn(
+                    async move {
+                        generate_multi_agent_output(server_api, params_clone, cancellation_rx).await
+                    },
+                    move |me, stream, ctx| {
+                        me.handle_response_stream_result(request_id, stream, ctx);
+                    },
+                );
+        }
+
         Self {
             id: ResponseStreamId(Uuid::new_v4().to_string()),
             params: params.clone(),

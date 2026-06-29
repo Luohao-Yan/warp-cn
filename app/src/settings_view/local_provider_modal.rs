@@ -5,7 +5,6 @@ use warpui::elements::{
     Expanded, Flex, MainAxisSize, MouseStateHandle, ParentElement, Radius, Text,
 };
 use warpui::fonts::FamilyId;
-use warpui::ui_components::button::ButtonVariant;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
 use warpui::{
     AppContext, Element, Entity, SingletonEntity, TypedActionView, View, ViewContext, ViewHandle,
@@ -18,7 +17,7 @@ use crate::editor::{
 };
 use crate::modal::{Modal, ModalViewState};
 use crate::ui_components::icons::Icon;
-use crate::view_components::action_button::{ActionButton, DangerSecondaryTheme};
+use crate::view_components::action_button::{ActionButton, ButtonSize, DangerSecondaryTheme, SecondaryTheme};
 
 const LABEL_FONT_SIZE: f32 = 12.;
 const INPUT_WIDTH: f32 = 480.;
@@ -123,10 +122,17 @@ pub struct LocalProviderModal {
     api_key_editor: ViewHandle<EditorView>,
     api_format: ApiFormat,
     model_rows: Vec<ModelRow>,
-    cancel_button_mouse_state: MouseStateHandle,
-    save_button_mouse_state: MouseStateHandle,
-    add_model_button_mouse_state: MouseStateHandle,
     remove_provider_button: ViewHandle<ActionButton>,
+    preset_kimi_button: ViewHandle<ActionButton>,
+    preset_kimi_coding_button: ViewHandle<ActionButton>,
+    preset_deepseek_button: ViewHandle<ActionButton>,
+    preset_ollama_button: ViewHandle<ActionButton>,
+    preset_anthropic_button: ViewHandle<ActionButton>,
+    format_openai_button: ViewHandle<ActionButton>,
+    format_anthropic_button: ViewHandle<ActionButton>,
+    add_model_button: ViewHandle<ActionButton>,
+    cancel_button: ViewHandle<ActionButton>,
+    save_button: ViewHandle<ActionButton>,
     editing_index: Option<usize>,
     url_has_error: bool,
 }
@@ -261,6 +267,89 @@ impl LocalProviderModal {
                 })
         });
 
+        let preset_kimi_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-preset-kimi"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetKimi);
+                })
+        });
+
+        let preset_kimi_coding_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-preset-kimi-coding"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetKimiCoding);
+                })
+        });
+
+        let preset_deepseek_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-preset-deepseek"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetDeepSeek);
+                })
+        });
+
+        let preset_ollama_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-preset-ollama"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetOllama);
+                })
+        });
+
+        let preset_anthropic_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-preset-anthropic"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetAnthropic);
+                })
+        });
+
+        let format_openai_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-format-openai"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::SetApiFormatOpenAi);
+                })
+        });
+
+        let format_anthropic_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-format-anthropic"), SecondaryTheme)
+                .with_size(ButtonSize::XSmall)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::SetApiFormatAnthropic);
+                })
+        });
+
+        let cancel_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-cancel"), SecondaryTheme)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::Cancel);
+                })
+        });
+
+        let save_label = if editing_index.is_some() {
+            crate::tr!("settings", "local-provider-save")
+        } else {
+            crate::tr!("settings", "local-provider-add-button")
+        };
+        let save_button = ctx.add_typed_action_view(move |_| {
+            ActionButton::new(save_label.clone(), SecondaryTheme)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::Save);
+                })
+        });
+
+        let add_model_button = ctx.add_typed_action_view(|_| {
+            ActionButton::new(crate::tr!("settings", "local-provider-add-model"), SecondaryTheme)
+                .with_size(ButtonSize::Small)
+                .on_click(|ctx| {
+                    ctx.dispatch_typed_action(LocalProviderModalAction::AddModel);
+                })
+        });
+
         let api_format = endpoint.map(|e| e.api_format).unwrap_or_default();
 
         Self {
@@ -269,10 +358,17 @@ impl LocalProviderModal {
             api_key_editor,
             api_format,
             model_rows,
-            cancel_button_mouse_state: Default::default(),
-            save_button_mouse_state: Default::default(),
-            add_model_button_mouse_state: Default::default(),
             remove_provider_button,
+            preset_kimi_button,
+            preset_kimi_coding_button,
+            preset_deepseek_button,
+            preset_ollama_button,
+            preset_anthropic_button,
+            format_openai_button,
+            format_anthropic_button,
+            add_model_button,
+            cancel_button,
+            save_button,
             editing_index,
             url_has_error,
         }
@@ -703,16 +799,6 @@ impl View for LocalProviderModal {
             width: Some(INPUT_WIDTH),
             ..Default::default()
         };
-        let button_style = UiComponentStyles {
-            font_size: Some(14.),
-            padding: Some(Coords::uniform(8.).left(12.).right(12.)),
-            ..Default::default()
-        };
-        let preset_button_style = UiComponentStyles {
-            font_size: Some(12.),
-            padding: Some(Coords::uniform(4.).left(8.).right(8.)),
-            ..Default::default()
-        };
 
         let mut column = Flex::column();
 
@@ -742,76 +828,11 @@ impl View for LocalProviderModal {
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_spacing(8.);
 
-        let kimi_mouse_state = MouseStateHandle::default();
-        let preset_row_ref = &mut preset_row;
-        preset_row_ref.add_child(
-            appearance
-                .ui_builder()
-                .button(ButtonVariant::Secondary, kimi_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-preset-kimi"))
-                .with_style(preset_button_style.clone())
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetKimi);
-                })
-                .finish(),
-        );
-
-        let kimi_coding_mouse_state = MouseStateHandle::default();
-        preset_row_ref.add_child(
-            appearance
-                .ui_builder()
-                .button(ButtonVariant::Secondary, kimi_coding_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-preset-kimi-coding"))
-                .with_style(preset_button_style.clone())
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetKimiCoding);
-                })
-                .finish(),
-        );
-
-        let deepseek_mouse_state = MouseStateHandle::default();
-        preset_row_ref.add_child(
-            appearance
-                .ui_builder()
-                .button(ButtonVariant::Secondary, deepseek_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-preset-deepseek"))
-                .with_style(preset_button_style.clone())
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetDeepSeek);
-                })
-                .finish(),
-        );
-
-        let ollama_mouse_state = MouseStateHandle::default();
-        preset_row_ref.add_child(
-            appearance
-                .ui_builder()
-                .button(ButtonVariant::Secondary, ollama_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-preset-ollama"))
-                .with_style(preset_button_style.clone())
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetOllama);
-                })
-                .finish(),
-        );
-
-        let anthropic_mouse_state = MouseStateHandle::default();
-        preset_row_ref.add_child(
-            appearance
-                .ui_builder()
-                .button(ButtonVariant::Secondary, anthropic_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-preset-anthropic"))
-                .with_style(preset_button_style)
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::ApplyPresetAnthropic);
-                })
-                .finish(),
-        );
+        preset_row.add_child(ChildView::new(&self.preset_kimi_button).finish());
+        preset_row.add_child(ChildView::new(&self.preset_kimi_coding_button).finish());
+        preset_row.add_child(ChildView::new(&self.preset_deepseek_button).finish());
+        preset_row.add_child(ChildView::new(&self.preset_ollama_button).finish());
+        preset_row.add_child(ChildView::new(&self.preset_anthropic_button).finish());
 
         column.add_child(
             Container::new(preset_row.finish())
@@ -825,58 +846,13 @@ impl View for LocalProviderModal {
                 .with_margin_bottom(4.)
                 .finish(),
         );
-        let format_openai_mouse_state = MouseStateHandle::default();
-        let format_anthropic_mouse_state = MouseStateHandle::default();
-        let is_openai = self.api_format == ApiFormat::OpenAi;
-        let is_anthropic = self.api_format == ApiFormat::Anthropic;
 
         let mut format_row = Flex::row()
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_spacing(8.);
 
-        let openai_variant = if is_openai {
-            ButtonVariant::Accent
-        } else {
-            ButtonVariant::Secondary
-        };
-        format_row.add_child(
-            appearance
-                .ui_builder()
-                .button(openai_variant, format_openai_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-format-openai"))
-                .with_style(UiComponentStyles {
-                    font_size: Some(12.),
-                    padding: Some(Coords::uniform(6.).left(12.).right(12.)),
-                    ..Default::default()
-                })
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::SetApiFormatOpenAi);
-                })
-                .finish(),
-        );
-
-        let anthropic_variant = if is_anthropic {
-            ButtonVariant::Accent
-        } else {
-            ButtonVariant::Secondary
-        };
-        format_row.add_child(
-            appearance
-                .ui_builder()
-                .button(anthropic_variant, format_anthropic_mouse_state)
-                .with_text_label(crate::tr!("settings", "local-provider-format-anthropic"))
-                .with_style(UiComponentStyles {
-                    font_size: Some(12.),
-                    padding: Some(Coords::uniform(6.).left(12.).right(12.)),
-                    ..Default::default()
-                })
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::SetApiFormatAnthropic);
-                })
-                .finish(),
-        );
+        format_row.add_child(ChildView::new(&self.format_openai_button).finish());
+        format_row.add_child(ChildView::new(&self.format_anthropic_button).finish());
 
         column.add_child(
             Container::new(format_row.finish())
@@ -1032,27 +1008,9 @@ impl View for LocalProviderModal {
 
         // + Add model button
         column.add_child(
-            Container::new(
-                appearance
-                    .ui_builder()
-                    .button(
-                        ButtonVariant::Secondary,
-                        self.add_model_button_mouse_state.clone(),
-                    )
-                    .with_text_label(crate::tr!("settings", "local-provider-add-model"))
-                    .with_style(UiComponentStyles {
-                        font_size: Some(14.),
-                        padding: Some(Coords::uniform(6.).left(8.).right(8.)),
-                        ..Default::default()
-                    })
-                    .build()
-                    .on_click(move |ctx, _, _| {
-                        ctx.dispatch_typed_action(LocalProviderModalAction::AddModel);
-                    })
-                    .finish(),
-            )
-            .with_margin_bottom(24.)
-            .finish(),
+            Container::new(ChildView::new(&self.add_model_button).finish())
+                .with_margin_bottom(24.)
+                .finish(),
         );
 
         // Bottom buttons row
@@ -1067,46 +1025,12 @@ impl View for LocalProviderModal {
 
         buttons_row.add_child(Expanded::new(1., Empty::new().finish()).finish());
 
+        buttons_row.add_child(ChildView::new(&self.cancel_button).finish());
+
         buttons_row.add_child(
-            appearance
-                .ui_builder()
-                .button(
-                    ButtonVariant::Secondary,
-                    self.cancel_button_mouse_state.clone(),
-                )
-                .with_text_label(crate::tr!("settings", "local-provider-cancel"))
-                .with_style(button_style.clone())
-                .build()
-                .on_click(move |ctx, _, _| {
-                    ctx.dispatch_typed_action(LocalProviderModalAction::Cancel);
-                })
+            Container::new(ChildView::new(&self.save_button).finish())
+                .with_margin_left(12.)
                 .finish(),
-        );
-
-        let mut save_button = appearance
-            .ui_builder()
-            .button(ButtonVariant::Accent, self.save_button_mouse_state.clone())
-            .with_text_label(if is_editing {
-                crate::tr!("settings", "local-provider-save")
-            } else {
-                crate::tr!("settings", "local-provider-add-button")
-            })
-            .with_style(button_style);
-        if !is_valid {
-            save_button = save_button.disabled();
-        }
-
-        buttons_row.add_child(
-            Container::new(
-                save_button
-                    .build()
-                    .on_click(move |ctx, _, _| {
-                        ctx.dispatch_typed_action(LocalProviderModalAction::Save);
-                    })
-                    .finish(),
-            )
-            .with_margin_left(12.)
-            .finish(),
         );
 
         column.add_child(buttons_row.finish());

@@ -1916,6 +1916,26 @@ impl AISettingsPageView {
                         height: Some(600.),
                         ..Default::default()
                     })
+                    .with_header_style(UiComponentStyles {
+                        padding: Some(Coords {
+                            top: 24.,
+                            bottom: 0.,
+                            left: 24.,
+                            right: 24.,
+                        }),
+                        font_size: Some(16.),
+                        font_weight: Some(Weight::Bold),
+                        ..Default::default()
+                    })
+                    .with_body_style(UiComponentStyles {
+                        padding: Some(Coords {
+                            top: 0.,
+                            bottom: 24.,
+                            left: 24.,
+                            right: 24.,
+                        }),
+                        ..Default::default()
+                    })
                     .with_background_opacity(100)
                     .with_dismiss_on_click()
                     .with_dismiss_keystroke(Keystroke::parse("escape").unwrap())
@@ -9225,7 +9245,7 @@ impl SettingsWidget for LocalModeWidget {
 
     fn render(
         &self,
-        _view: &Self::View,
+        view: &Self::View,
         appearance: &Appearance,
         app: &AppContext,
     ) -> Box<dyn Element> {
@@ -9236,43 +9256,16 @@ impl SettingsWidget for LocalModeWidget {
 
         let mut column = Flex::column().with_child(render_separator(appearance));
 
-        column.add_child(
-            build_sub_header(
-                appearance,
-                crate::tr!("settings", "ai-local-mode-header"),
-                Some(styles::header_font_color(is_any_ai_enabled, app)),
-            )
-            .with_padding_bottom(HEADER_PADDING)
-            .finish(),
-        );
-
-        column.add_child(
-            Container::new(
-                Text::new(
-                    crate::tr!("settings", "ai-local-mode-desc"),
-                    appearance.ui_font_family(),
-                    CONTENT_FONT_SIZE,
-                )
-                .with_color(theme.nonactive_ui_text_color().into())
-                .soft_wrap(true)
-                .finish(),
-            )
-            .with_margin_bottom(12.)
-            .finish(),
-        );
-
-        let toggle_row = Flex::row()
+        // Header row: large title on left, toggle on right
+        let header_row = Flex::row()
             .with_main_axis_size(MainAxisSize::Max)
             .with_main_axis_alignment(MainAxisAlignment::SpaceBetween)
             .with_cross_axis_alignment(CrossAxisAlignment::Center)
             .with_child(
-                Text::new(
-                    crate::tr!("settings", "ai-local-mode-label"),
-                    appearance.ui_font_family(),
-                    CONTENT_FONT_SIZE,
-                )
-                .with_color(
-                    styles::description_font_color(is_any_ai_enabled, app).into(),
+                build_sub_header(
+                    appearance,
+                    crate::tr!("settings", "ai-local-mode-header"),
+                    Some(styles::header_font_color(is_any_ai_enabled, app)),
                 )
                 .finish(),
             )
@@ -9293,7 +9286,27 @@ impl SettingsWidget for LocalModeWidget {
             )
             .finish();
 
-        column.add_child(Container::new(toggle_row).finish());
+        column.add_child(
+            Container::new(header_row)
+                .with_padding_bottom(HEADER_PADDING)
+                .finish(),
+        );
+
+        // Description text below header
+        column.add_child(
+            Container::new(
+                Text::new(
+                    crate::tr!("settings", "ai-local-mode-desc"),
+                    appearance.ui_font_family(),
+                    CONTENT_FONT_SIZE,
+                )
+                .with_color(theme.nonactive_ui_text_color().into())
+                .soft_wrap(true)
+                .finish(),
+            )
+            .with_margin_bottom(12.)
+            .finish(),
+        );
 
         if local_mode_enabled {
             let endpoints = &ApiKeyManager::as_ref(app).keys().custom_endpoints;
@@ -9334,17 +9347,30 @@ impl SettingsWidget for LocalModeWidget {
                         .map(|m| m.alias.as_deref().unwrap_or(&m.name))
                         .join(", ");
                     let label = format!("{} ({})", ep.name, models_str);
-                    column.add_child(
-                        Container::new(
+                    let row = Flex::row()
+                        .with_main_axis_size(MainAxisSize::Max)
+                        .with_cross_axis_alignment(CrossAxisAlignment::Center)
+                        .with_child(
                             Text::new(label, appearance.ui_font_family(), CONTENT_FONT_SIZE)
                                 .with_color(theme.active_ui_text_color().into())
                                 .finish(),
                         )
-                        .with_margin_bottom(4.)
-                        .finish(),
+                        .with_child(Expanded::new(1., Empty::new().finish()).finish())
+                        .with_child(
+                            ChildView::new(&view.local_provider_edit_buttons[i]).finish(),
+                        )
+                        .finish();
+                    column.add_child(
+                        Container::new(row)
+                            .with_margin_bottom(4.)
+                            .finish(),
                     );
                 }
             }
+
+            column.add_child(
+                ChildView::new(&view.local_provider_add_button).finish(),
+            );
         }
 
         column.finish()

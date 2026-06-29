@@ -278,12 +278,18 @@ impl LocalMultiAgentService {
     ///
     /// Returns `Err(ConvertToAPITypeError::Ignore)` when no local provider
     /// matches the requested model (so the caller can fall back to cloud).
+    ///
+    /// The returned `resume_tx` can be used by the UI to send user responses
+    /// when the agent pauses for `AskUserQuestion` or `SuggestPlan`.
     pub async fn generate_local(
         params: crate::ai::agent::api::RequestParams,
         cancellation_rx: futures::channel::oneshot::Receiver<()>,
         mcp_spawner: Option<warpui::ModelSpawner<crate::ai::mcp::TemplatableMCPServerManager>>,
         task_store: Arc<LocalAgentTaskStore>,
-    ) -> Result<crate::ai::agent::api::ResponseStream, crate::ai::agent::api::ConvertToAPITypeError> {
+    ) -> Result<
+        (crate::ai::agent::api::ResponseStream, Option<async_channel::Sender<super::runner::ResumePayload>>),
+        crate::ai::agent::api::ConvertToAPITypeError,
+    > {
         if !local_mode_config::is_local_mode_enabled() {
             return Err(crate::ai::agent::api::ConvertToAPITypeError::Ignore);
         }
@@ -359,6 +365,9 @@ impl LocalMultiAgentService {
             mcp_spawner,
         );
 
+        // Extract the resume sender before spawning the runner
+        let resume_tx = runner.take_resume_tx();
+
         // Spawn the runner — it emits events directly through the channel
         tokio::spawn(async move {
             let result = runner.run().await;
@@ -387,7 +396,7 @@ impl LocalMultiAgentService {
             let _ = done_rx.await;
         };
 
-        Ok(Box::pin(s))
+        Ok((Box::pin(s), resume_tx))
     }
 }
 
