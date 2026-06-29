@@ -25,6 +25,9 @@ use crate::settings::AISettings;
 
 /// Called during app initialization to set up local agent infrastructure.
 pub fn init(ctx: &mut warpui::AppContext) {
+    // Register the LocalModeConfig singleton model before anything uses it
+    ctx.add_model(|_| local_mode_config::LocalModeConfig::new());
+
     // Sync LOCAL_MODE_ENABLED from persisted settings on startup
     let enabled = *AISettings::as_ref(ctx).local_mode_enabled;
     local_mode_config::set_local_mode_enabled(enabled);

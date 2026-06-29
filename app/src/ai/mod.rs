@@ -78,4 +78,5 @@ pub fn init(app: &mut AppContext) {
     ai_document_view::init(app);
     conversation_details_panel::init(app);
     agent_management::init(app);
+    local_agent::init(app);
 }
