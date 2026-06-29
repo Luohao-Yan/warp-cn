@@ -1,8 +1,9 @@
 use ::ai::api_keys::{ApiFormat, CustomEndpoint};
 use warp_editor::editor::NavigationKey;
 use warpui::elements::{
-    Border, ChildView, ConstrainedBox, Container, CornerRadius, CrossAxisAlignment, Empty,
-    Expanded, Flex, MainAxisSize, MouseStateHandle, ParentElement, Radius, Text,
+    Border, ChildView, ClippedScrollStateHandle, ClippedScrollable, ConstrainedBox, Container,
+    CornerRadius, CrossAxisAlignment, Empty, Expanded, Flex, MainAxisSize, MouseStateHandle,
+    ParentElement, Radius, ScrollbarWidth, Text,
 };
 use warpui::fonts::FamilyId;
 use warpui::ui_components::components::{Coords, UiComponent, UiComponentStyles};
@@ -133,6 +134,7 @@ pub struct LocalProviderModal {
     add_model_button: ViewHandle<ActionButton>,
     cancel_button: ViewHandle<ActionButton>,
     save_button: ViewHandle<ActionButton>,
+    scroll_state: ClippedScrollStateHandle,
     editing_index: Option<usize>,
     url_has_error: bool,
 }
@@ -369,6 +371,7 @@ impl LocalProviderModal {
             add_model_button,
             cancel_button,
             save_button,
+            scroll_state: Default::default(),
             editing_index,
             url_has_error,
         }
@@ -1035,7 +1038,15 @@ impl View for LocalProviderModal {
 
         column.add_child(buttons_row.finish());
 
-        column.finish()
+        ClippedScrollable::vertical(
+            self.scroll_state.clone(),
+            column.finish(),
+            ScrollbarWidth::Auto,
+            theme.nonactive_ui_detail().into(),
+            theme.active_ui_detail().into(),
+            warpui::elements::Fill::None,
+        )
+        .finish()
     }
 }
 

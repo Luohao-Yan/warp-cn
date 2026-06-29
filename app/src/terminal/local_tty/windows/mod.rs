@@ -1,8 +1,8 @@
 mod child;
-mod conpty_api;
+pub(crate) mod conpty_api;
 mod environment;
-mod pipes;
-mod proc_thread_attribute_list;
+pub(crate) mod pipes;
+pub(crate) mod proc_thread_attribute_list;
 
 use std::ffi::{OsStr, OsString};
 use std::os::windows::ffi::OsStrExt;

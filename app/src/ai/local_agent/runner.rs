@@ -204,19 +204,47 @@ impl LocalAgentRunner {
             .update_task_status(&self.task_id, TaskStatus::Running, None)?;
 
         // Spawn a task that listens for pause reasons (from the tool executor)
-        // and emits them as ClientActions so the UI can render the pause state.
+        // and emits them as ToolCall messages so the existing action pipeline
+        // renders the proper AskUserQuestion / SuggestPlan interactive widgets.
         let pause_rx = self.take_pause_rx();
         let event_tx = self.event_tx.clone();
         let task_id = self.task_id.clone();
         if let Some(pause_rx) = pause_rx {
             tokio::spawn(async move {
                 while let Ok(reason) = pause_rx.recv().await {
-                    let reason_str = match &reason {
+                    let tool = match &reason {
                         PauseReason::AskUserQuestion { question } => {
-                            format!("ASK_USER_QUESTION:{}", question)
+                            api::message::tool_call::Tool::AskUserQuestion(
+                                api::AskUserQuestion {
+                                    questions: vec![api::ask_user_question::Question {
+                                        question_id: Uuid::new_v4().to_string(),
+                                        question: question.clone(),
+                                        question_type: Some(
+                                            api::ask_user_question::question::QuestionType::MultipleChoice(
+                                                api::ask_user_question::MultipleChoice {
+                                                    options: vec![
+                                                        api::ask_user_question::Option {
+                                                            label: "Yes".into(),
+                                                        },
+                                                        api::ask_user_question::Option {
+                                                            label: "No".into(),
+                                                        },
+                                                    ],
+                                                    recommended_option_index: 0,
+                                                    is_multiselect: false,
+                                                    supports_other: true,
+                                                },
+                                            ),
+                                        ),
+                                    }],
+                                },
+                            )
                         }
                         PauseReason::SuggestPlan { plan } => {
-                            format!("SUGGEST_PLAN:{}", plan)
+                            api::message::tool_call::Tool::SuggestPlan(api::message::tool_call::SuggestPlan {
+                                summary: plan.clone(),
+                                proposed_tasks: Vec::new(),
+                            })
                         }
                     };
                     let pause_event = api::ResponseEvent {
@@ -230,9 +258,10 @@ impl LocalAgentRunner {
                                                 id: Uuid::new_v4().to_string(),
                                                 task_id: task_id.clone(),
                                                 timestamp: Some(now_timestamp()),
-                                                message: Some(api::message::Message::AgentOutput(
-                                                    api::message::AgentOutput {
-                                                        text: reason_str,
+                                                message: Some(api::message::Message::ToolCall(
+                                                    api::message::ToolCall {
+                                                        tool_call_id: Uuid::new_v4().to_string(),
+                                                        tool: Some(tool),
                                                     },
                                                 )),
                                                 ..Default::default()
@@ -738,6 +767,12 @@ impl LocalAgentRunner {
                                     Some(api::message::tool_call::Tool::InitProject(_)) => {
                                         "init_project".to_string()
                                     }
+                                    Some(api::message::tool_call::Tool::UseComputer(_)) => {
+                                        "use_computer".to_string()
+                                    }
+                                    Some(api::message::tool_call::Tool::RequestComputerUse(_)) => {
+                                        "request_computer_use".to_string()
+                                    }
                                     _ => "unknown".to_string(),
                                 },
                                 arguments: serialize_tool_args(tc),
@@ -1158,6 +1193,41 @@ impl LocalAgentRunner {
                 parameters: serde_json::json!({
                     "type": "object",
                     "properties": {}
+                }),
+            },
+            #[cfg(feature = "local_computer_use")]
+            ToolDefinition {
+                name: "use_computer".to_string(),
+                description: "Perform actions on the user's computer (mouse, keyboard, screenshots). Requires user approval.".to_string(),
+                parameters: serde_json::json!({
+                    "type": "object",
+                    "properties": {
+                        "actions": {
+                            "type": "array",
+                            "items": { "type": "object" },
+                            "description": "List of computer actions (mouse_move, mouse_down, mouse_up, type_text, key_down, key_up, mouse_wheel, wait)"
+                        },
+                        "action_summary": {
+                            "type": "string",
+                            "description": "Human-readable description of what the actions do"
+                        }
+                    },
+                    "required": ["actions", "action_summary"]
+                }),
+            },
+            #[cfg(feature = "local_computer_use")]
+            ToolDefinition {
+                name: "request_computer_use".to_string(),
+                description: "Request permission to use the computer. The user must approve before computer use actions can be performed.".to_string(),
+                parameters: serde_json::json!({
+                    "type": "object",
+                    "properties": {
+                        "task_summary": {
+                            "type": "string",
+                            "description": "Brief description of what the agent wants to do with computer use"
+                        }
+                    },
+                    "required": ["task_summary"]
                 }),
             },
         ]
@@ -2338,6 +2408,53 @@ fn map_function_to_tool_call(
                 )),
             })
         }
+        #[cfg(feature = "local_computer_use")]
+        "use_computer" => {
+            let actions_val = args.get("actions").cloned().unwrap_or(serde_json::Value::Array(vec![]));
+            let action_summary = args.get("action_summary")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string();
+            let actions = parse_computer_actions(&actions_val);
+            let screenshot_params = args.get("post_actions_screenshot_params").and_then(|v| {
+                let max_px = v.get("max_long_edge_px").and_then(|v| v.as_i64()).unwrap_or(1920) as i32;
+                Some(api::message::tool_call::ScreenshotParams {
+                    max_long_edge_px: max_px,
+                })
+            });
+            Some(api::message::ToolCall {
+                tool_call_id: tool_call_id.to_string(),
+                tool: Some(api::message::tool_call::Tool::UseComputer(
+                    api::message::tool_call::UseComputer {
+                        actions,
+                        post_actions_screenshot_params: screenshot_params,
+                        action_summary,
+                    },
+                )),
+            })
+        }
+        #[cfg(feature = "local_computer_use")]
+        "request_computer_use" => {
+            let task_summary = args.get("task_summary")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string();
+            let screenshot_params = args.get("screenshot_params").and_then(|v| {
+                let max_px = v.get("max_long_edge_px").and_then(|v| v.as_i64()).unwrap_or(1920) as i32;
+                Some(api::message::tool_call::ScreenshotParams {
+                    max_long_edge_px: max_px,
+                })
+            });
+            Some(api::message::ToolCall {
+                tool_call_id: tool_call_id.to_string(),
+                tool: Some(api::message::tool_call::Tool::RequestComputerUse(
+                    api::message::tool_call::RequestComputerUse {
+                        task_summary,
+                        screenshot_params,
+                    },
+                )),
+            })
+        }
         _ => {
             log::warn!("Unrecognized function name from LLM: {function_name}");
             None
@@ -2508,6 +2625,32 @@ fn format_tool_call_result_text(tcr: &api::message::ToolCallResult) -> String {
         }
         Some(api::message::tool_call_result::Result::OpenCodeReview(_)) => "Code review opened".to_string(),
         Some(api::message::tool_call_result::Result::InitProject(_)) => "Project initialized".to_string(),
+        Some(api::message::tool_call_result::Result::UseComputer(r)) => match &r.result {
+            Some(api::use_computer_result::Result::Success(s)) => {
+                let mut text = "Computer use succeeded.".to_string();
+                if let Some(screenshot) = &s.screenshot {
+                    text.push_str(&format!(" Screenshot: {}x{}", screenshot.width, screenshot.height));
+                }
+                if let Some(pos) = &s.cursor_position {
+                    text.push_str(&format!(" Cursor: ({}, {})", pos.x, pos.y));
+                }
+                text
+            }
+            Some(api::use_computer_result::Result::Error(e)) => format!("Computer use error: {}", e.message),
+            None => "(UseComputer result unavailable)".to_string(),
+        },
+        Some(api::message::tool_call_result::Result::RequestComputerUseResult(r)) => match &r.result {
+            Some(api::request_computer_use_result::Result::Approved(a)) => {
+                let mut text = "Computer use approved.".to_string();
+                if let Some(dim) = &a.screen_dimensions {
+                    text.push_str(&format!(" Screen: {}x{}", dim.width_px, dim.height_px));
+                }
+                text
+            }
+            Some(api::request_computer_use_result::Result::Rejected(_)) => "Computer use rejected".to_string(),
+            Some(api::request_computer_use_result::Result::Error(e)) => format!("Computer use request error: {}", e.message),
+            None => "(RequestComputerUse result unavailable)".to_string(),
+        },
         _ => "(tool result)".to_string(),
     }
 }
@@ -2672,6 +2815,37 @@ fn serialize_tool_args(tc: &api::message::ToolCall) -> String {
         }
         Some(api::message::tool_call::Tool::OpenCodeReview(_)) => "{}".to_string(),
         Some(api::message::tool_call::Tool::InitProject(_)) => "{}".to_string(),
+        Some(api::message::tool_call::Tool::UseComputer(req)) => {
+            let actions_json: Vec<serde_json::Value> = req.actions.iter().map(|a| {
+                match &a.r#type {
+                    Some(api::message::tool_call::use_computer::action::Type::MouseMove(mm)) => {
+                        if let Some(to) = &mm.to {
+                            serde_json::json!({"mouse_move": {"to": {"x": to.x, "y": to.y}}})
+                        } else {
+                            serde_json::json!({"mouse_move": {}})
+                        }
+                    }
+                    Some(api::message::tool_call::use_computer::action::Type::MouseDown(md)) => {
+                        let at = md.at.map(|c| serde_json::json!({"x": c.x, "y": c.y}));
+                        serde_json::json!({"mouse_down": {"button": md.button, "at": at}})
+                    }
+                    Some(api::message::tool_call::use_computer::action::Type::MouseUp(mu)) => {
+                        serde_json::json!({"mouse_up": {"button": mu.button}})
+                    }
+                    Some(api::message::tool_call::use_computer::action::Type::TypeText(tt)) => {
+                        serde_json::json!({"type_text": {"text": tt.text}})
+                    }
+                    Some(api::message::tool_call::use_computer::action::Type::Wait(w)) => {
+                        serde_json::json!({"wait": {}})
+                    }
+                    _ => serde_json::json!({}),
+                }
+            }).collect();
+            serde_json::json!({"actions": actions_json, "action_summary": req.action_summary}).to_string()
+        }
+        Some(api::message::tool_call::Tool::RequestComputerUse(req)) => {
+            serde_json::json!({"task_summary": req.task_summary}).to_string()
+        }
         _ => "{}".to_string(),
     }
 }
@@ -2706,6 +2880,61 @@ pub(super) fn prost_value_to_serde_json(v: &prost_types::Value) -> Result<serde_
         Some(prost_types::value::Kind::StructValue(s)) => prost_struct_to_serde_json_value(s)?,
         None => serde_json::Value::Null,
     })
+}
+
+#[cfg(feature = "local_computer_use")]
+fn parse_computer_actions(actions_val: &serde_json::Value) -> Vec<api::message::tool_call::use_computer::Action> {
+    let mut result = Vec::new();
+    if let Some(arr) = actions_val.as_array() {
+        for item in arr {
+            let r#type = if let Some(mm) = item.get("mouse_move") {
+                Some(api::message::tool_call::use_computer::action::Type::MouseMove(
+                    api::message::tool_call::use_computer::action::MouseMove {
+                        to: mm.get("to").and_then(|t| t.get("x")).and_then(|v| v.as_i64()).zip(
+                            mm.get("to").and_then(|t| t.get("y")).and_then(|v| v.as_i64())
+                        ).map(|(x, y)| api::Coordinates { x: x as i32, y: y as i32 }),
+                    },
+                ))
+            } else if let Some(md) = item.get("mouse_down") {
+                Some(api::message::tool_call::use_computer::action::Type::MouseDown(
+                    api::message::tool_call::use_computer::action::MouseDown {
+                        button: md.get("button").and_then(|v| v.as_i64()).unwrap_or(0) as i32,
+                        at: md.get("at").and_then(|t| t.get("x")).and_then(|v| v.as_i64()).zip(
+                            md.get("at").and_then(|t| t.get("y")).and_then(|v| v.as_i64())
+                        ).map(|(x, y)| api::Coordinates { x: x as i32, y: y as i32 }),
+                    },
+                ))
+            } else if let Some(mu) = item.get("mouse_up") {
+                Some(api::message::tool_call::use_computer::action::Type::MouseUp(
+                    api::message::tool_call::use_computer::action::MouseUp {
+                        button: mu.get("button").and_then(|v| v.as_i64()).unwrap_or(0) as i32,
+                    },
+                ))
+            } else if let Some(tt) = item.get("type_text") {
+                Some(api::message::tool_call::use_computer::action::Type::TypeText(
+                    api::message::tool_call::use_computer::action::TypeText {
+                        text: tt.get("text").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                    },
+                ))
+            } else if item.get("wait").is_some() {
+                Some(api::message::tool_call::use_computer::action::Type::Wait(
+                    api::message::tool_call::use_computer::action::Wait {
+                        duration: Some(prost_types::Duration {
+                            seconds: 1,
+                            nanos: 0,
+                        }),
+                    },
+                ))
+            } else {
+                None
+            };
+            result.push(api::message::tool_call::use_computer::Action {
+                target: None,
+                r#type,
+            });
+        }
+    }
+    result
 }
 
 #[cfg(test)]

@@ -12,6 +12,9 @@ pub(crate) mod context_manager;
 pub(crate) mod task_store;
 pub(crate) mod pty_executor;
 
+#[cfg(target_os = "windows")]
+pub(crate) mod headless_pty;
+
 #[cfg(test)]
 mod tests {
     // Integration tests for local agent orchestration will go here

@@ -51,7 +51,7 @@ pub enum ConptyApiError {
 }
 
 impl ConptyApi {
-    pub(super) unsafe fn load() -> Result<Self, ConptyApiError> {
+    pub(crate) unsafe fn load() -> Result<Self, ConptyApiError> {
         type LoadedFn = unsafe extern "system" fn() -> isize;
 
         let hstring = HSTRING::from("conpty.dll");
@@ -111,7 +111,7 @@ impl ConptyApi {
         })
     }
 
-    pub(super) unsafe fn create(
+    pub(crate) unsafe fn create(
         &self,
         size: COORD,
         mut pipe: HANDLE,
@@ -127,7 +127,7 @@ impl ConptyApi {
         result
     }
 
-    pub(super) unsafe fn resize(
+    pub(crate) unsafe fn resize(
         &self,
         pty_handle: HPCON,
         size: COORD,
@@ -135,11 +135,11 @@ impl ConptyApi {
         (self.resize)(pty_handle, size).ok()
     }
 
-    pub(super) unsafe fn close(&self, pty_handle: HPCON) {
+    pub(crate) unsafe fn close(&self, pty_handle: HPCON) {
         (self.close)(pty_handle)
     }
 
-    pub(super) unsafe fn show_hide(
+    pub(crate) unsafe fn show_hide(
         &self,
         pty_handle: HPCON,
         visible: bool,
@@ -147,7 +147,7 @@ impl ConptyApi {
         (self.show_hide)(pty_handle, visible).ok()
     }
 
-    pub(super) unsafe fn release(&self, pty_handle: HPCON) -> windows::core::Result<()> {
+    pub(crate) unsafe fn release(&self, pty_handle: HPCON) -> windows::core::Result<()> {
         (self.release)(pty_handle).ok()
     }
 }

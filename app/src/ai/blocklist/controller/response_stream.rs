@@ -129,6 +129,10 @@ pub struct ResponseStream {
     /// Note this is unique compared to `id`; this is unique across retry requests while the response
     /// stream id remains stable.
     current_request_id: Option<Uuid>,
+
+    /// Channel to send user responses (answers/approvals) back to a paused local agent runner.
+    /// Only populated in local mode; `None` in cloud mode.
+    resume_tx: Option<async_channel::Sender<crate::ai::local_agent::runner::ResumePayload>>,
 }
 
 impl ResponseStream {
@@ -151,6 +155,7 @@ impl ResponseStream {
             error_event_emitted: false,
             deferred_retry_pending: false,
             current_request_id: Some(Uuid::new_v4()),
+            resume_tx: None,
         }
     }
 
@@ -166,6 +171,12 @@ impl ResponseStream {
 
         // Local mode dispatch: when local agent mode is enabled, route the
         // request to the local runner instead of the Warp cloud server.
+        // We use a channel to pass resume_tx from the spawned task back
+        // to this method, since generate_local() is async and only
+        // resolves inside the spawn.
+        let (resume_tx_sender, resume_tx_receiver) =
+            std::sync::mpsc::channel::<async_channel::Sender<crate::ai::local_agent::runner::ResumePayload>>();
+
         if crate::ai::local_agent::local_mode_config::is_local_mode_enabled() {
             let task_store = crate::ai::local_agent::service::LocalMultiAgentService::as_ref(ctx)
                 .task_store()
@@ -177,13 +188,16 @@ impl ResponseStream {
             let _ =
                 ctx.spawn(
                     async move {
-                        let (stream, _resume_tx) = crate::ai::local_agent::service::LocalMultiAgentService::generate_local(
+                        let (stream, resume_tx) = crate::ai::local_agent::service::LocalMultiAgentService::generate_local(
                             params_clone,
                             cancellation_rx,
                             Some(mcp_spawner),
                             task_store,
                         )
                         .await?;
+                        if let Some(tx) = resume_tx {
+                            let _ = resume_tx_sender.send(tx);
+                        }
                         Ok(stream)
                     },
                     move |me, stream, ctx| {
@@ -220,11 +234,27 @@ impl ResponseStream {
             error_event_emitted: false,
             deferred_retry_pending: false,
             current_request_id: Some(request_id),
+            resume_tx: resume_tx_receiver.try_recv().ok(),
         }
     }
 
     pub fn id(&self) -> &ResponseStreamId {
         &self.id
+    }
+
+    /// Take the resume sender for the local agent. Only available in local mode.
+    pub fn take_resume_tx(&mut self) -> Option<async_channel::Sender<crate::ai::local_agent::runner::ResumePayload>> {
+        self.resume_tx.take()
+    }
+
+    /// Try to send a resume payload to a paused local agent runner.
+    /// Returns true if the payload was sent successfully.
+    pub fn send_resume(&self, payload: crate::ai::local_agent::runner::ResumePayload) -> bool {
+        if let Some(tx) = &self.resume_tx {
+            tx.try_send(payload).is_ok()
+        } else {
+            false
+        }
     }
 
     /// Returns true if we should attempt to resume the conversation after the stream finishes.

@@ -355,6 +355,12 @@ pub struct BlocklistAIController {
             Option<PassiveSuggestionTrigger>,
         )>,
     >,
+
+    /// Resume senders for paused local agent runners, keyed by conversation ID.
+    /// When the user submits answers via AskUserQuestion or approves a plan,
+    /// the controller sends the payload through the corresponding sender to
+    /// unblock the runner. Only populated in local agent mode.
+    local_resume_txs: HashMap<AIConversationId, async_channel::Sender<crate::ai::local_agent::runner::ResumePayload>>,
 }
 
 enum InputQueryType {
@@ -554,6 +560,60 @@ impl BlocklistAIController {
             } else {
                 FollowUpTrigger::Auto
             };
+
+            // In local agent mode, if a runner is paused waiting for user input
+            // (AskUserQuestion / SuggestPlan), resume it via the channel instead
+            // of sending a cloud follow-up request.
+            if crate::ai::local_agent::local_mode_config::is_local_mode_enabled() {
+                if let Some(resume_tx) = me.local_resume_txs.remove(conversation_id) {
+                    let answer = finished_action_results
+                        .iter()
+                        .filter_map(|r| match &r.result {
+                            AIAgentActionResultType::AskUserQuestion(
+                                ai::agent::action_result::AskUserQuestionResult::Success { answers },
+                            ) => Some(
+                                answers
+                                    .iter()
+                                    .map(|a| match a {
+                                        ai::agent::action_result::AskUserQuestionAnswerItem::Answered {
+                                            selected_options,
+                                            other_text,
+                                            ..
+                                        } => {
+                                            let mut parts = selected_options.clone();
+                                            if !other_text.is_empty() {
+                                                parts.push(other_text.clone());
+                                            }
+                                            parts.join(", ")
+                                        }
+                                        ai::agent::action_result::AskUserQuestionAnswerItem::Skipped { .. } => {
+                                            String::new()
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()
+                                    .join("\n"),
+                            ),
+                            AIAgentActionResultType::AskUserQuestion(
+                                ai::agent::action_result::AskUserQuestionResult::SkippedByAutoApprove { .. },
+                            ) => Some(String::new()),
+                            _ => None,
+                        })
+                        .next()
+                        .unwrap_or_default();
+                    let approved = finished_action_results.iter().any(|r| {
+                        matches!(
+                            &r.result,
+                            AIAgentActionResultType::RequestFileEdits(_)
+                                | AIAgentActionResultType::RequestCommandOutput(_)
+                        ) && r.result.is_successful()
+                    });
+                    let payload =
+                        crate::ai::local_agent::runner::ResumePayload { answer, approved };
+                    let _ = resume_tx.try_send(payload);
+                    return;
+                }
+            }
+
             me.send_follow_up_for_conversation(*conversation_id, trigger, ctx);
         });
 
@@ -633,6 +693,7 @@ impl BlocklistAIController {
             pending_local_claude_wakes: HashMap::new(),
             pending_passive_follow_ups: HashSet::new(),
             pending_passive_suggestion_results: HashMap::new(),
+            local_resume_txs: HashMap::new(),
         }
     }
 
@@ -2516,6 +2577,14 @@ impl BlocklistAIController {
             }
         });
 
+        // In local agent mode, capture the resume_tx from the ResponseStream
+        // so the controller can forward user answers back to a paused runner.
+        let local_resume_tx = if crate::ai::local_agent::local_mode_config::is_local_mode_enabled() {
+            response_stream.update(ctx, |stream, _| stream.take_resume_tx())
+        } else {
+            None
+        };
+
         self.in_flight_response_streams.register_new_stream(
             response_stream_id.clone(),
             conversation_data.id,
@@ -2525,6 +2594,10 @@ impl BlocklistAIController {
             },
             ctx,
         );
+
+        if let Some(tx) = local_resume_tx {
+            self.local_resume_txs.insert(conversation_data.id, tx);
+        }
 
         // Skip the context reset for a fired queued-prompt row (`is_queued_prompt`): its
         // attachments came from the row, not the live staging, so the live `pending_attachments`
@@ -3022,6 +3095,9 @@ impl BlocklistAIController {
                 if cancellation.is_none() {
                     self.in_flight_response_streams.cleanup_stream(&stream_id);
 
+                    // Clean up any stale resume sender for this conversation.
+                    self.local_resume_txs.remove(&conversation_id);
+
                     // Now that the stream is cleaned up, re-check for pending
                     // orchestration events that couldn't be drained earlier.
                     self.handle_pending_events_ready(conversation_id, ctx);
@@ -3291,6 +3367,21 @@ impl BlocklistAIController {
                 llm_preferences.refresh_authed_models(ctx);
             });
             ctx.emit(BlocklistAIControllerEvent::FreeTierLimitCheckTriggered);
+        }
+    }
+
+    /// Resume a paused local agent runner for the given conversation.
+    /// Sends the payload through the stored `resume_tx`, unblocking
+    /// a runner waiting on `AskUserQuestion` or `SuggestPlan`.
+    pub fn resume_paused_local_agent(
+        &mut self,
+        conversation_id: AIConversationId,
+        payload: crate::ai::local_agent::runner::ResumePayload,
+    ) -> bool {
+        if let Some(tx) = self.local_resume_txs.remove(&conversation_id) {
+            tx.try_send(payload).is_ok()
+        } else {
+            false
         }
     }
 }

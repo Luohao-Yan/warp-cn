@@ -160,6 +160,8 @@ impl ToolExecutor {
                 Some(api::message::tool_call::Tool::InsertReviewComments(_)) => "insert_review_comments",
                 Some(api::message::tool_call::Tool::OpenCodeReview(_)) => "open_code_review",
                 Some(api::message::tool_call::Tool::InitProject(_)) => "init_project",
+                Some(api::message::tool_call::Tool::UseComputer(_)) => "use_computer",
+                Some(api::message::tool_call::Tool::RequestComputerUse(_)) => "request_computer_use",
                 _ => "unknown",
             }.to_string();
             let result_fut = self.execute_single(tc);
@@ -391,6 +393,12 @@ impl ToolExecutor {
                 let query = format!("List project structure and key files for: {}", self.working_dir.display());
                 self.search_codebase(&query).await
             }
+            Some(api::message::tool_call::Tool::UseComputer(req)) => {
+                self.execute_computer_use(req).await
+            }
+            Some(api::message::tool_call::Tool::RequestComputerUse(req)) => {
+                self.request_computer_use(req).await
+            }
             _ => Err(LocalAgentError::ToolExecution {
                 tool_name: "unknown".to_string(),
                 message: "Unsupported or unrecognized tool call".to_string(),
@@ -621,8 +629,45 @@ impl ToolExecutor {
     // -- Codebase search -----------------------------------------------------
 
     async fn search_codebase(&self, query: &str) -> Result<String, LocalAgentError> {
-        // Fall back to grep-based search for the local implementation.
-        self.grep(query, None).await
+        // Semantic search via codebase indexing is not yet wired for the local
+        // agent (the controller lives in the UI model layer). Fall back to
+        // enhanced grep which provides good results for most queries.
+        self.enhanced_grep(query).await
+    }
+
+    /// Enhanced grep with context lines, sorted output, and smarter defaults.
+    async fn enhanced_grep(&self, query: &str) -> Result<String, LocalAgentError> {
+        let search_dir = self.working_dir.clone();
+
+        let child = TokioCommand::new("rg")
+            .arg("--no-heading")
+            .arg("--color=never")
+            .arg("--context=3")
+            .arg("--sort=path")
+            .arg("--max-count=20")
+            .arg("--ignore-case")
+            .arg("--smart-case")
+            .arg(query)
+            .arg(&search_dir)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .map_err(|e| LocalAgentError::Search(format!("Failed to spawn rg: {e}")))?;
+
+        let output = child
+            .wait_with_output()
+            .await
+            .map_err(|e| LocalAgentError::Search(format!("rg execution error: {e}")))?;
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        let mut result = format!("{stdout}{stderr}");
+        truncate_string(&mut result, MAX_SHELL_OUTPUT);
+
+        if result.is_empty() {
+            result = "(No matches found)\n".to_string();
+        }
+        Ok(result)
     }
 
     // -- MCP tool call -------------------------------------------------------
@@ -1095,6 +1140,227 @@ impl ToolExecutor {
         }
     }
 
+    // -- Computer use --------------------------------------------------------
+
+    async fn execute_computer_use(
+        &self,
+        req: &api::message::tool_call::UseComputer,
+    ) -> Result<String, LocalAgentError> {
+        if !cfg!(feature = "local_computer_use") {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "use_computer".to_string(),
+                message: "Computer use feature is not enabled".to_string(),
+            });
+        }
+
+        if !crate::features::FeatureFlag::LocalComputerUse.is_enabled() {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "use_computer".to_string(),
+                message: "Computer use feature flag is not enabled".to_string(),
+            });
+        }
+
+        // Ask user for approval before performing actions
+        if let Some(handle) = &self.pause_handle {
+            let resume = handle
+                .pause_and_wait(super::runner::PauseReason::AskUserQuestion {
+                    question: format!(
+                        "Agent wants to use the computer: {}",
+                        req.action_summary
+                    ),
+                })
+                .await;
+            if resume.answer.is_empty() && !resume.approved {
+                return Ok("Computer use rejected by user".to_string());
+            }
+        }
+
+        // Convert proto actions to computer_use::Action
+        let mut actor = computer_use::create_actor();
+        let mut cu_actions = Vec::new();
+        for action in &req.actions {
+            match &action.r#type {
+                Some(api::message::tool_call::use_computer::action::Type::MouseMove(mm)) => {
+                    if let Some(to) = &mm.to {
+                        cu_actions.push(computer_use::Action::MouseMove {
+                            to: computer_use::Vector2I::new(to.x, to.y),
+                        });
+                    }
+                }
+                Some(api::message::tool_call::use_computer::action::Type::MouseDown(md)) => {
+                    let button = match mouse_button_proto_to_cu(md.button) {
+                        Some(b) => b,
+                        None => computer_use::MouseButton::Left,
+                    };
+                    let at = md.at.map(|c| computer_use::Vector2I::new(c.x, c.y))
+                        .unwrap_or(computer_use::Vector2I::new(0, 0));
+                    cu_actions.push(computer_use::Action::MouseDown { button, at });
+                }
+                Some(api::message::tool_call::use_computer::action::Type::MouseUp(mu)) => {
+                    let button = match mouse_button_proto_to_cu(mu.button) {
+                        Some(b) => b,
+                        None => computer_use::MouseButton::Left,
+                    };
+                    cu_actions.push(computer_use::Action::MouseUp { button });
+                }
+                Some(api::message::tool_call::use_computer::action::Type::MouseWheel(mw)) => {
+                    let at = mw.at.map(|c| computer_use::Vector2I::new(c.x, c.y))
+                        .unwrap_or(computer_use::Vector2I::new(0, 0));
+                    let direction = match mw.direction() {
+                        api::message::tool_call::use_computer::action::mouse_wheel::Direction::Up => {
+                            computer_use::ScrollDirection::Up
+                        }
+                        api::message::tool_call::use_computer::action::mouse_wheel::Direction::Down => {
+                            computer_use::ScrollDirection::Down
+                        }
+                        api::message::tool_call::use_computer::action::mouse_wheel::Direction::Left => {
+                            computer_use::ScrollDirection::Left
+                        }
+                        api::message::tool_call::use_computer::action::mouse_wheel::Direction::Right => {
+                            computer_use::ScrollDirection::Right
+                        }
+                    };
+                    let distance = match &mw.distance {
+                        Some(api::message::tool_call::use_computer::action::mouse_wheel::Distance::Pixels(px)) => {
+                            computer_use::ScrollDistance::Pixels(*px)
+                        }
+                        Some(api::message::tool_call::use_computer::action::mouse_wheel::Distance::Clicks(c)) => {
+                            computer_use::ScrollDistance::Clicks(*c)
+                        }
+                        None => computer_use::ScrollDistance::Clicks(3),
+                    };
+                    cu_actions.push(computer_use::Action::MouseWheel {
+                        at,
+                        direction,
+                        distance,
+                    });
+                }
+                Some(api::message::tool_call::use_computer::action::Type::TypeText(tt)) => {
+                    cu_actions.push(computer_use::Action::TypeText {
+                        text: tt.text.clone(),
+                    });
+                }
+                Some(api::message::tool_call::use_computer::action::Type::Wait(w)) => {
+                    let dur = w.duration.clone().map(|d| {
+                        std::time::Duration::from_secs_f64(d.seconds as f64 + d.nanos as f64 / 1e9)
+                    }).unwrap_or(std::time::Duration::from_secs_f64(1.0));
+                    cu_actions.push(computer_use::Action::Wait(dur));
+                }
+                Some(api::message::tool_call::use_computer::action::Type::KeyDown(kd)) => {
+                    if let Some(key) = &kd.key {
+                        let cu_key = match &key.data {
+                            Some(api::message::tool_call::use_computer::action::key::Data::Keycode(kc)) => {
+                                computer_use::Key::Keycode(*kc)
+                            }
+                            Some(api::message::tool_call::use_computer::action::key::Data::Char(c)) => {
+                                computer_use::Key::Char(c.chars().next().unwrap_or('\0'))
+                            }
+                            None => computer_use::Key::Keycode(0),
+                        };
+                        cu_actions.push(computer_use::Action::KeyDown { key: cu_key });
+                    }
+                }
+                Some(api::message::tool_call::use_computer::action::Type::KeyUp(ku)) => {
+                    if let Some(key) = &ku.key {
+                        let cu_key = match &key.data {
+                            Some(api::message::tool_call::use_computer::action::key::Data::Keycode(kc)) => {
+                                computer_use::Key::Keycode(*kc)
+                            }
+                            Some(api::message::tool_call::use_computer::action::key::Data::Char(c)) => {
+                                computer_use::Key::Char(c.chars().next().unwrap_or('\0'))
+                            }
+                            None => computer_use::Key::Keycode(0),
+                        };
+                        cu_actions.push(computer_use::Action::KeyUp { key: cu_key });
+                    }
+                }
+                None => {}
+            }
+        }
+
+        let options = computer_use::Options {
+            screenshot_params: req.post_actions_screenshot_params.as_ref().map(|p| {
+                computer_use::ScreenshotParams {
+                    max_long_edge_px: Some(p.max_long_edge_px as usize),
+                    max_total_px: None,
+                    region: None,
+                }
+            }),
+        };
+        match actor.perform_actions(&cu_actions, options).await {
+            Ok(result) => {
+                let mut summary = String::new();
+                if let Some(pos) = result.cursor_position {
+                    summary.push_str(&format!("Cursor position: ({}, {})\n", pos.x(), pos.y()));
+                }
+                if let Some(screenshot) = &result.screenshot {
+                    let b64 = base64::Engine::encode(&base64::engine::general_purpose::STANDARD, &screenshot.data);
+                    summary.push_str(&format!(
+                        "[Screenshot captured: {}x{} pixels, MIME {}]\n",
+                        screenshot.width, screenshot.height, screenshot.mime_type
+                    ));
+                    // Include base64 screenshot data for LLM consumption
+                    summary.push_str(&format!("![screenshot](data:{};base64,{})", screenshot.mime_type, b64));
+                }
+                if summary.is_empty() {
+                    summary = "Computer actions executed successfully (no screenshot captured)".to_string();
+                }
+                Ok(summary)
+            }
+            Err(e) => Err(LocalAgentError::ToolExecution {
+                tool_name: "use_computer".to_string(),
+                message: format!("Computer use action failed: {e}"),
+            }),
+        }
+    }
+
+    async fn request_computer_use(
+        &self,
+        req: &api::message::tool_call::RequestComputerUse,
+    ) -> Result<String, LocalAgentError> {
+        if !cfg!(feature = "local_computer_use") {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "request_computer_use".to_string(),
+                message: "Computer use feature is not enabled".to_string(),
+            });
+        }
+
+        if !crate::features::FeatureFlag::LocalComputerUse.is_enabled() {
+            return Err(LocalAgentError::ToolExecution {
+                tool_name: "request_computer_use".to_string(),
+                message: "Computer use feature flag is not enabled".to_string(),
+            });
+        }
+
+        // Ask the user whether they approve computer use
+        if let Some(handle) = &self.pause_handle {
+            let resume = handle
+                .pause_and_wait(super::runner::PauseReason::AskUserQuestion {
+                    question: format!(
+                        "Agent requests permission to use the computer: {}",
+                        req.task_summary
+                    ),
+                })
+                .await;
+            if resume.approved || !resume.answer.is_empty() {
+                let platform = computer_use::create_actor().platform().map(|p| match p {
+                    computer_use::Platform::Mac => "macos",
+                    computer_use::Platform::Windows => "windows",
+                    computer_use::Platform::LinuxX11 => "linux_x11",
+                    computer_use::Platform::LinuxWayland => "linux_wayland",
+                }).unwrap_or("unknown");
+                Ok(format!(
+                    "Computer use approved. Platform: {platform}. Task: {}",
+                    req.task_summary
+                ))
+            } else {
+                Ok("Computer use rejected by user".to_string())
+            }
+        } else {
+            Ok(format!("Computer use requested: {}", req.task_summary))
+        }
+    }
+
     // -- Helpers -------------------------------------------------------------
 
     /// Resolve a path relative to the working directory.
@@ -1104,6 +1370,27 @@ impl ToolExecutor {
         } else {
             self.working_dir.join(path)
         }
+    }
+}
+
+fn mouse_button_proto_to_cu(button: i32) -> Option<computer_use::MouseButton> {
+    match api::message::tool_call::use_computer::action::MouseButton::try_from(button) {
+        Ok(api::message::tool_call::use_computer::action::MouseButton::Left) => {
+            Some(computer_use::MouseButton::Left)
+        }
+        Ok(api::message::tool_call::use_computer::action::MouseButton::Right) => {
+            Some(computer_use::MouseButton::Right)
+        }
+        Ok(api::message::tool_call::use_computer::action::MouseButton::Middle) => {
+            Some(computer_use::MouseButton::Middle)
+        }
+        Ok(api::message::tool_call::use_computer::action::MouseButton::Back) => {
+            Some(computer_use::MouseButton::Back)
+        }
+        Ok(api::message::tool_call::use_computer::action::MouseButton::Forward) => {
+            Some(computer_use::MouseButton::Forward)
+        }
+        _ => None,
     }
 }
 
@@ -1493,6 +1780,34 @@ fn build_tool_call_result(tc: &api::message::ToolCall, output: &str) -> api::mes
             Some(api::message::tool_call::Tool::InitProject(_)) => {
                 Some(api::message::tool_call_result::Result::InitProject(
                     api::InitProjectResult {},
+                ))
+            }
+            Some(api::message::tool_call::Tool::UseComputer(_)) => {
+                Some(api::message::tool_call_result::Result::UseComputer(
+                    api::UseComputerResult {
+                        result: Some(api::use_computer_result::Result::Success(
+                            api::use_computer_result::Success {
+                                screenshot: None,
+                                cursor_position: None,
+                                captured_window: None,
+                                windows: vec![],
+                            },
+                        )),
+                    },
+                ))
+            }
+            Some(api::message::tool_call::Tool::RequestComputerUse(_)) => {
+                Some(api::message::tool_call_result::Result::RequestComputerUseResult(
+                    api::RequestComputerUseResult {
+                        result: Some(api::request_computer_use_result::Result::Approved(
+                            api::request_computer_use_result::Approved {
+                                screen_dimensions: None,
+                                initial_screenshot: None,
+                                platform: 0,
+                                windows: vec![],
+                            },
+                        )),
+                    },
                 ))
             }
             _ => Some(api::message::tool_call_result::Result::ReadShellCommandOutput(
