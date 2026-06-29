@@ -1,4 +1,4 @@
-#![cfg_attr(feature = "release_bundle", windows_subsystem = "windows")]
+#![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
 
 #[path = "channel_config.rs"]
 mod channel_config;
