@@ -297,7 +297,7 @@ jobs:
           channel: ${{ inputs.channel }}
 
       - name: Download aarch64 build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: macos-aarch64-${{ steps.get-config.outputs.channel }}
 
@@ -306,7 +306,7 @@ jobs:
         shell: bash
 
       - name: Download x86_64 build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: macos-x86_64-${{ steps.get-config.outputs.channel }}
 
@@ -1119,7 +1119,7 @@ jobs:
         shell: bash
 
       - name: Download app build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: built-arm64-linux-${{steps.get-config.outputs.channel}}
 
@@ -1159,7 +1159,7 @@ jobs:
       # Bundle the CLI packages
 
       - name: Download CLI build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: built-arm64-linux-cli-${{steps.get-config.outputs.channel}}
 
